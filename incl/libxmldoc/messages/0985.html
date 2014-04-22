@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Yet another msdev glitch</title>
+<meta name="Author" content="Antonio Alvarado (aalvarado@sema.com.ve)">
+<meta name="Subject" content="[xml] Yet another msdev glitch">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Yet another msdev glitch</h1>
+<!-- received="Mon Oct 16 11:50:06 2000" -->
+<!-- isoreceived="20001016155006" -->
+<!-- sent="Mon, 16 Oct 2000 12:37:18 -0400" -->
+<!-- isosent="20001016163718" -->
+<!-- name="Antonio Alvarado" -->
+<!-- email="aalvarado@sema.com.ve" -->
+<!-- subject="[xml] Yet another msdev glitch" -->
+<!-- id="41157D026B64D311A78600D0090553565DA829@SVR_SEMA" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Antonio Alvarado (<a href="mailto:aalvarado@sema.com.ve?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch"><em>aalvarado@sema.com.ve</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 12:37:18 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0984.html">Antonio Alvarado: "RE: [xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I had added xpointer.c file to the project, to avoid the current building
+<br>
+errors on msdev 6.0:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------------------Configuration: gjobread - Win32
+<br>
+Debug--------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Linking...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libxml2.lib(xpath.obj) : error LNK2001: unresolved external symbol
+<br>
+_xmlXPtrLocationSetMerge
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libxml2.lib(xpath.obj) : error LNK2001: unresolved external symbol
+<br>
+_xmlXPtrFreeLocationSet
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libxml2.lib(xpath.obj) : error LNK2001: unresolved external symbol
+<br>
+_xmlXPtrRangeToFunction
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.\bin/gjobread.exe : fatal error LNK1120: 3 unresolved externals
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error executing link.exe.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjobread.exe - 4 error(s), 0 warning(s)
+<br>
+<p>after that, gjobread has been builded right.
+<br>
+<p><p><em>&gt; -----Mensaje original-----
+</em><br>
+<em>&gt; De:	Antonio Alvarado [SMTP:<a href="mailto:aalvarado@sema.com.ve?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">aalvarado@sema.com.ve</a>]
+</em><br>
+<em>&gt; Enviado el:	Lunes 16 de Octubre de 2000 12:00 PM
+</em><br>
+<em>&gt; Para:	<a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Asunto:	RE: [xml] minor libxml2-2.2.5 glitches
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I also have problems with SOCKLEN_T using msdev.  But editing that file
+</em><br>
+<em>&gt; (win32config.h) the building process could be succefully!
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	-----Mensaje original-----
+</em><br>
+<em>&gt; 	De:	Wayne Davison [SMTP:<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">wayned@users.sourceforge.net</a>]
+</em><br>
+<em>&gt; 	Enviado el:	Lunes 16 de Octubre de 2000 12:31 AM
+</em><br>
+<em>&gt; 	Para:	libxml
+</em><br>
+<em>&gt; 	Asunto:	[xml] minor libxml2-2.2.5 glitches
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I grabbed the libxml2-2.2.5 tar file from the gnome ftp server, and
+</em><br>
+<em>&gt; I
+</em><br>
+<em>&gt; 	encountered a problem building it using the MinGW build environment:
+</em><br>
+<em>&gt; I
+</em><br>
+<em>&gt; 	had to edit include/win32config.h to add this line:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	#define SOCKLEN_T size_t
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I'm not sure if other Win32 build environments have this problem or
+</em><br>
+<em>&gt; not.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	One other thing I noticed:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	There's an extra copy of config.h and acconfig.h in the
+</em><br>
+<em>&gt; include/libxml
+</em><br>
+<em>&gt; 	dir, so I removed them both just to be sure that they weren't
+</em><br>
+<em>&gt; causing any
+</em><br>
+<em>&gt; 	problems.  You might want to change the tar-building rules to avoid
+</em><br>
+<em>&gt; 	putting these files in there.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	..wayne..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	----
+</em><br>
+<em>&gt; 	Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; 	Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; 	to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">majordomo@rpmfind.net</a>
+</em><br>
+<p>begin 600 winmail.dat
+<br>
+M&gt;)\^(A40`0:0&quot;``$```````!``$``0&gt;0!@`(````Y`0```````#H``$(@`&lt;`
+<br>
+M&amp;````$E032Y-:6-R;W-O9G0@36%I;&quot;Y.;W1E`#$(`06``P`.````T`&lt;*`!``
+<br>
+M#``E`!(``0`U`0$@@`,`#@```-`'&quot;@`0``P`)0`2``$`-0$!&quot;8`!`&quot;$```!&quot;
+<br>
+M.3DT138Q0C4Y03-$-#$Q0D,V.#`P,3`U044P,T%%-P`A!P$$@`$`&amp;0```%EE
+<br>
+M=&quot;!A;F]T:&amp;5R(&amp;US9&amp;5V(&amp;=L:71C:``=&quot;0$-@`0``@````(``@`!`Y`&amp;`&amp;0*
+<br>
+M```J````&quot;P`&quot;``$````#`&quot;X``````$``.0&quot;P^6Y9CS?``1X`&lt;``!````(P``
+<br>
+M`%MX;6Q=(&amp;UI;F]R(&amp;QI8GAM;#(M,BXR+C4@9VQI=&amp;-H97,```(!&lt;0`!````
+<br>
+M(`````'`-S%7S[Z6.EVA3A'4I^@`T`D%4U8`%'`+\``!&amp;H@`'@`Q0`$````*
+<br>
+M````04%,5D%2041/`````P`:0``````&gt;`#!``0````H```!!04Q605)!1$\`
+<br>
+M```#`!E```````(!&quot;1`!````$`8```P&amp;``&quot;$&quot;P``3%I&amp;=;)_YAP#``H`&lt;F-P
+<br>
+M9S$R-?(R`/LS-@'H`J0#XP(`!&amp;-H&quot;L!S970P(`\'$P*#`%`01G!R&lt;3)O$4D.
+<br>
+M4`/5$55]&quot;H`(R&quot;#V.PEO#C`U%6\*8`*`&quot;H&amp;2=@B0=VL+@&amp;0T#&amp;`V8P!0&quot;P-C
+<br>
+M`$$+8&amp;YG&amp;#,P.!.!&quot;\0@22`Y$-!D(!K@`0`:\'AP&quot;F\+@'0$D&quot;YC(&amp;:A`Q!E
+<br>
+M('1O'&amp;!H'%!)$I!O:@60=&quot;P&lt;8F'N=AN0&amp;O`&lt;HF,(&lt;!;0`C`H(&amp;)U`Q!D&quot;X!G
+<br>
+M(!&lt;$D`-@$/`@`B`@;7.!`0!V(#8N,#H*HN&lt;*A`J!`9$@+2&amp;O(=`(4(IN'&quot;!G
+<br>
+M&quot;'!A=&amp;D&quot;(,`Z(&amp;=J;V(6T!KA*&quot;T@5PN`,Q+`1&amp;7='L!G(=\E82#Y3`N`&amp;'$,
+<br>
+M9RXGD&quot;#Y;&amp;EB&gt;-!M;#(N*'$H&amp;W`C8,1H+B/P:BD@([`?4TDG$$Y+`=`P,2.P
+<br>
+M=2IN%M!S!O!V&amp;T%E&gt;&quot;4;P6X'0&quot;!S!L,@7P$HH5A0='),;V.3(V,&amp;8'1-!)!G
+<br>
+M92?/SRC?*&gt;\J_RP/&lt;D8)T2TIGRXO+S\P3S%?,F]R4AFQ\&amp;54;T8WH!TP(X$@
+<br>
+M^=&lt;GL`H@&quot;X`O(]8N.%`&lt;4-TCL&amp;8C8#BQ-K&lt;Q#B`@&lt;+P@,S&gt;?.*$0D&quot;$(13;#
+<br>
+M_SQQ'D`C&lt;!\A-2`G0#QB)[87(0@[ZR1@-!]$*',I^QU0$3!W&quot;L`#`!G`1#%!
+<br>
+MROYA`8`$D!R1(V`=4&quot;/7$-`]!&quot;!B&quot;&gt;$&gt;M!M!!1!G:/YT0;P@IPLP-2`/,1E1
+<br>
+M`4#/'.$;P!TP$=0Q-B&amp;4+=#]`(!A'1`?L$AA&quot;X`'0&quot;8J#TKE2L$+$TKV:2TQ
+<br>
+M-.8T`4`U(#$X-U`,P4^#[R&amp;`).`@@`R28A$Q`C`&quot;(#\C@!%`.``*P!K@'(!;
+<br>
+M4V!-5%`Z80=`4B1`KQ$``,`;\`-P+C@074'%34`1;A@P4E)E;%#W3$\^0`&gt;1
+<br>
+M2[$!`&quot;!/'3!U7R0!5I(W01$P#B`Z5Z%0.DU45U!2,5#W-5%`&lt;NQP;1P@&amp;)`N
+<br>
+M5C`T9B&amp;`G$%S/D`&lt;&lt;%#W4D4CL'I;-5%='^`+@`6Q-24MVS6`-8`U(\`U('00
+<br>
+MP`&gt;0_TV/3II*1A'Q&quot;\4@HQJP/U'_'(`0T#@0'-(&quot;8%.@!&quot;`#\`,&lt;H`8`3T-+
+<br>
+M3$5./%]4/C``D!\A'_,N(/P@0D#0'T`?`$#C1F(&lt;%)XH`_`DH06@(P(N:#9P
+<br>
+M=QRB'L&lt;&lt;X6,'D`0@!:!U7Q[P1X$L(!C0:$!F:+!L_'DA2,Q?#V`4`&lt;%*DTMO
+<br>
+M[TQ_:C].GT^C,FSP4&quot;]1,_A787E6,&quot;30':`$`!_!9U*41*!RX61`9``$D'/^
+<br>
+M+C?@&quot;'!I406P+@!:8E1/YU5?5F]7=S,Q$4!83U$D_S4D6J]1%5QO77]NSVM/
+<br>
+M&amp;5'W#E`9HAH`,!.!$X)A1F%F_PG``:!'D!WD?=P!D`7`'&quot;,[`U(&lt;DV=]D`&gt;`
+<br>
+M'!!T&lt;'&lt;L(`20.!!R'5``&lt;!KP2=]!Q`GP:)$;LAM!86)V'KB7?M!C]1RB30N`
+<br>
+M1U&lt;&gt;M/&lt;?0'9Q`V!N!X`&quot;,&quot;.PAY9_&amp;M(&lt;&lt;64BB?`Z8`I``0`O_V9;'6,;(!R1
+<br>
+M!`!!(E#A(*D&gt;(P$!C]%C60&quot;0&gt;F5?^S1F870GA&gt;!]D`5`6T!7(?\&amp;D!^P'*$%
+<br>
+MP&quot;2$BS\$(&amp;(SWX]SB/8%L9-10;M/&lt;O&amp;4%'^/&lt;1\A&amp;K&quot;340W@&quot;8`@BU3YE#%E
+<br>
+M)P0@`Y$X42-0:('\&lt;'D?L)/PCG&gt;'8@#0CG?_&quot;X`&lt;DXVF&gt;SH?`(&lt;Q8@$:L#\6
+<br>
+MT`1@.!(&lt;H8E1E!$@:O]D``5`''%H\U&lt;A9:,&lt;H9OP\G&gt;(@6XG!4`M0&amp;0$`'#N
+<br>
+M&gt;4'$8H9DL5D(8'UA2(%_1)$&gt;D1QQ$,$Y\1R3A2$M_1['&lt;FBP!Y$==J0%0-!E
+<br>
+M5?\'D(61'#$$()W$%M!!NR&gt;0OW0#)Z&lt;@HR8X+=`$$&amp;&amp;F&lt;7^%MS4@H5%9OR&quot;R
+<br>
+M!Q`0P&amp;D?.!)EP2.P2)&quot;&amp;L#HO+]\U43?@`8`V,&quot;WP+P&gt;!K:*\&lt;R]!Q!QQ/D!;
+<br>
+M0&amp;($\F]'D#:1$,`&lt;@&quot;*S6:[&quot;(OP@?!_@&quot;W`#(+6A(^`+(/\#&lt;%-PKQ]_GU_\
+<br>
+M`M$1,&quot;8S_X_&quot;!=&quot;MCZZ?-%&amp;Z4[`OL3__LD&gt;Z4[,OM#^U3[9?0&lt;04@0(`Q3`+
+<br>
+M``&quot;`&quot;&quot;`&amp;``````#`````````1@`````#A0````````,`!8`((`8``````,``
+<br>
+M``````!&amp;`````!&quot;%`````````P`!@`@@!@``````P````````$8`````4H4`
+<br>
+M`+&lt;-```#``.`&quot;&quot;`&amp;``````#`````````1@`````!A0```````!X``H`((`8`
+<br>
+M`````,````````!&amp;`````%2%```!````!````#@N,``+``2`&quot;&quot;`&amp;``````#`
+<br>
+M````````1@`````.A0````````,`!H`((`8``````,````````!&amp;`````!&amp;%
+<br>
+M`````````P`'@`@@!@``````P````````$8`````&amp;(4````````&gt;``B`&quot;&quot;`&amp;
+<br>
+M``````#`````````1@`````VA0```0````$`````````'@`)@`@@!@``````
+<br>
+MP````````$8`````-X4```$````!`````````!X`&quot;H`((`8``````,``````
+<br>
+M``!&amp;`````#B%```!`````0`````````#`/$_&quot;@0```,`_3_D!````P`F````
+<br>
+M```#`#8```````,`@!#_____`@%'``$````T````8SU54SMA/2`[&lt;#U396UA
+<br>
+M($=R;W5P.VP]4U927U-%34$M,#`Q,#$V,38S-S$X6BTR,3,S`!X`.$`!````
+<br>
+M&quot;@```$%!3%9!4D%$3P```!X`.4`!````&quot;@```$%!3%9!4D%$3P```$``!S&quot;`
+<br>
+M\V59CS?``4``&quot;##`O)!9CS?``1X`/0`!`````0`````````&gt;`!T.`0```!D`
+<br>
+M``!9970@86YO=&amp;AE&lt;B!M&lt;V1E=B!G;&amp;ET8V@`````'@`U$`$````R````/#0Q
+<br>
+M,34W1#`R-D(V-$0S,3%!-S@V,#!$,#`Y,#4U,S4V-41!.#(Y0%-64E]314U!
+<br>
+M/@````L`*0``````&quot;P`C```````#``80\[+./P,`!Q&quot;6!@```P`0$``````#
+<br>
+M`!$0`````!X`&quot;!`!````90```$E(041!1$1%1%A03TE.5$520T9)3$543U1(
+<br>
+M15!23TI%0U0L5$]!5D])1%1(14-54E)%3E1&quot;54E,1$E.1T524D]24T].35-$
+<br>
+M158V,#HM+2TM+2TM+2TM+2TM+2TM+2TM+4-/3D8``````@%_``$````R````
+<br>
+M/#0Q,34W1#`R-D(V-$0S,3%!-S@V,#!$,#`Y,#4U,S4V-41!.#(Y0%-64E]3
+<br>
+)14U!/@```&amp;G%
+<br>
+`
+<br>
+end
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Yet%20another%20msdev%20glitch">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0984.html">Antonio Alvarado: "RE: [xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 12:43:32 EDT</em>
+</em>
+</small>
+</body>
+</html>

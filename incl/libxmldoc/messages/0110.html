@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Valid Error</title>
+<meta name="Author" content="Stephane Conversy (Stephane.Conversy@lri.fr)">
+<meta name="Subject" content="Re: [xml] Valid Error">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Valid Error</h1>
+<!-- received="Fri Aug 27 09:25:17 1999" -->
+<!-- isoreceived="19990827132517" -->
+<!-- sent="Fri, 27 Aug 1999 15:24:26 +0200" -->
+<!-- isosent="19990827132426" -->
+<!-- name="Stephane Conversy" -->
+<!-- email="Stephane.Conversy@lri.fr" -->
+<!-- subject="Re: [xml] Valid Error" -->
+<!-- id="37C6918A.28B3BBDA@lri.fr" -->
+<!-- inreplyto="37C42210.CA8F1324@lri.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stephane Conversy (<a href="mailto:Stephane.Conversy@lri.fr?subject=Re:%20[xml]%20Valid%20Error"><em>Stephane.Conversy@lri.fr</em></a>)<br>
+<strong>Date:</strong> Fri Aug 27 1999 - 09:24:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0111.html">Daniel Veillard: "Re: [xml] Error"</a>
+<li><strong>Previous message:</strong> <a href="0109.html">Stephane Conversy: "Re: [xml] Error"</a>
+<li><strong>In reply to:</strong> <a href="0109.html">Stephane Conversy: "Re: [xml] Error"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0118.html">Stephane Conversy: "[xml] Valid example"</a>
+<li><strong>Reply:</strong> <a href="0118.html">Stephane Conversy: "[xml] Valid example"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi all.
+<br>
+<p>Is there a kind person to answer my question please ?
+<br>
+<p><p>Stephane Conversy wrote:
+<br>
+<p><em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; On Tue, Aug 24, 1999 at 03:47:25PM +0200, Stephane Conversy wrote:
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; How to handle error while parsing an xml file ?
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; Is there a way to register a callback with a line number and a message ?
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   yep, change the warning and errors function in the SAX callback
+</em><br>
+<em>&gt; &gt; block and have them point to your own function. The parser context
+</em><br>
+<em>&gt; &gt; which is passed as first argument holds file and line informations
+</em><br>
+<em>&gt; &gt; look at the existing code in error.c:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; <a href="http://dev.w3.org/cgi-bin/cvsweb/XML/error.c?rev=1.17&content-type=text/x-cvsweb-markup">http://dev.w3.org/cgi-bin/cvsweb/XML/error.c?rev=1.17&content-type=text/x-cvsweb-markup</a>
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ok now how to do the same with the validating pass ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; here is a snipet of my code using the validating parser:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  xmlDocPtr doc;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  xmlDoValidityCheckingDefaultValue = 1;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  xmlDefaultSAXHandler.error = error_cbk;
+</em><br>
+<em>&gt;  xmlDefaultSAXHandler.warning = warning_cbk;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  msg_ptr = msgs;
+</em><br>
+<em>&gt;  msgs[0]=0;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  doc = xmlParseFile(file);
+</em><br>
+<em>&gt;  if(!doc) {
+</em><br>
+<em>&gt;   return;
+</em><br>
+<em>&gt;  }
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I saw in the lib sources something like:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ctxt-&gt;vctxt.error = xmlParserValidityError;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; How to get the ctxt before the begining of the parse pass ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Btw, I ask some questions that may be in a doc somewhere, but I didn't
+</em><br>
+<em>&gt; find it. Am I blind or it doesn't exist ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;     stef
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Stéphane Conversy
+</em><br>
+<em>&gt; <a href="http://www-ihm.lri.fr/~conversy/">http://www-ihm.lri.fr/~conversy/</a>
+</em><br>
+<em>&gt; mailto:<a href="mailto:conversy@lri.fr?subject=Re:%20[xml]%20Valid%20Error">conversy@lri.fr</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Valid%20Error">xml@rufus.w3.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Valid%20Error">majordomo@rufus.w3.org</a>
+</em><br>
+<p><pre>
+--
+Stéphane Conversy
+<a href="http://www-ihm.lri.fr/~conversy/">http://www-ihm.lri.fr/~conversy/</a>
+mailto:<a href="mailto:conversy@lri.fr?subject=Re:%20[xml]%20Valid%20Error">conversy@lri.fr</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Valid%20Error">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Valid%20Error">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0111.html">Daniel Veillard: "Re: [xml] Error"</a>
+<li><strong>Previous message:</strong> <a href="0109.html">Stephane Conversy: "Re: [xml] Error"</a>
+<li><strong>In reply to:</strong> <a href="0109.html">Stephane Conversy: "Re: [xml] Error"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0118.html">Stephane Conversy: "[xml] Valid example"</a>
+<li><strong>Reply:</strong> <a href="0118.html">Stephane Conversy: "[xml] Valid example"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:44 EDT</em>
+</em>
+</small>
+</body>
+</html>

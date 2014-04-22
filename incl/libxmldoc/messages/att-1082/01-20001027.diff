@@ -1,0 +1,126 @@
+*** xpath.c	2000/10/26 18:13:22	1.1
+--- xpath.c	2000/10/26 23:31:20
+*************** xmlXPathSubstringAfterFunction(xmlXPathP
+*** 3278,3285 ****
+   * xmlXPathNormalizeFunction:
+   * @ctxt:  the XPath Parser context
+   *
+!  * Implement the normalize() XPath function
+!  * The normalize function returns the argument string with white
+   * space normalized by stripping leading and trailing whitespace
+   * and replacing sequences of whitespace characters by a single
+   * space. Whitespace characters are the same allowed by the S production
+--- 3278,3285 ----
+   * xmlXPathNormalizeFunction:
+   * @ctxt:  the XPath Parser context
+   *
+!  * Implement the normalize-space() XPath function
+!  * The normalize-space function returns the argument string with white
+   * space normalized by stripping leading and trailing whitespace
+   * and replacing sequences of whitespace characters by a single
+   * space. Whitespace characters are the same allowed by the S production
+*************** not_equal:
+*** 3522,3529 ****
+   *
+   * Implement the number() XPath function
+   *
+-  * BUG: since we directly call xmlXPathStringEvalNumber(),
+-  *      number("-1") isn't evaluated in -1.0 but in NaN.
+   */
+  void
+  xmlXPathNumberFunction(xmlXPathParserContextPtr ctxt, int nargs) {
+--- 3522,3527 ----
+*************** xmlXPathSumFunction(xmlXPathParserContex
+*** 3602,3607 ****
+--- 3600,3606 ----
+      } else {
+  	valuePush(ctxt,
+  		  xmlXPathNewNodeSet(cur->nodesetval->nodeTab[0]));
++ 	xmlXPathNumberFunction(ctxt, 1);
+  	for (i = 1; i < cur->nodesetval->nodeNr; i++) {
+  	    valuePush(ctxt,
+  		      xmlXPathNewNodeSet(cur->nodesetval->nodeTab[i]));
+*************** xmlXPathParseName(xmlXPathParserContextP
+*** 3814,3819 ****
+--- 3813,3820 ----
+   *  [31]   Digits ::=   [0-9]+
+   *
+   * Parse and evaluate a Number in the string
++  * In complement of the Number expression, this function also handles
++  * negative values : '-' Number.
+   *
+   * Returns the double value.
+   */
+*************** xmlXPathStringEvalNumber(const xmlChar *
+*** 3823,3833 ****
+      double ret = 0.0;
+      double mult = 1;
+      int ok = 0;
+  
+      while (*cur == ' ') cur++;
+!     if ((*cur != '.') && ((*cur < '0') || (*cur > '9'))) {
+          return(xmlXPathNAN);
+      }
+      while ((*cur >= '0') && (*cur <= '9')) {
+          ret = ret * 10 + (*cur - '0');
+  	ok = 1;
+--- 3824,3839 ----
+      double ret = 0.0;
+      double mult = 1;
+      int ok = 0;
++     int isneg = 0;
+  
+      while (*cur == ' ') cur++;
+!     if ((*cur != '.') && ((*cur < '0') || (*cur > '9')) && (*cur != '-')) {
+          return(xmlXPathNAN);
+      }
++     if (*cur == '-') {
++ 	isneg = 1;
++ 	cur++;
++     }
+      while ((*cur >= '0') && (*cur <= '9')) {
+          ret = ret * 10 + (*cur - '0');
+  	ok = 1;
+*************** xmlXPathStringEvalNumber(const xmlChar *
+*** 3846,3851 ****
+--- 3852,3858 ----
+      }
+      while (*cur == ' ') cur++;
+      if (*cur != 0) return(xmlXPathNAN);
++     if (isneg) ret = -ret;
+      return(ret);
+  }
+  
+*************** xmlXPathEval(const xmlChar *str, xmlXPat
+*** 5242,5250 ****
+  	xmlXPathRoot(ctxt);
+      xmlXPathEvalExpr(ctxt);
+  
+!     if ((ctxt->value == NULL) || (ctxt->value->type != XPATH_NODESET)) {
+  	fprintf(xmlXPathDebug,
+! 		"xmlXPathEval: evaluation failed to return a node set\n");
+      } else {
+  	res = valuePop(ctxt);
+      }
+--- 5249,5257 ----
+  	xmlXPathRoot(ctxt);
+      xmlXPathEvalExpr(ctxt);
+  
+!     if (ctxt->value == NULL) {
+  	fprintf(xmlXPathDebug,
+! 		"xmlXPathEval: evaluation failed\n");
+      } else {
+  	res = valuePop(ctxt);
+      }
+*************** xmlXPathRegisterAllFunctions(xmlXPathCon
+*** 5343,5350 ****
+      xmlXPathRegisterFunc(ctxt, (const xmlChar *)"namespace-uri",
+                           xmlXPathNamespaceURIFunction);
+      xmlXPathRegisterFunc(ctxt, (const xmlChar *)"normalize-space",
+-                          xmlXPathNormalizeFunction);
+-     xmlXPathRegisterFunc(ctxt, (const xmlChar *)"normalize",
+                           xmlXPathNormalizeFunction);
+      xmlXPathRegisterFunc(ctxt, (const xmlChar *)"number",
+                           xmlXPathNumberFunction);
+--- 5350,5355 ----
+

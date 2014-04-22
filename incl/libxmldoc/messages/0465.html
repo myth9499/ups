@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Handling of parser errors</title>
+<meta name="Author" content="Georg C. F. Greve (greve@gnu.org)">
+<meta name="Subject" content="[xml] Handling of parser errors">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Handling of parser errors</h1>
+<!-- received="Tue Apr 25 03:42:24 2000" -->
+<!-- isoreceived="20000425074224" -->
+<!-- sent="20 Apr 2000 12:09:52 +0200" -->
+<!-- isosent="20000420100952" -->
+<!-- name="Georg C. F. Greve" -->
+<!-- email="greve@gnu.org" -->
+<!-- subject="[xml] Handling of parser errors" -->
+<!-- id="uf1z41w0b3.fsf@fusebox.hanse.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Georg C. F. Greve (<a href="mailto:greve@gnu.org?subject=Re:%20[xml]%20Handling%20of%20parser%20errors"><em>greve@gnu.org</em></a>)<br>
+<strong>Date:</strong> Thu Apr 20 2000 - 06:09:52 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Previous message:</strong> <a href="0464.html">ayoub elmrabet: "[xml] about xmlibrary"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Reply:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Reply:</strong> <a href="0467.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+-----BEGIN PGP SIGNED MESSAGE-----
+<br>
+Hash: SHA1
+<br>
+<p>Hi!
+<br>
+<p>I'm currently worming my way into the libxml for a project and noticed
+<br>
+something that is a little annoying. When the XML file contains
+<br>
+errors these are printed directly on stdout/stderr - but for a program
+<br>
+that does not have a stdout/stderr at the time when XML is being
+<br>
+parsed this is highly undesireable. But I would still prefer not to
+<br>
+use the SAX interface, if possible.
+<br>
+<p>What I would probably consider the best solution is a 0 return value
+<br>
+of xmlParseFile upon errors in the XML code and then a 
+<br>
+<p>&nbsp;&nbsp;char** xmlParseErrors(const char* filename);
+<br>
+&nbsp;&nbsp;void   xmlFreeParseErrors(const char* filename);
+<br>
+<p>pair of functions where filename is the name of the file that has been
+<br>
+read and the return value of xmlParseErrors is the address of a 0
+<br>
+terminated list of pointers to the 0 terminated c-style strings that
+<br>
+contain the error messages. The xmlFreeParseErrors would release the
+<br>
+memory taken up by the error messages for this file.
+<br>
+<p>That way the calling program could deal with the error messages in the
+<br>
+best way while all information about the incorrect XML is preserved.
+<br>
+<p>Just my 2c...
+<br>
+<p>Regards,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Georg
+<br>
+<p>- -- 
+<br>
+Georg C. F. Greve &lt;<a href="mailto:greve@gnu.org?subject=Re:%20[xml]%20Handling%20of%20parser%20errors">greve@gnu.org</a>&gt;
+<br>
+the monthly GNU forum in English, German, 
+<br>
+French, Spanish and Japanese. Check it out 
+<br>
+at <a href="http://www.gnu.org/brave-gnu-world/">http://www.gnu.org/brave-gnu-world/</a>
+<br>
+-----BEGIN PGP SIGNATURE-----
+<br>
+Version: GnuPG v1.0.0 (GNU/Linux)
+<br>
+Comment: Processed by Mailcrypt 3.5.4 and Gnu Privacy Guard &lt;<a href="http://www.gnupg.org/">http://www.gnupg.org/</a>&gt;
+<br>
+<p>iD8DBQE4/tdvbvivwoZXSsoRApHlAKC/Oxa7osl+B647ogCe7Y6/fiNyZwCfflxo
+<br>
+LnK4GZw49NZCNQ8AwLUJMbQ=
+<br>
+=4Hkq
+<br>
+-----END PGP SIGNATURE-----
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Handling%20of%20parser%20errors">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Handling%20of%20parser%20errors">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Previous message:</strong> <a href="0464.html">ayoub elmrabet: "[xml] about xmlibrary"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Reply:</strong> <a href="0466.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<li><strong>Reply:</strong> <a href="0467.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

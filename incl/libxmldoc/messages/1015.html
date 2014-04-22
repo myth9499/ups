@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Suggestion for hacking</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Suggestion for hacking">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Suggestion for hacking</h1>
+<!-- received="Fri Oct 20 12:37:38 2000" -->
+<!-- isoreceived="20001020163738" -->
+<!-- sent="Fri, 20 Oct 2000 18:37:32 +0200" -->
+<!-- isosent="20001020163732" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Suggestion for hacking" -->
+<!-- id="20001020183732.I3634@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Suggestion%20for%20hacking"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 20 2000 - 12:37:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1014.html">Wendsomde Yameogo: "[xml] Getting Node by Name"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Okay here is a small tool which would be a good way to exercise
+<br>
+and spend a week-end hacking on libxml:
+<br>
+&nbsp;&nbsp;&nbsp;- building an XML merge tool
+<br>
+<p>&nbsp;&nbsp;Lets call it xmlmerge, it's goal is to merge 2 XML files, i.e.
+<br>
+retain the common parts and insert the extra ones within the tree
+<br>
+common to both imput files, giving precedence to one of them.
+<br>
+For example:
+<br>
+<p>--------------- first.xml ------------
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b z=&quot;1&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;c&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;d/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/c&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;f y=&quot;2&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;g&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;j&gt;hello&lt;/j&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/g&gt;
+<br>
+&lt;/a&gt;
+<br>
+--------------- second.xml ------------
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b z=&quot;1&quot; y=&quot;1&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;e/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;f y=&quot;3&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;g&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h&gt;test&lt;/h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;j&gt;bonjour&lt;/j&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/g&gt;
+<br>
+&lt;/a&gt;
+<br>
+---------------------------------------
+<br>
+<p>and the result of xmlmerge first.xml second.xml would be
+<br>
+<p>---------------------------------------
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b z=&quot;1&quot; y=&quot;1&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;c&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;d/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/c&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;e/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;f y=&quot;2&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;g&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h&gt;test&lt;/h&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;j&gt;hello&lt;/j&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/g&gt;
+<br>
+&lt;/a&gt;
+<br>
+---------------------------------------
+<br>
+<p>&nbsp;&nbsp;Should not be that much of code, two xmlParseDoc then a recursive
+<br>
+function call doing a merge operation at each level on the first tree,
+<br>
+then an xmldocDump.
+<br>
+&nbsp;&nbsp;Of course the core of the problem is the recursive function which
+<br>
+could be made more or less &quot;intelligent&quot; depending on how much context
+<br>
+is looked at before deciding to add or drop (and where).
+<br>
+&nbsp;&nbsp;If I remember correctly people from IBM Alphawork did a very efficient
+<br>
+XML diff and presented a paper on it a couple of years ago. This would be
+<br>
+an interesting related lecture [1].
+<br>
+<p>Daniel
+<br>
+<p>[1] I actually easilly located it they do a merge too :-)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.alphaworks.ibm.com/tech/xmldiffmerge">http://www.alphaworks.ibm.com/tech/xmldiffmerge</a>
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Suggestion%20for%20hacking">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Suggestion%20for%20hacking">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Suggestion%20for%20hacking">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1014.html">Wendsomde Yameogo: "[xml] Getting Node by Name"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 20 2000 - 12:43:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

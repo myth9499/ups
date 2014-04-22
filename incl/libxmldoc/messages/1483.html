@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] BUG: &lt;table&gt; tag ends paragraph</title>
+<meta name="Author" content="Jonas Borgströ (jonas@codefactory.se)">
+<meta name="Subject" content="Re: [xml] BUG: &lt;table&gt; tag ends paragraph">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] BUG: &lt;table&gt; tag ends paragraph</h1>
+<!-- received="Wed Feb 21 19:07:12 2001" -->
+<!-- isoreceived="20010222000712" -->
+<!-- sent="22 Feb 2001 00:25:17 +0100" -->
+<!-- isosent="20010221232517" -->
+<!-- name="Jonas Borgströ" -->
+<!-- email="jonas@codefactory.se" -->
+<!-- subject="Re: [xml] BUG: &lt;table&gt; tag ends paragraph" -->
+<!-- id="E14VidP-0000EY-00@blinky" -->
+<!-- inreplyto="Pine.LNX.4.21.0102211023090.6361-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Jonas Borgströ (<a href="mailto:jonas@codefactory.se?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph"><em>jonas@codefactory.se</em></a>)<br>
+<strong>Date:</strong> Wed Feb 21 2001 - 18:25:17 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1484.html">Daniel Veillard: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<li><strong>Previous message:</strong> <a href="1482.html">xml@thewrittenword.com: "Re: [xml] xml error functionality"</a>
+<li><strong>In reply to:</strong> <a href="1477.html">Wayne Davison: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1484.html">Daniel Veillard: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 21 Feb 2001 10:50:42 -0800, Wayne Davison wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On 21 Feb 2001, Jonas Borgström wrote:
+</em><br>
+<em>&gt; &gt; after a quick look at the code in HTMLparser.c it looks like the line:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; &quot;table&quot;,        &quot;p&quot;, &quot;head&quot;, &quot;h1&quot;, &quot;h2&quot;, &quot;h3&quot;, &quot;h4&quot;, &quot;h5&quot;, &quot;h6&quot;, &quot;pre&quot;,
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; should be removed from the char *htmlStartClose[] initialisation.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; What do you think about this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; No, that would break all other table tags that didn't have an inline
+</em><br>
+<em>&gt; display style.
+</em><br>
+<em>&gt; 
+</em><br>
+<p>Would it? modern htmlbrowsers should support nested levels of block
+<br>
+boxex (paragraphs) 
+<br>
+and tables. But perhaps it breaks the html4 specifikation. I don't know.
+<br>
+But atleast The linux version of Opera 5.0 renders the above example on
+<br>
+one line. But I can't
+<br>
+get gtkhtml2 to do it because gnome-xml removes (creates two paragraphs)
+<br>
+some important 
+<br>
+information before it reaches the saxparser of gtkhtml2
+<br>
+<p>One way to use inline tables like this is to use the &lt;.div&gt; tag instead
+<br>
+of &lt;p&gt; to make the
+<br>
+paragraphs. gnome-xml doesn't close these paragraphs when reaching a
+<br>
+table.
+<br>
+But this doesn't help gtkhtml2 to support allready existing html-pages.
+<br>
+<p><em>&gt; The problem you've noticed is just the tip of a larger issue:  libxml
+</em><br>
+<em>&gt; doesn't parse styles at all.  In order to allow styles (from sheets or
+</em><br>
+<em>&gt; inline elements) to affect the paragraph-ness of the standard elements
+</em><br>
+<em>&gt; (and also to support user-defined paragraph elements), it becomes
+</em><br>
+<em>&gt; necessary for libxml to parse all aspects of style (including loading
+</em><br>
+<em>&gt; and parsing all linked style sheets).  Once this is done, libxml could
+</em><br>
+<em>&gt; eliminate some of the elements in htmlStartClose[] array, and instead
+</em><br>
+<em>&gt; query the paragraph-display-attribute of the tags and act accordingly.
+</em><br>
+<em>&gt; 
+</em><br>
+<p>The problem is that gnome-xml might become quite bloated if it has to be
+<br>
+able to parse
+<br>
+css1 and css2 (and future versions). This is probably not what most
+<br>
+people want.
+<br>
+<p>One way of solving it might be to have some option to toggle this
+<br>
+paragraph-closing
+<br>
+&quot;feature&quot; on and off.
+<br>
+<p><p><em>&gt; I personally would like to see full style support in libxml.  I would
+</em><br>
+<em>&gt; like the parser to keep track of the current state of all of the
+</em><br>
+<em>&gt; styles, and to allow me to query specific style settings PLUS ask what
+</em><br>
+<em>&gt; has changed since the last time I asked for changes.  We could even
+</em><br>
+<em>&gt; have the standard HTML tags, such as I, B, and FONT, affect the
+</em><br>
+<em>&gt; current style settings.  This would allow client code to ignore how
+</em><br>
+<em>&gt; italics got turned on, and just ask libxml, &quot;What's new?  Italics is
+</em><br>
+<em>&gt; now on?  Great, I'll flip the switch in my rendering.&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The crux of the matter is whether this is an appropriate thing for
+</em><br>
+<em>&gt; libxml to be doing.  While I would probably lean towards having the
+</em><br>
+<em>&gt; user's code handle this, the problem is that libxml can't do the job
+</em><br>
+<em>&gt; of paragraph-closing properly without understanding styles, and once
+</em><br>
+<em>&gt; it has parsed all the available style information, why should the
+</em><br>
+<em>&gt; user's code have to duplicate all that work?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So Jonas, since you mention that the gtkhtml2 browser wants to act on
+</em><br>
+<em>&gt; the inline display style, does this mean that it already has code to
+</em><br>
+<em>&gt; parse styles?  If so, perhaps Daniel would be willing to allow some
+</em><br>
+<em>&gt; style sheet code to be integrated into libxml (if it were compatible
+</em><br>
+<em>&gt; with the LGPL and of an appropriate design for libxml, of course).
+</em><br>
+<em>&gt; 
+</em><br>
+<p>gtkhtml2 has a great cssparser. And it is LGPL. 
+<br>
+<p>/ Jonas
+<br>
+<p><p><pre>
+-- 
+Jonas Borgström                  <a href="mailto:jonas@codefactory.se?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">jonas@codefactory.se</a>
+CodeFactory AB                   <a href="http://www.codefactory.se/">http://www.codefactory.se/</a>
+Office: +46 (0)90 71 86 10       Cell: +46 (0)70 248 89 58
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1484.html">Daniel Veillard: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<li><strong>Previous message:</strong> <a href="1482.html">xml@thewrittenword.com: "Re: [xml] xml error functionality"</a>
+<li><strong>In reply to:</strong> <a href="1477.html">Wayne Davison: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1484.html">Daniel Veillard: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 21 2001 - 20:43:46 EST</em>
+</em>
+</small>
+</body>
+</html>

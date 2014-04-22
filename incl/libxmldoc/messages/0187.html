@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Réf. : Re: libxml on Solaris 2.6</title>
+<meta name="Author" content="Gilles FILIPPINI (Gilles.Filippini@edf.fr)">
+<meta name="Subject" content="[xml] Réf. : Re: libxml on Solaris 2.6">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Réf. : Re: libxml on Solaris 2.6</h1>
+<!-- received="Fri Oct 22 03:50:35 1999" -->
+<!-- isoreceived="19991022075035" -->
+<!-- sent="22 Oct 1999 09:49:32 +0200" -->
+<!-- isosent="19991022074932" -->
+<!-- name="Gilles FILIPPINI" -->
+<!-- email="Gilles.Filippini@edf.fr" -->
+<!-- subject="[xml] Réf. : Re: libxml on Solaris 2.6" -->
+<!-- id="01CCB3810170C095*/c=fr/admd=atlas/prmd=edfgdf/o=notes/s=Filippini/g=Gilles/@MHS" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gilles FILIPPINI (<a href="mailto:Gilles.Filippini@edf.fr?subject=Re:%20[xml]%20Réf.%20:%20Re:%20libxml%20on%20Solaris%202.6"><em>Gilles.Filippini@edf.fr</em></a>)<br>
+<strong>Date:</strong> Fri Oct 22 1999 - 03:49:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0188.html">Kristian Hogsberg Kristensen: "[xml] Strange stuff in htmlParseElement"</a>
+<li><strong>Previous message:</strong> <a href="0186.html">Daniel Veillard: "Re: [xml] More autoclose stuff"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20R\f.%20:%20Re:%20libxml%20on%20Solaris%202.6">Daniel.Veillard@w3.org</a> wrote :
+<br>
+<em>&gt; This is really strange could you check that configure detected the same
+</em><br>
+<em>&gt; set of headers on your machine ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_STDLIB_H confih.h
+</em><br>
+<em>&gt; grep: confih.h: No such file or directory
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_STDLIB_H config.h
+</em><br>
+<em>&gt; #define HAVE_STDLIB_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_UNISTD_H config.h
+</em><br>
+<em>&gt; #define HAVE_UNISTD_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_SYS_SOCKET_H config.h
+</em><br>
+<em>&gt; #define HAVE_SYS_SOCKET_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_NETINET_IN_H config.h
+</em><br>
+<em>&gt; #define HAVE_NETINET_IN_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_ARPA_INET_H config.h
+</em><br>
+<em>&gt; #define HAVE_ARPA_INET_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_FCNTL_H config.h
+</em><br>
+<em>&gt; #define HAVE_FCNTL_H 1
+</em><br>
+<em>&gt; ~/XML -&gt; grep HAVE_SYS_SELECT_H config.h
+</em><br>
+<em>&gt; #define HAVE_SYS_SELECT_H 1
+</em><br>
+<p>Well, I've had a closer look at the ./configure step.
+<br>
+It happens that configure doesn't detect &lt;netinet/in.h&gt;, &lt;arpa/inet.h&gt; and &lt;netdb.h&gt;  whereas
+<br>
+my machine *does* have those headers (provided by the Sun WorkShop - see below).
+<br>
+<p>~/libxml-1.7.3%find /usr/include -name '*net*.h' -print
+<br>
+/usr/include/sys/ethernet.h
+<br>
+/usr/include/sys/netconfig.h
+<br>
+/usr/include/sys/xti_inet.h
+<br>
+/usr/include/arpa/inet.h
+<br>
+/usr/include/arpa/telnet.h
+<br>
+/usr/include/rpc/nettype.h
+<br>
+/usr/include/monetary.h
+<br>
+/usr/include/netconfig.h
+<br>
+/usr/include/netdb.h
+<br>
+/usr/include/netdir.h
+<br>
+/usr/include/nss_netdir.h
+<br>
+<p>If I hack config.h to toggle on the HAVE_XXX flags related to them, the nanohttp compilation step ends up with
+<br>
+another error...
+<br>
+=&gt; I guess my machine isn't well configured.
+<br>
+<p>Here are the versions of the different tools I use. Please, tell me if I should upgrade or reinstall one of them :
+<br>
+<p>~/libxml-1.7.3%uname -a
+<br>
+SunOS sepgifac 5.6 Generic_105181-14 sun4u sparc SUNW,Ultra-1
+<br>
+~/libxml-1.7.3%gcc --version
+<br>
+2.7.2.f.1
+<br>
+~/libxml-1.7.3%cc -V
+<br>
+cc: WorkShop Compilers 4.2 30 Oct 1996 C 4.2 	(provides most of the include files)
+<br>
+usage: cc [ options] files.  Use 'cc -flags' for details
+<br>
+<p>Thanks in advance.
+<br>
+<p>- Gilles.
+<br>
+<p><em>&gt; P.S.: BTW the libxml mailing-list is <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20R\f.%20:%20Re:%20libxml%20on%20Solaris%202.6">xml@rufus.w3.org</a> :-)
+</em><br>
+Ooops ! Sorry about that... I switch to this one (hi there ! :)).
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20R\f.%20:%20Re:%20libxml%20on%20Solaris%202.6">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20R\f.%20:%20Re:%20libxml%20on%20Solaris%202.6">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0188.html">Kristian Hogsberg Kristensen: "[xml] Strange stuff in htmlParseElement"</a>
+<li><strong>Previous message:</strong> <a href="0186.html">Daniel Veillard: "Re: [xml] More autoclose stuff"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

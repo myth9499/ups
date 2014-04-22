@@ -1,0 +1,23 @@
+Index: valid.c
+===================================================================
+RCS file: /sources/public/XML/valid.c,v
+retrieving revision 1.81
+diff -p -r1.81 valid.c
+*** valid.c	2000/11/03 13:45:27	1.81
+--- valid.c	2000/11/07 12:48:26
+*************** child_ok:
+*** 3503,3512 ****
+--- 3503,3514 ----
+  		    VERROR(ctxt->userData,
+  		       "Element %s doesn't carry attribute %s\n",
+  			   elem->name, attr->name);
++ 		    ret = 0;
+  	        } else {
+  		    VERROR(ctxt->userData,
+  		       "Element %s doesn't carry attribute %s:%s\n",
+  			   elem->name, attr->prefix,attr->name);
++ 		    ret = 0;
+  		}
+  	    } else if (qualified == 0) {
+  		VWARNING(ctxt->userData,
+

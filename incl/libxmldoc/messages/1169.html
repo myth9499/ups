@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Conditional Sections and the X3D DTD</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Conditional Sections and the X3D DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Conditional Sections and the X3D DTD</h1>
+<!-- received="Sun Nov 12 13:04:45 2000" -->
+<!-- isoreceived="20001112180445" -->
+<!-- sent="Sun, 12 Nov 2000 19:04:40 +0100" -->
+<!-- isosent="20001112180440" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Conditional Sections and the X3D DTD" -->
+<!-- id="20001112190440.C17128@w3.org" -->
+<!-- inreplyto="20001112120140.A14477@buffy" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Nov 12 2000 - 13:04:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1170.html">Saravanan Ramaswamy: "[xml] User passed Arguments for Entities"</a>
+<li><strong>Previous message:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 12, 2000 at 12:01:40PM -0500, Jonathan P Springer wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've been fiddling with using libxml to parse Web3D X3D files.  I'd had no
+</em><br>
+<em>&gt; problems parsing them until I turned on validation, at which point all heck
+</em><br>
+<em>&gt; broke
+</em><br>
+<em>&gt; loose, primarily around conditional sections.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Basically, the X3D DTD (see <a href="http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd">http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd</a>)
+</em><br>
+<em>&gt; uses several parsed entities to define which sections of the X3D
+</em><br>
+<em>&gt; specification
+</em><br>
+<em>&gt; should be included and which should be excluded.  The idea is that the
+</em><br>
+<em>&gt; DOCTYPE
+</em><br>
+<em>&gt; in the X3D file can be used to switch on and off certain features in the
+</em><br>
+<em>&gt; specification.
+</em><br>
+<p>&nbsp;&nbsp;Okay the Docbook DTD uses those heavilly too.
+<br>
+<p><em>&gt; OK, so once Daniel put in the Conditional Section coding (was that version
+</em><br>
+<em>&gt; 2.2.3?), I thought I'd be home free.  Think again...
+</em><br>
+<p>&nbsp;&nbsp;Did you try with 2.2.7 ?
+<br>
+<p><em>&gt; Running my test file (see <a href="http://members.theglobe.com/springjp/try2.txt">http://members.theglobe.com/springjp/try2.txt</a> )
+</em><br>
+<em>&gt; yielded the following warning:
+</em><br>
+<p>&nbsp;&nbsp;Hum I was really unable to extract anything useful form this URL,
+<br>
+Could you send it to me ?
+<br>
+<p><em>&gt; --&gt;  warning: PEReference: %ChildrenNodes; not found
+</em><br>
+<em>&gt; --&gt;  &lt;!ENTITY % SceneNodes       	&quot; ( %ChildrenNodes; |
+</em><br>
+<em>&gt; %WildcardNodes;
+</em><br>
+<em>&gt; )*, ROUTE* &quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I did a little investigation in the DTD file and found out that what was
+</em><br>
+<em>&gt; happening was this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --&gt;  &lt;!ENTITY % CoreProfile  	&quot;IGNORE&quot;&gt;
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; --&gt;  &lt;![%CoreProfile;[
+</em><br>
+<em>&gt; --&gt;    &lt;!ENTITY % ChildrenNodes    	&quot; %BehaviorLeafNodes; |
+</em><br>
+<em>&gt; %BindableNodes; | %GroupingNodes; | %SceneLeafNodes; &quot; &gt;
+</em><br>
+<em>&gt; --&gt;    &lt;!ENTITY % SceneNodes       	&quot; ( %ChildrenNodes; |
+</em><br>
+<em>&gt; %WildcardNodes; )*, ROUTE* &quot; &gt;
+</em><br>
+<em>&gt; --&gt;  ]]&gt;
+</em><br>
+<p>&nbsp;&nbsp;Okay,
+<br>
+<p><em>&gt; A bit of nosing around in parser.c found that although the results of
+</em><br>
+<em>&gt; parsing
+</em><br>
+<em>&gt; weren't being applied for the IGNOREd section, the Parsed Entities (in this
+</em><br>
+<em>&gt; case
+</em><br>
+<em>&gt; ChildrenNodes) were still being passed through the parser.
+</em><br>
+<p>&nbsp;&nbsp;yes 
+<br>
+<p><em>&gt; Next stop, the Gospel according to XML 1.0 Second Edition.  The grammar
+</em><br>
+<em>&gt; spec
+</em><br>
+<em>&gt; for an IGNOREd section is:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --&gt;  [61] conditionalSect ::= includeSect | ignoreSect 
+</em><br>
+<em>&gt; --&gt;  [62] includeSect ::= '&lt;![' S? 'INCLUDE' S? '[' extSubsetDecl ']]&gt;' 
+</em><br>
+<em>&gt; --&gt;  [63] ignoreSect ::= '&lt;![' S? 'IGNORE' S? '[' ignoreSectContents* ']]&gt;'
+</em><br>
+<em>&gt; --&gt;  [64] ignoreSectContents ::= Ignore ('&lt;![' ignoreSectContents ']]&gt;'
+</em><br>
+<em>&gt; Ignore)*
+</em><br>
+<em>&gt; --&gt;  [65] Ignore ::= Char* - (Char* ('&lt;![' | ']]&gt;') Char*)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Or, in English, take anything that comes in the section, so long as the
+</em><br>
+<em>&gt; '&lt;!['s
+</em><br>
+<em>&gt; and ']]&gt;'s balance.
+</em><br>
+<p>&nbsp;&nbsp;As you can see at
+<br>
+&nbsp;&nbsp;<a href="http://www.w3.org/TR/2000/REC-xml-20001006-review.html#sec-condition-sect">http://www.w3.org/TR/2000/REC-xml-20001006-review.html#sec-condition-sect</a>
+<br>
+<p>&nbsp;&nbsp;The second edition wording revamped the explanations a bit.
+<br>
+<p><em>&gt; If you've had the spare time to stick with me through this, I've attached
+</em><br>
+<em>&gt; my
+</em><br>
+<em>&gt; recommended patches (as of v2.2.4) below.  In essence, I've added a state
+</em><br>
+<em>&gt; for
+</em><br>
+<em>&gt; IGNORE sections and changed the code in xmlParseConditionalSections to
+</em><br>
+<em>&gt; count
+</em><br>
+<em>&gt; opens
+</em><br>
+<em>&gt; and closes.  I hope that will be enough; additional testing or alternative
+</em><br>
+<em>&gt; approaches would be welcome.
+</em><br>
+<p>&nbsp;&nbsp;Sure I will look at it (one I get a test case this will help too :-).
+<br>
+Adding a new state might be a bit heavy, I would like to be sure it's really
+<br>
+the right way to do it. It looks like it is but :-)
+<br>
+&nbsp;&nbsp;I just tried with a fake document:
+<br>
+<p>--------------------------
+<br>
+~/XML -&gt; ./xmllint --valid try.xml 
+<br>
+<a href="http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd:322">http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd:322</a>: warning: PEReference: %ChildrenNodes; not found
+<br>
+&lt;!ENTITY % SceneNodes       	&quot; ( %ChildrenNodes; | %WildcardNodes; )*, ROUTE* &quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<a href="http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd:394">http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd:394</a>: warning: failed to load external entity &quot;<a href="file://localhost/C%3A/www.web3D.org/TaskGroups/x3d/translation/DisJavaVrml.dtd">file://localhost/C%3A/www.web3D.org/TaskGroups/x3d/translation/DisJavaVrml.dtd</a>&quot;
+<br>
+%DisJavaVrmlDTD;
+<br>
+--------------------------
+<br>
+&nbsp;Even if it should not be loaded, having &quot;<a href="file://localhost/C:/">file://localhost/C:/</a>&quot; referenced
+<br>
+from a published Dtd sounds lame anyway :-\
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1170.html">Saravanan Ramaswamy: "[xml] User passed Arguments for Entities"</a>
+<li><strong>Previous message:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Nov 12 2000 - 13:45:23 EST</em>
+</em>
+</small>
+</body>
+</html>

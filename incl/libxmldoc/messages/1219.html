@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] RE: xmlSetGenericErrorFunc</title>
+<meta name="Author" content="Leo Davidson (leo@ox.compsoc.net)">
+<meta name="Subject" content="[xml] RE: xmlSetGenericErrorFunc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] RE: xmlSetGenericErrorFunc</h1>
+<!-- received="Sun Nov 19 17:33:12 2000" -->
+<!-- isoreceived="20001119223312" -->
+<!-- sent="Sun, 19 Nov 2000 22:33:01 -0000" -->
+<!-- isosent="20001119223301" -->
+<!-- name="Leo Davidson" -->
+<!-- email="leo@ox.compsoc.net" -->
+<!-- subject="[xml] RE: xmlSetGenericErrorFunc" -->
+<!-- id="000401c05278$b330b200$8140dec2@n" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Leo Davidson (<a href="mailto:leo@ox.compsoc.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc"><em>leo@ox.compsoc.net</em></a>)<br>
+<strong>Date:</strong> Sun Nov 19 2000 - 17:33:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1218.html">Leo Davidson: "[xml] xmlSetGenericErrorFunc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+To follow-up on this, two more things:
+<br>
+<p>1) When I said you could call
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetGenericErrorFunc(stderr, xmlGenericErrorDefaultFunc)
+<br>
+I was wrong since xmlGenericErrorDefaultFunc isn't available outside of
+<br>
+LibXml's error.c, so as far as I can tell (maybe I'm being stupid!) there's
+<br>
+no way to restore the default error handling, FWIW.
+<br>
+<p>2) The error handler set by xmlSetGenericErrorFunc doesn't seem to get
+<br>
+called very predicably... The documentation says it's called outside of
+<br>
+parsing and validation, but it seems to be called during parsing as well,
+<br>
+although not for as many events.
+<br>
+<p>For example...
+<br>
+<p>Without changing the error handler I get error messages like this when
+<br>
+calling xmlParseFile on a file which has an error:
+<br>
+<p>--8&lt;--
+<br>
+C:\SN_Devices.xml:5: error: error parsing attribute name
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DigitsToPadTo Number=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+--&gt;8--
+<br>
+<p>If I set an error handler, that handler only gets part of the error message:
+<br>
+<p>--8&lt;--
+<br>
+C:\Leo\source\Home\SuperNudelist\Debug\SN_Config\SN_Devices.xml:5: error:
+<br>
+&lt;DigitsToPadTo Number=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+--&gt;8--
+<br>
+<p>(Missing the &quot; error parsing attribute name&lt;return&gt;&quot;)
+<br>
+<p>Is this a bug?
+<br>
+<p>If it's not a bug, is there any way to call xmlParseFile (I'm not using SAX)
+<br>
+and capture all error messages? I'm writing a GUI application and error
+<br>
+messages that go to stderr/stdout won't be seen by anyone. :-(
+<br>
+<p>Thanks for your time!
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leo
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: Leo Davidson [mailto:<a href="mailto:leo@ox.compsoc.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">leo@ox.compsoc.net</a>]
+</em><br>
+<em>&gt; Sent: Sunday, November 19 2000 19:40
+</em><br>
+<em>&gt; To: List LibXml Alt (E-mail)
+</em><br>
+<em>&gt; Subject: xmlSetGenericErrorFunc
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; (Apologies if this has changed in 2.2.8 as I am still working
+</em><br>
+<em>&gt; with 2.2.7 at
+</em><br>
+<em>&gt; the moment.)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Just a quick comment on xmlSetGenericErrorFunc: Since it
+</em><br>
+<em>&gt; ignores any NULL
+</em><br>
+<em>&gt; arguments (ctx or handler), there's (a) no way to specify a
+</em><br>
+<em>&gt; NULL ctx if
+</em><br>
+<em>&gt; that's what you really want and (b) no way to revert back to
+</em><br>
+<em>&gt; the default
+</em><br>
+<em>&gt; handling.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; (a) Could be important if your error handler optionally uses ctx but
+</em><br>
+<em>&gt; requires it NULL at other times. (I guess you could have two separate
+</em><br>
+<em>&gt; handler functions, one which ignores ctx... but why is
+</em><br>
+<em>&gt; setting ctx to NULL
+</em><br>
+<em>&gt; bad or any different to setting it to any other value?)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; (b) Can be worked around by calling
+</em><br>
+<em>&gt; 	xmlSetGenericErrorFunc(stderr, xmlGenericErrorDefaultFunc)
+</em><br>
+<em>&gt; but that assumes that the default won't ever change.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Why not change xmlSetGenericErrorFunc to:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; void
+</em><br>
+<em>&gt; xmlSetGenericErrorFunc(void *ctx, xmlGenericErrorFunc handler)
+</em><br>
+<em>&gt; {
+</em><br>
+<em>&gt; 	// Always set ctx as requested.
+</em><br>
+<em>&gt; 	xmlGenericErrorContext = ctx;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; 	// Set handler as requested, or restore default if NULL.
+</em><br>
+<em>&gt; 	if (handler != NULL)
+</em><br>
+<em>&gt; 		xmlGenericError = handler;
+</em><br>
+<em>&gt; 	else
+</em><br>
+<em>&gt; 		xmlGenericError = xmlGenericErrorDefaultFunc;
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Of course, this assumes that if handler is NULL then either
+</em><br>
+<em>&gt; ctx is also NULL
+</em><br>
+<em>&gt; or the caller has set ctx to a FILE*. If that assumption
+</em><br>
+<em>&gt; doesn't hold then
+</em><br>
+<em>&gt; the default handler will crash.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Sorry if this is a stupid idea!
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; 	Leo
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1218.html">Leo Davidson: "[xml] xmlSetGenericErrorFunc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Nov 19 2000 - 17:43:32 EST</em>
+</em>
+</small>
+</body>
+</html>

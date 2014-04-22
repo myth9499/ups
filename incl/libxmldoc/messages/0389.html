@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] using external dtd</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] using external dtd">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] using external dtd</h1>
+<!-- received="Wed Feb 23 05:31:22 2000" -->
+<!-- isoreceived="20000223103122" -->
+<!-- sent="Wed, 23 Feb 2000 11:31:11 +0100" -->
+<!-- isosent="20000223103111" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] using external dtd" -->
+<!-- id="20000223113110.B414@w3.org" -->
+<!-- inreplyto="38B3AEBF.B3BC262E@bull.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20using%20external%20dtd"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Feb 23 2000 - 05:31:11 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0390.html">Peter Jacobi: "[xml] libxml directions?"</a>
+<li><strong>Previous message:</strong> <a href="0388.html">Nadine Peyrouze: "[xml] using external dtd"</a>
+<li><strong>In reply to:</strong> <a href="0388.html">Nadine Peyrouze: "[xml] using external dtd"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Feb 23, 2000 at 10:56:15AM +0100, Nadine Peyrouze wrote:
+<br>
+<em>&gt; 2 questions about the use of external dtd
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1) is there any function for inserting or modidying the  &lt;!DOCTYPE
+</em><br>
+<em>&gt; ..... &gt; in an
+</em><br>
+<em>&gt;     xml document (to specify SYSTEM &quot;path&quot; ) ?
+</em><br>
+<em>&gt;    some functions (like xmlNewDtd) seems to allow it but in the in
+</em><br>
+<em>&gt; memory
+</em><br>
+<em>&gt;    document only : i.e, the corresponding DOCTYPE line is not inserted
+</em><br>
+<em>&gt; in the
+</em><br>
+<em>&gt;    saved xml file.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;function to modify the path, no, just avoid doing the valididy checking
+<br>
+It is possible to do a-posteriori valididy checking using either the
+<br>
+existing DTd info
+<br>
+<p>&nbsp;&nbsp;&nbsp;xmlValidateDocument()
+<br>
+<p>or an extra DTD:
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;xmlValidateDtd()
+<br>
+<p>The debug shell front end show uses of this :
+<br>
+<p>&nbsp;&nbsp;&nbsp;xmlShellValidate()
+<br>
+<p><p><em>&gt; 2) when a document is already parsed in memory, is there any way to make
+</em><br>
+<em>&gt; it use a
+</em><br>
+<em>&gt;     new Dtd (to get default values through xmlGetProp) without reloading
+</em><br>
+<em>&gt; the
+</em><br>
+<em>&gt;     document ?
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Hum, no. But it should not be that hard. Parse the external Dtd
+<br>
+using xmlParseDTD() and link it as the document external subset
+<br>
+doc-&gt;extSubset.
+<br>
+<p>Note however that you may get different result with this technique
+<br>
+than during normal parsing:
+<br>
+<p>&nbsp;&nbsp;&nbsp;Some DTDs are done in an extensible way, i.e. some of the productions
+<br>
+&nbsp;&nbsp;&nbsp;can be extended with parameter entities defined in the internal subset.
+<br>
+&nbsp;&nbsp;&nbsp;If you use xmlParseDTD() those won't be looked at, resulting in a
+<br>
+&nbsp;&nbsp;&nbsp;different class of valid documents
+<br>
+<p>this is subtle but should not be neglected. This also mean that I need
+<br>
+to etend the API to allow parsing of a DTD in teh context of an existing
+<br>
+document.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20using%20external%20dtd">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20using%20external%20dtd">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20using%20external%20dtd">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0390.html">Peter Jacobi: "[xml] libxml directions?"</a>
+<li><strong>Previous message:</strong> <a href="0388.html">Nadine Peyrouze: "[xml] using external dtd"</a>
+<li><strong>In reply to:</strong> <a href="0388.html">Nadine Peyrouze: "[xml] using external dtd"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:05 EDT</em>
+</em>
+</small>
+</body>
+</html>

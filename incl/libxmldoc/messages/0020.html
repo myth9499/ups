@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: libxml memory issues</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: libxml memory issues">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: libxml memory issues</h1>
+<!-- received="Wed Apr 21 07:13:10 1999" -->
+<!-- isoreceived="19990421111310" -->
+<!-- sent="Wed, 21 Apr 1999 07:13:08 -0400" -->
+<!-- isosent="19990421111308" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: libxml memory issues" -->
+<!-- id="19990421071308.P15825@w3.org" -->
+<!-- inreplyto="371BE6BE.36293833@hooked.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20libxml%20memory%20issues"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Apr 21 1999 - 07:13:08 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0021.html">Hilaire Fernandes: "[xml] Need help in implementing XML"</a>
+<li><strong>Previous message:</strong> <a href="0019.html">Daniel Veillard: "Re: [xml] References to external documents"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[ I Cc'ed xml and gdome lists since they are certainly interested by those issues]
+<br>
+<p>&nbsp;Hi Brad,
+<br>
+<p><em>&gt; Thanks for all your work on libxml. It has proven to be a very great
+</em><br>
+<em>&gt; help
+</em><br>
+<em>&gt; to me. Very good job. I have a few comments about places in the code
+</em><br>
+<em>&gt; that are a
+</em><br>
+<em>&gt; little unclear.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /** xmlDocDumpMemory:
+</em><br>
+<em>&gt;  * Dump an XML document in memory and return the CHAR * and it's size.
+</em><br>
+<em>&gt;  * It's up to the caller to free the memory.
+</em><br>
+<em>&gt; */
+</em><br>
+<em>&gt; This routine returns a pointer to static memory and should not be freed.
+</em><br>
+<p>&nbsp;&nbsp;Well I will rather fix the library behaviour. Having a thread safe version
+<br>
+is still my intend and one will have to free the memory.
+<br>
+<p><em>&gt; However, this results of this routine
+</em><br>
+<em>&gt; /**
+</em><br>
+<em>&gt;  * xmlNodeGetContent:
+</em><br>
+<em>&gt;  * @cur:  the node being read
+</em><br>
+<em>&gt;  *
+</em><br>
+<em>&gt;  * Read the value of a node, this can be either the text carried
+</em><br>
+<em>&gt;  * directly by this node if it's a TEXT node or the aggregate string
+</em><br>
+<em>&gt;  * of the values carried by this node child's (TEXT and ENTITY_REF).
+</em><br>
+<em>&gt;  * Entity references are substitued.
+</em><br>
+<em>&gt;  * Returns a new CHAR * or NULL if no content is available.
+</em><br>
+<em>&gt;  */
+</em><br>
+<em>&gt; do need to be freed. Could you comment to this effect in the code?
+</em><br>
+<p>&nbsp;&nbsp;Yep, done.
+<br>
+<p><em>&gt; Also, do you plan on making a thread safe version of this library?
+</em><br>
+<p>&nbsp;&nbsp;Ok, I have nearly finished removing all buffer problems which were
+<br>
+making the parser non thread safe, I hope to commit this to gnome CVS
+<br>
+base this afternoon. Basically I introduced an xmlBuffer type (which should
+<br>
+be useful for UTF8 conversion purposes too) and rewrote the dump routines
+<br>
+to use those. Only two interfaces are broken and they were clearly labeled
+<br>
+as unstable not for public use in tree.h (xmlBufferWriteChar and
+<br>
+xmlBufferWriteCHAR, I will probably get rid of them for good at some point).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20libxml%20memory%20issues">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0021.html">Hilaire Fernandes: "[xml] Need help in implementing XML"</a>
+<li><strong>Previous message:</strong> <a href="0019.html">Daniel Veillard: "Re: [xml] References to external documents"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

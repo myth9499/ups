@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Using the encoders</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Using the encoders">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Using the encoders</h1>
+<!-- received="Wed Feb  9 10:08:40 2000" -->
+<!-- isoreceived="20000209150840" -->
+<!-- sent="Wed, 9 Feb 2000 16:08:23 +0100" -->
+<!-- isosent="20000209150823" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Using the encoders" -->
+<!-- id="20000209160823.F24054@w3.org" -->
+<!-- inreplyto="38A17B11.BEE2305D@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Using%20the%20encoders"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Feb 09 2000 - 10:08:23 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0350.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<li><strong>In reply to:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0351.html">Lutz Behnke: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0351.html">Lutz Behnke: "Re: [xml] Using the encoders"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Lutz,
+<br>
+<p>On Wed, Feb 09, 2000 at 03:34:57PM +0100, Lutz Behnke wrote:
+<br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am currently trying to write a DOMHASH signing and verification implementation
+</em><br>
+<em>&gt; for libxml. Now I have some questions:
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Good ! BTW doesn't this requires having an implementation of canonical XML ?
+<br>
+c.f. <a href="http://www.w3.org/TR/xml-c14n">http://www.w3.org/TR/xml-c14n</a>  which is in Last Call at the moment.
+<br>
+If yes working on this part could be done now ... c.f. the following.
+<br>
+<p><em>&gt; a) Is there such an implement for/in libxml allready done? I could only find that
+</em><br>
+<em>&gt;    sneak-ware java thingy from IBM.
+</em><br>
+<p>&nbsp;&nbsp;I never heard of any.
+<br>
+<p><em>&gt; b) if not, how can I use the encoding functions from libxml. I need to get the
+</em><br>
+<em>&gt;    names and contents of the elements in UTF-16BE. I currently would understand the code
+</em><br>
+<em>&gt;    to be something like (for the name of the element):
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         xmlCharEncodingHandler utf16_handler = xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF16BE);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         utf16_handler-&gt;xmlCharEncodingOutputFunc(node-&gt;name, strlen(node-&gt;name),
+</em><br>
+<em>&gt;                                                 (utf16_name, some_guessed_value);
+</em><br>
+<p>&nbsp;&nbsp;yes, that what it is designed for. But this is not thoroughtly tested 
+<br>
+(euthemism !!) and subject to changes.
+<br>
+<p><em>&gt;    this is under the assumption that the name and CDATA is stored in allmost UTF-8 
+</em><br>
+<em>&gt;    (plain ASCII to be exact)
+</em><br>
+<em>&gt;    Is that correct? Is the fact that the data is in UTF-8/ASCII ensured by the library?
+</em><br>
+<em>&gt;    What happens when I present a full blown unicode document to libxml?
+</em><br>
+<p>&nbsp;&nbsp;Well this is being worked on right now. Basically libxml as released doesn't
+<br>
+garantee anything it just uses xmlChar (one byte unsigned elements) arrays to
+<br>
+keep document content in memory.
+<br>
+&nbsp;&nbsp;I'm working on enforcing UTF-8 support, with one exception, if the document
+<br>
+specified an encoding (like the ISO-Latin series) where chars use a fixed lenght
+<br>
+of 1. 
+<br>
+&nbsp;&nbsp;What is expected once 2.0 is released is that UTF-16 (and other encoding not
+<br>
+fiting on 1byte chars) is that the content gets converted on the fly before
+<br>
+being passed to the parser input buffer.
+<br>
+&nbsp;&nbsp;So basically yes we will work on providing conversion to/from UTF-8 for those.
+<br>
+The code in encoding.c is subject to changes, c.f. the following message and 
+<br>
+thread:
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/messages/0340.html">http://xmlsoft.org/messages/0340.html</a>
+<br>
+<p>&nbsp;&nbsp;This part of the code probably won't be released before 2.0 and sits for the
+<br>
+moment in the W3C CVS base at 
+<br>
+&nbsp;&nbsp;<a href="http://dev.w3.org/">http://dev.w3.org/</a>  in the XML module.
+<br>
+<p><p><em>&gt; c) How can I compute the neccesary lenght of the output buffer. Wouldn't be a good thing
+</em><br>
+<em>&gt;    for the function to return the _needed_ bytes if I call it with a output buffer of NULL.
+</em><br>
+<p>&nbsp;&nbsp;I think the best (CPU wise) is to also return the number of bytes read
+<br>
+from the buffer, if different from the value given, this may mean:
+<br>
+&nbsp;&nbsp;&nbsp;- that a larger output buffer is needed
+<br>
+&nbsp;&nbsp;&nbsp;- that the input didn't end-up on a character boundary
+<br>
+<p>&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Using%20the%20encoders">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Using%20the%20encoders">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Using%20the%20encoders">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0350.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<li><strong>In reply to:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0351.html">Lutz Behnke: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0351.html">Lutz Behnke: "Re: [xml] Using the encoders"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

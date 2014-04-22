@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/WIN32</title>
+<meta name="Author" content="Erwin Rol (Erwin.Rol@q-soft-engineering.com)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/WIN32</h1>
+<!-- received="Thu Jul  6 08:15:28 2000" -->
+<!-- isoreceived="20000706121528" -->
+<!-- sent="Thu, 06 Jul 2000 13:55:49 +0200" -->
+<!-- isosent="20000706115549" -->
+<!-- name="Erwin Rol" -->
+<!-- email="Erwin.Rol@q-soft-engineering.com" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/WIN32" -->
+<!-- id="396473C5.71B02ABE@q-soft-engineering.com" -->
+<!-- charset="iso-8859-2" -->
+<!-- inreplyto="3960E1B7.17B942E9@clanger9.demon.co.uk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Erwin Rol (<a href="mailto:Erwin.Rol@q-soft-engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32"><em>Erwin.Rol@q-soft-engineering.com</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 07:55:49 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0569.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0572.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0582.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0584.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0586.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello all,
+<br>
+<p>i just wanted to ask what the state is of LIBXML2 on WIN32.
+<br>
+I saw some typicle UNIX-&gt;WIN32 probleems like using int's for
+<br>
+socket descriptors and not the SOCKET type in wIN32 (that is unsigned).
+<br>
+And checking &lt; 0 for errors from network functions which is not the
+<br>
+recomended way on WIN32. Also the below named socklen_t isn't defined 
+<br>
+int WIN32. and the getsockopt warning wants a char* and not a int*.
+<br>
+Also htons wants a short and not a int (ports are 16bit so why using
+<br>
+a int in the first place ?) The compiler has problems with the function
+<br>
+pointers in 
+<br>
+<p>xmlXPathFunction
+<br>
+xmlXPathIsFunction(xmlXPathParserContextPtr ctxt, const xmlChar *name);
+<br>
+<p>the return statements _seem to need_ a cast to the xmlXPathFunction
+<br>
+type.
+<br>
+<p>The config file could just be config.h and not with a #ifdef WIN32.
+<br>
+just make the config.h file in the distribution the correct file
+<br>
+for WIN32 and put a copy of that config.h in config_win32.h. So when
+<br>
+yer on UNIX you run configure and it will overwrite config.h and
+<br>
+when yer on WIN32 it is correct and won't be over written, this
+<br>
+removes all the ugly #ifdef WIN32 at the start of the file.
+<br>
+<p>There where also some include files not included string.h and strings.h 
+<br>
+in some .c files that needed them.
+<br>
+<p>ANd the main question did anybody build a DLL out of it on WIN32. The
+<br>
+normal
+<br>
+way in VC++ seems to put something like this in the files.
+<br>
+<p>in config.h ????
+<br>
+<p>#ifdef LIBXML_EXPORTS
+<br>
+#define LIBXML_API __declspec(dllexport)
+<br>
+#else
+<br>
+#define LIBXML_API __declspec(dllimport)
+<br>
+#endif
+<br>
+<p><p>and in the files that have functions that need exporting to the outside
+<br>
+world.
+<br>
+<p>LIBXML_API int foo(void);
+<br>
+<p>This could be easely done and on UNIX the defines could just be empty.
+<br>
+<p><p>So how is the general &quot;standpoint&quot; towards getting libxml working and
+<br>
+compiling 
+<br>
+on WIN32 (as a DLL or not) ? And i mean with the MS compiler, and not
+<br>
+gcc. There could
+<br>
+be a simple subdirectory with the project files that can be a realy
+<br>
+seperate .zip file
+<br>
+than the main distribution. 
+<br>
+<p>- Erwin
+<br>
+<p><p><p>Paul Barnfather wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Compilation fails with:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /usr/local/bin/gcc -DHAVE_CONFIG_H -I. -I. -I. -I. -O2 -msupersparc -c
+</em><br>
+<em>&gt; nanohttp.c  -fPIC -DPIC -o .libs/nanohttp.lo
+</em><br>
+<em>&gt; nanohttp.c: In function `xmlNanoHTTPConnectAttempt':
+</em><br>
+<em>&gt; nanohttp.c:659: `socklen_t' undeclared (first use in this function)
+</em><br>
+<em>&gt; nanohttp.c:659: (Each undeclared identifier is reported only once
+</em><br>
+<em>&gt; nanohttp.c:659: for each function it appears in.)
+</em><br>
+<em>&gt; nanohttp.c:659: parse error before `len'
+</em><br>
+<em>&gt; nanohttp.c:660: `len' undeclared (first use in this function)
+</em><br>
+<em>&gt; nanohttp.c:661: warning: passing arg 4 of `getsockopt' from incompatible pointer
+</em><br>
+<em>&gt; type
+</em><br>
+<em>&gt; make[2]: *** [nanohttp.lo] Error 1
+</em><br>
+<em>&gt; make[2]: Leaving directory `/src/build/libxml2-2.1.1'
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Using gcc-2.95.2/Solaris 2.6.
+</em><br>
+<em>&gt; Did autoconf miss a library out?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt;  ~~~~~~~~~~~~~~~~~~~~~~~~ Paul Barnfather ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</em><br>
+<em>&gt; |  <a href="mailto:plb@clanger9.demon.co.uk?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">plb@clanger9.demon.co.uk</a>  <a href="mailto:paul.barnfather@northern-electric.co.uk?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">paul.barnfather@northern-electric.co.uk</a> |
+</em><br>
+<em>&gt; |      __           <a href="http://www.clanger9.demon.co.uk">http://www.clanger9.demon.co.uk</a>    .             |
+</em><br>
+<em>&gt;      o--o-... 75TS                                    o'~o... 750SS
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</em><br>
+<p><pre>
+-- 
+        Q - S O F T - E N G I N E E R I N G 
+     Rodachtalweg 11, 81549 Muenchen, Germany
+<p>Erwin Rol (Software Engineer)     phone: +49-89-68050051
+<a href="mailto:Erwin.Rol@Q-Soft-Engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">Erwin.Rol@Q-Soft-Engineering.com</a>  fax  : +49-89-68050052
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0569.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0572.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0582.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0584.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Maybe reply:</strong> <a href="0586.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

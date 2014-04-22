@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Gnome-xml bugs?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: Gnome-xml bugs?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Gnome-xml bugs?</h1>
+<!-- received="Mon Feb  8 13:35:10 1999" -->
+<!-- isoreceived="19990208183510" -->
+<!-- sent="Mon, 8 Feb 1999 13:35:04 -0500" -->
+<!-- isosent="19990208183504" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: Gnome-xml bugs?" -->
+<!-- id="19990208133504.B13729@w3.org" -->
+<!-- inreplyto="199902081731.SAA31344@c125.ryd.student.liu.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Gnome-xml%20bugs?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Feb 08 1999 - 13:35:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0004.html">Alexander Larsson: "Re: [xml] Re: Gnome-xml bugs?"</a>
+<li><strong>In reply to:</strong> <a href="0004.html">Alexander Larsson: "Re: [xml] Re: Gnome-xml bugs?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Quoting Alexander Larsson (<a href="mailto:alla@lysator.liu.se?subject=Re:%20[xml]%20Re:%20Gnome-xml%20bugs?">alla@lysator.liu.se</a>):
+<br>
+<em>&gt; On  8 Feb, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;&gt; It previously gave this xml code: &lt;root prop\&gt;, but after my comment you
+</em><br>
+<em>&gt; &gt;&gt; changed it to generate &lt;root prop=&quot;&quot;\&gt;. This has been changed back in
+</em><br>
+<em>&gt; &gt;&gt; the latest cvs version. Is this a bug, or have you deliberatly changed
+</em><br>
+<em>&gt; &gt;&gt; it? My program Dia currently depends on this.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   Fixed in CVS, sorry for reintroducing this bug,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Hmm, it seems the other bug is also left.
+</em><br>
+<p>&nbsp;&nbsp;Oops, yes ...
+<br>
+<p><em>&gt;  Parsing &lt;root prop=&quot;&quot;\&gt; gives the property a value of NULL when
+</em><br>
+<em>&gt;  doing xmlNodeListGetString(). I think it should give strdup(&quot;&quot;)
+</em><br>
+<em>&gt;  instead. (Because then you can separate xmlGetProp() return status for
+</em><br>
+<em>&gt;  'non-existing property' and 'property value is empty string')
+</em><br>
+<p>&nbsp;&nbsp;Rather than changing xmlNodeListGetString() I prefer changing
+<br>
+xmlGetProp to catch the case where the attribute exist but the associed
+<br>
+node list is NULL. xmlNodeListGetString is a bit more generic, and
+<br>
+it doesn't make sense to have it return &quot;&quot; when a NULL pointer is
+<br>
+given,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;I hope it's Ok, I commited that change,
+<br>
+<p>&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Gnome-xml%20bugs?">Daniel.Veillard@w3.org</a> | W3C  INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, Kaffe,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Amaya.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Gnome-xml%20bugs?">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Gnome-xml%20bugs?">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0004.html">Alexander Larsson: "Re: [xml] Re: Gnome-xml bugs?"</a>
+<li><strong>In reply to:</strong> <a href="0004.html">Alexander Larsson: "Re: [xml] Re: Gnome-xml bugs?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

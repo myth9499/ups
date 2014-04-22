@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Avoid displaying libxml error messages in my pro</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Avoid displaying libxml error messages in my program">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Avoid displaying libxml error messages in my program</h1>
+<!-- received="Fri Nov 26 13:00:57 1999" -->
+<!-- isoreceived="19991126180057" -->
+<!-- sent="Fri, 26 Nov 1999 13:00:56 -0500" -->
+<!-- isosent="19991126180056" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Avoid displaying libxml error messages in my program" -->
+<!-- id="19991126130056.B1005@w3.org" -->
+<!-- inreplyto="85256835.005C1883.00@ams-central-gate-5a.amsinc.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Avoid%20displaying%20libxml%20error%20messages%20in%20my%20program"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Nov 26 1999 - 13:00:56 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0225.html">Fernando_Pereira@amsinc.com: "[xml] Avoid displaying libxml error messages in my program"</a>
+<li><strong>In reply to:</strong> <a href="0225.html">Fernando_Pereira@amsinc.com: "[xml] Avoid displaying libxml error messages in my program"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Nov 26, 1999 at 04:07:49PM +0000, <a href="mailto:Fernando_Pereira@amsinc.com?subject=Re:%20[xml]%20Avoid%20displaying%20libxml%20error%20messages%20in%20my%20program">Fernando_Pereira@amsinc.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi all,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Can anyone tell me how to avoid the display of libxml error messages to the
+</em><br>
+<em>&gt; screen?
+</em><br>
+<em>&gt; Is there a macro or a define in one of the modules that I can use for this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Kind regards,
+</em><br>
+<p>&nbsp;&nbsp;The errors are displayed by the parser using the function registred
+<br>
+in the SAX callback list. E.g:
+<br>
+<p>xmlParseSystemLiteral(xmlParserCtxtPtr ctxt) {
+<br>
+&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax-&gt;error(ctxt-&gt;userData, &quot;Unfinished SystemLiteral\n&quot;);
+<br>
+<p>The point is to make ctxt-&gt;sax-&gt;error and ctxt-&gt;sax-&gt;warning
+<br>
+NULL or pointing to your own function. They are initialized by
+<br>
+default to 
+<br>
+<p>xmlParserError(void *ctx, const char *msg, ...)
+<br>
+and
+<br>
+xmlParserWarning(void *ctx, const char *msg, ...)
+<br>
+<p>found in error.c
+<br>
+<p>So use create your own xmlSAXHandlerPtr by copying the default one
+<br>
+with error and warning initialized to your need and call
+<br>
+<p>xmlDocPtr
+<br>
+xmlSAXParseFile(xmlSAXHandlerPtr sax, const char *filename, 0);
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Avoid%20displaying%20libxml%20error%20messages%20in%20my%20program">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Avoid%20displaying%20libxml%20error%20messages%20in%20my%20program">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Avoid%20displaying%20libxml%20error%20messages%20in%20my%20program">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0225.html">Fernando_Pereira@amsinc.com: "[xml] Avoid displaying libxml error messages in my program"</a>
+<li><strong>In reply to:</strong> <a href="0225.html">Fernando_Pereira@amsinc.com: "[xml] Avoid displaying libxml error messages in my program"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] MSDev project files for libxml2-2.2.4</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] MSDev project files for libxml2-2.2.4">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] MSDev project files for libxml2-2.2.4</h1>
+<!-- received="Wed Oct  4 09:44:36 2000" -->
+<!-- isoreceived="20001004134436" -->
+<!-- sent="Wed, 04 Oct 2000 09:44:31 -0400" -->
+<!-- isosent="20001004134431" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] MSDev project files for libxml2-2.2.4" -->
+<!-- id="200010041344.JAA12789@vixen.cs.utk.edu" -->
+<!-- inreplyto="[xml] MSDev project files for libxml2-2.2.4" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Wed Oct 04 2000 - 09:44:31 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0880.html">David Doolin: "Re: [xml] Targetting Win32"</a>
+<li><strong>Previous message:</strong> <a href="0878.html">Daniel Veillard: "Re: [xml] MSDev project files for libxml2-2.2.4"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0875.html">Timothee Besset: "[xml] MSDev project files for libxml2-2.2.4"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20001004104517.B14778@w3.org?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">20001004104517.B14778@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;On Tue, Oct 03, 2000 at 11:38:26PM -0500, Timothee Besset wrote:
+</em><br>
+<em>&gt;&gt; <a href="http://gtkradiant.qeradiant.com/xml_resources/libxml2-2.2.4-msdev.tar.gz">http://gtkradiant.qeradiant.com/xml_resources/libxml2-2.2.4-msdev.tar.gz</a>
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; I've upload a version with project files for VC++ 6.0
+</em><br>
+<em>&gt;&gt; I also added a README with detailed info on how I did it, I hope I'm 
+</em><br>
+<em>&gt;&gt; providing enough stuff so next releases can include something similar that 
+</em><br>
+<em>&gt;&gt; will work out of the box. Right now it's a bit painful process, if you want 
+</em><br>
+<em>&gt;&gt; to build on VC6 from scratch (i.e. standard distrib) you need to build with 
+</em><br>
+<em>&gt;&gt; cygwin first to get some config done.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   thanks,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  David is still the official WIN32 maintainer, I would prefer to get
+</em><br>
+<em>&gt;his feedback before any inclusion.
+</em><br>
+<p>I just downloaded and built it.  Nice work.  Here is a couple of comments:
+<br>
+<p>Tim added a directory MSDev to the libxml tree.  It might be a bit
+<br>
+more neighborly to change this to Win32, and put all the win32
+<br>
+stuff in that by itself.  This could include whatever makefiles,
+<br>
+configure scripts, msdev dsp/dsw files, and files associated with 
+<br>
+other development tools such as whatever Peter Jacobi is using.
+<br>
+This way us windows folks have `one-stop' shopping, and everyone 
+<br>
+else can simply ignore it.  Tim did not distribute a dsw file,
+<br>
+so it might be nice include one as a default.  If anyone can 
+<br>
+summon convincing arguments to the contrary, please do so on
+<br>
+the mailing list.   Also, my personal preference is for headers to be 
+<br>
+in an `include' directory, just to maintain consistency.  In 
+<br>
+this case, it would contain nothing more than a libxml subdirectory,
+<br>
+and -I changes from -I..\. to ..\include\.
+<br>
+<p>What Tim did with configure in cygwin, I was doing by hand,
+<br>
+more or less.  At some point in the future, it should be possible
+<br>
+to not have to do this, but just control it with #defines. 
+<br>
+<p><p>I could probably come up with several other things, of 
+<br>
+exponentially decreasing importance.  Maybe later.
+<br>
+<p>Ok, bottom line: Let's add a win32 subdirectory to the libxml
+<br>
+source tree, and add Tim's dsp and README.MSDev file to it.
+<br>
+And whatever Peter needs for building.  While the msdev files
+<br>
+won't work directly out of cvs, the README is very clear, and 
+<br>
+works fine for now.  Once that is in place, the (minor) changes
+<br>
+necessary for building without cygwin can be made without too
+<br>
+much disruption.
+<br>
+<p>Dave D
+<br>
+<p><p><p><em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;-- 
+</em><br>
+<em>&gt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt;Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt;Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt; <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20MSDev%20project%20files%20for%20libxml2-2.2.4">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0880.html">David Doolin: "Re: [xml] Targetting Win32"</a>
+<li><strong>Previous message:</strong> <a href="0878.html">Daniel Veillard: "Re: [xml] MSDev project files for libxml2-2.2.4"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0875.html">Timothee Besset: "[xml] MSDev project files for libxml2-2.2.4"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 04 2000 - 10:44:56 EDT</em>
+</em>
+</small>
+</body>
+</html>

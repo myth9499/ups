@@ -1,0 +1,162 @@
+*** xpath.c	2000/10/27 00:10:47	1.3
+--- xpath.c	2000/10/27 22:37:52
+*************** xmlXPathNodeCollectAndTest(xmlXPathParse
+*** 2499,2511 ****
+  		    }
+  		    break;
+                  case NODE_TEST_ALL:
+! 		    if ((cur->type == XML_ELEMENT_NODE) ||
+! 			(cur->type == XML_DOCUMENT_NODE) ||
+! 			(cur->type == XML_HTML_DOCUMENT_NODE)) {
+  #ifdef DEBUG_STEP
+!                         n++;
+  #endif
+! 		        xmlXPathNodeSetAdd(ret, cur);
+  		    }
+  		    break;
+                  case NODE_TEST_NS: {
+--- 2499,2525 ----
+  		    }
+  		    break;
+                  case NODE_TEST_ALL:
+! 		    switch (axis) {
+! 		    case AXIS_ATTRIBUTE:
+! 			if (cur->type == XML_ATTRIBUTE_NODE) {
+  #ifdef DEBUG_STEP
+! 			    n++;
+  #endif
+! 			    xmlXPathNodeSetAdd(ret, cur);
+! 			}
+! 			break;
+! 		    case AXIS_NAMESPACE:
+! 			TODO /* namespace search */
+! 			break;
+! 		    default:
+! 			if ((cur->type == XML_ELEMENT_NODE) ||
+! 			    (cur->type == XML_DOCUMENT_NODE) ||
+! 			    (cur->type == XML_HTML_DOCUMENT_NODE)) {
+! #ifdef DEBUG_STEP
+! 			    n++;
+! #endif
+! 			    xmlXPathNodeSetAdd(ret, cur);
+! 			}
+  		    }
+  		    break;
+                  case NODE_TEST_NS: {
+*************** xmlXPathEvalPathExpr(xmlXPathParserConte
+*** 4295,4300 ****
+--- 4309,4324 ----
+  #endif
+  		    lc = 1;
+  		    break;
++ 		} else if ((NXT(len) == ']')) {
++ 		    /*
++ 		     * the ending square bracket of a Predicate.
++ 		     * well-balancing is handled in
++ 		     * xmlXPathEvalPredicate()
++ 		     */
++ #ifdef DEBUG_STEP
++ 		    fprintf(xmlXPathDebug, "PathExpr: AbbrRelLocation\n");
++ #endif
++ 		    lc = 1;
+  		} else {
+  		    XP_ERROR(XPATH_EXPR_ERROR);
+  		}
+*************** xmlXPathEvalPathExpr(xmlXPathParserConte
+*** 4327,4332 ****
+--- 4351,4357 ----
+  	    ctxt->context->node = NULL;
+  	    xmlXPathEvalRelativeLocationPath(ctxt);
+  	} else if (CUR == '/') {
++ 	    NEXT;
+  	    xmlXPathEvalRelativeLocationPath(ctxt);
+  	}
+      }
+*************** eval_predicates:
+*** 5145,5169 ****
+  void
+  xmlXPathEvalRelativeLocationPath(xmlXPathParserContextPtr ctxt) {
+      SKIP_BLANKS;
+-     if ((CUR == '/') && (NXT(1) == '/')) {
+- 	SKIP(2);
+- 	SKIP_BLANKS;
+- 	xmlXPathNodeCollectAndTest(ctxt, AXIS_DESCENDANT_OR_SELF,
+- 			 NODE_TEST_TYPE, XML_ELEMENT_NODE, NULL, NULL);
+-     } else if (CUR == '/') {
+- 	    NEXT;
+- 	SKIP_BLANKS;
+-     }
+      xmlXPathEvalStep(ctxt);
+      SKIP_BLANKS;
+      while (CUR == '/') {
+! 	if ((CUR == '/') && (NXT(1) == '/')) {
+  	    SKIP(2);
+  	    SKIP_BLANKS;
+  	    xmlXPathNodeCollectAndTest(ctxt, AXIS_DESCENDANT_OR_SELF,
+  			     NODE_TEST_TYPE, XML_ELEMENT_NODE, NULL, NULL);
+  	    xmlXPathEvalStep(ctxt);
+! 	} else if (CUR == '/') {
+  	    NEXT;
+  	    SKIP_BLANKS;
+  	    xmlXPathEvalStep(ctxt);
+--- 5170,5185 ----
+  void
+  xmlXPathEvalRelativeLocationPath(xmlXPathParserContextPtr ctxt) {
+      SKIP_BLANKS;
+      xmlXPathEvalStep(ctxt);
+      SKIP_BLANKS;
+      while (CUR == '/') {
+! 	if (NXT(1) == '/') {
+  	    SKIP(2);
+  	    SKIP_BLANKS;
+  	    xmlXPathNodeCollectAndTest(ctxt, AXIS_DESCENDANT_OR_SELF,
+  			     NODE_TEST_TYPE, XML_ELEMENT_NODE, NULL, NULL);
+  	    xmlXPathEvalStep(ctxt);
+! 	} else {
+  	    NEXT;
+  	    SKIP_BLANKS;
+  	    xmlXPathEvalStep(ctxt);
+*************** xmlXPathEvalLocationPath(xmlXPathParserC
+*** 5197,5217 ****
+      if (CUR != '/') {
+          xmlXPathEvalRelativeLocationPath(ctxt);
+      } else {
+! 	while (CUR == '/') {
+! 	    if ((CUR == '/') && (NXT(1) == '/')) {
+! 		SKIP(2);
+! 		SKIP_BLANKS;
+! 		xmlXPathNodeCollectAndTest(ctxt,
+! 		                 AXIS_DESCENDANT_OR_SELF, NODE_TEST_TYPE,
+! 				 XML_ELEMENT_NODE, NULL, NULL);
+  		xmlXPathEvalRelativeLocationPath(ctxt);
+- 	    } else if (CUR == '/') {
+- 		NEXT;
+- 		SKIP_BLANKS;
+- 		xmlXPathRoot(ctxt);
+- 		if (CUR != 0)
+- 		    xmlXPathEvalRelativeLocationPath(ctxt);
+- 	    }
+  	}
+      }
+  }
+--- 5213,5231 ----
+      if (CUR != '/') {
+          xmlXPathEvalRelativeLocationPath(ctxt);
+      } else {
+! 	xmlXPathRoot(ctxt);
+! 	if (NXT(1) == '/') {
+! 	    SKIP(2);
+! 	    SKIP_BLANKS;
+! 	    xmlXPathNodeCollectAndTest(ctxt,
+! 				       AXIS_DESCENDANT_OR_SELF, NODE_TEST_TYPE,
+! 				       XML_ELEMENT_NODE, NULL, NULL);
+! 	    xmlXPathEvalRelativeLocationPath(ctxt);
+! 	} else {
+! 	    NEXT;
+! 	    SKIP_BLANKS;
+! 	    if (CUR != 0)
+  		xmlXPathEvalRelativeLocationPath(ctxt);
+  	}
+      }
+  }
+

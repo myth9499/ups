@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another buglet in HTML parser</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Another buglet in HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another buglet in HTML parser</h1>
+<!-- received="Wed Oct 13 02:38:52 1999" -->
+<!-- isoreceived="19991013063852" -->
+<!-- sent="Wed, 13 Oct 1999 02:38:50 -0400" -->
+<!-- isosent="19991013063850" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Another buglet in HTML parser" -->
+<!-- id="19991013023850.C9243@w3.org" -->
+<!-- inreplyto="y6y4sfwuu5s.fsf@nero.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Oct 13 1999 - 02:38:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>Previous message:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>In reply to:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>Reply:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt; Huh?  I though just moving the test down below the four cases would
+</em><br>
+<em>&gt; solve the problem; you couldn't have autoclosed anything before
+</em><br>
+<em>&gt; parsing some content anyway, so moving the test wont disturb the first
+</em><br>
+<em>&gt; iteration of the loop, and after the first iteration the loop
+</em><br>
+<em>&gt; basically looks the same as before...  What am I missing?
+</em><br>
+<p>&nbsp;&nbsp;The fact that the parser tries to accomodate with invalid
+<br>
+input. Your change was breaking the test3.html test and the whole
+<br>
+problem started to get really messy. I actually rewrote most
+<br>
+of the HTML parsing logic yesterday, and commited it to the W3C
+<br>
+CVS base, there is still a bug left (at least) but now at least
+<br>
+the parsing engine logic seems quite more robust.
+<br>
+<p><em>&gt; &gt;   I certainly need to add more test cases, as the code progresses
+</em><br>
+<em>&gt; &gt; catching those should be done as much as possible in a systematic
+</em><br>
+<em>&gt; &gt; way. Any idea ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Erh... not really.  I usually try to write small examples to test the
+</em><br>
+<em>&gt; individual functions as I go along, and I keep those around for
+</em><br>
+<em>&gt; regression testing.  But even so I dont really hope to cover all
+</em><br>
+<em>&gt; combinations, as different parts of my program starts to interact,
+</em><br>
+<em>&gt; cf. the bug that started this thread.  And anyway this is open
+</em><br>
+<em>&gt; source - leave the debugging to the users :-)
+</em><br>
+<p>&nbsp;&nbsp;Well, I need regression tests anyway to check before commits.
+<br>
+The fact that it's open source doesn't prevent people from complaining
+<br>
+when something gets broken ;-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>Previous message:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>In reply to:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>Reply:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

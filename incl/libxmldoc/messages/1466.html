@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Legitimate xpath expressions in XSLT</title>
+<meta name="Author" content="ross.alexander@uk.neceur.com (ross.alexander@uk.neceur.com)">
+<meta name="Subject" content="[xml] Legitimate xpath expressions in XSLT">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Legitimate xpath expressions in XSLT</h1>
+<!-- received="Sun Feb 18 13:05:05 2001" -->
+<!-- isoreceived="20010218180505" -->
+<!-- sent="Sun, 18 Feb 2001 17:13:56 +0000" -->
+<!-- isosent="20010218171356" -->
+<!-- name="ross.alexander@uk.neceur.com" -->
+<!-- email="ross.alexander@uk.neceur.com" -->
+<!-- subject="[xml] Legitimate xpath expressions in XSLT" -->
+<!-- id="OF2D4EFE4B.98B845F4-ON802569F7.00586299@uk.neceur.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:ross.alexander@uk.neceur.com?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT"><em>ross.alexander@uk.neceur.com</em></a><br>
+<strong>Date:</strong> Sun Feb 18 2001 - 12:13:56 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1465.html">Daniel Veillard: "Re: [xml] xmlNsPtr creation"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I have the following problem with XSLT.  Below is a fragment of the XML 
+<br>
+and the XSL files with
+<br>
+the error.
+<br>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+<br>
+&lt;character&gt;
+<br>
+&nbsp;&nbsp;&lt;skills&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Balance&quot; base=&quot;dex&quot; ranks=&quot;2&quot; total=&quot;5&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Bluff&quot; base=&quot;cha&quot; ranks=&quot;3&quot; total=&quot;4&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Climb&quot; base=&quot;str&quot; ranks=&quot;6&quot; total=&quot;5&quot; mod=&quot;-1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Diplomacy&quot; base=&quot;cha&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Escape artist&quot; base=&quot;dex&quot; ranks=&quot;2&quot; total=&quot;5&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Gather info&quot; base=&quot;cha&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Hide&quot; base=&quot;dex&quot; ranks=&quot;2&quot; total=&quot;5&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Jump&quot; base=&quot;str&quot; ranks=&quot;4&quot; total=&quot;3&quot; mod=&quot;-1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Listen&quot; base=&quot;wis&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Move silently&quot; base=&quot;dex&quot; ranks=&quot;2&quot; total=&quot;5&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Perform&quot; base=&quot;cha&quot; ranks=&quot;4&quot; total=&quot;5&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Ride&quot; base=&quot;dex&quot; ranks=&quot;4&quot; total=&quot;7&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Search&quot; base=&quot;int&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Sense motive&quot; base=&quot;wis&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Spot&quot; base=&quot;wis&quot; ranks=&quot;2&quot; total=&quot;3&quot; mod=&quot;1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Swim&quot; base=&quot;str&quot; ranks=&quot;4&quot; total=&quot;3&quot; mod=&quot;-1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Tumble&quot; base=&quot;dex&quot; ranks=&quot;3&quot; total=&quot;6&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;skill name=&quot;Use rope&quot; base=&quot;dex&quot; ranks=&quot;2&quot; total=&quot;5&quot; mod=&quot;3&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/skills&gt;
+<br>
+&lt;/character&gt;
+<br>
+<p>-------------------------------------------------------------------------------
+<br>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt; 
+<br>
+&lt;xsl:stylesheet xmlns:xsl=&quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot; 
+<br>
+version=&quot;1.0&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;xsl:output method=&quot;xml&quot; indent=&quot;yes&quot;/&gt;
+<br>
+<p>&lt;xsl:template match=&quot;character&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;xsl:apply-templates select=&quot;skills&quot;/&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>&lt;xsl:template match=&quot;skills&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;xsl:for-each select=&quot;./*&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;./@name&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:text&gt; &lt;/xsl:text&gt;
+<br>
+&nbsp;&nbsp;&lt;/xsl:for-each&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+&lt;/xsl:stylesheet&gt;
+<br>
+<p>-------------------------------------------------------------------------------
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+Balance Bluff Climb Diplomacy Escape artist Gather info Hide Jump Listen 
+<br>
+Move silently Perform Ride Search Sense motive Spot Swim Tumble Use rope 
+<br>
+<p>-------------------------------------------------------------------------------
+<br>
+<p>Which is fine, except that when I use the statement
+<br>
+<p>&nbsp;&nbsp;&lt;xsl:for-each select=&quot;*&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;./@name&quot;/&gt;&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:text&gt; &lt;/xsl:text&gt;
+<br>
+&nbsp;&nbsp;&lt;/xsl:for-each&gt;
+<br>
+<p>Error xpath.c:5215: Invalid expression
+<br>
+*
+<br>
+^
+<br>
+Segmentation fault (core dumped)
+<br>
+<p><p>Now, before libxslt came out I was using (and still do) use xalanj.  Both 
+<br>
+xalanj-1.2.2 and
+<br>
+xalanj-2.0.0 give the correct? result of listing all the skill names as 
+<br>
+above.
+<br>
+<p>So, which implementation is correct or is there ambiguity with the XPATH 
+<br>
+spec.
+<br>
+Personally I think there is a problem with the spec.  In the examples of 
+<br>
+abbrevitated
+<br>
+location paths * is described as all element children of the context node 
+<br>
+but in
+<br>
+more formal syntax I can find no reference for *. 
+<br>
+Should select=&quot;*&quot;  be identical to select=&quot;node()&quot;?
+<br>
+<p>Many thanks
+<br>
+<p>Ross Alexander
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1465.html">Daniel Veillard: "Re: [xml] xmlNsPtr creation"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Feb 18 2001 - 14:43:30 EST</em>
+</em>
+</small>
+</body>
+</html>

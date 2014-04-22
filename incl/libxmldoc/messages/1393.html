@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Testing pthreads safety in xmllint</title>
+<meta name="Author" content="Jorma Laaksonen (jorma.laaksonen@hut.fi)">
+<meta name="Subject" content="[xml] Testing pthreads safety in xmllint">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Testing pthreads safety in xmllint</h1>
+<!-- received="Wed Jan 31 04:06:12 2001" -->
+<!-- isoreceived="20010131090612" -->
+<!-- sent="31 Jan 2001 10:47:42 +0200" -->
+<!-- isosent="20010131084742" -->
+<!-- name="Jorma Laaksonen" -->
+<!-- email="jorma.laaksonen@hut.fi" -->
+<!-- subject="[xml] Testing pthreads safety in xmllint" -->
+<!-- id="x47l3c2jm9.fsf@james.hut.fi" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Jorma Laaksonen (<a href="mailto:jorma.laaksonen@hut.fi?subject=Re:%20[xml]%20Testing%20pthreads%20safety%20in%20xmllint"><em>jorma.laaksonen@hut.fi</em></a>)<br>
+<strong>Date:</strong> Wed Jan 31 2001 - 03:47:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1392.html">Craig Wright: "[xml] Installing on IRIX"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello!
+<br>
+<p>I've had thread safety problems in a program that uses libxml (v. 2.2.10
+<br>
+now).  In order to just test the library itself, I've added a piece
+<br>
+of code in xmllint.c so that it can be invoked to run in concurrent
+<br>
+pthreads.  This kind of an extension might be of interest to others too.
+<br>
+<p>Here is the patch:
+<br>
+<p>--- xmllint.c.orig	Fri Jan  5 08:39:29 2001
+<br>
++++ xmllint.c	Wed Jan 31 10:23:26 2001
+<br>
+@@ -16,6 +16,7 @@
+<br>
+&nbsp;#include &lt;string.h&gt;
+<br>
+&nbsp;#include &lt;stdio.h&gt;
+<br>
+&nbsp;#include &lt;stdarg.h&gt;
+<br>
++#include &lt;pthread.h&gt;
+<br>
+&nbsp;
+<br>
+&nbsp;#ifdef HAVE_SYS_TYPES_H
+<br>
+&nbsp;#include &lt;sys/types.h&gt;
+<br>
+@@ -78,6 +79,7 @@
+<br>
+&nbsp;static int html = 0;
+<br>
+&nbsp;static int htmlout = 0;
+<br>
+&nbsp;static int push = 0;
+<br>
++static int pthreads = 0;
+<br>
+&nbsp;#ifdef HAVE_SYS_MMAN_H
+<br>
+&nbsp;static int memory = 0;
+<br>
+&nbsp;#endif
+<br>
+@@ -382,6 +384,31 @@
+<br>
+&nbsp;&nbsp;* 			Test processing					*
+<br>
+&nbsp;&nbsp;* 									*
+<br>
+&nbsp;&nbsp;************************************************************************/
+<br>
++static void parseAndPrintFile(char*);
+<br>
++
+<br>
++void *parseAndPrintFile_inner(void *filename) {
+<br>
++  parseAndPrintFile((char*)filename);
+<br>
++  return NULL;
+<br>
++}
+<br>
++
+<br>
++void parseAndPrintFile_outer(char *filename) {
+<br>
++  if (!pthreads)
+<br>
++    parseAndPrintFile(filename);
+<br>
++  else {
+<br>
++    const int n = 10;
+<br>
++    pthread_t thread[n];
+<br>
++    int i;
+<br>
++
+<br>
++    xmlInitParser();
+<br>
++
+<br>
++    for (i=0; i&lt;n; i++)
+<br>
++      pthread_create(thread+i, NULL, parseAndPrintFile_inner, (void*)filename);
+<br>
++
+<br>
++    for (i=0; i&lt;n; i++)
+<br>
++      pthread_join(thread[i], NULL);
+<br>
++  }  
+<br>
++}
+<br>
++
+<br>
+&nbsp;void parseAndPrintFile(char *filename) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr doc = NULL, tmp;
+<br>
+&nbsp;
+<br>
+@@ -704,6 +731,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if ((!strcmp(argv[i], &quot;-push&quot;)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!strcmp(argv[i], &quot;--push&quot;)))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;push++;
+<br>
++	else if ((!strcmp(argv[i], &quot;-pthreads&quot;)) ||
+<br>
++	         (!strcmp(argv[i], &quot;--pthreads&quot;)))
+<br>
++	    pthreads++;
+<br>
+&nbsp;#ifdef HAVE_SYS_MMAN_H
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if ((!strcmp(argv[i], &quot;-memory&quot;)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!strcmp(argv[i], &quot;--memory&quot;)))
+<br>
+@@ -783,9 +813,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((argv[i][0] != '-') || (strcmp(argv[i], &quot;-&quot;) == 0)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (repeat) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (count = 0;count &lt; 100 * repeat;count++)
+<br>
+-		    parseAndPrintFile(argv[i]);
+<br>
++		    parseAndPrintFile_outer(argv[i]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else
+<br>
+-		parseAndPrintFile(argv[i]);
+<br>
++		parseAndPrintFile_outer(argv[i]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;files ++;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+@@ -817,6 +847,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--html : use the HTML parser\n&quot;);
+<br>
+&nbsp;#endif
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--push : use the push mode of the parser\n&quot;);
+<br>
++	printf(&quot;\t--pthreads : run the test in ten concurrent pthreads\n&quot;);
+<br>
+&nbsp;#ifdef HAVE_SYS_MMAN_H
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--memory : parse from memory\n&quot;);
+<br>
+&nbsp;#endif
+<br>
+<p>The proper insertion of this kind of a patch of course needs some
+<br>
+#ifdef HAVE_PTHREADS or something.  I'm not familiar with these, so
+<br>
+I'll leave it for you.  
+<br>
+<p>Also, I had to hack to resulting Makefile to include the pthread lib:
+<br>
+<p>--- Makefile.orig       Wed Jan 31 10:28:32 2001
+<br>
++++ Makefile    Wed Jan 31 10:32:42 2001
+<br>
+@@ -140,7 +140,7 @@
+<br>
+&nbsp;xmllint_SOURCES = xmllint.c
+<br>
+&nbsp;xmllint_LDFLAGS =
+<br>
+&nbsp;xmllint_DEPENDENCIES = $(DEPS)
+<br>
+-xmllint_LDADD =  $(LDADDS)
+<br>
++xmllint_LDADD =  $(LDADDS) -lpthread
+<br>
+&nbsp;
+<br>
+&nbsp;testSAX_SOURCES = testSAX.c
+<br>
+&nbsp;testSAX_LDFLAGS =
+<br>
+<p>That should, of course, be done in somewhere else.
+<br>
+<p>Now I'll start to examine what is wrong in my code with pthreads.
+<br>
+At least my first experiments with this pthread-extended xmllint
+<br>
+have not revealed any bug in the library...
+<br>
+<p>Yours,
+<br>
+<p>Jorma Laaksonen
+<br>
+<p><pre>
+-- 
+Jorma Laaksonen                                 email: <a href="mailto:jorma.laaksonen@hut.fi?subject=Re:%20[xml]%20Testing%20pthreads%20safety%20in%20xmllint">jorma.laaksonen@hut.fi</a>
+Dr. of Science in Technology, Docent            <a href="http://www.cis.hut.fi/jorma/">http://www.cis.hut.fi/jorma/</a>
+Laboratory of Computer and Information Science  tel. +358-9-4513269
+Helsinki University of Technology               fax. +358-9-4513277
+P.O.Box 5400, Fin-02015 HUT, Finland            mob. +358-50-3058719
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Testing%20pthreads%20safety%20in%20xmllint">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Testing%20pthreads%20safety%20in%20xmllint">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1392.html">Craig Wright: "[xml] Installing on IRIX"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 31 2001 - 04:44:51 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] uri.c bug in libxml2-2.2.3</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] uri.c bug in libxml2-2.2.3">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] uri.c bug in libxml2-2.2.3</h1>
+<!-- received="Wed Sep 20 14:13:31 2000" -->
+<!-- isoreceived="20000920181331" -->
+<!-- sent="Wed, 20 Sep 2000 14:14:28 -0400" -->
+<!-- isosent="20000920181428" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] uri.c bug in libxml2-2.2.3" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A086710A@EXCHANGE" -->
+<!-- inreplyto="[xml] uri.c bug in libxml2-2.2.3" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Wed Sep 20 2000 - 14:14:28 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Previous message:</strong> <a href="0781.html">Wayne Davison: "Re: [xml] xmlNodeDump"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0779.html">Marc Sanfacon: "[xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Reply:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Wayne,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is true that index is 0 at this point.  But am I right when
+<br>
+saying that 'ref' could be an absolute path ?
+<br>
+<p>i.e.  /index.htm
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In which case, we must ensure that it doesn't starts with '/',
+<br>
+otherwise we would have 2 '/'.
+<br>
+<p>regards,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marc.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Wayne Davison
+<br>
+Sent: September 20, 2000 13:53
+<br>
+To: '<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>'
+<br>
+Subject: Re: [xml] uri.c bug in libxml2-2.2.3
+<br>
+<p><p><p>On Wed, 20 Sep 2000, Marc Sanfacon wrote:
+<br>
+<em>&gt; 	In my case, 'out' is 0, so it doesn't go in the test.
+</em><br>
+<p>One thing I noticed when looking at your patch is that both the existing
+<br>
+code and your patched version test if ref-&gt;path[index] != '/'.  This is
+<br>
+not necessary since we know that ref is a relative path (and we also know
+<br>
+that &quot;index&quot; is 0 at this point).  Here is how I would patch the original
+<br>
+code:
+<br>
+<p>Index: uri.c
+<br>
+@@ -1547,15 +1547,13 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* b) The reference's path component is appended to the buffer
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    string.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+-    if (ref-&gt;path != NULL) {
+<br>
++    if (ref-&gt;path != NULL &amp;&amp; ref-&gt;path[0] != 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Ensure the path includes a '/'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+-	if ((out &gt;0) &amp;&amp; (res-&gt;path[out -1] != '/') &amp;&amp;
+<br>
+-	    (ref-&gt;path[0] != 0) &amp;&amp; (ref-&gt;path[index] != '/')) {
+<br>
++	if ((out == 0) || (res-&gt;path[out - 1] != '/'))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res-&gt;path[out++] = '/';
+<br>
+-	}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (ref-&gt;path[index] != 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res-&gt;path[out++] = ref-&gt;path[index++];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>..wayne..
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Previous message:</strong> <a href="0781.html">Wayne Davison: "Re: [xml] xmlNodeDump"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0779.html">Marc Sanfacon: "[xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Reply:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Sep 20 2000 - 14:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

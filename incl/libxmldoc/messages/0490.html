@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Saving without tree</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Saving without tree">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Saving without tree</h1>
+<!-- received="Sat May 27 07:43:37 2000" -->
+<!-- isoreceived="20000527114337" -->
+<!-- sent="Sat, 27 May 2000 13:42:00 +0200" -->
+<!-- isosent="20000527114200" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Saving without tree" -->
+<!-- id="20000527134200.A12082@w3.org" -->
+<!-- inreplyto="200005261946.PAA13882@hydrogen" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat May 27 2000 - 07:42:00 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, May 26, 2000 at 07:46:33PM +0000, <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20Saving%20without%20tree">mdf@angoss.com</a> wrote:
+<br>
+<em>&gt; &gt;   I don't know any better way if you don't have an XML tree built in memory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; How about extending libXML to be a generator as well as a parser?
+</em><br>
+<p>&nbsp;&nbsp;Of course libxml is both a generator and a parser ... But to be able
+<br>
+to generate it *needs* to understand the in-memory storage format. 
+<br>
+If you decide to not use the libxml tree format, for whatever reason,
+<br>
+I don't see how libxml could &quot;magically&quot; understand your encoding of
+<br>
+the data. Try to think 2 minutes about this there is no obvious
+<br>
+solution for this !
+<br>
+<p><em>&gt; Failing that, allowing one to use the streams libXML reads from in an
+</em><br>
+<em>&gt; output mode would be nice [thus one gets compression 'for free'].
+</em><br>
+<p>&nbsp;&nbsp;Parse error. I cannot understand this sentence...
+<br>
+<p>&nbsp;May I suggest people actaully *look* at what is available before starting
+<br>
+suggesting modifying/extending the library ? All the output routines are
+<br>
+available in tree.c . I also strongly suggest that if your interested going
+<br>
+that deep in the technical details of the library, then your should
+<br>
+use the CVS tree to see what is really there and not an ancient version.
+<br>
+<p>&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

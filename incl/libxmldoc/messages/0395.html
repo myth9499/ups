@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Compiling todays's snapahot on Win32</title>
+<meta name="Author" content="Peter Jacobi (pj@walter-graphtek.com)">
+<meta name="Subject" content="[xml] Compiling todays's snapahot on Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Compiling todays's snapahot on Win32</h1>
+<!-- received="Mon Feb 28 10:06:06 2000" -->
+<!-- isoreceived="20000228150606" -->
+<!-- sent="Mon, 28 Feb 2000 16:06:42 +0100" -->
+<!-- isosent="20000228150642" -->
+<!-- name="Peter Jacobi" -->
+<!-- email="pj@walter-graphtek.com" -->
+<!-- subject="[xml] Compiling todays's snapahot on Win32" -->
+<!-- id="1260372398-250779557@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Peter Jacobi (<a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20Compiling%20todays's%20snapahot%20on%20Win32"><em>pj@walter-graphtek.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 28 2000 - 10:06:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Previous message:</strong> <a href="0394.html">Matthew Francey: "[xml] Re: Problem with XPath expression"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Maybe reply:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Maybe reply:</strong> <a href="0397.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Reply:</strong> <a href="0398.html">Daniel Veillard: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Dear all,
+<br>
+<p>I just want to inform you, that the soon-to-be-v2.0.0 snapshot 
+<br>
+compiles OK under Win32 (see below for some minor issues).
+<br>
+<p>Keep in mind that I'm using Watcom C++ 11.0b and cannot speak 
+<br>
+for issues specific to MSVC.
+<br>
+<p>Incompatibilities my code experienced:
+<br>
+<p>xmlNode-&gt;childs =&gt; xmlNode-&gt;children
+<br>
+xmlDoc-&gt;root =&gt; xmlDoc-&gt;children
+<br>
+<p>Compiler warnings etc:
+<br>
+<p>nanoftp.c
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AFAIK all lengths in sockets API are int, not size_t and my 
+<br>
+compiler complains over providing a size_t* where a int* is 
+<br>
+expected.
+<br>
+<p>parser.c 4080 : &quot;Assignment found in boolean expression&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if ((name[0] = 'x') &amp;&amp; (name[1] == 'm') &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(name[2] = 'l') &amp;&amp; (name[3] == 0)) {
+<br>
+<p>parser.c 9243 : &quot;Meaningless use of expression&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;doc-&gt;children == NULL;
+<br>
+<p><p>Regards,
+<br>
+Peter
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compiling%20todays's%20snapahot%20on%20Win32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compiling%20todays's%20snapahot%20on%20Win32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Previous message:</strong> <a href="0394.html">Matthew Francey: "[xml] Re: Problem with XPath expression"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Maybe reply:</strong> <a href="0396.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Maybe reply:</strong> <a href="0397.html">David Doolin: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<li><strong>Reply:</strong> <a href="0398.html">Daniel Veillard: "Re: [xml] Compiling todays's snapahot on Win32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:05 EDT</em>
+</em>
+</small>
+</body>
+</html>

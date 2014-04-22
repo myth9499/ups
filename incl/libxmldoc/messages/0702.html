@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding Problems with libxml 2.2.2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Encoding Problems with libxml 2.2.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding Problems with libxml 2.2.2</h1>
+<!-- received="Tue Aug 29 10:37:37 2000" -->
+<!-- isoreceived="20000829143737" -->
+<!-- sent="Tue, 29 Aug 2000 19:36:05 +0200" -->
+<!-- isosent="20000829173605" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Encoding Problems with libxml 2.2.2" -->
+<!-- id="20000829193605.S804@w3.org" -->
+<!-- inreplyto="10225630925.20000829180412@triplex.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 29 2000 - 13:36:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0701.html">Nilo S. Mismetti: "[xml] Bad ilegal char handling"</a>
+<li><strong>In reply to:</strong> <a href="0700.html">Stefan Bambach: "[xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 29, 2000 at 06:04:12PM +0200, Stefan Bambach wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I wrote a basic libxml wrapper for python (very basic :-) ). I walk
+</em><br>
+<em>&gt; through the DOM tree by myself (child = child-&gt;next) and read out the
+</em><br>
+<em>&gt; content. I had access to the TAGs and the values, attributes, ... .
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now with libxml 2.2.2 the DOM tree's content is UTF8 encoded and can't
+</em><br>
+<em>&gt; read out it as simple as it was before. I have to convert the values
+</em><br>
+<em>&gt; to ISO-8859-1.
+</em><br>
+<p>&nbsp;Or EUC-JP if you're japanese or ISO-8859-2 if you're russian, etc ...
+<br>
+Yes libxml is now consistant independantly of the kind of input.
+<br>
+<p><em>&gt; Is there a Funktion that is equivalent to some kind of ugly code like
+</em><br>
+<em>&gt; printf ('%s', node-&gt;name) doing the encoding, too ?
+</em><br>
+<p>&nbsp;question is what encoding .... Are you just interested in ISO-8859-1 ?
+<br>
+If the answer is yes it's a good idea to ask you the question: why ?
+<br>
+<p><em>&gt; Are there functions to read out the content (value) of a tag, the tag
+</em><br>
+<em>&gt; itself and attribute names with there value ?
+</em><br>
+<p>&nbsp;Do you mean that python has no support for handling UTF8 strings ???
+<br>
+How is python expected to work in Internationalized environments ?
+<br>
+&nbsp;Converting the value as you read them from the tree content may not
+<br>
+make much sense, I would expect high level languages like python to
+<br>
+be able to work out of the box with UTF8 strings, I am very surprized.
+<br>
+<p>Daniel
+<br>
+<p><p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0701.html">Nilo S. Mismetti: "[xml] Bad ilegal char handling"</a>
+<li><strong>In reply to:</strong> <a href="0700.html">Stefan Bambach: "[xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 29 2000 - 10:43:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

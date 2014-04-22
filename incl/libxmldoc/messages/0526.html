@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Install part of the libxml?</title>
+<meta name="Author" content="rcx195@us.ibm.com (rcx195@us.ibm.com)">
+<meta name="Subject" content="Re: [xml] Install part of the libxml?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Install part of the libxml?</h1>
+<!-- received="Wed Jun 21 11:32:08 2000" -->
+<!-- isoreceived="20000621153208" -->
+<!-- sent="Wed, 21 Jun 2000 11:28:42 -0400" -->
+<!-- isosent="20000621152842" -->
+<!-- name="rcx195@us.ibm.com" -->
+<!-- email="rcx195@us.ibm.com" -->
+<!-- subject="Re: [xml] Install part of the libxml?" -->
+<!-- id="85256905.00550752.00@D51MTA03.pok.ibm.com" -->
+<!-- inreplyto="[xml] Install part of the libxml?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:rcx195@us.ibm.com?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?"><em>rcx195@us.ibm.com</em></a><br>
+<strong>Date:</strong> Wed Jun 21 2000 - 11:28:42 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0527.html">Joe McAlerney: "[xml] Additional examples"</a>
+<li><strong>Previous message:</strong> <a href="0525.html">David Doolin: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0519.html">rcx195@us.ibm.com: "[xml] Install part of the libxml?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank Daniel and David.   I have compiled the libxml source code and one
+<br>
+simple sample which uses the parser.
+<br>
+The total size of the code is only 14K.        I am writing a WML browser
+<br>
+and I hope the
+<br>
+size of the whole browser to be within 500K.      I think I was wrong to
+<br>
+say &quot;libxml is too big for me&quot;.
+<br>
+<p><p>Thanks again!
+<br>
+<p>Jing
+<br>
+<p><p><p><p><p><p>David Doolin &lt;<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">doolin@cs.utk.edu</a>&gt;@rufus.w3.org on 06/21/2000 10:33:50 AM
+<br>
+<p>Please respond to <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@rpmfind.net</a>
+<br>
+<p>Sent by:  <a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml-request@rufus.w3.org</a>
+<br>
+<p><p>To:   <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@rpmfind.net</a>
+<br>
+cc:   <a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">doolin@cs.utk.edu</a>
+<br>
+Subject:  Re: [xml] Install part of the libxml?
+<br>
+<p><p><p><p><p><em>&gt;  fetch the tar.gz, ./configure with the option, make, make install
+</em><br>
+<em>&gt;If you don't know how to do that I suggest you don't try to customize
+</em><br>
+<em>&gt;for size !!!
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt; 2. Do you know how big the library will be after removing the parts that
+</em><br>
+<em>&gt;&gt; you mentioned in your email?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  No it's won't give you anything in practice, I suggest you learn more
+</em><br>
+<em>&gt;about what linking a binary, shared libraries and demand loading are
+</em><br>
+<em>&gt;before deciding &quot;libxml is too big&quot;, usually those concepts are explained
+</em><br>
+<em>&gt;in programmer or operating system courses.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<p>Yes, what Daniel said.
+<br>
+<p>I am statically linking libxml under win32, and it adds approximately
+<br>
+35k to my code.  The only parts I am using are the parser and validator.
+<br>
+Just a couple of calls from my code.  I do not do embedded programming,
+<br>
+but I suspect that 35k would be reasonable, and you would be
+<br>
+cross-compiling
+<br>
+anyway (Right? gcc for a palm pilot?  I am out of my league here to be
+<br>
+sure).
+<br>
+<p>You will find more details in a good OS or systems text, you might find
+<br>
+a compiler text useful as well.  If you are really gung-ho, check out
+<br>
+John Levine's new book on linkers.
+<br>
+<p>Ciao,
+<br>
+<p>Dave D
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">majordomo@xmlsoft.org</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0527.html">Joe McAlerney: "[xml] Additional examples"</a>
+<li><strong>Previous message:</strong> <a href="0525.html">David Doolin: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0519.html">rcx195@us.ibm.com: "[xml] Install part of the libxml?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

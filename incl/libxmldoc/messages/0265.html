@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Win32 porting</title>
+<meta name="Author" content="pj@walter-graphtek.com (pj@walter-graphtek.com)">
+<meta name="Subject" content="[xml] Win32 porting">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Win32 porting</h1>
+<!-- received="Tue Dec 21 10:47:51 1999" -->
+<!-- isoreceived="19991221154751" -->
+<!-- sent="Tue, 21 Dec 1999 16:52:09 +0100" -->
+<!-- isosent="19991221155209" -->
+<!-- name="pj@walter-graphtek.com" -->
+<!-- email="pj@walter-graphtek.com" -->
+<!-- subject="[xml] Win32 porting" -->
+<!-- id="1266331229-78990027@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20Win32%20porting"><em>pj@walter-graphtek.com</em></a><br>
+<strong>Date:</strong> Tue Dec 21 1999 - 10:52:09 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0266.html">KUSANO Takayuki: "[xml] subtle bug of document"</a>
+<li><strong>Previous message:</strong> <a href="0264.html">Daniel Veillard: "Re: [xml] 1.8.1 defect"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>Reply:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+See below my approch for compiling libxml under Win32. I would 
+<br>
+be interested to see comments from other libxml/Win32 users.
+<br>
+<p>A) Change the libxml source files:
+<br>
+#ifdef WIN32
+<br>
+#include &quot;win32config.h&quot;
+<br>
+#else
+<br>
+#include &quot;config.h&quot;
+<br>
+#endif
+<br>
+<p>B) My win32config.h is (the inf/nan stuff is rather ad hoc)
+<br>
+#define HAVE_CTYPE_H 
+<br>
+#define HAVE_STDLIB_H 
+<br>
+#define HAVE_MALLOC_H 
+<br>
+#define HAVE_TIME_H 
+<br>
+#define HAVE_SYS_SOCKET_H 
+<br>
+#define HAVE_FCNTL_H
+<br>
+<p>#define LIBXML_VERSION &quot;1.8.1&quot; 
+<br>
+<p>#include &lt;io.h&gt;
+<br>
+<p>#include &lt;math.h&gt;
+<br>
+nt isinf (double d) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int expon = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;double val = frexp (d, &amp;expon);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (expon == 1025) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val == 0.5) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (val == -0.5) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+}
+<br>
+static int isnan (double d) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int expon = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;double val = frexp (d, &amp;expon);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (expon == 1025) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val == 0.5) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (val == -0.5) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+}
+<br>
+<p><p>C) In the sys directory relative to the compiler default include 
+<br>
+directory I put a dummy socket.h:
+<br>
+#include &lt;winsock2.h&gt;
+<br>
+#define EWOULDBLOCK             WSAEWOULDBLOCK
+<br>
+#define EINPROGRESS             WSAEINPROGRESS
+<br>
+#define EALREADY                WSAEALREADY
+<br>
+#define ENOTSOCK                WSAENOTSOCK
+<br>
+#define EDESTADDRREQ            WSAEDESTADDRREQ
+<br>
+#define EMSGSIZE                WSAEMSGSIZE
+<br>
+#define EPROTOTYPE              WSAEPROTOTYPE
+<br>
+#define ENOPROTOOPT             WSAENOPROTOOPT
+<br>
+#define EPROTONOSUPPORT         WSAEPROTONOSUPPORT
+<br>
+#define ESOCKTNOSUPPORT         WSAESOCKTNOSUPPORT
+<br>
+#define EOPNOTSUPP              WSAEOPNOTSUPP
+<br>
+#define EPFNOSUPPORT            WSAEPFNOSUPPORT
+<br>
+#define EAFNOSUPPORT            WSAEAFNOSUPPORT
+<br>
+#define EADDRINUSE              WSAEADDRINUSE
+<br>
+#define EADDRNOTAVAIL           WSAEADDRNOTAVAIL
+<br>
+#define ENETDOWN                WSAENETDOWN
+<br>
+#define ENETUNREACH             WSAENETUNREACH
+<br>
+#define ENETRESET               WSAENETRESET
+<br>
+#define ECONNABORTED            WSAECONNABORTED
+<br>
+#define ECONNRESET              WSAECONNRESET
+<br>
+#define ENOBUFS                 WSAENOBUFS
+<br>
+#define EISCONN                 WSAEISCONN
+<br>
+#define ENOTCONN                WSAENOTCONN
+<br>
+#define ESHUTDOWN               WSAESHUTDOWN
+<br>
+#define ETOOMANYREFS            WSAETOOMANYREFS
+<br>
+#define ETIMEDOUT               WSAETIMEDOUT
+<br>
+#define ECONNREFUSED            WSAECONNREFUSED
+<br>
+#define ELOOP                   WSAELOOP
+<br>
+#define ENAMETOOLONG            WSAENAMETOOLONG
+<br>
+#define EHOSTDOWN               WSAEHOSTDOWN
+<br>
+#define EHOSTUNREACH            WSAEHOSTUNREACH
+<br>
+#define ENOTEMPTY               WSAENOTEMPTY
+<br>
+#define EPROCLIM                WSAEPROCLIM
+<br>
+#define EUSERS                  WSAEUSERS
+<br>
+#define EDQUOT                  WSAEDQUOT
+<br>
+#define ESTALE                  WSAESTALE
+<br>
+#define EREMOTE                 WSAEREMOTE
+<br>
+<p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Win32%20porting">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Win32%20porting">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0266.html">KUSANO Takayuki: "[xml] subtle bug of document"</a>
+<li><strong>Previous message:</strong> <a href="0264.html">Daniel Veillard: "Re: [xml] 1.8.1 defect"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>Reply:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:55 EDT</em>
+</em>
+</small>
+</body>
+</html>

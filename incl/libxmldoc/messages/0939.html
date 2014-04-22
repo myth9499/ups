@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Thu Oct 12 15:10:36 2000" -->
+<!-- isoreceived="20001012191036" -->
+<!-- sent="Thu, 12 Oct 2000 21:10:30 +0200" -->
+<!-- isosent="20001012191030" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="20001012211030.N4121@w3.org" -->
+<!-- inreplyto="39E5F37C.307AFB93@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Oct 12 2000 - 15:10:30 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0938.html">Wayne Davison: "[xml] More win32 changes"</a>
+<li><strong>In reply to:</strong> <a href="0937.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Oct 12, 2000 at 05:23:08PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; Oh, I wasn't aware that there were two different initiatives.
+</em><br>
+<em>&gt; What is the difference?
+</em><br>
+<p>&nbsp;&nbsp;Well XML query is the W3C Working group started to work
+<br>
+on defining XML queries ... Of course a number of queries syntax
+<br>
+already existed but I think most of the authors of those earlier
+<br>
+efforts have joined the XML Query WG. Doesn't mean the preexisting
+<br>
+code will suddenly stop working, but point out that future efforts
+<br>
+should looks at what is been designed now :-)
+<br>
+<p><em>&gt; &gt;   Push and Pop are already exported in pre2.2.5. I just added
+</em><br>
+<em>&gt; &gt; registering and lookup of new functions and variables but it's
+</em><br>
+<em>&gt; &gt; untested for now.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Excellent.
+</em><br>
+<p>&nbsp;&nbsp;I also fixed the obvious stupid things I made in the earlier
+<br>
+implementation.
+<br>
+<p><em>&gt; May I suggest that the valuePush/Pop functions use prefixed
+</em><br>
+<em>&gt; names to avoid potential naming conflicts?
+</em><br>
+<p>&nbsp;&nbsp;Make sense, will use sed before the release ...
+<br>
+<p><em>&gt; I just implemented a version of the function registering based
+</em><br>
+<em>&gt; on hash tables, which passes the XPath regression tests. Let me
+</em><br>
+<em>&gt; know if you want a patch.
+</em><br>
+<p>&nbsp;&nbsp;Yes of course, though i have a tendency of trying to keep things
+<br>
+simple and stupid and only fix performances problems when they arose
+<br>
+(like when I started validating against the Docbook Dtd &lt;grin/&gt;)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0938.html">Wayne Davison: "[xml] More win32 changes"</a>
+<li><strong>In reply to:</strong> <a href="0937.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 12 2000 - 15:43:36 EDT</em>
+</em>
+</small>
+</body>
+</html>

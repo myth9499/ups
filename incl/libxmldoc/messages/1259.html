@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] validating and xmlExternalEntityLoader's argumen</title>
+<meta name="Author" content="Michael Mealling (michael@bailey.dscga.com)">
+<meta name="Subject" content="Re: [xml] validating and xmlExternalEntityLoader's arguments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] validating and xmlExternalEntityLoader's arguments</h1>
+<!-- received="Mon Dec  4 19:33:57 2000" -->
+<!-- isoreceived="20001205003357" -->
+<!-- sent="Mon, 4 Dec 2000 19:14:25 -0500" -->
+<!-- isosent="20001205001425" -->
+<!-- name="Michael Mealling" -->
+<!-- email="michael@bailey.dscga.com" -->
+<!-- subject="Re: [xml] validating and xmlExternalEntityLoader's arguments" -->
+<!-- id="20001204191425.M9127@bailey.dscga.com" -->
+<!-- inreplyto="20001204143139.F14628@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Michael Mealling (<a href="mailto:michael@bailey.dscga.com?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments"><em>michael@bailey.dscga.com</em></a>)<br>
+<strong>Date:</strong> Mon Dec 04 2000 - 19:14:25 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1258.html">Dave Madole: "Re: [xml] Xpath/Xpointer question..."</a>
+<li><strong>In reply to:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 04, 2000 at 02:31:39PM +0100, Daniel Veillard wrote:
+<br>
+<em>&gt; On Sun, Dec 03, 2000 at 06:20:06PM -0500, Michael Mealling wrote:
+</em><br>
+<em>&gt; &gt;   I'm building a client application that will receive XML back from
+</em><br>
+<em>&gt; &gt; several different servers which may decide to put different values in
+</em><br>
+<em>&gt; &gt; thier SYSTEM identifier in their DOCTYPE. After poking around
+</em><br>
+<em>&gt; &gt; trying to find an example of validatinog as you parsed (i.e. 
+</em><br>
+<em>&gt; &gt; xmlDoValidityCheckingDefaultValue = 1) it became obvious that 
+</em><br>
+<em>&gt; &gt; default behavior was to access whatever was in the SYSTEM ID regardless
+</em><br>
+<em>&gt; &gt; of what the PUBLIC ID was. So I decided to  write an ExternalEntityLoader.
+</em><br>
+<em>&gt; &gt; Not finding an example of one I looked at the default one in xmlIO.c.
+</em><br>
+<em>&gt; &gt; Its header looks like this:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  * xmlDefaultExternalEntityLoader:
+</em><br>
+<em>&gt; &gt;  * @URL:  the URL for the entity to load
+</em><br>
+<em>&gt; &gt;  * @ID:  the System ID for the entity to load
+</em><br>
+<em>&gt; &gt;  * @ctxt:  the context in which the entity is called or NULL
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Is this correct?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   I think so except that ID is actually the PUBLIC id.
+</em><br>
+<p>That's cool. I got all of this figured out but now I think
+<br>
+there might be a bug or else a problem in the reading of the XML spec.
+<br>
+I have a DTD that has this in it:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT results (status? |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( service+,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( status  | resourcedescriptor | referral )*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&gt;
+<br>
+<p><p>and when I give it this:
+<br>
+<p>&lt;!DOCTYPE cnrp PUBLIC &quot;-//IETF//DTD CNRP 1.0//EN&quot; &quot;<a href="http://www.ietf.org/cnrp.dtd">http://www.ietf.org/cnrp.dtd</a>&quot;&gt;
+<br>
+&lt;cnrp&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;results&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service id=&quot;service1&quot; ttl=&quot;10000&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;serviceuri&gt;<a href="http://cnrp.networksolutions.com</serviceuri">http://cnrp.networksolutions.com</serviceuri</a>&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;resourcedescriptor&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;commonname&gt;BAILEY BEAR&lt;/commonname&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;id&gt;8000112&lt;/id&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;resourceuri&gt;<a href="http://bailey.dscga.com/</resourceuri">http://bailey.dscga.com/</resourceuri</a>&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;serviceref ref=&quot;service1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;Michael and Kathy&amp;apos;s Golden Retriever&lt;/description&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/resourcedescriptor&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/results&gt;
+<br>
+&lt;/cnrp&gt;
+<br>
+<p><p>the parser barfs these errors:
+<br>
+Element results content doesn't follow the Dtd
+<br>
+Expecting (status? | (service+ , (status | resourcedescriptor | referral)*)*), 
+<br>
+got (service resourcedescriptor )
+<br>
+<p>Based on other parsers and my reading of the XML spec, that DTD
+<br>
+should allow that xml. Any clues as to why libxml tags that as an error?
+<br>
+<p>Thanks!
+<br>
+<p>-MM
+<br>
+<p>The entire DTD:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT cnrp (query|results|servicequery)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT servicequery EMPTY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT query (id|(commonname,property*))&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT id (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT commonname (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT property (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST property name CDATA #REQUIRED&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST property type CDATA &quot;freeform&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT results (status? |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( service+,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( status  | resourcedescriptor | referral )*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT resourcedescriptor (commonname,id,resourceuri,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;serviceref, datasetref?,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;property*)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST resourcedescriptor id ID #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT resourceuri (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT description (#PCDATA)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT referral (serviceref, datasetref?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST referral id ID #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT status (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST status code CDATA #REQUIRED&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST status ref IDREF #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT serviceref EMPTY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST serviceref ref IDREF #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT service (serviceuri, dataset*,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;servers?,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description?,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;property*,propertyschema?,queryschema?,resourcedescriptorschema?,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;serviceschema?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST service ttl CDATA &quot;0&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST service id ID #IMPLIED&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT serviceuri (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT servers (server+)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT server (serveruri, property*)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT serveruri (#PCDATA)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT dataset (property*)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST dataset id ID #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT datasetref EMPTY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST datasetref ref IDREF #IMPLIED&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT propertyschema (propertydeclaration*)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT propertydeclaration (propertyname, propertytype*)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST propertydeclaration id ID #IMPLIED&gt;
+<br>
+<p><p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT propertyname (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT propertytype (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST propertytype default (no|yes) &quot;no&quot;&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT queryschema (propertyreference*)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT resourcedescriptorschema (propertyreference*)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT serviceschema (propertyreference*)&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT propertyreference EMPTY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST propertyreference ref IDREF #REQUIRED&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST propertyreference required (no|yes) &quot;no&quot;&gt;
+<br>
+<p><p><p><p><pre>
+-- 
+--------------------------------------------------------------------------------
+Michael Mealling	|      Vote Libertarian!       | www.rwhois.net/michael
+Sr. Research Engineer   |   www.ga.lp.org/gwinnett     | ICQ#:         14198821
+Network Solutions	|          www.lp.org          |  <a href="mailto:michaelm@netsol.com?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">michaelm@netsol.com</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1258.html">Dave Madole: "Re: [xml] Xpath/Xpointer question..."</a>
+<li><strong>In reply to:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 19:43:38 EST</em>
+</em>
+</small>
+</body>
+</html>

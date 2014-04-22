@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Tag format</title>
+<meta name="Author" content="Mike Cunningham (mike.cunningham@ait.co.uk)">
+<meta name="Subject" content="Re: [xml] Tag format">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Tag format</h1>
+<!-- received="Wed Jan 26 11:32:46 2000" -->
+<!-- isoreceived="20000126163246" -->
+<!-- sent="Wed, 26 Jan 2000 16:28:41 +0000" -->
+<!-- isosent="20000126162841" -->
+<!-- name="Mike Cunningham" -->
+<!-- email="mike.cunningham@ait.co.uk" -->
+<!-- subject="Re: [xml] Tag format" -->
+<!-- id="388F20B9.AAF0D7BE@ait.co.uk" -->
+<!-- inreplyto="20000126082404.H10714@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Mike Cunningham (<a href="mailto:mike.cunningham@ait.co.uk?subject=Re:%20[xml]%20Tag%20format"><em>mike.cunningham@ait.co.uk</em></a>)<br>
+<strong>Date:</strong> Wed Jan 26 2000 - 11:28:41 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Previous message:</strong> <a href="0315.html">David Doolin: "Re: [xml] WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0313.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0318.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+<p>Thanks very much for the prompt reply - it's much appreciated. I've made
+<br>
+the necessary change. Would you consider adding it as a runtime option?
+<br>
+<p>I don't feel particularly able or inclined to make a strong case for it
+<br>
+as it's only really useful for me because the receiver of my XML stream
+<br>
+is too brain-dead to understand the short form and I guess the slight
+<br>
+performance hit would be unwelcome. Can you see any merit in having it
+<br>
+as a standard option? (well, if you don't ask you don't get - right?)
+<br>
+<p>Mike Cunningham
+<br>
+AIT Ltd
+<br>
+<p><p>Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, Jan 26, 2000 at 12:00:40PM +0000, Mike Cunningham wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; libxml seems to default to this style of tag:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; &lt;foo property=&quot;whatever&quot;/&gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I need it to produce the long-form. I.e.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; &lt;foo&gt; .... &lt;/foo&gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;  Is there a flag I can set to make it do this? I've only just started
+</em><br>
+<em>&gt; &gt; using it this morning so apologies in advance if this is a really dumb
+</em><br>
+<em>&gt; &gt; question.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I don't know if it's relevant, but I'm building a document manually and
+</em><br>
+<em>&gt; &gt; then calling xmlSaveFile.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   hum, there is no such flag, althrough this could be easily added .
+</em><br>
+<em>&gt;   The place where the choice is made is in tree.c, function xmlNodeDump
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if ((cur-&gt;content == NULL) &amp;&amp; (cur-&gt;childs == NULL)) {
+</em><br>
+<em>&gt;         xmlBufferWriteChar(buf, &quot;/&gt;&quot;);
+</em><br>
+<em>&gt;         return;
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Tag%20format">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">majordomo@xmlsoft.org</a>
+</em><br>
+<p>**************************************************************************
+<br>
+This footnote confirms that attachments in this message have been swept by 
+<br>
+Dr Solomons AVTK (version 8.02) for the presence of known computer viruses.
+<br>
+<p>**************************************************************************
+<br>
+<p><p>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Previous message:</strong> <a href="0315.html">David Doolin: "Re: [xml] WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0313.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0317.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0318.html">Daniel Veillard: "Re: [xml] Tag format"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:59 EDT</em>
+</em>
+</small>
+</body>
+</html>

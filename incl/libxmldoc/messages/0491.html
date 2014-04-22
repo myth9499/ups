@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] SAX, compression, etc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] SAX, compression, etc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] SAX, compression, etc</h1>
+<!-- received="Sat May 27 07:52:22 2000" -->
+<!-- isoreceived="20000527115222" -->
+<!-- sent="Sat, 27 May 2000 13:50:49 +0200" -->
+<!-- isosent="20000527115049" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] SAX, compression, etc" -->
+<!-- id="20000527135049.B12082@w3.org" -->
+<!-- inreplyto="200005261931.PAA13838@hydrogen" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat May 27 2000 - 07:50:49 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0492.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0490.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, May 26, 2000 at 07:31:17PM +0000, <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20SAX,%20compression,%20etc">mdf@angoss.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; &gt; 2) How do I do to parse special characters like '&lt;' '&gt;' in a string when
+</em><br>
+<em>&gt; &gt; &gt; I read a content using characterSAXfunc?. I understand that they are
+</em><br>
+<em>&gt; &gt; &gt; represented by expressions like 'lt' and 'gt' (just viewing gnumeric
+</em><br>
+<em>&gt; &gt; &gt; files). Where can I read more to understand how to handle this?
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   You don't need to handle them, the parser will, you will get &lt; and &gt;
+</em><br>
+<em>&gt; &gt; characters through the characters() SAX callback
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ... which seems to be true for the case of element content.  If, however,
+</em><br>
+<em>&gt; you have a document which has entities inside attributes, you will get
+</em><br>
+<em>&gt; the 'escaped' version of the string unless you call a 'special' function.
+</em><br>
+<p>&nbsp;&nbsp;yes this is a limitation of the SAX interface. If you want to be able to
+<br>
+build a tree from the SAX output, and save back entities references in 
+<br>
+attribute you don't have any choice left. SAX pass the attributes values
+<br>
+as strings in one block. There is no possibility of getting an entity
+<br>
+reference call since SAx consider the parsing of a full opening tag to
+<br>
+be atomic.
+<br>
+<p><em>&gt; Example:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	&lt;a b=&quot;&amp;amp;whee&quot;/&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; with the SAX parser, the attribute is returned
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	&quot;&amp;amp;whee&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; which is rather inconvenient.  The fix for this problem is to
+</em><br>
+<em>&gt; insert a call:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	xmlSubstituteEntitiesDefault(true);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; just before the call to &quot;xmlSAXUserParseFile&quot; or similar.  Then
+</em><br>
+<em>&gt; you get what you really want:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	&quot;&amp;whee&quot;
+</em><br>
+<p>&nbsp;&nbsp;yes, but xmlSubstituteEntitiesDefault(true); means taht you cannot save
+<br>
+back entities references if you build a tree. The &quot;macro&quot; substitution
+<br>
+is lost !
+<br>
+<p><em>&gt; If I may also interject an editorial comment:  I think a better fix for
+</em><br>
+<em>&gt; this is to tweak libXML to always dereference the standard entity
+</em><br>
+<em>&gt; references.  Indeed, I was rather surprised to see this as an option:  who
+</em><br>
+<em>&gt; on Earth but an XML parser/generator would need (or want) to know about
+</em><br>
+<em>&gt; the crazy entity reference schemes in XML?
+</em><br>
+<p>&nbsp;&nbsp;To be able to save back of course !!!
+<br>
+<p>Typical example is to use an entity for example for the status of the
+<br>
+document or authors names ... If libxml was not able to save them 
+<br>
+95% of document authors would consider the tool irremediably broken !
+<br>
+Remember, being able to round-trip from the serialization to the tree and
+<br>
+back to the serialization is one of the key principle design of libxml.
+<br>
+People using only SAX may not see the point but this is a very important
+<br>
+one.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0492.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0490.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

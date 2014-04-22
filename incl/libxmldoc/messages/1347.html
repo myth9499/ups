@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc</h1>
+<!-- received="Tue Jan 16 11:48:28 2001" -->
+<!-- isoreceived="20010116164828" -->
+<!-- sent="Tue, 16 Jan 2001 16:44:40 +0000" -->
+<!-- isosent="20010116164440" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc" -->
+<!-- id="3A647A78.CC402EBB@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Tue Jan 16 2001 - 11:44:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>Previous message:</strong> <a href="1346.html">Daniel Veillard: "Re: [xml] Flaw in libxml2-2.2.11"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>Reply:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I'm using libxml2-2.2.11 and I've encountered what I think is a bug in
+<br>
+the two functions named.
+<br>
+<p>In xmlDocDump, if an output buffer can't be created then -1 is returned
+<br>
+as per the documentation. However for both xmlSaveFile and
+<br>
+xmlSaveFileEnc, the return is 0 for the same condition. I think that
+<br>
+this should be changed so that it is -1 in all these cases if an output
+<br>
+buffer cannot be created.
+<br>
+<p>I suppose that a return of 0 is kind of correct (since 0 bytes were
+<br>
+written) but it seems a little misleading to me since there has been an
+<br>
+error which isn't reported.
+<br>
+<p>I encountered the problem when trying to save a file to a location in
+<br>
+which I didn't have permission to create files, so I think that
+<br>
+somewhere inside the guts of the IO mechanism an attempt to open a file
+<br>
+was rejected with EACCESS.
+<br>
+<p>Patch is :-
+<br>
+<p>calvin:libxml2-2.2.11:$ diff -c tree.c.ORIG tree.c
+<br>
+*** tree.c.ORIG Tue Jan 16 16:35:18 2001
+<br>
+--- tree.c      Tue Jan 16 16:36:01 2001
+<br>
+***************
+<br>
+*** 5842,5848 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* save the content to a temp buffer.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlOutputBufferCreateFilename(filename, handler, 0);
+<br>
+!     if (buf == NULL) return(0);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocContentDumpOutput(buf, cur, encoding, 1);
+<br>
+<p>--- 5842,5848 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* save the content to a temp buffer.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlOutputBufferCreateFilename(filename, handler, 0);
+<br>
+!     if (buf == NULL) return(-1);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocContentDumpOutput(buf, cur, encoding, 1);
+<br>
+<p>***************
+<br>
+*** 5897,5903 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlOutputBufferCreateFilename(filename, handler,
+<br>
+cur-&gt;compression);
+<br>
+!     if (buf == NULL) return(0);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocContentDumpOutput(buf, cur, NULL, 1);
+<br>
+<p>--- 5897,5903 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlOutputBufferCreateFilename(filename, handler,
+<br>
+cur-&gt;compression);
+<br>
+!     if (buf == NULL) return(-1);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocContentDumpOutput(buf, cur, NULL, 1);
+<br>
+<p>calvin:libxml2-2.2.11:$
+<br>
+<p><p>This is a trivial bug, but it annoyed me for a few minutes so I think
+<br>
+that the behaviour should be made consistent between these three
+<br>
+functions.
+<br>
+<p>Gary
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>Previous message:</strong> <a href="1346.html">Daniel Veillard: "Re: [xml] Flaw in libxml2-2.2.11"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>Reply:</strong> <a href="1348.html">Daniel Veillard: "Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 16 2001 - 12:44:10 EST</em>
+</em>
+</small>
+</body>
+</html>

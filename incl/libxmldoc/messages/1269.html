@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Last xinclude vs. DTD problem</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Last xinclude vs. DTD problem">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Last xinclude vs. DTD problem</h1>
+<!-- received="Wed Dec  6 08:14:18 2000" -->
+<!-- isoreceived="20001206131418" -->
+<!-- sent="Wed, 6 Dec 2000 04:14:17 +0100" -->
+<!-- isosent="20001206031417" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Last xinclude vs. DTD problem" -->
+<!-- id="20001206041417.K8490@w3.org" -->
+<!-- inreplyto="14884.35072.527631.64442@lemming.engeast.baynetworks.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Last%20xinclude%20vs.%20DTD%20problem"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Dec 05 2000 - 22:14:17 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1270.html">Daniel Veillard: "Re: [xml] XML license"</a>
+<li><strong>Previous message:</strong> <a href="1268.html">Daniel Veillard: "Re: [xml] Feature request"</a>
+<li><strong>In reply to:</strong> <a href="1240.html">Paul D. Smith: "[xml] Last xinclude vs. DTD problem"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Nov 28, 2000 at 11:41:36PM -0500, Paul D. Smith wrote:
+<br>
+&nbsp;&nbsp;Hi Paul,
+<br>
+<p><em>&gt; OK, after the last three patches I have only one problem left with my
+</em><br>
+<em>&gt; DTD validation using xinclude.
+</em><br>
+<p>&nbsp;&nbsp;thanks a lot for the patches. I'm afraid I will have to change
+<br>
+the second one since it breaks binary compatibility. I didn't had
+<br>
+time yet to merge, but I really appreciate the work you put to track
+<br>
+this down. I will try to integrate this into the next release !
+<br>
+<p><em>&gt; My stuff all validates correctly, but I get one last error:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   No declaration for attribute href on element include
+</em><br>
+<em>&gt;   Document test.xml does not validate against test.dtd
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm assuming (I haven't delved deeply into this) that this is failing to
+</em><br>
+<em>&gt; validate the XML_XINCLUDE_START node or something (--debug doesn't
+</em><br>
+<em>&gt; generate much info for this node type...)
+</em><br>
+<p>&nbsp;&nbsp;yes very probable
+<br>
+<p><em>&gt; Superficially, I could just go into the code and have whatever code is
+</em><br>
+<em>&gt; trying to validate this node skip nodes of these types
+</em><br>
+<em>&gt; (XML_XINCLUDE_START and XML_XINCLUDE_END) rather than validate them.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; However, I wonder if this isn't the wrong approach?
+</em><br>
+<p>&nbsp;&nbsp;Well the extra &quot;Infoset&quot; items should really be ignored when
+<br>
+validating because the validation step is logically done at parsing
+<br>
+stage.
+<br>
+<p><em>&gt; After all, this error seems incorrect: href _is_ a valid attribute on an
+</em><br>
+<em>&gt; include element... in the XInclude DTD.  It's just that the validator
+</em><br>
+<em>&gt; doesn't know that.
+</em><br>
+<p>&nbsp;&nbsp;Well, the validation has no idea of what an XInclude processing is
+<br>
+so this should really be dropped.
+<br>
+<p><em>&gt; So, is there something &quot;deeper&quot; than just skipping the XINCLUDE_START
+</em><br>
+<em>&gt; and XINCLUDE_END nodes that should be done here?
+</em><br>
+<p>&nbsp;&nbsp;No, this is really the right way to handle those.
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Last%20xinclude%20vs.%20DTD%20problem">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Last%20xinclude%20vs.%20DTD%20problem">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Last%20xinclude%20vs.%20DTD%20problem">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1270.html">Daniel Veillard: "Re: [xml] XML license"</a>
+<li><strong>Previous message:</strong> <a href="1268.html">Daniel Veillard: "Re: [xml] Feature request"</a>
+<li><strong>In reply to:</strong> <a href="1240.html">Paul D. Smith: "[xml] Last xinclude vs. DTD problem"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Dec 06 2000 - 09:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] HTML push interface</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] HTML push interface">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] HTML push interface</h1>
+<!-- received="Mon Aug  7 11:07:30 2000" -->
+<!-- isoreceived="20000807150730" -->
+<!-- sent="Mon, 7 Aug 2000 11:03:25 -0400 " -->
+<!-- isosent="20000807150325" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] HTML push interface" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A06B55CA@EXCHANGE" -->
+<!-- inreplyto="[xml] HTML push interface" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20HTML%20push%20interface"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Mon Aug 07 2000 - 11:03:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0638.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+You're welcome.  Thank you for fixing them !
+<br>
+<p>If I find any other, I will post them to the list, again.
+<br>
+<p>Marc.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: August 4, 2000 13:55
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20HTML%20push%20interface">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] HTML push interface
+<br>
+<p><p><p>On Wed, Aug 02, 2000 at 09:46:32AM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi Daniel,
+</em><br>
+<em>&gt; 	I have applied the fix on HTMLParser.c on my version libxml2-2.2.1.
+</em><br>
+<em>&gt; I am on using the latest version found on the cvs archive, so may be I
+</em><br>
+<em>&gt; should.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	But after applying your patch, I now have another problem, that
+</em><br>
+<em>&gt; appears using both interfaces.  When using the push interface, I have an
+</em><br>
+<em>&gt; infinite loop and when using the 'file' interface, I have invalid results.
+</em><br>
+<em>&gt; I have pinpointed the problem on the lines that were added at 2480 in
+</em><br>
+<em>&gt; HTMLParser.c:
+</em><br>
+[...]
+<br>
+<em>&gt; Again, I have tried my test files on it and the problem occurs on one
+</em><br>
+file,
+<br>
+<em>&gt; which is attached to this email.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I will continue to dig and learn the toolkit, and may try to repair the
+</em><br>
+<em>&gt; problem.  I will post my results on the list.
+</em><br>
+<p>&nbsp;&nbsp;Okay I have worked on this, and this pinpointed a couple of nasty
+<br>
+bugs related to HTML encoding support. I fixed them in W3C CVS base
+<br>
+and added you example in the testsuite.
+<br>
+&nbsp;&nbsp;Thanks those bugs were difficult to find and track, getting them reported
+<br>
+is extremely useful.
+<br>
+&nbsp;&nbsp;I will probably release a new version early next week, if I find the time
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0638.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Aug 07 2000 - 11:43:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

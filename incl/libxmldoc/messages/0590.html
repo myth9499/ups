@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] RE: Segmentation fault on windows</title>
+<meta name="Author" content="Nicholas Lewin-Koh (kohnicho@comp.nus.edu.sg)">
+<meta name="Subject" content="[xml] RE: Segmentation fault on windows">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] RE: Segmentation fault on windows</h1>
+<!-- received="Mon Jul 10 05:16:32 2000" -->
+<!-- isoreceived="20000710091632" -->
+<!-- sent="Mon, 10 Jul 2000 11:25:21 +0800 (SST)" -->
+<!-- isosent="20000710032521" -->
+<!-- name="Nicholas Lewin-Koh" -->
+<!-- email="kohnicho@comp.nus.edu.sg" -->
+<!-- subject="[xml] RE: Segmentation fault on windows" -->
+<!-- id="Pine.OSF.4.21.0007101115090.7964-100000@decunx.comp.nus.edu.sg" -->
+<!-- inreplyto="001101bfe7ed$64024900$0400a8c0@etherite" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Nicholas Lewin-Koh (<a href="mailto:kohnicho@comp.nus.edu.sg?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows"><em>kohnicho@comp.nus.edu.sg</em></a>)<br>
+<strong>Date:</strong> Sun Jul 09 2000 - 23:25:21 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<li><strong>Previous message:</strong> <a href="0589.html">Daniel Veillard: "Re: [xml] libxml security"</a>
+<li><strong>In reply to:</strong> <a href="0587.html">Alfred Reibenschuh: "[xml] RE: Segmentation fault on windows"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+Sorry to take so long to reply. I am using version 2.1.1. As for giving
+<br>
+you a test case, I will try, but the program I am working on (ggobi the
+<br>
+new xgobi) is about 10,000 lines of code, so i need to figure out where
+<br>
+the hell the libxml is causing the seg fault (if it is). If I compile
+<br>
+everything without using xml #define USE_XML FALSE, everything works fine,
+<br>
+if I set it to TRUE, then it compiles our read and write xml sources and a
+<br>
+few other place. When I start the program it seg faults before the console
+<br>
+comes up. I tried inserting print statements but that doesn't seem to
+<br>
+work, so it is faulting right when it enters main (or before?). Could it
+<br>
+be that I am not linking the library properly? here is an excerpt from my
+<br>
+make file
+<br>
+<p>#ifdef USE_XML
+<br>
+&nbsp;CFLAGS+= -DDIR_SEPARATOR=&quot;'/'&quot;
+<br>
+&nbsp;XML_SRC= read_xml.c write_xml.c
+<br>
+&nbsp;XML_OB= read_xml.o write_xml.o
+<br>
+&nbsp;XML_INC_DIRS= -I d:/Nicholas/src/libxml2\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-I d:/Nicholas/src/zlib
+<br>
+&nbsp;CFLAGS+=  -DUSE_XML=1 $(XML_INC_DIRS)
+<br>
+&nbsp;OB+= $(XML_OB)
+<br>
+<p>&nbsp;XML_LIB_DIRS = -L d:/Nicholas/src/libxml2 \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-L d:/Nicholas/src/zlib
+<br>
+&nbsp;XML_LIBS= -lxml_dll -lzlib
+<br>
+#endif
+<br>
+<p>I hope all this helps, If there is anything else I can try let me know.
+<br>
+<p>Nicholas
+<br>
+<p>On Fri, 7 Jul 2000, Alfred Reibenschuh wrote:
+<br>
+<p><em>&gt; hi !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; i'm using &quot;mingw gcc version 2.95.2 19991024 (release)&quot;
+</em><br>
+<em>&gt; on win2k. i can reproduce the error you mentoned only 
+</em><br>
+<em>&gt; if  i give no url to testURI, so:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	testURI -- segfaults
+</em><br>
+<em>&gt; but
+</em><br>
+<em>&gt; 	testURI http:/somewhen/allways -- does not
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; i looked into it and found a weakness in the argument evaluation
+</em><br>
+<em>&gt; which produces segfaults if fewer than 1 arguments are given
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; can you send me a test case which will reproduce 
+</em><br>
+<em>&gt; what your program is doing (incuding the segfaults) ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- Alfred Reibenschuh
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; +----------------------------------------------------+
+</em><br>
+<em>&gt; |  linux geek, perl monger, roleplayer &amp; sf-fanatic  |
+</em><br>
+<em>&gt; +----------------------------------------------------+
+</em><br>
+<em>&gt; |         Sometimes I hear voices in my head         |
+</em><br>
+<em>&gt; |        telling me to do strange things, but        |
+</em><br>
+<em>&gt; |     I always wonder if that's just me thinking     |
+</em><br>
+<em>&gt; |      about things I really want to do anyway.      |
+</em><br>
+<em>&gt; |                                                    |
+</em><br>
+<em>&gt; |            Why do the voices never say,            |
+</em><br>
+<em>&gt; |           &quot;Your dosage needs adjustment&quot;?          |
+</em><br>
+<em>&gt; +----------------------------------------------------+
+</em><br>
+<em>&gt; |        look @ <a href="http://penguin.at0.net/~fredo/">http://penguin.at0.net/~fredo/</a>       |
+</em><br>
+<em>&gt; +----------------------------------------------------+
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; -----Original Message-----
+</em><br>
+<em>&gt; &gt; From: Nicholas Lewin-Koh [mailto:<a href="mailto:kohnicho@comp.nus.edu.sg?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows">kohnicho@comp.nus.edu.sg</a>]
+</em><br>
+<em>&gt; &gt; Sent: Friday, July 07, 2000 6:17 AM
+</em><br>
+<em>&gt; &gt; To: <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows">xml@rufus.w3.org</a>
+</em><br>
+<em>&gt; &gt; Cc: <a href="mailto:alfred.reibenschu@chello.at?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows">alfred.reibenschu@chello.at</a>
+</em><br>
+<em>&gt; &gt; Subject: Segmentation fault on windows
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt; I compiled libxml-2.1.1 using alfred reibenschuh's port. I am using the
+</em><br>
+<em>&gt; &gt; mingw compiler gcc-2.95.2-1. The problem, when I compile my program before
+</em><br>
+<em>&gt; &gt; the program even starts there is a segementation fault, and of course
+</em><br>
+<em>&gt; &gt; stupid windows does not core dump. But I tried the test programs and the
+</em><br>
+<em>&gt; &gt; same thing happens with testURI. Anyone have any thoughts?
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Nicholas
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20RE:%20Segmentation%20fault%20on%20windows">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<li><strong>Previous message:</strong> <a href="0589.html">Daniel Veillard: "Re: [xml] libxml security"</a>
+<li><strong>In reply to:</strong> <a href="0587.html">Alfred Reibenschuh: "[xml] RE: Segmentation fault on windows"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Validating a previously validated and then modif</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Validating a previously validated and then modified document">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Validating a previously validated and then modified document</h1>
+<!-- received="Wed Feb  7 10:35:49 2001" -->
+<!-- isoreceived="20010207153549" -->
+<!-- sent="Wed, 7 Feb 2001 16:35:37 +0100" -->
+<!-- isosent="20010207153537" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Validating a previously validated and then modified document" -->
+<!-- id="20010207163537.F8188@imag.fr" -->
+<!-- inreplyto="3A81608E.41F867B0@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Wed Feb 07 2001 - 10:35:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1430.html">Daniel Veillard: "Re: [xml] Entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="1427.html">Gary Pennington: "[xml] Validating a previously validated and then modified document"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Feb 07, 2001 at 02:49:50PM +0000, Gary Pennington wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have a document with an associated DTD. I validate it. I then
+</em><br>
+<em>&gt; programmatically make changes to the document, including adding new
+</em><br>
+<em>&gt; elements, updating attributes, etc...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now, before I write the document to disk I want to re-validate the
+</em><br>
+<em>&gt; document to ensure that it is still valid and no errors have been
+</em><br>
+<em>&gt; introduced. How to do this in libxml?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I tried calling xmlValidateDocument,
+</em><br>
+<p>&nbsp;&nbsp;yes, that's the right way,
+<br>
+<p><em>&gt; however it complained that IDs were
+</em><br>
+<em>&gt; already defined which means, I guess, that the data structures are still
+</em><br>
+<em>&gt; there from the previous validation and thus causing problems for the
+</em><br>
+<em>&gt; re-validation.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I did a quick hack to set ids and refs to NULL in the document when
+</em><br>
+<em>&gt; calling xmlValidateDocument and this did the trick for me at the cost of
+</em><br>
+<em>&gt; a memory leak.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think the real answer is to find the core validation function(s) and
+</em><br>
+<em>&gt; do an xmlFreeIDTable and an xmlFreeRefTable whenever validation is
+</em><br>
+<em>&gt; called if the table pointers aren't null.
+</em><br>
+<p>&nbsp;&nbsp;Right this should be done only at revalidation time.
+<br>
+<p><em>&gt; I'm not certain that this patch is catching all areas where it's
+</em><br>
+<em>&gt; required, so it needs some scrutiny. It's working fine for me in the
+</em><br>
+<em>&gt; scenario I descrbed above. I decided to put the check in xmlValidateRoot
+</em><br>
+<em>&gt; since I was pretty sure that this would be called whenever an entire
+</em><br>
+<em>&gt; document was validated, however it may be the wrong place for this
+</em><br>
+<em>&gt; check.
+</em><br>
+<p>&nbsp;&nbsp;Yes I'm afraid that you would loose ID and REF tables when parsing
+<br>
+and validating at the very last step of the document validation, I'm
+<br>
+not 100% sure about this but I would prefer to avoid the risk :-).
+<br>
+&nbsp;&nbsp;This should be added only when one is about to revalidate a document.
+<br>
+So I added it at the beginning of xmlValidateDocument() and
+<br>
+xmlValidateDtd().
+<br>
+&nbsp;&nbsp;Patch enclosed, quick feedback on it would be welcome,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1429/01-valid.diff">valid.diff</a>
+</ul>
+<!-- attachment="01-valid.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1430.html">Daniel Veillard: "Re: [xml] Entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="1427.html">Gary Pennington: "[xml] Validating a previously validated and then modified document"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 07 2001 - 10:44:08 EST</em>
+</em>
+</small>
+</body>
+</html>

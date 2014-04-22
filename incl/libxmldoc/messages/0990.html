@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] empty tag !?</title>
+<meta name="Author" content="Michael Liehmann (e9425279@student.tuwien.ac.at)">
+<meta name="Subject" content="[xml] empty tag !?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] empty tag !?</h1>
+<!-- received="Tue Oct 17 13:45:41 2000" -->
+<!-- isoreceived="20001017174541" -->
+<!-- sent="Tue, 17 Oct 2000 19:41:45 +0200" -->
+<!-- isosent="20001017174145" -->
+<!-- name="Michael Liehmann" -->
+<!-- email="e9425279@student.tuwien.ac.at" -->
+<!-- subject="[xml] empty tag !?" -->
+<!-- id="39EC8F59.C3E7ACF6@stud1.tuwien.ac.at" -->
+<!-- inreplyto="20001015215113.O6250@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Michael Liehmann (<a href="mailto:e9425279@student.tuwien.ac.at?subject=Re:%20[xml]%20empty%20tag%20!?"><em>e9425279@student.tuwien.ac.at</em></a>)<br>
+<strong>Date:</strong> Tue Oct 17 2000 - 13:41:45 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>Previous message:</strong> <a href="0989.html">Albert Chin-A-Young: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<li><strong>In reply to:</strong> <a href="0973.html">Daniel Veillard: "Re: [xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>Maybe reply:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi !
+<br>
+<p>i want to walk through my parsed tree and
+<br>
+put the tagNames to screen.
+<br>
+<p>here is the according code
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goTree( xmlDocGetRootElement(doc), xmlDocGetRootElement(doc));
+<br>
+<p>&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void goTree(xmlNodePtr cur, xmlNodePtr checkEnd) {
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%s\n&quot;, cur-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( cur-&gt;children-&gt;next) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goTree(cur-&gt;children-&gt;next, checkEnd);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( (cur != checkEnd) &amp;&amp; (cur-&gt;next-&gt;next)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goTree(cur-&gt;next-&gt;next, checkEnd);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>it works real fine, as long as no empty tags like &lt;image ...\&gt;
+<br>
+or &lt;p&gt;&lt;/p&gt; occur.
+<br>
+<p>i tried to use xmlIsBlankNode(cur), but i did not get any appropriate
+<br>
+answer,
+<br>
+although i stepped through the code with gdb.
+<br>
+i am using libxml2
+<br>
+<p>hope somone can help me as fast as Daniel did last time (thanks, Daniel)
+<br>
+<p>michael
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20empty%20tag%20!?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20empty%20tag%20!?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>Previous message:</strong> <a href="0989.html">Albert Chin-A-Young: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<li><strong>In reply to:</strong> <a href="0973.html">Daniel Veillard: "Re: [xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>Maybe reply:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 17 2000 - 14:43:41 EDT</em>
+</em>
+</small>
+</body>
+</html>

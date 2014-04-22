@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Patch for libxml2's xmlIO.c</title>
+<meta name="Author" content="Alejandro Forero Cuervo (bachue@bachue.com)">
+<meta name="Subject" content="[xml] Patch for libxml2's xmlIO.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Patch for libxml2's xmlIO.c</h1>
+<!-- received="Thu Jan 25 03:19:50 2001" -->
+<!-- isoreceived="20010125081950" -->
+<!-- sent="Thu, 25 Jan 2001 00:45:49 -0500" -->
+<!-- isosent="20010125054549" -->
+<!-- name="Alejandro Forero Cuervo" -->
+<!-- email="bachue@bachue.com" -->
+<!-- subject="[xml] Patch for libxml2's xmlIO.c" -->
+<!-- id="20010125004549.A17275@azul.dhis.org" -->
+<!-- inreplyto="20010123105406.A25086@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alejandro Forero Cuervo (<a href="mailto:bachue@bachue.com?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c"><em>bachue@bachue.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 25 2001 - 00:45:49 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Previous message:</strong> <a href="1382.html">Alejandro Forero Cuervo: "[xml] Fix for bugs in xmlIO.c?"</a>
+<li><strong>In reply to:</strong> <a href="1366.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Reply:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I am attaching a patch that does the following changes to libxml2
+<br>
+2.2.11:
+<br>
+<p>&nbsp;&nbsp;* xmlIO.c (xmlFileOpen, xmlFileOpenW): Removed unnecesary checks.
+<br>
+<p>&nbsp;&nbsp;* xmlIO.c (xmlIsDir): Function added to know whether a given
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filename points to a directory or to something else.
+<br>
+&nbsp;&nbsp;* xmlIO.c (xmlFileOpen, xmlFileOpenW, xmlGzfileOpen,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlGzfileOpenW): Added calls to xmlIsDir.
+<br>
+<p>&nbsp;&nbsp;* xmlIO.c (xmlGzfileOpen, xmlGzfileOpenW, xmlFdOpen, xmlFdOpenW):
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Pass `path' (rather than `filename') as the parameter to gzopen
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and open.
+<br>
+<p>The patch includes the 4 bug fixes that the patch I sent earlier had.
+<br>
+<p>I tried to make the code as portable as I could (lots of #ifdef's so
+<br>
+if anything at all is not found, all the checks' code will be
+<br>
+#ifdef'ed out) but I'd still like someone on Windows to try it and let
+<br>
+me know it works.
+<br>
+<p>Again, I am assuming the configure scripts gets run there somehow (or
+<br>
+else, how can I get HAVE__STAT defined on Windows?)
+<br>
+<p>I ommited changes to config.h.in, configure and related files to keep
+<br>
+the patch small and simple.  Please rerun autoconf/autoheader and all
+<br>
+the appropiate tools.
+<br>
+<p>I am not quite sure I like setting errno explicitly (when the file is
+<br>
+a directory, I am setting it to EISDIR), but the semantics for these
+<br>
+functions are that, should they fail, they must return NULL and leave
+<br>
+a description of the problem in errno.  On the other hand, it looks
+<br>
+nice to get `grecvis: /tmp: Is a directory' with:
+<br>
+<p>&nbsp;&nbsp;if ((tmp = xmlParseFile(file)) == NULL &amp;&amp; errno)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;%s: %s: %s\n&quot;, program, file, strerror(errno));
+<br>
+<p>Finally, I'm not sure how to comment my function.  It seems you are
+<br>
+using some tool to parse the source file and extract documentation
+<br>
+from there.  I tried to mimic the comments for other functions but I
+<br>
+might have missed things.
+<br>
+<p>Please let me know what you think.
+<br>
+<p>Thanks.
+<br>
+<p>Alejo.
+<br>
+<a href="http://bachue.com/alejo">http://bachue.com/alejo</a>
+<br>
+<p><pre>
+--
+The mere formulation of a problem is far more essential than its solution.
+      -- Albert Einstein.
+<p>$0='!/sfldbi!yjoV0msfQ!sfiupob!utvK'x44;print map{(&quot;\e[7m \e[0m&quot;,chr ord
+(chop$0)-1)[$_].(&quot;\n&quot;)[++$i%77]}split//,unpack'B*',pack'H*',($F='F'x19).
+&quot;F0F3E0607879CC1E0F0F339F3FF399C666733333CCF87F99E6133999999E67CFFCCF3&quot;.
+&quot;219CC1CCC033E7E660198CCE4E66798303873CCE60F3387$F&quot;#Don't you love Perl?
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Previous message:</strong> <a href="1382.html">Alejandro Forero Cuervo: "[xml] Fix for bugs in xmlIO.c?"</a>
+<li><strong>In reply to:</strong> <a href="1366.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Reply:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 25 2001 - 04:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

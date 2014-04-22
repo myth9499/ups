@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] xsl:value-of on empty tags</title>
+<meta name="Author" content="Robert Klep (robert@ilse.nl)">
+<meta name="Subject" content="[xml] xsl:value-of on empty tags">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] xsl:value-of on empty tags</h1>
+<!-- received="Tue Mar  6 09:27:34 2001" -->
+<!-- isoreceived="20010306142734" -->
+<!-- sent="Tue, 6 Mar 2001 15:04:01 +0100" -->
+<!-- isosent="20010306140401" -->
+<!-- name="Robert Klep" -->
+<!-- email="robert@ilse.nl" -->
+<!-- subject="[xml] xsl:value-of on empty tags" -->
+<!-- id="20010306150401.A54181@ilse.nl" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Robert Klep (<a href="mailto:robert@ilse.nl?subject=Re:%20[xml]%20xsl:value-of%20on%20empty%20tags"><em>robert@ilse.nl</em></a>)<br>
+<strong>Date:</strong> Tue Mar 06 2001 - 09:04:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1530.html">Daniel Veillard: "Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+L.S.
+<br>
+<p>I'm having problems (libxml-2.3.3, libxslt-0.4.0) processing empty tags; in
+<br>
+fact, the results seem to be completely wrong.
+<br>
+<p>Take the following XSL sheet:
+<br>
+-snip-
+<br>
+&lt;xsl:stylesheet xmlns:xsl=&quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot; version=&quot;1.0&quot;&gt;
+<br>
+<p>&lt;xsl:template match=&quot;foo&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FOO&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/FOO&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>&lt;xsl:template match=&quot;bar&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;BAR&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;.&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/BAR&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>&lt;xsl:template match=&quot;xxx&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;XXX&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;.&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/XXX&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>&lt;/xsl:stylesheet&gt;
+<br>
+-snip-
+<br>
+<p>and the following XML input:
+<br>
+-snip-
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;foo&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bar&gt;This is bar 1&lt;/bar&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xxx/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bar&gt;This is bar 2&lt;/bar&gt;
+<br>
+&lt;/foo&gt;
+<br>
+-snip-
+<br>
+<p>The output is:
+<br>
+-snip-
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;FOO&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;BAR&gt;This is bar 1&lt;/BAR&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;XXX&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is bar 2
+<br>
+&lt;/XXX&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;BAR&gt;This is bar 2&lt;/BAR&gt;
+<br>
+&lt;/FOO&gt;
+<br>
+-snip-
+<br>
+<p>This doesn't seem to be right. If I change the xsl:value-of in the xxx-
+<br>
+template to &lt;xsl:value-of select=&quot;text()&quot;/&gt; (or to &lt;xsl:apply-templates/&gt;,
+<br>
+for that matter), the output is more sane.
+<br>
+<p>Am I missing something here?
+<br>
+<p>With kind regards,
+<br>
+Robert
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xsl:value-of%20on%20empty%20tags">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xsl:value-of%20on%20empty%20tags">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1530.html">Daniel Veillard: "Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Mar 06 2001 - 10:45:45 EST</em>
+</em>
+</small>
+</body>
+</html>

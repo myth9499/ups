@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] error reporting</title>
+<meta name="Author" content="Havoc Pennington (hp@redhat.com)">
+<meta name="Subject" content="[xml] error reporting">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] error reporting</h1>
+<!-- received="Sat Sep 16 08:42:26 2000" -->
+<!-- isoreceived="20000916124226" -->
+<!-- sent="15 Sep 2000 23:36:18 -0400" -->
+<!-- isosent="20000916033618" -->
+<!-- name="Havoc Pennington" -->
+<!-- email="hp@redhat.com" -->
+<!-- subject="[xml] error reporting" -->
+<!-- id="y5wd7i5dn4d.fsf@icon.labs.redhat.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Havoc Pennington (<a href="mailto:hp@redhat.com?subject=Re:%20[xml]%20error%20reporting"><em>hp@redhat.com</em></a>)<br>
+<strong>Date:</strong> Fri Sep 15 2000 - 23:36:18 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<li><strong>Previous message:</strong> <a href="0764.html">Mike Cunningham: "Re: [xml] 2 issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<li><strong>Reply:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I'm wondering why the parser usually sets the errno in the parse
+<br>
+context _after_ calling the sax-&gt;error handler, for example:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;sax != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;sax-&gt;error != NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax-&gt;error(ctxt-&gt;userData, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Char 0x%X out of allowed range\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;val);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;errNo = XML_ERR_INVALID_ENCODING;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;wellFormed = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;disableSAX = 1;
+<br>
+<p>So in your error handler, you can't know the errno. It would seem just
+<br>
+as easy to set the errno before calling the handler, then the handler
+<br>
+could know which error occurred.
+<br>
+<p>Also it's pretty problematic that error messages are not
+<br>
+localized; this makes them useless for showing to users, since many
+<br>
+users don't speak English.
+<br>
+<p>Any thoughts on these issues?
+<br>
+<p>Havoc
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20error%20reporting">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20error%20reporting">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<li><strong>Previous message:</strong> <a href="0764.html">Mike Cunningham: "Re: [xml] 2 issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<li><strong>Reply:</strong> <a href="0766.html">Daniel Veillard: "Re: [xml] error reporting"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Sep 16 2000 - 09:43:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: Encoding* of libxml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: Encoding* of libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: Encoding* of libxml</h1>
+<!-- received="Wed May  3 10:11:42 2000" -->
+<!-- isoreceived="20000503141142" -->
+<!-- sent="Wed, 3 May 2000 16:04:54 +0200" -->
+<!-- isosent="20000503140454" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: Encoding* of libxml" -->
+<!-- id="20000503160454.D24751@w3.org" -->
+<!-- inreplyto="20000426153646.B405@gate.sinica.edu.tw" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Encoding*%20of%20libxml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed May 03 2000 - 10:04:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0474.html">Bernie Rosman: "[xml] xmlMemoryParse leak?"</a>
+<li><strong>Previous message:</strong> <a href="0472.html">Daniel Veillard: "Re: [xml] libxml-1.8.7 leak?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Apr 26, 2000 at 03:36:46PM +0800, Yuan-Chen Cheng wrote:
+<br>
+<em>&gt; On Wed, Apr 26, 2000 at 09:09:58AM +0200, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt;   I have started working on the integration of your patch into the
+</em><br>
+<em>&gt; &gt; current framework, but I will keep encoding.[ch] a simple file.
+</em><br>
+<em>&gt; &gt; I also changed the way the ICONV stuff gets integrated into the existing
+</em><br>
+<em>&gt; &gt; code and structures. It will take a bit of time but I want this to work,
+</em><br>
+<em>&gt; &gt; especially I want support for japanese encodings through iconv that way.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;    thanks for your code, it's not dropped, integrating it just takes far
+</em><br>
+<em>&gt; &gt; more time and touch far more code that just the encoding related files.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thank you for your hard working for open-source/free software.
+</em><br>
+<p>&nbsp;&nbsp;The version in CVS now has iconv support enabled by default if found.
+<br>
+It parses without any trouble all the test in japanese subdir of the
+<br>
+OASIS testsuite on my linux box. So I assume it's working properly for
+<br>
+input. I still have troubles with conf/oasis/p02pass1.xml from the 
+<br>
+testsuite, I smell it's related to one of the chars from the new Unicode
+<br>
+planes, I will try to debug this later. So thanks for your help, this
+<br>
+was fruitful at the end !
+<br>
+&nbsp;&nbsp;Currently the output isn't nice though ... all the encodings are 
+<br>
+switched to UTF8 and all the output is saved using &amp;#xxxx; charrefs,
+<br>
+it's really ugly .... Maybe this should be done only if one wants
+<br>
+to save to an ASCII or ISOLatin-X encoding, but not for native UTF8.
+<br>
+&nbsp;&nbsp;Seems I need to add some kind of routine like 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int xmlSavexxx(  fd, xmlDocPtr doc, const char *encoding);
+<br>
+<p>&nbsp;I need to think a bit more about this but this doesn't look that hard
+<br>
+now ...
+<br>
+<p>&nbsp;&nbsp;thanks again,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Encoding*%20of%20libxml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20Encoding*%20of%20libxml">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20Encoding*%20of%20libxml">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0474.html">Bernie Rosman: "[xml] xmlMemoryParse leak?"</a>
+<li><strong>Previous message:</strong> <a href="0472.html">Daniel Veillard: "Re: [xml] libxml-1.8.7 leak?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

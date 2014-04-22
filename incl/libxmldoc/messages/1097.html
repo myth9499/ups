@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XPath and abbreviated paths</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] XPath and abbreviated paths">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XPath and abbreviated paths</h1>
+<!-- received="Sat Oct 28 06:09:17 2000" -->
+<!-- isoreceived="20001028100917" -->
+<!-- sent="Sat, 28 Oct 2000 12:09:13 +0200" -->
+<!-- isosent="20001028100913" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] XPath and abbreviated paths" -->
+<!-- id="20001028120912.H3808@w3.org" -->
+<!-- inreplyto="20001028014659.B1891@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Oct 28 2000 - 06:09:13 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1098.html">Daniel Veillard: "Re: [xml] xmlXPathRoot error?"</a>
+<li><strong>Previous message:</strong> <a href="1096.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<li><strong>In reply to:</strong> <a href="1093.html">TOM: "[xml] XPath and abbreviated paths"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1099.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<li><strong>Reply:</strong> <a href="1099.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Oct 28, 2000 at 01:46:59AM +0200, TOM wrote:
+<br>
+<em>&gt; If we call ./testXPath --expr /EXAMPLE//title, it works, and if we look
+</em><br>
+<em>&gt; at xmlXPathEvalLocationPath(), we see that if the path begins with '//'
+</em><br>
+<em>&gt; xmlXPathRoot() isn't called, but if it begins with a simple '/' it is.
+</em><br>
+<p>&nbsp;&nbsp;I made what seem the clean fix of the root evaluation problem.
+<br>
+It was just not done at the right places.
+<br>
+It also fixes the problem that Bjorn Reese raised Fri, 20 Oct 2000:
+<br>
+<p>~/XML -&gt;  ./testXPath 'string(//title)'
+<br>
+Object is a string : Welcome to Gnome
+<br>
+~/XML -&gt; ./testXPath --expr 'string(//title)'
+<br>
+Object is a string : Welcome to Gnome
+<br>
+~/XML -&gt; ./testXPath --expr 'concat(string(//title),&quot;hello&quot;)'
+<br>
+Object is a string : Welcome to Gnomehello
+<br>
+~/XML -&gt; ./testXPath --expr 'concat(&quot;hello&quot;,string(//title))'
+<br>
+Object is a string : helloWelcome to Gnome
+<br>
+~/XML -&gt; ./testXPath 'local-name(/EXAMPLE)'
+<br>
+Object is a string : EXAMPLE
+<br>
+~/XML -&gt; ./testXPath --expr 'local-name(/EXAMPLE)'
+<br>
+Object is a string : EXAMPLE
+<br>
+~/XML -&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;patch enclosed. There is still a couple of errors I'm chasing down
+<br>
+but no more related to root evaluation.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1098.html">Daniel Veillard: "Re: [xml] xmlXPathRoot error?"</a>
+<li><strong>Previous message:</strong> <a href="1096.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<li><strong>In reply to:</strong> <a href="1093.html">TOM: "[xml] XPath and abbreviated paths"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1099.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<li><strong>Reply:</strong> <a href="1099.html">Daniel Veillard: "Re: [xml] XPath and abbreviated paths"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 28 2000 - 09:44:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

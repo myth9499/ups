@@ -1,0 +1,33 @@
+Index: parser.c
+===================================================================
+RCS file: /data/itlnpc79/tal/dom_cvs/gnome-xml/parser.c,v
+retrieving revision 1.1.1.2
+retrieving revision 1.3
+diff -c -r1.1.1.2 -r1.3
+*** parser.c	1999/09/07 05:48:55	1.1.1.2
+--- parser.c	1999/09/08 02:00:11	1.3
+***************
+*** 3122,3132 ****
+  	    if (isParameter) {
+  	        if ((ctxt->sax != NULL) &&
+  		    (ctxt->sax->getParameterEntity != NULL))
+! 		    cur = ctxt->sax->getParameterEntity(ctxt, name);
+  	    } else {
+  	        if ((ctxt->sax != NULL) &&
+  		    (ctxt->sax->getEntity != NULL))
+! 		    cur = ctxt->sax->getEntity(ctxt, name);
+  	    }
+              if (cur != NULL) {
+  	        if (cur->orig != NULL)
+--- 3122,3132 ----
+  	    if (isParameter) {
+  	        if ((ctxt->sax != NULL) &&
+  		    (ctxt->sax->getParameterEntity != NULL))
+! 		    cur = ctxt->sax->getParameterEntity(ctxt->userData, name);
+  	    } else {
+  	        if ((ctxt->sax != NULL) &&
+  		    (ctxt->sax->getEntity != NULL))
+! 		    cur = ctxt->sax->getEntity(ctxt->userData, name);
+  	    }
+              if (cur != NULL) {
+  	        if (cur->orig != NULL)

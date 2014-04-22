@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] A truncation bug and some testHTML.c enhancements</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="[xml] A truncation bug and some testHTML.c enhancements">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] A truncation bug and some testHTML.c enhancements</h1>
+<!-- received="Sun Aug 13 00:45:27 2000" -->
+<!-- isoreceived="20000813044527" -->
+<!-- sent="Sun, 13 Aug 2000 00:41:40 -0700 (PDT)" -->
+<!-- isosent="20000813074140" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="[xml] A truncation bug and some testHTML.c enhancements" -->
+<!-- id="Pine.LNX.4.21.0008122326180.28380-400000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Sun Aug 13 2000 - 03:41:40 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0641.html">Daniel Veillard: "[xml] Release of libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+There's a bug in the HTML parser when we're using the push interface
+<br>
+and we encounter a meta tag that changes the charset.  After the code
+<br>
+shrinks the input buffer to remove all the already-parsed characters,
+<br>
+it then calls xmlCharEncFirstLine(), which only converts 45 characters
+<br>
+or less from the new raw buffer.  Any characters in the raw buffer
+<br>
+after this are never parsed.  Depending on the buffer size, this can
+<br>
+truncate the entire HTML file in the middle of the HEAD section.
+<br>
+<p>I made a quick fix by changing the xmlCharEncFirstLine() call in
+<br>
+parser.c into xmlCharEncInFunc().  This ensures that the entire buffer
+<br>
+gets converted and used.  This may even be the right thing to do,
+<br>
+since I don't see why we should be using the first-line version of
+<br>
+this function when we know that we've already parsed data from the
+<br>
+file (it seems to me that it should only get called if we're at the
+<br>
+very start of the file).
+<br>
+<p>If you'd like to see the bug in action, you need to use the push
+<br>
+interface with a buffer that is larger than 45 bytes.  The testHTML
+<br>
+program (as it exists now) will only trigger the bug if you use both
+<br>
+--push and --repeat (since it only uses a 3-byte buffer by default).
+<br>
+<p>This brings me to my changes for testHTML.c.
+<br>
+<p>I noticed that testHTML did not allow me to both push data and test
+<br>
+the SAX parser, so I added the appropriate code to parseSAXFile() to
+<br>
+honor the push flag.  I also added an option named &quot;--bigpush&quot; that
+<br>
+behaves just like --push except that it uses the whole 1024-byte
+<br>
+buffer.  (Given this option, I also removed the magic effect of
+<br>
+--repeat on the buffer size -- use --bigpush with --repeat to get the
+<br>
+old behavior.)  Lastly, I tweaked some of the option-parsing code to
+<br>
+make it a little less repetitive.
+<br>
+<p>After you apply this patch, you can run testHTML with both --bigpush
+<br>
+and --sax and see the truncated data quite easily.
+<br>
+<p>I've attached my test file (meta.html), a patch with the one-line
+<br>
+change for parser.c, and a patch with my changes to testHTML.c.
+<br>
+<p>All changes are based on the CVS source I just grabbed from gnome.org.
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/HTML attachment: <a href="att-0642/01-meta.html">Simple test file with a meta-tag charset</a>
+</ul>
+<!-- attachment="01-meta.html" -->
+<hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0642/02-parser.patch">My 1-line change to parser.c</a>
+</ul>
+<!-- attachment="02-parser.patch" -->
+<hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0642/03-testHTML.patch">My improvements for testHTML.c</a>
+</ul>
+<!-- attachment="03-testHTML.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0641.html">Daniel Veillard: "[xml] Release of libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Aug 13 2000 - 01:43:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

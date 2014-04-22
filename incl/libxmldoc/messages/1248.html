@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] First message: text nodes</title>
+<meta name="Author" content="Rafael Peregrino (rafael.peregrino@innominate.com)">
+<meta name="Subject" content="Re: [xml] First message: text nodes">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] First message: text nodes</h1>
+<!-- received="Thu Nov 30 12:10:31 2000" -->
+<!-- isoreceived="20001130171031" -->
+<!-- sent="Thu, 30 Nov 2000 18:18:14 +0100" -->
+<!-- isosent="20001130171814" -->
+<!-- name="Rafael Peregrino" -->
+<!-- email="rafael.peregrino@innominate.com" -->
+<!-- subject="Re: [xml] First message: text nodes" -->
+<!-- id="3A268BD6.4E32C0C0@innominate.com" -->
+<!-- inreplyto="41157D026B64D311A78600D00905535602D830@SVR_SEMA" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Rafael Peregrino (<a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes"><em>rafael.peregrino@innominate.com</em></a>)<br>
+<strong>Date:</strong> Thu Nov 30 2000 - 12:18:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<li><strong>In reply to:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Antonio Alvarado wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; -----Mensaje original-----
+</em><br>
+<em>&gt; &gt; De:   Rafael Peregrino [SMTP:<a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes">rafael.peregrino@innominate.com</a>]
+</em><br>
+<em>&gt; &gt; Enviado el:   jueves 30 de noviembre de 2000 08:49
+</em><br>
+<em>&gt; &gt; Para: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; &gt; Asunto:       Re: [xml] First message: text nodes
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Weird... I don't see this... Have a look yourself below:
+</em><br>
+<em>&gt; &gt; ....
+</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Antonio Alvarado]
+<br>
+<em>&gt;         I don't remember, but some guy have problems some time ago with
+</em><br>
+<em>&gt; blank-formating
+</em><br>
+<em>&gt;         text nodes between element nodes.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         Check if in libxml 2.2.2, is there a function named:
+</em><br>
+<em>&gt; &quot;xmlKeepBlanksDefault&quot;?
+</em><br>
+<em>&gt;         and then check if you have wrote a xmlKeepBlanksDefault(0) call at
+</em><br>
+<em>&gt; begining of your
+</em><br>
+<em>&gt;         code.
+</em><br>
+<p>THAT'S IT! ;-) I was really an idiot and have deleted the two following
+<br>
+lines
+<br>
+<p>&nbsp;&nbsp;/* COMPAT: Do not generate nodes for formatting spaces */
+<br>
+&nbsp;&nbsp;LIBXML_TEST_VERSION
+<br>
+&nbsp;&nbsp;xmlKeepBlanksDefault(0);
+<br>
+<p>of the original code (don't ask me why! :-)!
+<br>
+<p>Thanks a lot for the help!!!
+<br>
+<p>Best (happy) regards, 
+<br>
+<p>Rafael (8-)
+<br>
+P.S. (newbies... :-)
+<br>
+<pre>
+-- 
+<a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes">rafael.peregrino@innominate.com</a>
+software engineer                                        innominate AG
+server appliances                                 the linux architects
+tel: +49.30.308806-81  fax: -77              <a href="http://www.innominate.com">http://www.innominate.com</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<li><strong>In reply to:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Nov 30 2000 - 12:43:52 EST</em>
+</em>
+</small>
+</body>
+</html>

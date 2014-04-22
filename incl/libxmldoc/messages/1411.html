@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Core dumped (Floating exception) with libxml2-2-</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0</h1>
+<!-- received="Fri Feb  2 11:51:34 2001" -->
+<!-- isoreceived="20010202165134" -->
+<!-- sent="Fri, 02 Feb 2001 16:52:19 +0000" -->
+<!-- isosent="20010202165219" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0" -->
+<!-- id="3A7AE5C3.D316003A@mail1.stofanet.dk" -->
+<!-- inreplyto="00c701c08ce7$27fc15e0$8c866a9c@itu.ch" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20%20Digital%20Unix%20V4.0"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 11:52:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1412.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>Previous message:</strong> <a href="1410.html">Peter Jacobi: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1402.html">Caran julien: "[xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1413.html">Daniel Veillard: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<li><strong>Reply:</strong> <a href="1413.html">Daniel Veillard: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Caran julien wrote:
+<br>
+<p><em>&gt; /bin/sh: 17188 Floating exception - core dumped
+</em><br>
+<p>Adding a stacktrace could be helpful. The way you do this is to
+<br>
+<p>&nbsp;&nbsp;1. Locate the core dump
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% find . -name core -print
+<br>
+&nbsp;&nbsp;2. Change directory if necessary
+<br>
+&nbsp;&nbsp;3. Find out which executable caused the core dump
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% file core
+<br>
+&nbsp;&nbsp;4. Start a debugger for post-mortem investigation
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% gdb insert-the-executable-here core
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you don't have gdb, use dbx instead.
+<br>
+&nbsp;&nbsp;5. Make a stacktrace from the debugger
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(gdb) where
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20%20Digital%20Unix%20V4.0">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20%20Digital%20Unix%20V4.0">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1412.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>Previous message:</strong> <a href="1410.html">Peter Jacobi: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1402.html">Caran julien: "[xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1413.html">Daniel Veillard: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<li><strong>Reply:</strong> <a href="1413.html">Daniel Veillard: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 12:43:36 EST</em>
+</em>
+</small>
+</body>
+</html>

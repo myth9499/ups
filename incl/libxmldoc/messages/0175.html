@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Another buglet in HTML parser</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="[xml] Another buglet in HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Another buglet in HTML parser</h1>
+<!-- received="Sun Oct 10 18:56:11 1999" -->
+<!-- isoreceived="19991010225611" -->
+<!-- sent="11 Oct 1999 00:56:06 +0200" -->
+<!-- isosent="19991010225606" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="[xml] Another buglet in HTML parser" -->
+<!-- id="y6yln9ax1tl.fsf@decius.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Sun Oct 10 1999 - 18:56:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0174.html">Daniel Veillard: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>Here's some more feedback on the HTML parser: when parsing the
+<br>
+following
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;html&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;body&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ol&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt; hello
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ol&gt;&lt;/body&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/html&gt;
+<br>
+<p>I get &quot;htmlParseEndTag: unexpected close for tag OL &lt;/ol&gt;&lt;/body&gt;&quot;.
+<br>
+I've traced it to htmlParseContent: the test for wether current
+<br>
+element has been autoclosed (line 2184: if (currentNode != ctxt-&gt;name)
+<br>
+...) should be moved to after the four cases dealing with the element
+<br>
+content.
+<br>
+<p>In the example above, parsing the li element autocloses the ol
+<br>
+element.  Then the while loop terminates since the parser sees &quot;&lt;/&quot;
+<br>
+from &quot;&lt;/body&gt;&quot;, and it calls htmlParseEndTag, when it should just
+<br>
+return.
+<br>
+<p>Kristian
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0174.html">Daniel Veillard: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

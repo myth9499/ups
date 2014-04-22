@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] ipv6 and gnome-xml</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="Re: [xml] ipv6 and gnome-xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] ipv6 and gnome-xml</h1>
+<!-- received="Sat Dec 16 08:15:21 2000" -->
+<!-- isoreceived="20001216131521" -->
+<!-- sent="Sat, 16 Dec 2000 13:15:55 +0000" -->
+<!-- isosent="20001216131555" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="Re: [xml] ipv6 and gnome-xml" -->
+<!-- id="3A3B6B0B.55062555@mail1.stofanet.dk" -->
+<!-- inreplyto="20001216110703.E13200@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Sat Dec 16 2000 - 08:15:55 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt; If you could provide a brief summary of the changes needed to both
+</em><br>
+<em>&gt; the URI parsing algorithms and possibly the changes needed when dealing
+</em><br>
+<em>&gt; with the socket interfaces, that would be really useful.
+</em><br>
+<p>A little bit of juggling with the appropriate data structures
+<br>
+are needed for the socket interface.
+<br>
+<p>Enabling IPv6 support in the DNS resolver requires a bit of a
+<br>
+hack, and probably doesn't work on Windows at all.
+<br>
+<p>I have attached a patch for nanohttp.c (2-2.2.10), that does the
+<br>
+above. The patch is only meant as an example (or a starting point)
+<br>
+of how IPv6 can be added. Define the SUPPORT_IP6 macro if your
+<br>
+machine supports IPv6. I have not tested it, as I don't have IPv6
+<br>
+here, nor do I need it myself -- I just adapted some of my other
+<br>
+code.
+<br>
+<p>For further information see RFC 2553 and section 9 in &quot;Unix
+<br>
+Network Programming&quot; (2nd edition) by Stevens.
+<br>
+<p>
+*** libxml2-2.2.10/nanohttp.c	Sat Nov 25 11:39:36 2000
+<br>
+--- libxml2-2.2.10-breese/nanohttp.c	Sat Dec 16 13:55:25 2000
+<br>
+***************
+<br>
+*** 60,65 ****
+<br>
+--- 60,68 ----
+<br>
+&nbsp;&nbsp;#ifdef HAVE_STRINGS_H
+<br>
+&nbsp;&nbsp;#include &lt;strings.h&gt;
+<br>
+&nbsp;&nbsp;#endif
+<br>
++ #ifdef SUPPORT_IP6
+<br>
++ #include &lt;resolv.h&gt;
+<br>
++ #endif
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#ifdef VMS
+<br>
+&nbsp;&nbsp;#include &lt;stropts&gt;
+<br>
+***************
+<br>
+*** 643,652 ****
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;static int
+<br>
+! xmlNanoHTTPConnectAttempt(struct in_addr ia, int port)
+<br>
+&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+<br>
+-     struct sockaddr_in sin;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd_set wfd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct timeval tv;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int status;
+<br>
+--- 646,654 ----
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;static int
+<br>
+! xmlNanoHTTPConnectAttempt(struct sockaddr *addr, int port)
+<br>
+&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fd_set wfd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct timeval tv;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int status;
+<br>
+***************
+<br>
+*** 692,702 ****
+<br>
+&nbsp;&nbsp;#endif /* !_WINSOCKAPI_ */
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;
+<br>
+!     sin.sin_family = AF_INET;	
+<br>
+!     sin.sin_addr   = ia;
+<br>
+!     sin.sin_port   = htons(port);
+<br>
+!     
+<br>
+!     if ((connect(s, (struct sockaddr *)&amp;sin, sizeof(sin))==-1)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (socket_errno()) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case EINPROGRESS:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case EWOULDBLOCK:
+<br>
+--- 694,700 ----
+<br>
+&nbsp;&nbsp;#endif /* !_WINSOCKAPI_ */
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;
+<br>
+!     if ((connect(s, addr, sizeof(*addr))==-1)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (socket_errno()) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case EINPROGRESS:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case EWOULDBLOCK:
+<br>
+***************
+<br>
+*** 764,772 ****
+<br>
+--- 762,782 ----
+<br>
+&nbsp;&nbsp;xmlNanoHTTPConnectHost(const char *host, int port)
+<br>
+&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct hostent *h;
+<br>
++     struct sockaddr *addr;
+<br>
++     struct in_addr ia;
+<br>
++     struct sockaddr_in sin;
+<br>
++ #ifdef SUPPORT_IP6
+<br>
++     struct in6_addr ia6;
+<br>
++     struct sockaddr_in6 sin6;
+<br>
++ #endif
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int i;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int s;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
++ #if defined(SUPPORT_IP6) &amp;&amp; defined(RES_USE_INET6)
+<br>
++     if (!(_res.options &amp; RES_INIT))
+<br>
++ 	res_init();
+<br>
++     _res.options |= RES_USE_INET6;
+<br>
++ #endif
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h=gethostbyname(host);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (h==NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+***************
+<br>
+*** 778,786 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0; h-&gt;h_addr_list[i]; i++)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+! 	struct in_addr ia;
+<br>
+! 	memcpy(&amp;ia, h-&gt;h_addr_list[i],4);
+<br>
+! 	s = xmlNanoHTTPConnectAttempt(ia, port);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (s != -1)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(s);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+--- 788,813 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0; h-&gt;h_addr_list[i]; i++)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+! 	if (h-&gt;h_addrtype == AF_INET) {
+<br>
+! 	    /* A records (IPv4) */
+<br>
+! 	    memcpy(&amp;ia, h-&gt;h_addr_list[i], h-&gt;h_length);
+<br>
+! 	    sin.sin_family = h-&gt;h_addrtype;
+<br>
+! 	    sin.sin_addr   = ia;
+<br>
+! 	    sin.sin_port   = htons(port);
+<br>
+! 	    addr = (struct sockaddr *)&amp;sin;
+<br>
+! #ifdef SUPPORT_IP6
+<br>
+! 	} else if (h-&gt;h_addrtype == AF_INET6) {
+<br>
+! 	    /* AAAA records (IPv6) */
+<br>
+! 	    memcpy(&amp;ia6, h-&gt;h_addr_list[i], h-&gt;h_length);
+<br>
+! 	    sin6.sin_family = h-&gt;h_addrtype;
+<br>
+! 	    sin6.sin_addr   = ia6;
+<br>
+! 	    sin6.sin_port   = htons(port);
+<br>
+! 	    addr = (struct sockaddr *)&amp;sin6;
+<br>
+! #endif
+<br>
+! 	} else
+<br>
+! 	    break; /* for */
+<br>
+! 	
+<br>
+! 	s = xmlNanoHTTPConnectAttempt(addr, port);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (s != -1)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(s);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Dec 16 2000 - 09:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/Solaris</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/Solaris">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/Solaris</h1>
+<!-- received="Wed Jul  5 15:21:00 2000" -->
+<!-- isoreceived="20000705192100" -->
+<!-- sent="Wed, 5 Jul 2000 21:17:29 +0200" -->
+<!-- isosent="20000705191729" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/Solaris" -->
+<!-- id="20000705211729.C22413@w3.org" -->
+<!-- inreplyto="200007051645.MAA28241@duncan.cs.utk.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jul 05 2000 - 15:17:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jul 05, 2000 at 12:45:38PM -0400, David Doolin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; []
+</em><br>
+<em>&gt; &gt;Steffen Zahn &lt;<a href="mailto:Steffen.Zahn@icn.siemens.de?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">Steffen.Zahn@icn.siemens.de</a>&gt; reported the same problem
+</em><br>
+<em>&gt; &gt;and indicated a temporary fix:
+</em><br>
+<em>&gt; &gt;:I fixed it by using size_t instead of socklen_t. The correct
+</em><br>
+<em>&gt; &gt;:solution is probably to detect the existence of socklen_t with configure.  
+</em><br>
+<em>&gt; []
+</em><br>
+<em>&gt; &gt; &lt;sys/socket.h&gt; makes available a type, socklen_t, which is an
+</em><br>
+<em>&gt; &gt; unsigned opaque integral type of length of at least 32 bits. To
+</em><br>
+<em>&gt; &gt; forestall portability problems, it is recommended that applications
+</em><br>
+<em>&gt; &gt; should not use values larger than 232 - 1. 
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;  So I have switched back to use a simple int. All this is commited
+</em><br>
+<em>&gt; &gt;in libxml W3C CVS base, and will propagate to future versions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Just for the record, I changed this to u_int to get the win32 version to 
+</em><br>
+<em>&gt; compile.  
+</em><br>
+<p>&nbsp;&nbsp;Right this is a size_t in spirit, it should be unsigned. I will
+<br>
+change this.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

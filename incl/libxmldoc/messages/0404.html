@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Loss of whitespace</title>
+<meta name="Author" content="Paul DuBois (paul@snake.net)">
+<meta name="Subject" content="Re: [xml] Loss of whitespace">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Loss of whitespace</h1>
+<!-- received="Wed Mar  1 23:26:05 2000" -->
+<!-- isoreceived="20000302042605" -->
+<!-- sent="Wed, 1 Mar 2000 22:25:24 -0600" -->
+<!-- isosent="20000302042524" -->
+<!-- name="Paul DuBois" -->
+<!-- email="paul@snake.net" -->
+<!-- subject="Re: [xml] Loss of whitespace" -->
+<!-- id="p04310102b4e393b2fb4e@[192.168.0.6]" -->
+<!-- inreplyto="20000302041530.F2869@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Paul DuBois (<a href="mailto:paul@snake.net?subject=Re:%20[xml]%20Loss%20of%20whitespace"><em>paul@snake.net</em></a>)<br>
+<strong>Date:</strong> Wed Mar 01 2000 - 23:25:24 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0402.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+At 4:15 AM +0100 2000-03-02, Daniel Veillard wrote:
+<br>
+<em>&gt;On Wed, Mar 01, 2000 at 09:24:08PM +0100, Daniel Veillard wrote:
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt;  On Wed, Mar 01, 2000 at 01:40:39PM -0600, Paul DuBois wrote:
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; I first reported this on the PHP4 mailing list, but after some more
+</em><br>
+<em>&gt;&gt;  &gt; poking around, what I'm observing seems to be happening in the libxml
+</em><br>
+<em>&gt;&gt;  &gt; library that PHP4 uses.
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; Here's a sample document:
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;  &gt; &gt; &lt;?xml version='1.0'?&gt;
+</em><br>
+<em>&gt;&gt;  &gt; &lt;root&gt;
+</em><br>
+<em>&gt;&gt;  &gt; a&lt;x&gt; &lt;/x&gt;b&lt;x&gt; &lt;/x&gt;c
+</em><br>
+<em>&gt;&gt;  &gt; &lt;/root&gt;
+</em><br>
+<em>&gt;  &gt; &gt;
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; If I run this through &quot;tester&quot;, I get:
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; &lt;root&gt;
+</em><br>
+<em>&gt;&gt;  &gt; a&lt;x/&gt;b&lt;x/&gt;c
+</em><br>
+<em>&gt;&gt;  &gt; &lt;/root&gt;
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; Note that the whitespace which forms the contents of the &lt;x&gt; elements
+</em><br>
+<em>&gt;&gt;  &gt; has been discarded.
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt;
+</em><br>
+<em>&gt;&gt;  &gt; How do I defeat this?
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt;    With an upgrade, I need to fix this ASAP. I guess it's worth releasing
+</em><br>
+<em>&gt;&gt;  an 1.8.7 lib just for this &lt;grin/&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   This proves to be incredibly hard to fix !!!
+</em><br>
+<em>&gt;If I fix it, basically the tree produced by a document like
+</em><br>
+<em>&gt;&lt;root&gt;
+</em><br>
+<em>&gt;&lt;x&gt; &lt;/x&gt;
+</em><br>
+<em>&gt;&lt;/root&gt;
+</em><br>
+<em>&gt;would be:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt;text(\n) -&gt; x -&gt; text(\n)
+</em><br>
+<em>&gt;                    |
+</em><br>
+<em>&gt;		   -&gt; text( )
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;instead of
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt; x
+</em><br>
+<em>&gt;         |
+</em><br>
+<em>&gt;	-&gt; text( )
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;which is what you expect.
+</em><br>
+<p><p>Actually, the *first* form is exactly what I would expect, not the second.
+<br>
+I would expect a text node to be created for each occurrence of
+<br>
+text, whitespace included.
+<br>
+<p><em>&gt;and currently libxml generates
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt; x
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;There is no clean way to know whether such a white space is significant
+</em><br>
+<em>&gt;a priori, and I'm afraid that in the current for it would break most of the
+</em><br>
+<em>&gt;apps around using libxml.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Without a DTD telling me what is the content type of the element root
+</em><br>
+<em>&gt;I cannot assume it's just (x)* and not (CDATA | x), hence wether
+</em><br>
+<em>&gt;I can safely assume that this can be ignored
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Check the related section at:
+</em><br>
+<em>&gt;  <a href="http://xml.com/axml/target.html#sec-white-space">http://xml.com/axml/target.html#sec-white-space</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;and especially the couple of comments put by Tim Bray under the (T)
+</em><br>
+<em>&gt;links.
+</em><br>
+<p><p>What I see there is this comment:
+<br>
+<p>An XML processor must always pass all characters in a document that 
+<br>
+are not markup through to the application.
+<br>
+<p>And the annotation (<a href="http://xml.com/axml/notes/AllWSAlways.html">http://xml.com/axml/notes/AllWSAlways.html</a>) notes this:
+<br>
+<p>------
+<br>
+XML's White Space Policy
+<br>
+<p>XML has an incredibly simple rule about how to handle white space, 
+<br>
+that is contained in this one sentence: &quot;If it ain't markup, it's 
+<br>
+data.&quot;
+<br>
+Under no circumstances will an XML processor discard some white space 
+<br>
+because, in the processor's opinion, it is not &quot;significant&quot;.
+<br>
+------
+<br>
+<p>and this, which seems especially pertinent to the discussion:
+<br>
+<p>------
+<br>
+This behavior is going to cause some surprises and problems for XML 
+<br>
+users and programmers, because we've come to expect (as a result of
+<br>
+working with SGML and HTML) &quot;insignificant&quot; white space to 
+<br>
+auto-magically vanish.
+<br>
+------
+<br>
+<p><p><em>&gt;No single heuristic will work. And I'm using such an heuristic in libxml
+</em><br>
+<em>&gt;and changing it will probably kill a lot of applications using libxml,
+</em><br>
+<em>&gt;I tried with gnumeric it didn't liked :-(. PHP might break seriously too
+</em><br>
+<p><p>Actually, I noticed it because in an application I'm doing the PHP4
+<br>
+version was acting very strange compared to the Perl version.  Turned
+<br>
+out that the difference was libxml's tossing of whitespace.
+<br>
+<p>The Perl parsers I'm used to dealing with return text no matter where
+<br>
+it occurs.  The DOM parser constructs text nodes for all text.
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;The only ways I can think about this is the following:
+</em><br>
+<em>&gt;  1/ provide a flag in the parser context to change the
+</em><br>
+<em>&gt;     behaviour to pass all white spaces (if we are not validating)
+</em><br>
+<em>&gt;  2/ switch the parser to pass all white spaces to SAX,
+</em><br>
+<em>&gt;     but in the DOM generation callback, remove all text
+</em><br>
+<em>&gt;     nodes containing only empty spaces
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  1/ allow to preserve compatibility with all the existing set of
+</em><br>
+<em>&gt;libxml applications and allow a &quot;purist&quot; mode if needed
+</em><br>
+<em>&gt;  2/ is more pure but will break most SAX based libxml apps
+</em><br>
+<em>&gt;     like libglade I'm afraid, and creating nodes to remove them later
+</em><br>
+<em>&gt;     sounds unclean ...
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Conclusion, I'm puzzled, it's a really hard issue, and I'm afraid
+</em><br>
+<em>&gt;of breaking a number of apps. On the other hand I *really* want to
+</em><br>
+<em>&gt;be as conformant as possible. I delayed libxml-1.8.7 until I find
+</em><br>
+<em>&gt;a decent solution.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Feedback on this issue from libxml users would really be appreciated,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<p><p>I certainly wouldn't advise breaking existing applications, although I
+<br>
+think one could argue that they never should have been written to expect
+<br>
+the current behavior.  In any event, I have to admit I was surprised 
+<br>
+athaving parts of my documents thrown away. :-) For me, this was 
+<br>
+important, because
+<br>
+for the documents in question, I'm using them as formatting templates
+<br>
+specifying how to generate HTML output:
+<br>
+<p>- Read data XML record and construct DOM tree
+<br>
+- Read formatting XML specification and construct DOM tree
+<br>
+- Traverse the formatting tree, generating output and substituting
+<br>
+&nbsp;&nbsp;&nbsp;in data values from the data tree as we go.
+<br>
+<p>For instance, the format spec might have something like this:
+<br>
+<p>&lt;require taglist=&quot;fax&quot;&gt;&lt;strong&gt;Fax:&lt;/strong&gt;
+<br>
+&lt;field name=&quot;fax&quot;/&gt;&lt;/require&gt;
+<br>
+<p>This tells me that if the data document doesn't have a &lt;fax&gt; element,
+<br>
+to skip everything in the &lt;require&gt; tag.  If there is a &lt;fax&gt; element,
+<br>
+write &quot;&lt;strong&gt;Fax:&lt;/strong&gt;&quot;, a newline (because that is text), and
+<br>
+then the &lt;fax&gt; value from the data record.
+<br>
+<p>When all-whitespace text sequences are tossed, the result is that
+<br>
+&quot;Fax:&quot; and the following fax number have no space between.
+<br>
+<p>It would be sufficient for my purposes to have a flag telling the
+<br>
+parser whether or not to pass all whitespace back.  (I'm hoping
+<br>
+that if you do this, the PHP folks will provide an interface to
+<br>
+that flag, of course.)
+<br>
+<p><p><p><pre>
+-- 
+Paul DuBois, <a href="mailto:paul@snake.net?subject=Re:%20[xml]%20Loss%20of%20whitespace">paul@snake.net</a>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0402.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:06 EDT</em>
+</em>
+</small>
+</body>
+</html>

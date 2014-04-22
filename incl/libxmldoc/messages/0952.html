@@ -1,0 +1,1014 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Sat Oct 14 08:27:34 2000" -->
+<!-- isoreceived="20001014122734" -->
+<!-- sent="Sat, 14 Oct 2000 12:28:03 +0000" -->
+<!-- isosent="20001014122803" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="39E85153.64B592FB@mail1.stofanet.dk" -->
+<!-- inreplyto="20001012211030.N4121@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20Extending%20XPath?"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Sat Oct 14 2000 - 08:28:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0953.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0951.html">Bjorn Reese: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0939.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have attached three files:
+<br>
+<p>&nbsp;&nbsp;hash.c
+<br>
+&nbsp;&nbsp;hash.h     (should be put in include/libxml/)
+<br>
+&nbsp;&nbsp;hash.diff
+<br>
+<p>The latter contains the patches to Makefile.am and xpath.[hc]
+<br>
+<p>The size of the hash table has been arbitrarily set to 256 (it
+<br>
+should probably be a prime number instead.)
+<br>
+<p>I have put the hash.[hc] files under the MIT license, but I have
+<br>
+added Daniel as a copyright holder, which gives him permission
+<br>
+to change the license if he disagrees. Btw, talking about licenses
+<br>
+the COPYRIGHT file that all boilerplates are referring to is
+<br>
+missing from the distribution.
+<br>
+<p>
+diff -c -r libxml2-2.2.5/Makefile.am libxml2-2.2.5-breese/Makefile.am
+<br>
+*** libxml2-2.2.5/Makefile.am	Wed Oct 11 01:40:25 2000
+<br>
+--- libxml2-2.2.5-breese/Makefile.am	Thu Oct 12 17:43:47 2000
+<br>
+***************
+<br>
+*** 34,40 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpath.c \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpointer.c \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nanohttp.c \
+<br>
+! 		nanoftp.c
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;DEPS = $(top_builddir)/libxml.la
+<br>
+&nbsp;&nbsp;LDADDS = $(top_builddir)/libxml.la @Z_LIBS@ @M_LIBS@
+<br>
+--- 34,41 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpath.c \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpointer.c \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nanohttp.c \
+<br>
+! 		nanoftp.c \
+<br>
+! 		hash.c
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;DEPS = $(top_builddir)/libxml.la
+<br>
+&nbsp;&nbsp;LDADDS = $(top_builddir)/libxml.la @Z_LIBS@ @M_LIBS@
+<br>
+diff -c -r libxml2-2.2.5/include/libxml/xpath.h libxml2-2.2.5-breese/include/libxml/xpath.h
+<br>
+*** libxml2-2.2.5/include/libxml/xpath.h	Wed Oct 11 01:13:00 2000
+<br>
+--- libxml2-2.2.5-breese/include/libxml/xpath.h	Sat Oct 14 13:26:42 2000
+<br>
+***************
+<br>
+*** 13,18 ****
+<br>
+--- 13,19 ----
+<br>
+&nbsp;&nbsp;#define __XML_XPATH_H__
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#include &lt;libxml/tree.h&gt;
+<br>
++ #include &lt;libxml/hash.h&gt;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#ifdef __cplusplus
+<br>
+&nbsp;&nbsp;extern &quot;C&quot; {
+<br>
+***************
+<br>
+*** 184,192 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int max_types;			/* max number of types */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathTypePtr *types;		/* Array of defined types */
+<br>
+&nbsp;&nbsp;
+<br>
+!     int nb_funcs;			/* number of defined funcs */
+<br>
+!     int max_funcs;			/* max number of funcs */
+<br>
+!     xmlXPathFuncPtr *funcs;		/* Array of defined funcs */
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int nb_axis;			/* number of defined axis */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int max_axis;			/* max number of axis */
+<br>
+--- 185,191 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int max_types;			/* max number of types */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathTypePtr *types;		/* Array of defined types */
+<br>
+&nbsp;&nbsp;
+<br>
+!     xmlHashTablePtr funcTable;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int nb_axis;			/* number of defined axis */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int max_axis;			/* max number of axis */
+<br>
+diff -c -r libxml2-2.2.5/xpath.c libxml2-2.2.5-breese/xpath.c
+<br>
+*** libxml2-2.2.5/xpath.c	Wed Oct 11 01:26:24 2000
+<br>
+--- libxml2-2.2.5-breese/xpath.c	Sat Oct 14 13:34:17 2000
+<br>
+***************
+<br>
+*** 49,54 ****
+<br>
+--- 49,55 ----
+<br>
+&nbsp;&nbsp;#include &lt;libxml/valid.h&gt;
+<br>
+&nbsp;&nbsp;#include &lt;libxml/xpath.h&gt;
+<br>
+&nbsp;&nbsp;#include &lt;libxml/parserInternals.h&gt;
+<br>
++ #include &lt;libxml/hash.h&gt;
+<br>
+&nbsp;&nbsp;#ifdef LIBXML_XPTR_ENABLED
+<br>
+&nbsp;&nbsp;#include &lt;libxml/xpointer.h&gt;
+<br>
+&nbsp;&nbsp;#endif
+<br>
+***************
+<br>
+*** 163,168 ****
+<br>
+--- 164,170 ----
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;double xmlXPathStringEvalNumber(const xmlChar *str);
+<br>
+&nbsp;&nbsp;void xmlXPathStringFunction(xmlXPathParserContextPtr ctxt, int nargs);
+<br>
++ void xmlXPathRegisterAllFunctions(xmlXPathContextPtr ctxt);
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/************************************************************************
+<br>
+&nbsp;&nbsp;&nbsp;*									*
+<br>
+***************
+<br>
+*** 832,840 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;max_types = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;types = NULL;
+<br>
+&nbsp;&nbsp;
+<br>
+!     ret-&gt;nb_funcs = 0;
+<br>
+!     ret-&gt;max_funcs = 0;
+<br>
+!     ret-&gt;funcs = NULL;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;nb_axis = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;max_axis = 0;
+<br>
+--- 834,840 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;max_types = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;types = NULL;
+<br>
+&nbsp;&nbsp;
+<br>
+!     ret-&gt;funcTable = xmlHashCreate(256);
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;nb_axis = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;max_axis = 0;
+<br>
+***************
+<br>
+*** 846,851 ****
+<br>
+--- 846,854 ----
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;contextSize = -1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;proximityPosition = -1;
+<br>
++ 
+<br>
++     xmlXPathRegisterAllFunctions(ret);
+<br>
++     
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+***************
+<br>
+*** 3570,3654 ****
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;xmlXPathFunction
+<br>
+&nbsp;&nbsp;xmlXPathIsFunction(xmlXPathParserContextPtr ctxt, const xmlChar *name) {
+<br>
+!     switch (name[0]) {
+<br>
+!         case 'b':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;boolean&quot;))
+<br>
+! 	        return(xmlXPathBooleanFunction);
+<br>
+! 	    break;
+<br>
+!         case 'c':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;ceiling&quot;))
+<br>
+! 	        return(xmlXPathCeilingFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;count&quot;))
+<br>
+! 	        return(xmlXPathCountFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;concat&quot;))
+<br>
+! 	        return(xmlXPathConcatFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;contains&quot;))
+<br>
+! 	        return(xmlXPathContainsFunction);
+<br>
+! 	    break;
+<br>
+!         case 'i':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;id&quot;))
+<br>
+! 	        return(xmlXPathIdFunction);
+<br>
+! 	    break;
+<br>
+!         case 'f':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;false&quot;))
+<br>
+! 	        return(xmlXPathFalseFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;floor&quot;))
+<br>
+! 	        return(xmlXPathFloorFunction);
+<br>
+! 	    break;
+<br>
+!         case 'l':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;last&quot;))
+<br>
+! 	        return(xmlXPathLastFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;lang&quot;))
+<br>
+! 	        return(xmlXPathLangFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;local-part&quot;))
+<br>
+! 	        return(xmlXPathLocalPartFunction);
+<br>
+! 	    break;
+<br>
+!         case 'n':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;not&quot;))
+<br>
+! 	        return(xmlXPathNotFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;name&quot;))
+<br>
+! 	        return(xmlXPathNameFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;namespace&quot;))
+<br>
+! 	        return(xmlXPathNamespaceFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;normalize-space&quot;))
+<br>
+! 	        return(xmlXPathNormalizeFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;normalize&quot;))
+<br>
+! 	        return(xmlXPathNormalizeFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;number&quot;))
+<br>
+! 	        return(xmlXPathNumberFunction);
+<br>
+! 	    break;
+<br>
+!         case 'p':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;position&quot;))
+<br>
+! 	        return(xmlXPathPositionFunction);
+<br>
+! 	    break;
+<br>
+!         case 'r':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;round&quot;))
+<br>
+! 	        return(xmlXPathRoundFunction);
+<br>
+! 	    break;
+<br>
+!         case 's':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;string&quot;))
+<br>
+! 	        return(xmlXPathStringFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;string-length&quot;))
+<br>
+! 	        return(xmlXPathStringLengthFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;starts-with&quot;))
+<br>
+! 	        return(xmlXPathStartsWithFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;substring&quot;))
+<br>
+! 	        return(xmlXPathSubstringFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;substring-before&quot;))
+<br>
+! 	        return(xmlXPathSubstringBeforeFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;substring-after&quot;))
+<br>
+! 	        return(xmlXPathSubstringAfterFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;sum&quot;))
+<br>
+! 	        return(xmlXPathSumFunction);
+<br>
+! 	    break;
+<br>
+!         case 't':
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;true&quot;))
+<br>
+! 	        return(xmlXPathTrueFunction);
+<br>
+! 	    if (xmlStrEqual(name, BAD_CAST &quot;translate&quot;))
+<br>
+! 	        return(xmlXPathTranslateFunction);
+<br>
+! 	    break;
+<br>
+!     }
+<br>
+!     return(NULL);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+--- 3573,3579 ----
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;xmlXPathFunction
+<br>
+&nbsp;&nbsp;xmlXPathIsFunction(xmlXPathParserContextPtr ctxt, const xmlChar *name) {
+<br>
+!     return xmlHashLookup(ctxt-&gt;context-&gt;funcTable, name);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+***************
+<br>
+*** 4936,4941 ****
+<br>
+--- 4861,4907 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathFreeParserContext(pctxt);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(res);
+<br>
++ }
+<br>
++ 
+<br>
++ int
+<br>
++ xmlXPathRegisterFunc(xmlXPathContextPtr ctxt,
+<br>
++ 		     const xmlChar *name,
+<br>
++ 		     xmlXPathFunction func)
+<br>
++ {
+<br>
++   xmlHashAddEntry(ctxt-&gt;funcTable, name, func);
+<br>
++ }
+<br>
++ 
+<br>
++ void
+<br>
++ xmlXPathRegisterAllFunctions(xmlXPathContextPtr ctxt)
+<br>
++ {
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;boolean&quot;, xmlXPathBooleanFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;ceiling&quot;, xmlXPathCeilingFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;count&quot;, xmlXPathCountFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;concat&quot;, xmlXPathConcatFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;contains&quot;, xmlXPathContainsFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;id&quot;, xmlXPathIdFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;false&quot;, xmlXPathFalseFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;floor&quot;, xmlXPathFloorFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;last&quot;, xmlXPathLastFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;lang&quot;, xmlXPathLangFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;local-part&quot;, xmlXPathLocalPartFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;not&quot;, xmlXPathNotFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;name&quot;, xmlXPathNameFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;namespace&quot;, xmlXPathNamespaceFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;normalize-space&quot;, xmlXPathNormalizeFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;normalize&quot;, xmlXPathNormalizeFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;number&quot;, xmlXPathNumberFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;position&quot;, xmlXPathPositionFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;round&quot;, xmlXPathRoundFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;string&quot;, xmlXPathStringFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;string-length&quot;, xmlXPathStringLengthFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;starts-with&quot;, xmlXPathStartsWithFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;substring&quot;, xmlXPathSubstringFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;substring-before&quot;, xmlXPathSubstringBeforeFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;substring-after&quot;, xmlXPathSubstringAfterFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;sum&quot;, xmlXPathSumFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;true&quot;, xmlXPathTrueFunction);
+<br>
++     xmlXPathRegisterFunc(ctxt, &quot;translate&quot;, xmlXPathTranslateFunction);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#endif /* LIBXML_XPATH_ENABLED */
+<br>
+<p><p>
+/*
+<br>
+&nbsp;* hash.c: chained hash tables
+<br>
+&nbsp;*
+<br>
+&nbsp;* Reference: Your favorite introductory book on algorithms
+<br>
+&nbsp;*
+<br>
+&nbsp;* Copyright (C) 2000 Bjorn Reese and Daniel Veillard.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Permission to use, copy, modify, and distribute this software for any
+<br>
+&nbsp;* purpose with or without fee is hereby granted, provided that the above
+<br>
+&nbsp;* copyright notice and this permission notice appear in all copies.
+<br>
+&nbsp;*
+<br>
+&nbsp;* THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR IMPLIED
+<br>
+&nbsp;* WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+<br>
+&nbsp;* MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE AUTHORS AND
+<br>
+&nbsp;* CONTRIBUTORS ACCEPT NO RESPONSIBILITY IN ANY CONCEIVABLE MANNER.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Author: <a href="mailto:bjorn.reese@systematic.dk?subject=Re:%20[xml]%20Extending%20XPath?">bjorn.reese@systematic.dk</a>
+<br>
+&nbsp;*/
+<br>
+<p>#include &lt;libxml/hash.h&gt;
+<br>
+#include &lt;libxml/xmlmemory.h&gt;
+<br>
+#include &lt;libxml/parser.h&gt;
+<br>
+<p>/*
+<br>
+&nbsp;* Calculate the hash key
+<br>
+&nbsp;*/
+<br>
+static unsigned long
+<br>
+xmlHashComputeKey(xmlHashTablePtr table,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *string)
+<br>
+{
+<br>
+&nbsp;&nbsp;unsigned long value = 0L;
+<br>
+&nbsp;&nbsp;char ch;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;while ((ch = *string++) != 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value *= 31;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value += (unsigned long)ch;
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;return (value % table-&gt;size);
+<br>
+}
+<br>
+<p>/**
+<br>
+&nbsp;* xmlHashCreate:
+<br>
+&nbsp;* @size: the size of the hash table
+<br>
+&nbsp;*
+<br>
+&nbsp;* Create a new xmlHashTablePtr.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Returns the newly created object, or NULL if an error occured.
+<br>
+&nbsp;*/
+<br>
+xmlHashTablePtr
+<br>
+xmlHashCreate(int size)
+<br>
+{
+<br>
+&nbsp;&nbsp;xmlHashTablePtr table;
+<br>
+<p>&nbsp;&nbsp;table = xmlMalloc(sizeof(xmlHashTable));
+<br>
+&nbsp;&nbsp;if (table) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table-&gt;size = size;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table-&gt;table = xmlMalloc(size * sizeof(xmlHashEntry));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (table-&gt;table) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(table-&gt;table, 0, size * sizeof(xmlHashEntry));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return table;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(table);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;return NULL;
+<br>
+}
+<br>
+<p>/**
+<br>
+&nbsp;* xmlHashFree:
+<br>
+&nbsp;* @table: the hash table
+<br>
+&nbsp;*
+<br>
+&nbsp;* Free the hash table and its contents. The userdata is not
+<br>
+&nbsp;* deallocated.
+<br>
+&nbsp;*/
+<br>
+void
+<br>
+xmlHashFree(xmlHashTablePtr table)
+<br>
+{
+<br>
+&nbsp;&nbsp;int i;
+<br>
+&nbsp;&nbsp;xmlHashEntryPtr iter;
+<br>
+&nbsp;&nbsp;xmlHashEntryPtr next;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;if (table) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for(i = 0; i &lt; table-&gt;size; i++) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iter = table-&gt;table[i];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (iter) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next = iter-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (iter-&gt;name)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(iter-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iter-&gt;payload = NULL; /* Must be deallocated elsewhere */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(iter);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iter = next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(table);
+<br>
+&nbsp;&nbsp;}
+<br>
+}
+<br>
+<p>/**
+<br>
+&nbsp;* xmlHashAddEntry:
+<br>
+&nbsp;* @table: the hash table
+<br>
+&nbsp;* @name: the name of the userdata
+<br>
+&nbsp;* @userdata: a pointer to the userdata
+<br>
+&nbsp;*
+<br>
+&nbsp;* Add the userdata to the hash table. This can later be retrieved
+<br>
+&nbsp;* by using the name. Duplicate names are undefined behaviour.
+<br>
+&nbsp;*/
+<br>
+void
+<br>
+xmlHashAddEntry(xmlHashTablePtr table,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *name,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void *userdata)
+<br>
+{
+<br>
+&nbsp;&nbsp;unsigned long key;
+<br>
+&nbsp;&nbsp;xmlHashEntryPtr entry;
+<br>
+&nbsp;&nbsp;xmlHashEntryPtr insert;
+<br>
+<p>&nbsp;&nbsp;entry = xmlMalloc(sizeof(xmlHashEntry));
+<br>
+&nbsp;&nbsp;if (entry) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;entry-&gt;name = xmlStrdup(name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;entry-&gt;payload = userdata;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;entry-&gt;next = NULL;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;key = xmlHashComputeKey(table, name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (table-&gt;table[key] == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table-&gt;table[key] = entry;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (insert = table-&gt;table[key]; insert-&gt;next; insert = insert-&gt;next)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (insert)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;insert-&gt;next = entry;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;}
+<br>
+}
+<br>
+<p>/**
+<br>
+&nbsp;* xmlHashLookup:
+<br>
+&nbsp;* @table: the hash table
+<br>
+&nbsp;* @name: the name of the userdata
+<br>
+&nbsp;*
+<br>
+&nbsp;* Find the userdata specified by the name.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Returns the a pointer to the userdata
+<br>
+&nbsp;*/
+<br>
+void *
+<br>
+xmlHashLookup(xmlHashTablePtr table, const xmlChar *name)
+<br>
+{
+<br>
+&nbsp;&nbsp;unsigned long key;
+<br>
+&nbsp;&nbsp;xmlHashEntryPtr entry;
+<br>
+<p>&nbsp;&nbsp;key = xmlHashComputeKey(table, name);
+<br>
+&nbsp;&nbsp;for (entry = table-&gt;table[key]; entry; entry = entry-&gt;next) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (xmlStrEqual(name, entry-&gt;name))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break; /* for */
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;return (entry) ? entry-&gt;payload : NULL;
+<br>
+}
+<br>
+<p><p>
+/*
+<br>
+&nbsp;* hash.c: chained hash tables
+<br>
+&nbsp;*
+<br>
+&nbsp;* Copyright (C) 2000 Bjorn Reese and Daniel Veillard.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Permission to use, copy, modify, and distribute this software for any
+<br>
+&nbsp;* purpose with or without fee is hereby granted, provided that the above
+<br>
+&nbsp;* copyright notice and this permission notice appear in all copies.
+<br>
+&nbsp;*
+<br>
+&nbsp;* THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR IMPLIED
+<br>
+&nbsp;* WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+<br>
+&nbsp;* MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE AUTHORS AND
+<br>
+&nbsp;* CONTRIBUTORS ACCEPT NO RESPONSIBILITY IN ANY CONCEIVABLE MANNER.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Author: <a href="mailto:bjorn.reese@systematic.dk?subject=Re:%20[xml]%20Extending%20XPath?">bjorn.reese@systematic.dk</a>
+<br>
+&nbsp;*/
+<br>
+<p>#ifndef __XML_HASH_H__
+<br>
+#define __XML_HASH_H__
+<br>
+<p>#include &lt;libxml/parser.h&gt;
+<br>
+<p>#ifdef __cplusplus
+<br>
+extern &quot;C&quot; {
+<br>
+#endif
+<br>
+<p>/*
+<br>
+&nbsp;* A single entry in the hash table
+<br>
+&nbsp;*/
+<br>
+typedef struct _xmlHashEntry {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;struct _xmlHashEntry *next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlChar *name;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void *payload;
+<br>
+} xmlHashEntry, *xmlHashEntryPtr;
+<br>
+<p>/*
+<br>
+&nbsp;* The entire hash table
+<br>
+&nbsp;*/
+<br>
+typedef struct _xmlHashTable {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;struct _xmlHashEntry **table;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int size;
+<br>
+} xmlHashTable, *xmlHashTablePtr;
+<br>
+<p>/*
+<br>
+&nbsp;* Constructor and destructor
+<br>
+&nbsp;*/
+<br>
+xmlHashTablePtr xmlHashCreate(int size);
+<br>
+void xmlHashFree(xmlHashTablePtr table);
+<br>
+/*
+<br>
+&nbsp;* Add a new entry to the hash table
+<br>
+&nbsp;*/
+<br>
+void xmlHashAddEntry(xmlHashTablePtr table,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *name,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void *userdata);
+<br>
+/*
+<br>
+&nbsp;* Retrieve the userdata
+<br>
+&nbsp;*/
+<br>
+void *xmlHashLookup(xmlHashTablePtr table, const xmlChar *name);
+<br>
+<p>#ifdef __cplusplus
+<br>
+}
+<br>
+#endif
+<br>
+#endif /* ! __XML_HASH_H__ */
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0953.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0951.html">Bjorn Reese: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0939.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 14 2000 - 09:43:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

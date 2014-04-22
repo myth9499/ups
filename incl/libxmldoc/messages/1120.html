@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Caracter (0x0b) makes libxml do an infinite loop.</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Caracter (0x0b) makes libxml do an infinite loop.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Caracter (0x0b) makes libxml do an infinite loop.</h1>
+<!-- received="Tue Oct 31 08:00:12 2000" -->
+<!-- isoreceived="20001031130012" -->
+<!-- sent="Tue, 31 Oct 2000 13:58:26 +0100" -->
+<!-- isosent="20001031125826" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Caracter (0x0b) makes libxml do an infinite loop." -->
+<!-- id="20001031135826.E7780@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B19316@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Caracter%20(0x0b)%20makes%20libxml%20do%20an%20infinite%20loop."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 31 2000 - 07:58:26 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1121.html">Daniel Veillard: "[xml] libxml-2.2.7 is released"</a>
+<li><strong>Previous message:</strong> <a href="1119.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1118.html">Marc Sanfacon: "[xml] Caracter (0x0b) makes libxml do an infinite loop."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 30, 2000 at 04:52:44PM -0500, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	when parsing a html file from the net, libxml entered an infinite
+</em><br>
+<em>&gt; loop.  After tracking down the problem, it seemed that it didn't like the
+</em><br>
+<em>&gt; 0x0B caracter in a script definition.  I managed to reproduce the bug in a
+</em><br>
+<em>&gt; small test, that is attached.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I also fixed it by modifying parserInternals.h at line: 41
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define IS_CHAR(c)							\
+</em><br>
+<em>&gt;     (((c) == 0x09) || ((c) == 0x0A) || ((c) == 0x0B) || ((c) == 0x0D) ||
+</em><br>
+<em>&gt; \
+</em><br>
+<em>&gt;      (((c) &gt;= 0x20) &amp;&amp; ((c) &lt;= 0xD7FF)) ||				\
+</em><br>
+<em>&gt;      (((c) &gt;= 0xE000) &amp;&amp; ((c) &lt;= 0xFFFD)) ||				\
+</em><br>
+<em>&gt;      (((c) &gt;= 0x10000) &amp;&amp; ((c) &lt;= 0x10FFFF)))
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I added 0x0B as a CHAR.  Still can't figure what is this caracter though.
+</em><br>
+<em>&gt; May be it should simply be ignored.
+</em><br>
+<p>&nbsp;&nbsp;yep accepting 0xB would break XML compatibility. The enclosed patch
+<br>
+reports the error and skip the offending char. This bug was fairly
+<br>
+specific to the new script/style handling.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Caracter%20(0x0b)%20makes%20libxml%20do%20an%20infinite%20loop.">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1120/01-invalchar.diff">invalchar.diff</a>
+</ul>
+<!-- attachment="01-invalchar.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Caracter%20(0x0b)%20makes%20libxml%20do%20an%20infinite%20loop.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Caracter%20(0x0b)%20makes%20libxml%20do%20an%20infinite%20loop.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1121.html">Daniel Veillard: "[xml] libxml-2.2.7 is released"</a>
+<li><strong>Previous message:</strong> <a href="1119.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1118.html">Marc Sanfacon: "[xml] Caracter (0x0b) makes libxml do an infinite loop."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 31 2000 - 09:43:49 EST</em>
+</em>
+</small>
+</body>
+</html>

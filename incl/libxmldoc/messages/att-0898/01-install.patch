@@ -1,0 +1,34 @@
+Index: Makefile.in
+@@ -525,17 +525,19 @@
+ 
+ install-xmlincHEADERS: $(xmlinc_HEADERS)
+ 	@$(NORMAL_INSTALL)
+-	$(mkinstalldirs) $(DESTDIR)$(xmlincdir)
++	$(mkinstalldirs) $(DESTDIR)$(includedir)/libxml
+ 	@list='$(xmlinc_HEADERS)'; for p in $$list; do \
+ 	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(xmlincdir)/$$p"; \
+-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(xmlincdir)/$$p; \
++	  i=`basename $$p`; \
++	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/libxml/$$i"; \
++	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/libxml/$$i; \
+ 	done
+ 
+ uninstall-xmlincHEADERS:
+ 	@$(NORMAL_UNINSTALL)
+ 	list='$(xmlinc_HEADERS)'; for p in $$list; do \
+-	  rm -f $(DESTDIR)$(xmlincdir)/$$p; \
++	  i=`basename $$p`; \
++	  rm -f $(DESTDIR)$(includedir)/libxml/$$i; \
+ 	done
+ 
+ # This directory's subdirectories are mostly independent; you can cd
+@@ -820,7 +822,7 @@
+ 	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) \
+ 		$(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man1 \
+ 		$(DESTDIR)$(mandir)/man4 $(DESTDIR)$(confexecdir) \
+-		$(DESTDIR)$(pkgconfigdir) $(DESTDIR)$(xmlincdir)
++		$(DESTDIR)$(pkgconfigdir) $(DESTDIR)$(includedir)/libxml
+ 
+ 
+ mostlyclean-generic:

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Char encoding again</title>
+<meta name="Author" content="Tobias Peters (t-peters@hrz2.uni-oldenburg.de)">
+<meta name="Subject" content="[xml] Char encoding again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Char encoding again</h1>
+<!-- received="Tue Jun 27 09:17:24 2000" -->
+<!-- isoreceived="20000627131724" -->
+<!-- sent="Tue, 27 Jun 2000 15:07:41 +0200" -->
+<!-- isosent="20000627130741" -->
+<!-- name="Tobias Peters" -->
+<!-- email="t-peters@hrz2.uni-oldenburg.de" -->
+<!-- subject="[xml] Char encoding again" -->
+<!-- id="200006271307.e5RD7Xa02411@mailsrvc.hrz.uni-oldenburg.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tobias Peters (<a href="mailto:t-peters@hrz2.uni-oldenburg.de?subject=Re:%20[xml]%20Char%20encoding%20again"><em>t-peters@hrz2.uni-oldenburg.de</em></a>)<br>
+<strong>Date:</strong> Tue Jun 27 2000 - 09:07:41 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Previous message:</strong> <a href="0536.html">Daniel Veillard: "Re: [xml] How to stop SAX parsing ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Reply:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I am using the tree interface in libxml2. I have made the following experiences with the
+<br>
+parser:
+<br>
+<p>1) Numeric character references (&amp;#...;) are translated to utf8.
+<br>
+<p>2) Non-Ascii characters (as a umlaut) are rejected by the parser when no encoding is
+<br>
+&nbsp;&nbsp;&nbsp;specified in the document.
+<br>
+3) Non-Ascii characters are accepted when the document uses the &quot;ISO-8859-1&quot; (or 
+<br>
+&nbsp;&nbsp;&nbsp;probably some other) encoding. They are left untouched by libxml.
+<br>
+<p>While 1) and 2) are good things, 3) is at least questionable, I think. But it gets
+<br>
+*really* bad, when 1)and 3) come together: Suppose you have a document that declares
+<br>
+to use the ISO-8859-1 encoding, that contains some special characters of this charset,
+<br>
+but at the same time contains numeric character references that can or can not be
+<br>
+represented in the chosen encoding. Either way, libxml will leave the special characters
+<br>
+untouched and translate the numeric character reference to utf8. So you could end up
+<br>
+having characters that use different encodings in a single string. That's what I consider 
+<br>
+bad.
+<br>
+<p>having characters that use different encodings in a single string. That's what I consider 
+<br>
+a) translate everything to utf8. If libxml does not know how to translate a specific 
+<br>
+&nbsp;&nbsp;&nbsp;charset, return an error. Let the library user supply conversion functions.
+<br>
+b) try to translate everything to the given encoding. If this is impossible, return
+<br>
+&nbsp;&nbsp;&nbsp;an error.
+<br>
+<p>I would prefer a).
+<br>
+Maybe this is already implemented, but I have not found it yet.
+<br>
+Comments welcome.
+<br>
+<p>Tobias
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Char%20encoding%20again">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Char%20encoding%20again">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Previous message:</strong> <a href="0536.html">Daniel Veillard: "Re: [xml] How to stop SAX parsing ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Reply:</strong> <a href="0538.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

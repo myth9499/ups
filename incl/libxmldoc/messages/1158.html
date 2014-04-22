@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Glitch with external entity files; patch enclosed</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Glitch with external entity files; patch enclosed">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Glitch with external entity files; patch enclosed</h1>
+<!-- received="Wed Nov  8 18:12:49 2000" -->
+<!-- isoreceived="20001108231249" -->
+<!-- sent="Thu, 9 Nov 2000 00:12:40 +0100" -->
+<!-- isosent="20001108231240" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Glitch with external entity files; patch enclosed" -->
+<!-- id="20001109001240.F27831@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1001108163855.16307V-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 18:12:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1157.html">Kenneth Pronovici: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1157.html">Kenneth Pronovici: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 08, 2000 at 04:50:48PM -0600, Kenneth Pronovici wrote:
+<br>
+<em>&gt; &gt;   However I must admit (I discovered it today) that the entity loader
+</em><br>
+<em>&gt; &gt; is called and the URI location of the resource effectively used has
+</em><br>
+<em>&gt; &gt; been changed, then this must me made available back to the parser. I
+</em><br>
+<em>&gt; &gt; think it is through the filename field of the returned 
+</em><br>
+<em>&gt; &gt; xmlParserInputPtr but I must double check that it's done the right way
+</em><br>
+<em>&gt; &gt; (especially if it uses HTTP and a redirection).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm also confused on this.  Regardless, the issue still is that the entity 
+</em><br>
+<em>&gt; loader is being called twice for the same entity.  I don't see how there is
+</em><br>
+<em>&gt; any way I could implement an entity loader and make this work under
+</em><br>
+<em>&gt; those circumstances... if it's already been called once, and libxml
+</em><br>
+<em>&gt; saves the result, and then calls it again with that saved result, 
+</em><br>
+<em>&gt; how could my external entity loader ever be right, even disregarding
+</em><br>
+<em>&gt; whether you think I should be using it the way I am?
+</em><br>
+<p>&nbsp;&nbsp;Let's try to understand the issue better:
+<br>
+<p>&nbsp;&nbsp;DOC   -&gt;    DTD    -&gt;  ENT
+<br>
+<p>&nbsp;&nbsp;There will be a call to the entity loader to fetch DTD with the
+<br>
+URI computed from:
+<br>
+&nbsp;&nbsp;&nbsp;- the URL of DOC
+<br>
+&nbsp;&nbsp;&nbsp;- the URI-Reference for DTD stored in DOC
+<br>
+<p>&nbsp;&nbsp;When the URI-Reference to ENT is found in DTD, there will be a call
+<br>
+to the entity loader to fetch ENT with the URI computed from:
+<br>
+&nbsp;&nbsp;&nbsp;- the URL of DTD as found in the result returned by the previous
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invocation to get DTD
+<br>
+&nbsp;&nbsp;&nbsp;- the URI-Reference for ENT stored in DTD
+<br>
+<p>&nbsp;So yes there is 2 call to the entity loader, and yes it's normal,
+<br>
+I assume you agree.
+<br>
+<p>&nbsp;&nbsp;Now you seem surprized because the URI computed for ENT by libxml
+<br>
+is actually the right one (i.e. with the extra path already added).
+<br>
+Is that still right ?
+<br>
+&nbsp;&nbsp;If yes, this is simply because libxml store more information
+<br>
+than you expected the simple hack in you entity loaded is to try
+<br>
+top call the existing default one and only add the prefix if this
+<br>
+failed. But you will have to resort to an hack unless you keep a
+<br>
+catalog i.e. an association between not the URL but the PUBLIC
+<br>
+identifier of the DTD and it's actual path.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1157.html">Kenneth Pronovici: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1157.html">Kenneth Pronovici: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 18:43:30 EST</em>
+</em>
+</small>
+</body>
+</html>

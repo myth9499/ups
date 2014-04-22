@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Weirdness in XML parser</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="[xml] Weirdness in XML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Weirdness in XML parser</h1>
+<!-- received="Thu Nov 11 15:37:45 1999" -->
+<!-- isoreceived="19991111203745" -->
+<!-- sent="11 Nov 1999 21:37:40 +0100" -->
+<!-- isosent="19991111203740" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="[xml] Weirdness in XML parser" -->
+<!-- id="y6yk8nolq7f.fsf@decius.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Thu Nov 11 1999 - 15:37:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0198.html">Stefan Bambach: "Re: [xml] parser xml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0201.html">Stefan Bambach: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0208.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[ I sent this earlier, but apparently it didn't show up on the
+<br>
+&nbsp;&nbsp;list... It's not on the list archive page either, which by the way
+<br>
+&nbsp;&nbsp;seems to have stopped updating around October 11. Anyway, here
+<br>
+&nbsp;&nbsp;goes... ]
+<br>
+<p>Hi,
+<br>
+<p>When parsing this document:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;HTML&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;BODY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;P&gt; 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;HR&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foo
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/BODY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/HTML&gt;
+<br>
+<p>The HTML parser makes &quot;foo&quot; a child of &lt;HR&gt;...  I tracked the problem
+<br>
+to this piece of code in htmlParseElement (lines 2310-2317):
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (((depth == ctxt-&gt;nameNr) &amp;&amp; (oldname == ctxt-&gt;name)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(name == NULL)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (CUR == '&gt;')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEXT;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>which look a bit weird to me... I dont see what it's supposed to do.
+<br>
+What happens is that &lt;HR&gt; autocloses &lt;P&gt;, and when control reaches
+<br>
+these lines, oldname points to freed memory.  Accidently, this memory
+<br>
+is used for the name of the new name, so oldname == ctxt-&gt;name and
+<br>
+thus htmlParseElement returns prematurely (it doesn't reach the test
+<br>
+for info-&gt;empty).
+<br>
+<p>I see you've made &lt;DD&gt; autoclose &lt;DT&gt; and &lt;DT&gt; autoclose &lt;DD&gt;, but
+<br>
+what about also making &lt;DD&gt; autoclose &lt;DD&gt; and likewise for &lt;DT&gt;?
+<br>
+This would make the parser a bit more robust; suppose someone were to
+<br>
+do something like:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;DL&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;foo
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;bar
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/DL&gt;
+<br>
+<p>it would get parsed as
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;DL&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;foo&lt;/DD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;bar&lt;/DD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/DL&gt;
+<br>
+<p>which I believe is a bit more useful than
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;DL&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;foo
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DD&gt;bar&lt;/DL&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/DD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/DL&gt;
+<br>
+<p>regards,
+<br>
+Kristian
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0198.html">Stefan Bambach: "Re: [xml] parser xml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0201.html">Stefan Bambach: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Maybe reply:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Reply:</strong> <a href="0208.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

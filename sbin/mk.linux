@@ -1,0 +1,20 @@
+cd ../src/base
+make
+cd ../commmsg
+make
+cd ../hash
+make
+cd ../channel
+rm sync_chnl
+rm sync_chnl_r
+make
+make -f mk.exe
+cd ../cfg
+rm loadcfg
+make
+cd ../server
+rm server
+make
+cd ../shm
+rm initshm
+make

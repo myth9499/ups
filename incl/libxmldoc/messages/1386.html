@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Patch for libxml2's xmlIO.c</title>
+<meta name="Author" content="Igor Zlatkovic (igorz@dialup.nacamar.de)">
+<meta name="Subject" content="Re: [xml] Patch for libxml2's xmlIO.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Patch for libxml2's xmlIO.c</h1>
+<!-- received="Thu Jan 25 07:23:20 2001" -->
+<!-- isoreceived="20010125122320" -->
+<!-- sent="Thu, 25 Jan 2001 13:24:58 +0100" -->
+<!-- isosent="20010125122458" -->
+<!-- name="Igor Zlatkovic" -->
+<!-- email="igorz@dialup.nacamar.de" -->
+<!-- subject="Re: [xml] Patch for libxml2's xmlIO.c" -->
+<!-- id="000a01c086c9$d4d68170$0b01a8c0@home.loc" -->
+<!-- inreplyto="20010125005553.A6812@azul.dhis.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Igor Zlatkovic (<a href="mailto:igorz@dialup.nacamar.de?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c"><em>igorz@dialup.nacamar.de</em></a>)<br>
+<strong>Date:</strong> Thu Jan 25 2001 - 07:24:58 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1387.html">Igor Zlatkovic: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Previous message:</strong> <a href="1385.html">Alejandro Forero Cuervo: "Re: [xml] on this silly debate..."</a>
+<li><strong>In reply to:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1387.html">Igor Zlatkovic: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello.
+<br>
+<p>Alejo, you almost did it. The work looks good, just few things more need be
+<br>
+done before it would work under Win32.
+<br>
+<p>OK, since you have no way of knowing, let me tell you: GNU autoconf anf GNU
+<br>
+automake have no significance under Win32. They produce a sh script which
+<br>
+cannot be executed in vanilla Win32 environment because Win32 lacks a
+<br>
+bourne/korn shell. Therefore, there is no effect in modifying config.in.
+<br>
+Instead, you must edit the include/win32config.h file and add
+<br>
+<p>#define HAVE_SYS_STAT_H
+<br>
+#define HAVE__STAT
+<br>
+<p>somewhere near the beginning. The first macro shall cause the file
+<br>
+sys/stat.h to be included in xmlIO.c, while the second enables your macros
+<br>
+in xmlIO.c which define S_ISFDIR.
+<br>
+<p>Just one more small issue. Here are few lines from your patch:
+<br>
+<p>@@ -264,8 +326,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = &amp;filename[8];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = filename;
+<br>
+-    if (path == NULL)
+<br>
+-        return(NULL);
+<br>
++
+<br>
++    if (!xmlCheckFilename(path))
+<br>
++        return(NULL);
+<br>
+<p>This means, you remove the statement which checks path against NULL and add
+<br>
+a call to xmlCheckFilename in its stead, passing it path as a parameter.
+<br>
+Indeed, if the path is NULL and we have stat(2), xmlCheckFilename calls
+<br>
+stat(2) internally, passing on the NULL. Who guarantees that stat(2) would
+<br>
+accept NULL and live?
+<br>
+<p>Just incase someone is interrested,  _stat from Win32 C-runtime does not
+<br>
+survive NULL as a parameter. It trashes. Therefore, I would suggest to leave
+<br>
+the check for NULL in place and simply add your a call to xmlCheckFilename
+<br>
+after that.
+<br>
+<p>That would be all. I see no other problems.
+<br>
+<p>Ciao
+<br>
+Igor
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20libxml2's%20xmlIO.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1387.html">Igor Zlatkovic: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>Previous message:</strong> <a href="1385.html">Alejandro Forero Cuervo: "Re: [xml] on this silly debate..."</a>
+<li><strong>In reply to:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1387.html">Igor Zlatkovic: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 25 2001 - 08:45:43 EST</em>
+</em>
+</small>
+</body>
+</html>

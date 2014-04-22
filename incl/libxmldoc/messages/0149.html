@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: R: libxml release 1.7.2 (bug?)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: R: libxml release 1.7.2 (bug?)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: R: libxml release 1.7.2 (bug?)</h1>
+<!-- received="Wed Sep 29 09:01:37 1999" -->
+<!-- isoreceived="19990929130137" -->
+<!-- sent="Wed, 29 Sep 1999 09:00:34 -0400" -->
+<!-- isosent="19990929130034" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: R: libxml release 1.7.2 (bug?)" -->
+<!-- id="19990929090034.E20268@w3.org" -->
+<!-- inreplyto="00a701bf0a79$c0927ed0$1000000a@icteam.it" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20R:%20libxml%20release%201.7.2%20(bug?)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Sep 29 1999 - 09:00:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0150.html">Daniel Veillard: "[xml] libxml-1.7.3 is out"</a>
+<li><strong>Previous message:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<li><strong>In reply to:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Sep 29, 1999 at 02:54:04PM +0200, Andrea LUCIANO wrote:
+<br>
+<em>&gt; I sussessfully compiled libxml on HP-UX 11 using cc, but I had to break the
+</em><br>
+<em>&gt; IS_BASECHAR(c) in parserInternals.h:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define IS_BASECHAR1(c) ...
+</em><br>
+<em>&gt; #define IS_BASECHAR2(c) ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define IS_BASECHAR(c) IS_BASECHAR1(c)||IS_BASECHAR2(c)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; because it was to long for cpp (as called by cc).
+</em><br>
+<p>&nbsp;&nbsp;Gimme a patch, I will incorporate it.
+<br>
+<p><em>&gt; Maybe it is better define xmlChar as char (not unsigned char), to stop C++
+</em><br>
+<em>&gt; compilers complaining on casting char * buffer to unsigned char * (I do
+</em><br>
+<em>&gt; always use char * for strings), isn't it?
+</em><br>
+<p>&nbsp;&nbsp;No, for teh very simple reason that an xmlChar is not a C string
+<br>
+it's an UTF-8 encoded string. Even if this part of the implementation
+<br>
+is not complete, that's the intent, and I want a different type since
+<br>
+the content is somewhat different,
+<br>
+&nbsp;&nbsp;As a note, UTF-8 string should no break client code, it's still
+<br>
+a 0 terminated octet string, just that it's variable lenght character
+<br>
+set. This is high in my task list but it's unfortunately not easy.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20R:%20libxml%20release%201.7.2%20(bug?)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20R:%20libxml%20release%201.7.2%20(bug?)">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20R:%20libxml%20release%201.7.2%20(bug?)">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0150.html">Daniel Veillard: "[xml] libxml-1.7.3 is out"</a>
+<li><strong>Previous message:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<li><strong>In reply to:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

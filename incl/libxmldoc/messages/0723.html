@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] More uri.c bugs</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="[xml] More uri.c bugs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] More uri.c bugs</h1>
+<!-- received="Mon Sep  4 04:15:41 2000" -->
+<!-- isoreceived="20000904081541" -->
+<!-- sent="Mon, 4 Sep 2000 01:15:04 -0700 (PDT)" -->
+<!-- isosent="20000904081504" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="[xml] More uri.c bugs" -->
+<!-- id="Pine.LNX.4.21.0009040033070.12858-300000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20More%20uri.c%20bugs"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Mon Sep 04 2000 - 04:15:04 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>Previous message:</strong> <a href="0722.html">Peter Jacobi: "Re: [xml] Win32 support"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>Reply:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I'm trying to use xmlBuildURI() in a program that needs to combine
+<br>
+base and relative URIs together, and I found a number of things wrong.
+<br>
+To facilitate testing, I modified testURI.c to allow a base URI to be
+<br>
+used with an input file.  (See the attached testURI.patch.)
+<br>
+<p>Using this version of the program and the attached uri.data file, run the
+<br>
+following command:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;./testURI -base '<a href="http://foo.com/path/to/index.html#help">http://foo.com/path/to/index.html#help</a>' &lt;uri.data
+<br>
+<p>I believe that the output should be (and is with my patch):
+<br>
+<p><a href="http://foo.com/path/to/index.html#help">http://foo.com/path/to/index.html#help</a>
+<br>
+<a href="http://foo.com/path/to/">http://foo.com/path/to/</a>
+<br>
+<a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+<br>
+<a href="http://foo.com/path/to/bar#baz">http://foo.com/path/to/bar#baz</a>
+<br>
+<a href="http://foo.com/path/to/bar?baz">http://foo.com/path/to/bar?baz</a>
+<br>
+<a href="http://foo.com/path/to/index.html#baz">http://foo.com/path/to/index.html#baz</a>
+<br>
+<a href="http://foo.com/path/to/index.html?baz">http://foo.com/path/to/index.html?baz</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html#wow">http://foo.com/path/up.a.notch.html#wow</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html?wow">http://foo.com/path/up.a.notch.html?wow</a>
+<br>
+<a href="http://foo.com/root.cgi#OK">http://foo.com/root.cgi#OK</a>
+<br>
+<a href="http://foo.com/root.cgi?OK">http://foo.com/root.cgi?OK</a>
+<br>
+<a href="https://elsewhere.com/#deep">https://elsewhere.com/#deep</a>
+<br>
+<a href="https://elsewhere.com/?deep">https://elsewhere.com/?deep</a>
+<br>
+<p>but is instead:
+<br>
+<p>::ERROR::
+<br>
+<a href="http://foo.com/path/to/">http://foo.com/path/to/</a>
+<br>
+<a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+<br>
+<a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+<br>
+<a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+<br>
+::ERROR::
+<br>
+::ERROR::
+<br>
+<a href="http://foo.com/path/up.a.notch.html">http://foo.com/path/up.a.notch.html</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html">http://foo.com/path/up.a.notch.html</a>
+<br>
+<a href="http://foo.com/root.cgi#OK">http://foo.com/root.cgi#OK</a>
+<br>
+<a href="http://foo.com/root.cgi?OK">http://foo.com/root.cgi?OK</a>
+<br>
+<a href="https://elsewhere.com/#deep">https://elsewhere.com/#deep</a>
+<br>
+<a href="https://elsewhere.com/?deep">https://elsewhere.com/?deep</a>
+<br>
+<p>In other words, there were quite a few cases where the fragment and the
+<br>
+query were either dropped, or were not allowed to parse without more of
+<br>
+the reference URI being present.  I'm assuming from the previous URI-bug
+<br>
+discussion that we want to be able to combine &quot;&quot; with a base URI and get
+<br>
+the base URI (the previous discussion made it sound like this is what
+<br>
+happened even though it didn't work).
+<br>
+<p>I've attached uri.patch, with my suggested changes.
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0723/01-testURI.patch">testURI.c enhancements</a>
+</ul>
+<!-- attachment="01-testURI.patch" -->
+<hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0723/02-uri.patch">Fixes for uri.c</a>
+</ul>
+<!-- attachment="02-uri.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>Previous message:</strong> <a href="0722.html">Peter Jacobi: "Re: [xml] Win32 support"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>Reply:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 04 2000 - 04:43:29 EDT</em>
+</em>
+</small>
+</body>
+</html>

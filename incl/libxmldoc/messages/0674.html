@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug #21194</title>
+<meta name="Author" content="Kenneth Pronovici (pronovic@skyjammer.com)">
+<meta name="Subject" content="Re: [xml] Bug #21194">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug #21194</h1>
+<!-- received="Wed Aug 23 07:08:44 2000" -->
+<!-- isoreceived="20000823110844" -->
+<!-- sent="Wed, 23 Aug 2000 09:06:28 -0500 (CDT)" -->
+<!-- isosent="20000823140628" -->
+<!-- name="Kenneth Pronovici" -->
+<!-- email="pronovic@skyjammer.com" -->
+<!-- subject="Re: [xml] Bug #21194" -->
+<!-- id="Pine.LNX.3.96.1000823085909.2987K-100000@skyjammer.com" -->
+<!-- inreplyto="20000823011605.D13313@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kenneth Pronovici (<a href="mailto:pronovic@skyjammer.com?subject=Re:%20[xml]%20Bug%20#21194"><em>pronovic@skyjammer.com</em></a>)<br>
+<strong>Date:</strong> Wed Aug 23 2000 - 10:06:28 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0673.html">Daniel Veillard: "Re: [xml] Aliases for encodings"</a>
+<li><strong>In reply to:</strong> <a href="0668.html">Daniel Veillard: "Re: [xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;   Seems you didn't originally assigned it as to gnome-xml, so I didn't
+</em><br>
+<em>&gt; received it, an it only show up in the database now:
+</em><br>
+<p>Yes, I goofed and put &quot;gnome-xml (libxml)&quot; in the pseudo-header, not 
+<br>
+really realizing that the pseudo-header would be machine-parsed.  Sorry.
+<br>
+<p><em>&gt;   Something strange may have happened
+</em><br>
+<p>Yes, I was wondering why they didn't show up in the archive, too.
+<br>
+<p><em>&gt;  but those are not public,
+</em><br>
+<em>&gt;  I assume you would like to make similar functions public, could you send
+</em><br>
+<em>&gt; me the patches again ?
+</em><br>
+<p>I'll do that.  This time, I've just stuck them in the body of this email
+<br>
+below my signature (maybe that will work better).
+<br>
+<p><em>&gt;   Sure if the codde is okay it may be included in the next one.
+</em><br>
+<em>&gt; One just need to worry about the fact that extenal subsets must follow
+</em><br>
+<em>&gt; the given constraints:
+</em><br>
+<p>I doubt I have taken all of that into account properly, but I can fix it
+<br>
+if you let me know what needs to be done.  I'll let you look at the patches
+<br>
+and decide whether they're appropriate or just a quick hack that doesn't
+<br>
+fit with the way you want to organize things.  If what I've written doesn't
+<br>
+match what you want to see, I'll rewrite it so it does.
+<br>
+<p>Thanks for the help.
+<br>
+<p>KEN
+<br>
+<p><pre>
+--
+Kenneth J. Pronovici &lt;<a href="mailto:pronovic@ieee.org?subject=Re:%20[xml]%20Bug%20#21194">pronovic@ieee.org</a>&gt;
+Alliance of Computer Professionals (<a href="http://www.acpros.com/">http://www.acpros.com/</a>)
+Personal Homepage: <a href="http://www.skyjammer.com/~pronovic/">http://www.skyjammer.com/~pronovic/</a>
+Home: 763.546.0140, NWA: 612.726.0842
+&quot;Hell hath no fury like the weather when I'm camping...&quot; 
+<p>patch for tree.h
+<p>613a614,616
+&gt; void		xmlDocDumpMemoryWithDOCTYPE	(xmlDocPtr cur,
+&gt; 					 xmlChar**mem,
+&gt; 					 int *size);
+620a624,625
+&gt; int		xmlSaveFileWithDOCTYPE		(const char *filename,
+&gt; 					 xmlDocPtr cur);
+<p>patch for tree.c:
+<p>5443a5444,5703
+&gt; /* This section added by KJP 08/16/00 ******************************/
+&gt; /* 
+&gt;    I needed the &lt;!DOCTYPE&gt; information printed in my XML documents
+&gt;    so that downstream subscribers could validate this XML against
+&gt;    an external DTD.  This was not possible with the current 
+&gt;    functionality, so I customized the functionality.
+&gt;  
+&gt;    Changes were based on the original implementations of the four
+&gt;    functions which do what I need but do not write the &lt;!DOCTYPE&gt;
+&gt;    tag.
+&gt; 
+&gt;    It seemed like a good idea to make four new functions rather than 
+&gt;    to modify the existing ones, so functions not expecting this behavior 
+&gt;    would not be harmed. 
+&gt; 
+&gt;    Questions?  Please write &lt;<a href="mailto:pronovic@ieee.org?subject=Re:%20[xml]%20Bug%20#21194">pronovic@ieee.org</a>&gt;.
+&gt; */
+&gt; 
+&gt; /**
+&gt;  * xmlDocContentDumpOutputWithDOCTYPE:
+&gt;  * @buf:  the XML buffer output
+&gt;  * @cur:  the document
+&gt;  * @encoding:  an optional encoding string
+&gt;  *
+&gt;  * Dump an XML document. If an extSubset (i.e. DTD) is associated with 
+&gt;  * the document, and the name and ExternalID are filled in, will print 
+&gt;  * the appropriate &lt;!DOCTYPE&gt; header after the &lt;?xml version&gt; line.
+&gt;  */
+&gt; static void
+&gt; xmlDocContentDumpOutputWithDOCTYPE(xmlOutputBufferPtr buf, xmlDocPtr cur,
+&gt; 	                const char *encoding) {
+&gt;     xmlOutputBufferWriteString(buf, &quot;&lt;?xml version=&quot;);
+&gt;     if (cur-&gt;version != NULL) 
+&gt; 	xmlBufferWriteQuotedString(buf-&gt;buffer, cur-&gt;version);
+&gt;     else
+&gt; 	xmlOutputBufferWriteString(buf, &quot;\&quot;1.0\&quot;&quot;);
+&gt;     if (encoding == NULL) {
+&gt; 	if (cur-&gt;encoding != NULL)
+&gt; 	    encoding = (const char *) cur-&gt;encoding;
+&gt; 	else if (cur-&gt;charset != XML_CHAR_ENCODING_UTF8)
+&gt; 	    encoding = xmlGetCharEncodingName((xmlCharEncoding) cur-&gt;charset);
+&gt;     }
+&gt;     if (encoding != NULL) {
+&gt;         xmlOutputBufferWriteString(buf, &quot; encoding=&quot;);
+&gt; 	xmlBufferWriteQuotedString(buf-&gt;buffer, (xmlChar *) encoding);
+&gt;     }
+&gt;     switch (cur-&gt;standalone) {
+&gt;         case 0:
+&gt; 	    xmlOutputBufferWriteString(buf, &quot; standalone=\&quot;no\&quot;&quot;);
+&gt; 	    break;
+&gt;         case 1:
+&gt; 	    xmlOutputBufferWriteString(buf, &quot; standalone=\&quot;yes\&quot;&quot;);
+&gt; 	    break;
+&gt;     }
+&gt; 
+&gt;     /* Modified by KJP 08/16/2000 ********************************/
+&gt;     /*{*/
+&gt;     if(cur-&gt;extSubset != NULL)
+&gt;     {
+&gt; 
+&gt;       xmlOutputBufferWriteString(buf, &quot;?&gt;\n&quot;);
+&gt; 
+&gt;       if(xmlStrlen(cur-&gt;extSubset-&gt;name) != 0 &amp;&amp; xmlStrlen(cur-&gt;extSubset-&gt;ExternalID) != 0)
+&gt;       {
+&gt;          if (encoding == NULL)
+&gt;          {
+&gt;             if (cur-&gt;encoding != NULL)
+&gt;                encoding = (const char *) cur-&gt;encoding;
+&gt;             else if (cur-&gt;charset != XML_CHAR_ENCODING_UTF8)
+&gt;                encoding = xmlGetCharEncodingName((xmlCharEncoding) cur-&gt;charset);
+&gt;          }
+&gt; 
+&gt;          xmlOutputBufferWriteString(buf, &quot;&lt;!DOCTYPE &quot;);
+&gt;          xmlOutputBufferWriteString(buf, cur-&gt;extSubset-&gt;name);
+&gt;          xmlOutputBufferWriteString(buf, &quot; SYSTEM &quot;);
+&gt;          xmlBufferWriteQuotedString(buf-&gt;buffer, (xmlChar *)cur-&gt;extSubset-&gt;ExternalID);
+&gt;          xmlOutputBufferWriteString(buf, &quot;&gt;&quot;);
+&gt; 
+&gt;          xmlOutputBufferWriteString(buf, &quot;\n&quot;);
+&gt;       }
+&gt;     }
+&gt;     else
+&gt;     {
+&gt;        xmlOutputBufferWriteString(buf, &quot;?&gt;\n&quot;);
+&gt;     }
+&gt;     /*}*/
+&gt;     /* End modified by KJP 08/16/2000 **************************/
+&gt; 
+&gt;     if (cur-&gt;children != NULL) {
+&gt;         xmlNodePtr child = cur-&gt;children;
+&gt; 
+&gt; 	/* global namespace definitions, the old way */
+&gt; 	if (oldXMLWDcompatibility)
+&gt; 	    xmlGlobalNsListDumpOutput(buf, cur-&gt;oldNs);
+&gt; 	else 
+&gt; 	    xmlUpgradeOldNs(cur);
+&gt; 	
+&gt; 	while (child != NULL) {
+&gt; 	    xmlNodeDumpOutput(buf, cur, child, 0, 1, encoding);
+&gt; 	    xmlOutputBufferWriteString(buf, &quot;\n&quot;);
+&gt; 	    child = child-&gt;next;
+&gt; 	}
+&gt;     }
+&gt; }
+&gt; 
+&gt; /**
+&gt;  * xmlSaveFileWithDOCTYPE:
+&gt;  * @filename:  the filename (or URL)
+&gt;  * @cur:  the document
+&gt;  *
+&gt;  * Dump an XML document to a file. Will use compression if
+&gt;  * compiled in and enabled. If @filename is &quot;-&quot; the stdout file is
+&gt;  * used.  If an extSubset (i.e. DTD) is associated with the document,
+&gt;  * and the name and ExternalID are filled in, will print the appropriate
+&gt;  * &lt;!DOCTYPE&gt; header after the &lt;?xml version&gt; line.
+&gt;  * returns: the number of byte written or -1 in case of failure.
+&gt;  */
+&gt; int
+&gt; xmlSaveFileWithDOCTYPE(const char *filename, xmlDocPtr cur) {
+&gt;     xmlOutputBufferPtr buf;
+&gt;     const char *encoding;
+&gt;     xmlCharEncodingHandlerPtr handler = NULL;
+&gt;     int ret;
+&gt; 
+&gt;     if (cur == NULL)
+&gt; 	return(-1);
+&gt;     encoding = (const char *) cur-&gt;encoding;
+&gt; 
+&gt;     /* 
+&gt;      * save the content to a temp buffer.
+&gt;      */
+&gt; #ifdef HAVE_ZLIB_H
+&gt;     if (cur-&gt;compression &lt; 0) cur-&gt;compression = xmlCompressMode;
+&gt; #endif
+&gt;     if (encoding != NULL) {
+&gt; 	xmlCharEncoding enc;
+&gt; 
+&gt; 	enc = xmlParseCharEncoding(encoding);
+&gt; 
+&gt; 	if (cur-&gt;charset != XML_CHAR_ENCODING_UTF8) {
+&gt; 	    fprintf(stderr, &quot;xmlSaveFile: document not in UTF8\n&quot;);
+&gt; 	    return(-1);
+&gt; 	}
+&gt; 	if (enc != XML_CHAR_ENCODING_UTF8) {
+&gt; 	    handler = xmlFindCharEncodingHandler(encoding);
+&gt; 	    if (handler == NULL) {
+&gt; 		xmlFree((char *) cur-&gt;encoding);
+&gt; 		cur-&gt;encoding = NULL;
+&gt; 	    }
+&gt; 	}
+&gt;     }
+&gt; 
+&gt;     buf = xmlOutputBufferCreateFilename(filename, handler, cur-&gt;compression);
+&gt;     if (buf == NULL) return(0);
+&gt; 
+&gt;     xmlDocContentDumpOutputWithDOCTYPE(buf, cur, NULL);
+&gt; 
+&gt;     ret = xmlOutputBufferClose(buf);
+&gt;     return(ret);
+&gt; }
+&gt; 
+&gt; /**
+&gt;  * xmlDocContentDumpWithDOCTYPE:
+&gt;  * @buf:  the XML buffer output
+&gt;  * @cur:  the document
+&gt;  *
+&gt;  * Dump an XML document.
+&gt;  */
+&gt; static void
+&gt; xmlDocContentDumpWithDOCTYPE(xmlBufferPtr buf, xmlDocPtr cur) {
+&gt;     xmlBufferWriteChar(buf, &quot;&lt;?xml version=&quot;);
+&gt;     if (cur-&gt;version != NULL) 
+&gt; 	xmlBufferWriteQuotedString(buf, cur-&gt;version);
+&gt;     else
+&gt; 	xmlBufferWriteChar(buf, &quot;\&quot;1.0\&quot;&quot;);
+&gt;     if (cur-&gt;encoding != NULL) {
+&gt;         xmlBufferWriteChar(buf, &quot; encoding=&quot;);
+&gt; 	xmlBufferWriteQuotedString(buf, cur-&gt;encoding);
+&gt;     }
+&gt;     switch (cur-&gt;standalone) {
+&gt;         case 0:
+&gt; 	    xmlBufferWriteChar(buf, &quot; standalone=\&quot;no\&quot;&quot;);
+&gt; 	    break;
+&gt;         case 1:
+&gt; 	    xmlBufferWriteChar(buf, &quot; standalone=\&quot;yes\&quot;&quot;);
+&gt; 	    break;
+&gt;     }
+&gt; 
+&gt;     /* Modified by KJP 08/17/2000 ********************************/
+&gt;     /*{*/
+&gt;     if(cur-&gt;extSubset != NULL)
+&gt;     {
+&gt;       xmlBufferWriteChar(buf, &quot;?&gt;\n&quot;);
+&gt;       if(xmlStrlen(cur-&gt;extSubset-&gt;name) != 0 &amp;&amp; xmlStrlen(cur-&gt;extSubset-&gt;ExternalID) != 0)
+&gt;       {
+&gt;          xmlBufferWriteChar(buf, &quot;&lt;!DOCTYPE &quot;);
+&gt;          xmlBufferWriteChar(buf, cur-&gt;extSubset-&gt;name);
+&gt;          xmlBufferWriteChar(buf, &quot; SYSTEM &quot;);
+&gt;          xmlBufferWriteQuotedString(buf, (xmlChar *)cur-&gt;extSubset-&gt;ExternalID);
+&gt;          xmlBufferWriteChar(buf, &quot;&gt;&quot;);
+&gt;          xmlBufferWriteChar(buf, &quot;\n&quot;);
+&gt;       }
+&gt;     }
+&gt;     else
+&gt;     {
+&gt;        xmlBufferWriteChar(buf, &quot;?&gt;\n&quot;);
+&gt;     }
+&gt;     /*}*/
+&gt;     /* End modified by KJP 08/17/2000 **************************/
+&gt; 
+&gt;     if (cur-&gt;children != NULL) {
+&gt;         xmlNodePtr child = cur-&gt;children;
+&gt; 
+&gt; 	/* global namespace definitions, the old way */
+&gt; 	if (oldXMLWDcompatibility)
+&gt; 	    xmlGlobalNsListDump(buf, cur-&gt;oldNs);
+&gt; 	else 
+&gt; 	    xmlUpgradeOldNs(cur);
+&gt; 	
+&gt; 	while (child != NULL) {
+&gt; 	    xmlNodeDump(buf, cur, child, 0, 1);
+&gt; 	    xmlBufferWriteChar(buf, &quot;\n&quot;);
+&gt; 	    child = child-&gt;next;
+&gt; 	}
+&gt;     }
+&gt; }
+&gt; 
+&gt; /**
+&gt;  * xmlDocDumpMemoryWithDOCTYPE:
+&gt;  * @cur:  the document
+&gt;  * @mem:  OUT: the memory pointer
+&gt;  * @size:  OUT: the memory lenght
+&gt;  *
+&gt;  * Dump an XML document in memory and return the xmlChar * and it's size.
+&gt;  * It's up to the caller to free the memory.
+&gt;  */
+&gt; void
+&gt; xmlDocDumpMemoryWithDOCTYPE(xmlDocPtr cur, xmlChar**mem, int *size) {
+&gt;     xmlBufferPtr buf;
+&gt; 
+&gt;     if (cur == NULL) {
+&gt; #ifdef DEBUG_TREE
+&gt;         fprintf(stderr, &quot;xmlDocDumpMemoryWithDOCTYPE : document == NULL\n&quot;);
+&gt; #endif
+&gt; 	*mem = NULL;
+&gt; 	*size = 0;
+&gt; 	return;
+&gt;     }
+&gt;     buf = xmlBufferCreate();
+&gt;     if (buf == NULL) {
+&gt; 	*mem = NULL;
+&gt; 	*size = 0;
+&gt; 	return;
+&gt;     }
+&gt;     xmlDocContentDumpWithDOCTYPE(buf, cur);
+&gt;     *mem = xmlStrndup(buf-&gt;content, buf-&gt;use);
+&gt;     *size = buf-&gt;use;
+&gt;     xmlBufferFree(buf);
+&gt; }
+&gt; 
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0673.html">Daniel Veillard: "Re: [xml] Aliases for encodings"</a>
+<li><strong>In reply to:</strong> <a href="0668.html">Daniel Veillard: "Re: [xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 23 2000 - 09:43:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

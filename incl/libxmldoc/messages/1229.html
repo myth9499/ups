@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] RE: xmlSetGenericErrorFunc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] RE: xmlSetGenericErrorFunc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] RE: xmlSetGenericErrorFunc</h1>
+<!-- received="Fri Nov 24 18:58:52 2000" -->
+<!-- isoreceived="20001124235852" -->
+<!-- sent="Sat, 25 Nov 2000 00:58:41 +0100" -->
+<!-- isosent="20001124235841" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] RE: xmlSetGenericErrorFunc" -->
+<!-- id="20001125005841.B23805@w3.org" -->
+<!-- inreplyto="000401c05278$b330b200$8140dec2@n" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Nov 24 2000 - 18:58:41 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1228.html">Daniel Veillard: "Re: [xml] xmlSetGenericErrorFunc"</a>
+<li><strong>In reply to:</strong> <a href="1219.html">Leo Davidson: "[xml] RE: xmlSetGenericErrorFunc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 19, 2000 at 10:33:01PM -0000, Leo Davidson wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; To follow-up on this, two more things:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1) When I said you could call
+</em><br>
+<em>&gt; 	xmlSetGenericErrorFunc(stderr, xmlGenericErrorDefaultFunc)
+</em><br>
+<em>&gt; I was wrong since xmlGenericErrorDefaultFunc isn't available outside of
+</em><br>
+<em>&gt; LibXml's error.c, so as far as I can tell (maybe I'm being stupid!) there's
+</em><br>
+<em>&gt; no way to restore the default error handling, FWIW.
+</em><br>
+<p>&nbsp;&nbsp;xmlSetGenericErrorFunc is exported by xmlerror.h, at least in 2.2.8 ...
+<br>
+<p><em>&gt; 2) The error handler set by xmlSetGenericErrorFunc doesn't seem to get
+</em><br>
+<em>&gt; called very predicably... The documentation says it's called outside of
+</em><br>
+<em>&gt; parsing and validation, but it seems to be called during parsing as well,
+</em><br>
+<em>&gt; although not for as many events.
+</em><br>
+<p>&nbsp;&nbsp;the SAX error handler is by default xmlParserError which calls
+<br>
+the current generic error function.
+<br>
+<p><em>&gt; For example...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Without changing the error handler I get error messages like this when
+</em><br>
+<em>&gt; calling xmlParseFile on a file which has an error:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --8&lt;--
+</em><br>
+<em>&gt; C:\SN_Devices.xml:5: error: error parsing attribute name
+</em><br>
+<em>&gt;       &lt;DigitsToPadTo Number=&quot;1&quot;/&gt;
+</em><br>
+<em>&gt;       ^
+</em><br>
+<em>&gt; --&gt;8--
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If I set an error handler, that handler only gets part of the error message:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --8&lt;--
+</em><br>
+<em>&gt; C:\Leo\source\Home\SuperNudelist\Debug\SN_Config\SN_Devices.xml:5: error:
+</em><br>
+<em>&gt; &lt;DigitsToPadTo Number=&quot;1&quot;/&gt;
+</em><br>
+<em>&gt;       ^
+</em><br>
+<em>&gt; --&gt;8--
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; (Missing the &quot; error parsing attribute name&lt;return&gt;&quot;)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is this a bug?
+</em><br>
+<p>&nbsp;&nbsp;I have looked at this and could not find the error. Something else
+<br>
+must hae been changed, the error function always use the callback the
+<br>
+same way be it the default one or an overriden one ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">Daniel.Veillard@w3.org</a> | W3C  MIT/LCS  NE43-344  | Today's Bookmarks :
+Tel : +1 617 253 5884  | 545 Technology Square   | Linux, WWW, Java,
+Fax : +1 617 258 5999  | Cambridge, MA 02139 USA | badminton, Kaffe,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | HTTP-NG and Amaya.
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20RE:%20xmlSetGenericErrorFunc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1228.html">Daniel Veillard: "Re: [xml] xmlSetGenericErrorFunc"</a>
+<li><strong>In reply to:</strong> <a href="1219.html">Leo Davidson: "[xml] RE: xmlSetGenericErrorFunc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 24 2000 - 19:44:02 EST</em>
+</em>
+</small>
+</body>
+</html>

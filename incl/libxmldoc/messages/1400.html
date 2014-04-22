@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Dave Madole (dmadole@cddb.com)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Thu Feb  1 14:08:39 2001" -->
+<!-- isoreceived="20010201190839" -->
+<!-- sent="Thu, 01 Feb 2001 11:07:34 -0800" -->
+<!-- isosent="20010201190734" -->
+<!-- name="Dave Madole" -->
+<!-- email="dmadole@cddb.com" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="3A79B3F6.52E5D9C2@cddb.com" -->
+<!-- inreplyto="3A789351.D6A49F21@stud.fh-frankfurt.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Dave Madole (<a href="mailto:dmadole@cddb.com?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>dmadole@cddb.com</em></a>)<br>
+<strong>Date:</strong> Thu Feb 01 2001 - 14:07:34 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1399.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1399.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I use the ICU (International Components for Unicode) libraries from IBM
+<br>
+<p><a href="http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
+<br>
+<p>to encode element content.  One must convert the element content from utf-8
+<br>
+to  utf-16(native byte order) then convert from utf-16 to whatever
+<br>
+character encoding (sjis, big-5) one wants, then base64 encode the
+<br>
+content.  This works and satisfies the w3c requirement that the XML itself
+<br>
+must be utf-8 or utf-16.  I found that ICU more completely addressed my
+<br>
+needs than iconv.  The only downside is that you must convert whatever your
+<br>
+source encoding is to native byte order utf-16 before converting it to your
+<br>
+destination encoding.  The API seems to be modeled on iconv and is very
+<br>
+easy to use.
+<br>
+<p>This obviates messing with libxml, although it becomes a bit of a memory
+<br>
+management nightmare.
+<br>
+<p>Dave
+<br>
+<p>Igor Zlatkovic wrote:
+<br>
+<p><em>&gt; Hi there.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; You have a problem. So do I. What you are trying to do is the subject of
+</em><br>
+<em>&gt; my pains since few days and it has proven to be fairly difficult to
+</em><br>
+<em>&gt; handle. Due to numerous issues, there is only one way I can go: use wide
+</em><br>
+<em>&gt; charracters (type wchar_t) internally and UTF-8 externally. When one set
+</em><br>
+<em>&gt; to such a way needs to use libxml in its present form, there are two
+</em><br>
+<em>&gt; possibilities:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; 1. Write a surrogate for each and every libxml function which operates
+</em><br>
+<em>&gt; on strings and make the surrogate convert all involved strings before
+</em><br>
+<em>&gt; and/or after the call to the real libxml function. The same applies when
+</em><br>
+<em>&gt; accessing any data member of any structure in libxml which contains a
+</em><br>
+<em>&gt; string. Well, if you are using just a few libxml functions, this is not
+</em><br>
+<em>&gt; a big problem to do. If you however use a lot of them, it is a pure
+</em><br>
+<em>&gt; terror. Depending on how often your program calls into libxml, it can
+</em><br>
+<em>&gt; represent a performance penalty. Good thing about it is that it need be
+</em><br>
+<em>&gt; done once, provided libxml interface doesn't change.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; 2. Modify libxml and make xmlChar type resemble wchar_t, instead of
+</em><br>
+<em>&gt; unsigned char. In this case, libxml would have to convert from/to UTF-8
+</em><br>
+<em>&gt; whenever it reads from, or writes to, any external storage (file,
+</em><br>
+<em>&gt; http...). This is considerable if, and only if you use a whole lot of
+</em><br>
+<em>&gt; libxml functions and call them often. However, it means producing a new,
+</em><br>
+<em>&gt; private version of libxml and keeping it in sync with the public one for
+</em><br>
+<em>&gt; all times. No, even if that would be my (and your) salvation, the
+</em><br>
+<em>&gt; official libxml cannot be modified in this manner. That would
+</em><br>
+<em>&gt; mercilessly break each and every libxml-based program out there, in
+</em><br>
+<em>&gt; addition to loosing support for every platform which does not have an
+</em><br>
+<em>&gt; ISO-10646 implementation. (Is there such platform?)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; To convert strings between wide charracter and UTF-8 representations
+</em><br>
+<em>&gt; under Win32, I would use WidecharToMultiByte and MultiByteToWideChar
+</em><br>
+<em>&gt; functions, which are a part of the operating system NLS interface.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I wish you a lot of luck.
+</em><br>
+<em>&gt; Igor
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Philipp Kursawe wrote:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hello,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I'm new to libxml and and must say its wonderful clean, fast simple
+</em><br>
+<em>&gt; &gt; C-API is just what I's looking for.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; But now I'm running into serious problems when I want to use russian,
+</em><br>
+<em>&gt; &gt; german or chinese text in my XML (not for the tags).
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I don't understand how to convert from the internal used UTF-8 to a
+</em><br>
+<em>&gt; &gt; Win32 character set so I can use the texts in native Win32 functions.
+</em><br>
+<em>&gt; &gt; I'v tried to use iconv and enabled iconv support in libxml but the
+</em><br>
+<em>&gt; &gt; resulting string still doesnt look right to me. Is it possible to
+</em><br>
+<em>&gt; &gt; convert from UTF-8 to 2-Byte Windows UNICODE characters, or is there
+</em><br>
+<em>&gt; &gt; something I've missed?
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Thanks in advance for your help,
+</em><br>
+<em>&gt; &gt; Philipp
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1399.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1399.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Feb 01 2001 - 14:43:38 EST</em>
+</em>
+</small>
+</body>
+</html>

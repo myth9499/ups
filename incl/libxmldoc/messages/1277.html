@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] traverse the XML tree but contents and attribute</title>
+<meta name="Author" content="Wang, Hai (hwang@accuris.ie)">
+<meta name="Subject" content="RE: [xml] traverse the XML tree but contents and attributes are e mmpty">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] traverse the XML tree but contents and attributes are e mmpty</h1>
+<!-- received="Thu Dec  7 06:40:27 2000" -->
+<!-- isoreceived="20001207114027" -->
+<!-- sent="Thu, 7 Dec 2000 11:36:32 -0000 " -->
+<!-- isosent="20001207113632" -->
+<!-- name="Wang, Hai" -->
+<!-- email="hwang@accuris.ie" -->
+<!-- subject="RE: [xml] traverse the XML tree but contents and attributes are e mmpty" -->
+<!-- id="577D56F824BAD411A1230008C728534A081295@dublin.accuris.ie" -->
+<!-- inreplyto="[xml] traverse the XML tree but contents and attributes are e mmpty" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wang, Hai (<a href="mailto:hwang@accuris.ie?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty"><em>hwang@accuris.ie</em></a>)<br>
+<strong>Date:</strong> Thu Dec 07 2000 - 06:36:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<li><strong>Previous message:</strong> <a href="1276.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are emmpty"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<li><strong>Reply:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello Daniel,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You are right, but I still could not print out any thing from leaves
+<br>
+nodes,say text node. I used the function &quot;xmlNodeIsText&quot;to check if the node
+<br>
+is a leaf node. the output from my codes is:
+<br>
+<p>nodename: text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content:
+<br>
+<p>nodename: question
+<br>
+nodename: text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content:
+<br>
+<p>nodename: answer
+<br>
+nodename: text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content:
+<br>
+<p>nodename: question
+<br>
+nodename: text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content:
+<br>
+<p>nodename: answer
+<br>
+nodename: text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content:
+<br>
+<p>//---XML file used is -------
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;exam&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;question&gt;Who is the last King of England&lt;/question&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;answer&gt;George VI&lt;/answer&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;question&gt;How many queens were named Elizabeth &lt;/question&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;answer&gt;Two&lt;/answer&gt;
+<br>
+&lt;/exam&gt;
+<br>
+<p><p>//----------------------------
+<br>
+<p>Thank you very much
+<br>
+<p>-----Original Message-----
+<br>
+From: Daniel Veillard [mailto:<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">Daniel.Veillard@w3.org</a>]
+<br>
+Sent: Thursday, December 07, 2000 10:30 AM
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] traverse the XML tree but contents and attributes are
+<br>
+emmpty
+<br>
+<p><p><p>On Thu, Dec 07, 2000 at 09:57:22AM -0000, Wang, Hai wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello everybody,
+</em><br>
+<em>&gt;         I have got a problem with gnome parser, I tried to parse a XML doc
+</em><br>
+<em>&gt; from memory, it was good, but when I tried to traverse the xml tree in
+</em><br>
+<em>&gt; xmlDocPtr to get all the nodes and print out their names, attributesname
+</em><br>
+and
+<br>
+<em>&gt; contents, I find the following problems:
+</em><br>
+<em>&gt; 1. Node name is correct, but with text node, (I want to get rid of the
+</em><br>
+text
+<br>
+<em>&gt; node).
+</em><br>
+<em>&gt; 2. attributes are empty
+</em><br>
+<em>&gt; 3 contents are all empty.
+</em><br>
+<p>&nbsp;&nbsp;You need to (re)read 
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/#tree">http://xmlsoft.org/#tree</a>
+<br>
+<p>Attributes and element nodes don't have content they have children,
+<br>
+Only leaves in the tree have content !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20traverse%20the%20XML%20tree%20but%20contents%20and%20attributes%20are%20e%20mmpty">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<li><strong>Previous message:</strong> <a href="1276.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are emmpty"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<li><strong>Reply:</strong> <a href="1278.html">Daniel Veillard: "Re: [xml] traverse the XML tree but contents and attributes are e mmpty"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Dec 07 2000 - 09:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

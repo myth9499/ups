@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] UTF8ToHtml() changes</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] UTF8ToHtml() changes">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] UTF8ToHtml() changes</h1>
+<!-- received="Sun Aug 27 15:34:29 2000" -->
+<!-- isoreceived="20000827193429" -->
+<!-- sent="Mon, 28 Aug 2000 00:31:37 +0200" -->
+<!-- isosent="20000827223137" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] UTF8ToHtml() changes" -->
+<!-- id="20000828003137.A10082@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0008271340490.23983-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20UTF8ToHtml()%20changes"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Aug 27 2000 - 18:31:37 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0684.html">Wayne Davison: "[xml] UTF8ToHtml() changes"</a>
+<li><strong>In reply to:</strong> <a href="0684.html">Wayne Davison: "[xml] UTF8ToHtml() changes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Aug 27, 2000 at 02:18:35PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; I was trying to use UTF8ToHtml() to transform some internal-format
+</em><br>
+<em>&gt; characters back into HTML, and it was failing to translate some curly
+</em><br>
+<em>&gt; quotes and such.  Come to find out that the array, html40EntitiesTable[],
+</em><br>
+<em>&gt; is not sorted like UTF8ToHtml() expects it to be.
+</em><br>
+<p>&nbsp;&nbsp;Okay good catch,
+<br>
+<p><em>&gt; Also, the function does
+</em><br>
+<em>&gt; not escape actual ampersands in the input, which leads to ambiguities in
+</em><br>
+<em>&gt; the output.
+</em><br>
+<p>&nbsp;&nbsp;And for a good reason, the escaping is done at another level
+<br>
+UTF8ToHtml() is just registered as the encoding handler in 
+<br>
+encoding.c, the conversion is done before calling it, the result
+<br>
+was that it was completely breaking libxml HTML output (by
+<br>
+double escaping of &amp;).
+<br>
+&nbsp;&nbsp;HTML output is handled by UTF8ToHtml as the default encoding
+<br>
+filter for HTML. You can perfectly save in UTF-16 or something
+<br>
+even more exotic.
+<br>
+<p><em>&gt; The attached patch does the following:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  + Sorts all the entries in html40EntitiesTable[] by unicode value.
+</em><br>
+<p>&nbsp;&nbsp;thanks, applied,
+<br>
+<p><em>&gt;  + Renamed htmlEntityLookup() to htmlEntityNameLookup() and then added
+</em><br>
+<p>&nbsp;&nbsp;Sorry not possible would break binary compatibility
+<br>
+<p><em>&gt;    htmlEntityValueLookup() (since I wanted to lookup entities by value
+</em><br>
+<em>&gt;    in my own code).  The value lookup code has a debug check that
+</em><br>
+<em>&gt;    complains if it finds a value in the list that is out of order.
+</em><br>
+<p>&nbsp;&nbsp;yes added
+<br>
+<p><em>&gt;    the new htmlEntityValueLookup() function (which uses a slightly more
+</em><br>
+<em>&gt;    efficient linear scan -- it has a maximum of N+1 value comparisons
+</em><br>
+<em>&gt;    rather than 2*N).
+</em><br>
+<p>&nbsp;&nbsp;Okay, applied
+<br>
+<p><em>&gt;  + Fixed an off-by-one bug in UTF8ToHtml() when it was checking for enough
+</em><br>
+<em>&gt;    room in the output buffer to fit an entity.
+</em><br>
+<p>&nbsp;&nbsp;I prefer having one extra byte left in the case the user need to
+<br>
+add a zero, in that case there is no loss in output, and the fact that
+<br>
+UTF8ToHtml() returns -2 is not handled as an error condition, it's the
+<br>
+normal way to use the conversion filters. That one byte is for safety at
+<br>
+no cost in reality.
+<br>
+<p><em>&gt;  + Tweaked the entity-copying code in UTF8ToHtml() a tad.
+</em><br>
+<p>&nbsp;&nbsp;Okay, I kept most of it.
+<br>
+<p><em>&gt;  + Removed a superfluous &quot;i = 0&quot; initialization that I happened to notice.
+</em><br>
+<p>&nbsp;&nbsp;Okay.
+<br>
+<p><em>&gt;  	/* assertion: c is a single UTF-4 value */
+</em><br>
+<em>&gt;  	if (c &lt; 0x80) {
+</em><br>
+<em>&gt; -	    if (out &gt;= outend)
+</em><br>
+<em>&gt; +	    switch (c) {
+</em><br>
+<em>&gt; +	      case '&amp;':
+</em><br>
+<em>&gt; +		if (out + 5 &gt; outend) {
+</em><br>
+<em>&gt; +		    *outlen = out - outstart;
+</em><br>
+<em>&gt; +		    *inlen = processed - instart;
+</em><br>
+<em>&gt; +		    return(0);
+</em><br>
+<em>&gt; +		}
+</em><br>
+<em>&gt; +		memcpy(out, &quot;&amp;amp;&quot;, 5);
+</em><br>
+<em>&gt; +		out += 5;
+</em><br>
+<em>&gt; +		break;
+</em><br>
+<em>&gt; +	      case '&lt;':
+</em><br>
+<em>&gt; +		if (out + 4 &gt; outend) {
+</em><br>
+<em>&gt; +		    *outlen = out - outstart;
+</em><br>
+<em>&gt; +		    *inlen = processed - instart;
+</em><br>
+<em>&gt; +		    return(0);
+</em><br>
+<em>&gt; +		}
+</em><br>
+<em>&gt; +		memcpy(out, &quot;&amp;lt;&quot;, 4);
+</em><br>
+<em>&gt; +		out += 4;
+</em><br>
+<em>&gt; +		break;
+</em><br>
+<em>&gt; +	      case '&gt;':
+</em><br>
+<em>&gt; +		if (out + 4 &gt; outend) {
+</em><br>
+<em>&gt; +		    *outlen = out - outstart;
+</em><br>
+<em>&gt; +		    *inlen = processed - instart;
+</em><br>
+<em>&gt; +		    return(0);
+</em><br>
+<em>&gt; +		}
+</em><br>
+<em>&gt; +		memcpy(out, &quot;&amp;gt;&quot;, 4);
+</em><br>
+<em>&gt; +		out += 4;
+</em><br>
+<em>&gt;  		break;
+</em><br>
+<em>&gt; -	    *out++ = c;
+</em><br>
+<em>&gt; +	      default:
+</em><br>
+<em>&gt; +		if (out &gt;= outend) {
+</em><br>
+<em>&gt; +		    *outlen = out - outstart;
+</em><br>
+<em>&gt; +		    *inlen = processed - instart;
+</em><br>
+<em>&gt; +		    return(0);
+</em><br>
+<em>&gt; +		}
+</em><br>
+<em>&gt; +		*out++ = c;
+</em><br>
+<em>&gt; +		break;
+</em><br>
+<em>&gt; +	    }
+</em><br>
+<p>&nbsp;&nbsp;This part was not applied. It was breaking HTML generation (check
+<br>
+&quot;make HTMLtests&quot; to get an idea :-)
+<br>
+&nbsp;&nbsp;This may be worth a separate function if you just want to output
+<br>
+a string extrated from the internal representation. I would accept
+<br>
+it without problem.
+<br>
+<p>&nbsp;&nbsp;thanks for the report and the patch,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20UTF8ToHtml()%20changes">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20UTF8ToHtml()%20changes">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20UTF8ToHtml()%20changes">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0684.html">Wayne Davison: "[xml] UTF8ToHtml() changes"</a>
+<li><strong>In reply to:</strong> <a href="0684.html">Wayne Davison: "[xml] UTF8ToHtml() changes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Aug 27 2000 - 15:43:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

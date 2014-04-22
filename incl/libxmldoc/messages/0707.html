@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2</h1>
+<!-- received="Wed Aug 30 03:11:49 2000" -->
+<!-- isoreceived="20000830071149" -->
+<!-- sent="Wed, 30 Aug 2000 12:10:19 +0200" -->
+<!-- isosent="20000830101019" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2" -->
+<!-- id="20000830121019.D16558@w3.org" -->
+<!-- inreplyto="1932009339.20000830113147@triplex.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Aug 30 2000 - 06:10:19 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0706.html">Stefan Bambach: "Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0706.html">Stefan Bambach: "Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Aug 30, 2000 at 11:31:47AM +0200, Stefan Bambach wrote:
+<br>
+<em>&gt; DV&gt;  Or EUC-JP if you're japanese or ISO-8859-2 if you're russian, etc ...
+</em><br>
+<em>&gt; DV&gt; Yes libxml is now consistant independantly of the kind of input.
+</em><br>
+<em>&gt; I have to store some data from the XML file in MySQL. It's enough to
+</em><br>
+<em>&gt; store it as 8859-1, because I know that the system is intended for
+</em><br>
+<em>&gt; germans only :-) So I don't need all features.
+</em><br>
+<p>&nbsp;&nbsp;Just to give you an example, I'm french and we are supposed to use
+<br>
+ISO-8859-1, except it lacks the o-e ligature &amp;oelig; character. You're
+<br>
+lucky if all your data can be expressed with ISO-8859-1 :-)
+<br>
+<p><em>&gt; Yesterday, I used the UTF8toisolat1() function to do the job for me (I
+</em><br>
+<em>&gt; have to convert each value I read from DOM tree by myself). Is there I
+</em><br>
+<em>&gt; function like xmlNodeListGetString() with an additional parameter, the
+</em><br>
+<em>&gt; encoding string, and I get the String as I need it ?
+</em><br>
+<p>&nbsp;&nbsp;Hum ... it's not that simple. This would work well with ISO-8859-1
+<br>
+but a lot of character encoders need to maintain a state, which means
+<br>
+that if we fallback to iconv we should try to keep the same encoder
+<br>
+and not open/convert/close for each operation (iconv potentially
+<br>
+ends-up looking for a shared lib and loading it when requesting a new
+<br>
+encoder, this may become very heavy, very fast). So the function should
+<br>
+rather had an xmlCharEncodingHandlerPtr as the second argument. 
+<br>
+I will look into this,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0706.html">Stefan Bambach: "Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0706.html">Stefan Bambach: "Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 30 2000 - 03:43:40 EDT</em>
+</em>
+</small>
+</body>
+</html>

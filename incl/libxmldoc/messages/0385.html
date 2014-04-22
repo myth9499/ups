@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Incremental output (kinda followup to: streaming</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Incremental output (kinda followup to: streaming output)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Incremental output (kinda followup to: streaming output)</h1>
+<!-- received="Mon Feb 21 06:21:27 2000" -->
+<!-- isoreceived="20000221112127" -->
+<!-- sent="Mon, 21 Feb 2000 12:21:13 +0100" -->
+<!-- isosent="20000221112113" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Incremental output (kinda followup to: streaming output)" -->
+<!-- id="20000221122112.F3847@w3.org" -->
+<!-- inreplyto="38B11779.3F472661@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Feb 21 2000 - 06:21:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0386.html">Peter Jacobi: "[xml] Hashing strings"</a>
+<li><strong>Previous message:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>In reply to:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Feb 21, 2000 at 11:46:17AM +0100, Lutz Behnke wrote:
+<br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; [..]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; For Input I allready use the push interface.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   On the other hand concerning serialization of the result it seems not too
+</em><br>
+<em>&gt; &gt; difficult to tweak the buffer code so that it does flushing while being
+</em><br>
+<em>&gt; &gt; created (and add possible encoding conversion like the parser input).
+</em><br>
+<em>&gt; &gt; Would an interface accepting a file descriptor or a FILE * suitable ?
+</em><br>
+<em>&gt; &gt; Or another callback on buffer full interface would be better ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Personally It would suit me most to be able to supply the buffer to the function
+</em><br>
+<em>&gt; and then have it return for each time the buffer is full. But a callback
+</em><br>
+<p>&nbsp;&nbsp;Hum, I'm afraid I would have too keep too much context in the buffer
+<br>
+structure. Too specialized to be really good.
+<br>
+<p><em>&gt; with a similar interface registered with the library by the calling app would be
+</em><br>
+<em>&gt; fine too.
+</em><br>
+<p>&nbsp;&nbsp;Seems the best option. How urgent would this be ? I'm still focusing
+<br>
+on more core XML related code right now.
+<br>
+&nbsp;&nbsp;Providing patches would certainly speed up the process :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0386.html">Peter Jacobi: "[xml] Hashing strings"</a>
+<li><strong>Previous message:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>In reply to:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:04 EDT</em>
+</em>
+</small>
+</body>
+</html>

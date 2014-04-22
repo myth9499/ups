@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out</h1>
+<!-- received="Tue Mar  6 04:37:18 2001" -->
+<!-- isoreceived="20010306093718" -->
+<!-- sent="Tue, 06 Mar 2001 09:33:10 +0000" -->
+<!-- isosent="20010306093310" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out" -->
+<!-- id="3AA4AED6.56346AB0@uk.sun.com" -->
+<!-- inreplyto="20010304132818.D30105@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Tue Mar 06 2001 - 04:33:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1527.html">Daniel Veillard: "Re: [xml] interfacing libxml with YACC"</a>
+<li><strong>In reply to:</strong> <a href="1518.html">Daniel Veillard: "Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1525.html">Luca Padovani: "[xml] interfacing libxml with YACC"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt; On Sun, Mar 04, 2001 at 05:18:37PM +0000, Gary Pennington wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; There appears to be a regression in this release. xmllint has stopped working
+</em><br>
+<em>&gt; &gt; with my xml documents and generates errors such as
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; calvin:dev/ASPSE/src:$ xmllint --valid /etc/pool.conf
+</em><br>
+<em>&gt; &gt; <a href="file:///usr/share/lib/xml/dtd/rm_all.dtd:14">file:///usr/share/lib/xml/dtd/rm_all.dtd:14</a>: validity error: PEReference: %;
+</em><br>
+<em>&gt; &gt; not found
+</em><br>
+<em>&gt; &gt; %rm_core;
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; &gt;  ff30c47c xmlNewElementContent (1, 2, b4, 1, 21dc0, ff2d5b8c) + 20c
+</em><br>
+<em>&gt; &gt;  ff2d5b68 xmlParseElementChildrenContentDecl (54f10, ff28abe4, b6, 1,
+</em><br>
+<em>&gt; &gt; ff3e0000, ff3a02d4) + 1008
+</em><br>
+<em>&gt; &gt;  ff2d4c8c xmlParseElementChildrenContentDecl (54f10, 7, 69230, ff136000,
+</em><br>
+<em>&gt; &gt; 21de8, ff0c1b68) + 12c
+</em><br>
+<em>&gt; &gt;  ff2d61fc xmlParseElementContentDecl (54f10, 420c0, ffbee6b0, 69230, 21dc0,
+</em><br>
+<em>&gt; &gt; ff2cd754) + 2bc
+</em><br>
+<em>&gt; &gt;  ff2d6d30 xmlParseElementDecl (54f10, 0, 0, 0, 0, 0) + a30
+</em><br>
+<em>&gt; &gt;  ff2d72a8 xmlParseMarkupDecl (54f10, 0, 0, 0, 0, 0) + b0
+</em><br>
+<em>&gt; &gt;  ff2d97ac xmlParseExternalSubset (54f10, 56750, 567c0, 567c0, 0, 0) + 6e4
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I'm too wasted to do more debugging today, but has anybody got any pointers
+</em><br>
+<em>&gt; &gt; for me on what may have changed in this release before I start my debugging
+</em><br>
+<em>&gt; &gt; session tomorrow? This was all working with 2.3.2.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   yep, sure, I know what's happening !
+</em><br>
+<em>&gt; I optimized parsing speed a lot, but seem I forgot someting obvious
+</em><br>
+<em>&gt; the % character has a special value within the internal and external
+</em><br>
+<em>&gt; subset. Basically when parsing the Dtd we should not call xmlParseName()
+</em><br>
+<em>&gt; or xmlParseCharData() but xmlParseNameComplex() and
+</em><br>
+<em>&gt; xmlParseCharDataComplex().
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   My mistake, I will try to provide a patch tomorrow.
+</em><br>
+<p>Hi Daniel,
+<br>
+<p>Sorry to bother you, but I'm trying to build a release of 2.3.3 that several
+<br>
+colleagues can use and so this patch is quite essential for me. If you haven't got
+<br>
+time, let me know and I will start trying to work out the patch myself or revert
+<br>
+to 2.3.2. Otherwise, some kind of time estimate would be much appreciated.
+<br>
+<p>Let me know if you don't appreciate being chased/reminded and I won't do it again.
+<br>
+<p>Yours,
+<br>
+<p>Gary
+<br>
+<p><p><em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1527.html">Daniel Veillard: "Re: [xml] interfacing libxml with YACC"</a>
+<li><strong>In reply to:</strong> <a href="1518.html">Daniel Veillard: "Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1525.html">Luca Padovani: "[xml] interfacing libxml with YACC"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Mar 06 2001 - 04:48:50 EST</em>
+</em>
+</small>
+</body>
+</html>

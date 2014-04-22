@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Saving without tree</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Saving without tree">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Saving without tree</h1>
+<!-- received="Tue May 30 05:10:23 2000" -->
+<!-- isoreceived="20000530091023" -->
+<!-- sent="Tue, 30 May 2000 11:08:11 +0200" -->
+<!-- isosent="20000530090811" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Saving without tree" -->
+<!-- id="20000530110811.B31986@w3.org" -->
+<!-- inreplyto="200005292343.TAA17287@hydrogen" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue May 30 2000 - 05:08:11 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0495.html">Andrea LUCIANO: "[xml] Is XML thread safe?"</a>
+<li><strong>Previous message:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0492.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0483.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, May 29, 2000 at 11:43:29PM +0000, <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20Saving%20without%20tree">mdf@angoss.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   Of course libxml is both a generator and a parser ... But to be able
+</em><br>
+<em>&gt; &gt; to generate it *needs* to understand the in-memory storage format. 
+</em><br>
+<em>&gt; &gt; If you decide to not use the libxml tree format, for whatever reason,
+</em><br>
+<em>&gt; &gt; I don't see how libxml could &quot;magically&quot; understand your encoding of
+</em><br>
+<em>&gt; &gt; the data. Try to think 2 minutes about this there is no obvious
+</em><br>
+<em>&gt; &gt; solution for this !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've actually thought about this so much that I actually *have a working
+</em><br>
+<em>&gt; generator* that needs no &quot;in-memory storage format&quot;, beyond whatever
+</em><br>
+<em>&gt; tree/list structure that is implicit in the data itself.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Rather than defining rigid, stifling, data structures, you just play
+</em><br>
+<em>&gt; around with some function and object pointers instead.  {ie, rigid,
+</em><br>
+<em>&gt; stifling, interfaces.}  Naturally, this is alot cleaner in a so-called
+</em><br>
+<em>&gt; &quot;civilized&quot; languages like C++, but it can be done easily [though
+</em><br>
+<em>&gt; tediously] enough in C as well.
+</em><br>
+<p>&nbsp;&nbsp;I'm definitely rigid and uncivilized, i.e. I stick to C - which
+<br>
+is probably why I have a user base at all -, on the other hand I'm
+<br>
+not formerly opposed to clean things up when necessary, or add new
+<br>
+interfaces when they ease the reuse of my code !
+<br>
+<p><em>&gt; Add in some helpers for conversion to and from core data types like
+</em><br>
+<em>&gt; strings, deals with the standard entity stuff, numbers and you have
+</em><br>
+<em>&gt; something which can deal with about 90% of the &quot;work&quot; one is likely to
+</em><br>
+<em>&gt; do with XML.  [Well, the work *I've* done at least..]
+</em><br>
+<p>&nbsp;&nbsp;I would not call this obvious ... You need at least a structural 
+<br>
+model, and a set of per-node calls. I assume it's like DOM, you can
+<br>
+define interfaces without defining the content model strictly. 
+<br>
+However people want running code, at at some point you need to select
+<br>
+a data representation. I did, with a set of constraints in mind,
+<br>
+including being able to save back with minimal changes, and
+<br>
+ease the implementation of DOM on top of it (seems there is 2
+<br>
+available gdome(2) and the DOM module in PHP4, so at least I didn't
+<br>
+completely missed my target).
+<br>
+<p><em>&gt; The result is effectively an inverse of a SAX parser.
+</em><br>
+&nbsp;
+<br>
+&nbsp;Can you share it ? Does it support the full content model of an XML
+<br>
+information set or just a restricted version ? In other words can it
+<br>
+output the full document space defined by the productions of the 
+<br>
+XML specification, including PIs, internal subset, etc ... ?
+<br>
+<p><em>&gt; &gt; &gt; Failing that, allowing one to use the streams libXML reads from in an
+</em><br>
+<em>&gt; &gt; &gt; output mode would be nice [thus one gets compression 'for free'].
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   Parse error. I cannot understand this sentence...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Translation:  expose a &quot;stream&quot; thingee which has nice, easy to use functions
+</em><br>
+<em>&gt; a la fread, fwrite(), but can do the compression dance if necessary.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am aware this is probably well beyond the purview of an XML parser though,
+</em><br>
+<em>&gt; but I suspect a parser could make excellent use of such a thing.  Example:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;  May I suggest people actaully *look* at what is available before starting
+</em><br>
+<em>&gt; &gt; suggesting modifying/extending the library ? All the output routines are
+</em><br>
+<em>&gt; &gt; available in tree.c.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Inside tree.c is a bunch of &quot;buffer&quot; stuff.  Now I haven't used it myself,
+</em><br>
+<em>&gt; but reading around in the code, it looks like you hand someone a complete
+</em><br>
+<em>&gt; document [in the &quot;in-memory storage format&quot;] and it proceeds to
+</em><br>
+<em>&gt; generate the XML [optionally compressed?] into another in-memory buffer,
+</em><br>
+<em>&gt; and this buffer is finally slopped to a file.
+</em><br>
+<p>&nbsp;&nbsp;Was version 2.0, current code allows a different scheme.
+<br>
+<p><em>&gt; If this understanding is correct, the primary issue is the usual one:
+</em><br>
+<em>&gt; memory consumption.  Namely, one will have the source data in-memory
+</em><br>
+<em>&gt; [unavoidable [*]], an in-memory document tree, and, the in-memory XML
+</em><br>
+<em>&gt; equivalent of this tree.
+</em><br>
+<p>&nbsp;&nbsp;agreed :-)
+<br>
+<p><em>&gt; For piddly small documents like web-pages and the like, this is probably
+</em><br>
+<em>&gt; bearable.  But for multi-megabyte monsters, it would be better if the
+</em><br>
+<em>&gt; memory footprint for a simple &quot;save&quot; operation be nominal to non-existant.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This is probably easiest done when one has a nifty stream gizmo into
+</em><br>
+<em>&gt; which one just dribbles the XML straight out of the application's
+</em><br>
+<em>&gt; objects, and this eventually makes it to the disk (or socket connection
+</em><br>
+<em>&gt; or whereever).  Net memory hit is independent of document size, and might
+</em><br>
+<em>&gt; be a mighty 4k if one is feeling decadent the day the code is written... ;-)
+</em><br>
+<p>&nbsp;&nbsp;I'm decadent, I used up to 8K in the case where there is an encoding
+<br>
+conversion done on the fly when saving.
+<br>
+<p><em>&gt; [*] In the application area I am interested in, there is really a continuous
+</em><br>
+<em>&gt; stream of source data.  So even though the total amount of data is, in
+</em><br>
+<em>&gt; principle at least, unbounded, the actual data being dealt with at any
+</em><br>
+<em>&gt; time is O(100 bytes).
+</em><br>
+<p>&nbsp;&nbsp;Note that XML in itself does not allow streaming. The specification
+<br>
+ask for a single root.
+<br>
+<p><em>&gt; &gt;                       I also strongly suggest that if your interested going
+</em><br>
+<em>&gt; &gt; that deep in the technical details of the library, then your should
+</em><br>
+<em>&gt; &gt; use the CVS tree to see what is really there and not an ancient version.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am looking at, and using, libxml2.0.0.
+</em><br>
+<p>&nbsp;&nbsp;Ok, the CVS version has more flexibility w.r.t. saving function
+<br>
+especially :
+<br>
+&nbsp;&nbsp;int xmlSaveFileTo(xmlOutputBuffer *buf, xmlDocPtr cur, const char *encoding);
+<br>
+and
+<br>
+&nbsp;&nbsp;static void
+<br>
+&nbsp;&nbsp;xmlNodeDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr doc, xmlNodePtr cur,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int level, int format, const char *encoding);
+<br>
+<p>&nbsp;&nbsp;Note this last one is currently static.
+<br>
+Those functions were added to be able to save to a given encoding.
+<br>
+And xmlOutputBufferPtr can be created with:
+<br>
+<p>&nbsp;&nbsp;xmlOutputBufferPtr
+<br>
+&nbsp;&nbsp;xmlOutputBufferCreateIO(xmlOutputWriteCallback   iowrite,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlOutputCloseCallback  ioclose, void *ioctx,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlCharEncodingHandlerPtr encoder);
+<br>
+<p>&nbsp;&nbsp;I.e. using a callback based output mechanism ... So a lot of flexibility
+<br>
+has been added in this area recently hence my suggestion to use the CVS
+<br>
+version. I still need more work before being able to release libxml-2.1,
+<br>
+if you want to make use of this you should not wait for the &quot;release&quot;
+<br>
+(reminder there are daily tar.gz snapshots made from CVS current version
+<br>
+at <a href="ftp://rpmfind.net/pub/libxml/">ftp://rpmfind.net/pub/libxml/</a> ).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0495.html">Andrea LUCIANO: "[xml] Is XML thread safe?"</a>
+<li><strong>Previous message:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0492.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0483.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

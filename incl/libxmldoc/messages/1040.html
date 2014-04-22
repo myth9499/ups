@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlNodeSetContent that doesn't wipe out child el</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?</h1>
+<!-- received="Mon Oct 23 11:56:07 2000" -->
+<!-- isoreceived="20001023155607" -->
+<!-- sent="Mon, 23 Oct 2000 17:56:03 +0200" -->
+<!-- isosent="20001023155603" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?" -->
+<!-- id="20001023175603.M13575@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10010230939360.24462-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 11:56:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1041.html">Daniel Veillard: "Re: [xml] Auto-close in HTML parser."</a>
+<li><strong>Previous message:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>In reply to:</strong> <a href="1036.html">Harry Blundell: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 23, 2000 at 09:46:16AM -0400, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks for your answer, but I think that either I wasn't clear, or I'm
+</em><br>
+<em>&gt; missing something.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;I honnestly think it's the second
+<br>
+<p><em>&gt; I have no problem with the way the mixed content of
+</em><br>
+<em>&gt; an element is stored.  My problem is with my understanding of
+</em><br>
+<em>&gt; xmlNodeSetContent:  before adding new content to an element node, it
+</em><br>
+<em>&gt; removes ALL child nodes - both text nodes (understandable) and element
+</em><br>
+<em>&gt; nodes (no so understandable, at least to me).  I'm looking for a function
+</em><br>
+<em>&gt; that replaces the child text nodes (and I'm not too concerned with where 
+</em><br>
+<em>&gt; the new text nodes go - at the end would be fine), while leaving the
+</em><br>
+<em>&gt; child element nodes intact.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'll write such a function if I have to - I just want to be sure that I'm
+</em><br>
+<em>&gt; not reinventing the wheel.
+</em><br>
+<p>&nbsp;&nbsp;Honnestly it doesn't make sense to me:
+<br>
+<p>&lt;a&gt;aaaa&lt;b&gt;bbbbb&lt;/b&gt;AAAAAA&lt;/a&gt;
+<br>
+<p>This generate 5 nodes, 
+<br>
+&nbsp;&nbsp;&nbsp;the parent node a with 3 children
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ a text node containing &quot;aaaa&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ a b node with one child
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ a text node containing &quot;bbbb&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ a text node containing &quot;AAAAA&quot;
+<br>
+<p>&nbsp;Now tell me what your semantic of xmlNodeSetContent(nodea, &quot;cccccc&quot;)
+<br>
+would be and I'm pretty sure I can suggest another one which makes as
+<br>
+much (less) sense.
+<br>
+<p>&nbsp;If you want toc chnage the content of the text node do it directly
+<br>
+but sonething which would remove the &quot;aaaa&quot; and &quot;AAAAA&quot; nodes leaving
+<br>
+b untouched will not be integrated in libxml because from an XML
+<br>
+content model it doesn't make sense !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1041.html">Daniel Veillard: "Re: [xml] Auto-close in HTML parser."</a>
+<li><strong>Previous message:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>In reply to:</strong> <a href="1036.html">Harry Blundell: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 12:44:00 EDT</em>
+</em>
+</small>
+</body>
+</html>

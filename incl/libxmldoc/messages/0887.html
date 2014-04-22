@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Wayne Davison (wayned@users.sourceforge.net)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Fri Oct  6 15:21:00 2000" -->
+<!-- isoreceived="20001006192100" -->
+<!-- sent="Fri, 6 Oct 2000 12:20:10 -0700 (PDT)" -->
+<!-- isosent="20001006192010" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@users.sourceforge.net" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="Pine.LNX.4.21.0010061131530.2075-200000@phong.blorf.net" -->
+<!-- inreplyto="20001006161025.C29963@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>wayned@users.sourceforge.net</em></a>)<br>
+<strong>Date:</strong> Fri Oct 06 2000 - 15:20:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0886.html">Jordan Henderson: "RE: [xml] libxml for CE"</a>
+<li><strong>In reply to:</strong> <a href="0882.html">Daniel Veillard: "[xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 6 Oct 2000, Daniel Veillard wrote:
+<br>
+<em>&gt; Please check it out if you're using Windows or XPath, i probably
+</em><br>
+<em>&gt; won't be able to make a real release before next Wed, and won't 
+</em><br>
+<em>&gt; answer mail in the meantime. Send patches !
+</em><br>
+<p>Here's what I found wrong and (in most cases) fixed:
+<br>
+<p>&nbsp;+ Several .c files were including &quot;xmlversion.h&quot; rather than
+<br>
+&nbsp;&nbsp;&nbsp;&lt;libxml/xmlversion.h&gt;.
+<br>
+<p>&nbsp;+ There is an undefined call to xmlXPathFreeLocationSet() in xpath.c.
+<br>
+&nbsp;&nbsp;&nbsp;This might be because xpointer.[ch] are not in the tar file, but I
+<br>
+&nbsp;&nbsp;&nbsp;just #if-0-ed the call out of the source for now.
+<br>
+<p>&nbsp;+ The Makefile.in was still trying to create libxml, even with the
+<br>
+&nbsp;&nbsp;&nbsp;include/libxml dir existing.  I changed this so that the Makefile
+<br>
+&nbsp;&nbsp;&nbsp;looks for include/libxml, and creates &quot;include&quot; as a dir and puts
+<br>
+&nbsp;&nbsp;&nbsp;the libxml symlink into the include dir if it is missing.
+<br>
+<p>&nbsp;+ Changed configure.in to create &quot;include&quot; as a directory with the
+<br>
+&nbsp;&nbsp;&nbsp;&quot;libxml&quot; symlink inside it.  It looks like the code that was supposed
+<br>
+&nbsp;&nbsp;&nbsp;to create these items inside the build dir (when it differs from the
+<br>
+&nbsp;&nbsp;&nbsp;src dir) was broken, and I think I fixed it (though I didn't try to
+<br>
+&nbsp;&nbsp;&nbsp;configure things from an separate build dir).
+<br>
+<p>&nbsp;+ Removed include/libxml/config.h.in, as it is not needed.
+<br>
+<p>&nbsp;+ The LIBXML_VERSION defines in win32include.h.in are duplicates of
+<br>
+&nbsp;&nbsp;&nbsp;defines in xmlversion.h, so I removed them.  This makes the file
+<br>
+&nbsp;&nbsp;&nbsp;have no @...@ expansions, so I just renamed the *.in version to be
+<br>
+&nbsp;&nbsp;&nbsp;the .h version and removed it from the configure.in file.
+<br>
+<p>&nbsp;+ The win32include.h file should not be in the include/libxml dir
+<br>
+&nbsp;&nbsp;&nbsp;(since it doesn't get installed).  I moved it into the include dir.
+<br>
+<p>&nbsp;+ Changed all the .h dependencies (or it wouldn't compile).
+<br>
+<p>&nbsp;+ Added the file win32/Makefile.mingw, which is a simplified Makefile
+<br>
+&nbsp;&nbsp;&nbsp;that builds the library, a DLL, and the tools using the mingw gcc
+<br>
+&nbsp;&nbsp;&nbsp;compiler.
+<br>
+<p>&nbsp;+ I tweaked the win32/README.MSDev to remove all mention of copying
+<br>
+&nbsp;&nbsp;&nbsp;.h files and commenting out the LIBXML_VERSION* defines, added a
+<br>
+&nbsp;&nbsp;&nbsp;comment that the diff is out of date now, and mention the build
+<br>
+&nbsp;&nbsp;&nbsp;instructions for using the &quot;mingw&quot; gcc compiler.
+<br>
+<p>&nbsp;+ I changed the include/libxml/libxmlversion.h file that was included
+<br>
+&nbsp;&nbsp;&nbsp;in the tar file so that LIBXML_ICONV_ENABLED is not defined.  I like
+<br>
+&nbsp;&nbsp;&nbsp;the fact that this file is there, as it means that MSWin developers
+<br>
+&nbsp;&nbsp;&nbsp;can have an easier file to tweak (and it works without change after my
+<br>
+&nbsp;&nbsp;&nbsp;fix if you're using the mingw compiler), and it gets replaced by the
+<br>
+&nbsp;&nbsp;&nbsp;normal configuration process for other folks.
+<br>
+<p>A patch is appended.  To summarize what to do after the patch:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;# After running &quot;patch -p0 &lt;wayne.patch&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rm include/libxml/config.h.in
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mv include/libxml/win32config.h.in include/win32config.h
+<br>
+<p>TODO:
+<br>
+<p>&nbsp;+ Remove #if-0 from xpath.c and solve build problem.
+<br>
+<p>&nbsp;+ Figure out why example/Makefile.in doesn't exist (this is a
+<br>
+&nbsp;&nbsp;&nbsp;long-standing problem with libxml, but it just seems to cause
+<br>
+&nbsp;&nbsp;&nbsp;configure to complain).
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0887/01-wayne.patch">Fixes for 2.2.5 prerelease</a>
+</ul>
+<!-- attachment="01-wayne.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0886.html">Jordan Henderson: "RE: [xml] libxml for CE"</a>
+<li><strong>In reply to:</strong> <a href="0882.html">Daniel Veillard: "[xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 06 2000 - 15:44:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

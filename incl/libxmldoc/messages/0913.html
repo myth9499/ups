@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml v2.2.4 and Digital UNIX</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml v2.2.4 and Digital UNIX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml v2.2.4 and Digital UNIX</h1>
+<!-- received="Tue Oct 10 17:36:21 2000" -->
+<!-- isoreceived="20001010213621" -->
+<!-- sent="Tue, 10 Oct 2000 23:36:17 +0200" -->
+<!-- isosent="20001010213617" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml v2.2.4 and Digital UNIX" -->
+<!-- id="20001010233617.P23005@w3.org" -->
+<!-- inreplyto="20001009175205.A23039@postal.il.thewrittenword.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 10 2000 - 17:36:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Previous message:</strong> <a href="0912.html">Adam Clarke: "[xml] valid document confirmation"</a>
+<li><strong>In reply to:</strong> <a href="0909.html">Albert Chin-A-Young: "[xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 09, 2000 at 05:52:06PM -0500, Albert Chin-A-Young wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; What's the purpose of:
+</em><br>
+<em>&gt; (xmlversion.h)
+</em><br>
+<em>&gt; #ifndef HAVE_SOCKLEN_T
+</em><br>
+<em>&gt; #if defined(__osf__) || defined(__Linux__)
+</em><br>
+<em>&gt; #define HAVE_SOCKLEN_T
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This causes the build of libxml 2.2.4 to fail under Digital UNIX 4.0D
+</em><br>
+<em>&gt; and 5.0A. There is no socklen_t defined in /usr/include/*/*.h under
+</em><br>
+<em>&gt; 4.0D and 5.0A has the following in /usr/include/sys/socket.h:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /*
+</em><br>
+<em>&gt;  * This data type is needed for both UNIX98 and POSIX support.
+</em><br>
+<em>&gt;  */
+</em><br>
+<em>&gt; #if (defined (_XOPEN_SOURCE) &amp;&amp; (_XOPEN_SOURCE&gt;=500)) || \
+</em><br>
+<em>&gt;     defined(_POSIX_PII_SOCKET)
+</em><br>
+<em>&gt; typedef unsigned long   socklen_t;      /* 64-bits */
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's the failure:
+</em><br>
+<em>&gt; cc -DHAVE_CONFIG_H -I. -I. -I. -I. -I/opt/TWWfsw/zlib11/include
+</em><br>
+<em>&gt; -I/opt/TWWfsw/readline4/include -I/opt/TWWfsw/readline4/include -O2
+</em><br>
+<em>&gt; -std1 -c nanohttp.c  -DPIC -o .libs/nanohttp.lo
+</em><br>
+<em>&gt; cc: Error: nanohttp.c, line 648: In this declaration, &quot;socklen_t&quot; must
+</em><br>
+<em>&gt; specify a type.
+</em><br>
+<em>&gt;         socklen_t len;
+</em><br>
+<em>&gt; --------^
+</em><br>
+<em>&gt; cc: Error: nanohttp.c, line 652: In this statement, &quot;len&quot; is not
+</em><br>
+<em>&gt; declared.
+</em><br>
+<em>&gt;         len = sizeof(status);
+</em><br>
+<em>&gt; --------^
+</em><br>
+<em>&gt; gmake[2]: *** [nanohttp.lo] Error 1
+</em><br>
+<p>&nbsp;&nbsp;Well I have access to one DU machine and I tested this code there
+<br>
+and it worked. I'm pretty sure I used the native C compiler and not gcc.
+<br>
+<p>&nbsp;&nbsp;Note taht is you don't use socklen_t on DU you may end-up with serious
+<br>
+aligment problems since the POSIX system call expects a pointer to a 
+<br>
+64bits area while you're passing a pointer to a 32bit area with int* ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Previous message:</strong> <a href="0912.html">Adam Clarke: "[xml] valid document confirmation"</a>
+<li><strong>In reply to:</strong> <a href="0909.html">Albert Chin-A-Young: "[xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 10 2000 - 17:44:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

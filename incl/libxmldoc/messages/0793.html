@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Why the strncasecmp() avoidance?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Why the strncasecmp() avoidance?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Why the strncasecmp() avoidance?</h1>
+<!-- received="Fri Sep 22 13:06:00 2000" -->
+<!-- isoreceived="20000922170600" -->
+<!-- sent="Fri, 22 Sep 2000 19:05:53 +0200" -->
+<!-- isosent="20000922170553" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Why the strncasecmp() avoidance?" -->
+<!-- id="20000922190553.P13300@w3.org" -->
+<!-- inreplyto="39CB8D4D.BFB0BCF@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 13:05:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0794.html">David Doolin: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>Previous message:</strong> <a href="0792.html">Bjorn Reese: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0792.html">Bjorn Reese: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0794.html">David Doolin: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Sep 22, 2000 at 04:48:13PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Wayne Davison wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; On Fri, 22 Sep 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; &gt; I see no problem if you provide xmlStrncasecmp(), yes go ahead !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; May I suggest adding xmlStrEqual(), which would be equivalent to
+</em><br>
+<em>&gt; xmlStrcasecmp()==0, and use this instead (and perhaps xmlStrEqualMax()
+</em><br>
+<em>&gt; instead of xmlStrncasecmp()==0).
+</em><br>
+<p>&nbsp;&nbsp;Well there is at least 2 good reasons to stick with the existing names:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- they are &quot;standard&quot; i.e. their semantic is well known, the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;semantic of the libxml UTF8 string operations matches the one
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from strings.h
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xmlStrncasecmp is not (!xmlStrEqual()), the return value
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is useful in the sense it allows for example to sort string
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objects.
+<br>
+<p>&nbsp;&nbsp;So I'm not very found of xmlStrEqual, even if I recognize it may be
+<br>
+slightly simpler for a beginner. Having to learn a new semantic when
+<br>
+using a new package is on the long run a very consuming operation.
+<br>
+Duplicating the functions means a bit more code bloat too :-\
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0794.html">David Doolin: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>Previous message:</strong> <a href="0792.html">Bjorn Reese: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0792.html">Bjorn Reese: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0794.html">David Doolin: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 13:43:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

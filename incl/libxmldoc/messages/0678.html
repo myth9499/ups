@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Valid URI ?</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] Valid URI ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Valid URI ?</h1>
+<!-- received="Thu Aug 24 06:47:10 2000" -->
+<!-- isoreceived="20000824104710" -->
+<!-- sent="Thu, 24 Aug 2000 09:44:56 -0400" -->
+<!-- isosent="20000824134456" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] Valid URI ?" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0773357@EXCHANGE" -->
+<!-- inreplyto="[xml] Valid URI ?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20Valid%20URI%20?"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Thu Aug 24 2000 - 09:44:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>Previous message:</strong> <a href="0677.html">Daniel Veillard: "Re: [xml] Bug #21194"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0675.html">Marc Sanfacon: "[xml] Valid URI ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>Reply:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thank you for the explanation.  I made a mistake, MS URLCracker
+<br>
+gives: ?cp=nsidircat as extra info.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marc.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Valid%20URI%20?">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Valid%20URI%20?">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: August 23, 2000 16:34
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Valid%20URI%20?">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] Valid URI ?
+<br>
+<p><p><p>On Wed, Aug 23, 2000 at 03:18:37PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	I am trying to figure out if this URI is valid:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	<a href="http://info.netscape.com/world/espa%0!ol?cp=nsidircat">http://info.netscape.com/world/espa%0!ol?cp=nsidircat</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	Got that when doing my tests.  libxml tells me it is invalid, but
+</em><br>
+<em>&gt; the URLCracker of MS gives me a valid URI with '%0!ol?cp=nsidircat' as
+</em><br>
+extra
+<br>
+<em>&gt; info.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	If it is a valid URI, I will try to find the problem in libxml.
+</em><br>
+<p>&nbsp;&nbsp;Hum, a foreword ... Warning Warning Warning ... 
+<br>
+&nbsp;&nbsp;URI related work is hard, really.
+<br>
+&nbsp;&nbsp;And also, just looking at it ... I don't know the answer !
+<br>
+<p>The first thing even before trying to analyze the string w.r.t. the 
+<br>
+specification (I'm using RFC 2396 as defined on top of the uri.c file)
+<br>
+is to know in which context it was found !
+<br>
+<p>For example when contained within an XML document, this string would not
+<br>
+and URI but an escaped (from an XML point of view) string moreover
+<br>
+converted to the encoding representation of the document, if contained
+<br>
+in other resource it may be needed to escape it accordingly to the type
+<br>
+of document in use (I told you it is hard ...).
+<br>
+<p>Assuming it's an unescaped URI, then we can process through 2396:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.faqs.org/rfcs/rfc2396.html">http://www.faqs.org/rfcs/rfc2396.html</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. URI Syntactic Components
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;<a href="http://info.netscape.com/world/">http://info.netscape.com/world/</a>
+<br>
+this part is no problem, scheme, server, and path with 1 segment
+<br>
+<p>&nbsp;&nbsp;let's look at the annoying part:
+<br>
+&nbsp;&nbsp;&nbsp;espa%0!ol?cp=nsidircat
+<br>
+&nbsp;&nbsp;considering the context, &quot;espa&quot; are 4 chars of the next segment
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;segment       = *pchar *( &quot;;&quot; param )
+<br>
+<p>&nbsp;&nbsp;pchar         = unreserved | escaped |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;:&quot; | &quot;@&quot; | &quot;&amp;&quot; | &quot;=&quot; | &quot;+&quot; | &quot;$&quot; | &quot;,&quot;
+<br>
+<p>&nbsp;&nbsp;unreserved  = alphanum | mark
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphanum = alpha | digit      (letters or number in the ASCII range)
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mark  = &quot;-&quot; | &quot;_&quot; | &quot;.&quot; | &quot;!&quot; | &quot;~&quot; | &quot;*&quot; | &quot;'&quot; | &quot;(&quot; | &quot;)&quot;
+<br>
+<p>&nbsp;&nbsp;if the next element was a pchar, then it would have to be an
+<br>
+&nbsp;&nbsp;escaped, but
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;escaped     = &quot;%&quot; hex hex
+<br>
+<p>&nbsp;&nbsp;&nbsp;hence one would need two hexa digit in a row, there is only one.
+<br>
+<p>&nbsp;So the next element is not a pchar and the last segment is &quot;espa&quot;
+<br>
+&nbsp;with &quot;%0!ol?cp=nsidircat&quot; remaining.
+<br>
+&nbsp;The spec allows a query after the path:
+<br>
+<p>&nbsp;&nbsp;&nbsp;hier_part     = ( net_path | abs_path ) [ &quot;?&quot; query ]
+<br>
+<p>&nbsp;&nbsp;but this needs a '?' first,
+<br>
+<p>&nbsp;&nbsp;URLCracker of MS tells you &quot;<a href="http://info.netscape.com/world/espa">http://info.netscape.com/world/espa</a>&quot;
+<br>
+is the valid longest URI which can be extracted from the given string
+<br>
+and the rest &quot;%0!ol?cp=nsidircat&quot; is garbage.
+<br>
+<p>&nbsp;the URI module of libxml rightly says:
+<br>
+&nbsp;&nbsp;&nbsp;&quot;<a href="http://info.netscape.com/world/espa%0!ol?cp=nsidircat">http://info.netscape.com/world/espa%0!ol?cp=nsidircat</a>&quot;
+<br>
+&nbsp;is not an URI.
+<br>
+<p>&nbsp;There is no contradiction, but this is misleading. Since
+<br>
+&nbsp;&nbsp;&quot;<a href="http://info.netscape.com/world/espa%0!ol?cp=nsidircat">http://info.netscape.com/world/espa%0!ol?cp=nsidircat</a>&quot;
+<br>
+&nbsp;the last segment was probably espa&lt;ntilde&gt;ol and due to either
+<br>
+buggy software or bad escaping of the string, the actual resource
+<br>
+was
+<br>
+&nbsp;&nbsp;<a href="http://info.netscape.com/world/espa<ntilde">http://info.netscape.com/world/espa<ntilde</a>&gt;ol?cp=nsidircat
+<br>
+<p>&nbsp;&nbsp;and certainly not <a href="http://info.netscape.com/world/espa">http://info.netscape.com/world/espa</a>
+<br>
+<p>&nbsp;&nbsp;So i don't think one need to fix uri.c, but if you got a problem
+<br>
+this si probably due to an escaping problem, like if you take
+<br>
+a string directly out of libxml document memory, this string is
+<br>
+encoded in UTF8 and to get a real URI, you would have to 
+<br>
+escape it properly (in that case convert the &lt;ntilde&gt; un UTF8 to
+<br>
+the appropriate %XX sequence. But it's impossible to tell without
+<br>
+more context where the error really lies.
+<br>
+&nbsp;&nbsp;One thing is sure, a function to convert from an UTF-8 encoded
+<br>
+inline reference to an escaped valid URI is needed bit it's not
+<br>
+simple to do !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Valid%20URI%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Valid%20URI%20?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Valid%20URI%20?">majordomo@xmlsoft.org</a>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Valid%20URI%20?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Valid%20URI%20?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>Previous message:</strong> <a href="0677.html">Daniel Veillard: "Re: [xml] Bug #21194"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0675.html">Marc Sanfacon: "[xml] Valid URI ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>Reply:</strong> <a href="0679.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Aug 24 2000 - 09:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

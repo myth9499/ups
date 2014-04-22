@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] bug in valid.c</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] bug in valid.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] bug in valid.c</h1>
+<!-- received="Thu Feb  8 04:36:00 2001" -->
+<!-- isoreceived="20010208093600" -->
+<!-- sent="Thu, 8 Feb 2001 10:35:52 +0100" -->
+<!-- isosent="20010208093552" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] bug in valid.c" -->
+<!-- id="20010208103552.E27812@imag.fr" -->
+<!-- inreplyto="3A824159.312B71C6@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20bug%20in%20valid.c"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Thu Feb 08 2001 - 04:35:52 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1435.html">Gary Pennington: "Re: [xml] bug in valid.c"</a>
+<li><strong>In reply to:</strong> <a href="1435.html">Gary Pennington: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Feb 08, 2001 at 06:48:57AM +0000, Gary Pennington wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi Daniel,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I was in too much of an hurry last night.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; My patch introduces a memory leak. A better patch would be to always update the
+</em><br>
+<em>&gt; hash table with the latest update (just in case something further up the call
+</em><br>
+<em>&gt; stack expects the hash table to contain our data) and free the existing
+</em><br>
+<em>&gt; reference.
+</em><br>
+<p>&nbsp;&nbsp;Right,
+<br>
+<p><em>&gt; !         * Since there is no discrimination on error returns
+</em><br>
+<em>&gt; !         * from xmlHashAddEntry, I'm presuming &lt;0 means the
+</em><br>
+<em>&gt; !         * key already exists.
+</em><br>
+<em>&gt; !         */
+</em><br>
+<em>&gt; !         xmlHashUpdateEntry(table, value, ret, (xmlHashDeallocator)
+</em><br>
+<em>&gt; xmlFreeRef);
+</em><br>
+<p>&nbsp;&nbsp;Right, what you actually do with this code is keep a single ref (the last
+<br>
+one in document order). It's not good but better than a leak !
+<br>
+<p><em>&gt; I worked out how to use the arity 2 hash functions, but they didn't solve the
+</em><br>
+<em>&gt; problem since I couldn't work out a unique key for a reference using any of the
+</em><br>
+<em>&gt; data in the data structures (I really needed a unique element identifier, but
+</em><br>
+<em>&gt; since there is no such thing that won't work.). Anyway, the more I thought about
+</em><br>
+<em>&gt; it, the more I thought that a list of entries stored at the hash for the ref key
+</em><br>
+<em>&gt; was the right approach.
+</em><br>
+<p>&nbsp;&nbsp;Hum, right !
+<br>
+<p><em>&gt; If people agree with my comments above, then I'd be happy to implement a list
+</em><br>
+<em>&gt; based ref approach which provides a new function :-
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlGetRefs (returns a list of refs for a key)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and which allows multiple refs to be stored under a single key. I'd be
+</em><br>
+<em>&gt; introducing a linked list data structure for holding the refs and would also
+</em><br>
+<em>&gt; provide some functions for walking the list, etc...
+</em><br>
+<p>&nbsp;&nbsp;Yes please ! shouldn't be too hard,
+<br>
+&nbsp;&nbsp;I suggest you use the xmlNodeSetPtr structure (only trouble is that
+<br>
+it's dependant on XPath code right now, but i can fix that), rather than
+<br>
+rebuild a list based new set of APIs.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20bug%20in%20valid.c">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1435.html">Gary Pennington: "Re: [xml] bug in valid.c"</a>
+<li><strong>In reply to:</strong> <a href="1435.html">Gary Pennington: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Feb 08 2001 - 04:44:42 EST</em>
+</em>
+</small>
+</body>
+</html>

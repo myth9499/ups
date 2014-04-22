@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-1.8.5 is released</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml-1.8.5 is released">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-1.8.5 is released</h1>
+<!-- received="Mon Jan 24 08:29:47 2000" -->
+<!-- isoreceived="20000124132947" -->
+<!-- sent="Mon, 24 Jan 2000 08:29:45 -0500" -->
+<!-- isosent="20000124132945" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml-1.8.5 is released" -->
+<!-- id="20000124082944.A12019@w3.org" -->
+<!-- inreplyto="388C3FB7.C074FA95@lri.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Jan 24 2000 - 08:29:45 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0300.html">Michael Wiedmann: "[xml] xmlNode-&gt;content"</a>
+<li><strong>Previous message:</strong> <a href="0298.html">Stephane Conversy: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>In reply to:</strong> <a href="0298.html">Stephane Conversy: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Jan 24, 2000 at 01:04:07PM +0100, Stephane Conversy wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I saw somewhere that you added code to handle external entities.
+</em><br>
+<em>&gt; Could it be used to implement cached DTDs, that is
+</em><br>
+<em>&gt; parse once a dtd, and when loading an xml to be validated,
+</em><br>
+<em>&gt; pass the structure representing the dtd to the validation mechanism ?
+</em><br>
+<em>&gt; If so, could you give me some insights about the way to do that ?
+</em><br>
+<p>&nbsp;Well the function is:
+<br>
+void		xmlSetExternalEntityLoader(xmlExternalEntityLoader f);
+<br>
+<p>&nbsp;but it works at the I/O level only.
+<br>
+Parsing DTD isn't that costly as far as I can tell, through retrieving
+<br>
+them can be a serious slow down. That why i did it taht way.
+<br>
+<p>&nbsp;That doesn't prevent adding a Dtd cache in parsed form. However
+<br>
+some tweaking of libxml core may be needed. Then it's just applying
+<br>
+int             xmlValidateDtd          (xmlValidCtxtPtr ctxt,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr doc,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDtdPtr dtd);
+<br>
+&nbsp;to the given parts.
+<br>
+<p><em>&gt; another request: when doing
+</em><br>
+<em>&gt; 'somestuff-config --version'
+</em><br>
+<em>&gt; it displays a 3 dotted number:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; $ gtk-config --version
+</em><br>
+<em>&gt; 1.2.6
+</em><br>
+<em>&gt; $ gtkmm-config --version
+</em><br>
+<em>&gt; 1.0.2
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; but when doing that with libxml with got:
+</em><br>
+<em>&gt; $ xml-config --version
+</em><br>
+<em>&gt; libxml 1.8.5
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Having only the numbers is useful when comparing against
+</em><br>
+<em>&gt; version number. Would it hurt if you change xml-config and make
+</em><br>
+<em>&gt; it behave like other tools ?
+</em><br>
+<p>&nbsp;That's easy, and makes sense, I will commit the change soon,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0300.html">Michael Wiedmann: "[xml] xmlNode-&gt;content"</a>
+<li><strong>Previous message:</strong> <a href="0298.html">Stephane Conversy: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>In reply to:</strong> <a href="0298.html">Stephane Conversy: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:58 EDT</em>
+</em>
+</small>
+</body>
+</html>

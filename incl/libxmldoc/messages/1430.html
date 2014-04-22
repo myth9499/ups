@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Entity substitution</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Entity substitution">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Entity substitution</h1>
+<!-- received="Wed Feb  7 10:42:24 2001" -->
+<!-- isoreceived="20010207154224" -->
+<!-- sent="Wed, 7 Feb 2001 16:42:14 +0100" -->
+<!-- isosent="20010207154214" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Entity substitution" -->
+<!-- id="20010207164214.G8188@imag.fr" -->
+<!-- inreplyto="01049D4F474ED211A6A20000E8DF6382A239F3@BBGE-EXCH-SVR" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Entity%20substitution"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Wed Feb 07 2001 - 10:42:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<li><strong>In reply to:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Feb 07, 2001 at 04:39:53PM +0100, Philipp Kursawe wrote:
+<br>
+<em>&gt; Hello it's me again :)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; First of all thanks you all for the reply on my &quot;Encoding and Win32&quot; topic.
+</em><br>
+<em>&gt; I have solved the problem now I hope. Last I've to test are chinese texts :)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now I have another question about libxml and its handling of external system
+</em><br>
+<em>&gt; entities.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I want to substitute another file into my main xml file. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This external file contains well formed xml content.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; main.xml
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;languages&gt;
+</em><br>
+<em>&gt; 	&amp;lang;
+</em><br>
+<em>&gt; &lt;/languages&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; lang is an external entity.
+</em><br>
+<em>&gt; &lt;!ENTITY lang SYSTEM &quot;language.xml&quot;&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now when traversing the languages chunk the enitity reference is not
+</em><br>
+<em>&gt; resolved, the languages element is empty and has no children.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;that's strange ...
+<br>
+<p><em>&gt; Something I missunderstand about external entities or a declaration error?
+</em><br>
+<p>&nbsp;&nbsp;Probably, libxml can work in two modes w.r.t. entities:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- normal mode is to parse the external entity, generate an entity
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node and reference this entity node by an entity ref node in the tree
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- replacement mode, in this case the entity content is inlined and
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directly seen as the children of the parent
+<br>
+<p>&nbsp;you will understand better by running:
+<br>
+&nbsp;&nbsp;&nbsp;xmllint --debug main.xml
+<br>
+&nbsp;and
+<br>
+&nbsp;&nbsp;&nbsp;xmllint --noent --debug main.xml
+<br>
+to switch the mode of entity replacement, 
+<br>
+&nbsp;&nbsp;int             xmlSubstituteEntitiesDefault(int val);
+<br>
+<p>This is described at
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/#Entities">http://xmlsoft.org/#Entities</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Entity%20substitution">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Entity%20substitution">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Entity%20substitution">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<li><strong>In reply to:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 07 2001 - 10:44:08 EST</em>
+</em>
+</small>
+</body>
+</html>

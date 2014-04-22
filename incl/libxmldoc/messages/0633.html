@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] HTML push interface</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] HTML push interface">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] HTML push interface</h1>
+<!-- received="Tue Aug  1 18:07:58 2000" -->
+<!-- isoreceived="20000801220758" -->
+<!-- sent="Tue, 1 Aug 2000 18:03:02 -0400" -->
+<!-- isosent="20000801220302" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] HTML push interface" -->
+<!-- id="20000801180302.G20558@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A06B53A8@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20HTML%20push%20interface"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 01 2000 - 18:03:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0632.html">Jordan Henderson: "RE: [xml] HTML push interface"</a>
+<li><strong>In reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Reply:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 01, 2000 at 02:36:30PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	I am new to libxml (I've been using it for less than 1 week).  I
+</em><br>
+<em>&gt; have written a C++ interface on top of it.  It is not yet finished, but it
+</em><br>
+<em>&gt; includes most features I need for now.  BTW, I am working under Windows 2000
+</em><br>
+<em>&gt; using MSVC 6.0 SP3.
+</em><br>
+<p>&nbsp;&nbsp;Could you give the precise version you're using ?
+<br>
+Did you tried with one very recent version or the CVS snapshot ?
+<br>
+<p><em>&gt; 	I have tried to parse a file using the html push interface and have
+</em><br>
+<em>&gt; strange results.
+</em><br>
+<p><em>&gt; This is mainly the code presented in 'testHTML.c' from the package, except
+</em><br>
+<em>&gt; that I use a bigger buffer.  In my tests, one strange thing happened.  When
+</em><br>
+<em>&gt; using a buffer large enough to fit one of my document, the result of the
+</em><br>
+<em>&gt; parsing is not complete.  For now, I have only one document that does this
+</em><br>
+<em>&gt; effect and I have attached it to this email.
+</em><br>
+<p>&nbsp;&nbsp;Well, I just modified my testHTML.c to use a 4096 bytes buffer,
+<br>
+force it to read 4096 bytes at a time and reran make HTMLtests .
+<br>
+This test uses files with varying sizes from 150bytes to 40000 bytes
+<br>
+and this worked perfectly.
+<br>
+<p><em>&gt; For example, the document is 2001 bytes long.  When reading using fread, it
+</em><br>
+<em>&gt; strips the '\r' so this gives a total of 1971 bytes.  When I put 1967 (1971
+</em><br>
+<em>&gt; - 4 bytes for the header) or more, I get the error, a big chunk from my
+</em><br>
+<em>&gt; document is skipped, but if I put 1966 or less, the document is parsed OK.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I even modified 'testHTML.c' to use buffer of 1967 bytes to ensure I was OK,
+</em><br>
+<em>&gt; and I had the same error using: testHTML -debug -repeat -push doc2.htm
+</em><br>
+<p>&nbsp;&nbsp;However your document raises the same problem on my environment
+<br>
+so I will have a look at it and try to pinpoint and fix the problem.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20HTML%20push%20interface">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0632.html">Jordan Henderson: "RE: [xml] HTML push interface"</a>
+<li><strong>In reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Reply:</strong> <a href="0634.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

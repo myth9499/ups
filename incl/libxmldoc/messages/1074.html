@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Big clean up in XPath</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Big clean up in XPath">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Big clean up in XPath</h1>
+<!-- received="Thu Oct 26 08:57:11 2000" -->
+<!-- isoreceived="20001026125711" -->
+<!-- sent="Thu, 26 Oct 2000 14:57:06 +0200" -->
+<!-- isosent="20001026125706" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Big clean up in XPath" -->
+<!-- id="20001026145706.E24266@w3.org" -->
+<!-- inreplyto="20001026013316.A2126@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Oct 26 2000 - 08:57:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1073.html">Daniel Veillard: "Re: [xml] BIG PATCH: libxml and use of stderr"</a>
+<li><strong>In reply to:</strong> <a href="1071.html">TOM: "[xml] Big clean up in XPath"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Oct 26, 2000 at 01:33:16AM +0200, TOM wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; The attached patch fixes many bugs in XPath implementation:
+</em><br>
+<p>&nbsp;&nbsp;First question:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- did you compile it ? Some added to xmlXPathNumberFunction()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlChar* content = xmlNodeGetContent(ctxt-&gt;content-&gt;node);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearly this is wrong, this should be 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlChar* content = xmlNodeGetContent(ctxt-&gt;context-&gt;node);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and there is a couple of other obvious errors proving this
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wasn't even compiled.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please check the patches before sending them. Moreover,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test them for memory leaks by configuring --with-mem-debug
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and running make tests if you can.
+<br>
+<p>&nbsp;&nbsp;If you don't do it you put a lot more work on me, and it really
+<br>
+&nbsp;&nbsp;lower the level of trust I will give to patches. A compiler
+<br>
+&nbsp;&nbsp;can catch the obvious bugs and those are not a problem, but
+<br>
+&nbsp;&nbsp;sometime real bugs happen, and I'm not necessarily the best one
+<br>
+&nbsp;&nbsp;to find it if it comes in a contributed patch.
+<br>
+<p><em>&gt;  - errors in function names (local-name() and namespace-uri(), not
+</em><br>
+<em>&gt; local-part() and namespace(); C function names now are
+</em><br>
+<em>&gt; xmlXPathLocalNameFunction() and xmlXPathNamespaceURIFunction())
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minor, applied but now that those function names get exported
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;via xpathInternals.h future changes to just rename function will
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not be accepted to not break binary compatibility.
+<br>
+<p><em>&gt;  - some functions didn't allow optional arguments (xmlXPathLocalName(),
+</em><br>
+<em>&gt; xmlXPathNameFunction(), xmlXPathStringFunction(),
+</em><br>
+<em>&gt; xmlXPathNumberFunction(), 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  - adds the sum() function
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  - implements some TODO parts (xmlXPathIdFunction() with node-set
+</em><br>
+<em>&gt; argument, xmlXPathNormalizeFunction()
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks 
+<br>
+<em>&gt;  - change xmlXPathFloorFunction(), xmlXPathCeilingFunction() and
+</em><br>
+<em>&gt; xmlXPathRoundFunction() to use floor() and ceil() if we have math.h
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Okay, I hope it won't break on some strange architecture.
+<br>
+<p><em>&gt;  - add the description of the -xptr option in testXPath's help message
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks :-) 
+<br>
+<p><em>&gt;  - some corrections in help comments (xmlXPathStringEvalNumber() and
+</em><br>
+<em>&gt; xmlXPathEvalNumber() : the BUG was already fixed and the Number definition
+</em><br>
+<em>&gt; wasn't the one of the Recommandation)
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;yes the code was revamped (I initially coded it against a working draft).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;thanks for finding this.
+<br>
+<p><em>&gt;  - rename xmlXPathMINF to xmlXPathNINF (I think in xmlXPathPINF PINF
+</em><br>
+<em>&gt; means Positive INFinity, then it should be xmlXPathNINF for Negative
+</em><br>
+<em>&gt; INFinity)
+</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp;yeah, 
+<br>
+<p><em>&gt; There are still big bugs (I don't yet try to fix them) :
+</em><br>
+<em>&gt;  - it is always assumed node-sets are ordered in document order, it
+</em><br>
+<em>&gt; isn't always the case (with the ancestor, ancestor-or-self, preceding and
+</em><br>
+<em>&gt; preceding-sibling [and parent] axes). We probably need an
+</em><br>
+<em>&gt; xmlXPathNodeSetGetFirst() function to get the node in the node-set that appears first in
+</em><br>
+<em>&gt; document order.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;I have some node ordering test code in XPointer already, I will need
+<br>
+to backport it.
+<br>
+<p><em>&gt;  - the same lack of ordering rigour leads
+</em><br>
+<em>&gt; &quot;/EXAMPLE/chapter[last()]/preceding-sibling::chapter[1]&quot; (should select /EXAMPLE/chapter[last() - 1])
+</em><br>
+<em>&gt; and &quot;(/EXAMPLE/chapter[last()]/preceding-sibling::chapter)[1]&quot; (should
+</em><br>
+<em>&gt; select /EXAMPLE/chapter[1]) to be equivalent (always selects
+</em><br>
+<em>&gt; /EXAMPLE/chapter[last() - 1]). We probably need ordering functions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  - doesn't seem there is a namespace support for functions (last() is
+</em><br>
+<em>&gt; equivalent to foo:last() and bar:last()), it'll be necessary for
+</em><br>
+<em>&gt; proprietary XPath extension functions.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;humm, do we really need namespace in that case, IMHO it should just be
+<br>
+&nbsp;string comparisons.
+<br>
+<p><em>&gt;  - number() (xmlXPathNumberFunction() or xmlXPathStringEvalNumber())
+</em><br>
+<em>&gt; should be rewritten to handle &quot;flip sign&quot;: number(&quot;-1&quot;) evaluates to NaN
+</em><br>
+<em>&gt; rather than -1.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&lt;grin/&gt;
+<br>
+<p><em>&gt; I didn't know what to change (it would be easier to modify
+</em><br>
+<em>&gt; xmlXPathStringEvalNumber()) so I did nothing.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;yes that's probably the right place to handle this.
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+<em>&gt;  - it seems impossible to pass node-sets (actually only relative paths
+</em><br>
+<em>&gt; or abbreviated absolute paths, and the root node) to functions:
+</em><br>
+<em>&gt; ptittom:~/libxml/devel$ ./testXPath --expr 'string(//title)'
+</em><br>
+<em>&gt; Error xpath.c:2345: Invalid type
+</em><br>
+<em>&gt; string(//title)
+</em><br>
+<em>&gt;          ^
+</em><br>
+<em>&gt; Segfault
+</em><br>
+<em>&gt; ptittom:~/libxml/devel$ ./testXPath --expr 'string(title)'
+</em><br>
+<em>&gt; Error xpath.c:4292: Invalid expression
+</em><br>
+<em>&gt; number(title)
+</em><br>
+<em>&gt;        ^
+</em><br>
+<em>&gt; Error xpath.c:4070: Invalid expression
+</em><br>
+<em>&gt; number(title)
+</em><br>
+<em>&gt;        ^
+</em><br>
+<em>&gt; Object is empty (NULL)
+</em><br>
+<em>&gt; ptittom:~/libxml/devel$ ./testXPath --expr 'string(/)'
+</em><br>
+<em>&gt; Error xpath.c:4824: Invalid expression
+</em><br>
+<em>&gt; number(/)
+</em><br>
+<em>&gt;         ^
+</em><br>
+<em>&gt; Segfault
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;gdb seems the only way to get this fixed . There is still a couple
+<br>
+of evaluation problems, right.
+<br>
+<p><em>&gt;  - I don't understand why xmlXPathEval() (actually xmlXPathEvalExpr()
+</em><br>
+<em>&gt; called within xmlXPathEval()) must return a node-set.
+</em><br>
+<em>&gt; ptittom:~/libxml/devel$ ./testXPath --expr 'local-name(/EXAMPLE)'
+</em><br>
+<em>&gt; Object is a string : EXAMPLE
+</em><br>
+<em>&gt; ptittom:~/libxml/devel$ ./testXPath 'local-name(/EXAMPLE)'
+</em><br>
+<em>&gt; xmlXPathEval: evaluation failed to return a node set
+</em><br>
+<em>&gt; xmlXPathEval: 1 object left on the stack
+</em><br>
+<em>&gt; Object is empty (NULL)
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;yes that must be fixed. 
+<br>
+<p><em>&gt; I hope forgetting nothing...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Note: I haven't yet applied the &quot;big patch&quot; you mentionned, hope this
+</em><br>
+<em>&gt; won't break mine...
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Seems it didn't. You should double check later once I have commited
+<br>
+your patches into CVS.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1073.html">Daniel Veillard: "Re: [xml] BIG PATCH: libxml and use of stderr"</a>
+<li><strong>In reply to:</strong> <a href="1071.html">TOM: "[xml] Big clean up in XPath"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 26 2000 - 09:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

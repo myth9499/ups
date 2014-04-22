@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Numeric Entities</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Numeric Entities">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Numeric Entities</h1>
+<!-- received="Mon Sep 25 09:06:05 2000" -->
+<!-- isoreceived="20000925130605" -->
+<!-- sent="Mon, 25 Sep 2000 15:06:01 +0200" -->
+<!-- isosent="20000925130601" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Numeric Entities" -->
+<!-- id="20000925150601.C9442@w3.org" -->
+<!-- inreplyto="39CF455B.B44E75D@skyrix.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Numeric%20Entities"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Sep 25 2000 - 09:06:01 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0815.html">richard@brainstorm.co.uk: "[xml] Re: Numeric Entities"</a>
+<li><strong>Previous message:</strong> <a href="0813.html">Daniel Veillard: "Re: [xml] Control char causes infinite loop"</a>
+<li><strong>In reply to:</strong> <a href="0811.html">Helge Hess: "[xml] Numeric Entities"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0815.html">richard@brainstorm.co.uk: "[xml] Re: Numeric Entities"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Sep 25, 2000 at 02:30:19PM +0200, Helge Hess wrote:
+<br>
+[Please sub scribe to post to the list]
+<br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; is it correct behaviour that 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;string&gt;&amp;#7;&lt;/string&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doesn't work (CharRef: invalid xmlChar value 1) ? I would expect that I
+</em><br>
+<em>&gt; can encode/escape any unichar that way ?
+</em><br>
+<p>&nbsp;&nbsp;I don't think so !!!
+<br>
+<p><a href="http://www.w3.org/TR/REC-xml#charsets">http://www.w3.org/TR/REC-xml#charsets</a> explicitely says:
+<br>
+-----------------------------------------
+<br>
+A parsed entity contains text, a sequence of characters, which may
+<br>
+represent markup or character data. A character is an atomic unit of text
+<br>
+as specified by ISO/IEC 10646 [ISO/IEC 10646]. Legal characters are tab,
+<br>
+carriage return, line feed, and the legal graphic characters of Unicode
+<br>
+and ISO/IEC 10646.
+<br>
+-----------------------------------------
+<br>
+<p>And the following production is quite precise about this:
+<br>
+<p>-----------------------------------------
+<br>
+[2] Char ::= #x9 | #xA | #xD | [#x20-#xD7FF] |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[#xE000-#xFFFD] | [#x10000-#x10FFFF]
+<br>
+/* any Unicode character, excluding the surrogate blocks, FFFE, and FFFF. */
+<br>
+-----------------------------------------
+<br>
+<p>&nbsp;And 0x7 is clearly not within that range. It means you cannot
+<br>
+embed binary data within XML documents without escaping (uuencode
+<br>
+is one of the methods which should work). Using &amp;#7; is not an escaping
+<br>
+at the XML level it is an escaping at the encoding level IMHO.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Numeric%20Entities">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Numeric%20Entities">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Numeric%20Entities">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0815.html">richard@brainstorm.co.uk: "[xml] Re: Numeric Entities"</a>
+<li><strong>Previous message:</strong> <a href="0813.html">Daniel Veillard: "Re: [xml] Control char causes infinite loop"</a>
+<li><strong>In reply to:</strong> <a href="0811.html">Helge Hess: "[xml] Numeric Entities"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0815.html">richard@brainstorm.co.uk: "[xml] Re: Numeric Entities"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 25 2000 - 09:43:59 EDT</em>
+</em>
+</small>
+</body>
+</html>

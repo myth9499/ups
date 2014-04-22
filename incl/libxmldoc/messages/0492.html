@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Saving without tree</title>
+<meta name="Author" content="mdf@angoss.com (mdf@angoss.com)">
+<meta name="Subject" content="Re: [xml] Saving without tree">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Saving without tree</h1>
+<!-- received="Mon May 29 19:47:00 2000" -->
+<!-- isoreceived="20000529234700" -->
+<!-- sent="Mon, 29 May 2000 23:43:29 +0000" -->
+<!-- isosent="20000529234329" -->
+<!-- name="mdf@angoss.com" -->
+<!-- email="mdf@angoss.com" -->
+<!-- subject="Re: [xml] Saving without tree" -->
+<!-- id="200005292343.TAA17287@hydrogen" -->
+<!-- inreplyto="[xml] Saving without tree" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20Saving%20without%20tree"><em>mdf@angoss.com</em></a><br>
+<strong>Date:</strong> Mon May 29 2000 - 19:43:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Reply:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Reply:</strong> <a href="0494.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;   Of course libxml is both a generator and a parser ... But to be able
+</em><br>
+<em>&gt; to generate it *needs* to understand the in-memory storage format. 
+</em><br>
+<em>&gt; If you decide to not use the libxml tree format, for whatever reason,
+</em><br>
+<em>&gt; I don't see how libxml could &quot;magically&quot; understand your encoding of
+</em><br>
+<em>&gt; the data. Try to think 2 minutes about this there is no obvious
+</em><br>
+<em>&gt; solution for this !
+</em><br>
+<p>I've actually thought about this so much that I actually *have a working
+<br>
+generator* that needs no &quot;in-memory storage format&quot;, beyond whatever
+<br>
+tree/list structure that is implicit in the data itself.
+<br>
+<p>Rather than defining rigid, stifling, data structures, you just play
+<br>
+around with some function and object pointers instead.  {ie, rigid,
+<br>
+stifling, interfaces.}  Naturally, this is alot cleaner in a so-called
+<br>
+&quot;civilized&quot; languages like C++, but it can be done easily [though
+<br>
+tediously] enough in C as well.
+<br>
+<p>Add in some helpers for conversion to and from core data types like
+<br>
+strings, deals with the standard entity stuff, numbers and you have
+<br>
+something which can deal with about 90% of the &quot;work&quot; one is likely to
+<br>
+do with XML.  [Well, the work *I've* done at least..]
+<br>
+<p>The result is effectively an inverse of a SAX parser.
+<br>
+<p><em>&gt; &gt; Failing that, allowing one to use the streams libXML reads from in an
+</em><br>
+<em>&gt; &gt; output mode would be nice [thus one gets compression 'for free'].
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Parse error. I cannot understand this sentence...
+</em><br>
+<p>Translation:  expose a &quot;stream&quot; thingee which has nice, easy to use functions
+<br>
+a la fread, fwrite(), but can do the compression dance if necessary.
+<br>
+<p>I am aware this is probably well beyond the purview of an XML parser though,
+<br>
+but I suspect a parser could make excellent use of such a thing.  Example:
+<br>
+<p><em>&gt;  May I suggest people actaully *look* at what is available before starting
+</em><br>
+<em>&gt; suggesting modifying/extending the library ? All the output routines are
+</em><br>
+<em>&gt; available in tree.c.
+</em><br>
+<p>Inside tree.c is a bunch of &quot;buffer&quot; stuff.  Now I haven't used it myself,
+<br>
+but reading around in the code, it looks like you hand someone a complete
+<br>
+document [in the &quot;in-memory storage format&quot;] and it proceeds to
+<br>
+generate the XML [optionally compressed?] into another in-memory buffer,
+<br>
+and this buffer is finally slopped to a file.
+<br>
+<p>If this understanding is correct, the primary issue is the usual one:
+<br>
+memory consumption.  Namely, one will have the source data in-memory
+<br>
+[unavoidable [*]], an in-memory document tree, and, the in-memory XML
+<br>
+equivalent of this tree.
+<br>
+<p>For piddly small documents like web-pages and the like, this is probably
+<br>
+bearable.  But for multi-megabyte monsters, it would be better if the
+<br>
+memory footprint for a simple &quot;save&quot; operation be nominal to non-existant.
+<br>
+<p>This is probably easiest done when one has a nifty stream gizmo into
+<br>
+which one just dribbles the XML straight out of the application's
+<br>
+objects, and this eventually makes it to the disk (or socket connection
+<br>
+or whereever).  Net memory hit is independent of document size, and might
+<br>
+be a mighty 4k if one is feeling decadent the day the code is written... ;-)
+<br>
+<p>[*] In the application area I am interested in, there is really a continuous
+<br>
+stream of source data.  So even though the total amount of data is, in
+<br>
+principle at least, unbounded, the actual data being dealt with at any
+<br>
+time is O(100 bytes).
+<br>
+<p><em>&gt;                       I also strongly suggest that if your interested going
+</em><br>
+<em>&gt; that deep in the technical details of the library, then your should
+</em><br>
+<em>&gt; use the CVS tree to see what is really there and not an ancient version.
+</em><br>
+<p>I am looking at, and using, libxml2.0.0.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Reply:</strong> <a href="0493.html">Alfred Reibenschuh: "RE: [xml] Saving without tree"</a>
+<li><strong>Reply:</strong> <a href="0494.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

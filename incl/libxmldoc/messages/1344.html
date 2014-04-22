@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Possible XML Entity encoding bug.</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Possible XML Entity encoding bug.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Possible XML Entity encoding bug.</h1>
+<!-- received="Wed Jan 10 13:05:14 2001" -->
+<!-- isoreceived="20010110180514" -->
+<!-- sent="Wed, 10 Jan 2001 19:05:03 +0100" -->
+<!-- isosent="20010110180503" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Possible XML Entity encoding bug." -->
+<!-- id="20010110190503.E20713@imag.fr" -->
+<!-- inreplyto="3A5CA029.EE903402@greencathedral.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Possible%20XML%20Entity%20encoding%20bug."><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Wed Jan 10 2001 - 13:05:03 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1343.html">steve woolfries: "[xml] Possible XML Entity encoding bug."</a>
+<li><strong>In reply to:</strong> <a href="1343.html">steve woolfries: "[xml] Possible XML Entity encoding bug."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jan 10, 2001 at 05:47:21PM +0000, steve woolfries wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Dear Sir/Madam,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am using libxml2-2.2.4 parser on SunOS that seems to convert the
+</em><br>
+<em>&gt; &amp;#163; (or &amp;#xA3;) sequence into £ (ie a capital A-circumflex followed
+</em><br>
+<em>&gt; by a pound-sterling sign) instead of simply a pound-sterling sign.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Being a bit unfamiliar with libxml, it's quite possible that I'm missing
+</em><br>
+<em>&gt; something or doing something stupid. Any help or redirection to
+</em><br>
+<em>&gt; somewhere where I could get help more on my level would be much
+</em><br>
+<em>&gt; appreciated.
+</em><br>
+<p>&nbsp;&nbsp;Quite possible :-)
+<br>
+Libxml keep its internal representation as sequences of UTF8 characters
+<br>
+Here is how it is represented:
+<br>
+<p>orchis:~/XML -&gt; ./xmllint --dedug tst.xml 
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;tst&gt;&amp;#xA3;&lt;/tst&gt;
+<br>
+orchis:~/XML -&gt; ./xmllint --debug tst.xml 
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+URL=tst.xml
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;ELEMENT tst
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=#C2#A3
+<br>
+<p>&nbsp;&nbsp;The UTF8 representation of the character 163 is a sequence of 2
+<br>
+bytes 0xC2 and 0xA3
+<br>
+<p>&nbsp;&nbsp;Please check the doc on internationalization support
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+<br>
+for further information on this topic,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20Possible%20XML%20Entity%20encoding%20bug.">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Possible%20XML%20Entity%20encoding%20bug.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Possible%20XML%20Entity%20encoding%20bug.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1343.html">steve woolfries: "[xml] Possible XML Entity encoding bug."</a>
+<li><strong>In reply to:</strong> <a href="1343.html">steve woolfries: "[xml] Possible XML Entity encoding bug."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 10 2001 - 13:43:50 EST</em>
+</em>
+</small>
+</body>
+</html>

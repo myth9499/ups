@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/Solaris</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/Solaris">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/Solaris</h1>
+<!-- received="Wed Jul  5 10:24:35 2000" -->
+<!-- isoreceived="20000705142435" -->
+<!-- sent="Wed, 5 Jul 2000 16:21:11 +0200" -->
+<!-- isosent="20000705142111" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/Solaris" -->
+<!-- id="20000705162111.B7937@w3.org" -->
+<!-- inreplyto="3960E1B7.17B942E9@clanger9.demon.co.uk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jul 05 2000 - 10:21:11 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Previous message:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Jul 03, 2000 at 07:55:51PM +0100, Paul Barnfather wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Compilation fails with:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /usr/local/bin/gcc -DHAVE_CONFIG_H -I. -I. -I. -I. -O2 -msupersparc -c
+</em><br>
+<em>&gt; nanohttp.c  -fPIC -DPIC -o .libs/nanohttp.lo
+</em><br>
+<em>&gt; nanohttp.c: In function `xmlNanoHTTPConnectAttempt':
+</em><br>
+<em>&gt; nanohttp.c:659: `socklen_t' undeclared (first use in this function)
+</em><br>
+<em>&gt; nanohttp.c:659: (Each undeclared identifier is reported only once
+</em><br>
+<em>&gt; nanohttp.c:659: for each function it appears in.)
+</em><br>
+<em>&gt; nanohttp.c:659: parse error before `len'
+</em><br>
+<em>&gt; nanohttp.c:660: `len' undeclared (first use in this function)
+</em><br>
+<em>&gt; nanohttp.c:661: warning: passing arg 4 of `getsockopt' from incompatible pointer
+</em><br>
+<em>&gt; type
+</em><br>
+<em>&gt; make[2]: *** [nanohttp.lo] Error 1
+</em><br>
+<em>&gt; make[2]: Leaving directory `/src/build/libxml2-2.1.1'
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Using gcc-2.95.2/Solaris 2.6. 
+</em><br>
+<em>&gt; Did autoconf miss a library out?
+</em><br>
+<p>Steffen Zahn &lt;<a href="mailto:Steffen.Zahn@icn.siemens.de?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">Steffen.Zahn@icn.siemens.de</a>&gt; reported the same problem
+<br>
+and indicated a temporary fix:
+<br>
+:I fixed it by using size_t instead of socklen_t. The correct
+<br>
+:solution is probably to detect the existence of socklen_t with configure.  
+<br>
+<p>&nbsp;&nbsp;I recompiled un a sun enterprise with Solaris-2.7 and an old
+<br>
+gcc version egcs-2.91.60 19981201 (egcs-1.1.1 release) without 
+<br>
+problem. 
+<br>
+&nbsp;&nbsp;To try to find the problem I recompiled with cc of the SunPro
+<br>
+packages, and cleaned up a lot of things in the process but this
+<br>
+specific error didn't appear either ...
+<br>
+&nbsp;&nbsp;It's sole use is as the last argument of getsockopt(), it seems
+<br>
+on bsd it uses int, linux uses socklen_t and Microsoft uses int ...
+<br>
+&nbsp;<a href="http://msdn.microsoft.com/library/psdk/winsock/wsapiref_8qcy.htm">http://msdn.microsoft.com/library/psdk/winsock/wsapiref_8qcy.htm</a>
+<br>
+<p>&nbsp;&nbsp;The OpenGroup specify it uses socklen_t and this should be defined
+<br>
+in sys/socket.h:
+<br>
+&nbsp;<a href="http://www.opennc.org/onlinepubs/7908799/xns/getsockopt.html">http://www.opennc.org/onlinepubs/7908799/xns/getsockopt.html</a>
+<br>
+<p>but warn about the fact that it should stay a small number:
+<br>
+&nbsp;<a href="http://www.opennc.org/onlinepubs/7908799/xns/syssocket.h.html">http://www.opennc.org/onlinepubs/7908799/xns/syssocket.h.html</a>
+<br>
+<p>&nbsp;&lt;sys/socket.h&gt; makes available a type, socklen_t, which is an
+<br>
+&nbsp;unsigned opaque integral type of length of at least 32 bits. To
+<br>
+&nbsp;forestall portability problems, it is recommended that applications
+<br>
+&nbsp;should not use values larger than 232 - 1. 
+<br>
+<p>&nbsp;&nbsp;So I have switched back to use a simple int. All this is commited
+<br>
+in libxml W3C CVS base, and will propagate to future versions.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Previous message:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>In reply to:</strong> <a href="0565.html">Paul Barnfather: "[xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0567.html">Steffen Zahn: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

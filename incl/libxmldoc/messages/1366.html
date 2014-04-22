@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Don't read XML from directories.</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Don't read XML from directories.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Don't read XML from directories.</h1>
+<!-- received="Tue Jan 23 04:54:13 2001" -->
+<!-- isoreceived="20010123095413" -->
+<!-- sent="Tue, 23 Jan 2001 10:54:06 +0100" -->
+<!-- isosent="20010123095406" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Don't read XML from directories." -->
+<!-- id="20010123105406.A25086@imag.fr" -->
+<!-- inreplyto="20010123004446.A1067@azul.dhis.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories."><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Tue Jan 23 2001 - 04:54:06 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Reply:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Jan 23, 2001 at 12:44:46AM -0500, Alejandro Forero Cuervo wrote:
+<br>
+[...]
+<br>
+<em>&gt; When we call xmlParseFile and pass a directory as the filename, libxml
+</em><br>
+<em>&gt; opens the directory and attempts to read from it.  We consider this a
+</em><br>
+<em>&gt; bug and would rather have it notice it was told to read XML from a
+</em><br>
+<em>&gt; directory and consider this an error.
+</em><br>
+[...]
+<br>
+<em>&gt; We can make those checks right before calling xmlParseFile, but it
+</em><br>
+<em>&gt; doesn't feel right: we believe it should be done inside
+</em><br>
+<em>&gt; xmlParserInputBufferCreateFilename (or other appropiate functions in
+</em><br>
+<em>&gt; libxml) and xmlFdOpen, xmlFileOpen and xmlGzfileOpen (or other
+</em><br>
+<em>&gt; appropiate functions in libxml2).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Making those checks will be as simple as calling stat(2) on the
+</em><br>
+<em>&gt; filename and using the S_ISDIR macro.
+</em><br>
+[...]
+<br>
+<em>&gt; Where should we send patches with this simple changes so, if
+</em><br>
+<em>&gt; considered worthy, they are incorporated into the next releases?
+</em><br>
+<p>&nbsp;&nbsp;I have no problem adding this check (patch welcome !), my only concern
+<br>
+is about portability of the check (on Windows for example). Is S_ISDIR()
+<br>
+part of the Posix definition (I think so) and does it work on Windows ?
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Reply:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 06:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

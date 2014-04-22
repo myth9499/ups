@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Dave Madole (dmadole@cddb.com)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Fri Feb  2 14:07:49 2001" -->
+<!-- isoreceived="20010202190749" -->
+<!-- sent="Fri, 02 Feb 2001 11:06:18 -0800" -->
+<!-- isosent="20010202190618" -->
+<!-- name="Dave Madole" -->
+<!-- email="dmadole@cddb.com" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="3A7B052A.79155376@cddb.com" -->
+<!-- inreplyto="1230990666-1418086@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Dave Madole (<a href="mailto:dmadole@cddb.com?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>dmadole@cddb.com</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 14:06:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1415.html">Harry Blundell: "[xml] xmlCheckFilename breaking stuff in 2.2.12"</a>
+<li><strong>In reply to:</strong> <a href="1410.html">Peter Jacobi: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I feel that my original comment could use a little clarification.
+<br>
+<p>First, I tried using &quot;iconv&quot;, but it didn't really cut it for a couple of
+<br>
+reasons, not the least of which was the fact that its use was completely opaque
+<br>
+on my Red Hat  linux box - man iconv, man -k iconv, man unicode, etc. produce
+<br>
+nothing appropriate.  I searched around for the data files, etc. to no avail.
+<br>
+There are man pages on my solaris box, but they aren't really appropriate, as
+<br>
+the character encodings actually SEEM to have different names (cross platform
+<br>
+transparency is critical to my app).
+<br>
+<p>Our friends at Red Hat could use a little prodding as far as the doc goes.
+<br>
+Doing a search for &quot;iconv&quot; on the RedHat sites turns up nothing useful.
+<br>
+<p>May I suggest adding a link to the online Linux iconv documentation to the
+<br>
+xmlsoft.org web site?
+<br>
+<p>Secondly, the data from which I am building my document is coming from various
+<br>
+sources, some in utf-8, some in &quot;wrong endian&quot; utf-16 (Oracle), some in &quot;wierd&quot;
+<br>
+and basically unpredictable multi-byte Asian character encodings.  In my case
+<br>
+it actually makes sense to convert to a &quot;neutral&quot; utf-16 intermediate
+<br>
+encoding.  Also I am dealing with a situation where I need to be told on the
+<br>
+fly what destination encoding to use from a very large range of Asian character
+<br>
+encodings - ICU makes this much easier because it accepts just about anything
+<br>
+the user might enter as the name of the encoding.  It also provides support for
+<br>
+collating and sorting, etc.
+<br>
+<p>Finally, I had meant to add that I certainly appreciate the work that went into
+<br>
+putting iconv support into libxml, and understand that it IS the standard and
+<br>
+that it should be used when possible and didn't mean to imply that it was a
+<br>
+wrong choice in any way.  No doubt in most cases it is more than adequate.
+<br>
+ICU probably is more than most people would need and is a bit fat, but it works
+<br>
+very well and is copiously documented.
+<br>
+<p>Dave
+<br>
+<p><p><p><p><p><p>Peter Jacobi wrote:
+<br>
+<p><em>&gt; Hi Igor, All,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I agree, that is easier to factor a n-to-m conversion into  n-1 and 1-m, but
+</em><br>
+<em>&gt; it isn't required or useful to store the complete string in the intermediate
+</em><br>
+<em>&gt; encoding. Only one internal w_char needs to be used.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Regards,
+</em><br>
+<em>&gt; Peter
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1415.html">Harry Blundell: "[xml] xmlCheckFilename breaking stuff in 2.2.12"</a>
+<li><strong>In reply to:</strong> <a href="1410.html">Peter Jacobi: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 14:43:44 EST</em>
+</em>
+</small>
+</body>
+</html>

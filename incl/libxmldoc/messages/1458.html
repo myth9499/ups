@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XPath queries with libxml2</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] XPath queries with libxml2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XPath queries with libxml2</h1>
+<!-- received="Fri Feb 16 07:04:42 2001" -->
+<!-- isoreceived="20010216120442" -->
+<!-- sent="Fri, 16 Feb 2001 11:01:27 +0000" -->
+<!-- isosent="20010216110127" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] XPath queries with libxml2" -->
+<!-- id="3A8D0887.24A710A1@uk.sun.com" -->
+<!-- inreplyto="1229803850-3424794@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20XPath%20queries%20with%20libxml2"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Fri Feb 16 2001 - 06:01:27 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1457.html">Peter Jacobi: "[xml] XPath queries with libxml2"</a>
+<li><strong>In reply to:</strong> <a href="1457.html">Peter Jacobi: "[xml] XPath queries with libxml2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Peter,
+<br>
+<p>Find attached a very simple program that does use some XPath functions.
+<br>
+<p>You should be able to compile it and by changing the values in the
+<br>
+xmlXPathEvalExpression functions do some XPath against your documents.
+<br>
+<p>Gary
+<br>
+<p>Peter Jacobi wrote:
+<br>
+<p><em>&gt; Dear Daniel, All,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; It would be rather helpful for me to see some example using XPath
+</em><br>
+<em>&gt; queries with libxml2 (not in the context of XSLT). So far I only found the
+</em><br>
+<em>&gt; commented xpath.h header in the documentation on xmlsoft.org.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Can anybody provide a simple example program?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Regards,
+</em><br>
+<em>&gt; Peter Jacobi
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20queries%20with%20libxml2">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20queries%20with%20libxml2">majordomo@rpmfind.net</a>
+</em><br>
+<p><p>
+#include &lt;stdio.h&gt;
+<br>
+#include &quot;libxml/parser.h&quot;
+<br>
+#include &quot;libxml/tree.h&quot;
+<br>
+#include &quot;libxml/xmlmemory.h&quot;
+<br>
+#include &quot;libxml/xpath.h&quot;
+<br>
+<p>extern int xmlDoValidityCheckingDefaultValue;
+<br>
+<p>int
+<br>
+main(int argc, char **argv)
+<br>
+{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr doc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr root;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathContextPtr ctx;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathObjectPtr path;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *prop;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (argc != 2) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;usage:%s &lt;filename&gt;\n&quot;, argv[0]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(-1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlKeepBlanksDefault(1);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc = xmlParseFile(argv[1]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;mem used =%d\n&quot;, xmlMemUsed());
+<br>
+/* 	xmlMemDisplay(stdout); */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root = xmlDocGetRootElement(doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Document root element name is %s\n&quot;, root-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Try to find root element using xpath...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathInit();
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctx = xmlXPathNewContext(doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = xmlXPathEvalExpression((const xmlChar *)&quot;id(\&quot;calvin\&quot;)&quot;, ctx);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Document root element name is %s\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path-&gt;nodesetval-&gt;nodeTab[0]-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = xmlXPathEvalExpression((const xmlChar *)&quot;count(/*/cpu_set_default)&quot;, ctx);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Document contains %.0f cpu_set_default elements\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path-&gt;floatval);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = xmlXPathEvalExpression((const xmlChar *)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;//cpu_set_default&quot;, ctx);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root = path-&gt;nodesetval-&gt;nodeTab[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;cpu_set_default Element name is %s\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Attribute created=%s\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prop = xmlGetProp(root, (const xmlChar *)&quot;created&quot;));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(prop);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetProp(root, (const xmlChar *)&quot;created&quot;, (const xmlChar *)&quot;26&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathFreeObject(path);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathFreeContext(ctx);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Dump the document to stdout
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+/* 	xmlDocDump(stdout, doc); */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFreeDoc(doc);
+<br>
+/* 	xmlMemDisplay(stdout); */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;mem used =%d\n&quot;, xmlMemUsed());
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return (0);
+<br>
+}
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20queries%20with%20libxml2">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20queries%20with%20libxml2">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1457.html">Peter Jacobi: "[xml] XPath queries with libxml2"</a>
+<li><strong>In reply to:</strong> <a href="1457.html">Peter Jacobi: "[xml] XPath queries with libxml2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 16 2001 - 08:44:16 EST</em>
+</em>
+</small>
+</body>
+</html>

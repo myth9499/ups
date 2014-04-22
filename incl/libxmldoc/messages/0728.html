@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] More uri.c bugs</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="Re: [xml] More uri.c bugs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] More uri.c bugs</h1>
+<!-- received="Mon Sep  4 17:59:50 2000" -->
+<!-- isoreceived="20000904215950" -->
+<!-- sent="Mon, 4 Sep 2000 13:57:05 -0700 (PDT)" -->
+<!-- isosent="20000904205705" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="Re: [xml] More uri.c bugs" -->
+<!-- id="Pine.LNX.4.21.0009041355230.7438-200000@phong.blorf.net" -->
+<!-- inreplyto="20000904121750.C15538@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20More%20uri.c%20bugs"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Mon Sep 04 2000 - 16:57:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0729.html">Daniel Veillard: "Re: [xml] Behavior of the parser"</a>
+<li><strong>Previous message:</strong> <a href="0727.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>In reply to:</strong> <a href="0725.html">Daniel Veillard: "Re: [xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, 4 Sep 2000, Daniel Veillard wrote:
+<br>
+<em>&gt;   I'm a bit puzzled because your examples and the test case seems sound
+</em><br>
+<em>&gt; and what one would expect in practice, but doesn't match with what the
+</em><br>
+<em>&gt; wording in 2) seems to indicate.  Something similar appears in 5) [...]
+</em><br>
+<p>I was attempting to share some of the inheritance code, since steps 3 and
+<br>
+4 copy bits of the base URI into the result.  However, since I managed to
+<br>
+get a couple details wrong, I think that going with the original idea of
+<br>
+more closely following the flow of the RFC is the better thing to do.
+<br>
+<p>I saw two problems with my previous attempt -- it was inheriting the
+<br>
+fragment from the base when it shouldn't have, and was failing to inherit
+<br>
+the query from the base in one instance.  In addition, I did some testing
+<br>
+with a few modern browsers (including NN 4.74, IE 5.5, Mozilla, and lynx)
+<br>
+and it revealed two areas of contention between the RFC and various
+<br>
+implementations:
+<br>
+<p>&nbsp;&nbsp;1)  A completely empty URI is treated like &quot;.&quot; rather than as a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference to the base URI (except in lynx).  I just added a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;comment about this. Do we want to have xmlBuildURI() do this too?
+<br>
+<p>&nbsp;&nbsp;2)  The step 2 processing specifies that the query string must be
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;undefined, and this is how Netscape 4.x and lynx parses this.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, both IE 5.5 and Mozilla allow &quot;?query&quot; to refer to the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current document.  Since this makes more sense to me than what
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the RFC says, I added a comment about this and coded it that way.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any counter arguments to this?
+<br>
+<p>Appended is a patch for uri.c.  I slightly modified my test case to use
+<br>
+the following data (only slightly tweaked):
+<br>
+<p>-----------------
+<br>
+&nbsp;
+<br>
+.
+<br>
+bar
+<br>
+bar#baz
+<br>
+bar?baz
+<br>
+bar?baz#baz2
+<br>
+#baz
+<br>
+?baz
+<br>
+?baz#baz2
+<br>
+../up.a.notch.html#wow
+<br>
+../up.a.notch.html?wow
+<br>
+../up.a.notch.html?wow#wow2
+<br>
+/root.cgi#OK
+<br>
+/root.cgi?OK
+<br>
+/root.cgi?OK#OK2
+<br>
+<a href="http://elsewhere.com/#deep">http://elsewhere.com/#deep</a>
+<br>
+<a href="http://elsewhere.com/?deep">http://elsewhere.com/?deep</a>
+<br>
+<a href="http://elsewhere.com/?deep#deep2">http://elsewhere.com/?deep#deep2</a>
+<br>
+-----------------
+<br>
+<p>... the following command line (note the addition of &quot;?orig&quot;):
+<br>
+<p>./testURI -base '<a href="http://foo.com/path/to/index.html?orig#help">http://foo.com/path/to/index.html?orig#help</a>' &lt;/tmp/uri.data
+<br>
+<p>... and now get the following results:
+<br>
+<p><a href="http://foo.com/path/to/index.html?orig">http://foo.com/path/to/index.html?orig</a>
+<br>
+<a href="http://foo.com/path/to/">http://foo.com/path/to/</a>
+<br>
+<a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+<br>
+<a href="http://foo.com/path/to/bar#baz">http://foo.com/path/to/bar#baz</a>
+<br>
+<a href="http://foo.com/path/to/bar?baz">http://foo.com/path/to/bar?baz</a>
+<br>
+<a href="http://foo.com/path/to/bar?baz#baz2">http://foo.com/path/to/bar?baz#baz2</a>
+<br>
+<a href="http://foo.com/path/to/index.html?orig#baz">http://foo.com/path/to/index.html?orig#baz</a>
+<br>
+<a href="http://foo.com/path/to/index.html?baz">http://foo.com/path/to/index.html?baz</a>
+<br>
+<a href="http://foo.com/path/to/index.html?baz#baz2">http://foo.com/path/to/index.html?baz#baz2</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html#wow">http://foo.com/path/up.a.notch.html#wow</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html?wow">http://foo.com/path/up.a.notch.html?wow</a>
+<br>
+<a href="http://foo.com/path/up.a.notch.html?wow#wow2">http://foo.com/path/up.a.notch.html?wow#wow2</a>
+<br>
+<a href="http://foo.com/root.cgi#OK">http://foo.com/root.cgi#OK</a>
+<br>
+<a href="http://foo.com/root.cgi?OK">http://foo.com/root.cgi?OK</a>
+<br>
+<a href="http://foo.com/root.cgi?OK#OK2">http://foo.com/root.cgi?OK#OK2</a>
+<br>
+<a href="http://elsewhere.com/#deep">http://elsewhere.com/#deep</a>
+<br>
+<a href="http://elsewhere.com/?deep">http://elsewhere.com/?deep</a>
+<br>
+<a href="http://elsewhere.com/?deep#deep2">http://elsewhere.com/?deep#deep2</a>
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-0728/01-uri.patch">More uri.c fixes</a>
+</ul>
+<!-- attachment="01-uri.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0729.html">Daniel Veillard: "Re: [xml] Behavior of the parser"</a>
+<li><strong>Previous message:</strong> <a href="0727.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>In reply to:</strong> <a href="0725.html">Daniel Veillard: "Re: [xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 04 2000 - 18:43:35 EDT</em>
+</em>
+</small>
+</body>
+</html>

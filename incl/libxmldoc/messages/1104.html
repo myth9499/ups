@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Namespace question</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Namespace question">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Namespace question</h1>
+<!-- received="Sun Oct 29 12:35:45 2000" -->
+<!-- isoreceived="20001029173545" -->
+<!-- sent="Sun, 29 Oct 2000 18:35:39 +0100" -->
+<!-- isosent="20001029173539" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Namespace question" -->
+<!-- id="20001029183539.A22416@w3.org" -->
+<!-- inreplyto="39FC5142.46D62C55@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Namespace%20question"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 29 2000 - 12:35:39 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1103.html">Bjorn Reese: "[xml] Namespace question"</a>
+<li><strong>In reply to:</strong> <a href="1103.html">Bjorn Reese: "[xml] Namespace question"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 29, 2000 at 04:33:06PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; What is the difference between ns and nsDef in struct _xmlNode in
+</em><br>
+<em>&gt; tree.h?
+</em><br>
+<p>&nbsp;&nbsp;very simple:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- ns is a pointer to the namepsace associated to the node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- nsDef on elements is the lists of namespace definitions
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;made on this element
+<br>
+<p>For example:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;rdf:RDF 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns:rdf=&quot;<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns">http://www.w3.org/1999/02/22-rdf-syntax-ns</a>#&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns=&quot;<a href="http://my.netscape.com/rdf/simple/0.9/">http://my.netscape.com/rdf/simple/0.9/</a>&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;channel&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;....
+<br>
+<p>&nbsp;&nbsp;The top level element RDF will have 2 entries in the nsDef list
+<br>
+and its ns field will point to the rdf one. The channel element
+<br>
+will ahve an empty nsDef and it's ns will point to the other namespace.
+<br>
+<p><em>&gt; The reason I ask is that I have a situation where xmlSearchNsByHref()
+</em><br>
+<em>&gt; enters an infinite loop because nsDef is NULL (ns does contain data).
+</em><br>
+<em>&gt; I strongly suspect that the 16th line in xmlSearchNsByHref(), which
+</em><br>
+<em>&gt; is
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 		while (check != node) {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; should be
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 		if (check != node) {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If I make this modification, the my program seems to work.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Then again, I am searching on a tree during its construction, so I
+</em><br>
+<em>&gt; may be doing something illegal (or at least unexpected).
+</em><br>
+<p>&nbsp;&nbsp;Well actually the bug is somewhere else :-) . The loop should recurse
+<br>
+on the parent, and this is missing. 1 line patch enclosed ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Namespace%20question">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1104/01-ns.diff">ns.diff</a>
+</ul>
+<!-- attachment="01-ns.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Namespace%20question">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Namespace%20question">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1103.html">Bjorn Reese: "[xml] Namespace question"</a>
+<li><strong>In reply to:</strong> <a href="1103.html">Bjorn Reese: "[xml] Namespace question"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 29 2000 - 12:44:01 EST</em>
+</em>
+</small>
+</body>
+</html>

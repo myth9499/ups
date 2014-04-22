@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is ho</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]</h1>
+<!-- received="Wed Sep 22 08:33:31 1999" -->
+<!-- isoreceived="19990922123331" -->
+<!-- sent="Wed, 22 Sep 1999 08:33:08 -0400" -->
+<!-- isosent="19990922123308" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]" -->
+<!-- id="19990922083308.Q20945@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.990922201011.4020G-100000@quoll.daa.com.au" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Sep 22 1999 - 08:33:08 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0135.html">Daniel Veillard: "Re: [xml] libxml version"</a>
+<li><strong>Previous message:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>In reply to:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0136.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0136.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Sep 22, 1999 at 08:19:01PM +0800, James Henstridge wrote:
+<br>
+<em>&gt; I wish I didn't have to rely on the xmlParserCtxt structure.  It is just
+</em><br>
+<em>&gt; that the SAX parser entry points in libxml are not usable for most SAX
+</em><br>
+<em>&gt; parsers other than the DOM tree generator because they give no way of
+</em><br>
+<em>&gt; setting the userData pointer that is passed to each SAX callback.  As it
+</em><br>
+<em>&gt; stands, you would need to use global variables to hold parser state
+</em><br>
+<em>&gt; information, which is not always desirable.
+</em><br>
+<p>&nbsp;&nbsp;I completely agree, you're not to blame, I am, but the parser interface
+<br>
+get more complex, there is a wide range of options:
+<br>
+&nbsp;&nbsp;- to use SAX or the DOM tree generation
+<br>
+&nbsp;&nbsp;- to substitute entities or not
+<br>
+&nbsp;&nbsp;- to validate or not
+<br>
+&nbsp;&nbsp;- to fetch external parser entities or not
+<br>
+&nbsp;&nbsp;- etc ...
+<br>
+&nbsp;This is actually growing as I implement more fully the XML specification
+<br>
+and it's unclear to me that adding one function per case is a good idea as
+<br>
+the number will explode fast. Maybe one function will all parameters are
+<br>
+tunable, but in that case I need a precise list of those parameters and
+<br>
+it was still growing last week (with remote entities/DTD fetching being
+<br>
+added).
+<br>
+&nbsp;I would like that interface to be the final one, and that's the reason
+<br>
+I didn't create &quot;intermediary&quot; ones.
+<br>
+<p><em>&gt; The problem code in libglade is concentrated in the my_xmlSAXParseFile and
+</em><br>
+<em>&gt; my_xmlSAXParseMemory function in glade/glade-sax.c.  These two functions
+</em><br>
+<em>&gt; give sane entry points to the libxml parser for custom SAX parsers.  If
+</em><br>
+<em>&gt; you added routines with similar functionality to libxml, I can remove the
+</em><br>
+<em>&gt; problem code from libglade.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Please consider doing this, as the SAX interface is very useful for
+</em><br>
+<em>&gt; writing fast parsers where the DOM tree is not required.
+</em><br>
+<p>&nbsp;Yes of course, more and more people are now using the SAX API so it probably
+<br>
+makes sense to provide (and maintain a specific SAX simplified API).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0135.html">Daniel Veillard: "Re: [xml] libxml version"</a>
+<li><strong>Previous message:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>In reply to:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0136.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0136.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

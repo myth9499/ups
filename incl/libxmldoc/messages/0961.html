@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Lower speed with greater xmlParseChunk() chunks?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Lower speed with greater xmlParseChunk() chunks?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Lower speed with greater xmlParseChunk() chunks?</h1>
+<!-- received="Sun Oct 15 04:41:00 2000" -->
+<!-- isoreceived="20001015084100" -->
+<!-- sent="Sun, 15 Oct 2000 10:40:56 +0200" -->
+<!-- isosent="20001015084056" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Lower speed with greater xmlParseChunk() chunks?" -->
+<!-- id="20001015104056.B6250@w3.org" -->
+<!-- inreplyto="200010150123.DAA12795@pointsman.pointsman.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 04:40:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0960.html">rolf@pointsman.de: "[xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>In reply to:</strong> <a href="0960.html">rolf@pointsman.de: "[xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Rolf,
+<br>
+<p>On Sun, Oct 15, 2000 at 03:23:05AM +0200, <a href="mailto:rolf@pointsman.de?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">rolf@pointsman.de</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using the libxml SAX Interface (without validation). I'm doing
+</em><br>
+<em>&gt; things very close to the way shown in SAXtest.c. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; More detailed I'm using xmlCreatePushParserCtxt() to create the parser
+</em><br>
+<em>&gt; (and feed in the first 4 byte of the input, as mentioned in the
+</em><br>
+<em>&gt; documentation and shown in SAXtest.c). 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Then I use xmlParseChunk to feed in the rest of my XML data chunk by
+</em><br>
+<em>&gt; chunk. Everything seems to work very well.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Playing around I found one very strange behavior. Parsing speed slows
+</em><br>
+<em>&gt; (dramatically) down, if the chunks of data are big.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Parsing always the same medium sized XML Data (around 11 Mbyte) I got:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Chunk Size   time
+</em><br>
+<em>&gt;   1 MB         360s (!)
+</em><br>
+<em>&gt;   100 kB        28s
+</em><br>
+<em>&gt;   1 kB          12,8s
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;From test to test, I changed nothing, but the buffer size within the
+</em><br>
+<em>&gt; parsing loop. It seems, optimum is around 1kB. chunk of 512 Bytes are
+</em><br>
+<em>&gt; as fast as 1 kByte Chunks, 128 Byte chunks are slightly slower. Memory
+</em><br>
+<em>&gt; consumption seems to be equal independent from chunk size. This all at
+</em><br>
+<em>&gt; linux 2.2.13 with libc 2.1.2-24, egcs-2.91 and libxml 2-2.2.4.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Thanks for the detailed bug report !
+<br>
+<p><em>&gt; Of course, nobody reads a file in 1 MByte chunks. I discovered this
+</em><br>
+<em>&gt; behavior while parsing already in memory XML-Data coming from
+</em><br>
+<em>&gt; elsewhere. In this situation is seems to be the most easiest way, to
+</em><br>
+<em>&gt; feed the hole XML string into the parser with one xmlParseChunk()
+</em><br>
+<em>&gt; call. 
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Hum .... interesting, this sounds like a funny bug especially
+<br>
+when using only the SAX interface ! I fixed a similar serious
+<br>
+slowdown around 2.1.x when using DOM and very large pieces of
+<br>
+content data.
+<br>
+<p><em>&gt; Is somebody able to reproduce this behavior?
+</em><br>
+<p>&nbsp;&nbsp;Well it would help me a lot if you could do the following:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- compile with -pg -g
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- do the same 3 runs and use gprof to extract profiling
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;informations for each run
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- send me (privately unless someone else is interested
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in debugging it).
+<br>
+If needed I will do this too ...
+<br>
+<p><em>&gt; It's easy to use a small chunk size even for in memory XML Data, of
+</em><br>
+<em>&gt; course. But at least a short hint within the documentation would be
+</em><br>
+<em>&gt; helpful, if this all is true (and not a fault of me). Maybe best would
+</em><br>
+<em>&gt; be, if the parsing engine would spilt up the input into the
+</em><br>
+<em>&gt; comfortablest chunks automatically. (xmlSAXUserParseMemory() doesn't
+</em><br>
+<em>&gt; seems to do this.)
+</em><br>
+<p>&nbsp;&nbsp;I think the bug should rather be located and fixed !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0960.html">rolf@pointsman.de: "[xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>In reply to:</strong> <a href="0960.html">rolf@pointsman.de: "[xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 04:45:37 EDT</em>
+</em>
+</small>
+</body>
+</html>

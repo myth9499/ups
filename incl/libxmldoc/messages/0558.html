@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Compilation problem on gjobread</title>
+<meta name="Author" content="Alfred Reibenschuh (alfred.reibenschu@chello.at)">
+<meta name="Subject" content="RE: [xml] Compilation problem on gjobread">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Compilation problem on gjobread</h1>
+<!-- received="Fri Jun 30 15:38:17 2000" -->
+<!-- isoreceived="20000630193817" -->
+<!-- sent="Fri, 30 Jun 2000 21:37:03 +0200" -->
+<!-- isosent="20000630193703" -->
+<!-- name="Alfred Reibenschuh" -->
+<!-- email="alfred.reibenschu@chello.at" -->
+<!-- subject="RE: [xml] Compilation problem on gjobread" -->
+<!-- id="000401bfe2ca$9110c610$0400a8c0@etherite" -->
+<!-- inreplyto="395CC625.5459F8E5@wanadoo.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alfred Reibenschuh (<a href="mailto:alfred.reibenschu@chello.at?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread"><em>alfred.reibenschu@chello.at</em></a>)<br>
+<strong>Date:</strong> Fri Jun 30 2000 - 15:37:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0559.html">Daniel Veillard: "[xml] Release of libxml2-2.1.1"</a>
+<li><strong>Previous message:</strong> <a href="0557.html">Tobias Peters: "Re: [xml] Compilation problem on gjobread"</a>
+<li><strong>In reply to:</strong> <a href="0556.html">Marc Billaud: "[xml] Compilation problem on gjobread"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+hi!
+<br>
+<p>if you have the /usr/local/lib in /etc/ld.so.conf
+<br>
+you need to run &quot;ldconfig&quot; to make the changes known
+<br>
+to the system :)
+<br>
+<p><p>-- Alfred Reibenschuh
+<br>
+<p>+----------------------------------------------------+
+<br>
+|  linux geek, perl monger, roleplayer &amp; sf-fanatic  |
+<br>
++----------------------------------------------------+
+<br>
+|         Sometimes I hear voices in my head         |
+<br>
+|        telling me to do strange things, but        |
+<br>
+|     I always wonder if that's just me thinking     |
+<br>
+|      about things I really want to do anyway.      |
+<br>
+|                                                    |
+<br>
+|            Why do the voices never say,            |
+<br>
+|           &quot;Your dosage needs adjustment&quot;?          |
+<br>
++----------------------------------------------------+
+<br>
+|        look @ <a href="http://penguin.at0.net/~fredo/">http://penguin.at0.net/~fredo/</a>       |
+<br>
++----------------------------------------------------+
+<br>
+<p><p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">xml-request@rufus.w3.org</a>]On
+</em><br>
+<em>&gt; Behalf Of Marc Billaud
+</em><br>
+<em>&gt; Sent: Friday, June 30, 2000 6:09 PM
+</em><br>
+<em>&gt; To: Xml List
+</em><br>
+<em>&gt; Subject: [xml] Compilation problem on gjobread
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks Daniel for the help.
+</em><br>
+<em>&gt; I ve installed libxml-2.1.0 on a distrib Suse62 and all seems to happen
+</em><br>
+<em>&gt; well. During the make install, I got the message:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;Libraries have been installed in:
+</em><br>
+<em>&gt; &gt;   /usr/local/lib
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;If you ever happen to want to link against installed libraries
+</em><br>
+<em>&gt; &gt;specify the full pathname of the library, or use `-LLIBDIR'
+</em><br>
+<em>&gt; &gt;flag during linking and do at least one of the following:
+</em><br>
+<em>&gt; &gt;   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+</em><br>
+<em>&gt; &gt;     during execution
+</em><br>
+<em>&gt; &gt;   - add LIBDIR to the `LD_RUN_PATH' environment variable
+</em><br>
+<em>&gt; &gt;     during linking
+</em><br>
+<em>&gt; &gt;   - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+</em><br>
+<em>&gt; &gt;   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;See any operating system documentation about shared libraries for
+</em><br>
+<em>&gt; &gt;more information, such as the ld(1) and ld.so(8) manual pages.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I didn't take care about it because &quot;/usr/local/lib&quot; was included
+</em><br>
+<em>&gt; correctly in my file &quot;/etc/ld.so.conf&quot;. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So I did the compilation of the examples with Daniel's Makefile and the
+</em><br>
+<em>&gt; compilation seems also to happen well. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;Makefile used:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;CC=gcc
+</em><br>
+<em>&gt; &gt;CFLAGS=`xml-config --cflags`
+</em><br>
+<em>&gt; &gt;LDFLAGS=`xml-config --libs`
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;all: gjobread
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;clean:
+</em><br>
+<em>&gt; &gt;	@(rm -f gjobread gjobread.o)
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;gjobread.o : gjobread.c
+</em><br>
+<em>&gt; &gt;	$(CC) $(CFLAGS) -c gjobread.c
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;gjobread: gjobread.o
+</em><br>
+<em>&gt; &gt;	$(CC) -o gjobread gjobread.o $(LDFLAGS)
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;test: gjobread
+</em><br>
+<em>&gt; &gt;	./gjobread gjobs.xml
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But during the execution I got the following message:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; cyrix150:~/xml/libxml2-2.1.0/example # gjobread gjobs.xml
+</em><br>
+<em>&gt; gjobread: error in loading shared libraries: libxml.so.2: cannot open
+</em><br>
+<em>&gt; shared object file: No such file or directory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have checked if all these libraries were installed and I have found
+</em><br>
+<em>&gt; them in &quot;/usr/local/lib&quot;. I haven't found libxml.so.2 in &quot;usr/lib&quot;.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I ve tried to compile with a manual cde but the compilation fell also 
+</em><br>
+<em>&gt; because the system seems to use the libxml.a localised in &quot;/usr/lib/&quot;
+</em><br>
+<em>&gt; instead of &quot;/usr/local/lib&quot;. I don't know how to force the system use
+</em><br>
+<em>&gt; the &quot;/usr/local/lib&quot;.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	gcc -o gjobread gjobread.c -I/root/xml/libxml2-2.1.0  -lxml
+</em><br>
+<em>&gt; -&gt;
+</em><br>
+<em>&gt; /tmp/ccE5nqHP.o: In function `main':
+</em><br>
+<em>&gt; /tmp/ccE5nqHP.o(.text+0x8cc): undefined reference to `xmlCheckVersion'
+</em><br>
+<em>&gt; /usr/lib/libxml.a(tree.o): In function `xmlSaveFile':
+</em><br>
+<em>&gt; tree.o(.text+0x3d1e): undefined reference to `gzdopen'
+</em><br>
+<em>&gt; tree.o(.text+0x3d2a): undefined reference to `gzopen'
+</em><br>
+<em>&gt; tree.o(.text+0x3d69): undefined reference to `gzwrite'
+</em><br>
+<em>&gt; tree.o(.text+0x3d71): undefined reference to `gzclose'
+</em><br>
+<em>&gt; /usr/lib/libxml.a(xmlIO.o): In function `xmlFreeParserInputBuffer':
+</em><br>
+<em>&gt; xmlIO.o(.text+0xb7): undefined reference to `gzclose'
+</em><br>
+<em>&gt; /usr/lib/libxml.a(xmlIO.o): In function
+</em><br>
+<em>&gt; `xmlParserInputBufferCreateFilename':
+</em><br>
+<em>&gt; xmlIO.o(.text+0x1a7): undefined reference to `gzdopen'
+</em><br>
+<em>&gt; xmlIO.o(.text+0x1b7): undefined reference to `gzopen'
+</em><br>
+<em>&gt; /usr/lib/libxml.a(xmlIO.o): In function `xmlParserInputBufferGrow':
+</em><br>
+<em>&gt; xmlIO.o(.text+0x3dd): undefined reference to `gzread'
+</em><br>
+<em>&gt; collect2: ld returned 1 exit status
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I will try to install &quot;libxml-2.1.0&quot; on a distrib Rdhat62 to check if
+</em><br>
+<em>&gt; the pb is similar.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Pb not easy. Thanks for the help.
+</em><br>
+<em>&gt; Bye
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">majordomo@xmlsoft.org</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Compilation%20problem%20on%20gjobread">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0559.html">Daniel Veillard: "[xml] Release of libxml2-2.1.1"</a>
+<li><strong>Previous message:</strong> <a href="0557.html">Tobias Peters: "Re: [xml] Compilation problem on gjobread"</a>
+<li><strong>In reply to:</strong> <a href="0556.html">Marc Billaud: "[xml] Compilation problem on gjobread"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

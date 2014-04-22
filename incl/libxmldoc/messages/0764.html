@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] 2 issues</title>
+<meta name="Author" content="Mike Cunningham (mike.cunningham@ait.co.uk)">
+<meta name="Subject" content="Re: [xml] 2 issues">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] 2 issues</h1>
+<!-- received="Fri Sep 15 09:46:30 2000" -->
+<!-- isoreceived="20000915134630" -->
+<!-- sent="Fri, 15 Sep 2000 14:38:59 +0100" -->
+<!-- isosent="20000915133859" -->
+<!-- name="Mike Cunningham" -->
+<!-- email="mike.cunningham@ait.co.uk" -->
+<!-- subject="Re: [xml] 2 issues" -->
+<!-- id="00091514431301.00729@MCUNNING5100" -->
+<!-- inreplyto="20000915144324.J31760@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Mike Cunningham (<a href="mailto:mike.cunningham@ait.co.uk?subject=Re:%20[xml]%202%20issues"><em>mike.cunningham@ait.co.uk</em></a>)<br>
+<strong>Date:</strong> Fri Sep 15 2000 - 09:38:59 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0763.html">Daniel Veillard: "Re: [xml] 2 issues"</a>
+<li><strong>In reply to:</strong> <a href="0763.html">Daniel Veillard: "Re: [xml] 2 issues"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 15 Sep 2000, Daniel Veillard wrote:
+<br>
+<em>&gt; On Fri, Sep 15, 2000 at 07:43:50AM +0100, Mike Cunningham wrote:
+</em><br>
+<em>&gt; &gt; Thanks Daniel. Any ideas how I can resolve my 2nd issue?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; : Ideally I'd like to stop xmlDocDump (well, xmlDocContentDumpOutput)
+</em><br>
+<em>&gt; : automatically adding the XML version tag to the start of the output. It
+</em><br>
+<em>&gt; : causes  an error in the 3rd party component I'm sending the output to. I
+</em><br>
+<em>&gt; : can't change   the 3rd party component so I'm kinda stuck.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Hrumpf ... the declaration is mandatory if one doesn't use UTF8 or
+</em><br>
+<em>&gt; UTF16 encodings. Your 3rd party component is not an XML parser, if it
+</em><br>
+<em>&gt; was sold or labelled as such I suggest you do some legal action ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  In practice the simplest is to design your own xmlDocDump and
+</em><br>
+<em>&gt; xmlDocContentDumpOutput functions. Copy them in your code, rename them
+</em><br>
+<em>&gt; and remove the beginning of xmlDocContentDumpOutput() until
+</em><br>
+<em>&gt; &quot;if (cur-&gt;children != NULL) {&quot; ... Problem is that 
+</em><br>
+<em>&gt; xmlNodeDumpOutput() is declared static, but maybe you can still link
+</em><br>
+<em>&gt; with it, if not tell me I will make it public
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  But I'm not inclined to put a hack in libxml to support this broken
+</em><br>
+<em>&gt; 3rd party component :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<p>No, no, I don't expect you to! The author of the component acknowledges that it
+<br>
+is broken but doesn't seem inclined to change it. It was free anyway so I think
+<br>
+legal action is probably a bit harsh!
+<br>
+<p>I'll try what you suggest but, as you mention, I'm going to hit a problem with
+<br>
+xmlNodeDumpOutput (or &lt;something&gt;) being private. I'll write the code and
+<br>
+'prove' it first though.
+<br>
+<p>Thanks again,
+<br>
+<p>Mike Cunningham
+<br>
+AIT Ltd
+<br>
+<p><p>*******************************************************
+<br>
+Attachments in this message have been swept
+<br>
+by NAI's TVD (version 4.0.4095) for the presence
+<br>
+of known computer viruses.
+<br>
+*********************************************************
+<br>
+<p>_____________________________________________________________________
+<br>
+This message has been checked for all known viruses by Star Internet delivered
+<br>
+through the MessageLabs Virus Control Centre. For further information visit
+<br>
+<a href="http://www.star.net.uk/stats.asp">http://www.star.net.uk/stats.asp</a>
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%202%20issues">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%202%20issues">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0763.html">Daniel Veillard: "Re: [xml] 2 issues"</a>
+<li><strong>In reply to:</strong> <a href="0763.html">Daniel Veillard: "Re: [xml] 2 issues"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 15 2000 - 10:43:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

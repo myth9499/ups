@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] minor libxml2-2.2.5 glitches</title>
+<meta name="Author" content="Leo Davidson (leo@ox.compsoc.net)">
+<meta name="Subject" content="RE: [xml] minor libxml2-2.2.5 glitches">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] minor libxml2-2.2.5 glitches</h1>
+<!-- received="Mon Oct 16 05:51:01 2000" -->
+<!-- isoreceived="20001016095101" -->
+<!-- sent="Mon, 16 Oct 2000 10:48:50 +0100" -->
+<!-- isosent="20001016094850" -->
+<!-- name="Leo Davidson" -->
+<!-- email="leo@ox.compsoc.net" -->
+<!-- subject="RE: [xml] minor libxml2-2.2.5 glitches" -->
+<!-- id="000101c03756$bcbf6970$978a01d5@n" -->
+<!-- inreplyto="Pine.LNX.4.21.0010152107020.10800-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Leo Davidson (<a href="mailto:leo@ox.compsoc.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches"><em>leo@ox.compsoc.net</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 05:48:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0981.html">Leo Davidson: "[xml] Comments from a LibXml newbie"</a>
+<li><strong>Previous message:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<li><strong>In reply to:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt; I grabbed the libxml2-2.2.5 tar file from the gnome ftp server, and I
+</em><br>
+<em>&gt; encountered a problem building it using the MinGW build
+</em><br>
+<em>&gt; environment
+</em><br>
+<p>2.2.5 doesn't seem to work out-of-the-box for MSVC++6, either. (But a huge
+<br>
+thank-you to Daniel for aiming to do this! The effort and difficulty is very
+<br>
+much appreciated given that the Windows platform is so different and lacking
+<br>
+in places.)
+<br>
+<p>I should point out that I've only just started looking at LibXml (I wish I
+<br>
+had found it before Xerces-C) and that I have very little experience with
+<br>
+things like the build-configuration scripts which I don't think I can run on
+<br>
+Windows. (I think I understand what they do, though. :)) I apologise in
+<br>
+advance for my ignorance and anything stupid that I say!
+<br>
+<p><p><em>&gt; I had to edit include/win32config.h to add this line:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; #define SOCKLEN_T size_t
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I'm not sure if other Win32 build environments have this
+</em><br>
+<em>&gt; problem or not.
+</em><br>
+<p>I also had errors because of this when I initally tried to build.
+<br>
+<p><p><em>&gt; One other thing I noticed:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; There's an extra copy of config.h and acconfig.h in the include/libxml
+</em><br>
+<em>&gt; dir, so I removed them both just to be sure that they weren't
+</em><br>
+<em>&gt; causing any
+</em><br>
+<em>&gt; problems.  You might want to change the tar-building rules to avoid
+</em><br>
+<em>&gt; putting these files in there.
+</em><br>
+<p>config.h and acconfig.h don't seem to make a difference for me, but as I say
+<br>
+I don't have a good understanding of the configuration stuff.
+<br>
+<p>Additional comments about building on VC6:
+<br>
+<p>As well as SOCKLEN_T being undefined, as mentioned above, I had errors
+<br>
+because iconv.h could not be found. I'll admit my ignorance again and say
+<br>
+that I don't know what iconv is but I saw in previous posts that LibXml has
+<br>
+been compiled with VC6 by disabling most of the optional stuff, so I edited
+<br>
+include/libxml/xmlversion.h and changed all of the &quot;#if 1&quot; lines to &quot;#if 0&quot;,
+<br>
+which is fine for me as I'm just using XML as my configuration file format.
+<br>
+<p>Having done this I only get two problems:
+<br>
+<p>(One)
+<br>
+<p>parserinternals.c(1032) : warning C4018: '&gt;' : signed/unsigned mismatch
+<br>
+<p>I'll just ignore the warning for now. I think it's because &quot;used&quot; is not
+<br>
+explicitly unsigned:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int used;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (in-&gt;buf-&gt;buffer-&gt;use &gt; used + 2 * INPUT_CHUNK)
+<br>
+<p>(Two)
+<br>
+<p>xmlio.c(1509) : warning C4013: 'getcwd' undefined; assuming extern returning
+<br>
+int
+<br>
+(This causes a third knock-on error because of the assumed return type.)
+<br>
+<p>Adding &quot;#include &lt;direct.h&gt;&quot; to the top of xmlio.c fixed this.
+<br>
+<p><p>Another Windows thing:
+<br>
+<p>In xmlmemory.h:
+<br>
+typedef void *(*xmlMallocFunc)(int);
+<br>
+typedef void *(*xmlReallocFunc)(void *, int);
+<br>
+<p>This causes a minor problem on VC6 since Malloc and Realloc take size_t,
+<br>
+defined as unsigned int, rather than int. (Of course, int is signed by
+<br>
+default, else there would not be a problem.) A simple cast when calling
+<br>
+xmlMemSetup gets around this but I thought I would mention it. (BTW, many
+<br>
+thanks for the well thought-out way this is done to avoid problems with the
+<br>
+library using incompatible memory functions!)
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leo
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0981.html">Leo Davidson: "[xml] Comments from a LibXml newbie"</a>
+<li><strong>Previous message:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<li><strong>In reply to:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 09:43:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Minor troubles compiling xinclude.c, again</title>
+<meta name="Author" content="Oliver Eikemeier (eikemeier@gmx.de)">
+<meta name="Subject" content="[xml] Minor troubles compiling xinclude.c, again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Minor troubles compiling xinclude.c, again</h1>
+<!-- received="Mon Feb 19 16:55:50 2001" -->
+<!-- isoreceived="20010219215550" -->
+<!-- sent="Mon, 19 Feb 2001 20:49:37 +0100" -->
+<!-- isosent="20010219194937" -->
+<!-- name="Oliver Eikemeier" -->
+<!-- email="eikemeier@gmx.de" -->
+<!-- subject="[xml] Minor troubles compiling xinclude.c, again" -->
+<!-- id="B6B73760.AE12%eikemeier@gmx.de" -->
+<!-- inreplyto="B6AB9BC1.A6FD%eikemeier@gmx.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Oliver Eikemeier (<a href="mailto:eikemeier@gmx.de?subject=Re:%20[xml]%20Minor%20troubles%20compiling%20xinclude.c,%20again"><em>eikemeier@gmx.de</em></a>)<br>
+<strong>Date:</strong> Mon Feb 19 2001 - 14:49:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1470.html">Charlie Bozeman: "Re: [xml] Link errors in pc-cgwin build."</a>
+<li><strong>In reply to:</strong> <a href="1449.html">Oliver Eikemeier: "[xml] Minor troubles compiling xinclude.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+<p>here is a patch file to make the changes from 'typedef xmlChar *URL' to just
+<br>
+'xmlChar *', to cope with problems with the Apple-modified GCC. Would you
+<br>
+put it into the repository?
+<br>
+<p>Thanks
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Oliver
+<br>
+<p><p>*** /tmp/pbcvsdiff.428/1.3_xinclude.c    2000-11-12 16:56:55 +0100
+<br>
+--- /Users/eik/Development/libxml/xinclude.c    2001-02-19 20:40:25 +0100
+<br>
+***************
+<br>
+*** 53,60 ****
+<br>
+&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;* An XInclude context
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+- typedef xmlChar *URL;
+<br>
+&nbsp;&nbsp;typedef struct _xmlXIncludeCtxt xmlXIncludeCtxt;
+<br>
+&nbsp;&nbsp;typedef xmlXIncludeCtxt *xmlXIncludeCtxtPtr;
+<br>
+&nbsp;&nbsp;struct _xmlXIncludeCtxt {
+<br>
+--- 53,59 ----
+<br>
+***************
+<br>
+*** 65,76 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                 docNr; /* number of parsed documents */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                docMax; /* size of parsed documents tab */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr         *docTab; /* array of parsed documents */
+<br>
+!     URL               *urlTab; /* array of parsed documents URLs */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                 txtNr; /* number of unparsed documents */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                txtMax; /* size of unparsed documents tab */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr        *txtTab; /* array of unparsed text nodes */
+<br>
+!     URL            *txturlTab; /* array of unparsed txtuments URLs */
+<br>
+&nbsp;&nbsp;};
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+--- 64,75 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                 docNr; /* number of parsed documents */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                docMax; /* size of parsed documents tab */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr         *docTab; /* array of parsed documents */
+<br>
+!     xmlChar          **urlTab; /* array of parsed documents URLs */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                 txtNr; /* number of unparsed documents */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int                txtMax; /* size of unparsed documents tab */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr        *txtTab; /* array of unparsed text nodes */
+<br>
+!     xmlChar       **txturlTab; /* array of unparsed txtuments URLs */
+<br>
+&nbsp;&nbsp;};
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+***************
+<br>
+*** 129,136 ****
+<br>
+&nbsp;&nbsp;&nbsp;* Add a new document to the list
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+! xmlXIncludeAddDoc(xmlXIncludeCtxtPtr ctxt, xmlDocPtr doc, const URL url) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;docMax == 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docMax = 4;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docTab = (xmlDocPtr *) xmlMalloc(ctxt-&gt;docMax *
+<br>
+--- 128,135 ----
+<br>
+&nbsp;&nbsp;&nbsp;* Add a new document to the list
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+! xmlXIncludeAddDoc(xmlXIncludeCtxtPtr ctxt, xmlDocPtr doc, const xmlChar
+<br>
+*url) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;docMax == 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docMax = 4;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docTab = (xmlDocPtr *) xmlMalloc(ctxt-&gt;docMax *
+<br>
+***************
+<br>
+*** 139,146 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;malloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;urlTab = (URL *) xmlMalloc(ctxt-&gt;docMax *
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;urlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+--- 138,145 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;malloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;urlTab = (xmlChar **) xmlMalloc(ctxt-&gt;docMax *
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;urlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+***************
+<br>
+*** 156,163 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;realloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;urlTab = (URL *) xmlRealloc(ctxt-&gt;urlTab,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docMax * sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;urlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+--- 155,162 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;realloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;urlTab = (xmlChar **) xmlRealloc(ctxt-&gt;urlTab,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;docMax * sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;urlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+***************
+<br>
+*** 178,185 ****
+<br>
+&nbsp;&nbsp;&nbsp;* Add a new txtument to the list
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+! xmlXIncludeAddTxt(xmlXIncludeCtxtPtr ctxt, xmlNodePtr txt, const URL url)
+<br>
+{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txtMax == 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtMax = 4;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtTab = (xmlNodePtr *) xmlMalloc(ctxt-&gt;txtMax *
+<br>
+--- 177,184 ----
+<br>
+&nbsp;&nbsp;&nbsp;* Add a new txtument to the list
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+! xmlXIncludeAddTxt(xmlXIncludeCtxtPtr ctxt, xmlNodePtr txt, const xmlChar
+<br>
+*url) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txtMax == 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtMax = 4;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtTab = (xmlNodePtr *) xmlMalloc(ctxt-&gt;txtMax *
+<br>
+***************
+<br>
+*** 188,195 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;malloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;txturlTab = (URL *) xmlMalloc(ctxt-&gt;txtMax *
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeof(ctxt-&gt;txturlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txturlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+--- 187,194 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;malloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;txturlTab = (xmlChar **) xmlMalloc(ctxt-&gt;txtMax *
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeof(ctxt-&gt;txturlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txturlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+***************
+<br>
+*** 205,212 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;realloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;txturlTab = (URL *) xmlRealloc(ctxt-&gt;txturlTab,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtMax * sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txturlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+--- 204,211 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;realloc failed !\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!         ctxt-&gt;txturlTab = (xmlChar **) xmlRealloc(ctxt-&gt;txturlTab,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;txtMax * sizeof(ctxt-&gt;urlTab[0]));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;txturlTab == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext,
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Minor%20troubles%20compiling%20xinclude.c,%20again">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Minor%20troubles%20compiling%20xinclude.c,%20again">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1470.html">Charlie Bozeman: "Re: [xml] Link errors in pc-cgwin build."</a>
+<li><strong>In reply to:</strong> <a href="1449.html">Oliver Eikemeier: "[xml] Minor troubles compiling xinclude.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 19 2001 - 18:43:32 EST</em>
+</em>
+</small>
+</body>
+</html>

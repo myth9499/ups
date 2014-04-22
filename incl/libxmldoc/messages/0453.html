@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] libxml-1.8.7 build on AIX 4.2</title>
+<meta name="Author" content="Rosman, Bernard (Bernard.Rosman@fmr.com)">
+<meta name="Subject" content="RE: [xml] libxml-1.8.7 build on AIX 4.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] libxml-1.8.7 build on AIX 4.2</h1>
+<!-- received="Tue Apr 11 11:14:29 2000" -->
+<!-- isoreceived="20000411151429" -->
+<!-- sent="Tue, 11 Apr 2000 11:13:28 -0400" -->
+<!-- isosent="20000411151328" -->
+<!-- name="Rosman, Bernard" -->
+<!-- email="Bernard.Rosman@fmr.com" -->
+<!-- subject="RE: [xml] libxml-1.8.7 build on AIX 4.2" -->
+<!-- id="595400F835AFD31182B20008C791819E1E1C5E@MSGBOS678NTS.fmr.com" -->
+<!-- inreplyto="[xml] libxml-1.8.7 build on AIX 4.2" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Rosman, Bernard (<a href="mailto:Bernard.Rosman@fmr.com?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2"><em>Bernard.Rosman@fmr.com</em></a>)<br>
+<strong>Date:</strong> Tue Apr 11 2000 - 11:13:28 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0454.html">Daniel Veillard: "[xml] [ANNOUNCE] libxml-2.0.0 is out !"</a>
+<li><strong>Previous message:</strong> <a href="0452.html">Daniel Veillard: "Re: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+It was my fault!! My program which traverses the tree was NOT using
+<br>
+xmlDocGetRootElement, but was assuming that the first node was an element.
+<br>
+Once I used xmlDocGetRootElement, it worked!
+<br>
+Tnakks very much,
+<br>
+Bernie Rosman
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From:	Daniel Veillard [SMTP:<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">Daniel.Veillard@w3.org</a>]
+</em><br>
+<em>&gt; Sent:	Tuesday, April 11, 2000 6:17 AM
+</em><br>
+<em>&gt; To:	<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Subject:	Re: [xml] libxml-1.8.7 build on AIX 4.2
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Mon, Apr 10, 2000 at 04:02:44PM -0400, Bernie Rosman wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; FYI:
+</em><br>
+<em>&gt; &gt; By creating an exports file and invoking it in libtool instead of using
+</em><br>
+<em>&gt; &gt; -b:expall in libtool, libxml-1.8.7 built ok and programs using it built
+</em><br>
+<em>&gt; &gt; ok without duplicate symbols. This version handles whitespace data well,
+</em><br>
+<em>&gt; &gt; but still does not handle xml with a comment right after xml processing
+</em><br>
+<em>&gt; &gt; instruction.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Well I still don't understand what's happening, so I rebuilt the
+</em><br>
+<em>&gt; parser from a pristine libxml-1.8.7.tar.gz distribution. I can't 
+</em><br>
+<em>&gt; reproduce the problem:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ~/tmp/libxml-1.8.7 -&gt; cat tst.xml
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!-- comment --&gt;
+</em><br>
+<em>&gt; &lt;root /&gt;
+</em><br>
+<em>&gt; ~/tmp/libxml-1.8.7 -&gt; ./tester tst.xml 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!-- comment --&gt;
+</em><br>
+<em>&gt; &lt;root/&gt;
+</em><br>
+<em>&gt; ~/tmp/libxml-1.8.7 -&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   So I'm really confused. What is the output of a similar test in
+</em><br>
+<em>&gt; your environment ? What is the exact test exhibiting the problem ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">majordomo@xmlsoft.org</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0454.html">Daniel Veillard: "[xml] [ANNOUNCE] libxml-2.0.0 is out !"</a>
+<li><strong>Previous message:</strong> <a href="0452.html">Daniel Veillard: "Re: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

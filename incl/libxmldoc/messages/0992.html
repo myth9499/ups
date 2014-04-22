@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] empty tag !?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] empty tag !?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] empty tag !?</h1>
+<!-- received="Tue Oct 17 16:06:40 2000" -->
+<!-- isoreceived="20001017200640" -->
+<!-- sent="Tue, 17 Oct 2000 22:06:33 +0200" -->
+<!-- isosent="20001017200633" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] empty tag !?" -->
+<!-- id="20001017220633.A5102@w3.org" -->
+<!-- inreplyto="39EC90EB.DEB9CE09@stud1.tuwien.ac.at" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20empty%20tag%20!?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 17 2000 - 16:06:33 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>In reply to:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 17, 2000 at 07:48:27PM +0200, Michael Liehmann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; i want to walk through my parsed tree and
+</em><br>
+<em>&gt; put the tagNames to screen.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; here is the according code
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         goTree( xmlDocGetRootElement(doc), xmlDocGetRootElement(doc));
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;         void goTree(xmlNodePtr cur, xmlNodePtr checkEnd) {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;           printf(&quot;%s\n&quot;, cur-&gt;name);
+</em><br>
+<em>&gt;         
+</em><br>
+<em>&gt;           if ( cur-&gt;children-&gt;next) {
+</em><br>
+<em>&gt;             goTree(cur-&gt;children-&gt;next, checkEnd);
+</em><br>
+<em>&gt;           }
+</em><br>
+<em>&gt;           if ( (cur != checkEnd) &amp;&amp; (cur-&gt;next-&gt;next)) {
+</em><br>
+<em>&gt;             goTree(cur-&gt;next-&gt;next, checkEnd);
+</em><br>
+<em>&gt;           }
+</em><br>
+<em>&gt;        }
+</em><br>
+<p>&nbsp;&nbsp;Hum, there is multiple examples of tree traversal in tree.c at least
+<br>
+it's a very basic algorithm usually taught in 1st semester course and
+<br>
+walking libxml tree ain't different.
+<br>
+&nbsp;&nbsp;You just get confused by the presence of blanks nodes
+<br>
+<p>-------
+<br>
+&lt;p&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;q/&gt;
+<br>
+&lt;/p&gt;
+<br>
+-------
+<br>
+<p>&nbsp;&nbsp;Generates the following tree
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Node p
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node q
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text node
+<br>
+<p>&nbsp;Use xmllint --debug to see it
+<br>
+<p>You seems to not realize that *any* character is significant
+<br>
+including the &quot;white spaces&quot; used for formatting as was repeated
+<br>
+multiple times on the list :-)
+<br>
+<p>&nbsp;Use xmllint --debug to undertand the generated structure,
+<br>
+use then xmllint --noblanks --debug to se what you expected to find
+<br>
+in the first place, then rewrite you algorithm correctly !
+<br>
+<p>&nbsp;You can double check by reading xmlNodeDump() in tree.c for
+<br>
+the solution of the exercise, use the code it's available :-) 
+<br>
+<p>daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20empty%20tag%20!?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20empty%20tag%20!?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20empty%20tag%20!?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<li><strong>In reply to:</strong> <a href="0991.html">Michael Liehmann: "[xml] empty tag !?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 17 2000 - 16:43:54 EDT</em>
+</em>
+</small>
+</body>
+</html>

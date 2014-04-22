@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Bug in uri.c</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] Bug in uri.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Bug in uri.c</h1>
+<!-- received="Tue Aug 22 13:57:18 2000" -->
+<!-- isoreceived="20000822175718" -->
+<!-- sent="Tue, 22 Aug 2000 16:55:17 -0400" -->
+<!-- isosent="20000822205517" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] Bug in uri.c" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A077327A@EXCHANGE" -->
+<!-- inreplyto="[xml] Bug in uri.c" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20Bug%20in%20uri.c"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Tue Aug 22 2000 - 16:55:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<li><strong>Previous message:</strong> <a href="0663.html">Daniel Veillard: "Re: [xml] Bug in uri.c"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0657.html">Marc Sanfacon: "[xml] Bug in uri.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank you...
+<br>
+<p>But, I found another bug in uri.c when giving this kind of URI to
+<br>
+xmlParseURI
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://investor.cnet.com/?tag=st.ne.1002.dir.Investor">http://investor.cnet.com/?tag=st.ne.1002.dir.Investor</a>
+<br>
+<p>The bug is in function: xmlParseURIPathSegments.  It calls
+<br>
+xmlURIUnescapeString which concatenate the content of the string in path,
+<br>
+but path doesn't have enough memory allocated to contain all the string.
+<br>
+<p>I fixed it doing the following:
+<br>
+<p>uri.c, line 1034
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur - *str &gt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlURIUnescapeString(*str, cur - *str, &amp;path[len2]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>Regards, Marc.
+<br>
+<p><p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: August 22, 2000 16:40
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20uri.c">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] Bug in uri.c
+<br>
+<p><p><p><p>&nbsp;&nbsp;Hi Marc,
+<br>
+<p>On Tue, Aug 22, 2000 at 03:29:26PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	I am using libxml2-2.2.2 under Windows, using VC 6.0 SP4.
+</em><br>
+<em>&gt; 	I found 2 problems in uri.c in the function 'xmlBuildURI' when given
+</em><br>
+<em>&gt; these parameters:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	xmlBuildURI(&quot;<a href="http://news.gnome.org/gnome-news/">http://news.gnome.org/gnome-news/</a>&quot;, &quot;/&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	What I think I should get is: <a href="http://news.gnome.org/">http://news.gnome.org/</a>, but instead, I
+</em><br>
+<em>&gt; get garbage, because the string is not properly terminated in the code.  I
+</em><br>
+<em>&gt; fixed it doing the following change in uri.c.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; in int xmlParseURIPathSegments(xmlURIPtr uri, const char **str, int slash)
+</em><br>
+<em>&gt; line 1021
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         path = (char *) xmlMalloc(len + 1);
+</em><br>
+<em>&gt; --&gt;     path[len] = '\0';
+</em><br>
+<p>Oops, sounds right, the memcpy function used there don't add the zero
+<br>
+<p><em>&gt; 	the second problem is when giving an incomplete path:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	xmlBuildURI(&quot;<a href="http://news.gnome.org">http://news.gnome.org</a>&quot;, &quot;whatever.html&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I get: <a href="http://news.gnome.orgwhatever.html">http://news.gnome.orgwhatever.html</a>, but I want:
+</em><br>
+<em>&gt; <a href="http://news.gnome.org/whatever.html">http://news.gnome.org/whatever.html</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I don't know if it is the correct behavior, but what I did, is
+</em><br>
+<em>&gt; ensure there is a '/' between the server and the path component of a URI.
+</em><br>
+<em>&gt; So here are the changes:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; in xmlBuildURI, line 1620
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     /*
+</em><br>
+<em>&gt;      * b) The reference's path component is appended to the buffer
+</em><br>
+<em>&gt;      *    string.
+</em><br>
+<em>&gt;      */
+</em><br>
+<em>&gt;     if (ref-&gt;path != NULL) {
+</em><br>
+<em>&gt;         index = 0;
+</em><br>
+<em>&gt;         /*
+</em><br>
+<em>&gt;          * Ensure the path includes a '/'
+</em><br>
+<em>&gt;          */
+</em><br>
+<em>&gt;         if (res-&gt;path[0] != '/' &amp;&amp; ref-&gt;path[index] != '/') {
+</em><br>
+<em>&gt;             res-&gt;path[out++] = '/';
+</em><br>
+<em>&gt;         }
+</em><br>
+<em>&gt;         while (ref-&gt;path[index] != 0) {
+</em><br>
+<em>&gt;             res-&gt;path[out++] = ref-&gt;path[index++];
+</em><br>
+<em>&gt;         }
+</em><br>
+<em>&gt;     }
+</em><br>
+<p>&nbsp;&nbsp;Humm, trouble is that
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xmlBuildURI(&quot;<a href="http://news.gnome.org">http://news.gnome.org</a>&quot;, &quot;&quot;);
+<br>
+&nbsp;&nbsp;should return
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;<a href="http://news.gnome.org">http://news.gnome.org</a>&quot;
+<br>
+&nbsp;&nbsp;and not
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;<a href="http://news.gnome.org/">http://news.gnome.org/</a>&quot;
+<br>
+<p>(okay it's a bit pedantic ...). Plus the test to be sure the last
+<br>
+fragment ends up with a / should be ref-&gt;path[out] != '/'
+<br>
+<p>So I will rather use 
+<br>
+&nbsp;&nbsp;if (res-&gt;path[0] != '/' &amp;&amp; res-&gt;path[0] != 0 &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ref-&gt;path[out] != '/') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res-&gt;path[out++] = '/';
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>as the test condition for appending the '/'
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">majordomo@xmlsoft.org</a>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Bug%20in%20uri.c">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<li><strong>Previous message:</strong> <a href="0663.html">Daniel Veillard: "Re: [xml] Bug in uri.c"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0657.html">Marc Sanfacon: "[xml] Bug in uri.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 22 2000 - 14:43:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

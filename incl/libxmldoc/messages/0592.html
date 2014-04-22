@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] How to check whether a node contains a certain p</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] How to check whether a node contains a certain property?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] How to check whether a node contains a certain property?</h1>
+<!-- received="Wed Jul 12 10:47:54 2000" -->
+<!-- isoreceived="20000712144754" -->
+<!-- sent="Wed, 12 Jul 2000 16:44:04 +0200" -->
+<!-- isosent="20000712144404" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] How to check whether a node contains a certain property?" -->
+<!-- id="20000712164404.C17471@w3.org" -->
+<!-- inreplyto="8525691A.004E57C1.00@D51MTA03.pok.ibm.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20How%20to%20check%20whether%20a%20node%20contains%20a%20certain%20property?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jul 12 2000 - 10:44:04 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<li><strong>Previous message:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<li><strong>In reply to:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jul 12, 2000 at 10:15:37AM -0400, <a href="mailto:rcx195@us.ibm.com?subject=Re:%20[xml]%20How%20to%20check%20whether%20a%20node%20contains%20a%20certain%20property?">rcx195@us.ibm.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there some function for checking  whether a node contains a property?
+</em><br>
+<em>&gt;  Usually I use xmlGetProp function to get a property of a node.   But
+</em><br>
+<em>&gt; according to the reference mannual,  I have to free the memory taken by the
+</em><br>
+<em>&gt; return value.  For my &quot;checking only&quot; purpose,  I may never use the return
+</em><br>
+<em>&gt; value of xmlGetProp and I do not want the memory to be allocated to store
+</em><br>
+<em>&gt; the property value.
+</em><br>
+<em>&gt; So I am wondering whether there are other functions that I can use.
+</em><br>
+<p>&nbsp;&nbsp;Hum, makes a lot of sense,
+<br>
+I added xmlHasProp() to tree.c in my code base, before it get's
+<br>
+propagated in a new release you can use the enclosed code if needed.
+<br>
+<p>Daniel
+<br>
+<p><p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20How%20to%20check%20whether%20a%20node%20contains%20a%20certain%20property?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-0592/01-xmlhasprop.c">xmlhasprop.c</a>
+</ul>
+<!-- attachment="01-xmlhasprop.c" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20How%20to%20check%20whether%20a%20node%20contains%20a%20certain%20property?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20How%20to%20check%20whether%20a%20node%20contains%20a%20certain%20property?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<li><strong>Previous message:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<li><strong>In reply to:</strong> <a href="0591.html">rcx195@us.ibm.com: "[xml] How to check whether a node contains a certain property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

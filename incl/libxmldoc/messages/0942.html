@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Thu Oct 12 19:49:50 2000" -->
+<!-- isoreceived="20001012234950" -->
+<!-- sent="Fri, 13 Oct 2000 01:49:46 +0200" -->
+<!-- isosent="20001012234946" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="20001013014946.F19704@w3.org" -->
+<!-- inreplyto="39DDE296.3E152E26@skyrix.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Oct 12 2000 - 19:49:46 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0941.html">Helge Hess: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0941.html">Helge Hess: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 06, 2000 at 04:32:54PM +0200, Helge Hess wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt;  is available at <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a>
+</em><br>
+<em>&gt; &gt; Please check it out if you're using Windows or XPath, i probably
+</em><br>
+<em>&gt; &gt; won't be able to make a real release before next Wed, and won't
+</em><br>
+<em>&gt; &gt; answer mail in the meantime. Send patches !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have not looked yet at libxml XPath support, anyway a question ..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In my understanding XPath is some kind of navigation language for XML
+</em><br>
+<em>&gt; trees, I hope this is right ...
+</em><br>
+<p>more generally an XML expression language (stack, variables and
+<br>
+functions).
+<br>
+<p><em>&gt; So, in libxml, is the XPath support tied to the libxml document
+</em><br>
+<em>&gt; structures
+</em><br>
+<p>&nbsp;&nbsp;yes
+<br>
+<p><em>&gt; or does it use callbacks,
+</em><br>
+<p>&nbsp;&nbsp;no
+<br>
+<p><em>&gt; so that one can hook in any
+</em><br>
+<em>&gt; structure ? Eg if I would have navigation like that:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &quot;up().up().left()&quot;  (don't know correct XPath yet ..)
+</em><br>
+<p>&nbsp;&nbsp;Well read the spec, especially the data model and you will understand
+<br>
+why this approach is unfeasible...
+<br>
+<p><em>&gt; Any suggestions, opinions ?
+</em><br>
+<p>&nbsp;&nbsp;If you want to use XPath/XPointer etc ... or more generally
+<br>
+the advanced functionnalities of libxml the best way is to associate
+<br>
+your own data structure to the DOM tree using the _private fields
+<br>
+on the nodes.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prerelease%20of%202.2.5">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0941.html">Helge Hess: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0941.html">Helge Hess: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 12 2000 - 20:43:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

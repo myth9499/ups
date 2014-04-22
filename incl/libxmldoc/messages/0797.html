@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] entity substitution</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] entity substitution">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] entity substitution</h1>
+<!-- received="Fri Sep 22 17:11:41 2000" -->
+<!-- isoreceived="20000922211141" -->
+<!-- sent="Fri, 22 Sep 2000 23:11:38 +0200" -->
+<!-- isosent="20000922211138" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] entity substitution" -->
+<!-- id="20000922231137.A1913@w3.org" -->
+<!-- inreplyto="39CBC775.F6ABCA4E@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20substitution"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 17:11:38 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="0796.html">Joe McAlerney: "[xml] entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="0796.html">Joe McAlerney: "[xml] entity substitution"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>Reply:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;What version are you using. Are you using SAX or DOM ?
+<br>
+<p><em>&gt; I have not changed the value for substituting entities, so it's is still
+</em><br>
+<em>&gt; 0.  I have explicitly called xmlSubstituteEntitiesDefault(0) as a test,
+</em><br>
+<em>&gt; but nothing changed.  Additionally, I have not specified entities of any
+</em><br>
+<em>&gt; kind.  Why is xmlGetDocEntity being called if we are not supposed to be
+</em><br>
+<em>&gt; substituting entities?
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;To support predefined entities which are automatically substituted.
+<br>
+To verify some wellformedness constraints one the entities content too.
+<br>
+<p><em>&gt; I'm sure the problem exists in my understanding of libxml's entity
+</em><br>
+<em>&gt; substitution behavior, rather than the library itself.  If anyone can
+</em><br>
+<em>&gt; enlighten me, it would be most appreciated.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;A gdb backtrace is not very helpful without the associated version
+<br>
+number or more informations about the interface used. Especially using
+<br>
+SAX clearly makes entity processing far more complex :
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/#Entities">http://xmlsoft.org/#Entities</a>
+<br>
+<p>&nbsp;&nbsp;&nbsp;As this paragraph explain too,  xmlSubstituteEntitiesDefault() does
+<br>
+not mean that the parser will not try to access the entity, but that
+<br>
+the entity reference will (not) be replaced by its content in the output
+<br>
+<p>&nbsp;&nbsp;&nbsp;In your case, the problem comes from doc being NULL when calling the
+<br>
+entity resolution routine. This bug was fixed in the last month, so what
+<br>
+version are you using ???
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20substitution">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="0796.html">Joe McAlerney: "[xml] entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="0796.html">Joe McAlerney: "[xml] entity substitution"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>Reply:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 17:43:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

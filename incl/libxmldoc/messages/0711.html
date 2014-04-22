@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlDocDump( FILE *, xmlDocPtr )</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlDocDump( FILE *, xmlDocPtr )">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlDocDump( FILE *, xmlDocPtr )</h1>
+<!-- received="Wed Aug 30 07:39:18 2000" -->
+<!-- isoreceived="20000830113918" -->
+<!-- sent="Wed, 30 Aug 2000 16:37:53 +0200" -->
+<!-- isosent="20000830143753" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlDocDump( FILE *, xmlDocPtr )" -->
+<!-- id="20000830163753.M16558@w3.org" -->
+<!-- inreplyto="00Aug30.105740bst.119044@worm.brammer.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Aug 30 2000 - 10:37:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0712.html">Daniel Veillard: "Re: [xml] List of apps anywhere which uses libxml"</a>
+<li><strong>Previous message:</strong> <a href="0710.html">Stefan Bambach: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>In reply to:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Aug 30, 2000 at 10:53:47AM +0100, Andrew Logan wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Can somebody explain why xmlDocDump() closes the the file pointer when it
+</em><br>
+<em>&gt; has finished writing?
+</em><br>
+<p>&nbsp;&nbsp;Humm, yes, this doesn't make much sense actually since the FILE *
+<br>
+is inherited. 
+<br>
+&nbsp;&nbsp;I wonder if changing this would break existing applications...
+<br>
+<p><em>&gt; I thought this could be a simple way of dumping an in-memory XML document
+</em><br>
+<em>&gt; down a network channel to a server.
+</em><br>
+<p>&nbsp;&nbsp;There is another (easy) way to have total control over the output
+<br>
+used, use the I/O handlers:
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/html/gnome-xml-xmlio.html">http://xmlsoft.org/html/gnome-xml-xmlio.html</a>
+<br>
+<p>&nbsp;&nbsp;Define you own I/O handler allocator
+<br>
+------------------------------------
+<br>
+xmlOutputBufferPtr
+<br>
+xmlOutputBufferCreateOwn(FILE *file, xmlCharEncodingHandlerPtr encoder) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlOutputBufferPtr ret;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (xmlOutputCallbackInitialized == 0)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlRegisterDefaultOutputCallbacks();
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (file == NULL) return(NULL);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;ret = xmlAllocOutputBuffer(encoder);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (ret != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;context = file;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;writecallback = xmlFileWrite;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;closecallback = NULL;  /* No close callback */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+}
+<br>
+------------------------------------
+<br>
+<p>call it to get an OutputBuffer and then use the following function to
+<br>
+save to this buffer.
+<br>
+<p>int xmlSaveFileTo (xmlOutputBuffer *buf, xmlDocPtr cur, const char *encoding);
+<br>
+<p>&nbsp;&nbsp;I agree the I/O handlers aren't well documented, but basically they
+<br>
+allow you to totally control how you load and save documents.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0712.html">Daniel Veillard: "Re: [xml] List of apps anywhere which uses libxml"</a>
+<li><strong>Previous message:</strong> <a href="0710.html">Stefan Bambach: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>In reply to:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 30 2000 - 09:43:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

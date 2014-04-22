@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compilation pbs for the example</title>
+<meta name="Author" content="Marc Billaud (marcbill@wanadoo.fr)">
+<meta name="Subject" content="Re: [xml] Compilation pbs for the example">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compilation pbs for the example</h1>
+<!-- received="Fri Jun 30 04:08:26 2000" -->
+<!-- isoreceived="20000630080826" -->
+<!-- sent="Fri, 30 Jun 2000 10:02:51 +0200" -->
+<!-- isosent="20000630080251" -->
+<!-- name="Marc Billaud" -->
+<!-- email="marcbill@wanadoo.fr" -->
+<!-- subject="Re: [xml] Compilation pbs for the example" -->
+<!-- id="395C542B.D8169832@wanadoo.fr" -->
+<!-- inreplyto="10006281034.ZM7375@saab.cns-nw.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Billaud (<a href="mailto:marcbill@wanadoo.fr?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example"><em>marcbill@wanadoo.fr</em></a>)<br>
+<strong>Date:</strong> Fri Jun 30 2000 - 04:02:51 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>Previous message:</strong> <a href="0553.html">Vincent Trussart: "[xml] libxml/xpath integration with postgresql"</a>
+<li><strong>In reply to:</strong> <a href="0544.html">Bill Randle: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>Reply:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Bill Randle wrote:
+<br>
+<p><em>&gt; On Jun 28,  6:50pm, Marc Billaud wrote:
+</em><br>
+<em>&gt; } Subject: [xml] Compilation pbs for the example
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; } I got this message:
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; } creating example/Makefile
+</em><br>
+<em>&gt; } sed: can't read ./example/Makefile.in: No such file or directory
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; This problem has been there a long time. It's a circular dependency
+</em><br>
+<em>&gt; in the automake rules where the top level config wants to build
+</em><br>
+<em>&gt; Makefiles for all the subdirectories, but the Makefile.in in the
+</em><br>
+<em>&gt; example directory requires the top level Makefile to be built first
+</em><br>
+<em>&gt; (or something like that; it's been awhile since I looked at it).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; That failure won't affect the actually building of the xml library.
+</em><br>
+<em>&gt; You can later go in and create the example Makefile by hand.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<p>Hello
+<br>
+Thanks to Bill about the help. I ve written a new instruction for the
+<br>
+compilation of the example gjobread.c and the compilation seems to work
+<br>
+well now
+<br>
+<p>&nbsp;gcc -g -o gjobread gjobread.c -I/root/xml/libxml2-2.0.0 -lxml
+<br>
+<p>I ve installed temporally the libxml2-2.0.0 in the root directory.
+<br>
+After I ve tried to run the gjobread bin on the gjobs.xml file provided.
+<br>
+Then I got a NULL pointer returned by xmlDocGetRootElement.
+<br>
+Here the result of the execution:
+<br>
+<p>cyrix150:~/xml/libxml2-2.0.0/example # gjobread gjobs.xml
+<br>
+empty document n°1
+<br>
+&nbsp;134587872
+<br>
+&nbsp;0
+<br>
+&nbsp;Segmentation fault (core dumped)
+<br>
+cyrix150:~/xml/libxml2-2.0.0/example #
+<br>
+<p>Part of the source code of gjobread.c , I ve modified to display the
+<br>
+lines below:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;doc = xmlParseFile(filename);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (doc == NULL){
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;renvoi ptr null: %lu&quot;,(unsigned long int)doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout,&quot;renvoi ptr doc: %lu&quot;,(unsigned long int)doc );
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check the document is of the right kind
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = doc-&gt;children;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (cur == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;empty document n°1 \n %lu \n %lu \n &quot;,(unsigned
+<br>
+long int)doc,(unsigned long int)cur);
+<br>
+&nbsp;xmlFreeDoc(doc);
+<br>
+&nbsp;return(NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+Has anybody already get this problem. Thanks for the help
+<br>
+Bye
+<br>
+<p><p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>Previous message:</strong> <a href="0553.html">Vincent Trussart: "[xml] libxml/xpath integration with postgresql"</a>
+<li><strong>In reply to:</strong> <a href="0544.html">Bill Randle: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>Reply:</strong> <a href="0555.html">Daniel Veillard: "Re: [xml] Compilation pbs for the example"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

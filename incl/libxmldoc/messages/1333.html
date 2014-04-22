@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace rears its ugly head again</title>
+<meta name="Author" content="Harry Blundell (harry@halcyoninc.com)">
+<meta name="Subject" content="Re: [xml] Whitespace rears its ugly head again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace rears its ugly head again</h1>
+<!-- received="Mon Jan  8 14:54:24 2001" -->
+<!-- isoreceived="20010108195424" -->
+<!-- sent="Mon, 8 Jan 2001 14:53:42 -0500 (EST)" -->
+<!-- isosent="20010108195342" -->
+<!-- name="Harry Blundell" -->
+<!-- email="harry@halcyoninc.com" -->
+<!-- subject="Re: [xml] Whitespace rears its ugly head again" -->
+<!-- id="Pine.GSO.4.05.10101081443490.21297-100000@columbia" -->
+<!-- inreplyto="20001206021332.A8490@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Harry Blundell (<a href="mailto:harry@halcyoninc.com?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again"><em>harry@halcyoninc.com</em></a>)<br>
+<strong>Date:</strong> Mon Jan 08 2001 - 14:53:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>In reply to:</strong> <a href="1273.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+<p>I have upgraded to 2.2.11, to take advantage of your suggestion.  A few
+<br>
+comments:
+<br>
+<p>- xmlDocDumpFormatMemoryEnc has the format parameter, but doesn't use it
+<br>
+&nbsp;&nbsp;for the format argument in the call to xmlDocContentDumpOutput - it is 
+<br>
+&nbsp;&nbsp;hardcoded to 1 (which is fine with me, but I don't think was the
+<br>
+&nbsp;&nbsp;intention).
+<br>
+<p>- Is setting the global variable xmlIndentTreeOutput to 1 the intended
+<br>
+&nbsp;&nbsp;interface to turn on indentation?  I don't see another one.
+<br>
+<p>- It would be nice if the string to use for indenting (currently &quot;  &quot;)
+<br>
+&nbsp;&nbsp;was also configurable.
+<br>
+<p>But anyway, I'm happy with the way things are working now.  Thanks!
+<br>
+<p>Harry
+<br>
+----------------------------------------------------------------------
+<br>
+Harry Blundell                    Principal / Senior Software Designer
+<br>
+Halcyon Monitoring Solutions Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+<br>
+2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+<br>
+PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">harry@HalcyonInc.com</a>
+<br>
+<p><p>On Wed, 6 Dec 2000, Daniel Veillard wrote:
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; On Mon, Dec 04, 2000 at 03:31:08PM -0500, Matthew Kellett wrote:
+</em><br>
+<em>&gt; &gt; Hi Harry,
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; &gt; Now that change has been accomplished there is no way that I know of 
+</em><br>
+<em>&gt; &gt; getting a formatted dump of the tree, since the function being called is 
+</em><br>
+<em>&gt; &gt; static.  I would find it useful as well, for logging of the xml in 
+</em><br>
+<em>&gt; &gt; human-readable format.  Maybe Daniel could consider adding an 
+</em><br>
+<em>&gt; &gt; xmlDocDumpMemoryFormatted call for the next version.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Harry's problem is certainly due to the fact that he builts the
+</em><br>
+<em>&gt; tree using the libxml interfaces. In this case there is no formatting
+</em><br>
+<em>&gt; spaces added to the tree. This means that libxml which now outputs
+</em><br>
+<em>&gt; the exact tree when saving to memory don't adds the formatting spaces
+</em><br>
+<em>&gt; by default. I saw no other solution than adding new APIs for forcing
+</em><br>
+<em>&gt; this. So I added xmlDocDumpFormatMemoryEnc() and xmlDocDumpFormatMemory()
+</em><br>
+<em>&gt; with an extra parameter. 
+</em><br>
+<em>&gt;   I suggest Harry to upgrade to next version when released and call
+</em><br>
+<em>&gt; the new function with the format parameter equal to 1. This should solve
+</em><br>
+<em>&gt; the problem at a minimal cost.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>In reply to:</strong> <a href="1273.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Jan 08 2001 - 15:44:34 EST</em>
+</em>
+</small>
+</body>
+</html>

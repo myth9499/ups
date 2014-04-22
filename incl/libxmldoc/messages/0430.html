@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XML autoconf magic</title>
+<meta name="Author" content="David Helder (dhelder@umich.edu)">
+<meta name="Subject" content="[xml] XML autoconf magic">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XML autoconf magic</h1>
+<!-- received="Wed Mar 22 14:36:27 2000" -->
+<!-- isoreceived="20000322193627" -->
+<!-- sent="Wed, 22 Mar 2000 14:39:01 -0500 (EST)" -->
+<!-- isosent="20000322193901" -->
+<!-- name="David Helder" -->
+<!-- email="dhelder@umich.edu" -->
+<!-- subject="[xml] XML autoconf magic" -->
+<!-- id="Pine.LNX.4.10.10003221437250.20672-100000@mofo.eecs.umich.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Helder (<a href="mailto:dhelder@umich.edu?subject=Re:%20[xml]%20XML%20autoconf%20magic"><em>dhelder@umich.edu</em></a>)<br>
+<strong>Date:</strong> Wed Mar 22 2000 - 14:39:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Previous message:</strong> <a href="0429.html">Christophe Le Gal: "[xml] xmlRemoveNode, xmlBufferUse"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+FYI, this is what I'm using.  Maybe someone else will find it useful.
+<br>
+<p>David
+<br>
+<p><p># Need libxml
+<br>
+AC_PATH_PROG(XML_CONFIG, xml-config, no)
+<br>
+AC_MSG_CHECKING(for libxml)
+<br>
+if test &quot;$XML_CONFIG&quot; = &quot;no&quot; ; then
+<br>
+&nbsp;&nbsp;AC_MSG_RESULT(no)
+<br>
+&nbsp;&nbsp;echo &quot;*** Could not find libxml.  Check out the libxml homepage at &quot;
+<br>
+&nbsp;&nbsp;echo &quot;*** <a href="http://rufus.w3.org/veillard/XML/xml.html">http://rufus.w3.org/veillard/XML/xml.html</a> or just get &quot;
+<br>
+&nbsp;&nbsp;echo &quot;*** the appropriate package for your system.  If you have Debian,
+<br>
+&quot;
+<br>
+&nbsp;&nbsp;echo &quot;*** get libxml-dev&quot;
+<br>
+&nbsp;&nbsp;AC_MSG_ERROR([libxml needed])
+<br>
+else
+<br>
+&nbsp;&nbsp;AC_MSG_RESULT(yes)
+<br>
+<p>&nbsp;&nbsp;# Check for proper version
+<br>
+&nbsp;&nbsp;AC_MSG_CHECKING(for version 1.8.2 (or better) of libxml)
+<br>
+<p>&nbsp;&nbsp;# Check if old or new style xml-config
+<br>
+&nbsp;&nbsp;libxml_version=`$XML_CONFIG --version`
+<br>
+&nbsp;&nbsp;libxml_version=`echo $libxml_version | sed 's/ //'`
+<br>
+&nbsp;&nbsp;if test `expr $libxml_version : libxml` != 0; then
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xml_config_major_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/libxml \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xml_config_minor_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/libxml \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xml_config_micro_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/libxml \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+<br>
+<p>&nbsp;&nbsp;else
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xml_config_major_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xml_config_minor_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xml_config_micro_version=`$XML_CONFIG --version | \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+<br>
+<p>&nbsp;&nbsp;fi
+<br>
+<p>&nbsp;&nbsp;# Check if version is good
+<br>
+&nbsp;&nbsp;if test \( $xml_config_major_version -ne 1 \) -o \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\( $xml_config_minor_version -ne 8 \) -o \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\( $xml_config_micro_version -lt 2 \) ; then
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC_MSG_RESULT(no)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*** You need libxml 1.8.2 or greater.  Check out the libxml &quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*** homepage at <a href="http://rufus.w3.org/veillard/XML/xml.html">http://rufus.w3.org/veillard/XML/xml.html</a> or
+<br>
+just get &quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*** the appropriate package for your system.  If you have
+<br>
+Debian, &quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*** get the latest libxml-dev&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC_MSG_ERROR([libxml 1.8.2 or greater needed])
+<br>
+<p>&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC_MSG_RESULT(yes)
+<br>
+&nbsp;&nbsp;fi
+<br>
+<p>&nbsp;&nbsp;XML_LIBS=`$XML_CONFIG --libs`
+<br>
+&nbsp;&nbsp;XML_CFLAGS=`$XML_CONFIG --cflags`
+<br>
+&nbsp;&nbsp;LIBS=&quot;$LIBS $XML_LIBS&quot;
+<br>
+&nbsp;&nbsp;CFLAGS=&quot;$CFLAGS $XML_CFLAGS&quot;
+<br>
+fi
+<br>
+<p><p><p><p><p><pre>
+-- 
+      __          _    __ 
+  ___/ /__ __  __(_)__/ /  David Helder - University of Michigan
+ / _  / _ `/ |/ / / _  /   <a href="mailto:dhelder@umich.edu?subject=Re:%20[xml]%20XML%20autoconf%20magic">dhelder@umich.edu</a>
+ |_,_/|_,_/|___/_/|_,_/    <a href="http://www.eecs.umich.edu/~dhelder">http://www.eecs.umich.edu/~dhelder</a>
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XML%20autoconf%20magic">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XML%20autoconf%20magic">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Previous message:</strong> <a href="0429.html">Christophe Le Gal: "[xml] xmlRemoveNode, xmlBufferUse"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:08 EDT</em>
+</em>
+</small>
+</body>
+</html>

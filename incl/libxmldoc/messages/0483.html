@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] SAX, compression, etc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] SAX, compression, etc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] SAX, compression, etc</h1>
+<!-- received="Fri May 26 14:19:06 2000" -->
+<!-- isoreceived="20000526181906" -->
+<!-- sent="Fri, 26 May 2000 20:17:17 +0200" -->
+<!-- isosent="20000526181717" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] SAX, compression, etc" -->
+<!-- id="965233754.0019@hypermail.dummy" -->
+<!-- inreplyto="Pine.GSO.4.05.10005261341070.21516-100000@fangio.magnet.fsu.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri May 26 2000 - 14:17:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0482.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>In reply to:</strong> <a href="0480.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0481.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, May 26, 2000 at 01:58:47PM -0400, Adrian Feiguin wrote:
+<br>
+<em>&gt; &gt; You may be able to use the same set
+</em><br>
+<em>&gt; &gt; of callbacks, yes, but you will have to add some extra logic to be able
+</em><br>
+<em>&gt; &gt; to process both inputs.
+</em><br>
+<em>&gt; &gt;   If you also mean the user data context, then it's completely dependant
+</em><br>
+<em>&gt; &gt; on what is put in there.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I fixed this, and it's working great. James's docs and LibGlade code were
+</em><br>
+<em>&gt; very useful in this sense. I put all the code in one handler
+</em><br>
+<em>&gt; and I use the same to read worksheets, plots, and projects. You also have
+</em><br>
+<em>&gt; the option to save all separate. 
+</em><br>
+<em>&gt;  Now I have more doubts:
+</em><br>
+<em>&gt; 1) Can I find some documentation abour XML string handling --the
+</em><br>
+<em>&gt; functions XMLStr*? Most of them look obvious, but anyways...
+</em><br>
+<p>&nbsp;&nbsp;they are part of the parser core module:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/gnome-xml-parser.html#XMLSTRDUP">http://xmlsoft.org/gnome-xml-parser.html#XMLSTRDUP</a>
+<br>
+<p><em>&gt; 2) How do I do to parse special characters like '&lt;' '&gt;' in a string when
+</em><br>
+<em>&gt; I read a content using characterSAXfunc?. I understand that they are
+</em><br>
+<em>&gt; represented by expressions like 'lt' and 'gt' (just viewing gnumeric
+</em><br>
+<em>&gt; files). Where can I read more to understand how to handle this?
+</em><br>
+<p>&nbsp;&nbsp;You don't need to handle them, the parser will, you will get &lt; and &gt;
+<br>
+characters through the characters() SAX callback
+<br>
+<p><em>&gt; 3) Where can I read about using SAX + compression?
+</em><br>
+<p>&nbsp;&nbsp;Well compression is automatically detected by the file access functions
+<br>
+fron-end (if compiled in) you should not have to worry about it.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0482.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>In reply to:</strong> <a href="0480.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0481.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

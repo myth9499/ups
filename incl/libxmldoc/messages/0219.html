@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2</h1>
+<!-- received="Wed Nov 24 08:35:57 1999" -->
+<!-- isoreceived="19991124133557" -->
+<!-- sent="Wed, 24 Nov 1999 08:35:54 -0500" -->
+<!-- isosent="19991124133554" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2" -->
+<!-- id="19991124083554.A653@w3.org" -->
+<!-- inreplyto="04E36383BE438020*/c=fr/admd=atlas/prmd=edfgdf/o=notes/s=Filippini/g=Gilles/@MHS" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Réf.%20:%20Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 24 1999 - 08:35:54 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0220.html">Andrea LUCIANO: "[xml] Just comments about documentation :-)"</a>
+<li><strong>Previous message:</strong> <a href="0218.html">Gilles FILIPPINI: "Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<li><strong>In reply to:</strong> <a href="0218.html">Gilles FILIPPINI: "Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0222.html">Joerg Wittenberger: "Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 24, 1999 at 02:12:24PM +0100, Gilles FILIPPINI wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Well, I didn't look at the code (so please, forgive me if I'm wrong)
+</em><br>
+<p>&nbsp;&nbsp;Well, please look at the code before commenting on it :-\
+<br>
+<p><em>&gt; but there must be a
+</em><br>
+<em>&gt; way of doing this initialization via a static data structure (since its size is known at the
+</em><br>
+<em>&gt; compilation step)
+</em><br>
+<p>&nbsp;&nbsp;It seems I will have to go through a lenghty justification for
+<br>
+having malloc'ed 240 bytes :-(, oh well here it is:
+<br>
+&nbsp;&nbsp;- XML specification allows the XML producer to use nearly whatever
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;encoding it want's as long as the identification string is 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;indicated in the document declaration section.
+<br>
+&nbsp;&nbsp;- XML spec force the parsers to support at least UTF-8 and UTF-16
+<br>
+&nbsp;&nbsp;- XML spec suggests the parser to basically have as much of those
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;registered.
+<br>
+So as a design principle I did set-up an API for registering
+<br>
+new encoding supports, so that applications can register whaterver
+<br>
+encoding is needed for their specific use.
+<br>
+<p>And in order to keep a clean design, the basic encodings are registered
+<br>
+using this API when the encoding code is used for the first time
+<br>
+(this among other things allows to override the default one by registering
+<br>
+yours before calling libxml). This is the Right Way (TM) to do it.
+<br>
+<p>So I will keep this dynamic, and I will provide a function to cleanup
+<br>
+the encoding datastructures registered.
+<br>
+<p><em>&gt; so that the space allocated for it would be released as soon as
+</em><br>
+<em>&gt; the program exit and without any explicit call.
+</em><br>
+<p>&nbsp;Could you please indicate the operating system you're using which
+<br>
+doesn't deallocate the malloc'ed memory when the program exits. Except
+<br>
+a very few (and crude) OSes for embedded systems, all OSes I know do.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20R\f.%20:%20Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20R\f.%20:%20Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20R\f.%20:%20Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0220.html">Andrea LUCIANO: "[xml] Just comments about documentation :-)"</a>
+<li><strong>Previous message:</strong> <a href="0218.html">Gilles FILIPPINI: "Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<li><strong>In reply to:</strong> <a href="0218.html">Gilles FILIPPINI: "Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0222.html">Joerg Wittenberger: "Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:52 EDT</em>
+</em>
+</small>
+</body>
+</html>

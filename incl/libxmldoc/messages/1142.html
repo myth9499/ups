@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlValidCtxt.error called, but not invalid?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlValidCtxt.error called, but not invalid?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlValidCtxt.error called, but not invalid?</h1>
+<!-- received="Tue Nov  7 07:51:02 2000" -->
+<!-- isoreceived="20001107125102" -->
+<!-- sent="Tue, 7 Nov 2000 13:50:57 +0100" -->
+<!-- isosent="20001107125057" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlValidCtxt.error called, but not invalid?" -->
+<!-- id="20001107135057.E14384@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10011062221470.4988-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlValidCtxt.error%20called,%20but%20not%20invalid?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Nov 07 2000 - 07:50:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1143.html">Daniel Veillard: "Re: [xml] MinGW fixes for 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1141.html">Daniel Veillard: "Re: [xml] IConv under WIN32 ?"</a>
+<li><strong>In reply to:</strong> <a href="1139.html">Harry Blundell: "[xml] xmlValidCtxt.error called, but not invalid?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Nov 06, 2000 at 10:35:59PM -0500, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi folks,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have a document with an element with a missing required attribute.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When parsing with validation, or post-validating, I get the
+</em><br>
+<em>&gt; xmlValidCtxt.error function called, with an error like
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Element x doesn't carry attribute y
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; but the xmlParserCtxtPtr.valid flag doesn't get unset (in the case of
+</em><br>
+<em>&gt; parsing while validating; when post-validating, I get 1 returned by
+</em><br>
+<em>&gt; xmlValidateDocument).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I had a look at the code, and see where the error message comes from, but
+</em><br>
+<em>&gt; don't see where the document is marked invalid.  Am I missing something, 
+</em><br>
+<em>&gt; or is there some reason that this behaves this way?
+</em><br>
+<p>&nbsp;&nbsp;No, you're right, it's a bug :-), the enclosed patch should fix it.
+<br>
+<p>&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlValidCtxt.error%20called,%20but%20not%20invalid?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1142/01-valid.patch">valid.patch</a>
+</ul>
+<!-- attachment="01-valid.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlValidCtxt.error%20called,%20but%20not%20invalid?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlValidCtxt.error%20called,%20but%20not%20invalid?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1143.html">Daniel Veillard: "Re: [xml] MinGW fixes for 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1141.html">Daniel Veillard: "Re: [xml] IConv under WIN32 ?"</a>
+<li><strong>In reply to:</strong> <a href="1139.html">Harry Blundell: "[xml] xmlValidCtxt.error called, but not invalid?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Nov 07 2000 - 09:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

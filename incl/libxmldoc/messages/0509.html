@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Embedding DTD into document</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Embedding DTD into document">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Embedding DTD into document</h1>
+<!-- received="Tue Jun 13 15:11:14 2000" -->
+<!-- isoreceived="20000613191114" -->
+<!-- sent="Tue, 13 Jun 2000 21:08:43 +0200" -->
+<!-- isosent="20000613190843" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Embedding DTD into document" -->
+<!-- id="20000613210842.C22758@w3.org" -->
+<!-- inreplyto="3936BCE8.6C38B2AB@sandia.gov" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Jun 13 2000 - 15:08:43 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0510.html">Daniel Veillard: "Re: [xml] Is XML thread safe?"</a>
+<li><strong>Previous message:</strong> <a href="0508.html">Ziying Sherwin: "[xml] UNIX man page"</a>
+<li><strong>In reply to:</strong> <a href="0496.html">Greg Sjaardema: "[xml] Embedding DTD into document"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>Reply:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jun 01, 2000 at 01:43:36PM -0600, Greg Sjaardema wrote:
+<br>
+<em>&gt; I am using XML as the basis for describing the syntax of the commands
+</em><br>
+<em>&gt; that a code parser understands.  The syntax for each command or block of
+</em><br>
+<em>&gt; commands is described in a single file.  A separate application was
+</em><br>
+<em>&gt; written that reads all of the individual files, verifies their
+</em><br>
+<em>&gt; structure, verifies correct nesting of commands and that all referenced
+</em><br>
+<em>&gt; commands are defined, strips out data and comments, and then writes an
+</em><br>
+<em>&gt; XML file containing all of the commands in a single file.  This is all
+</em><br>
+<em>&gt; working great, but I would also like to output the DTD at the beginning
+</em><br>
+<em>&gt; of this file so there is only a single file to move to different
+</em><br>
+<em>&gt; platforms, and other considerations.  I have been unable to find the
+</em><br>
+<em>&gt; correct sequence of calls that would let me read in the external DTD and
+</em><br>
+<em>&gt; then write it out as an 'internal' DTD in my concatenated XML file.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is this possible, if so, where should I look in the documentation.
+</em><br>
+<p>&nbsp;&nbsp;Something like the following:
+<br>
+<p>{
+<br>
+&nbsp;&nbsp;xmlDocPtr  doc = xmlParseFile(...);
+<br>
+&nbsp;&nbsp;xmlDtdPtr  dtd = xmlParseDTD(NULL, ...);
+<br>
+<p>&nbsp;&nbsp;doc-&gt;InternalSubset = dtd;
+<br>
+<p>&nbsp;&nbsp;xmlSaveFile(..., doc);
+<br>
+&nbsp;&nbsp;xmlFreeDoc(doc); /* do not free the Dtd twice */
+<br>
+}
+<br>
+<p>&nbsp;&nbsp;Doc is in:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/gnome-xml-parser.html">http://xmlsoft.org/gnome-xml-parser.html</a> for xmlParseDTD ()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and xmlParseFile()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/gnome-xml-tree.html">http://xmlsoft.org/gnome-xml-tree.html</a> for xmlSaveFile ()
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0510.html">Daniel Veillard: "Re: [xml] Is XML thread safe?"</a>
+<li><strong>Previous message:</strong> <a href="0508.html">Ziying Sherwin: "[xml] UNIX man page"</a>
+<li><strong>In reply to:</strong> <a href="0496.html">Greg Sjaardema: "[xml] Embedding DTD into document"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>Reply:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

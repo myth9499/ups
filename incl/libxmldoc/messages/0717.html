@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Indentation ?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Indentation ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Indentation ?</h1>
+<!-- received="Thu Aug 31 19:26:41 2000" -->
+<!-- isoreceived="20000831232641" -->
+<!-- sent="Fri, 1 Sep 2000 04:25:29 +0200" -->
+<!-- isosent="20000901022529" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Indentation ?" -->
+<!-- id="20000901042529.A31079@w3.org" -->
+<!-- inreplyto="20000831225406.A3010@purple42.epx.epita.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indentation%20?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Aug 31 2000 - 22:25:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0716.html">Thomas Poindessous: "[xml] Indentation ?"</a>
+<li><strong>In reply to:</strong> <a href="0716.html">Thomas Poindessous: "[xml] Indentation ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Aug 31, 2000 at 10:54:06PM +0200, Thomas Poindessous wrote:
+<br>
+[ please sub scribe to the list if you intend to post, Daniel ]
+<br>
+<em>&gt; I know this isn't a bug but how can I indent my xml files ?
+</em><br>
+<em>&gt; Juste a example:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; int	main()
+</em><br>
+<em>&gt; {
+</em><br>
+<em>&gt;   xmlDocPtr	doc;
+</em><br>
+<em>&gt;   xmlNodePtr	pere;
+</em><br>
+<em>&gt;   xmlNodePtr	fils;
+</em><br>
+<em>&gt;   xmlNodePtr	petit_fils;
+</em><br>
+<em>&gt;   
+</em><br>
+<em>&gt;   doc = xmlNewDoc(&quot;1.0&quot;);
+</em><br>
+<em>&gt;   doc-&gt;xmlRootNode = xmlNewDocNode(doc, NULL, &quot;Test&quot;, NULL);
+</em><br>
+<em>&gt;   pere = doc-&gt;xmlRootNode;
+</em><br>
+<em>&gt;   fils = xmlNewChild(pere, NULL, &quot;Fils&quot;, NULL);
+</em><br>
+<em>&gt;   xmlSetProp(fils, &quot;type&quot;, &quot;val&quot;);
+</em><br>
+<em>&gt;   petit_fils = xmlNewChild(fils, NULL, &quot;Fils2&quot;, NULL);
+</em><br>
+<em>&gt;   xmlSetProp(petit_fils, &quot;type2&quot;, &quot;val&quot;);
+</em><br>
+<em>&gt;   xmlSaveFile(&quot;toto.test&quot;, doc);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and I get that:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;Test&gt;
+</em><br>
+<em>&gt; &lt;Fils type=&quot;val&quot;&gt;
+</em><br>
+<em>&gt; &lt;Fils2 type2=&quot;val&quot;/&gt;
+</em><br>
+<em>&gt; &lt;/Fils&gt;
+</em><br>
+<em>&gt; &lt;/Test&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It looks a little ugly ...
+</em><br>
+<p>&nbsp;&nbsp;You can switch it on using:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int xmlIndentTreeOutput;
+<br>
+<p>&nbsp;but be careful, because in XML whitespaces are significant. By default
+<br>
+libxml2 will make those white spaces available when you reload the 
+<br>
+document (and by reindenting those again at saving time you may get
+<br>
+a document stability problem).
+<br>
+&nbsp;&nbsp;Either switch xmlIndentTreeOutput to 1 only when saving a document
+<br>
+for the first time or use xmlKeepBlanksDefault(0) but this may not be
+<br>
+a good idea. Check
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/html/gnome-xml-parser.html#XMLKEEPBLANKSDEFAULT">http://xmlsoft.org/html/gnome-xml-parser.html#XMLKEEPBLANKSDEFAULT</a>
+<br>
+<p>&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indentation%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indentation%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Indentation%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0716.html">Thomas Poindessous: "[xml] Indentation ?"</a>
+<li><strong>In reply to:</strong> <a href="0716.html">Thomas Poindessous: "[xml] Indentation ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Aug 31 2000 - 22:34:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

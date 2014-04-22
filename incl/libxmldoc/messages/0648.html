@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] outputting empty attributes in test{HTML,SAX}.c</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="[xml] outputting empty attributes in test{HTML,SAX}.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] outputting empty attributes in test{HTML,SAX}.c</h1>
+<!-- received="Tue Aug 15 20:30:37 2000" -->
+<!-- isoreceived="20000816003037" -->
+<!-- sent="Tue, 15 Aug 2000 20:27:10 -0700 (PDT)" -->
+<!-- isosent="20000816032710" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="[xml] outputting empty attributes in test{HTML,SAX}.c" -->
+<!-- id="Pine.LNX.4.21.0008152021120.14201-100000@phong.blorf.net" -->
+<!-- inreplyto="Pine.LNX.4.21.0008130950150.7966-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20outputting%20empty%20attributes%20in%20test{HTML,SAX}.c"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Tue Aug 15 2000 - 23:27:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<li><strong>Previous message:</strong> <a href="0647.html">Daniel Veillard: "Re: [xml] Release of libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0644.html">Wayne Davison: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<li><strong>Reply:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The code in testHTML.c and testSAX.c doesn't handle the outputting of
+<br>
+empty attributes cleanly (it passes a NULL pointer to printf).  The
+<br>
+following simple patch causes the ='value' section to be omitted when
+<br>
+the value is NULL.
+<br>
+<p>..wayne..
+<br>
+<p>---8&lt;------8&lt;------8&lt;------8&lt;---cut here---&gt;8------&gt;8------&gt;8------&gt;8---
+<br>
+Index: testHTML.c
+<br>
+@@ -372,8 +372,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;SAX.startElement(%s&quot;, (char *) name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (atts != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0;(atts[i] != NULL);i++) {
+<br>
+-	    fprintf(stdout, &quot;, %s='&quot;, atts[i++]);
+<br>
+-	    fprintf(stdout, &quot;%s'&quot;, atts[i]);
+<br>
++	    fprintf(stdout, &quot;, %s&quot;, atts[i++]);
+<br>
++	    if (atts[i])
+<br>
++		fprintf(stdout, &quot;='%s'&quot;, atts[i]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;)\n&quot;);
+<br>
+Index: testSAX.c
+<br>
+@@ -370,8 +370,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;SAX.startElement(%s&quot;, (char *) name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (atts != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0;(atts[i] != NULL);i++) {
+<br>
+-	    fprintf(stdout, &quot;, %s='&quot;, atts[i++]);
+<br>
+-	    fprintf(stdout, &quot;%s'&quot;, atts[i]);
+<br>
++	    fprintf(stdout, &quot;, %s&quot;, atts[i++]);
+<br>
++	    if (atts[i])
+<br>
++		fprintf(stdout, &quot;='%s'&quot;, atts[i]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;)\n&quot;);
+<br>
+---8&lt;------8&lt;------8&lt;------8&lt;---cut here---&gt;8------&gt;8------&gt;8------&gt;8---
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20outputting%20empty%20attributes%20in%20test{HTML,SAX}.c">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20outputting%20empty%20attributes%20in%20test{HTML,SAX}.c">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<li><strong>Previous message:</strong> <a href="0647.html">Daniel Veillard: "Re: [xml] Release of libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0644.html">Wayne Davison: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<li><strong>Reply:</strong> <a href="0649.html">Daniel Veillard: "Re: [xml] outputting empty attributes in test{HTML,SAX}.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 15 2000 - 20:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

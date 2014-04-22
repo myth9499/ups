@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml -&gt; .</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml -&gt; .">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml -&gt; .</h1>
+<!-- received="Tue Oct  3 06:01:37 2000" -->
+<!-- isoreceived="20001003100137" -->
+<!-- sent="Tue, 3 Oct 2000 12:01:34 +0200" -->
+<!-- isosent="20001003100134" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml -&gt; ." -->
+<!-- id="20001003120134.D14437@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1001002204646.20050C-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 03 2000 - 06:01:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0865.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Previous message:</strong> <a href="0863.html">Daniel Veillard: "Re: [xml] xmlHasProp case sensitive ?"</a>
+<li><strong>In reply to:</strong> <a href="0861.html">Kenneth Pronovici: "Re: [xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0865.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 02, 2000 at 08:51:45PM -0500, Kenneth Pronovici wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; This can be solved through clever (arcane maybe) use of preprocessor,
+</em><br>
+<em>&gt; &gt; at least I am pretty sure it can be.  Note that I am at the moment working
+</em><br>
+<em>&gt; &gt; far too many hours in the day on some other bsd/win32/linux 
+</em><br>
+<em>&gt; &gt; cross-platform code.  
+</em><br>
+<em>&gt; &gt; [...]
+</em><br>
+<em>&gt; &gt; intricacies of cross-platfrom building, anyone so inclined 
+</em><br>
+<em>&gt; &gt; is welcome to provide me with due dose of enlightenment.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Maybe I'm missing something here, but why not just have internal
+</em><br>
+<em>&gt; libxml code include use
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    #include &quot;file.h&quot; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; but install the include files to 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    /include/libxml/file.h
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; (or wherever) and have libxml client code use 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    #include &lt;libxml/file.h&gt; 
+</em><br>
+<p>&nbsp;&nbsp;Yeah ... too simple, doesn't work I'm afraid.
+<br>
+<p>for example debugXML.h needs tree.h, both for libxml code and client code
+<br>
+For the client code this will be located under a libxml subtree when
+<br>
+installed. Do you ever do &quot;make install&quot; on Windows ? Where do the includes
+<br>
+go, I hope not in the same directory for all installed packages ! 
+<br>
+Having an isolation by subtree and the client code using &lt;libxml/xxx.h&gt;
+<br>
+seems a needed practice to avoid utter mess, I assume it's not 
+<br>
+challenged.
+<br>
+So assuming the headers have to be addressed by &lt;libxml/xxx.h&gt; from client
+<br>
+code. I don't want to have debugXML.h include &quot;tree.h&quot; because this 
+<br>
+can lead to serious troubles due to interaction with other packages.
+<br>
+So debugXML.h have to include &lt;libxml/tree.h&gt;, and unless the headers
+<br>
+installed by &quot;make install&quot; are modified before being installed, then
+<br>
+the libxml code itself also need to be able to handle &lt;libxml/tree,h&gt; .
+<br>
+<p><em>&gt; The way I've done this with libraries in the past is to have an include 
+</em><br>
+<em>&gt; directory for the library that I just path to during the library build 
+</em><br>
+<em>&gt; with a &quot;-I ../include&quot; compiler flag - there's no reason why it has to
+</em><br>
+<em>&gt; match what the clients use, right?
+</em><br>
+<p>&nbsp;&nbsp;Hum, wrong IMHO 
+<br>
+<p><em>&gt; Anyway, it seems like this would simplify things...
+</em><br>
+<p>&nbsp;&nbsp;The right way will be to have an include/libxml tree in the libxml
+<br>
+sources . I would rather not have to change the structure of the
+<br>
+CVS code base now, but I can probably manage to get the tarballs to follow
+<br>
+this structure automatically. I don't think I will change the CVs structure
+<br>
+(and hence my enviroment) soon, maybe when switching to libxml3 if it
+<br>
+ever get released :-)
+<br>
+&nbsp;&nbsp;I will play with the tarball generation,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20.">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0865.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Previous message:</strong> <a href="0863.html">Daniel Veillard: "Re: [xml] xmlHasProp case sensitive ?"</a>
+<li><strong>In reply to:</strong> <a href="0861.html">Kenneth Pronovici: "Re: [xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0865.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 03 2000 - 09:43:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

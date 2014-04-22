@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</h1>
+<!-- received="Fri Oct  8 10:42:22 1999" -->
+<!-- isoreceived="19991008144222" -->
+<!-- sent="Fri, 8 Oct 1999 10:42:18 -0400" -->
+<!-- isosent="19991008144218" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c" -->
+<!-- id="19991008104218.E10431@w3.org" -->
+<!-- inreplyto="y6y4sg5a2px.fsf@nero.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 08 1999 - 10:42:18 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0166.html">Tim Josling: "[xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Previous message:</strong> <a href="0164.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>In reply to:</strong> <a href="0162.html">Kristian Hogsberg Kristensen: "[xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Kristian,
+<br>
+<p><em>&gt; I've been working with the HTML parser that comes with gnome-xml, and
+</em><br>
+<em>&gt; after debugging my own code for a while because of some weird nesting
+</em><br>
+<em>&gt; of lists, I realized that the HTML parser doesn't infer &lt;/li&gt; when
+</em><br>
+<em>&gt; current element is &lt;li&gt; and a new &lt;li&gt; is seen.  Shouldn't it do so?
+</em><br>
+<em>&gt; I added &quot;LI&quot; to the &quot;LI&quot; entry in the htmlStartClose array in
+</em><br>
+<em>&gt; HTMLParser.c, line 302, and it all worked allright.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Fixed, you were right.
+<br>
+<p><em>&gt; By the way, I would really like to use the HTML parser with the SAX
+</em><br>
+<em>&gt; interface, however this isn't possible, since the parser looks at the
+</em><br>
+<em>&gt; currently open element to infer close tags, and the element stack is
+</em><br>
+<em>&gt; maintained by the DOM building default SAX handler.  On the other hand
+</em><br>
+<em>&gt; I cant maintain the element stack in my SAX handler, since I dont have
+</em><br>
+<em>&gt; access to the parser context there.
+</em><br>
+<p>&nbsp;&nbsp;Fixed too, the parser don't uses the DOM produced tree for pure
+<br>
+parsing anymore, 
+<br>
+<p><p>&nbsp;&nbsp;I have commited the fixes both on Gnome and W3C CVs bases, you can grab
+<br>
+a snapshot with the fixes at 
+<br>
+&nbsp;&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/XML/cvs-snapshot.tar.gz">ftp://rpmfind.net/pub/XML/cvs-snapshot.tar.gz</a>
+<br>
+<p>&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0166.html">Tim Josling: "[xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Previous message:</strong> <a href="0164.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>In reply to:</strong> <a href="0162.html">Kristian Hogsberg Kristensen: "[xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

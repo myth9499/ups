@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out</h1>
+<!-- received="Sun Mar  4 12:22:48 2001" -->
+<!-- isoreceived="20010304172248" -->
+<!-- sent="Sun, 04 Mar 2001 17:18:37 +0000" -->
+<!-- isosent="20010304171837" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] libxml-2.3.3 amd libxslt-0.4.0 are out" -->
+<!-- id="3AA278ED.6D87D6C7@uk.sun.com" -->
+<!-- inreplyto="20010301164505.A8471@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Sun Mar 04 2001 - 12:18:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1516.html">Daniel Veillard: "Re: [xml] libxslt apply-templates with parameter(s)"</a>
+<li><strong>In reply to:</strong> <a href="1508.html">Daniel Veillard: "[xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>There appears to be a regression in this release. xmllint has stopped working
+<br>
+with my xml documents and generates errors such as
+<br>
+<p>calvin:dev/ASPSE/src:$ xmllint --valid /etc/pool.conf
+<br>
+<a href="file:///usr/share/lib/xml/dtd/rm_all.dtd:14">file:///usr/share/lib/xml/dtd/rm_all.dtd:14</a>: validity error: PEReference: %;
+<br>
+not found
+<br>
+%rm_core;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<a href="file:///usr/share/lib/xml/dtd/rm_all.dtd:18">file:///usr/share/lib/xml/dtd/rm_all.dtd:18</a>: validity error: PEReference: %;
+<br>
+not found
+<br>
+%rm_resource;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<a href="file:///usr/share/lib/xml/dtd/rm_all.dtd:22">file:///usr/share/lib/xml/dtd/rm_all.dtd:22</a>: validity error: PEReference: %;
+<br>
+not found
+<br>
+%rm_pool;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+before core dumping
+<br>
+<p>Segmentation Fault (core dumped)
+<br>
+<p>calvin:dev/ASPSE/src:$ pstack core
+<br>
+core 'core' of 17174:   xmllint --valid /etc/pool.conf
+<br>
+&nbsp;ff2c4c9c xmlStrdup (1, ff136000, 42040, ff136000, 21de8, ff0c1b68) + 4c
+<br>
+&nbsp;ff30c47c xmlNewElementContent (1, 2, b4, 1, 21dc0, ff2d5b8c) + 20c
+<br>
+&nbsp;ff2d5b68 xmlParseElementChildrenContentDecl (54f10, ff28abe4, b6, 1,
+<br>
+ff3e0000, ff3a02d4) + 1008
+<br>
+&nbsp;ff2d4c8c xmlParseElementChildrenContentDecl (54f10, 7, 69230, ff136000,
+<br>
+21de8, ff0c1b68) + 12c
+<br>
+&nbsp;ff2d61fc xmlParseElementContentDecl (54f10, 420c0, ffbee6b0, 69230, 21dc0,
+<br>
+ff2cd754) + 2bc
+<br>
+&nbsp;ff2d6d30 xmlParseElementDecl (54f10, 0, 0, 0, 0, 0) + a30
+<br>
+&nbsp;ff2d72a8 xmlParseMarkupDecl (54f10, 0, 0, 0, 0, 0) + b0
+<br>
+&nbsp;ff2d97ac xmlParseExternalSubset (54f10, 56750, 567c0, 567c0, 0, 0) + 6e4
+<br>
+&nbsp;ff2a991c externalSubset (54f10, 42000, 56750, 567c0, 0, 0) + 36c
+<br>
+&nbsp;ff2e42c4 xmlParseDocument (54f10, 0, 0, 0, 0, 0) + 814
+<br>
+&nbsp;ff2eac80 xmlSAXParseFile (0, ffbef0a4, 0, 0, 0, 0) + 128
+<br>
+&nbsp;ff2eadd4 xmlParseFile (ffbef0a4, 0, 0, 0, 0, 0) + 34
+<br>
+&nbsp;00014658 parseAndPrintFile (ffbef0a4, 1a2ec, ff138588, 0, 2f657463,
+<br>
+2d2d6474) + 5f0
+<br>
+&nbsp;000163b0 main     (3, ffbeef24, ffbeef34, 2b400, 0, 0) + fe0
+<br>
+&nbsp;00013328 _start   (0, 0, 0, 0, 0, 0) + f8
+<br>
+<p>I'm too wasted to do more debugging today, but has anybody got any pointers
+<br>
+for me on what may have changed in this release before I start my debugging
+<br>
+session tomorrow? This was all working with 2.3.2.
+<br>
+<p>Gary
+<br>
+<p>Daniel Veillard wrote:
+<br>
+<p><em>&gt;   Downloads from:
+</em><br>
+<em>&gt;   <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   libxml-2.3.3 is a normal bugfix release. It also include
+</em><br>
+<em>&gt; significative performance improvements.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/XSLT/">http://xmlsoft.org/XSLT/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Libxslt-0.4.0 is the fourth beta release, it should cover
+</em><br>
+<em>&gt; most features from the XSLT-1.0 spec.
+</em><br>
+<em>&gt; It requires libxml 2.3.3 or later.
+</em><br>
+<em>&gt;   The embedded xmlproc test program allow to run non-trivial
+</em><br>
+<em>&gt; transformations.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   The parts missing are:
+</em><br>
+<em>&gt;     - Embedding Stylesheets
+</em><br>
+<em>&gt;     - document() and key() are incomplete
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.3%20amd%20libxslt-0.4.0%20are%20out">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1516.html">Daniel Veillard: "Re: [xml] libxslt apply-templates with parameter(s)"</a>
+<li><strong>In reply to:</strong> <a href="1508.html">Daniel Veillard: "[xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Mar 04 2001 - 12:44:21 EST</em>
+</em>
+</small>
+</body>
+</html>

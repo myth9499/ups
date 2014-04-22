@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] May I have line breaks in a property?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] May I have line breaks in a property?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] May I have line breaks in a property?</h1>
+<!-- received="Sun Feb 11 03:29:41 2001" -->
+<!-- isoreceived="20010211082941" -->
+<!-- sent="Sun, 11 Feb 2001 09:29:25 +0100" -->
+<!-- isosent="20010211082925" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] May I have line breaks in a property?" -->
+<!-- id="20010211092925.H826@imag.fr" -->
+<!-- inreplyto="000501c093d4$9432a230$0fcf7318@cr556392a" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Sun Feb 11 2001 - 03:29:25 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1449.html">Oliver Eikemeier: "[xml] Minor troubles compiling xinclude.c"</a>
+<li><strong>In reply to:</strong> <a href="1448.html">ming lu: "Re: [xml] May I have line breaks in a property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Same thing, end of line normalization:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/REC-xml#sec-line-ends">http://www.w3.org/TR/REC-xml#sec-line-ends</a>
+<br>
+<p>though I'm surprized libxml generates two 0A, only one should be there.
+<br>
+The goal is to standardize on only one way to tag end-of-line.
+<br>
+<p>Daniel
+<br>
+<p>On Sat, Feb 10, 2001 at 06:44:36PM -0800, ming lu wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thank you very much for your reply. But after I changed it to element. I
+</em><br>
+<em>&gt; found the string I got from
+</em><br>
+<em>&gt; xmlNodeListGetString changed 0D0A (return for dos) to 0A0A. Anyway to get
+</em><br>
+<em>&gt; 0D0A instead? Thank you again for your help!
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   Hum, that's an interesting point.
+</em><br>
+<em>&gt; &gt; Basically XML parser have to do attribute normalization, and this include
+</em><br>
+<em>&gt; &gt; replacing newlines by blanks.
+</em><br>
+<em>&gt; &gt;    <a href="http://www.w3.org/TR/REC-xml#AVNormalize">http://www.w3.org/TR/REC-xml#AVNormalize</a>
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   However when passed as numeric character reference in the serialization
+</em><br>
+<em>&gt; &gt; (like &amp;#xA; ) then the normalization doesn't apply, but currently libxml
+</em><br>
+<em>&gt; &gt; doesn't check for extra spaces or newlines in attribute content when
+</em><br>
+<em>&gt; &gt; saving, i.e. it doesn't escape them as character reference and then at
+</em><br>
+<em>&gt; next
+</em><br>
+<em>&gt; &gt; parsing they would disapear anyway :-\, it's in the TODO but I never
+</em><br>
+<em>&gt; &gt; took the time of handling this.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   A rule of thumbs is that if you have to encode multiline contents,
+</em><br>
+<em>&gt; &gt; use an element and not an attribute, it fits really better in the
+</em><br>
+<em>&gt; &gt; XML framework.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; --
+</em><br>
+<em>&gt; &gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; &gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; &gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; &gt; ----
+</em><br>
+<em>&gt; &gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; &gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; &gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1449.html">Oliver Eikemeier: "[xml] Minor troubles compiling xinclude.c"</a>
+<li><strong>In reply to:</strong> <a href="1448.html">ming lu: "Re: [xml] May I have line breaks in a property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Feb 11 2001 - 04:44:47 EST</em>
+</em>
+</small>
+</body>
+</html>

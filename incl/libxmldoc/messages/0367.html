@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] GPL and other licensing issues</title>
+<meta name="Author" content="Art Gillespie (agillesp@i-no.com)">
+<meta name="Subject" content="Re: [xml] GPL and other licensing issues">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] GPL and other licensing issues</h1>
+<!-- received="Mon Feb 14 11:32:37 2000" -->
+<!-- isoreceived="20000214163237" -->
+<!-- sent="Mon, 14 Feb 2000 11:33:27 -0800" -->
+<!-- isosent="20000214193327" -->
+<!-- name="Art Gillespie" -->
+<!-- email="agillesp@i-no.com" -->
+<!-- subject="Re: [xml] GPL and other licensing issues" -->
+<!-- id="38A85887.737090B2@i-no.com" -->
+<!-- inreplyto="1261590637-177508589@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Art Gillespie (<a href="mailto:agillesp@i-no.com?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues"><em>agillesp@i-no.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 14 2000 - 14:33:27 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0368.html">David Doolin: "Re: [xml] Portings of libXML"</a>
+<li><strong>Previous message:</strong> <a href="0366.html">Stefano Pogliani: "[xml] Portings of libXML"</a>
+<li><strong>In reply to:</strong> <a href="0365.html">Peter Jacobi: "Re: [xml] GPL and other licensing issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0378.html">Havoc Pennington: "Re: [xml] GPL and other licensing issues"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Peter,
+<br>
+<p>Under the standard GPL, including proprietary code 'taints' this
+<br>
+proprietary code, since, as you point out, the GPL requires that the
+<br>
+code also be available under the GPL.  The license isn't specific about
+<br>
+'data', which is what your question is centered around, but a liberal
+<br>
+interpretation of the license would suggest that the data you speak of
+<br>
+could very well be tainted by the strict GPL.
+<br>
+<p>Luckily, the FSF created the LGPL to address this very issue (see
+<br>
+<a href="http://www.gnu.org/copyleft/lesser.html">http://www.gnu.org/copyleft/lesser.html</a>).  The 'Lesser General Public
+<br>
+License' is intended to allow proprietary software to link to free
+<br>
+software libraries (or vice versa), without tainting the 'closed'
+<br>
+portion of the code.  Since libxml is available under the LGPL (see the
+<br>
+xmlsoft.org website), you are free to distribute it with proprietary
+<br>
+code and certainly with proprietary data.
+<br>
+<p>However, your responsibilities as to making changes to libxml itself
+<br>
+publicly available still hold.
+<br>
+<p>Hope this helps,
+<br>
+<p>Art
+<br>
+<p><em>&gt; &gt; &gt; under the GPL, when this 'derived work' needs an XML data file
+</em><br>
+<em>&gt; &gt; &gt;  a third party holds copyright of? (provided that this third party will
+</em><br>
+<em>&gt; &gt; &gt; allow me the use of their copyrighted data)
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   the data file is an input ? if yes i don't see the problem.
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The data in question is from medical coding schemes. Lots of
+</em><br>
+<em>&gt; entries like:
+</em><br>
+<em>&gt; 17328 = &quot;Wolf-Parkinson-White Syndrom type B (certain)&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Most of these coding schemes are unfortunately copyrighted and
+</em><br>
+<em>&gt; subject to substantial license fees.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So, if I include these entries in .h files, this will make them freely
+</em><br>
+<em>&gt; distributable under GPL and the organizations owning the coding
+</em><br>
+<em>&gt; schemes will probably cut me in several pieces.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As a workaround, I would put the coding into a XML file and
+</em><br>
+<em>&gt; distribute it only subject to the need of paying the license fees to
+</em><br>
+<em>&gt; the owning organization. (And against proof of having paid for the
+</em><br>
+<em>&gt; nastier organizations).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But, as this is only a workaround for putting these data entries
+</em><br>
+<em>&gt; directly into the program, I was wondering whether this is in
+</em><br>
+<em>&gt; violation of the GPL..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Regards,
+</em><br>
+<em>&gt; Peter
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">majordomo@xmlsoft.org</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0368.html">David Doolin: "Re: [xml] Portings of libXML"</a>
+<li><strong>Previous message:</strong> <a href="0366.html">Stefano Pogliani: "[xml] Portings of libXML"</a>
+<li><strong>In reply to:</strong> <a href="0365.html">Peter Jacobi: "Re: [xml] GPL and other licensing issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0378.html">Havoc Pennington: "Re: [xml] GPL and other licensing issues"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:03 EDT</em>
+</em>
+</small>
+</body>
+</html>

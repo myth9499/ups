@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] non-quoted attributes invalid?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] non-quoted attributes invalid?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] non-quoted attributes invalid?</h1>
+<!-- received="Mon Nov 29 03:59:09 1999" -->
+<!-- isoreceived="19991129085909" -->
+<!-- sent="Mon, 29 Nov 1999 03:59:05 -0500" -->
+<!-- isosent="19991129085905" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] non-quoted attributes invalid?" -->
+<!-- id="19991129035905.D27642@w3.org" -->
+<!-- inreplyto="199911282003.PAA21176@silicon.ccs.neu.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Nov 29 1999 - 03:59:05 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<li><strong>In reply to:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 28, 1999 at 03:03:42PM -0500, Bryan E. Chafy wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; My xml file has some attributes without quotes:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!DOCTYPE client SYSTEM &quot;client.dtd&quot;&gt;
+</em><br>
+<em>&gt; &lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When I try to parse, I get:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; test.xml:3: error: AttValue: &quot; or ' expected
+</em><br>
+<em>&gt; &lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+</em><br>
+<p>&nbsp;&nbsp;Your XML is broken, you have to quote attributes !
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/REC-xml#NT-AttValue">http://www.w3.org/TR/REC-xml#NT-AttValue</a>
+<br>
+<p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[10] AttValue ::= '&quot;' ([^&lt;&amp;&quot;] | Reference)* '&quot;' |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;'&quot; ([^&lt;&amp;'] | Reference)* &quot;'&quot;
+<br>
+<p>&nbsp;Don't even try to bypass the error message, no XML parser will ever
+<br>
+return some data on such an input, this is not Well Formed XML.
+<br>
+<p><em>&gt; Also, why is libxml called the xml library for gnome?  What's so
+</em><br>
+<em>&gt; gnome about it?  It looks like a generic XML DOM/SAX parser usefull for
+</em><br>
+<em>&gt; things other than just gnome.
+</em><br>
+<p>&nbsp;&nbsp;It was largely developped in the Gnome framework, is used by quite
+<br>
+a few Gnome apps, but I agree you can perfectly use it without gnome.
+<br>
+For example it doesn't depend on any Gnome lib, and should even work
+<br>
+on Windows.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<li><strong>In reply to:</strong> <a href="0227.html">Bryan E. Chafy: "[xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0229.html">Stefan Bambach: "Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

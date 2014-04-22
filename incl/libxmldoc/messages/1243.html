@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] First message: text nodes</title>
+<meta name="Author" content="Charlie Bozeman (cbozeman@HiWAAY.net)">
+<meta name="Subject" content="Re: [xml] First message: text nodes">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] First message: text nodes</h1>
+<!-- received="Wed Nov 29 21:40:50 2000" -->
+<!-- isoreceived="20001130024050" -->
+<!-- sent="Wed, 29 Nov 2000 20:40:54 -0600" -->
+<!-- isosent="20001130024054" -->
+<!-- name="Charlie Bozeman" -->
+<!-- email="cbozeman@HiWAAY.net" -->
+<!-- subject="Re: [xml] First message: text nodes" -->
+<!-- id="3A25BE36.EEE6E429@HiWAAY.net" -->
+<!-- inreplyto="3A24E38C.6070A7CB@innominate.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Charlie Bozeman (<a href="mailto:cbozeman@HiWAAY.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes"><em>cbozeman@HiWAAY.net</em></a>)<br>
+<strong>Date:</strong> Wed Nov 29 2000 - 21:40:54 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1242.html">Manuel Guesdon: "[xml] Feature request"</a>
+<li><strong>In reply to:</strong> <a href="1241.html">Rafael Peregrino: "[xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+It's hard to tell without seeing the modifications you have made, but my
+<br>
+guess is you have something in your xml file like:
+<br>
+&lt;tag1&gt;blah blah&lt;tag2&gt;yada yada&lt;/tag2&gt;&lt;/tag1&gt;
+<br>
+This will give you text nodes between elements.
+<br>
+<p>Rafael Peregrino wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi ALL,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This is my first message to this list. I'm a beginner on programming
+</em><br>
+<em>&gt; with libxml and I'm having some problems with a xml-parser I'm writing.
+</em><br>
+<em>&gt; I'm using the libxml version 2.2.2 on a Debian woody (instable)
+</em><br>
+<em>&gt; GNU/Linux distribution and my code is by now entirely based on the
+</em><br>
+<em>&gt; example parser that comes with the library (gjobread.c). Frankly, I'm
+</em><br>
+<em>&gt; just really changing the names of the variables and the tag names that
+</em><br>
+<em>&gt; must be parsed. The xml file I'm parsing has also a slightly different
+</em><br>
+<em>&gt; structure when compared to the gjobs.xml. Furthermore I have thrown the
+</em><br>
+<em>&gt; name spaces code away. Of course, my structures (to them I'm copying the
+</em><br>
+<em>&gt; elements of the tree) are different of the ones of the gJobs example. My
+</em><br>
+<em>&gt; problem is that between the xml nodes a &quot;text&quot; node always appears and
+</em><br>
+<em>&gt; this doesn't happen with the original code (i.e., with the gJobs
+</em><br>
+<em>&gt; example). I've already read the available documentation, but it remains
+</em><br>
+<em>&gt; unclear to me how to change this behaviour. Besides I can't really see
+</em><br>
+<em>&gt; any logical difference between my code and the example's code, though of
+</em><br>
+<em>&gt; course they do exist. I'm compilig the code with
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         gcc -Wall -g simple_parser.c -o simple_parser -lxml
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What the hell am I overlooking? Are there any defines that must be made
+</em><br>
+<em>&gt; in order to turn this behavior on and off? Can you please help me?
+</em><br>
+<em>&gt; Thanks a lot in advance!
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Best regards,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Rafael (8-)
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes">rafael.peregrino@innominate.com</a>
+</em><br>
+<em>&gt; software engineer                                        innominate AG
+</em><br>
+<em>&gt; server appliances                                 the linux architects
+</em><br>
+<em>&gt; tel: +49.30.308806-81  fax: -77              <a href="http://www.innominate.com">http://www.innominate.com</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1242.html">Manuel Guesdon: "[xml] Feature request"</a>
+<li><strong>In reply to:</strong> <a href="1241.html">Rafael Peregrino: "[xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 29 2000 - 21:44:04 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Incremental output (kinda followup to: streaming</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Incremental output (kinda followup to: streaming output)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Incremental output (kinda followup to: streaming output)</h1>
+<!-- received="Fri Feb 18 11:26:00 2000" -->
+<!-- isoreceived="20000218162600" -->
+<!-- sent="Fri, 18 Feb 2000 17:25:42 +0100" -->
+<!-- isosent="20000218162542" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Incremental output (kinda followup to: streaming output)" -->
+<!-- id="20000218172542.K18472@w3.org" -->
+<!-- inreplyto="38AD6B9E.8EAC8C28@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Feb 18 2000 - 11:25:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0381.html">Matt Ettus: "[xml] Guile Bindings?"</a>
+<li><strong>Previous message:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>In reply to:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Reply:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 18, 2000 at 04:56:14PM +0100, Lutz Behnke wrote:
+<br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I want to use libxml in an application that sends data over a http connection.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; David, I have read your answer to Havocs question, stating that you would not
+</em><br>
+<em>&gt; use such large trees, but rather either do it all in one streaming go, or split
+</em><br>
+<em>&gt; the messages.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; My problem is a little bit different: while each individual document is small 
+</em><br>
+<em>&gt; enough to write to memory w/o using all VM, there are some issues:
+</em><br>
+<em>&gt;   a) I have to watch the memory footprint of each message and its environment as
+</em><br>
+<em>&gt;      this is a server application and I need to be able to process more than one
+</em><br>
+<em>&gt;      message in parrallel.
+</em><br>
+<em>&gt;   b) As I have to write the outgoing data to the network, I costs a lot of overhead
+</em><br>
+<em>&gt;      to write data to a file first and then pump the file back into the socket.
+</em><br>
+<em>&gt;      And as this is somewhat security sensitive I also have to watch temp files
+</em><br>
+<em>&gt;      in general (lets say that I was brainwashed to simply dislike temp files).
+</em><br>
+<em>&gt;   c) If I dump the tree to memory I allmost double the mem footprint instantly.
+</em><br>
+<em>&gt;      I would really like to avoid this.
+</em><br>
+<em>&gt;   d) generating the tree for outgoing messages from the tree of incomming messages
+</em><br>
+<em>&gt;      makes some sense as there are rather complex operations on both before I write
+</em><br>
+<em>&gt;      all of it back to the net.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I would assume that there are some kind of iterators to go over the tree in order
+</em><br>
+<em>&gt; to dump it to mem or to a file. would it not be possible to adapt them to a producer-
+</em><br>
+<em>&gt; consumer style dumper that stop when a number of bytes are written?
+</em><br>
+<em>&gt; I would like to write it, but unfortunately am I only stalking around the lib trying
+</em><br>
+<em>&gt; to understand how to use it, let alone how to extend it.
+</em><br>
+<p>&nbsp;Honnestly if you have memory constraints I suggest using the SAX interface.
+<br>
+You don't get a tree but a list of callback get called as the input is processed
+<br>
+I also suggest that you use the Push mechanism where data is provided chunk by
+<br>
+chunk, it would allow you to check that you're not near the memory limit before
+<br>
+processing some input:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/#Invoking2">http://xmlsoft.org/#Invoking2</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;Invoking the parser: the push way&quot; and following section
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;Invoking the parser: the SAX interface&quot;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;If you really need the tree, and are concerned about memory consumption
+<br>
+I have a bad news, the tree memory structure will grow up somewhat to be able
+<br>
+to handle DOM in a better way. Attribute structure will be larger in 2.0 .
+<br>
+<p>&nbsp;&nbsp;c.f: <a href="http://bugs.gnome.org/db/51/5190.html">http://bugs.gnome.org/db/51/5190.html</a>
+<br>
+<p>&nbsp;&nbsp;On the other hand concerning serialization of the result it seems not too
+<br>
+difficult to tweak the buffer code so that it does flushing while being
+<br>
+created (and add possible encoding conversion like the parser input).
+<br>
+Would an interface accepting a file descriptor or a FILE * suitable ?
+<br>
+Or another callback on buffer full interface would be better ?
+<br>
+<p>&nbsp;&nbsp;I can do binary incompatible changes now since I'm preparing version
+<br>
+2.0 so if there is such changes to be done I would rather get the list now.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0381.html">Matt Ettus: "[xml] Guile Bindings?"</a>
+<li><strong>Previous message:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>In reply to:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Reply:</strong> <a href="0384.html">Lutz Behnke: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:04 EDT</em>
+</em>
+</small>
+</body>
+</html>

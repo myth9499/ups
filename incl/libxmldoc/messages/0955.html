@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Sat Oct 14 11:38:52 2000" -->
+<!-- isoreceived="20001014153852" -->
+<!-- sent="Sat, 14 Oct 2000 15:39:26 +0000" -->
+<!-- isosent="20001014153926" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="39E87E2E.DC15FFB@mail1.stofanet.dk" -->
+<!-- inreplyto="20001014163324.H23022@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20Extending%20XPath?"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Sat Oct 14 2000 - 11:39:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0954.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0954.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt;   - this introduce a binary incompatible change, some data
+</em><br>
+<em>&gt;     structures are changed and that a first thing I will have
+</em><br>
+<em>&gt;     to correct
+</em><br>
+<p>Why is binary compatibility an issue?
+<br>
+<p><em>&gt;   - an hash table only makes sense if the pool of object is
+</em><br>
+<em>&gt;     clearly larger than the number of entries, and whatever how I
+</em><br>
+<em>&gt;     turn the problem, I don't see how i would need to register
+</em><br>
+<em>&gt;     250 functions, if you have such an use case please enlighten me
+</em><br>
+<p>Let me reiterate, the number is arbitrarily chosen. Change it to
+<br>
+whatever pleases you.
+<br>
+<p><em>&gt;   - the function used to compute the hash looks rather costly
+</em><br>
+<em>&gt;     you have a multiply and an add per char in the string, I
+</em><br>
+<em>&gt;     usually simply compute the sum of all chars in the string
+</em><br>
+<em>&gt;     which for a 256 hash size should be good enough.
+</em><br>
+<p>I use a standard hash key computation algorithm. If you disapprove
+<br>
+of it, change it (if you feel the distribution of your algorithm is
+<br>
+good enough). I don't see the issue here.
+<br>
+<p><em>&gt;   - the overall memory used for storing the hash table seems a
+</em><br>
+<em>&gt;     bit inappropriate in that specific case of the few XPath
+</em><br>
+<em>&gt;     functions (but tiny compare to a DOM tree size and other use
+</em><br>
+<em>&gt;     of hash tables in libxml).
+</em><br>
+<p>As you mention, the size of the hash table is neglible compared to
+<br>
+the size of the parse tree. We are talking peanuts here. Again, I
+<br>
+don't see the issue here.
+<br>
+<p><em>&gt;   - adding a new header and C file would only really make sense if
+</em><br>
+<em>&gt;     those were reused in multiple places.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  I think integrating the patch as is is a bit problematic right now.
+</em><br>
+<em>&gt; But I think it does make sense to try to reuse it to make it the
+</em><br>
+<em>&gt; hash table interfaces used in other parts as well (entities, element/
+</em><br>
+<em>&gt; attributes/notations declarations, and the XPath registry).
+</em><br>
+<p>This was exactly the reason why I made the hash functions generic,
+<br>
+and put them in separate files (well, this and the good software
+<br>
+engineering practice of modulability).
+<br>
+<p><em>&gt;   I hope that you won't take offense if I don't integrate it for
+</em><br>
+<em>&gt; 2.2.5, I think I will reuse it but as explained in a larger context :-)
+</em><br>
+<p>Well, I was only trying to be helpful. I do not take personal
+<br>
+offence, but I will, in all likelihood, be more cautious with
+<br>
+future submissions.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0954.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0954.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 14 2000 - 11:43:28 EDT</em>
+</em>
+</small>
+</body>
+</html>

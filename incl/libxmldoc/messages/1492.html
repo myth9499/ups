@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] encoding, SAX callbacks</h1>
+<!-- received="Fri Feb 23 15:05:53 2001" -->
+<!-- isoreceived="20010223200553" -->
+<!-- sent="Fri, 23 Feb 2001 21:05:22 +0100" -->
+<!-- isosent="20010223200522" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] encoding, SAX callbacks" -->
+<!-- id="20010223210522.H28971@imag.fr" -->
+<!-- inreplyto="0102AE2D3200D4118AE20050DACDB02E363418@congress.vhcorp.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Fri Feb 23 2001 - 15:05:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1493.html">Craig Wright: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Previous message:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1493.html">Craig Wright: "Re: [xml] encoding, SAX callbacks"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 23, 2001 at 11:31:29AM -0800, James McCann wrote:
+<br>
+<em>&gt; &gt;There would be some value in the possibility to specify the desired 
+</em><br>
+<em>&gt; &gt;encoding for the callbacks, if you have a UTF16 or 8859-x centric 
+</em><br>
+<em>&gt; &gt;application. But this can easily implemented on top of the existing SAX 
+</em><br>
+<em>&gt; &gt;callback.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I agree that there is &quot;value in the possibility to specify the desired 
+</em><br>
+<em>&gt; encoding for the callbacks&quot; but I would drop the qualification.  I also
+</em><br>
+<em>&gt; agree that it can easily be implemented, and I propose to do this w/in the
+</em><br>
+<em>&gt; library.  libxml already does UTF8 -&gt; various other encodings and vice
+</em><br>
+<em>&gt; versa, so why burden applications w/ the need to write additional code?
+</em><br>
+<em>&gt; I have no problem with using UTF8 as the default encoding for the SAX 
+</em><br>
+<em>&gt; callbacks as long as a mechanism exists to determine the encoding used
+</em><br>
+<em>&gt; in the callbacks.  I realize there will be memory use and performance 
+</em><br>
+<em>&gt; drawbacks, but if a user requests a certain encoding, and the appropriate
+</em><br>
+<em>&gt; transcoders exist, that encoding should be used in the callbacks.  
+</em><br>
+<p>&nbsp;&nbsp;Let's be very clear.
+<br>
+&nbsp;&nbsp;You ask for ISO Latin 1, someone could ask for Shift JIS callbacks
+<br>
+or UTF16 ones. In either cases I would have to seriously complicate
+<br>
+libxml parser design to adapt dynamically to the fact that it should
+<br>
+lookup the tags and delimiters using X Y Z encodings. 
+<br>
+&nbsp;&nbsp;No way, I can't do this. So I convert before parsing. Hence I have
+<br>
+a single encoding to understand in the parser. Now once the parser 
+<br>
+has decoded a chain, converting back to onther encoding is brain-dead.
+<br>
+I't already in a canonical form.
+<br>
+&nbsp;&nbsp;You don't use the DOM limiting yourself to SAX. Try to find another
+<br>
+parser with a SAX only interface and not needing conversion of its
+<br>
+input. Maybe expat does, libxml won't. Though if you have some
+<br>
+time prepare a patch and send it, maybe it will be accepted if it's
+<br>
+clean and don't look like a maintenance nightmare.
+<br>
+<p><em>&gt; Now my application only ever needs to understand ISO-8859-1.
+</em><br>
+<p>&nbsp;&nbsp;right now it only need to understand UTF8 instead, and this 
+<br>
+completely independantly of the encoding of the input.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1493.html">Craig Wright: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Previous message:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1493.html">Craig Wright: "Re: [xml] encoding, SAX callbacks"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 23 2001 - 16:44:45 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] using large binary chunks / binary XML?</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] using large binary chunks / binary XML?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] using large binary chunks / binary XML?</h1>
+<!-- received="Thu Jan  4 10:41:27 2001" -->
+<!-- isoreceived="20010104154127" -->
+<!-- sent="Thu, 04 Jan 2001 09:41:04 -0600" -->
+<!-- isosent="20010104154104" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] using large binary chunks / binary XML?" -->
+<!-- id="5.0.2.1.2.20010104093838.02b5f8c0@mail.telefragged.com" -->
+<!-- inreplyto="20010104113125.E18020@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 04 2001 - 10:41:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1313.html">Daniel Veillard: "Re: [xml] Last xinclude vs. DTD problem"</a>
+<li><strong>In reply to:</strong> <a href="1310.html">Daniel Veillard: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+How well does the zip approach allow file modification? Let's say I end up 
+<br>
+with a zip file that's 300Mb, in which I randomly add and remove chunks (of 
+<br>
+the size of an average file, say 100kb)? I understand this zip format would 
+<br>
+be fine for reading, but I'm a bit worried about writing performances :-)
+<br>
+<p>TTimo
+<br>
+<p>At 11:31 AM 1/4/01 +0100, you wrote:
+<br>
+<p><em>&gt;On Thu, Jan 04, 2001 at 09:59:47AM +0100, Peter Jacobi wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hi Daniel, All,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt;   I think this is a packaging format problem. I have already suggested a
+</em><br>
+<em>&gt; &gt; &gt; format (in other forums), basically it's the following:
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt;   - a ZIP file encapsulating a set of files
+</em><br>
+<em>&gt; &gt; &gt;   - the first file is in an XML format and provides metadata
+</em><br>
+<em>&gt; &gt; &gt;     (filename, URL, mime type, ...) for the content of the archive
+</em><br>
+<em>&gt; &gt; &gt;   - the other elements in the archive can be either XML or binary
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Are you suggesting 'the' ZIP format or do you mean any generic packed
+</em><br>
+<em>&gt; &gt; archive format? If the former is the case, what's the rationale for
+</em><br>
+<em>&gt; &gt; choosing ZIP over TAR/GZIP?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   because one can seek in a ZIP archive
+</em><br>
+<em>&gt;   because it's basically Jar (Java format) but with an XML metadata header
+</em><br>
+<em>&gt;   because tar standard (POSIX IIRC) and GNU implementation are subtly 
+</em><br>
+<em>&gt; different
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; And to add another suggestion: The multiple 'forks' (XML, Binary) should
+</em><br>
+<em>&gt; &gt; be virtualized in some kind, to a) exploit file systems who can provide
+</em><br>
+<em>&gt; &gt; multiple forks per file natively (NTFS) b) use files withing a directory,
+</em><br>
+<em>&gt; &gt; c) use MIME multipart, beside the d) the ZIP (or tar/gzip) implementation.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   I beg to differ, the problem with such an approach is that you loose
+</em><br>
+<em>&gt;the portability of an archive, factor which is driving me to add it. I'm
+</em><br>
+<em>&gt;not interested in this N ways to do packaging, I want one and have it
+</em><br>
+<em>&gt;work everywhere. Packing multiple entities in a single file using ZIP
+</em><br>
+<em>&gt;is a good interchange format, that's why I want to add it.
+</em><br>
+<em>&gt;Standardizing the metadata description is important too.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;--
+</em><br>
+<em>&gt;Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt;<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt;<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1313.html">Daniel Veillard: "Re: [xml] Last xinclude vs. DTD problem"</a>
+<li><strong>In reply to:</strong> <a href="1310.html">Daniel Veillard: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 04 2001 - 10:43:50 EST</em>
+</em>
+</small>
+</body>
+</html>

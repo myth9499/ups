@@ -1,0 +1,32 @@
+Index: include/win32config.h
+@@ -4,10 +4,6 @@
+ #define HAVE_TIME_H
+ #define HAVE_FCNTL_H
+ 
+-#define LIBXML_VERSION @LIBXML_VERSION_NUMBER@
+-#define LIBXML_VERSION_STRING "@LIBXML_VERSION@"
+-
+-
+ #include <io.h>
+ 
+ #ifdef INCLUDE_WINSOCK
+Index: win32/Makefile.mingw
+@@ -75,15 +75,15 @@
+ 
+ $(EXE1): $(OBJ1) $(LIBOBJS) $(DLL)
+ 	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
+-	strip $@.exe
++	strip $@
+ 
+ $(EXE2): $(OBJ2) $(LIBOBJS) $(DLL)
+ 	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
+-	strip $@.exe
++	strip $@
+ 
+ $(EXE3): $(OBJ3) $(LIBOBJS) $(LIB)
+ 	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(LIBBASE) $(LIBS)
+-	strip $@.exe
++	strip $@
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) -c $< -o $@	

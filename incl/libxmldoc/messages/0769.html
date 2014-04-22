@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-2.2.3 is released.</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="Re: [xml] libxml-2.2.3 is released.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-2.2.3 is released.</h1>
+<!-- received="Sun Sep 17 16:38:05 2000" -->
+<!-- isoreceived="20000917203805" -->
+<!-- sent="Sun, 17 Sep 2000 13:37:27 -0700 (PDT)" -->
+<!-- isosent="20000917203727" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="Re: [xml] libxml-2.2.3 is released." -->
+<!-- id="Pine.LNX.4.21.0009171320390.8704-200000@phong.blorf.net" -->
+<!-- inreplyto="20000917181119.A5159@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20libxml-2.2.3%20is%20released."><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Sun Sep 17 2000 - 16:37:27 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0768.html">Daniel Veillard: "[xml] libxml-2.2.3 is released."</a>
+<li><strong>In reply to:</strong> <a href="0768.html">Daniel Veillard: "[xml] libxml-2.2.3 is released."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, 17 Sep 2000, Daniel Veillard wrote:
+<br>
+<em>&gt; If there is fixes which seems to be missing, send them again
+</em><br>
+<p>I'm been expecting you to comment on (or perhaps accept) my recent patch
+<br>
+to fix the parsing of UTF8 characters in HTML tag-attribute values.
+<br>
+<p>Here's the patch:
+<br>
+<p>Index: HTMLparser.c
+<br>
+@@ -1970,7 +1970,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned int c;
+<br>
+-	    int bits;
+<br>
++	    int bits, l;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (out - buffer &gt; buffer_size - 100) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int index = out - buffer;
+<br>
+@@ -1978,7 +1978,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;growBuffer(buffer);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out = &amp;buffer[index];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+-	    c = CUR;
+<br>
++	    c = CUR_CHAR(l);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if      (c &lt;    0x80)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ *out++  = c;                bits= -6; }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (c &lt;   0x800)
+<br>
+<p>Attached is a test file that demonstrates the problem when it is run like
+<br>
+this:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;./testHTML -sax test.html
+<br>
+<p>Both HREF tags have the same high-bit character in them (&amp;#145;), but the
+<br>
+second instance outputs an &quot;&amp;Acirc;&quot; instead.
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/html attachment: <a href="att-0769/01-test.html">high-bit tag-attribute-value test case</a>
+</ul>
+<!-- attachment="01-test.html" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.2.3%20is%20released.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.2.3%20is%20released.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0768.html">Daniel Veillard: "[xml] libxml-2.2.3 is released."</a>
+<li><strong>In reply to:</strong> <a href="0768.html">Daniel Veillard: "[xml] libxml-2.2.3 is released."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 17 2000 - 16:43:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

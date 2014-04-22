@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Adjacent TEXT nodes aren't merged</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Adjacent TEXT nodes aren't merged">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Adjacent TEXT nodes aren't merged</h1>
+<!-- received="Sat Oct 21 05:22:27 2000" -->
+<!-- isoreceived="20001021092227" -->
+<!-- sent="Sat, 21 Oct 2000 11:22:21 +0200" -->
+<!-- isosent="20001021092221" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Adjacent TEXT nodes aren't merged" -->
+<!-- id="20001021112221.A17831@w3.org" -->
+<!-- inreplyto="20001020212501.A6790@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Adjacent%20TEXT%20nodes%20aren't%20merged"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Oct 21 2000 - 05:22:21 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1024.html">Daniel Veillard: "Re: [xml] libxml2-2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="1022.html">Timothee Besset: "[xml] libxml2-2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="1020.html">TOM: "[xml] Adjacent TEXT nodes aren't merged"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 20, 2000 at 09:25:01PM +0200, TOM wrote:
+<br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; I used 'xmllint --debug --noent test/ent1' (from libxml2-2.2.5) and
+</em><br>
+<em>&gt; contrary to what was expected I had 3 TEXT nodes.
+</em><br>
+<p>&nbsp;&nbsp;Hi TOM,
+<br>
+<p><em>&gt; The attached patch should fix this.
+</em><br>
+<p>&nbsp;This might be slightly more complex than the proposed solution, but it's
+<br>
+nearly complete. The problem you faced is:
+<br>
+&nbsp;&nbsp;- there is a reference to a parsed entity
+<br>
+&nbsp;&nbsp;- libxml do build the DOM equivalent of the entity content 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the first time the entity is referenced:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ this is needed to make sure that teh entity content is well
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balanced (checking needed only if referenced)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ when not substituting entities libxml currently keep a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;single copy of the DOM subtree attached to an entity reference
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(which raises some problem w.r.t. namespace support but reduces
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the memory usage if frequently referenced and allow a change
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;made to the entity content to be simply reported by all
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;references)
+<br>
+&nbsp;&nbsp;- when substituting entities, the xmlParseReference() function does
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a xmlCopyNodeList(ent-&gt;children); and then an xmlAddChildList()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at the current node level.
+<br>
+&nbsp;That explains why you got 3 node one of the text before, one for
+<br>
+the content of the entity reference and one for the text after.
+<br>
+<p>&nbsp;So your patch cover those well, but doesn't free the result of
+<br>
+xmlCopyNodeList() resulting in a memory leak in this case.
+<br>
+<p>&nbsp;Since I far prefer a segfault on the developper workbench than
+<br>
+silent memory leaks which are the poison of the current software
+<br>
+industry, I preferred to modify the semantic of the merge operation
+<br>
+and to possibly free up the merged nodes. I hope this won't led to
+<br>
+too many troubles. This is a somewhat serious change of semantic but
+<br>
+it seems to not break anything in my testsuite, and completely avoid
+<br>
+memory leaks.
+<br>
+&nbsp;Programmers can be aware that the node has been freed if the insertion
+<br>
+function don't return the new node ...
+<br>
+<p>&nbsp;&nbsp;Patch enclosed to the 2.2.5 version.
+<br>
+<p><em>&gt; I went on this after a thread on comp.text.xml about Xerces, which
+</em><br>
+<em>&gt; doesn't merge adjacent TEXT nodes or substitute entities. A little bit
+</em><br>
+<em>&gt; annoying when processing XSLT !
+</em><br>
+<em>&gt; For curious, Message-Id: &lt;<a href="mailto:G2Hs12.G8I@world.std.com?subject=Re:%20[xml]%20Adjacent%20TEXT%20nodes%20aren't%20merged">G2Hs12.G8I@world.std.com</a>&gt;
+</em><br>
+<p>&nbsp;&nbsp;Yeah, in general substituting entities makes a serious change of
+<br>
+the content model. We start hitting some of the divergences between
+<br>
+the XPath (on which XSLT/XPointer is built and the XML Infoset), I hope
+<br>
+this will be cleaned up in the future.
+<br>
+&nbsp;&nbsp;Another think which should be changed too in libxml is that I don't
+<br>
+generate the blanks node used for formatting when validating and that
+<br>
+libxml knows that it's not a mixed content model. They should be put
+<br>
+back since most implementation seems to do the same and to be sure that
+<br>
+the DOM tree obtained is the same whether validation is done at parsing
+<br>
+time or later on (if done at all).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Adjacent%20TEXT%20nodes%20aren't%20merged">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1023/01-tree.diff">tree.diff</a>
+</ul>
+<!-- attachment="01-tree.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Adjacent%20TEXT%20nodes%20aren't%20merged">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Adjacent%20TEXT%20nodes%20aren't%20merged">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1024.html">Daniel Veillard: "Re: [xml] libxml2-2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="1022.html">Timothee Besset: "[xml] libxml2-2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="1020.html">TOM: "[xml] Adjacent TEXT nodes aren't merged"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 21 2000 - 05:43:35 EDT</em>
+</em>
+</small>
+</body>
+</html>

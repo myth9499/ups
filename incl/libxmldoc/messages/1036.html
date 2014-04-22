@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlNodeSetContent that doesn't wipe out child el</title>
+<meta name="Author" content="Harry Blundell (harry@halcyoninc.com)">
+<meta name="Subject" content="Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?</h1>
+<!-- received="Mon Oct 23 09:46:52 2000" -->
+<!-- isoreceived="20001023134652" -->
+<!-- sent="Mon, 23 Oct 2000 09:46:16 -0400 (EDT)" -->
+<!-- isosent="20001023134616" -->
+<!-- name="Harry Blundell" -->
+<!-- email="harry@halcyoninc.com" -->
+<!-- subject="Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?" -->
+<!-- id="Pine.GSO.4.05.10010230939360.24462-100000@columbia" -->
+<!-- inreplyto="20001021233220.A5260@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Harry Blundell (<a href="mailto:harry@halcyoninc.com?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?"><em>harry@halcyoninc.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 09:46:16 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1037.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] [Re:]newbie question about encoding"</a>
+<li><strong>Previous message:</strong> <a href="1035.html">Daniel Veillard: "Re: [xml] newbie question about encoding"</a>
+<li><strong>In reply to:</strong> <a href="1026.html">TOM: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks for your answer, but I think that either I wasn't clear, or I'm
+<br>
+missing something.  I have no problem with the way the mixed content of
+<br>
+an element is stored.  My problem is with my understanding of
+<br>
+xmlNodeSetContent:  before adding new content to an element node, it
+<br>
+removes ALL child nodes - both text nodes (understandable) and element
+<br>
+nodes (no so understandable, at least to me).  I'm looking for a function
+<br>
+that replaces the child text nodes (and I'm not too concerned with where 
+<br>
+the new text nodes go - at the end would be fine), while leaving the
+<br>
+child element nodes intact.
+<br>
+<p>I'll write such a function if I have to - I just want to be sure that I'm
+<br>
+not reinventing the wheel.
+<br>
+<p>Thanks,
+<br>
+<p>Harry
+<br>
+----------------------------------------------------------------------
+<br>
+Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+<br>
+2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+<br>
+PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">harry@HalcyonInc.com</a>
+<br>
+<p><p>On Sat, 21 Oct 2000, TOM wrote:
+<br>
+<p><em>&gt; On 21/10/2000 22:58:33 Harry Blundell wrote:
+</em><br>
+<em>&gt; &gt; My reading of xmlNodeSetContent is that it wipes out
+</em><br>
+<em>&gt; &gt; node-&gt;content, and all of node's child nodes, and then acts
+</em><br>
+<em>&gt; &gt; differently to save the new content depending on whether the node
+</em><br>
+<em>&gt; &gt; is a comment (in which case it uses node-&gt;content) or an element
+</em><br>
+<em>&gt; &gt; (in which case it creates child nodes to hold the new content.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; This doesn't work so well for elements that have mixed content
+</em><br>
+<em>&gt; &gt; (both text content, and child elements).  Is there a function that
+</em><br>
+<em>&gt; &gt; replaces the content of an element, while leaving its child
+</em><br>
+<em>&gt; &gt; elements alone, or do I have to write one?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Mixed content doesn't use node-&gt;content but text nodes between element
+</em><br>
+<em>&gt; nodes.
+</em><br>
+<em>&gt; Imagine you have node-&gt;content not NULL *AND* child elements. When you
+</em><br>
+<em>&gt; need to &quot;serialize&quot; the tree, where do you put node-&gt;content in relation
+</em><br>
+<em>&gt; with child elements ? before ? after ? somewhere between ? There's no
+</em><br>
+<em>&gt; issue!
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If you have child elements, text content is represented by text nodes
+</em><br>
+<em>&gt; (XML_TEXT_NODE) between your child elements (XML_ELEMENT_NODES).
+</em><br>
+<em>&gt; You can figure out this passing the --debug option to xmllint.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; HTH
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">majordomo@rpmfind.net</a>
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlNodeSetContent%20that%20doesn't%20wipe%20out%20child%20elements?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1037.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] [Re:]newbie question about encoding"</a>
+<li><strong>Previous message:</strong> <a href="1035.html">Daniel Veillard: "Re: [xml] newbie question about encoding"</a>
+<li><strong>In reply to:</strong> <a href="1026.html">TOM: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 10:43:36 EDT</em>
+</em>
+</small>
+</body>
+</html>

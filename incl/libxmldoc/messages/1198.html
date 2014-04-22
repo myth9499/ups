@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Question about libxml...</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Question about libxml...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Question about libxml...</h1>
+<!-- received="Wed Nov 15 17:39:16 2000" -->
+<!-- isoreceived="20001115223916" -->
+<!-- sent="Wed, 15 Nov 2000 23:39:12 +0100" -->
+<!-- isosent="20001115223912" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Question about libxml..." -->
+<!-- id="20001115233912.E12678@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B1999F@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20libxml..."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 15 2000 - 17:39:12 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1197.html">TOM: "Re: [xml] Question about libxml..."</a>
+<li><strong>In reply to:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 15, 2000 at 02:51:18PM -0500, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	we have found a problem in the HTML parser.  Here is my HTML code:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;SCRIPT LANGUAGE=&quot;JavaScript&quot;&gt;
+</em><br>
+<em>&gt; &lt;!--
+</em><br>
+<em>&gt; var cobrand_directory = &quot;&quot;;
+</em><br>
+<em>&gt; //--&gt;
+</em><br>
+<em>&gt; &lt;/SCRIPT&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+</em><br>
+<em>&gt; &lt;HTML&gt;
+</em><br>
+<em>&gt; &lt;HEAD&gt;
+</em><br>
+<em>&gt; &lt;TITLE&gt;Title&lt;/TITLE&gt;
+</em><br>
+<em>&gt; &lt;/HEAD&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;BODY&gt;
+</em><br>
+<em>&gt; This is a test
+</em><br>
+<em>&gt; &lt;/BODY&gt;
+</em><br>
+<em>&gt; &lt;/HTML&gt;
+</em><br>
+<p>yeah, nicely piece of horrible HTML like crap, not even single rooted !!!
+<br>
+Look closely, there is not a single root element for this document !
+<br>
+Whoever produced code generating this kind of horrible stuff should
+<br>
+get some really nasty advertizing ...
+<br>
+<p><em>&gt; libxml (2.2.7) outputs the following:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+</em><br>
+<em>&gt; &lt;html&gt;&lt;head&gt;
+</em><br>
+<em>&gt; &lt;script language=&quot;JavaScript&quot;&gt;
+</em><br>
+<em>&gt; &lt;!--
+</em><br>
+<em>&gt; var cobrand_directory = &quot;&quot;;
+</em><br>
+<em>&gt; //--&gt;
+</em><br>
+<em>&gt; &lt;/script&gt;
+</em><br>
+<em>&gt; &lt;html&gt;
+</em><br>
+<em>&gt; &lt;head&gt;&lt;title&gt;Title&lt;/title&gt;&lt;/head&gt;
+</em><br>
+<em>&gt; &lt;body&gt;&lt;p&gt;
+</em><br>
+<em>&gt; This is a test
+</em><br>
+<em>&gt; &lt;/p&gt;&lt;/body&gt;
+</em><br>
+<em>&gt; &lt;/html&gt;
+</em><br>
+<em>&gt; &lt;/html&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As you can see, the results contain 2 html tags, 2 head tags, 2 ending html
+</em><br>
+<em>&gt; and only 1 head tag.
+</em><br>
+<em>&gt; I have pinpointed where this comes from (htmlcheckImplied), but haven't
+</em><br>
+<em>&gt; found where to fix it yet.
+</em><br>
+<p>&nbsp;&nbsp;What's happening:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- libxml sees the script without context, so it auto-adds 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;html and head parent. I think this is normal, this should
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not be changed
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- when the script element is closed we are still with 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;html and head open
+<br>
+&nbsp;
+<br>
+&nbsp;Now at that point libxml, seeing opening tags, just open them ...
+<br>
+<p>&nbsp;The best to do is to not open html when we are in html, nor head when
+<br>
+in head nor body when in body.
+<br>
+&nbsp;However we are diverging slightly from the initial goal of traying to parse
+<br>
+and bive back without too many changes what was on the input to the
+<br>
+upper layer, and start the kind of cleanups similar to Tidy's ones.
+<br>
+&nbsp;Finding the limit is a bit difficult, in this case I would still add
+<br>
+the heuristics suggested before.
+<br>
+<p>&nbsp;&nbsp;But damnit, how broken the HTML found on the web is !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20libxml...">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Question%20about%20libxml...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Question%20about%20libxml...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1197.html">TOM: "Re: [xml] Question about libxml..."</a>
+<li><strong>In reply to:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 15 2000 - 17:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

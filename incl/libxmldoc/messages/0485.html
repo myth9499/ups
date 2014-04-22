@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Saving without tree</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Saving without tree">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Saving without tree</h1>
+<!-- received="Fri May 26 14:44:59 2000" -->
+<!-- isoreceived="20000526184459" -->
+<!-- sent="Fri, 26 May 2000 20:43:25 +0200" -->
+<!-- isosent="20000526184325" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Saving without tree" -->
+<!-- id="20000526204325.G8774@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10005261426300.21516-100000@fangio.magnet.fsu.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri May 26 2000 - 14:43:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, May 26, 2000 at 02:31:04PM -0400, Adrian Feiguin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a way to save the file without building a tree? Suppouse that my
+</em><br>
+<em>&gt; file is huge, because it contains a lot of data (the same reason for using
+</em><br>
+<em>&gt; the SAX interfase). Building a tree will consume a lot of memory. Instead
+</em><br>
+<em>&gt; of that, I am using fprints's. OK, it may sound dumb, but it works
+</em><br>
+<em>&gt; simply great, I even manage to keep the indentation.
+</em><br>
+<em>&gt; Tha only problem are the special characters '&gt;' '&lt;'. 
+</em><br>
+<em>&gt; 1) Is there a better way?
+</em><br>
+<p>&nbsp;&nbsp;I don't know any better way if you don't have an XML tree built in memory
+<br>
+<p><em>&gt; 2) Are ther more spacial characters that these two?
+</em><br>
+<p>&nbsp;&nbsp;yes '&amp;' =&gt; &amp;amp;
+<br>
+&nbsp;&nbsp;you should also be extremely cautious about any char out of the ASCII
+<br>
+range, they are expect to be encoded in UTF-8 by default, or using 
+<br>
+character references like &amp;#x81;
+<br>
+&nbsp;&nbsp;Internationalization is hard, so I suggest you stick with character
+<br>
+references if you really don't understand fully what exorting an XML
+<br>
+file in given encoding means
+<br>
+<p><em>&gt; 3) Suggestions?
+</em><br>
+<p>&nbsp;&nbsp;Read more about XML :-\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.ucc.ie/xml/">http://www.ucc.ie/xml/</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.xml.com/axml/axml.html">http://www.xml.com/axml/axml.html</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.xmlhack.com/">http://www.xmlhack.com/</a>
+<br>
+&nbsp;&nbsp;books ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Saving%20without%20tree">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0484.html">Adrian Feiguin: "[xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

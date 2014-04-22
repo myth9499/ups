@@ -1,0 +1,25 @@
+diff -p -r1.52 encoding.c
+*** encoding.c	2000/10/25 19:26:52	1.52
+--- encoding.c	2000/11/23 13:01:08
+*************** xmlIconvWrapper(iconv_t cd,
+*** 1686,1694 ****
+  #ifdef EINVAL
+  		if (errno == EINVAL) {
+  			return -3;
+! 		}
+  #endif
+! 		else {
+  			return -3;
+  		}
+  	}
+--- 1686,1694 ----
+  #ifdef EINVAL
+  		if (errno == EINVAL) {
+  			return -3;
+! 		} else
+  #endif
+! 		{
+  			return -3;
+  		}
+  	}
+

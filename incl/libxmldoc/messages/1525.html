@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] interfacing libxml with YACC</title>
+<meta name="Author" content="Luca Padovani (luca.padovani@cs.unibo.it)">
+<meta name="Subject" content="[xml] interfacing libxml with YACC">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] interfacing libxml with YACC</h1>
+<!-- received="Mon Mar  5 16:25:48 2001" -->
+<!-- isoreceived="20010305212548" -->
+<!-- sent="Mon, 05 Mar 2001 20:59:32 +0100" -->
+<!-- isosent="20010305195932" -->
+<!-- name="Luca Padovani" -->
+<!-- email="luca.padovani@cs.unibo.it" -->
+<!-- subject="[xml] interfacing libxml with YACC" -->
+<!-- id="3AA3F024.2733D1B7@cs.unibo.it" -->
+<!-- inreplyto="20010301164505.A8471@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Luca Padovani (<a href="mailto:luca.padovani@cs.unibo.it?subject=Re:%20[xml]%20interfacing%20libxml%20with%20YACC"><em>luca.padovani@cs.unibo.it</em></a>)<br>
+<strong>Date:</strong> Mon Mar 05 2001 - 14:59:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1524.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1508.html">Daniel Veillard: "[xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+some alternative subjects for this mail:
+<br>
+- structural validation of XML files using SAX in libxml
+<br>
+- semantic parsing of XML documents
+<br>
+- specific-markup parser generator with libxml
+<br>
+<p>Hi all,
+<br>
+<p>I've been using libxml for more than one year and I think it is a really
+<br>
+great tool. In this year I found myself parsing more than a dozen of
+<br>
+different markup languages, and each time I had to rewrite several
+<br>
+&quot;semantic actions&quot; to rebuild the internal data structures that XML was
+<br>
+representing. This is a very boring and repetitive task. Let us take a
+<br>
+look at the two alternatives:
+<br>
+<p>a) DOM. Yeah, if you want to validate a XML file with libxml you must
+<br>
+built the whole tree. But then you have this recursive structure and is
+<br>
+is pretty easy to do the right traversal. There are blank nodes to skip,
+<br>
+your code relies on validation for the correct positioning of node
+<br>
+children, it is a bit boring to scan over node lists.
+<br>
+<p>b) SAX. No additional memory is required for this parsing, but you have
+<br>
+no validation and the parsing proceeds in a sort of top-down fashion,
+<br>
+which is not what you want in some (most?) cases. In an attempt to make
+<br>
+SAX parsing easier I implemented a kind of run-time environment with
+<br>
+association between names and values, with little support for run-time
+<br>
+type-checking, but the approach was error-prone and resulted in using
+<br>
+dozens of C macro to access all the environment variables I needed.
+<br>
+<p>I was looking for an approach for the easy (bottom-up) parsing of a XML
+<br>
+document, still having the possibility of associating semantic actions
+<br>
+at each stage of the parsing. Code reusability, code readability and
+<br>
+easiness of implementation was some of my goals. I had YACC in my mind,
+<br>
+and the approach I am currently investigating is using YACC as the
+<br>
+parser, and libxml SAX as the lexer.
+<br>
+<p>In other words, SAX events coming from libxml are translated into tokens
+<br>
+for a user-supplied grammar specified in a YACC-like syntax. Semantic
+<br>
+actions can be associated to grammar reductions and you can use the
+<br>
+mechanism of semantic values provided by YACC to propagate parsed
+<br>
+results in a bottom-up manner.
+<br>
+<p>The following is a trivial example of YAXP grammar:
+<br>
+<p>%{{
+<br>
+#include &lt;stdlib.h&gt;
+<br>
+%}}
+<br>
+<p>%union {{
+<br>
+&nbsp;&nbsp;gint n;
+<br>
+}}
+<br>
+<p>%type &lt;&lt;n&gt;&gt; expr
+<br>
+%type &lt;&lt;n&gt;&gt; &lt;expr&gt;
+<br>
+%type &lt;&lt;n&gt;&gt; &lt;constant&gt;
+<br>
+<p>%%
+<br>
+<p>main:
+<br>
+&nbsp;&nbsp;expr {{ printf(&quot;result: %d\n&quot;, $1); }}
+<br>
+;
+<br>
+<p>expr:
+<br>
+&nbsp;&nbsp;&lt;expr&gt;
+<br>
+| &lt;constant&gt;
+<br>
+| expr &lt;plus&gt; expr {{ $$ = $1 + $3; }}
+<br>
+| expr &lt;minus&gt; expr {{ $$ = $1 - $3; }}
+<br>
+| &lt;plus&gt; expr {{ $$ = $2; }}
+<br>
+| &lt;minus&gt; expr {{ $$ = -$2; }}
+<br>
+;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&lt;expr&gt;:
+<br>
+&nbsp;expr
+<br>
+;
+<br>
+<p>&lt;constant&gt;:
+<br>
+&nbsp;&nbsp;TEXT {{ $$ = atoi(YAXP_GET_TEXT($1)); }}
+<br>
+;
+<br>
+<p>&lt;plus&gt;:
+<br>
+;
+<br>
+<p>&lt;minus&gt;:
+<br>
+;
+<br>
+<p>%%
+<br>
+<p>The grammar is made of rules, rules are made of components. Components
+<br>
+surrounded by &lt; &gt; are indeed XML elements, the other are non-terminal
+<br>
+symbols, like in YACC. Thus, I see from the grammar above that &lt;plus&gt;
+<br>
+and &lt;minus&gt; are EMPTY XML elements, &lt;constant&gt; is an XML element
+<br>
+containing just characters data, &lt;expr&gt; is an element whose content is
+<br>
+described by the non-terminal expr.
+<br>
+Semantic actions are surrounded by {{ }} and semantic values are
+<br>
+accessed by the same notation as in YACC. There are some facilities for
+<br>
+attributes, for example, in a rule with the form:
+<br>
+<p>&lt;table&gt;:
+<br>
+&nbsp;&nbsp;bla bla {{ printf(&quot;%s\n&quot;, @border); }}
+<br>
+<p>you can access the attribute &quot;border&quot; of the element table when it is
+<br>
+parsed.
+<br>
+<p>The implementation of all this is fairly easy: I have a little
+<br>
+processor, yaxp, which translates a YAXP grammar into a YACC file. Then,
+<br>
+you have to process the resulting grammar with YACC, compile and link
+<br>
+with a little library for using libxml as &quot;yylex&quot;.
+<br>
+<p>Well, I tried to sum up what I can do with YAXP right now. The question
+<br>
+is: does someone find this useful too? Are you interested in
+<br>
+using/developing/extending YAXP? If so please let me know and I'll make
+<br>
+a public release of the source code in a few days.
+<br>
+Any ideas, criticisms, suggestions? (I have many) They are all welcome.
+<br>
+<p>Best regards,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;luca
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20interfacing%20libxml%20with%20YACC">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20interfacing%20libxml%20with%20YACC">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1524.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1508.html">Daniel Veillard: "[xml] libxml-2.3.3 amd libxslt-0.4.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Mar 05 2001 - 16:43:41 EST</em>
+</em>
+</small>
+</body>
+</html>

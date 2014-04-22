@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace problem with external DTD validation</title>
+<meta name="Author" content="Bill Kendrick (William.Kendrick@wcom.com)">
+<meta name="Subject" content="Re: [xml] Whitespace problem with external DTD validation">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace problem with external DTD validation</h1>
+<!-- received="Tue Oct 10 17:56:04 2000" -->
+<!-- isoreceived="20001010215604" -->
+<!-- sent="Tue, 10 Oct 2000 14:50:29 -0700" -->
+<!-- isosent="20001010215029" -->
+<!-- name="Bill Kendrick" -->
+<!-- email="William.Kendrick@wcom.com" -->
+<!-- subject="Re: [xml] Whitespace problem with external DTD validation" -->
+<!-- id="20001010145029.A24829@atari" -->
+<!-- inreplyto="20001010232712.M23005@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Kendrick (<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation"><em>William.Kendrick@wcom.com</em></a>)<br>
+<strong>Date:</strong> Tue Oct 10 2000 - 17:50:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>In reply to:</strong> <a href="0910.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Reply:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, 10 Oct 2000 14:27:12 Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Mon, Oct 09, 2000 at 04:47:08PM -0700, Bill Kendrick wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; In other words, the difference between:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   &lt;tag1&gt;foo&lt;/tag1&gt;
+</em><br>
+<em>&gt; &gt;   &lt;tag2&gt;bar&lt;/tag2&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; and:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   &lt;tag1&gt;foo&lt;/tag1&gt;&lt;tag2&gt;bar&lt;/tag2&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; The validator accepts the latter (no whitespace between tags),
+</em><br>
+<em>&gt; &gt; but complains about the former (whitespace between tags).
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; At this point (I just started working with XML and DTD's last
+</em><br>
+<em>&gt; &gt; Friday ;) ), I don't know much, but I ASSUME either the problem
+</em><br>
+<em>&gt; &gt; is a bug, or there's some &quot;ignore whitespace between tags&quot; flag
+</em><br>
+<em>&gt; &gt; to set somewhere, or something...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Okay here is the answer ....
+</em><br>
+<em>&gt; What you are doing is 
+</em><br>
+<em>&gt;    1/ parsing without a DTD
+</em><br>
+<em>&gt;    2/ trying to validate the result using a DTD.
+</em><br>
+<em>&gt; instead of 
+</em><br>
+<em>&gt;    3/ parsing an validating at the same time
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  What's happening ???
+</em><br>
+<em>&gt;  Simply that during 1/ when the XML parser see &lt;/p&gt;   &lt;p&gt;
+</em><br>
+<em>&gt; it can't say for sure whether those blanks are significant or not,
+</em><br>
+<em>&gt; and by default it keeps them as text nodes in the tree. Then in 2/
+</em><br>
+<em>&gt; the parser see extra text nodes and barfs because it doesn't expect
+</em><br>
+<em>&gt; PCDATA there.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Solutions:
+</em><br>
+<em>&gt;    Quick: use 3/ add 
+</em><br>
+<em>&gt; 	  xmlDoValidityCheckingDefaultValue = 1;
+</em><br>
+<em>&gt; 	  before calling the parser and the XML parser will automatically
+</em><br>
+<em>&gt; 	  validate
+</em><br>
+<p>Well, the XML documents do not have DTDs embeded in them (they will be
+<br>
+coming over a network connection from a Point of Sale client device).
+<br>
+<p>I tried what you suggested (&quot;xmlDoValidityCheckingDefaultValue = 1;&quot;
+<br>
+before my call to xmlParseFile()&quot;), and now I get errors during
+<br>
+the loading, AND still getting the same error about whitespace!!! &lt;:^(
+<br>
+<p><p>&nbsp;&nbsp;test-with-whitespace.xml:3: validity error: Validation failed: no DTD found !
+<br>
+&nbsp;&nbsp;&lt;List&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+&nbsp;&nbsp;Element List content doesn't follow the Dtd
+<br>
+&nbsp;&nbsp;Expecting (Item)+, got (CDATA Item CDATA Item CDATA Item CDATA)
+<br>
+&nbsp;&nbsp;test-with-whitespace.xml: invalid
+<br>
+<p>The example code I'm writing is less than 250 lines long, and the XML and
+<br>
+DTD files are 14 lines long, total..  May I email them all to you so you can
+<br>
+see exactly what I'm trying to do and you can point out my errors? :)
+<br>
+<p><p><em>&gt;  Serious: the code doing the validity checking in valid.c should attempt to
+</em><br>
+<em>&gt;           detect those unsignificant white spaces in the tree and avoid
+</em><br>
+<em>&gt; 	  generating validity errors for them
+</em><br>
+<p>Are there plans to implement this?  The project must be up and running
+<br>
+by October 27th. :)
+<br>
+<p>-bill!
+<br>
+<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">William.Kendrick@wcom.com</a>
+<br>
+ext 6218
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>In reply to:</strong> <a href="0910.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Reply:</strong> <a href="0916.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 10 2000 - 18:43:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

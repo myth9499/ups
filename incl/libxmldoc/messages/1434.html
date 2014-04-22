@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] bug in valid.c</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] bug in valid.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] bug in valid.c</h1>
+<!-- received="Wed Feb  7 15:49:07 2001" -->
+<!-- isoreceived="20010207204907" -->
+<!-- sent="Wed, 07 Feb 2001 20:45:13 +0000" -->
+<!-- isosent="20010207204513" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] bug in valid.c" -->
+<!-- id="3A81B3D9.3422A66F@uk.sun.com" -->
+<!-- inreplyto="20010207192148.J8188@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20bug%20in%20valid.c"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 07 2001 - 15:45:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>In reply to:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+<p>I think that I may have found another problem in valid.c.
+<br>
+<p>My fix isn't working, which makes me wonder why. Some debugging and
+<br>
+investigating got me looking at xmlAddRef and it seems to be fairly wrong to
+<br>
+me.
+<br>
+<p>Near the end of the function, there is the following section of code :-
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* !!! Should we keep track of all refs ? and use xmlHashAddEntry2 ?
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (xmlHashAddEntry(table, value, ret) &lt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFreeRef(ret);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>When this code is executed any IDREF(S) which reference an ID multiple times
+<br>
+(probably from different elements, but in the case of IDREFS not
+<br>
+necessarily), then the add to the hash table will fail. Thus a document will
+<br>
+be reported as invalid because more than one element references an ID.
+<br>
+<p>I took a hint from the comment and tried to fix the creation/update/access of
+<br>
+refs using xmlHashAddEntry/UpdateEntry/Lookup2  - but this really broke my
+<br>
+code and I was getting SIGSEGVs.
+<br>
+<p>So, I thought about this and decided that as long as there is an entry in the
+<br>
+ref table for a ref, it doesn't matter if all refs are tracked or not. The
+<br>
+only function broken by this would be the xmlGetRef function, which isn't
+<br>
+actually used anywhere as far as I can tell.
+<br>
+<p>So my patch to get my earlier patch working is to simply add a ref and ignore
+<br>
+failed adds since that means there is already a ref in the ref table.
+<br>
+<p>Patch is :-
+<br>
+<p>*** ../ORIG/libxml2-2.2.11/valid.c      Fri Jan  5 06:39:29 2001
+<br>
+--- valid.c     Wed Feb  7 20:38:23 2001
+<br>
+***************
+<br>
+*** 1774,1783 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* !!! Should we keep track of all refs ? and use xmlHashAddEntry2 ?
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+!     if (xmlHashAddEntry(table, value, ret) &lt; 0) {
+<br>
+!       xmlFreeRef(ret);
+<br>
+!       return(NULL);
+<br>
+!     }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>--- 1774,1781 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* !!! Should we keep track of all refs ? and use xmlHashAddEntry2 ?
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+!
+<br>
+!     xmlHashAddEntry(table, value, ret);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>I don't really like this fix, but I couldn't get the arity 2 version of the
+<br>
+hashtable logic to work, so I think this is good enough. I don't like the
+<br>
+fact that it breaks xmlGetRef, but having said that I'm not sure what the
+<br>
+point of xmlGetRef is anyway. Why would you want to get a single ref from a
+<br>
+document, wouldn't you want all of them as a navigable list?
+<br>
+<p>Yours,
+<br>
+<p>Gary
+<br>
+<p>Daniel Veillard wrote:
+<br>
+<p><em>&gt; &gt; I've found what I think is a bug in the xmlValidateOneAttribute
+</em><br>
+<em>&gt; &gt; function. When checking for validity the routine does not detect that an
+</em><br>
+<em>&gt; &gt; error has been flagged for a duplicate ID or non existent ref without
+</em><br>
+<em>&gt; &gt; this patch. Thus invalid documents, although reported as such by the
+</em><br>
+<em>&gt; &gt; error and warning functions, are not reported as invalid by the
+</em><br>
+<em>&gt; &gt; xmlValidateDocument (etc... ) routines.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Good catch !
+</em><br>
+<em>&gt; Right the error message is not sufficient :-\
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   thanks, patched, will commit !
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20bug%20in%20valid.c">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>In reply to:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 07 2001 - 16:44:01 EST</em>
+</em>
+</small>
+</body>
+</html>

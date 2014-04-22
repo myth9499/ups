@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding question</title>
+<meta name="Author" content="Bill Randle (billr@exgate.tek.com)">
+<meta name="Subject" content="Re: [xml] Encoding question">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding question</h1>
+<!-- received="Fri Mar  3 13:59:04 2000" -->
+<!-- isoreceived="20000303185904" -->
+<!-- sent="Fri, 3 Mar 2000 10:57:10 -0800" -->
+<!-- isosent="20000303185710" -->
+<!-- name="Bill Randle" -->
+<!-- email="billr@exgate.tek.com" -->
+<!-- subject="Re: [xml] Encoding question" -->
+<!-- id="10003031057.ZM19000@saab.cns-nw.com" -->
+<!-- inreplyto="Daniel.Veillard@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Randle (<a href="mailto:billr@exgate.tek.com?subject=Re:%20[xml]%20Encoding%20question"><em>billr@exgate.tek.com</em></a>)<br>
+<strong>Date:</strong> Fri Mar 03 2000 - 13:57:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0413.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0411.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0416.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<li><strong>Reply:</strong> <a href="0416.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I noticed in the current cvs (as of yesterday afternoon) that the
+<br>
+IS_XXX macros in parserInternals.h assume 16 bit characters in
+<br>
+the macro arguments [i.e. Unicode]. I realize  this is left over
+<br>
+from when xmlChar was a short if UNICODE was defined, but now
+<br>
+that xmlChar is always a &quot;char&quot;, it causes lots of compile time
+<br>
+warnings in HTMLparser.c, entities.c, parser.c, etc.
+<br>
+<p>Is this still code not to the point where I should be using it,
+<br>
+or I am I missing something?
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Bill
+<br>
+<p><p>On Mar 3,  7:16pm, Daniel Veillard wrote:
+<br>
+} Subject: Re: [xml] Encoding question
+<br>
+}
+<br>
+} On Fri, Mar 03, 2000 at 10:52:12AM +0100, Tobias Peters wrote:
+<br>
+} &gt;
+<br>
+} &gt; After doc = xmlParseFile(..) I have to read doc-&gt;encoding and convert all
+<br>
+} &gt; strings to utf8 myself. Is this true, and will this change in future?
+<br>
+}
+<br>
+}   Don't base any assumption on libxml-1.x code in this area.
+<br>
+} Fetch a pre-2.0 snapshot if you plam to work with I18N
+<br>
+} As explained a couple of time but maybe not clearly:
+<br>
+}   - internally everything will be kept using 8bit encoding or
+<br>
+}     UTF-8 (i.e ISO-Latin-X don't have to be converted)
+<br>
+}   - everything else is converted to UTF-8
+<br>
+}   - UTF-16 is decoded automatically after detecting the
+<br>
+}     byte order mark
+<br>
+}   - other enc should be processed by registering first
+<br>
+}     convertesr to/from utf8. libxml will take care of
+<br>
+}     doing the convertion on the fly
+<br>
+} This is nearly completely implemented in 2.0 snapshots
+<br>
+}
+<br>
+}  Daniel
+<br>
+}
+<br>
+} --
+<br>
+} <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Encoding%20question">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+<br>
+} Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+<br>
+} Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+<br>
+}  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<br>
+} ----
+<br>
+} Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20question">xml@xmlsoft.org</a>
+<br>
+} Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+<br>
+} to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20question">majordomo@xmlsoft.org</a>
+<br>
+}-- End of excerpt from Daniel Veillard
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20question">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Encoding%20question">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0413.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0411.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0416.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<li><strong>Reply:</strong> <a href="0416.html">Daniel Veillard: "Re: [xml] Encoding question"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:07 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,20 @@
+*** ../gnome-xml/HTMLparser.c	Mon Oct 30 09:54:34 2000
+--- HTMLparser.c	Tue Oct 31 13:51:08 2000
+*************** htmlParseScript(htmlParserCtxtPtr ctxt) 
+*** 2329,2334 ****
+--- 2329,2342 ----
+  	NEXT;
+  	cur = CUR;
+      }
++     if (!(IS_CHAR(cur))) {
++ 	if ((ctxt->sax != NULL) && (ctxt->sax->error != NULL))
++ 	    ctxt->sax->error(ctxt->userData,
++ 		"Invalid char in CDATA 0x%X\n", cur);
++ 	ctxt->wellFormed = 0;
++ 	NEXT;
++     }
++ 
+      if ((nbchar != 0) && (ctxt->sax != NULL) && (!ctxt->disableSAX)) {
+  	if (ctxt->sax->cdataBlock!= NULL) {
+  	    /*
+

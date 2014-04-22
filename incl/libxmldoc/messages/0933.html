@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Post prerelease of 2.2.5</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Post prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Post prerelease of 2.2.5</h1>
+<!-- received="Thu Oct 12 04:08:05 2000" -->
+<!-- isoreceived="20001012080805" -->
+<!-- sent="Thu, 12 Oct 2000 10:07:56 +0200" -->
+<!-- isosent="20001012080756" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Post prerelease of 2.2.5" -->
+<!-- id="20001012100756.A3491@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0010112058190.2341-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Post%20prerelease%20of%202.2.5"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Oct 12 2000 - 04:07:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0934.html">Nabil Layaida: "Re: [xml] libxml for CE"</a>
+<li><strong>Previous message:</strong> <a href="0932.html">Wayne Davison: "Re: [xml] Post prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0932.html">Wayne Davison: "Re: [xml] Post prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Oct 11, 2000 at 09:40:50PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, 11 Oct 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt;   I have put a new version at
+</em><br>
+<em>&gt; &gt;     <a href="ftp://xmlsoft.org/pre-libxml2-2.2.5.tar.gz">ftp://xmlsoft.org/pre-libxml2-2.2.5.tar.gz</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I though that this one built and installed on Linux without a hitch
+</em><br>
+<em>&gt; until I noticed that the xmlversion.h file hadn't gotten installed.
+</em><br>
+<em>&gt; The Makefile installs xmlversion.h.in instead.
+</em><br>
+<p>&nbsp;&nbsp;Hum, right :-\ ... fixed
+<br>
+<p><em>&gt; On the win32 front, the win32config.h file seems to have vanished from the
+</em><br>
+<em>&gt; tar file. 
+</em><br>
+<p>&nbsp;&nbsp;Fixed too it will be in the distribution under include but not installed
+<br>
+by &quot;make install&quot;
+<br>
+<p><em>&gt; I snagged an older version, tweaked the xmlversion.h file to
+</em><br>
+<em>&gt; turn off ICONV and DEBUG, and proceeded to built the library with only one
+</em><br>
+<p>&nbsp;&nbsp;I was tempted to simply #ifndef WIN23 out the ICONV part of the
+<br>
+xmlversion.h.in when I realized that cygwin may actually have iconv()
+<br>
+support, if this is not the case tell me ...
+<br>
+&nbsp;&nbsp;I will try to see if I can patch the &quot;make dist&quot; process to force
+<br>
+the default installed xmlversion.h to be with ICONV and DEBUG off,
+<br>
+this should not impact Unixized builds where this file is rebuilt.
+<br>
+<p><em>&gt; minor problem -- Makefile.mingw needed to be updated to include the
+</em><br>
+<em>&gt; xpointer.o object file.  The change is so simple, I didn't included a
+</em><br>
+<em>&gt; patch.
+</em><br>
+<p>&nbsp;&nbsp;Done
+<br>
+&nbsp;&nbsp;Thanks for the report,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Post%20prerelease%20of%202.2.5">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Post%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Post%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0934.html">Nabil Layaida: "Re: [xml] libxml for CE"</a>
+<li><strong>Previous message:</strong> <a href="0932.html">Wayne Davison: "Re: [xml] Post prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0932.html">Wayne Davison: "Re: [xml] Post prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 12 2000 - 04:43:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

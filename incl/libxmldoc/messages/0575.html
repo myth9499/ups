@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/WIN32</title>
+<meta name="Author" content="Erwin Rol (Erwin.Rol@q-soft-engineering.com)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/WIN32</h1>
+<!-- received="Thu Jul  6 10:00:29 2000" -->
+<!-- isoreceived="20000706140029" -->
+<!-- sent="Thu, 06 Jul 2000 15:36:32 +0200" -->
+<!-- isosent="20000706133632" -->
+<!-- name="Erwin Rol" -->
+<!-- email="Erwin.Rol@q-soft-engineering.com" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/WIN32" -->
+<!-- id="39648B60.8DF55BFB@q-soft-engineering.com" -->
+<!-- charset="iso-8859-2" -->
+<!-- inreplyto="20000706142710.A20699@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Erwin Rol (<a href="mailto:Erwin.Rol@q-soft-engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32"><em>Erwin.Rol@q-soft-engineering.com</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 09:36:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0576.html">Erwin Rol: "[xml] libxml++"</a>
+<li><strong>Previous message:</strong> <a href="0574.html">Erwin Rol: "[xml] LIBXML WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0572.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Thu, Jul 06, 2000 at 01:55:49PM +0200, Erwin Rol wrote:
+</em><br>
+<em>&gt; &gt; i just wanted to ask what the state is of LIBXML2 on WIN32.
+</em><br>
+<em>&gt; &gt; I saw some typicle UNIX-&gt;WIN32 probleems like using int's for
+</em><br>
+<em>&gt; &gt; socket descriptors and not the SOCKET type in wIN32 (that is unsigned).
+</em><br>
+<em>&gt; &gt; And checking &lt; 0 for errors from network functions which is not the
+</em><br>
+<em>&gt; &gt; recomended way on WIN32.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   libxml will stick as much as possible to the POSIX standard.
+</em><br>
+<em>&gt; If supporting WIN32 means adding a lot of mess and dropping
+</em><br>
+<em>&gt; adherence to that standard, then I won't accept patches for this.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   The config.h file is auto generated this is the result of the
+</em><br>
+<em>&gt; configure processing. It should not be hacked specifically for WIN32
+</em><br>
+<em>&gt; hence the winconfig.h stuff.
+</em><br>
+<p>I know but the 
+<br>
+#ifdef WIN32
+<br>
+#include &quot;winconfig.h&quot;
+<br>
+#else
+<br>
+#include &lt;config.h&gt;
+<br>
+#endif
+<br>
+<p>is rather messy, what if there is a OS2 port or some other non autoconf
+<br>
+aware
+<br>
+pladform, will you make this #ifdeffing even bigger. 
+<br>
+When always using config.h in the sources, the make processes just has
+<br>
+to copy
+<br>
+winconfig.h to config.h before building on win32. or os2config.h to
+<br>
+config.h
+<br>
+on OS2 or what ever.
+<br>
+<p>- Erwin
+<br>
+<p><p><em>&gt; 
+</em><br>
+<em>&gt;   Send patches, if they are a mess w.r.t. the POSIX API I will reject
+</em><br>
+<em>&gt; them, if they don't uglyfy the code (or fix stuff) then I will accept
+</em><br>
+<em>&gt; them.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; PS: subscribe to the list if you want to follow that discussion.
+</em><br>
+I am on it. (reading it might help though :-)
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<p><pre>
+-- 
+        Q - S O F T - E N G I N E E R I N G 
+     Rodachtalweg 11, 81549 Muenchen, Germany
+<p>Erwin Rol (Software Engineer)     phone: +49-89-68050051
+<a href="mailto:Erwin.Rol@Q-Soft-Engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">Erwin.Rol@Q-Soft-Engineering.com</a>  fax  : +49-89-68050052
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0576.html">Erwin Rol: "[xml] libxml++"</a>
+<li><strong>Previous message:</strong> <a href="0574.html">Erwin Rol: "[xml] LIBXML WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0571.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0572.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

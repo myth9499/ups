@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re[2]: [xml] non-quoted attributes invalid?</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re[2]: [xml] non-quoted attributes invalid?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re[2]: [xml] non-quoted attributes invalid?</h1>
+<!-- received="Mon Nov 29 04:08:56 1999" -->
+<!-- isoreceived="19991129090856" -->
+<!-- sent="Mon, 29 Nov 1999 10:08:50 +0100" -->
+<!-- isosent="19991129090850" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re[2]: [xml] non-quoted attributes invalid?" -->
+<!-- id="2422.991129@triplex.de" -->
+<!-- inreplyto="19991129035905.D27642@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20non-quoted%20attributes%20invalid?"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Mon Nov 29 1999 - 04:08:50 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>In reply to:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+<p>Monday, November 29, 1999, 9:59:05 AM, you wrote:
+<br>
+<p><p>DV&gt; On Sun, Nov 28, 1999 at 03:03:42PM -0500, Bryan E. Chafy wrote:
+<br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; My xml file has some attributes without quotes:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt;&gt; &lt;!DOCTYPE client SYSTEM &quot;client.dtd&quot;&gt;
+</em><br>
+<em>&gt;&gt; &lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; When I try to parse, I get:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; test.xml:3: error: AttValue: &quot; or ' expected
+</em><br>
+<em>&gt;&gt; &lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+</em><br>
+<p>DV&gt;   Your XML is broken, you have to quote attributes !
+<br>
+DV&gt;     <a href="http://www.w3.org/TR/REC-xml#NT-AttValue">http://www.w3.org/TR/REC-xml#NT-AttValue</a>
+<br>
+<p><p>DV&gt;        [10] AttValue ::= '&quot;' ([^&lt;&amp;&quot;] | Reference)* '&quot;' |
+<br>
+DV&gt;                          &quot;'&quot; ([^&lt;&amp;'] | Reference)* &quot;'&quot;
+<br>
+<p>DV&gt;  Don't even try to bypass the error message, no XML parser will ever
+<br>
+DV&gt; return some data on such an input, this is not Well Formed XML.
+<br>
+<p><em>&gt;&gt; Also, why is libxml called the xml library for gnome?  What's so
+</em><br>
+<em>&gt;&gt; gnome about it?  It looks like a generic XML DOM/SAX parser usefull for
+</em><br>
+<em>&gt;&gt; things other than just gnome.
+</em><br>
+<p>DV&gt;   It was largely developped in the Gnome framework, is used by quite
+<br>
+DV&gt; a few Gnome apps, but I agree you can perfectly use it without gnome.
+<br>
+DV&gt; For example it doesn't depend on any Gnome lib, and should even work
+<br>
+DV&gt; on Windows.
+<br>
+<p>DV&gt; Daniel
+<br>
+<p><p>try this:
+<br>
+&nbsp;&lt;image href=&quot;img.gif&quot; HEIGHT=&quot;0&quot; WIDTH=&quot;22&quot;/&gt;
+<br>
+<p>ciao. Stefan
+<br>
+<p>-----------------------------------------------------------------------
+<br>
+Stefan Bambach
+<br>
+<p>triplex - agentur für neue medien GmbH
+<br>
+Erhardtstr. 8
+<br>
+80469 München
+<br>
+<p>Tel: +49 89 209138-29
+<br>
+Fax: +49 89 209138-10
+<br>
+mailto:<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20non-quoted%20attributes%20invalid?">bambach@triplex.de</a>
+<br>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<br>
+-----------------------------------------------------------------------
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re[2]:%20[xml]%20non-quoted%20attributes%20invalid?">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re[2]:%20[xml]%20non-quoted%20attributes%20invalid?">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>In reply to:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

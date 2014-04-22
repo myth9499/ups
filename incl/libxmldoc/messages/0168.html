@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml bug and fix for single quoted item</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml bug and fix for single quoted item">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml bug and fix for single quoted item</h1>
+<!-- received="Sat Oct  9 04:56:09 1999" -->
+<!-- isoreceived="19991009085609" -->
+<!-- sent="Sat, 9 Oct 1999 04:56:06 -0400" -->
+<!-- isosent="19991009085606" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml bug and fix for single quoted item" -->
+<!-- id="19991009045606.D8112@w3.org" -->
+<!-- inreplyto="37FE7B52.BCC71F31@melbpc.org.au" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Oct 09 1999 - 04:56:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0169.html">Daniel Veillard: "Re: [xml] &quot;Usage&quot; of tester omits --valid"</a>
+<li><strong>Previous message:</strong> <a href="0167.html">Tim Josling: "[xml] &quot;Usage&quot; of tester omits --valid"</a>
+<li><strong>In reply to:</strong> <a href="0166.html">Tim Josling: "[xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0171.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Reply:</strong> <a href="0171.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Oct 09, 1999 at 09:16:34AM +1000, Tim Josling wrote:
+<br>
+<em>&gt; The string after PUBLIC needs to be double quoted at present -
+</em><br>
+<em>&gt; single quoted gives a syntax error. Here is the diff for a fix
+</em><br>
+<em>&gt; (attached). 
+</em><br>
+<p>&nbsp;&nbsp;Yep, this part of the function was clealy buggy, thanks for the 
+<br>
+patch. Note, the actual correct code is:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (IS_PUBIDCHAR(CUR)) NEXT;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (CUR != '\'') {
+<br>
+<p>&nbsp;&nbsp;Fixed, and commited. Will be in next release.
+<br>
+<p><em>&gt; Can anyone point me to the w3c licence details - accordig to the
+</em><br>
+<em>&gt; doc you have a choice of GPL/LGPL or w3c licence for libxml?
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;X11 like, and compatible with GPL/LGPL . The library is also
+<br>
+licenced as LGPL.
+<br>
+<p>&nbsp;&nbsp;<a href="http://www.w3.org/Consortium/Legal/copyright-software.html">http://www.w3.org/Consortium/Legal/copyright-software.html</a>
+<br>
+<p>Linked from W3C OpenSource Page,
+<br>
+<p>&nbsp;&nbsp;<a href="http://www.w3.org/Status.html">http://www.w3.org/Status.html</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0169.html">Daniel Veillard: "Re: [xml] &quot;Usage&quot; of tester omits --valid"</a>
+<li><strong>Previous message:</strong> <a href="0167.html">Tim Josling: "[xml] &quot;Usage&quot; of tester omits --valid"</a>
+<li><strong>In reply to:</strong> <a href="0166.html">Tim Josling: "[xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0171.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Reply:</strong> <a href="0171.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

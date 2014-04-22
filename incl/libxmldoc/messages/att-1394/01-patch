@@ -1,0 +1,23 @@
+diff -ur libxml2-2.2.12/tree.c libxml2-2.2.12-new/tree.c
+--- libxml2-2.2.12/tree.c	Mon Jan 22 20:28:07 2001
++++ libxml2-2.2.12-new/tree.c	Wed Jan 31 16:10:57 2001
+@@ -2613,7 +2613,10 @@
+     xmlNodePtr p = NULL,q;
+ 
+     while (node != NULL) {
+-        q = xmlStaticCopyNode(node, doc, parent, 1);
++       if( node->type == XML_DTD_NODE )
++	 q = (xmlNodePtr) xmlCopyDtd( (xmlDtdPtr) node );
++       else
++	 q = xmlStaticCopyNode(node, doc, parent, 1);
+ 	if (ret == NULL) {
+ 	    q->prev = NULL;
+ 	    ret = p = q;
+@@ -2734,6 +2737,7 @@
+         ret->name = xmlMemStrdup(doc->name);
+     if (doc->encoding != NULL)
+         ret->encoding = xmlStrdup(doc->encoding);
++    ret->charset = doc->charset;
+     ret->compression = doc->compression;
+     ret->standalone = doc->standalone;
+     if (!recursive) return(ret);

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] non-quoted attributes invalid?</title>
+<meta name="Author" content="Bryan E. Chafy (bchafy@ccs.neu.edu)">
+<meta name="Subject" content="[xml] non-quoted attributes invalid?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] non-quoted attributes invalid?</h1>
+<!-- received="Sun Nov 28 15:03:47 1999" -->
+<!-- isoreceived="19991128200347" -->
+<!-- sent="Sun, 28 Nov 1999 15:03:42 -0500 (EST)" -->
+<!-- isosent="19991128200342" -->
+<!-- name="Bryan E. Chafy" -->
+<!-- email="bchafy@ccs.neu.edu" -->
+<!-- subject="[xml] non-quoted attributes invalid?" -->
+<!-- id="199911282003.PAA21176@silicon.ccs.neu.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bryan E. Chafy (<a href="mailto:bchafy@ccs.neu.edu?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?"><em>bchafy@ccs.neu.edu</em></a>)<br>
+<strong>Date:</strong> Sun Nov 28 1999 - 15:03:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0226.html">Daniel Veillard: "Re: [xml] Avoid displaying libxml error messages in my program"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+My xml file has some attributes without quotes:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE client SYSTEM &quot;client.dtd&quot;&gt;
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+<p>When I try to parse, I get:
+<br>
+<p>test.xml:3: error: AttValue: &quot; or ' expected
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.xml:3: error: error parsing attribute name
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.xml:3: error: xmlParseStartTag: problem parsing attributes
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.xml:3: error: Couldn't find end of Start Tag
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.xml:3: error: Extra content at the end of the document
+<br>
+&lt;image href=&quot;img.gif&quot; HEIGHT=0 WIDTH=22/&gt;
+<br>
+<p>When I looked at xmlParseAttValue, it looks like it does not check for
+<br>
+unquoted attrubutes (numerical).  Maybee add something like:
+<br>
+<p>&nbsp;&nbsp;&nbsp;if (CUR == '&quot;') { ... }
+<br>
+&nbsp;&nbsp;&nbsp;else if (CUR == '\'') { ... }
+<br>
+&nbsp;&nbsp;&nbsp;else if (CUR == &quot;-&quot;  ||  (int)CUR ==atoi(CUR)){   // if not quoted, maybee a numerical value?
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;instate = XML_PARSER_ATTRIBUTE_VALUE;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEXT;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = xmlDecodeEntities(ctxt, -1, XML_SUBSTITUTE_REF, ' ', '&lt;', 0);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}  else  { ... } 
+<br>
+// not tested
+<br>
+<p>Also, why is libxml called the xml library for gnome?  What's so
+<br>
+gnome about it?  It looks like a generic XML DOM/SAX parser usefull for
+<br>
+things other than just gnome.
+<br>
+<p>Bryan
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20non-quoted%20attributes%20invalid?">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Previous message:</strong> <a href="0226.html">Daniel Veillard: "Re: [xml] Avoid displaying libxml error messages in my program"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<li><strong>Reply:</strong> <a href="0228.html">Daniel Veillard: "Re: [xml] non-quoted attributes invalid?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

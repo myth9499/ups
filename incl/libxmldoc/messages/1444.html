@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] A little confued, please have a look</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] A little confued, please have a look">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] A little confued, please have a look</h1>
+<!-- received="Sat Feb 10 04:42:33 2001" -->
+<!-- isoreceived="20010210094233" -->
+<!-- sent="Sat, 10 Feb 2001 10:42:20 +0100" -->
+<!-- isosent="20010210094220" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] A little confued, please have a look" -->
+<!-- id="20010210104220.Q3940@imag.fr" -->
+<!-- inreplyto="1B3F1A19E93BD411AF8800D0B747742939D209@ARGUS_EXCH1" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20A%20little%20confued,%20please%20have%20a%20look"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Sat Feb 10 2001 - 04:42:20 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1443.html">Ming Lu: "[xml] A little confued, please have a look"</a>
+<li><strong>In reply to:</strong> <a href="1443.html">Ming Lu: "[xml] A little confued, please have a look"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 09, 2001 at 01:06:05PM -0800, Ming Lu wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; For a XML file as below:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;PLAN xmlns=&quot;<a href="http://www.argus.ca/autotest/1.0/">http://www.argus.ca/autotest/1.0/</a>&quot;&gt;
+</em><br>
+<em>&gt; &lt;NODE CommFlag=&quot;0&quot;/&gt;
+</em><br>
+<em>&gt; &lt;NODE CommFlag=&quot;1&quot;/&gt;
+</em><br>
+<em>&gt; &lt;/PLAN&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; after parse it with the function pxmlDoc=xmlParseFile(LPCTSTR(strFileName));
+</em><br>
+<em>&gt; I want to the get the content of the first node (node with the CommFlag=&quot;0&quot;)
+</em><br>
+<em>&gt; so I did it as following;
+</em><br>
+<em>&gt; 	xmlNodePtr pode;
+</em><br>
+<em>&gt; 	pnode=pxmlDoc-&gt;children-&gt;children;
+</em><br>
+<em>&gt; but it doesnt work. If I change pnode=pxmlDoc-&gt;children-&gt;children to
+</em><br>
+<em>&gt; pnode=pxmlDoc-&gt;children-&gt;children-&gt;next; then it works. But from the
+</em><br>
+<em>&gt; document, I think it should be
+</em><br>
+<em>&gt; pnode=pxmlDoc-&gt;children-&gt;children. Can someone explain it to me. TIA. By the
+</em><br>
+<p>&nbsp;&nbsp;Seems I really need to add this to the FAQ ... done
+<br>
+<p>&nbsp;&nbsp;No, in XML all characters in the content of the document are
+<br>
+signifficant *including blanks and formatting line breaks* .
+<br>
+&nbsp;&nbsp;The extra nodes you are wondering about are just that, text nodes
+<br>
+with the formatting spaces wich are part of the document but that
+<br>
+people tend to forget.
+<br>
+&nbsp;&nbsp;There is a function xmlKeepBlanksDefault ()  to remove those at parse
+<br>
+time, but that's an heuristic, and its use should be limited to case
+<br>
+where you are sure there is no mixed-content in the document.
+<br>
+<p>&nbsp;&nbsp;<a href="http://xmlsoft.org/html/libxml-parser.html#XMLKEEPBLANKSDEFAULT">http://xmlsoft.org/html/libxml-parser.html#XMLKEEPBLANKSDEFAULT</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20A%20little%20confued,%20please%20have%20a%20look">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20A%20little%20confued,%20please%20have%20a%20look">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20A%20little%20confued,%20please%20have%20a%20look">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1443.html">Ming Lu: "[xml] A little confued, please have a look"</a>
+<li><strong>In reply to:</strong> <a href="1443.html">Ming Lu: "[xml] A little confued, please have a look"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Feb 10 2001 - 04:43:31 EST</em>
+</em>
+</small>
+</body>
+</html>

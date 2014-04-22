@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</h1>
+<!-- received="Mon Nov 13 09:48:50 2000" -->
+<!-- isoreceived="20001113144850" -->
+<!-- sent="Mon, 13 Nov 2000 15:48:46 +0100" -->
+<!-- isosent="20001113144846" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7" -->
+<!-- id="20001113154846.I27672@w3.org" -->
+<!-- inreplyto="20001113143713.A2479@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 09:48:46 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Nov 13, 2000 at 02:37:13PM +0100, TOM wrote:
+<br>
+<em>&gt; Wouldn't it be better to add a function for setting a node as the
+</em><br>
+<em>&gt; context node, as it is done for the root node in xmlXPathRoot ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Something like this :
+</em><br>
+<em>&gt; /**
+</em><br>
+<em>&gt;  * xmlXPathSetContextNode:
+</em><br>
+<em>&gt;  * @ctxt:  the XPath Parser context
+</em><br>
+<em>&gt;  * @node:  the new context node
+</em><br>
+<em>&gt;  *
+</em><br>
+<em>&gt;  * Initialize the context to @node
+</em><br>
+<em>&gt;  */
+</em><br>
+<em>&gt; void
+</em><br>
+<em>&gt; xmlXPathSetContextNode(xmlXPathParserContextPtr ctxt,
+</em><br>
+<em>&gt; 		       xmlNodePtr node) {
+</em><br>
+<em>&gt;     ctxt-&gt;context-&gt;node = node;
+</em><br>
+<em>&gt;     valuePush(ctxt, xmlXPathNewNodeSet(node));
+</em><br>
+<em>&gt; }
+</em><br>
+<p>&nbsp;&nbsp;I don't think it is really useful:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xmlXPathParserContextPtr are more internal structures
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- changing this for an xmlXPathContextPtr would make more sense
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- there is a problem of detecting extra element left on the 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;evaluation stack: if you evaluate &quot;2&quot; the nodeset added should
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not generate an error. If another nodeset is found left on the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack at the end we should raise the problem
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; the initialization and checking really belongs to xmlXPathEval()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not to a user level routine.
+<br>
+<p>Daniel
+<br>
+<p><p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 10:47:24 EST</em>
+</em>
+</small>
+</body>
+</html>

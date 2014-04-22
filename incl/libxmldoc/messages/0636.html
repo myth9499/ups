@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] HTML push interface</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] HTML push interface">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] HTML push interface</h1>
+<!-- received="Wed Aug  2 09:51:08 2000" -->
+<!-- isoreceived="20000802135108" -->
+<!-- sent="Wed, 2 Aug 2000 09:46:32 -0400 " -->
+<!-- isosent="20000802134632" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] HTML push interface" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A06B53FD@EXCHANGE" -->
+<!-- inreplyto="[xml] HTML push interface" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20HTML%20push%20interface"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Wed Aug 02 2000 - 09:46:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0637.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0635.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0637.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have applied the fix on HTMLParser.c on my version libxml2-2.2.1.
+<br>
+I am on using the latest version found on the cvs archive, so may be I
+<br>
+should.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;But after applying your patch, I now have another problem, that
+<br>
+appears using both interfaces.  When using the push interface, I have an
+<br>
+infinite loop and when using the 'file' interface, I have invalid results.
+<br>
+I have pinpointed the problem on the lines that were added at 2480 in
+<br>
+HTMLParser.c:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;input-&gt;buf != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;buf-&gt;encoder != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;buf-&gt;raw != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;buf-&gt;buffer != NULL)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int nbchars;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* convert as much as possible to the parser reading buffer.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nbchars = xmlCharEncInFunc(ctxt-&gt;input-&gt;buf-&gt;encoder,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;input-&gt;buf-&gt;buffer,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;input-&gt;buf-&gt;raw);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (nbchars &lt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;htmlCheckEncoding: encoder error\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;errNo = XML_ERR_INVALID_ENCODING;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p><p>Again, I have tried my test files on it and the problem occurs on one file,
+<br>
+which is attached to this email.
+<br>
+<p>I will continue to dig and learn the toolkit, and may try to repair the
+<br>
+problem.  I will post my results on the list.
+<br>
+<p>Regards,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marc.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: August 1, 2000 19:45
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20HTML%20push%20interface">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] HTML push interface
+<br>
+<p><p><p>On Tue, Aug 01, 2000 at 06:03:02PM -0400, Daniel Veillard wrote:
+<br>
+<em>&gt; &gt; For example, the document is 2001 bytes long.  When reading using fread,
+</em><br>
+it
+<br>
+<em>&gt; &gt; strips the '\r' so this gives a total of 1971 bytes.  When I put 1967
+</em><br>
+(1971
+<br>
+<em>&gt; &gt; - 4 bytes for the header) or more, I get the error, a big chunk from my
+</em><br>
+<em>&gt; &gt; document is skipped, but if I put 1966 or less, the document is parsed
+</em><br>
+OK.
+<br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I even modified 'testHTML.c' to use buffer of 1967 bytes to ensure I was
+</em><br>
+OK,
+<br>
+<em>&gt; &gt; and I had the same error using: testHTML -debug -repeat -push doc2.htm
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   However your document raises the same problem on my environment
+</em><br>
+<em>&gt; so I will have a look at it and try to pinpoint and fix the problem.
+</em><br>
+<p>&nbsp;&nbsp;Okay, I found the problem, fixed it (wasn't really trivial :-\)
+<br>
+and added your html in the testsuite. It's commited in W3C cvs base:
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="http://dev.w3.org/cvsweb/XML/HTMLparser.c.diff?r1=1.53&r2=1.54">http://dev.w3.org/cvsweb/XML/HTMLparser.c.diff?r1=1.53&r2=1.54</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20HTML%20push%20interface">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+<p><p></pre>
+<hr noshade>
+<ul>
+<li>application/octet-stream attachment: <a href="att-0636/01-doc3.htm.gz">doc3.htm.gz</a>
+</ul>
+<!-- attachment="01-doc3.htm.gz" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0637.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0635.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0637.html">Marc Sanfacon: "RE: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

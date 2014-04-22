@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XPath Memory Leak</title>
+<meta name="Author" content="Tim Ruddick (truddick@eng.us.uu.net)">
+<meta name="Subject" content="[xml] XPath Memory Leak">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XPath Memory Leak</h1>
+<!-- received="Thu Jul 13 16:07:34 2000" -->
+<!-- isoreceived="20000713200734" -->
+<!-- sent="Thu, 13 Jul 2000 16:03:27 -0400 (EDT)" -->
+<!-- isosent="20000713200327" -->
+<!-- name="Tim Ruddick" -->
+<!-- email="truddick@eng.us.uu.net" -->
+<!-- subject="[xml] XPath Memory Leak" -->
+<!-- id="Pine.BSI.4.05Lt.10007131553040.9943-100000@perrier.eng.us.uu.net" -->
+<!-- inreplyto="396489E5.E800A40D@q-soft-engineering.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tim Ruddick (<a href="mailto:truddick@eng.us.uu.net?subject=Re:%20[xml]%20XPath%20Memory%20Leak"><em>truddick@eng.us.uu.net</em></a>)<br>
+<strong>Date:</strong> Thu Jul 13 2000 - 16:03:27 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<li><strong>Previous message:</strong> <a href="0595.html">Jordan Henderson: "RE: [xml] Get a property for read-only purpose"</a>
+<li><strong>In reply to:</strong> <a href="0574.html">Erwin Rol: "[xml] LIBXML WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<li><strong>Reply:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The XPath implementation has improved *dramatically* in v2.1.1!  Many
+<br>
+thanks to whomever was responsible!
+<br>
+<p>I noticed something in the xmlXPathFreeContext function, and I'm wondering
+<br>
+if there's a reason for it.  The snippet of code that deallocates the
+<br>
+memory for the context nodeset is commented out.  This means every call to
+<br>
+xmlXPathEval leaks at least 40 bytes (the size of the context-&gt;nodeTab
+<br>
+array).  Should I be deallocating this memory outside of the FreeContext
+<br>
+function?
+<br>
+<p>Context diffs below....
+<br>
+<p>Tim.
+<br>
+<p><p><p>*** ../libxml2-2.1.1/xpath.c    Fri Jun 30 13:59:48 2000
+<br>
+--- xpath.c     Thu Jul 13 15:57:07 2000
+<br>
+***************
+<br>
+*** 849,858 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;namespaces != NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(ctxt-&gt;namespaces);
+<br>
+&nbsp;&nbsp;
+<br>
+-  /***********   
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;nodelist != NULL) 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathFreeNodeSet(ctxt-&gt;nodelist);
+<br>
+!   ***********/  
+<br>
+&nbsp;&nbsp;#ifdef DEBUG
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(ctxt, 0xB , (size_t) sizeof(xmlXPathContext));
+<br>
+&nbsp;&nbsp;#endif
+<br>
+--- 849,857 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;namespaces != NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(ctxt-&gt;namespaces);
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;nodelist != NULL) 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlXPathFreeNodeSet(ctxt-&gt;nodelist);
+<br>
+! 
+<br>
+&nbsp;&nbsp;#ifdef DEBUG
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(ctxt, 0xB , (size_t) sizeof(xmlXPathContext));
+<br>
+&nbsp;&nbsp;#endif
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Memory%20Leak">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Memory%20Leak">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<li><strong>Previous message:</strong> <a href="0595.html">Jordan Henderson: "RE: [xml] Get a property for read-only purpose"</a>
+<li><strong>In reply to:</strong> <a href="0574.html">Erwin Rol: "[xml] LIBXML WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<li><strong>Reply:</strong> <a href="0597.html">Daniel Veillard: "Re: [xml] XPath Memory Leak"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

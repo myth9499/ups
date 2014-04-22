@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Bugs in copying parts of tree.c</title>
+<meta name="Author" content="Anders Karlsson (pugo@cendio.se)">
+<meta name="Subject" content="[xml] Bugs in copying parts of tree.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Bugs in copying parts of tree.c</h1>
+<!-- received="Wed Jan 31 10:23:12 2001" -->
+<!-- isoreceived="20010131152312" -->
+<!-- sent="Wed, 31 Jan 2001 16:23:04 +0100 (CET)" -->
+<!-- isosent="20010131152304" -->
+<!-- name="Anders Karlsson" -->
+<!-- email="pugo@cendio.se" -->
+<!-- subject="[xml] Bugs in copying parts of tree.c" -->
+<!-- id="Pine.LNX.4.21.0101311439330.13614-200000@q-bert.cendio.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Anders Karlsson (<a href="mailto:pugo@cendio.se?subject=Re:%20[xml]%20Bugs%20in%20copying%20parts%20of%20tree.c"><em>pugo@cendio.se</em></a>)<br>
+<strong>Date:</strong> Wed Jan 31 2001 - 10:23:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1393.html">Jorma Laaksonen: "[xml] Testing pthreads safety in xmllint"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have now digged deeper into the libxml code and found two bugs in the
+<br>
+implementation om xmlCopyDoc.
+<br>
+<p>There is a patch attatched to this document.
+<br>
+<p><p>Bug 1: Missing 'charset' copy in xmlCopyDoc
+<br>
+-------------------------------------------
+<br>
+<p>In 'xmlCopyDoc' in tree.c the variable 'charset' should be copied, but
+<br>
+this is missing. This causes problems when using 'xmlDocDump' since it
+<br>
+tries to read the charset variable.
+<br>
+<p>This should be fixed by adding the following line:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;charset = doc-&gt;charset;
+<br>
+<p><p><p>Bug 2: Casting problems in xmlCopyDoc
+<br>
+-------------------------------------
+<br>
+<p>When calling xmlCopyDoc with recursive=1 it uses xmlStaticCopyNodeList
+<br>
+to copy the node tree, which in turn uses xmlStaticCopyNode.
+<br>
+<p>xmlStaticCopyNode returns a 'static xmlNodePtr' containing the new
+<br>
+node. It does not look at the type variable whether it is a
+<br>
+xmlNodePtr or not. 
+<br>
+<p>The problem comes when using xmlDocDump, which uses 
+<br>
+xmlDocContentDumpOutput to dump the contents. This function calls
+<br>
+xmlNodeDumpOutput to dump the nodes.
+<br>
+<p>xmlNodeDumpOutput looks at the type variable and if it is a XML_DTD_NODE
+<br>
+it runs:
+<br>
+<p><p>&nbsp;&nbsp;xmlDtdDumpOutput(buf, (xmlDtdPtr) cur, encoding);
+<br>
+<p><p>Here it casts &quot;cur&quot; (which is the xmlNodePtr pointing to the xmlNode
+<br>
+created by the copy described above) to a xmlDtdPtr.
+<br>
+<p><p>The function &quot;xmlDtdDumpOutput&quot; then tries the following:
+<br>
+<p>xmlDtdDumpOutput(xmlOutputBufferPtr buf, xmlDtdPtr dtd, const char
+<br>
+*encoding) 
+<br>
+{
+<br>
+.
+<br>
+. (cut)
+<br>
+.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (dtd-&gt;ExternalID != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlOutputBufferWriteString(buf, &quot; PUBLIC &quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteQuotedString(buf-&gt;buffer, dtd-&gt;ExternalID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlOutputBufferWriteString(buf, &quot; &quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteQuotedString(buf-&gt;buffer, dtd-&gt;SystemID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}  else if (dtd-&gt;SystemID != NULL) {
+<br>
+.
+<br>
+.
+<br>
+<p><p>I.e. it tries to read the &quot;ExternalID&quot; from the &quot;xmlDtdPtr&quot;, but since
+<br>
+this is a &quot;xmlNodePtr&quot; casted to a &quot;xmlDtdPtr&quot; it doesn't contain the
+<br>
+ExternalID. When &quot;xmlBufferWriteQuotedString&quot; tries to dump the 
+<br>
+information is segfaults.
+<br>
+<p><p>This can be solved by checking the type when copying the nodes in
+<br>
+xmlStaticCopyNodeList and if it is a DTD node it should be copied with
+<br>
+xmlCopyDtd instead:
+<br>
+<p>static xmlNodePtr
+<br>
+xmlStaticCopyNodeList(xmlNodePtr node, xmlDocPtr doc, xmlNodePtr parent) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr ret = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr p = NULL,q;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;while (node != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if( node-&gt;type == XML_DTD_NODE )
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;q = (xmlNodePtr) xmlCopyDtd( (xmlDtdPtr) node );
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;q = xmlStaticCopyNode(node, doc, parent, 1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ret == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;q-&gt;prev = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = p = q;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p-&gt;next = q;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;q-&gt;prev = p;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p = q;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node = node-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+}
+<br>
+<p><p>Regards,
+<br>
+--------------------------------------------------------------------------
+<br>
+Anders Karlsson                        Email:  <a href="mailto:anders.karlsson@cendio.se?subject=Re:%20[xml]%20Bugs%20in%20copying%20parts%20of%20tree.c">anders.karlsson@cendio.se</a>
+<br>
+Cendio Systems AB                      WWW:    www.cendio.se
+<br>
+Teknikringen 3,                        Voice:  +46 - (0)13 - 21 46 00
+<br>
+SE-583 30  LINKÖPING, SWEDEN           Fax:    +46 - (0)13 - 21 47 00
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-1394/01-patch">patch</a>
+</ul>
+<!-- attachment="01-patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bugs%20in%20copying%20parts%20of%20tree.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bugs%20in%20copying%20parts%20of%20tree.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1393.html">Jorma Laaksonen: "[xml] Testing pthreads safety in xmllint"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 31 2001 - 10:46:24 EST</em>
+</em>
+</small>
+</body>
+</html>

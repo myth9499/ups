@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml 2.2.8 encoding.c compilation problem</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml 2.2.8 encoding.c compilation problem">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml 2.2.8 encoding.c compilation problem</h1>
+<!-- received="Thu Nov 23 08:02:55 2000" -->
+<!-- isoreceived="20001123130255" -->
+<!-- sent="Thu, 23 Nov 2000 14:02:47 +0100" -->
+<!-- isosent="20001123130247" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml 2.2.8 encoding.c compilation problem" -->
+<!-- id="20001123140247.C19368@w3.org" -->
+<!-- inreplyto="00112312425308.00868@tomatin.sychron.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Nov 23 2000 - 08:02:47 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1223.html">Mark Buckley: "[xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>In reply to:</strong> <a href="1223.html">Mark Buckley: "[xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Nov 23, 2000 at 12:41:58PM +0000, Mark Buckley wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've just copied across the libxml2 2.2.8 release, and I'm having trouble with
+</em><br>
+<em>&gt; making the distribution. I'm using RedHat and compiling under gcc version
+</em><br>
+<em>&gt; egcs-2.91.66. I've checked the archives but I haven't found any reference to
+</em><br>
+<em>&gt; the problem that I've discovered:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When I run make, the compiler gives me the following error:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; encoding.c: In function `xmlIconvWrapper':
+</em><br>
+<em>&gt; encoding.c:1691: parse error before `else'
+</em><br>
+<em>&gt; encoding.c: At top level:
+</em><br>
+<em>&gt; encoding.c:1695: parse error before `return'
+</em><br>
+<em>&gt; make[2]: *** [encoding.lo] Error 1                                          
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The relevant piece of code is copied below, it appears that gcc doesn't like the
+</em><br>
+<em>&gt; last 'else' being outside the #ifdef EINVAL...#endif pair. Moving it inside to
+</em><br>
+<em>&gt; match the others stops the parse error.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #ifdef EILSEQ
+</em><br>
+<em>&gt;          if (errno == EILSEQ) {
+</em><br>
+<em>&gt;                  return -2;
+</em><br>
+<em>&gt;          } else
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt; #ifdef E2BIG
+</em><br>
+<em>&gt;          if (errno == E2BIG) {
+</em><br>
+<em>&gt;                  return -1;
+</em><br>
+<em>&gt;          } else
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt; #ifdef EINVAL
+</em><br>
+<em>&gt;          if (errno == EINVAL) {
+</em><br>
+<em>&gt;                  return -3;
+</em><br>
+<em>&gt;          }
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt;          else {
+</em><br>
+<em>&gt;                  return -3;
+</em><br>
+<em>&gt;          }
+</em><br>
+<em>&gt;  }
+</em><br>
+<em>&gt;  return 0;
+</em><br>
+<p>&nbsp;&nbsp;Hum, good catch ...
+<br>
+&nbsp;&nbsp;I assume the enclosed patch will fix the problem,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks for the report,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1224/01-encoding.diff">encoding.diff</a>
+</ul>
+<!-- attachment="01-encoding.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1223.html">Mark Buckley: "[xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>In reply to:</strong> <a href="1223.html">Mark Buckley: "[xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Nov 23 2000 - 09:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

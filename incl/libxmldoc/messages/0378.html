@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] GPL and other licensing issues</title>
+<meta name="Author" content="Havoc Pennington (hp@redhat.com)">
+<meta name="Subject" content="Re: [xml] GPL and other licensing issues">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] GPL and other licensing issues</h1>
+<!-- received="Wed Feb 16 03:37:03 2000" -->
+<!-- isoreceived="20000216083703" -->
+<!-- sent="16 Feb 2000 02:44:39 -0500" -->
+<!-- isosent="20000216074439" -->
+<!-- name="Havoc Pennington" -->
+<!-- email="hp@redhat.com" -->
+<!-- subject="Re: [xml] GPL and other licensing issues" -->
+<!-- id="y5wsnyt617c.fsf@icon.labs.redhat.com" -->
+<!-- inreplyto="Mon, 14 Feb 2000 12:02:02 +0100&quot;" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Havoc Pennington (<a href="mailto:hp@redhat.com?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues"><em>hp@redhat.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 16 2000 - 02:44:39 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Previous message:</strong> <a href="0377.html">Daniel Veillard: "Re: [xml] WebDAV?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&quot;Peter Jacobi&quot; &lt;<a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">pj@walter-graphtek.com</a>&gt; writes:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I just tried to understand the GPL governing the use and 
+</em><br>
+<em>&gt; distribution of libxml. And I didn't succeed.
+</em><br>
+<em>&gt; 
+</em><br>
+<p>Note that libxml is under the LGPL (or under the GPL as well, your
+<br>
+choice), which makes a big difference in this case. See COPYING.LIB
+<br>
+that comes with it.
+<br>
+<p><em>&gt; Some of my questions are:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1. Can I create and distribute a 'derived work' all source code free 
+</em><br>
+<em>&gt; and under the GPL, when this 'derived work' needs an XML data file 
+</em><br>
+<em>&gt;  a third party holds copyright of? (provided that this third party will 
+</em><br>
+<em>&gt; allow me the use of their copyrighted data)
+</em><br>
+<em>&gt; 
+</em><br>
+<p>Yes I think the XML data file isn't part of the program. So it's not a
+<br>
+derived work of libxml and its copyright is not relevant.
+<br>
+<p><em>&gt; 2. Can I create and distribute a DLL exporting the SAX interface 
+</em><br>
+<em>&gt; under GPL and package it together with a commercial application 
+</em><br>
+<em>&gt; using it through the exported SAX interface?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 3. Can I create and distribute a 'derived work' as an DLL under 
+</em><br>
+<em>&gt; GPL, exporting an API I definded and package it together with a 
+</em><br>
+<em>&gt; commercial application using it through this exported API interface?
+</em><br>
+<em>&gt; 
+</em><br>
+<p>Under the LGPL, as long as the library (DLL) is entirely LGPL you can
+<br>
+link a proprietary application to it (note proprietary, not
+<br>
+commercial, is the relevant point - see www.gnu.org under
+<br>
+&quot;terminology&quot; or something). However if you statically link then
+<br>
+things get a bit more complex, I think the license talks about it.
+<br>
+However if you enhance libxml itself then those enhancements should be
+<br>
+released with source.
+<br>
+<p>If libxml were GPL only then any application using it would need to be
+<br>
+GPL as well.
+<br>
+<p>I'm not a lawyer and if this is relevant to your business decisions or
+<br>
+anything like that you should certainly have a lawyer give you an
+<br>
+opinion.
+<br>
+<p>Havoc
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20GPL%20and%20other%20licensing%20issues">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0379.html">Lutz Behnke: "[xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Previous message:</strong> <a href="0377.html">Daniel Veillard: "Re: [xml] WebDAV?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:04 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Using the encoders</title>
+<meta name="Author" content="Lutz Behnke (behnke@trustcenter.de)">
+<meta name="Subject" content="[xml] Using the encoders">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Using the encoders</h1>
+<!-- received="Wed Feb  9 09:39:07 2000" -->
+<!-- isoreceived="20000209143907" -->
+<!-- sent="Wed, 09 Feb 2000 15:34:57 +0100" -->
+<!-- isosent="20000209143457" -->
+<!-- name="Lutz Behnke" -->
+<!-- email="behnke@trustcenter.de" -->
+<!-- subject="[xml] Using the encoders" -->
+<!-- id="38A17B11.BEE2305D@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Lutz Behnke (<a href="mailto:behnke@trustcenter.de?subject=Re:%20[xml]%20Using%20the%20encoders"><em>behnke@trustcenter.de</em></a>)<br>
+<strong>Date:</strong> Wed Feb 09 2000 - 09:34:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0347.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0350.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there,
+<br>
+<p>I am currently trying to write a DOMHASH signing and verification implementation
+<br>
+for libxml. Now I have some questions:
+<br>
+<p>a) Is there such an implement for/in libxml allready done? I could only find that
+<br>
+&nbsp;&nbsp;&nbsp;sneak-ware java thingy from IBM.
+<br>
+b) if not, how can I use the encoding functions from libxml. I need to get the
+<br>
+&nbsp;&nbsp;&nbsp;names and contents of the elements in UTF-16BE. I currently would understand the code
+<br>
+&nbsp;&nbsp;&nbsp;to be something like (for the name of the element):
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlCharEncodingHandler utf16_handler = xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF16BE);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utf16_handler-&gt;xmlCharEncodingOutputFunc(node-&gt;name, strlen(node-&gt;name),
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(utf16_name, some_guessed_value);
+<br>
+<p>&nbsp;&nbsp;&nbsp;this is under the assumption that the name and CDATA is stored in allmost UTF-8 
+<br>
+&nbsp;&nbsp;&nbsp;(plain ASCII to be exact)
+<br>
+&nbsp;&nbsp;&nbsp;Is that correct? Is the fact that the data is in UTF-8/ASCII ensured by the library?
+<br>
+&nbsp;&nbsp;&nbsp;What happens when I present a full blown unicode document to libxml?
+<br>
+<p>c) How can I compute the neccesary lenght of the output buffer. Wouldn't be a good thing
+<br>
+&nbsp;&nbsp;&nbsp;for the function to return the _needed_ bytes if I call it with a output buffer of NULL.
+<br>
+<p>mfg lutz
+<br>
+<p><pre>
+-- 
+Lutz Behnke, TC TrustCenter GmbH
+Sonninstrasse 24-28, D-20097 Hamburg, Germany
+Tel:040/80 80 26-0  Fax:040/80 80 26-1 26   <a href="http://www.trustcenter.de">http://www.trustcenter.de</a>
+-----BEGIN GEEK CODE BLOCK-----
+ Version: 3.1  
+GCS/IT d- s+:+ a C++ ULS+++$ P+++ L+++ E+++ W++ !N o? k? !w@++ !O
+!M !V PS+ PE Y+ PGP t+ 5+ X R+ tv+ b+++ DI+++ D G++ e++ h* r y+  
+------END GEEK CODE BLOCK------
+</pre>
+<hr noshade>
+<ul>
+<li>application/x-pkcs7-signature attachment: <a href="att-0348/01-smime.p7s">S/MIME Cryptographic Signature</a>
+</ul>
+<!-- attachment="01-smime.p7s" -->
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Using%20the%20encoders">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Using%20the%20encoders">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0347.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0349.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<li><strong>Reply:</strong> <a href="0350.html">Daniel Veillard: "Re: [xml] Using the encoders"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] help with embedded DTD</title>
+<meta name="Author" content="Fred_Smith@computrition.com (Fred_Smith@computrition.com)">
+<meta name="Subject" content="[xml] help with embedded DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] help with embedded DTD</h1>
+<!-- received="Tue Jan 23 13:25:10 2001" -->
+<!-- isoreceived="20010123182510" -->
+<!-- sent="Tue, 23 Jan 2001 13:16:21 -0500" -->
+<!-- isosent="20010123181621" -->
+<!-- name="Fred_Smith@computrition.com" -->
+<!-- email="Fred_Smith@computrition.com" -->
+<!-- subject="[xml] help with embedded DTD" -->
+<!-- id="852569DD.00635F7E.00@cinote.computrition.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:Fred_Smith@computrition.com?subject=Re:%20[xml]%20help%20with%20embedded%20DTD"><em>Fred_Smith@computrition.com</em></a><br>
+<strong>Date:</strong> Tue Jan 23 2001 - 13:16:21 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<li><strong>Previous message:</strong> <a href="1370.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<li><strong>Reply:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Gentlepersons:
+<br>
+<p>I'm very wet behind the ears when it comes to XML. I'm trying to write some
+<br>
+(one hopes SIMPLE) code to construct a small XML document and I want that
+<br>
+document's DTD to be embedded, per the example below:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<br>
+&lt;!DOCTYPE CI7 [
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT CI7 (MSG_HDR, PATIENT_INFORMATION, PATIENT_CLASS?,
+<br>
+PATIENT_TYPE?, ADMIT_DISCHARGE?, ALLERGIES?, DIAGNOSES?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT MSG_HDR (MSG_TYPE, MSG_DATE_TIME)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT PATIENT_INFORMATION (MEDICAL_RECORD_NUMBER, PATIENT_ID?,
+<br>
+LAST_NAME, FIRST_NAME?, MIDDLE_NAME?, NICKNAME?, TITLE?, DOB?, SEX?,
+<br>
+RELIGION?, PRIMARY_LANGUAGE?, ROOM_LOCATION?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT PATIENT_CLASS (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT PATIENT_TYPE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ADMIT_DISCHARGE (ADMIT_DATE_TIME?, DISCHARGE_DATE_TIME?,
+<br>
+RETAIN_ON_DISCHARGE?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ALLERGIES (ALLERGY+)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT DIAGNOSES (DIAGNOSIS+)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT MSG_TYPE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT MSG_DATE_TIME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT MEDICAL_RECORD_NUMBER (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT LAST_NAME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT FIRST_NAME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT MIDDLE_NAME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT NICKNAME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT TITLE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT PATIENT_ID (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT DOB (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--M : Male  F: Female  U:Unknown--&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT SEX (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--Short name, please // for Religion and Primary Language--&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT RELIGION (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT PRIMARY_LANGUAGE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ROOM_LOCATION (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ADMIT_DATE_TIME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT DISCHARGE_DATE_TIME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT RETAIN_ON_DISCHARGE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ALLERGY (ADD_DELETE, ALLERGY_ID, ALLERGY_NAME?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--The ADD_DELETE  node can have an ADD or DELETE entry.--&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ADD_DELETE (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ALLERGY_ID (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ALLERGY_NAME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT DIAGNOSIS (EXTERNAL_ID, START_DATE_TIME, END_DATE_TIME?,
+<br>
+DESCRIPTION?)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT EXTERNAL_ID (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT START_DATE_TIME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT END_DATE_TIME (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT DESCRIPTION (#PCDATA)&gt;
+<br>
+]&gt;
+<br>
+&lt;CI7&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MSG_HDR&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MSG_TYPE&gt;A01&lt;/MSG_TYPE&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MSG_DATE_TIME&gt;20010115&lt;/MSG_DATE_TIME&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/MSG_HDR&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;PATIENT_INFORMATION&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MEDICAL_RECORD_NUMBER&gt;123456789&lt;/MEDICAL_RECORD_NUMBER&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LAST_NAME&gt;Smith&lt;/LAST_NAME&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/PATIENT_INFORMATION&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ALLERGIES&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ALLERGY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ADD_DELETE&gt;ADD&lt;/ADD_DELETE&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ALLERGY_ID&gt;132&lt;/ALLERGY_ID&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ALLERGY_NAME&gt;chesse&lt;/ALLERGY_NAME&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ALLERGY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ALLERGIES&gt;
+<br>
+&lt;/CI7&gt;
+<br>
+<p>I've been reading through the mailing list archives and saw a series of
+<br>
+postings on the subject, but I cannot get it to embed the DTD so that it
+<br>
+looks like this example. Here's what I keep getting:
+<br>
+<p><p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE CI7 SYSTEM &quot;CI7.dtd&quot; [
+<br>
+&lt;!ELEMENT CI7 (MSG_HDR , PATIENT_INFORMATION , PATIENT_CLASS? ,
+<br>
+PATIENT_TYPE? , ADMIT_DISCHARGE? , ALLERGIES? , DIAGNOSES?)&gt;
+<br>
+&lt;!ELEMENT MSG_HDR (MSG_TYPE , MSG_DATE_TIME)&gt;
+<br>
+&lt;!ELEMENT PATIENT_INFORMATION (MEDICAL_RECORD_NUMBER , PATIENT_ID? ,
+<br>
+LAST_NAME , FIRST_NAME? , MIDDLE_NAME? , NICKNAME? , TITLE? , DOB? , SEX? ,
+<br>
+&nbsp;RELIGION? , PRIMARY_LANGUAGE? , ROOM_LOCATION?)&gt;
+<br>
+&lt;!ELEMENT PATIENT_CLASS (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT PATIENT_TYPE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ADMIT_DISCHARGE (ADMIT_DATE_TIME? , DISCHARGE_DATE_TIME? ,
+<br>
+RETAIN_ON_DISCHARGE?)&gt;
+<br>
+&lt;!ELEMENT ALLERGIES (ALLERGY)+&gt;
+<br>
+&lt;!ELEMENT DIAGNOSES (DIAGNOSIS)+&gt;
+<br>
+&lt;!ELEMENT MSG_TYPE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT MSG_DATE_TIME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT MEDICAL_RECORD_NUMBER (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT LAST_NAME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT FIRST_NAME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT MIDDLE_NAME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT NICKNAME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT TITLE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT PATIENT_ID (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT DOB (#PCDATA)&gt;
+<br>
+&lt;!--M : Male  F: Female  U:Unknown--&gt;&lt;!ELEMENT SEX (#PCDATA)&gt;
+<br>
+&lt;!--Short name, please // for Religion and Primary Language--&gt;&lt;!ELEMENT
+<br>
+RELIGION (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT PRIMARY_LANGUAGE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ROOM_LOCATION (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ADMIT_DATE_TIME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT DISCHARGE_DATE_TIME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT RETAIN_ON_DISCHARGE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ALLERGY (ADD_DELETE , ALLERGY_ID , ALLERGY_NAME?)&gt;
+<br>
+&lt;!--The ADD_DELETE  node can have an ADD or DELETE entry.--&gt;&lt;!ELEMENT
+<br>
+ADD_DELETE (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ALLERGY_ID (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT ALLERGY_NAME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT DIAGNOSIS (EXTERNAL_ID , START_DATE_TIME , END_DATE_TIME? ,
+<br>
+DESCRIPTION?)&gt;
+<br>
+&lt;!ELEMENT EXTERNAL_ID (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT START_DATE_TIME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT END_DATE_TIME (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT DESCRIPTION (#PCDATA)&gt;
+<br>
+]&gt;
+<br>
+In the second file (above) I've removed the document body as it is
+<br>
+unimportant for purposes of this dicsussion. Note the differences in the
+<br>
+!DOCTYPE tag.
+<br>
+<p>I've got the body of the DTD stored in a local file and want to import it
+<br>
+into the document. I want it embedded in the document so that the receiver
+<br>
+does not need to have his own disk-based copy of the DTD's contents. The
+<br>
+DTD is stored in a file named &quot;CI7.dtd&quot;. I don't want the !DOCTYPE tag to
+<br>
+include either the &quot;SYSTEM&quot; or the &quot;&quot;CI7.dtd&quot;&quot; fields, I want it just as
+<br>
+shown in the first file.
+<br>
+<p>Here's an excerpt of the code I'm using to create the second file shown
+<br>
+above, can someone show me what I need to change to make it work in the
+<br>
+desired way?
+<br>
+<p>#include &lt;stdio.h&gt;
+<br>
+#include &lt;fcntl.h&gt;
+<br>
+#include &lt;stdlib.h&gt;
+<br>
+#include &lt;sys/types.h&gt;
+<br>
+#include &lt;unistd.h&gt;
+<br>
+#include &lt;libxml/tree.h&gt;
+<br>
+#include &lt;libxml/SAX.h&gt;
+<br>
+int main (int argc, char ** argv)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr doc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr root;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDtdPtr dtd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc = xmlNewDoc(&quot;1.0&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd = xmlParseDTD (NULL, &quot;CI7.dtd&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc-&gt;intSubset = dtd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;parent = doc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;doc = doc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc-&gt;children = (xmlNodePtr) dtd;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root = xmlNewDocNode(doc, NULL, &quot;EXAMPLE&quot;, NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlDocSetRootElement (doc, root);
+<br>
+&lt;snip&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>I'd appreciate some pointers/help in accomplishing this, I've been going
+<br>
+crosseyed trying to read my way through the library hoping to figure it
+<br>
+out, but so far I'm merely going blind.
+<br>
+<p>Thanks in advance!
+<br>
+<p>Fred
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<li><strong>Previous message:</strong> <a href="1370.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<li><strong>Reply:</strong> <a href="1372.html">Daniel Veillard: "Re: [xml] help with embedded DTD"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 14:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

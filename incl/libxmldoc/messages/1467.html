@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Legitimate xpath expressions in XSLT</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Legitimate xpath expressions in XSLT">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Legitimate xpath expressions in XSLT</h1>
+<!-- received="Mon Feb 19 04:28:20 2001" -->
+<!-- isoreceived="20010219092820" -->
+<!-- sent="Mon, 19 Feb 2001 10:28:07 +0100" -->
+<!-- isosent="20010219092807" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Legitimate xpath expressions in XSLT" -->
+<!-- id="20010219102807.A866@imag.fr" -->
+<!-- inreplyto="OF2D4EFE4B.98B845F4-ON802569F7.00586299@uk.neceur.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Mon Feb 19 2001 - 04:28:07 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1466.html">ross.alexander@uk.neceur.com: "[xml] Legitimate xpath expressions in XSLT"</a>
+<li><strong>In reply to:</strong> <a href="1466.html">ross.alexander@uk.neceur.com: "[xml] Legitimate xpath expressions in XSLT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Feb 18, 2001 at 05:13:56PM +0000, <a href="mailto:ross.alexander@uk.neceur.com?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">ross.alexander@uk.neceur.com</a> wrote:
+<br>
+<p>&nbsp;&nbsp;Hi Alexander,
+<br>
+<p><em>&gt; Which is fine, except that when I use the statement
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;xsl:for-each select=&quot;*&quot;&gt;
+</em><br>
+<em>&gt;     &lt;xsl:value-of select=&quot;./@name&quot;/&gt;&lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt;     &lt;xsl:text&gt; &lt;/xsl:text&gt;
+</em><br>
+<em>&gt;   &lt;/xsl:for-each&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Error xpath.c:5215: Invalid expression
+</em><br>
+<em>&gt; *
+</em><br>
+<em>&gt; ^
+</em><br>
+<em>&gt; Segmentation fault (core dumped)
+</em><br>
+<p>&nbsp;&nbsp;Two things:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1/ &lt;?xml version=&quot;1.0&quot;?&gt; at that place in the document is an
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error, I assume it's just a cut and paste error ...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(precisely it's an invalid PI form, XML declaration are only
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allowed as the first declaration in the document).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2/ Yessss it's a bug !
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I can't believe that something so basic escaped to the tests
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for such a long time, thanks a lot for reporting it. Again an
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error in the detection of abbreviated sequences. Patch enclosed
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applying to libxml-2.3.1 !
+<br>
+<p><em>&gt; Now, before libxslt came out I was using (and still do) use xalanj.  Both 
+</em><br>
+<em>&gt; xalanj-1.2.2 and
+</em><br>
+<em>&gt; xalanj-2.0.0 give the correct? result of listing all the skill names as 
+</em><br>
+<em>&gt; above.
+</em><br>
+<p>&nbsp;&nbsp;yes it's correct,
+<br>
+<p><em>&gt; So, which implementation is correct or is there ambiguity with the XPATH 
+</em><br>
+<em>&gt; spec.
+</em><br>
+<p>&nbsp;&nbsp;No ambiguity, if it segfault, it's a problem of the implementation :-)
+<br>
+<p><em>&gt; Personally I think there is a problem with the spec. In the examples of 
+</em><br>
+<em>&gt; abbrevitated
+</em><br>
+<em>&gt; location paths * is described as all element children of the context node 
+</em><br>
+<em>&gt; but in
+</em><br>
+<em>&gt; more formal syntax I can find no reference for *. 
+</em><br>
+<em>&gt; Should select=&quot;*&quot;  be identical to select=&quot;node()&quot;?
+</em><br>
+<p>&nbsp;&nbsp;2.5 states (2nd example):
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/xpath#path-abbrev">http://www.w3.org/TR/xpath#path-abbrev</a>
+<br>
+<p>-------------------
+<br>
+* selects all element children of the context node
+<br>
+-------------------
+<br>
+<p>&nbsp;&nbsp;For &quot;node()&quot; construct this is an abbreviated version of &quot;child::node()&quot;
+<br>
+i.e. the child axis is the default one.
+<br>
+<p>&nbsp;&nbsp;Section 2 states (4th example)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/xpath#location-paths">http://www.w3.org/TR/xpath#location-paths</a>
+<br>
+<p>-------------------
+<br>
+child::node() selects all the children of the context node, whatever
+<br>
+their node type
+<br>
+-------------------
+<br>
+<p>&nbsp;&nbsp;Sounds really clear to me, * selects less nodes than node(), i.e.
+<br>
+it restricts itself to element nodes (dropping text, PIs, comments, ...).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1467/01-xpath.c.diff">xpath.c.diff</a>
+</ul>
+<!-- attachment="01-xpath.c.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Legitimate%20xpath%20expressions%20in%20XSLT">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1466.html">ross.alexander@uk.neceur.com: "[xml] Legitimate xpath expressions in XSLT"</a>
+<li><strong>In reply to:</strong> <a href="1466.html">ross.alexander@uk.neceur.com: "[xml] Legitimate xpath expressions in XSLT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 19 2001 - 04:44:32 EST</em>
+</em>
+</small>
+</body>
+</html>

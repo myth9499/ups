@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] suggestion with libxml</title>
+<meta name="Author" content="hilaire@seul.org (hilaire@seul.org)">
+<meta name="Subject" content="[xml] suggestion with libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] suggestion with libxml</h1>
+<!-- received="Sun Jun 27 10:49:21 1999" -->
+<!-- isoreceived="19990627144921" -->
+<!-- sent="Sat, 26 Jun 1999 20:22:15 +0800 (CST)" -->
+<!-- isosent="19990626122215" -->
+<!-- name="hilaire@seul.org" -->
+<!-- email="hilaire@seul.org" -->
+<!-- subject="[xml] suggestion with libxml" -->
+<!-- id="Pine.LNX.4.10.9906262015300.10262-100000@obelix.ncserver.org" -->
+<!-- inreplyto="Pine.LNX.4.10.9906261958360.10262@obelix.ncserver.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:hilaire@seul.org?subject=Re:%20[xml]%20suggestion%20with%20libxml"><em>hilaire@seul.org</em></a><br>
+<strong>Date:</strong> Sat Jun 26 1999 - 08:22:15 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Previous message:</strong> <a href="0078.html">Miguel de Icaza: "[xml] Re: update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Reply:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Reply:</strong> <a href="0081.html">Daniel Veillard: "Re: [xml] suggestion with libxml"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I may use libxml to parse xml file format for an interactive geometry
+<br>
+application. 
+<br>
+I've a couple of question.
+<br>
+&nbsp;Here are examples - valid ? - to define points :
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&lt;freepoint label=&quot;A&quot; x=&quot;1.3&quot; y=&quot;10&quot; /&gt;
+<br>
+&nbsp;&nbsp;&lt;freepoint label=&quot;B&quot; x=&quot;13&quot; y=&quot;10&quot; /&gt;
+<br>
+&nbsp;&nbsp;&lt;middle label=&quot;I&quot; point=&quot;A&quot; point=&quot;B&quot;/&gt;
+<br>
+&nbsp;
+<br>
+&nbsp;The 1st things I don't like is I need to define different tags for each
+<br>
+&nbsp;kind of point (and there is a lot) althought this is always point I
+<br>
+&nbsp;define. Do I have the choice ?
+<br>
+&nbsp;
+<br>
+&nbsp;
+<br>
+&nbsp;The 2nd things. Is it valid, in the middle definition, to have twice the
+<br>
+&nbsp;point attribut ? Or should I write somethings like :
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&lt;middle label=&quot;I&quot; point1=&quot;A&quot; point2=&quot;B&quot;/&gt;
+<br>
+&nbsp;
+<br>
+&nbsp;This appear to be more easy to parse this with libxml but may be less
+<br>
+&nbsp;readble/conistant for users
+<br>
+&nbsp;
+<br>
+&nbsp;The situation is even worst with intersection point:
+<br>
+&nbsp;Here the intersection of line &amp; cercle ; segment &amp; half-line :
+<br>
+&nbsp;
+<br>
+&nbsp;&lt;intersection label=&quot;A&quot; line=&quot;(MN)&quot; circle=&quot;(C1)&quot; k=&quot;1&quot; /&gt;
+<br>
+&nbsp;&lt;intersection label=&quot;B&quot; segment=&quot;[MN]&quot; halfline=&quot;[OP)&quot; /&gt;
+<br>
+&nbsp;
+<br>
+&nbsp;This really look like a nightmare to parse with libxml as there is 10th
+<br>
+kind of intersection point.
+<br>
+&nbsp;
+<br>
+&nbsp;Alternatively I could make a horrible things like this :
+<br>
+&nbsp;
+<br>
+&nbsp;&lt;intersection_line_circle label=&quot;A&quot; line=&quot;(MN)&quot; circle=&quot;(C1)&quot; k=&quot;1&quot; /&gt;
+<br>
+&nbsp;&lt;intersection_segment_halfline label=&quot;B&quot; segment=&quot;[MN]&quot; halfline=&quot;[OP)&quot; /&gt;
+<br>
+&nbsp;
+<br>
+&nbsp;Horrible for the users but easy to parse.
+<br>
+&nbsp;
+<br>
+&nbsp;Any ideas, suggestion ?
+<br>
+&nbsp;
+<br>
+&nbsp;
+<br>
+&nbsp;
+<br>
+Hilaire Fernandes 
+<br>
+Dr Geo project <a href="http://www.drgeo.seul.org">http://www.drgeo.seul.org</a>
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Previous message:</strong> <a href="0078.html">Miguel de Icaza: "[xml] Re: update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Reply:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>Reply:</strong> <a href="0081.html">Daniel Veillard: "Re: [xml] suggestion with libxml"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

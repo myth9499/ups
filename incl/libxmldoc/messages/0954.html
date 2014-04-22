@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Sat Oct 14 10:33:29 2000" -->
+<!-- isoreceived="20001014143329" -->
+<!-- sent="Sat, 14 Oct 2000 16:33:24 +0200" -->
+<!-- isosent="20001014143324" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="20001014163324.H23022@w3.org" -->
+<!-- inreplyto="39E85153.64B592FB@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Oct 14 2000 - 10:33:24 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0953.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0952.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Oct 14, 2000 at 12:28:03PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; I have attached three files:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   hash.c
+</em><br>
+<em>&gt;   hash.h     (should be put in include/libxml/)
+</em><br>
+<em>&gt;   hash.diff
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The latter contains the patches to Makefile.am and xpath.[hc]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The size of the hash table has been arbitrarily set to 256 (it
+</em><br>
+<em>&gt; should probably be a prime number instead.)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have put the hash.[hc] files under the MIT license, but I have
+</em><br>
+<em>&gt; added Daniel as a copyright holder, which gives him permission
+</em><br>
+<em>&gt; to change the license if he disagrees. Btw, talking about licenses
+</em><br>
+<em>&gt; the COPYRIGHT file that all boilerplates are referring to is
+</em><br>
+<em>&gt; missing from the distribution.
+</em><br>
+<p>&nbsp;&nbsp;First thanks a lot !
+<br>
+<p>However there are several issues I would like to raise:
+<br>
+<p>&nbsp;&nbsp;- this introduce a binary incompatible change, some data
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;structures are changed and that a first thing I will have
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to correct
+<br>
+&nbsp;&nbsp;- an hash table only makes sense if the pool of object is
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;clearly larger than the number of entries, and whatever how I
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;turn the problem, I don't see how i would need to register
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;250 functions, if you have such an use case please enlighten me
+<br>
+&nbsp;&nbsp;- the function used to compute the hash looks rather costly
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;you have a multiply and an add per char in the string, I
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;usually simply compute the sum of all chars in the string
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;which for a 256 hash size should be good enough.
+<br>
+&nbsp;&nbsp;- the overall memory used for storing the hash table seems a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bit inappropriate in that specific case of the few XPath
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;functions (but tiny compare to a DOM tree size and other use
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of hash tables in libxml).
+<br>
+&nbsp;&nbsp;- adding a new header and C file would only really make sense if
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;those were reused in multiple places.
+<br>
+<p>&nbsp;I think integrating the patch as is is a bit problematic right now.
+<br>
+But I think it does make sense to try to reuse it to make it the
+<br>
+hash table interfaces used in other parts as well (entities, element/
+<br>
+attributes/notations declarations, and the XPath registry).
+<br>
+<p>&nbsp;&nbsp;I hope that you won't take offense if I don't integrate it for 
+<br>
+2.2.5, I think I will reuse it but as explained in a larger context :-)
+<br>
+<p>&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0953.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0952.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 14 2000 - 10:43:28 EDT</em>
+</em>
+</small>
+</body>
+</html>

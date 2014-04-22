@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Igor Zlatkovic (igor@stud.fh-frankfurt.de)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Wed Jan 31 21:02:51 2001" -->
+<!-- isoreceived="20010201020251" -->
+<!-- sent="Wed, 31 Jan 2001 23:36:01 +0100" -->
+<!-- isosent="20010131223601" -->
+<!-- name="Igor Zlatkovic" -->
+<!-- email="igor@stud.fh-frankfurt.de" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="3A789351.D6A49F21@stud.fh-frankfurt.de" -->
+<!-- inreplyto="01049D4F474ED211A6A20000E8DF6382A239CD@BBGE-EXCH-SVR" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Igor Zlatkovic (<a href="mailto:igor@stud.fh-frankfurt.de?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>igor@stud.fh-frankfurt.de</em></a>)<br>
+<strong>Date:</strong> Wed Jan 31 2001 - 17:36:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1398.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1396.html">Philipp Kursawe: "[xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there.
+<br>
+<p>You have a problem. So do I. What you are trying to do is the subject of
+<br>
+my pains since few days and it has proven to be fairly difficult to
+<br>
+handle. Due to numerous issues, there is only one way I can go: use wide
+<br>
+charracters (type wchar_t) internally and UTF-8 externally. When one set
+<br>
+to such a way needs to use libxml in its present form, there are two
+<br>
+possibilities:
+<br>
+<p>1. Write a surrogate for each and every libxml function which operates
+<br>
+on strings and make the surrogate convert all involved strings before
+<br>
+and/or after the call to the real libxml function. The same applies when
+<br>
+accessing any data member of any structure in libxml which contains a
+<br>
+string. Well, if you are using just a few libxml functions, this is not
+<br>
+a big problem to do. If you however use a lot of them, it is a pure
+<br>
+terror. Depending on how often your program calls into libxml, it can
+<br>
+represent a performance penalty. Good thing about it is that it need be
+<br>
+done once, provided libxml interface doesn't change.
+<br>
+<p>2. Modify libxml and make xmlChar type resemble wchar_t, instead of
+<br>
+unsigned char. In this case, libxml would have to convert from/to UTF-8
+<br>
+whenever it reads from, or writes to, any external storage (file,
+<br>
+http...). This is considerable if, and only if you use a whole lot of
+<br>
+libxml functions and call them often. However, it means producing a new,
+<br>
+private version of libxml and keeping it in sync with the public one for
+<br>
+all times. No, even if that would be my (and your) salvation, the
+<br>
+official libxml cannot be modified in this manner. That would
+<br>
+mercilessly break each and every libxml-based program out there, in
+<br>
+addition to loosing support for every platform which does not have an
+<br>
+ISO-10646 implementation. (Is there such platform?)
+<br>
+<p>To convert strings between wide charracter and UTF-8 representations
+<br>
+under Win32, I would use WidecharToMultiByte and MultiByteToWideChar
+<br>
+functions, which are a part of the operating system NLS interface.
+<br>
+<p>I wish you a lot of luck.
+<br>
+Igor
+<br>
+<p><p>Philipp Kursawe wrote:
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Hello,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I'm new to libxml and and must say its wonderful clean, fast simple
+</em><br>
+<em>&gt; C-API is just what I's looking for.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; But now I'm running into serious problems when I want to use russian,
+</em><br>
+<em>&gt; german or chinese text in my XML (not for the tags).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I don't understand how to convert from the internal used UTF-8 to a
+</em><br>
+<em>&gt; Win32 character set so I can use the texts in native Win32 functions.
+</em><br>
+<em>&gt; I'v tried to use iconv and enabled iconv support in libxml but the
+</em><br>
+<em>&gt; resulting string still doesnt look right to me. Is it possible to
+</em><br>
+<em>&gt; convert from UTF-8 to 2-Byte Windows UNICODE characters, or is there
+</em><br>
+<em>&gt; something I've missed?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Thanks in advance for your help,
+</em><br>
+<em>&gt; Philipp
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1398.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1396.html">Philipp Kursawe: "[xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 31 2001 - 22:43:49 EST</em>
+</em>
+</small>
+</body>
+</html>

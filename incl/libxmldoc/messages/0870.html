@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml -&gt; .</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] libxml -&gt; .">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml -&gt; .</h1>
+<!-- received="Tue Oct  3 10:16:30 2000" -->
+<!-- isoreceived="20001003141630" -->
+<!-- sent="Tue, 03 Oct 2000 10:16:26 -0400" -->
+<!-- isosent="20001003141626" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] libxml -&gt; ." -->
+<!-- id="200010031416.KAA02787@vixen.cs.utk.edu" -->
+<!-- inreplyto="[xml] libxml -&gt; ." -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20libxml%20-&gt;%20."><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Tue Oct 03 2000 - 10:16:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0869.html">Kenneth Pronovici: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Maybe in reply to:</strong> <a href="0857.html">Timothee Besset: "[xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[]
+<br>
+<em>&gt;&gt; cvs can be picky about such things, but it is very doable.
+</em><br>
+<em>&gt;&gt; It helps (alot) to understand how ./CVS/Entries  works.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  I think I understand pretty well how CVS work, I don't want
+</em><br>
+<em>&gt;to break CVS checkout of people especilly on the Gnome CVS base.
+</em><br>
+<p>This is important enough to leave the repository alone!
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;  There is either:
+</em><br>
+<em>&gt;    - create the new directory, move the files there, cvs delete
+</em><br>
+<em>&gt;      an then cvs add in the new directory.
+</em><br>
+<em>&gt;      =&gt; I don't want this option before a new major change to
+</em><br>
+<em>&gt;         avoid loosing the CVS logs
+</em><br>
+<em>&gt;    - simply move the ,v files on the server but I'm absolutely opposed
+</em><br>
+<em>&gt;      to this since this will break all the client checkouts, it's
+</em><br>
+<em>&gt;      bad behaviour
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  I don't want to mess with the CVS repository now, there is of
+</em><br>
+<em>&gt;course things which could be done to not break existing checkouts and
+</em><br>
+<em>&gt;make that change at the CVS level, but people updating without -d 
+</em><br>
+<em>&gt;could be in trouble. 
+</em><br>
+<p>Since everything works well enough as it is now, no need to hurry.
+<br>
+On the win32 side, since libxml does not depend on e.g., glib or lex,
+<br>
+porting really is not that difficult.  Changes to the repository
+<br>
+structure fall under the &quot;nice to have but not necessary&quot; category.
+<br>
+<p><p><em>&gt;
+</em><br>
+<em>&gt;&gt; &gt;this structure automatically. I don't think I will change the CVs structure
+</em><br>
+<em>&gt;&gt; &gt;(and hence my enviroment) soon, maybe when switching to libxml3 if it
+</em><br>
+<em>&gt;&gt; &gt;ever get released :-)
+</em><br>
+<em>&gt;&gt; &gt;  I will play with the tarball generation,
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; I guess I am better with cvs than with tar, because I would find 
+</em><br>
+<em>&gt;&gt; much, much faster to reoroganize the repository than figure out 
+</em><br>
+<em>&gt;&gt; how to make tar so this!   
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I don't ask you to do it, I will ... Next revision of libxml tar will
+</em><br>
+<em>&gt;have an include/libxml/ subtree containing the .h files.
+</em><br>
+<p>Yay!
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0869.html">Kenneth Pronovici: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Maybe in reply to:</strong> <a href="0857.html">Timothee Besset: "[xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 03 2000 - 10:43:42 EDT</em>
+</em>
+</small>
+</body>
+</html>

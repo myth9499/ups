@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Using libxml</title>
+<meta name="Author" content="Anders Karlsson (pugo@cendio.se)">
+<meta name="Subject" content="Re: [xml] Using libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Using libxml</h1>
+<!-- received="Fri Feb  2 06:54:32 2001" -->
+<!-- isoreceived="20010202115432" -->
+<!-- sent="Fri, 2 Feb 2001 12:54:22 +0100 (CET)" -->
+<!-- isosent="20010202115422" -->
+<!-- name="Anders Karlsson" -->
+<!-- email="pugo@cendio.se" -->
+<!-- subject="Re: [xml] Using libxml" -->
+<!-- id="Pine.LNX.4.21.0102021027550.2303-100000@q-bert.cendio.se" -->
+<!-- inreplyto="Pine.LNX.4.30.0102012058240.11847-100000@lotus.slothmud.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Anders Karlsson (<a href="mailto:pugo@cendio.se?subject=Re:%20[xml]%20Using%20libxml"><em>pugo@cendio.se</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 06:54:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<li><strong>Previous message:</strong> <a href="1404.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>In reply to:</strong> <a href="1401.html">hayward@slothmud.org: "[xml] Using libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, 1 Feb 2001 <a href="mailto:hayward@slothmud.org?subject=Re:%20[xml]%20Using%20libxml">hayward@slothmud.org</a> wrote:
+<br>
+<p><em>&gt; I've already hacked together a sample program that loads/saves xml files
+</em><br>
+<em>&gt; based on the available documentation.  I also figured out how to make use
+</em><br>
+<em>&gt; of the data read in by accessing the DOM tree directly.  But I get this
+</em><br>
+<em>&gt; feeling that I should be using more of the API functions do do much of
+</em><br>
+<em>&gt; what I'm doing directly, and I haven't found a good place to get a good
+</em><br>
+<em>&gt; understanding of when I should and shouldn't use the API functions.
+</em><br>
+<p>Well, some days ago I understood that I hade reinvented the wheel. I wrote
+<br>
+some code that traverses the DOM tree recursivelly and searches for
+<br>
+elements matching a specific path. The code works fine, but as you I had
+<br>
+the feeling that there must be a more standard way to do it. Then I found
+<br>
+the wheel, XPath. 
+<br>
+<p>XPath is a standard that makes it possible to reference objects in the
+<br>
+tree with advanced possibilities, in fact it's a language in itself,
+<br>
+making it possible to create advanced references.
+<br>
+<p>I looked closer at XPath and realized that it seemed to be good, but I
+<br>
+also realized that in my case it would be like shooting ducks with
+<br>
+ballistic missiles, it was far too advanced and big for my use. I simply
+<br>
+didn't need anything more than what I already had implemented, so I still
+<br>
+use my own wheel. 
+<br>
+<p>Regards,
+<br>
+--------------------------------------------------------------------------
+<br>
+Anders Karlsson                        Email:  <a href="mailto:anders.karlsson@cendio.se?subject=Re:%20[xml]%20Using%20libxml">anders.karlsson@cendio.se</a>
+<br>
+Cendio Systems AB                      WWW:    www.cendio.se
+<br>
+Teknikringen 3,                        Voice:  +46 - (0)13 - 21 46 00
+<br>
+SE-583 30  LINKÖPING, SWEDEN           Fax:    +46 - (0)13 - 21 47 00
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Using%20libxml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Using%20libxml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<li><strong>Previous message:</strong> <a href="1404.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>In reply to:</strong> <a href="1401.html">hayward@slothmud.org: "[xml] Using libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 08:43:31 EST</em>
+</em>
+</small>
+</body>
+</html>

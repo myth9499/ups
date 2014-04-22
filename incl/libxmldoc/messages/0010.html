@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Question about xmlSetProp</title>
+<meta name="Author" content="Alexander Larsson (alla@lysator.liu.se)">
+<meta name="Subject" content="Re: [xml] Question about xmlSetProp">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Question about xmlSetProp</h1>
+<!-- received="Mon Feb 15 12:12:20 1999" -->
+<!-- isoreceived="19990215171220" -->
+<!-- sent="Mon, 15 Feb 1999 18:12:06 +0100 (CET)" -->
+<!-- isosent="19990215171206" -->
+<!-- name="Alexander Larsson" -->
+<!-- email="alla@lysator.liu.se" -->
+<!-- subject="Re: [xml] Question about xmlSetProp" -->
+<!-- id="199902151712.SAA19199@c125.ryd.student.liu.se" -->
+<!-- inreplyto="19990214130549.A29337@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alexander Larsson (<a href="mailto:alla@lysator.liu.se?subject=Re:%20[xml]%20Question%20about%20xmlSetProp"><em>alla@lysator.liu.se</em></a>)<br>
+<strong>Date:</strong> Mon Feb 15 1999 - 12:12:06 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0009.html">Daniel Veillard: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0009.html">Daniel Veillard: "Re: [xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 14 Feb, Daniel Veillard wrote:
+<br>
+<em>&gt;&gt;  Ok. So attribute values are whitespace ignorant... Is
+</em><br>
+<em>&gt;&gt;  multiple whitespace ignored in the content too? 
+</em><br>
+<em>&gt;&gt;  (as in &lt;string&gt;a b c&lt;/string&gt; vs &lt;string&gt;a  b  c&lt;/string&gt;)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   No, element content is not !
+</em><br>
+<em>&gt; However when elements can contain both childs and text, then you may
+</em><br>
+<em>&gt; have troubles with white spaces.
+</em><br>
+<em>&gt;    &lt;string&gt;a  b  c&lt;/string&gt; will always be saved as read, but
+</em><br>
+<em>&gt;    &lt;string&gt;a  &lt;elem&gt;b&lt;/elem&gt;  c&lt;/string&gt;  may be saved differently.
+</em><br>
+<em>&gt; Being able to distinguish in such elements (mixed content) whether a
+</em><br>
+<em>&gt; white space is significant or not is difficult.
+</em><br>
+<p>&nbsp;Ok, just so i don't make the same stupid mistake again: Exactly what
+<br>
+&nbsp;is guaranteed about element content (which is not mixed). What
+<br>
+&nbsp;characters do i need to escape?, which are significant and stored
+<br>
+&nbsp;exactly? (space? tab? newline?) Is it 8bit clean?
+<br>
+<p>/ Alex, not very knowledgeable about xml.
+<br>
+<p>Ps. This is the DTD i use in my program. Does it have any more obvious
+<br>
+blunders?
+<br>
+<p>&lt;!ELEMENT diagram (diagramdata, (layer)*) &gt;
+<br>
+<p>&lt;!ELEMENT diagramdata (attribute)* &gt;
+<br>
+<p>&lt;!ELEMENT layer (object | group)*&gt;
+<br>
+&lt;!ATTLIST layer
+<br>
+&nbsp;&nbsp;&nbsp;name CDATA #REQUIRED
+<br>
+&nbsp;&nbsp;&nbsp;visible (true|false) #REQUIRED &gt;
+<br>
+<p>&lt;!ELEMENT object ((attribute)*, connections?)&gt;
+<br>
+&lt;!ATTLIST object
+<br>
+&nbsp;&nbsp;&nbsp;type CDATA #REQUIRED
+<br>
+&nbsp;&nbsp;&nbsp;version NMTOKEN #REQUIRED
+<br>
+&nbsp;&nbsp;&nbsp;id ID #REQUIRED &gt;
+<br>
+<p>&lt;!ELEMENT connections (connection)*&gt;
+<br>
+<p>&lt;!ELEMENT connection EMPTY&gt;
+<br>
+&lt;!ATTLIST connection
+<br>
+&nbsp;&nbsp;&nbsp;handle NMTOKEN #REQUIRED
+<br>
+&nbsp;&nbsp;&nbsp;to IDREF #REQUIRED
+<br>
+&nbsp;&nbsp;&nbsp;connection NMTOKEN #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT group (object | group)*&gt;
+<br>
+<p>&lt;!ELEMENT attribute (composite | int | enum | real | boolean |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color | point | rectangle | string | font)*&gt;
+<br>
+&lt;!ATTLIST attribute  name CDATA #REQUIRED &gt;
+<br>
+<p>&lt;!ELEMENT composite (attribute)*&gt;
+<br>
+&lt;!ATTLIST composite  type CDATA #IMPLIED&gt;
+<br>
+<p>&lt;!ELEMENT int EMPTY&gt;
+<br>
+&lt;!ATTLIST int  val NMTOKEN #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT enum EMPTY&gt;
+<br>
+&lt;!ATTLIST enum  val NMTOKEN #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT real EMPTY&gt;
+<br>
+&lt;!ATTLIST real  val CDATA #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT boolean EMPTY&gt;
+<br>
+&lt;!ATTLIST boolean  val (true|false) #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT color EMPTY&gt;
+<br>
+&lt;!ATTLIST color  val CDATA #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT point EMPTY&gt;
+<br>
+&lt;!ATTLIST point  val CDATA #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT rectangle EMPTY&gt;
+<br>
+&lt;!ATTLIST rectangle  val CDATA #REQUIRED&gt;
+<br>
+<p>&lt;!ELEMENT string EMPTY&gt;
+<br>
+&lt;!ATTLIST string  val CDATA #IMPLIED&gt;
+<br>
+<p>&lt;!ELEMENT font EMPTY&gt;
+<br>
+&lt;!ATTLIST font name CDATA #REQUIRED&gt;
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0009.html">Daniel Veillard: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0009.html">Daniel Veillard: "Re: [xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

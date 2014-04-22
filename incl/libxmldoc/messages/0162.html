@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="[xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</h1>
+<!-- received="Tue Oct  5 17:59:28 1999" -->
+<!-- isoreceived="19991005215928" -->
+<!-- sent="05 Oct 1999 23:59:22 +0200" -->
+<!-- isosent="19991005215922" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="[xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c" -->
+<!-- id="y6y4sg5a2px.fsf@nero.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Tue Oct 05 1999 - 17:59:22 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Previous message:</strong> <a href="0161.html">Daniel Veillard: "Re: [xml] Dangerous..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Reply:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Maybe reply:</strong> <a href="0164.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Reply:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Maybe reply:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I've been working with the HTML parser that comes with gnome-xml, and
+<br>
+after debugging my own code for a while because of some weird nesting
+<br>
+of lists, I realized that the HTML parser doesn't infer &lt;/li&gt; when
+<br>
+current element is &lt;li&gt; and a new &lt;li&gt; is seen.  Shouldn't it do so?
+<br>
+I added &quot;LI&quot; to the &quot;LI&quot; entry in the htmlStartClose array in
+<br>
+HTMLParser.c, line 302, and it all worked allright.
+<br>
+<p>By the way, I would really like to use the HTML parser with the SAX
+<br>
+interface, however this isn't possible, since the parser looks at the
+<br>
+currently open element to infer close tags, and the element stack is
+<br>
+maintained by the DOM building default SAX handler.  On the other hand
+<br>
+I cant maintain the element stack in my SAX handler, since I dont have
+<br>
+access to the parser context there.
+<br>
+<p>But actually I need the DOM tree later on anyway, so I would be happy
+<br>
+if I could just add a SAX handler, instead of replacing to default
+<br>
+one.  An elegant way to implement multiple SAX handlers could be to do
+<br>
+a meta SAX handler, that has a list of SAX handlers and just
+<br>
+propagates the callback to each of the handlers in the list.
+<br>
+<p>Finally, how about a way to attach custom data to xmlNode?  The
+<br>
+application I'm thinking of is that, suppose you have an xmlDoc and a
+<br>
+visualisation using some interface objects (canvas items, widgets,
+<br>
+whatever).  What I'd like to do, is to have pointers from the xmlNodes
+<br>
+to the interface objects, so that when the xmlDoc changes I can follow
+<br>
+the pointer and change the visualisation accordingly.  I suspect this
+<br>
+is the kind of functionality you'd have to support if you were to
+<br>
+export the DOM tree using gdome (I haven't studied this in detail,
+<br>
+though).  Is there something I'm missing, how is this usually done?
+<br>
+<p>regards,
+<br>
+Kristian
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Previous message:</strong> <a href="0161.html">Daniel Veillard: "Re: [xml] Dangerous..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Reply:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Maybe reply:</strong> <a href="0164.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Reply:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Maybe reply:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

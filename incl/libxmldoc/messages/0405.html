@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Loss of whitespace</title>
+<meta name="Author" content="acassin@cs.mu.OZ.AU (acassin@cs.mu.OZ.AU)">
+<meta name="Subject" content="Re: [xml] Loss of whitespace">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Loss of whitespace</h1>
+<!-- received="Thu Mar  2 00:28:34 2000" -->
+<!-- isoreceived="20000302052834" -->
+<!-- sent="Thu, 2 Mar 2000 16:28:14 +1100 (EST)" -->
+<!-- isosent="20000302052814" -->
+<!-- name="acassin@cs.mu.OZ.AU" -->
+<!-- email="acassin@cs.mu.OZ.AU" -->
+<!-- subject="Re: [xml] Loss of whitespace" -->
+<!-- id="200003020528.QAA24782@mulga.cs.mu.OZ.AU" -->
+<!-- inreplyto="20000302041530.F2869@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:acassin@cs.mu.OZ.AU?subject=Re:%20[xml]%20Loss%20of%20whitespace"><em>acassin@cs.mu.OZ.AU</em></a><br>
+<strong>Date:</strong> Thu Mar 02 2000 - 00:28:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0404.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0402.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On  2 Mar, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, Mar 01, 2000 at 09:24:08PM +0100, Daniel Veillard wrote:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; On Wed, Mar 01, 2000 at 01:40:39PM -0600, Paul DuBois wrote:
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; I first reported this on the PHP4 mailing list, but after some more
+</em><br>
+<em>&gt;&gt; &gt; poking around, what I'm observing seems to be happening in the libxml
+</em><br>
+<em>&gt;&gt; &gt; library that PHP4 uses.
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; Here's a sample document:
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; &lt;?xml version='1.0'?&gt;
+</em><br>
+<em>&gt;&gt; &gt; &lt;root&gt;
+</em><br>
+<em>&gt;&gt; &gt; a&lt;x&gt; &lt;/x&gt;b&lt;x&gt; &lt;/x&gt;c
+</em><br>
+<em>&gt;&gt; &gt; &lt;/root&gt;
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; If I run this through &quot;tester&quot;, I get:
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; &lt;root&gt;
+</em><br>
+<em>&gt;&gt; &gt; a&lt;x/&gt;b&lt;x/&gt;c
+</em><br>
+<em>&gt;&gt; &gt; &lt;/root&gt;
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; Note that the whitespace which forms the contents of the &lt;x&gt; elements
+</em><br>
+<em>&gt;&gt; &gt; has been discarded.
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; 
+</em><br>
+<em>&gt;&gt; &gt; How do I defeat this?
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt;   With an upgrade, I need to fix this ASAP. I guess it's worth releasing
+</em><br>
+<em>&gt;&gt; an 1.8.7 lib just for this &lt;grin/&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   This proves to be incredibly hard to fix !!!
+</em><br>
+<em>&gt; If I fix it, basically the tree produced by a document like
+</em><br>
+<em>&gt; &lt;root&gt;
+</em><br>
+<em>&gt; &lt;x&gt; &lt;/x&gt;
+</em><br>
+<em>&gt; &lt;/root&gt;
+</em><br>
+<em>&gt; would be:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt;text(\n) -&gt; x -&gt; text(\n)
+</em><br>
+<em>&gt;                    |
+</em><br>
+<em>&gt; 		   -&gt; text( )
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; instead of 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt; x 
+</em><br>
+<em>&gt;         |
+</em><br>
+<em>&gt; 	-&gt; text( )
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; which is what you expect.
+</em><br>
+<em>&gt; and currently libxml generates
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doc
+</em><br>
+<em>&gt;  |
+</em><br>
+<em>&gt;  -&gt; root
+</em><br>
+<em>&gt;      |
+</em><br>
+<em>&gt;      -&gt; x 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; There is no clean way to know whether such a white space is significant
+</em><br>
+<em>&gt; a priori, and I'm afraid that in the current for it would break most of the
+</em><br>
+<em>&gt; apps around using libxml.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Without a DTD telling me what is the content type of the element root
+</em><br>
+<em>&gt; I cannot assume it's just (x)* and not (CDATA | x), hence wether
+</em><br>
+<em>&gt; I can safely assume that this can be ignored
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Check the related section at:
+</em><br>
+<em>&gt;  <a href="http://xml.com/axml/target.html#sec-white-space">http://xml.com/axml/target.html#sec-white-space</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and especially the couple of comments put by Tim Bray under the (T)
+</em><br>
+<em>&gt; links.
+</em><br>
+<em>&gt; No single heuristic will work. And I'm using such an heuristic in libxml
+</em><br>
+<em>&gt; and changing it will probably kill a lot of applications using libxml,
+</em><br>
+<em>&gt; I tried with gnumeric it didn't liked :-(. PHP might break seriously too
+</em><br>
+<p>surely a fix for these applications wouldn't be that difficult? Schedule
+<br>
+the whitespace corrections for the next major release of libxml
+<br>
+perhapsto give app developers time to switch? I think conformance is the
+<br>
+more important objective here. Cryptographic algorithms need to be
+<br>
+precise about how libxml is going to handle whitespace otherwise
+<br>
+cryptographic keys over document content wont compute the same as
+<br>
+another XML parser...
+<br>
+<p>There is also one other thing to be aware of, the attribute xml:space
+<br>
+which defines the whitespace processing behaviour intended by the
+<br>
+application. Section 2.10 of the XML-Rec.
+<br>
+<p><p>Andrew Cassin
+<br>
+<a href="mailto:acassin@cs.mu.oz.au?subject=Re:%20[xml]%20Loss%20of%20whitespace">acassin@cs.mu.oz.au</a>
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0404.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0402.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:06 EDT</em>
+</em>
+</small>
+</body>
+</html>

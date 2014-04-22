@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Release of libxml2-2.2.0</title>
+<meta name="Author" content="Peter Jacobi (pj@walter-graphtek.com)">
+<meta name="Subject" content="Re: [xml] Release of libxml2-2.2.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Release of libxml2-2.2.0</h1>
+<!-- received="Mon Jul 17 08:30:06 2000" -->
+<!-- isoreceived="20000717123006" -->
+<!-- sent="Mon, 17 Jul 2000 14:27:05 +0200" -->
+<!-- isosent="20000717122705" -->
+<!-- name="Peter Jacobi" -->
+<!-- email="pj@walter-graphtek.com" -->
+<!-- subject="Re: [xml] Release of libxml2-2.2.0" -->
+<!-- id="1248285724-359150377@jessenlenz.com" -->
+<!-- inreplyto="20000717124459.B19247@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Peter Jacobi (<a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20Release%20of%20libxml2-2.2.0"><em>pj@walter-graphtek.com</em></a>)<br>
+<strong>Date:</strong> Mon Jul 17 2000 - 08:27:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0605.html">marcus@levonline.com: "[xml] Possible bug in xmlXPathEvalPathExpr - patch included"</a>
+<li><strong>Previous message:</strong> <a href="0603.html">Daniel Veillard: "Re: [xml] Release of libxml2-2.2.0"</a>
+<li><strong>In reply to:</strong> <a href="0603.html">Daniel Veillard: "Re: [xml] Release of libxml2-2.2.0"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+<p><em>&gt; But I agree with you
+</em><br>
+<em>&gt; there might be place where the lookup is just bogus.
+</em><br>
+<em>&gt;   If you can send me (directly) the lines where this happen that
+</em><br>
+<em>&gt; would reduce the work needed for chasing them (and the the time
+</em><br>
+<em>&gt; needed to get this fixed :-)
+</em><br>
+<p>There are fewer lines (compared to my initial impression) affected. So I 
+<br>
+can attach the list below. I get about 10000 warnings for these 60 lines, 
+<br>
+as each single comparison which will always yield the same result earns 
+<br>
+a compiler warning. This can be seen as hint, how much comparisons 
+<br>
+are done by the UNICODE classifying macros. Perhaps a table lookup 
+<br>
+for the BMP would make sense.
+<br>
+<p>Regards,
+<br>
+Peter
+<br>
+<p>The list of lines:
+<br>
+<p>parser.c(3436)
+<br>
+parser.c(3439)
+<br>
+parser.c(3440)
+<br>
+parser.c(3446)
+<br>
+parser.c(3449)
+<br>
+parser.c(3450)
+<br>
+valid.c(2419)
+<br>
+valid.c(2424)
+<br>
+valid.c(2427)
+<br>
+valid.c(2428)
+<br>
+valid.c(2452)
+<br>
+valid.c(2457)
+<br>
+valid.c(2460)
+<br>
+valid.c(2461)
+<br>
+valid.c(2467)
+<br>
+valid.c(2472)
+<br>
+valid.c(2475)
+<br>
+valid.c(2476)
+<br>
+valid.c(2503)
+<br>
+valid.c(2506)
+<br>
+valid.c(2507)
+<br>
+valid.c(2510)
+<br>
+valid.c(2513)
+<br>
+valid.c(2514)
+<br>
+valid.c(2541)
+<br>
+valid.c(2544)
+<br>
+valid.c(2545)
+<br>
+valid.c(2548)
+<br>
+valid.c(2551)
+<br>
+valid.c(2552)
+<br>
+valid.c(2559)
+<br>
+valid.c(2562)
+<br>
+valid.c(2563)
+<br>
+valid.c(2566)
+<br>
+valid.c(2569)
+<br>
+valid.c(2570)
+<br>
+xpath.c(2291)
+<br>
+xpath.c(2294)
+<br>
+xpath.c(2295)
+<br>
+xpath.c(3079)
+<br>
+xpath.c(3082)
+<br>
+xpath.c(3085)
+<br>
+xpath.c(3086)
+<br>
+xpath.c(3233)
+<br>
+xpath.c(3235)
+<br>
+xpath.c(3244)
+<br>
+xpath.c(3246)
+<br>
+xpath.c(3549)
+<br>
+xpath.c(3619)
+<br>
+xpath.c(3624)
+<br>
+xpath.c(3627)
+<br>
+xpath.c(3628)
+<br>
+xpath.c(3634)
+<br>
+xpath.c(3637)
+<br>
+xpath.c(3638)
+<br>
+xpath.c(3669)
+<br>
+htmlparser.c(2190)
+<br>
+htmlparser.c(2207)
+<br>
+<p>end of list
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Release%20of%20libxml2-2.2.0">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Release%20of%20libxml2-2.2.0">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0605.html">marcus@levonline.com: "[xml] Possible bug in xmlXPathEvalPathExpr - patch included"</a>
+<li><strong>Previous message:</strong> <a href="0603.html">Daniel Veillard: "Re: [xml] Release of libxml2-2.2.0"</a>
+<li><strong>In reply to:</strong> <a href="0603.html">Daniel Veillard: "Re: [xml] Release of libxml2-2.2.0"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

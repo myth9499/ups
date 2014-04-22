@@ -1,0 +1,209 @@
+Index: HTMLparser.c
+@@ -1650,6 +1650,8 @@
+     if (CUR != '<') return(0);
+     if (ctxt->name == NULL)
+ 	return(1);
++    if (!xmlStrcmp(ctxt->name, BAD_CAST"html"))
++	return(1);
+     if (!xmlStrcmp(ctxt->name, BAD_CAST"head"))
+ 	return(1);
+     if (!xmlStrcmp(ctxt->name, BAD_CAST"body"))
+Index: Down.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+   , 3)
+@@ -36,7 +33,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: doc3.htm.sax
+@@ -70,11 +70,8 @@
+ SAX.startElement(meta, content='MSHTML 5.00.3103.1000', name='GENERATOR')
+ SAX.endElement(meta)
+ SAX.endElement(head)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 2)
+-SAX.endElement(p)
+ SAX.startElement(body, aLink='red', bgColor='black', link='red', text='white', vLink='red')
+ SAX.ignorableWhitespace(
+ , 2)
+@@ -2923,7 +2920,6 @@
+ SAX.endElement(script)
+ SAX.ignorableWhitespace(
+ , 2)
+-SAX.endElement(body)
+ SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+Index: fp40.htm.sax
+@@ -2,12 +2,9 @@
+ SAX.startDocument()
+ SAX.internalSubset(html, -//IETF//DTD HTML//EN, )
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ 
+ , 2)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 1)
+@@ -460,7 +457,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: reg1.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 1)
+@@ -33,7 +30,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: reg2.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 1)
+@@ -38,7 +35,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: reg3.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 1)
+@@ -42,7 +39,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: reg4.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 1)
+@@ -40,7 +37,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: test2.html.sax
+@@ -8,11 +8,8 @@
+ SAX.characters(Linux Today, 11)
+ SAX.endElement(title)
+ SAX.endElement(head)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(p)
+ SAX.startElement(body, bgcolor='White', link='Blue', text='Black', VLINK='Black', ALINK='Red')
+ SAX.ignorableWhitespace(
+ 
+@@ -142,7 +139,6 @@
+ SAX.endElement(body)
+ SAX.ignorableWhitespace(
+ , 1)
+-SAX.endElement(body)
+ SAX.endElement(html)
+ SAX.ignorableWhitespace(
+ , 1)
+Index: test3.html.sax
+@@ -1,11 +1,8 @@
+ SAX.setDocumentLocator()
+ SAX.startDocument()
+ SAX.startElement(html)
+-SAX.startElement(body)
+-SAX.startElement(p)
+-SAX.characters(
++SAX.ignorableWhitespace(
+ , 2)
+-SAX.endElement(p)
+ SAX.startElement(head)
+ SAX.ignorableWhitespace(
+ , 2)
+@@ -16,6 +13,7 @@
+ SAX.endElement(head)
+ SAX.ignorableWhitespace(
+ , 2)
++SAX.startElement(body)
+ SAX.startElement(a, name='ProblemDomain.Package')
+ SAX.startElement(h2)
+ SAX.characters(Component Package diagram Prob, 39)

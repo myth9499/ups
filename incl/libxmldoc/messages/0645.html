@@ -1,0 +1,419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] A truncation bug and some testHTML.c enhancements</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="Re: [xml] A truncation bug and some testHTML.c enhancements">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] A truncation bug and some testHTML.c enhancements</h1>
+<!-- received="Sun Aug 13 10:08:01 2000" -->
+<!-- isoreceived="20000813140801" -->
+<!-- sent="Sun, 13 Aug 2000 10:04:17 -0700 (PDT)" -->
+<!-- isosent="20000813170417" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="Re: [xml] A truncation bug and some testHTML.c enhancements" -->
+<!-- id="966177791.0027@hypermail.dummy" -->
+<!-- inreplyto="20000813103322.A21621@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Sun Aug 13 2000 - 13:04:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0644.html">Wayne Davison: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<li><strong>In reply to:</strong> <a href="0643.html">Daniel Veillard: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, 13 Aug 2000, Daniel Veillard wrote:
+<br>
+<em>&gt;   Quick question: before or after the 2.2.2 release (i.e. yesterday
+</em><br>
+<em>&gt; afternoon) ?
+</em><br>
+<p>I had thought that I was using 2.2.2 because I did a brand-new, fresh
+<br>
+pull of the gnome-xml library yesterday afternoon (and the on-line
+<br>
+version of the cvs library showed that your patch was there).  
+<br>
+However, there were some changes that I just pulled from CVS this
+<br>
+morning, so it looks like I didn't get the full 2.2.2 release somehow.
+<br>
+<p><em>&gt; Because I think I fixed this bug
+</em><br>
+<p>Yes, it seems to be gone now.  Fabulous!
+<br>
+<p><em>&gt;   Ok maybe bigpush should be the default and adding --smallpush
+</em><br>
+<em>&gt; is the right option.
+</em><br>
+<p>I've appended a patch that does this, and also fixes a minor oversight
+<br>
+in your push-SAX code where &quot;doc&quot; could get used uninitialized if the
+<br>
+initial file read failed, and it includes my recommend improvements to
+<br>
+the option-parsing code.
+<br>
+<p>..wayne..
+<br>
+<p>---8&lt;------8&lt;------8&lt;------8&lt;---cut here---&gt;8------&gt;8------&gt;8------&gt;8---
+<br>
+Index: testHTML.c
+<br>
+--- testHTML.c	2000/08/12 21:12:02	1.13
+<br>
++++ testHTML.c	2000/08/13 16:47:55
+<br>
+@@ -49,6 +49,7 @@
+<br>
+&nbsp;static int repeat = 0;
+<br>
+&nbsp;static int noout = 0;
+<br>
+&nbsp;static int push = 0;
+<br>
++static int smallpush = 0;
+<br>
+&nbsp;static char *encoding = NULL;
+<br>
+&nbsp;
+<br>
+&nbsp;xmlSAXHandler emptySAXHandlerStruct = {
+<br>
+@@ -575,7 +576,7 @@
+<br>
+&nbsp;&nbsp;************************************************************************/
+<br>
+&nbsp;
+<br>
+&nbsp;void parseSAXFile(char *filename) {
+<br>
+-    htmlDocPtr doc;
+<br>
++    htmlDocPtr doc = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Empty callbacks for checking
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+@@ -584,12 +585,12 @@
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = fopen(filename, &quot;r&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (f != NULL) {
+<br>
+-	    int res, size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char chars[4096];
+<br>
++	    int res, size = sizeof chars;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserCtxtPtr ctxt;
+<br>
+&nbsp;
+<br>
+-	    /* if (repeat) */
+<br>
+-		size = 4096;
+<br>
++	    if (smallpush)
+<br>
++		size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = fread(chars, 1, 4, f);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (res &gt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt = htmlCreatePushParserCtxt(emptySAXHandler, NULL,
+<br>
+@@ -610,12 +611,12 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!noout) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = fopen(filename, &quot;r&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (f != NULL) {
+<br>
+-		int res, size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char chars[4096];
+<br>
++		int res, size = sizeof chars;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserCtxtPtr ctxt;
+<br>
+&nbsp;
+<br>
+-		/* if (repeat) */
+<br>
+-		    size = 4096;
+<br>
++		if (smallpush)
+<br>
++		    size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = fread(chars, 1, 4, f);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (res &gt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt = htmlCreatePushParserCtxt(debugSAXHandler, NULL,
+<br>
+@@ -665,12 +666,12 @@
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = fopen(filename, &quot;r&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (f != NULL) {
+<br>
+-	    int res, size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char chars[4096];
+<br>
++	    int res, size = sizeof chars;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserCtxtPtr ctxt;
+<br>
+&nbsp;
+<br>
+-	    /* if (repeat) */
+<br>
+-		size = 4096;
+<br>
++	    if (smallpush)
+<br>
++		size = 3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = fread(chars, 1, 4, f);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (res &gt; 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt = htmlCreatePushParserCtxt(NULL, NULL,
+<br>
+@@ -731,34 +732,32 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int files = 0;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 1; i &lt; argc ; i++) {
+<br>
++	if (argv[i][0] == '-') {
+<br>
++	    char *opt = argv[i] + 1;
+<br>
++	    if (*opt == '-')
+<br>
++		opt++;
+<br>
+&nbsp;#ifdef LIBXML_DEBUG_ENABLED
+<br>
+-	if ((!strcmp(argv[i], &quot;-debug&quot;)) || (!strcmp(argv[i], &quot;--debug&quot;)))
+<br>
+-	    debug++;
+<br>
+-	else
+<br>
++	    if (!strcmp(opt, &quot;debug&quot;))
+<br>
++		debug++;
+<br>
++	    else
+<br>
+&nbsp;#endif
+<br>
+-	    if ((!strcmp(argv[i], &quot;-copy&quot;)) || (!strcmp(argv[i], &quot;--copy&quot;)))
+<br>
+-	    copy++;
+<br>
+-	else if ((!strcmp(argv[i], &quot;-push&quot;)) || (!strcmp(argv[i], &quot;--push&quot;)))
+<br>
+-	    push++;
+<br>
+-	else if ((!strcmp(argv[i], &quot;-sax&quot;)) || (!strcmp(argv[i], &quot;--sax&quot;)))
+<br>
+-	    sax++;
+<br>
+-	else if ((!strcmp(argv[i], &quot;-noout&quot;)) || (!strcmp(argv[i], &quot;--noout&quot;)))
+<br>
+-	    noout++;
+<br>
+-	else if ((!strcmp(argv[i], &quot;-repeat&quot;)) ||
+<br>
+-	         (!strcmp(argv[i], &quot;--repeat&quot;)))
+<br>
+-	    repeat++;
+<br>
+-	else if ((!strcmp(argv[i], &quot;-encode&quot;)) ||
+<br>
+-	         (!strcmp(argv[i], &quot;--encode&quot;))) {
+<br>
+-	    i++;
+<br>
+-	    encoding = argv[i];
+<br>
+-        }
+<br>
++		if (!strcmp(opt, &quot;copy&quot;))
+<br>
++		copy++;
+<br>
++	    else if (!strcmp(opt, &quot;push&quot;))
+<br>
++		push++;
+<br>
++	    else if (!strcmp(opt, &quot;smallpush&quot;))
+<br>
++		push++, smallpush++;
+<br>
++	    else if (!strcmp(opt, &quot;sax&quot;))
+<br>
++		sax++;
+<br>
++	    else if (!strcmp(opt, &quot;noout&quot;))
+<br>
++		noout++;
+<br>
++	    else if (!strcmp(opt, &quot;repeat&quot;))
+<br>
++		repeat++;
+<br>
++	    else if (!strcmp(opt, &quot;encode&quot;))
+<br>
++		encoding = argv[++i];
+<br>
++	}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 1; i &lt; argc ; i++) {
+<br>
+-	if ((!strcmp(argv[i], &quot;-encode&quot;)) ||
+<br>
+-	         (!strcmp(argv[i], &quot;--encode&quot;))) {
+<br>
+-	    i++;
+<br>
+-	    continue;
+<br>
+-        }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (argv[i][0] != '-') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (repeat) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (count = 0;count &lt; 100 * repeat;count++) {
+<br>
+@@ -774,10 +773,16 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parseAndPrintFile(argv[i]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;files ++;
+<br>
++	} else {
+<br>
++	    char *opt = argv[i] + 1;
+<br>
++	    if (*opt == '-')
+<br>
++		opt++;
+<br>
++	    if (!strcmp(opt, &quot;encode&quot;))
+<br>
++		i++;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (files == 0) {
+<br>
+-	printf(&quot;Usage : %s [--debug] [--copy] [--copy] HTMLfiles ...\n&quot;,
+<br>
++	printf(&quot;Usage : %s [--debug] [--copy] [--...] HTMLfiles ...\n&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;argv[0]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\tParse the HTML files and output the result of the parsing\n&quot;);
+<br>
+&nbsp;#ifdef LIBXML_DEBUG_ENABLED
+<br>
+@@ -788,6 +793,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--repeat : parse the file 100 times, for timing\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--noout : do not print the result\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--push : use the push mode parser\n&quot;);
+<br>
++	printf(&quot;\t--smallpush : like --push, but use a 3-byte buffer\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\t--encode encoding : output in the given encoding\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlCleanupParser();
+<br>
+---8&lt;------8&lt;------8&lt;------8&lt;---cut here---&gt;8------&gt;8------&gt;8------&gt;8---
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0644.html">Wayne Davison: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<li><strong>In reply to:</strong> <a href="0643.html">Daniel Veillard: "Re: [xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Aug 13 2000 - 10:43:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

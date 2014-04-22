@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] How to stop SAX parsing ?</title>
+<meta name="Author" content="Eric Bresie (ebresie@usa.net)">
+<meta name="Subject" content="RE: [xml] How to stop SAX parsing ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] How to stop SAX parsing ?</h1>
+<!-- received="Tue Jun 27 18:26:08 2000" -->
+<!-- isoreceived="20000627222608" -->
+<!-- sent="Tue, 27 Jun 2000 17:29:34 -0500" -->
+<!-- isosent="20000627222934" -->
+<!-- name="Eric Bresie" -->
+<!-- email="ebresie@usa.net" -->
+<!-- subject="RE: [xml] How to stop SAX parsing ?" -->
+<!-- id="NDBBIOAPLEFIAKLGABEEIEFFCHAA.ebresie@usa.net" -->
+<!-- inreplyto="20000626165754.C1074@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Eric Bresie (<a href="mailto:ebresie@usa.net?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?"><em>ebresie@usa.net</em></a>)<br>
+<strong>Date:</strong> Tue Jun 27 2000 - 18:29:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0541.html">Daniel Veillard: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<li><strong>In reply to:</strong> <a href="0536.html">Daniel Veillard: "Re: [xml] How to stop SAX parsing ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I am really more of a lurker on this list and on the perl-xml list,
+<br>
+but this thread made me wonder if the current SAX support (is it SAX1 or
+<br>
+SAX2),
+<br>
+has the Error Events and the Error Event Handler capabilities?
+<br>
+<p>I am using as a reference (which may not be the same in libxml case):
+<br>
+<p><a href="http://bitsko.slc.ut.us/~ken/perl-xml/sax-2.0-adv.html#Handlers">http://bitsko.slc.ut.us/~ken/perl-xml/sax-2.0-adv.html#Handlers</a> see Error
+<br>
+Events
+<br>
+<p>or in the original SAX2/Java setEventHandler.
+<br>
+<p><a href="http://www.megginson.com/SAX/Java/index.html">http://www.megginson.com/SAX/Java/index.html</a>
+<br>
+<p>Eric Bresie
+<br>
+<a href="mailto:ebresie@usa.net?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">ebresie@usa.net</a>
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">xml-request@rufus.w3.org</a>]On
+</em><br>
+<em>&gt; Behalf Of Daniel Veillard
+</em><br>
+<em>&gt; Sent: Monday, June 26, 2000 9:58 AM
+</em><br>
+<em>&gt; To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Subject: Re: [xml] How to stop SAX parsing ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; On Mon, Jun 26, 2000 at 04:37:12PM +0200, Petr Kozelka wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I am implementing a SAX parser which invokes some external
+</em><br>
+<em>&gt; applications or commands.
+</em><br>
+<em>&gt; &gt; When the command fails, I need the parser to stop parsing and
+</em><br>
+<em>&gt; ignore the rest of the file.
+</em><br>
+<em>&gt; &gt; How can I do this ? Is there a SAX function which I can call
+</em><br>
+<em>&gt; from inside of my SAX handler to stop sending SAX events ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Hum, not yet ...
+</em><br>
+<em>&gt;   The simplest to implement this would not be to add a new SAX
+</em><br>
+<em>&gt; callback but rather modify the xmlParserCtxtPtr passed to the
+</em><br>
+<em>&gt; callbacks. The best seems to be:
+</em><br>
+<em>&gt;   - set ctxt-&gt;instate to XML_PARSER_EOF
+</em><br>
+<em>&gt;   - hack xmlCurrentChar() to return 0
+</em><br>
+<em>&gt;     if (ctxt-&gt;instate == XML_PARSER_EOF)
+</em><br>
+<em>&gt;   Doing both should led to a quick termination of parsing
+</em><br>
+<em>&gt; (but endElement(s)/endDocument will certainly be called anyway).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">majordomo@xmlsoft.org</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20How%20to%20stop%20SAX%20parsing%20?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0541.html">Daniel Veillard: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<li><strong>In reply to:</strong> <a href="0536.html">Daniel Veillard: "Re: [xml] How to stop SAX parsing ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

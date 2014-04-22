@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] uri.c bug in libxml2-2.2.3</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] uri.c bug in libxml2-2.2.3">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] uri.c bug in libxml2-2.2.3</h1>
+<!-- received="Wed Sep 20 14:54:44 2000" -->
+<!-- isoreceived="20000920185444" -->
+<!-- sent="Wed, 20 Sep 2000 14:55:39 -0400" -->
+<!-- isosent="20000920185539" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] uri.c bug in libxml2-2.2.3" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A086710F@EXCHANGE" -->
+<!-- inreplyto="[xml] uri.c bug in libxml2-2.2.3" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Wed Sep 20 2000 - 14:55:39 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0785.html">Marc Sanfacon: "[xml] xmlHasProp case sensitive ?"</a>
+<li><strong>Previous message:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0779.html">Marc Sanfacon: "[xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Excellent, thank you.  I applied your path to my code and it seems to work
+<br>
+well.  I shall do more tests, though.
+<br>
+<p>Marc.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Wayne Davison
+<br>
+Sent: September 20, 2000 14:24
+<br>
+To: '<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>'
+<br>
+Subject: RE: [xml] uri.c bug in libxml2-2.2.3
+<br>
+<p><p><p>On Wed, 20 Sep 2000, Marc Sanfacon wrote:
+<br>
+<em>&gt; But am I right when saying that 'ref' could be an absolute path ?
+</em><br>
+<p>No, that is handled back in step 5.  By the time we get to step 6, we know
+<br>
+that we're combining a relative path with the base path.
+<br>
+<p>In fact, I don't even think that the res-&gt;patch[out - 1] != '/' check is
+<br>
+needed, since the only path that we could have copied over from &quot;bas&quot; (in
+<br>
+step 6a) ends in a slash.  Thus, the test in my patch could be simplified
+<br>
+to just this:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (out == 0)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res-&gt;path[out++] = '/';
+<br>
+<p>..wayne..
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20uri.c%20bug%20in%20libxml2-2.2.3">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0785.html">Marc Sanfacon: "[xml] xmlHasProp case sensitive ?"</a>
+<li><strong>Previous message:</strong> <a href="0783.html">Wayne Davison: "RE: [xml] uri.c bug in libxml2-2.2.3"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0779.html">Marc Sanfacon: "[xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Sep 20 2000 - 15:43:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

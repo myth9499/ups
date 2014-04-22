@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Generating XML-Documents from a given DTD</title>
+<meta name="Author" content="H.-Arno Jacobsen (jacobsen@eecg.toronto.edu)">
+<meta name="Subject" content="Re: [xml] Generating XML-Documents from a given DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Generating XML-Documents from a given DTD</h1>
+<!-- received="Thu Jan 18 08:42:06 2001" -->
+<!-- isoreceived="20010118134206" -->
+<!-- sent="Thu, 18 Jan 2001 08:41:38 -0500" -->
+<!-- isosent="20010118134138" -->
+<!-- name="H.-Arno Jacobsen" -->
+<!-- email="jacobsen@eecg.toronto.edu" -->
+<!-- subject="Re: [xml] Generating XML-Documents from a given DTD" -->
+<!-- id="Pine.LNX.4.10.10101180836320.4299-100000@olive.eecg.toronto.edu" -->
+<!-- inreplyto="20010118095554.A6869@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> H.-Arno Jacobsen (<a href="mailto:jacobsen@eecg.toronto.edu?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD"><em>jacobsen@eecg.toronto.edu</em></a>)<br>
+<strong>Date:</strong> Thu Jan 18 2001 - 08:41:38 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1350.html">Daniel Veillard: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<li><strong>In reply to:</strong> <a href="1350.html">Daniel Veillard: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks for the response.
+<br>
+<p>Let me explain ...
+<br>
+<p>I need this as a &quot;test driver&quot;. I have an application that processes
+<br>
+XML documents (LOTS !!!!). To evaluate my app. I need LOTS-and-LOTS
+<br>
+of XML-documents - more than I ever want to store on my system.
+<br>
+<p>Obviously, this is not what a DTD was intended for. The way I imagine
+<br>
+it to work is {&lt;specification&gt;, DTD} -&gt; xml-docs.
+<br>
+<p>The spec. would probabilistically describe what I expect on average
+<br>
+the resulting XML-doc. to look like.
+<br>
+<p>Just hoped somebody had already implemented that.
+<br>
+<p>I'll check out the functions you pointed out.
+<br>
+<p>Thanks,
+<br>
+<p>Arno
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; On Wed, Jan 17, 2001 at 03:48:04PM -0500, H.-Arno Jacobsen wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; has anybody written a function to automatically generate
+</em><br>
+<em>&gt; &gt; XML documents from a provided DTD for libxml ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Not that I know of.
+</em><br>
+<em>&gt;   The main problem is that it is hard to make such a function
+</em><br>
+<em>&gt; given that a DTD can generate (quite often) an infinity of
+</em><br>
+<em>&gt; document instance conforming to it. A DTD which would generate
+</em><br>
+<em>&gt; a single instance is possible but I have never seen one :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   You could write a big ball of heuristics and try to get one
+</em><br>
+<em>&gt; document generated but chances are very high that it would
+</em><br>
+<em>&gt; not suit the needs of the caller...
+</em><br>
+<em>&gt;  There is 2 functions which could help if you're trying to
+</em><br>
+<em>&gt; automatically generate such a tree (or a list of choices
+</em><br>
+<em>&gt; in a GUI):
+</em><br>
+<em>&gt;   - xmlValidGetValidElements ()
+</em><br>
+<em>&gt; <a href="http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETVALIDELEMENTS">http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETVALIDELEMENTS</a>
+</em><br>
+<em>&gt;   - xmlValidGetPotentialChildren ()
+</em><br>
+<em>&gt; <a href="http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETPOTENTIALCHILDREN">http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETPOTENTIALCHILDREN</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1350.html">Daniel Veillard: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<li><strong>In reply to:</strong> <a href="1350.html">Daniel Veillard: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 18 2001 - 08:44:30 EST</em>
+</em>
+</small>
+</body>
+</html>

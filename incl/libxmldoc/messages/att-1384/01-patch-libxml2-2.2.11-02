@@ -1,0 +1,186 @@
+diff -Naur libxml2-2.2.11/ChangeLog libxml2-2.2.11-alejo/ChangeLog
+--- libxml2-2.2.11/ChangeLog	Fri Jan  5 06:39:25 2001
++++ libxml2-2.2.11-alejo/ChangeLog	Thu Jan 25 05:39:37 2001
+@@ -1,3 +1,15 @@
++Wed Jan 24 20:27:28 COT 2001 Alejandro Forero <bachue@bachue.com>
++
++        * xmlIO.c (xmlFileOpen, xmlFileOpenW): Removed unnecesary checks.
++
++        * xmlIO.c (xmlCheckFilename): Function added to know whether a given
++          filename points to a valid file (not a directory).
++        * xmlIO.c (xmlFileOpen, xmlFileOpenW, xmlGzfileOpen, xmlGzfileOpenW):
++          Added calls to xmlCheckFilenameDir.
++
++        * xmlIO.c (xmlGzfileOpen, xmlGzfileOpenW, xmlFdOpen, xmlFdOpenW): Pass
++          `path' (rather than `filename') as the parameter to gzopen and open.
++
+ Thu Jan  4 19:07:49 CET 2001 Daniel Veillard <Daniel.Veillard@imag.fr>
+ 
+ 	* configure.in: preparing 2.2.11
+diff -Naur libxml2-2.2.11/configure.in libxml2-2.2.11-alejo/configure.in
+--- libxml2-2.2.11/configure.in	Fri Jan  5 06:39:26 2001
++++ libxml2-2.2.11-alejo/configure.in	Thu Jan 25 05:30:27 2001
+@@ -103,6 +103,7 @@
+ AC_CHECK_FUNCS(strdup strndup strerror snprintf)
+ AC_CHECK_FUNCS(finite isnand fp_class class fpclass)
+ AC_CHECK_FUNCS(strftime localtime)
++AC_CHECK_FUNCS(stat _stat)
+ 
+ dnl Checks for inet libraries:
+ AC_CHECK_FUNC(gethostent, , AC_CHECK_LIB(nsl, gethostent))
+diff -Naur libxml2-2.2.11/xmlIO.c libxml2-2.2.11-alejo/xmlIO.c
+--- libxml2-2.2.11/xmlIO.c	Fri Jan  5 06:39:29 2001
++++ libxml2-2.2.11-alejo/xmlIO.c	Thu Jan 25 05:30:27 2001
+@@ -16,6 +16,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <errno.h>
+ 
+ #ifdef HAVE_SYS_TYPES_H
+ #include <sys/types.h>
+@@ -36,6 +37,32 @@
+ #include <zlib.h>
+ #endif
+ 
++/* Figure a portable way to know if a file is a directory. */
++#ifndef HAVE_STAT
++#  ifdef HAVE__STAT
++#    define stat(x,y) _stat(x,y)
++#    define HAVE_STAT
++#  endif
++#endif
++#ifdef HAVE_STAT
++#  ifndef S_ISDIR
++#    ifdef _S_ISDIR
++#      define S_ISDIR(x) _S_ISDIR(x)
++#    else
++#      ifdef S_IFDIR
++#        ifndef S_IFMT
++#          ifdef _S_IFMT
++#            define S_IFMT _S_IFMT
++#          endif
++#        endif
++#        ifdef S_IFMT
++#          define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
++#        endif
++#      endif
++#    endif
++#  endif
++#endif
++
+ #include <libxml/xmlmemory.h>
+ #include <libxml/parser.h>
+ #include <libxml/parserInternals.h>
+@@ -97,6 +124,41 @@
+  *									*
+  ************************************************************************/
+ 
++/**
++ * xmlCheckFilename
++ * @path:  the path to check
++ *
++ * function checks to see if @path is a valid source
++ * (file, socket...) for XML.
++ *
++ * if stat is not available on the target machine,
++ * returns 1.  if stat fails, returns 0 (if calling
++ * stat on the filename fails, it can't be right).
++ * if stat succeeds and the file is a directory,
++ * sets errno to EISDIR and returns 0.  otherwise
++ * returns 1.
++ */
++
++static int
++xmlCheckFilename (const char *path)
++{
++#ifdef HAVE_STAT
++#ifdef S_ISDIR
++    struct stat stat_buffer;
++
++    if (stat(path, &stat_buffer) == -1)
++        return 0;
++
++    if (S_ISDIR(stat_buffer.st_mode)) {
++        errno = EISDIR;
++        return 0;
++    }
++
++#endif
++#endif
++    return 1;
++}
++
+ int
+ xmlNop(void) {
+     return(0);
+@@ -144,9 +206,9 @@
+ 	return(NULL);
+ 
+ #ifdef WIN32
+-    fd = _open (filename, O_RDONLY | _O_BINARY);
++    fd = _open (path, O_RDONLY | _O_BINARY);
+ #else
+-    fd = open (filename, O_RDONLY);
++    fd = open (path, O_RDONLY);
+ #endif
+ 
+     return((void *) fd);
+@@ -180,7 +242,7 @@
+     if (path == NULL)
+ 	return(NULL);
+ 
+-    fd = open (filename, O_WRONLY);
++    fd = open (path, O_WRONLY);
+ 
+     return((void *) fd);
+ }
+@@ -264,8 +326,9 @@
+ 	path = &filename[8];
+     else 
+ 	path = filename;
+-    if (path == NULL)
+-	return(NULL);
++
++    if (!xmlCheckFilename(path))
++      return(NULL);
+ 
+ #ifdef WIN32
+     fd = fopen(path, "rb");
+@@ -300,8 +363,9 @@
+ 	path = &filename[8];
+     else 
+ 	path = filename;
+-    if (path == NULL)
+-	return(NULL);
++
++    if (!xmlCheckFilename(path))
++      return(NULL);
+ 
+     fd = fopen(path, "w");
+     return((void *) fd);
+@@ -404,7 +468,10 @@
+     else 
+ 	path = filename;
+ 
+-    fd = gzopen(filename, "rb");
++    if (!xmlCheckFilename(path))
++      return(NULL);
++
++    fd = gzopen(path, "rb");
+     return((void *) fd);
+ }
+ 
+@@ -437,7 +504,10 @@
+     else 
+ 	path = filename;
+ 
+-    fd = gzopen(filename, mode);
++    if (!xmlCheckFilename(path))
++      return(NULL);
++
++    fd = gzopen(path, mode);
+     return((void *) fd);
+ }
+ 
+

@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating elements with &quot;default&quot; value</title>
+<meta name="Author" content="Daniel Veillard (veillard@redhat.com)">
+<meta name="Subject" content="Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD</h1>
+<!-- received="Mon Feb 26 14:17:36 2001" -->
+<!-- isoreceived="20010226191736" -->
+<!-- sent="Mon, 26 Feb 2001 14:17:04 -0500" -->
+<!-- isosent="20010226191704" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="veillard@redhat.com" -->
+<!-- subject="Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD" -->
+<!-- id="20010226141704.G9128@imag.fr" -->
+<!-- inreplyto="3A9A40BA.8386F4F7@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD"><em>veillard@redhat.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 26 2001 - 14:17:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Previous message:</strong> <a href="1502.html">Daniel Veillard: "Re: [xml] segfault at xmlParseFile()"</a>
+<li><strong>In reply to:</strong> <a href="1500.html">Gary Pennington: "[xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Feb 26, 2001 at 11:40:42AM +0000, Gary Pennington wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have a problem which I'm not sure about how to solve most efficiently
+</em><br>
+<em>&gt; using libxml, so any ideas/pointers would be appreciated.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am writing a library which will create xml elements for insertion into
+</em><br>
+<em>&gt; a document (which is also created at runtime) which will then be
+</em><br>
+<em>&gt; validated. A lot of my elements carry default or fixed attributes and
+</em><br>
+<em>&gt; I'd like to make the API for creating these elements as simple as
+</em><br>
+<em>&gt; possible. Thus, when a user calls a function to create an element, I'd
+</em><br>
+<em>&gt; like that element to be populated with all the fixed and default
+</em><br>
+<em>&gt; attribute values (which may be retrieved from the DTD).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The problem I have is how to extract all this information from the
+</em><br>
+<em>&gt; DTD and use it when new elements are created? I've tried to create a doc
+</em><br>
+<em>&gt; and associate a DTD with the doc (using xmlCreateIntSubset) which works
+</em><br>
+<em>&gt; fine from a validation point of view. However, any elements that are
+</em><br>
+<em>&gt; created are not populated with values from the DTD, which defeats the
+</em><br>
+<em>&gt; purpose of what I'm trying to achieve.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Anybody got any suggestions?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Gary
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; PS I tried investigating the xmlGetDtdElementDesc function but could
+</em><br>
+<em>&gt; never get a definition for my elements (only a NULL pointer).
+</em><br>
+<p>&nbsp;&nbsp;Hum, that's strange because that's what the validation process uses
+<br>
+Basically this is the function you need to call, you will get the 
+<br>
+XML Element declaration element associated to the name, then there
+<br>
+is an attribute declaration list that you need to follow to find
+<br>
+all the associated attribute as defined in the DTD, then add the ones
+<br>
+which are defaulted or fixed.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Previous message:</strong> <a href="1502.html">Daniel Veillard: "Re: [xml] segfault at xmlParseFile()"</a>
+<li><strong>In reply to:</strong> <a href="1500.html">Gary Pennington: "[xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 26 2001 - 14:43:49 EST</em>
+</em>
+</small>
+</body>
+</html>

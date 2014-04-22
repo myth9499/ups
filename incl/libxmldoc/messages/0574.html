@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] LIBXML WIN32</title>
+<meta name="Author" content="Erwin Rol (Erwin.Rol@q-soft-engineering.com)">
+<meta name="Subject" content="[xml] LIBXML WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] LIBXML WIN32</h1>
+<!-- received="Thu Jul  6 10:00:17 2000" -->
+<!-- isoreceived="20000706140017" -->
+<!-- sent="Thu, 06 Jul 2000 15:30:13 +0200" -->
+<!-- isosent="20000706133013" -->
+<!-- name="Erwin Rol" -->
+<!-- email="Erwin.Rol@q-soft-engineering.com" -->
+<!-- subject="[xml] LIBXML WIN32" -->
+<!-- id="396489E5.E800A40D@q-soft-engineering.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Erwin Rol (<a href="mailto:Erwin.Rol@q-soft-engineering.com?subject=Re:%20[xml]%20LIBXML%20WIN32"><em>Erwin.Rol@q-soft-engineering.com</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 09:30:13 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0575.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0596.html">Tim Ruddick: "[xml] XPath Memory Leak"</a>
+<li><strong>Reply:</strong> <a href="0596.html">Tim Ruddick: "[xml] XPath Memory Leak"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello David,
+<br>
+<p>I noticed a bit late (after sending my mail to the xml list) that you
+<br>
+also fighting
+<br>
+with the libxml on WIN32. Here some of my comments on the warnings.
+<br>
+Question , did you build the whole thing as a DLL or just static
+<br>
+compiled the tests?
+<br>
+<p>- Erwin
+<br>
+<p><p><p><em>&gt; --------------------Configuration: libxml - Win32 Debug--------------------
+</em><br>
+<em>&gt; Compiling...
+</em><br>
+<em>&gt; debugXML.c
+</em><br>
+<em>&gt; encoding.c
+</em><br>
+<em>&gt; entities.c
+</em><br>
+<em>&gt; error.c
+</em><br>
+<em>&gt; HTMLparser.c
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\HTMLparser.c(2327) : warning C4090: 'function' : different 'const' qualifiers
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\HTMLparser.c(2327) : warning C4022: 'xmlRealloc' : pointer mismatch for actual parameter 1
+</em><br>
+<p>wants a xmlReallocLoc (xmlRealloc is a macro) wants a void* a simple
+<br>
+cast removes this warning.
+<br>
+<p><p><em>&gt; HTMLtree.c
+</em><br>
+<em>&gt; nanoftp.c
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(623) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(1276) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(1278) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(1492) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(1494) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(1645) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<p>sockets in WIN32 are of type SOCKET wich is unsigned. I dunno if it will
+<br>
+be accepted in the main tree
+<br>
+to use SOCKET for sockets. and define SOCKET to be int on unix and
+<br>
+unsigned int on WIN32.
+<br>
+<p><em>&gt; nanohttp.c
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanoftp.c(773) : warning C4761: integral size mismatch in argument; conversion supplied
+</em><br>
+htons() wants a short and not an int a simple cast should remove the
+<br>
+warning , or patching the sources
+<br>
+to always use 16bit shorts for port numbers. 
+<br>
+<p><em>&gt; C:\dave\libxml\libxml2-2.1.1\nanohttp.c(428) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\nanohttp.c(641) : warning C4018: '==' : signed/unsigned mismatch
+</em><br>
+see nanoftp.c
+<br>
+<p><em>&gt; C:\dave\libxml\libxml2-2.1.1\nanohttp.c(662) : warning C4133: 'function' : incompatible types - from 'int *' to 'char *'
+</em><br>
+<em>&gt; parser.c
+</em><br>
+the prototype for getsockopt in WIN32 wants a char* so just a simple
+<br>
+cast should be ok.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (getsockopt(s, SOL_SOCKET, SO_ERROR, (char*) &amp;status, &amp;len) &lt; 0 ) {
+<br>
+<p><p><em>&gt; C:\dave\libxml\libxml2-2.1.1\nanohttp.c(628) : warning C4761: integral size mismatch in argument; conversion supplied
+</em><br>
+htons() wants a short and not an int a simple cast should remove the
+<br>
+warning , or patching the sources
+<br>
+to always use 16bit shorts for port numbers. 
+<br>
+<p><em>&gt; C:\dave\libxml\libxml2-2.1.1\parser.c(7560) : warning C4090: 'function' : different 'const' qualifiers
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\parser.c(7560) : warning C4022: 'xmlRealloc' : pointer mismatch for actual parameter 1
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\parser.c(7613) : warning C4090: 'function' : different 'const' qualifiers
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\parser.c(7613) : warning C4022: 'xmlFree' : pointer mismatch for actual parameter 1
+</em><br>
+casts should do no harm.
+<br>
+<p><em>&gt; SAX.c
+</em><br>
+<em>&gt; tree.c
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\tree.c(3839) : warning C4018: '&gt;' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\tree.c(3862) : warning C4018: '&lt;=' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\tree.c(3950) : warning C4018: '&lt;' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\tree.c(4013) : warning C4018: '&gt;' : signed/unsigned mismatch
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\tree.c(4058) : warning C4018: '&gt;' : signed/unsigned mismatch
+</em><br>
+this should turnup on UNIX too ????
+<br>
+<p><em>&gt; valid.c
+</em><br>
+<em>&gt; xlink.c
+</em><br>
+<em>&gt; xmlIO.c
+</em><br>
+<em>&gt; xmlmemory.c
+</em><br>
+<em>&gt; xpath.c
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(1129) : warning C4244: 'function' : conversion from 'double ' to 'float ', possible loss of data
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(1178) : warning C4244: 'function' : conversion from 'double ' to 'float ', possible loss of data
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3320) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3324) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3326) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3328) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3330) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3334) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3338) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3340) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3344) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3346) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3348) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3352) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3354) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3356) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3358) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3360) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3362) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3366) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3370) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3374) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3376) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3378) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3380) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3382) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3384) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3386) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3390) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(3392) : warning C4550: expression evaluates to a function which is missing an argument list
+</em><br>
+These all seem to need a cast before the return type. 
+<br>
+<p><em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(148) : warning C4723: potential divide by 0
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(151) : warning C4723: potential divide by 0
+</em><br>
+<em>&gt; C:\dave\libxml\libxml2-2.1.1\xpath.c(154) : warning C4723: potential divide by 0
+</em><br>
+Shouldn't there be constants defined for NAN and the like ?
+<br>
+<p><p><em>&gt; Creating library...
+</em><br>
+<p>libxmld2.lib - 0 error(s), 55 warning(s)
+<br>
+<p><pre>
+-- 
+        Q - S O F T - E N G I N E E R I N G 
+     Rodachtalweg 11, 81549 Muenchen, Germany
+<p>Erwin Rol (Software Engineer)     phone: +49-89-68050051
+<a href="mailto:Erwin.Rol@Q-Soft-Engineering.com?subject=Re:%20[xml]%20LIBXML%20WIN32">Erwin.Rol@Q-Soft-Engineering.com</a>  fax  : +49-89-68050052
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20LIBXML%20WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20LIBXML%20WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0575.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0596.html">Tim Ruddick: "[xml] XPath Memory Leak"</a>
+<li><strong>Reply:</strong> <a href="0596.html">Tim Ruddick: "[xml] XPath Memory Leak"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

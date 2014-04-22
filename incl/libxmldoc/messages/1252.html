@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Xpath/Xpointer question...</title>
+<meta name="Author" content="Dave Madole (dmadole@cddb.com)">
+<meta name="Subject" content="[xml] Xpath/Xpointer question...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Xpath/Xpointer question...</h1>
+<!-- received="Mon Dec  4 15:17:39 2000" -->
+<!-- isoreceived="20001204201739" -->
+<!-- sent="Mon, 04 Dec 2000 12:17:04 -0800" -->
+<!-- isosent="20001204201704" -->
+<!-- name="Dave Madole" -->
+<!-- email="dmadole@cddb.com" -->
+<!-- subject="[xml] Xpath/Xpointer question..." -->
+<!-- id="3A2BFBC0.B5DE7B78@cddb.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Dave Madole (<a href="mailto:dmadole@cddb.com?subject=Re:%20[xml]%20Xpath/Xpointer%20question..."><em>dmadole@cddb.com</em></a>)<br>
+<strong>Date:</strong> Mon Dec 04 2000 - 15:17:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1253.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Previous message:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+This is an Xpath question, not specifically libxml oriented, but as the
+<br>
+answer would have to be
+<br>
+expressed using libxml (and I can't find the answer anywhere else, as
+<br>
+these things seem to be
+<br>
+documented sparingly) so I'll ask it here.  If anyone can suggest a
+<br>
+better list for the question, I'm
+<br>
+all ears.
+<br>
+<p>I have XPath working fine, but I can't find a location path/ predicate
+<br>
+to give me what I want.
+<br>
+<p>Lets say I have a document:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;doc&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sec part_id=&quot;I&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;a&quot;&gt;This is section  I, paragraph 1
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  I, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;2&quot;&gt;This is section  I, paragraph a, clause
+<br>
+2&lt;/clause&gt;
+<br>
+&nbsp;&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;b&quot;&gt;This is section I, paragraph  b&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sec&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;sec part_id=&quot;II&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;a&quot;&gt;This is section  II, paragraph a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  II, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&nbsp;&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;b&quot;&gt;This is section II, paragraph  b&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sec&gt;
+<br>
+&lt;/doc&gt;
+<br>
+<p>The path (most explicitly):
+<br>
+<p>//sec/para/clause/self::*[@part_id='1']
+<br>
+<p>Gives me:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;doc&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  I, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  II, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&lt;/doc&gt;
+<br>
+<p>(I built the &quot;doc&quot; node, of course).
+<br>
+<p>Is there any way to get more complete fragments to put into the new doc:
+<br>
+<p>&lt;doc&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sec part_id=&quot;I&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;a&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  I, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sec&gt;
+<br>
+&lt;sec part_id=&quot;II&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;para part_id=&quot;a&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;clause part_id=&quot;1&quot;&gt;This is section  II, paragraph a, clause
+<br>
+1&lt;/clause&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/para&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sec&gt;
+<br>
+&lt;/doc&gt;
+<br>
+<p>i.e., just the ancestors without the siblings (of course I get the whole
+<br>
+tree if I specify )
+<br>
+without writing a function (going back up through the tree and pruning
+<br>
+all the siblings).  I've tried all kinds of things (I won't list them
+<br>
+here) but they either give me what I showed above or too much.
+<br>
+<p>This is the code chunk (pretty much copied from &quot;testXPath&quot; I'm using to
+<br>
+build the new tree, which is currently at positioned &quot;currnode&quot;).
+<br>
+<p>&nbsp;ctxt = xmlXPathNewContext(olddoc);
+<br>
+&nbsp;res = xmlXPathEval(BAD_CAST str, ctxt);
+<br>
+&nbsp;fprintf(stderr, &quot;nodeNr %d i %d\n&quot;,res-&gt;nodesetval-&gt;nodeNr,i);
+<br>
+&nbsp;for (i = 0; i &lt; res-&gt;nodesetval-&gt;nodeNr; i++) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newnode = xmlCopyNode(res-&gt;nodesetval-&gt;nodeTab[i],1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlAddChild(currnode,newnode);
+<br>
+&nbsp;}
+<br>
+<p>Or is this what we need XSLT for?
+<br>
+<p>Thanks,
+<br>
+<p>Dave Madole
+<br>
+<p><p><p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Xpath/Xpointer%20question...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Xpath/Xpointer%20question...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1253.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Previous message:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 15:43:42 EST</em>
+</em>
+</small>
+</body>
+</html>

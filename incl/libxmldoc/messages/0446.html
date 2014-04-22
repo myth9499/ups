@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure</title>
+<meta name="Author" content="Byron Ellacott (bje@apnic.net)">
+<meta name="Subject" content="Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure [long]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure [long]</h1>
+<!-- received="Wed Apr  5 20:09:55 2000" -->
+<!-- isoreceived="20000406000955" -->
+<!-- sent="Thu, 6 Apr 2000 10:09:17 +1000 (EST)" -->
+<!-- isosent="20000406000917" -->
+<!-- name="Byron Ellacott" -->
+<!-- email="bje@apnic.net" -->
+<!-- subject="Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure [long]" -->
+<!-- id="Pine.UW2.4.10.10004060907220.22196-100000@hadrian" -->
+<!-- inreplyto="20000405133049.R17188@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Byron Ellacott (<a href="mailto:bje@apnic.net?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure%20[long]"><em>bje@apnic.net</em></a>)<br>
+<strong>Date:</strong> Wed Apr 05 2000 - 20:09:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0447.html">Bernie Rosman: "[xml] libxml-1.8.7 issues"</a>
+<li><strong>Previous message:</strong> <a href="0445.html">David Doolin: "Re: [xml] win32 libxml2"</a>
+<li><strong>In reply to:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, 5 Apr 2000, Daniel Veillard wrote:
+<br>
+<p>Thanks for the quick response.
+<br>
+<p><em>&gt;   Ok I think I know the problem:
+</em><br>
+[null terminate string]
+<br>
+<p><em>&gt;   So basically the answer is:
+</em><br>
+<em>&gt;     add an instruction buffer[size] = 0  before calling xmlParseMemory()
+</em><br>
+<p>I had read that in the list archives or the bug report page, I forget
+<br>
+which, and was using the following code:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;stat(filename, &amp;statbuf);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fsize = statbuf.st_size - ftell(f);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if ((buffer = malloc(fsize+1)) == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (fread(buffer, fsize, 1, f) != 1) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;fclose(f);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;buffer[fsize] = '\0';
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;doc = xmlParseMemory(buffer, fsize+1);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;free(buffer);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (!doc) return 0;
+<br>
+<p>Close inspection of parser.c reveals xmlCreateMemoryParserCtxt() is doing
+<br>
+the following:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (buffer[size] != '\0')
+<br>
+<p>This strikes me as confusing, since it means the size argument I pass to
+<br>
+xmlParseMemory is the size of the buffer, *minus the null character*.
+<br>
+<p>For example, if I was parsing 3 characters, I'd have a memory array:
+<br>
+<p>char buffer[] = {'H', 'i', '!'}
+<br>
+<p>where sizeof(buffer) == 3.  If I add a null:
+<br>
+<p>char buffer[] = {'H', 'i', '!', '\0'}
+<br>
+<p>I get buffer[sizeof(buffer)] being undetermined, since it's off the end of
+<br>
+the buffer, and so I cannot call xmlParseMemory(buffer, sizeof(buffer)) as
+<br>
+would seem intuitive, but rather, I must call
+<br>
+xmlParseMemory(buffer, sizeof(buffer) - 1).
+<br>
+<p>The simple fix for me was to pass fsize instead of fsize+1 to
+<br>
+xmlParseMemory, but this means I'm no longer passing the actual size of
+<br>
+the buffer, but rather the size of the buffer minus one.
+<br>
+<p>This also explains why the parser would have been succeeding first time,
+<br>
+but not subsequent times, since memory would have been uninitialised in
+<br>
+the first pass, and the character one past the null character I'm adding
+<br>
+would have been null too.
+<br>
+<p>Is this a logic error, or deliberate?
+<br>
+<p><em>&gt; &gt; [0] Why isn't there an xmlParseStream(FILE *input) method?  I'm sure I'm
+</em><br>
+<em>&gt;   This could be implemented in less than 10 lines of code using
+</em><br>
+<em>&gt; existing interface, there is actually such code in parser.c / xmllint.c
+</em><br>
+<em>&gt; in parseAndPrintFile(char *filename)
+</em><br>
+<p>It's effectively what I've implemented, too, but it would be nice not to
+<br>
+require everyone who wishes to do this to implement the same code.  Are
+<br>
+there any plans to add such a function to the API?
+<br>
+<p><pre>
+--
+bje
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure%20[long]">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure%20[long]">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0447.html">Bernie Rosman: "[xml] libxml-1.8.7 issues"</a>
+<li><strong>Previous message:</strong> <a href="0445.html">David Doolin: "Re: [xml] win32 libxml2"</a>
+<li><strong>In reply to:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

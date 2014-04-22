@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Big clean up in XPath</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Big clean up in XPath">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Big clean up in XPath</h1>
+<!-- received="Thu Oct 26 20:14:20 2000" -->
+<!-- isoreceived="20001027001420" -->
+<!-- sent="Fri, 27 Oct 2000 01:42:35 +0200" -->
+<!-- isosent="20001026234235" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Big clean up in XPath" -->
+<!-- id="20001027014235.A28150@debian" -->
+<!-- inreplyto="20001027001751.A7630@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Thu Oct 26 2000 - 19:42:35 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1080.html">Harry Blundell: "[xml] Current error handling scheme"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Reply:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 26/10/2000 14:57:06 Daniel Veillard wrote:
+<br>
+<em>&gt; &gt;  - doesn't seem there is a namespace support for functions
+</em><br>
+<em>&gt; &gt; (last() is equivalent to foo:last() and bar:last()), it'll be
+</em><br>
+<em>&gt; &gt; necessary for proprietary XPath extension functions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    humm, do we really need namespace in that case, IMHO it should
+</em><br>
+<em>&gt;  just be string comparisons.
+</em><br>
+<p>Give a look at the XSLT 1.0 Recommandation, section 14.2:
+<br>
+&nbsp;&nbsp;14.2 Extension Functions
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;If a [409]FunctionName in a [410]FunctionCall expression is
+<br>
+&nbsp;&nbsp;&nbsp;not an [411]NCName (i.e. if it contains a colon), then it is
+<br>
+&nbsp;&nbsp;&nbsp;treated as a call to an extension function. The
+<br>
+&nbsp;&nbsp;&nbsp;[412]FunctionName is expanded to a name using the namespace
+<br>
+&nbsp;&nbsp;&nbsp;declarations from the evaluation context.
+<br>
+<p>&nbsp;&nbsp;&nbsp;[...]
+<br>
+<p>&nbsp;&nbsp;&nbsp;Function: boolean function-available(string)
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;The argument must evaluate to a string that is a [420]QName.
+<br>
+&nbsp;&nbsp;&nbsp;The [421]QName is expanded into an [422]expanded-name using
+<br>
+&nbsp;&nbsp;&nbsp;the namespace declarations in scope for the expression. The
+<br>
+&nbsp;&nbsp;&nbsp;[423]function-available function returns true if and only if
+<br>
+&nbsp;&nbsp;&nbsp;the expanded-name is the name of a function in the function
+<br>
+&nbsp;&nbsp;&nbsp;library. If the expanded-name has a non-null namespace URI,
+<br>
+&nbsp;&nbsp;&nbsp;then it refers to an extension function; otherwise, it
+<br>
+&nbsp;&nbsp;&nbsp;refers to a function defined by XPath or XSLT.
+<br>
+<p>It's only for XSLT, not more generaly XPath.
+<br>
+The lookup should at least be done with the complete QName and not only
+<br>
+its local part. I guess this will be sufficient.
+<br>
+And last() won't be equivalent to foo:last() since last() is the XPath
+<br>
+function but not foo:last() (an extension function).
+<br>
+<p>Not modified:
+<br>
+I notice xmlXPathEvalVariableReference() uses xmlXPathParseName(), but
+<br>
+Names and QNames aren't identical: a Name can begin with and contain more
+<br>
+than one colon.
+<br>
+Since no validation is done at function registering, we may have a
+<br>
+function which hasn't a valid name and then allow calls of such functions.
+<br>
+This shouldn't happen but it can.
+<br>
+If we don't fix this, the error message isn't XPATH_VARIABLE_REF_ERROR
+<br>
+(as it should be) but XPATH_UNDEF_VARIABLE_ERROR.
+<br>
+If we change something, we must change both
+<br>
+xmlXPathEvalVariableReference() and xmlXPathEvalFunctionCall().
+<br>
+<p>There are at least two way to handle that:
+<br>
+&nbsp;1. parse a QName then strcat the Prefix and the LocalPart and finally
+<br>
+look up for the function/variable. This is costly in memory.
+<br>
+&nbsp;2. parse a Name then verify it's a QName (the first character isn't a
+<br>
+colon and there isn't more than one colon in it) and do the look up. This
+<br>
+is a bit dirty.
+<br>
+<p><em>&gt; &gt; I didn't know what to change (it would be easier to modify
+</em><br>
+<em>&gt; &gt; xmlXPathStringEvalNumber()) so I did nothing.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    yes that's probably the right place to handle this.
+</em><br>
+<p>done.
+<br>
+<p>By the way, where can I find the IEEE 754 ?
+<br>
+<p><em>&gt; &gt;  - I don't understand why xmlXPathEval() (actually
+</em><br>
+<em>&gt; &gt; xmlXPathEvalExpr() called within xmlXPathEval()) must return a
+</em><br>
+<em>&gt; &gt; node-set. [...]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    yes that must be fixed. 
+</em><br>
+<p>done.
+<br>
+<p>The patch applies well and compiles on a libxml2-message-2.2.6 with my
+<br>
+precedent (fixed) patch.
+<br>
+It also fixes a bug in the sum() function (xmlXPathSumFunction()) which
+<br>
+returned a node-set when the node-set argument contained only one node.
+<br>
+Other functions still need debugging (I still have segfaults from time
+<br>
+to time).
+<br>
+I remove the double registry of xmlXPathNormalizeFunction() (and fix the
+<br>
+help comment, but don't rename it ;o).
+<br>
+<p>(if anyone has time to tell me how to organize myself and use the tools
+<br>
+[RCS, diff and patch] in a good way, not to give more work than necessary
+<br>
+to Daniel [and others], he's invited to contact me in private ;o)
+<br>
+<p>Tom
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1080.html">Harry Blundell: "[xml] Current error handling scheme"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Reply:</strong> <a href="1082.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 26 2000 - 20:43:31 EDT</em>
+</em>
+</small>
+</body>
+</html>

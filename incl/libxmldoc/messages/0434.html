@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title>XML: [xml] Conflict between namespaces and external DTD declara</title>
+<meta name="Author" content="William Kunkel (wkunkel@opteway.com)">
+<meta name="Subject" content="[xml] Conflict between namespaces and external DTD declaration">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Conflict between namespaces and external DTD declaration</h1>
+<!-- received="Wed Mar 29 05:28:30 2000" -->
+<!-- isoreceived="20000329102830" -->
+<!-- sent="Wed, 29 Mar 2000 12:17:43 +0200" -->
+<!-- isosent="20000329101743" -->
+<!-- name="William Kunkel" -->
+<!-- email="wkunkel@opteway.com" -->
+<!-- subject="[xml] Conflict between namespaces and external DTD declaration" -->
+<!-- id="38E1D847.B54C9920@opteway.com" -->
+<!-- charset="iso-8859-15" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> William Kunkel (<a href="mailto:wkunkel@opteway.com?subject=Re:%20[xml]%20Conflict%20between%20namespaces%20and%20external%20DTD%20declaration"><em>wkunkel@opteway.com</em></a>)<br>
+<strong>Date:</strong> Wed Mar 29 2000 - 05:17:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0435.html">Daniel Veillard: "[xml] Re: [gdome] gdome2"</a>
+<li><strong>Previous message:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Package: libxml
+<br>
+Version: 1.8.4 &amp; 1.8.7
+<br>
+<p>Hi,
+<br>
+<p>I have a problem with the declaration of an external DTD and namespace.
+<br>
+For the libxml the next sample is valid:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;test.xml -----------------------------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;?xml version=&quot;1.0&quot; standalone=&quot;no&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!DOCTYPE ROOT SYSTEM &quot;test.dtd&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;prefix:ROOT xmlns:prefix=&quot;<a href="http://www.URL.com/xml/1.0">http://www.URL.com/xml/1.0</a>&quot;/&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;test.dtd -----------------------------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ELEMENT ROOT EMPTY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!ATTLIST ROOT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:prefix CDATA #FIXED '<a href="http://www.URL.com/xml/1.0">http://www.URL.com/xml/1.0</a>'&gt;
+<br>
+<p>But on the other hand, if I use the XML library (Java) provides by SUN,
+<br>
+the test.xml becomes :
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;test.xml -----------------------------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;?xml version=&quot;1.0&quot; standalone=&quot;no&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!DOCTYPE prefix:ROOT SYSTEM &quot;test.dtd&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;prefix:ROOT xmlns:prefix=&quot;<a href="http://www.URL.com/xml/1.0">http://www.URL.com/xml/1.0</a>&quot;/&gt;
+<br>
+<p>The SUN library has added a prefix namespace in the DOCTYPE declaration.
+<br>
+<p>In this case, the XML Document is not valid for the libxml :
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;Not valid: root and DtD name do not match 'ROOT' and 'prefix:ROOT'&quot;
+<br>
+<p><p>In the XML W3C Recommemdation document &quot;REC-xml-19980210&quot;, the name in
+<br>
+the DOCTYPE
+<br>
+declaration must match the name of the root element.
+<br>
+But in the REC-xml-names-19990114 document this name is a qualified name
+<br>
+!!!
+<br>
+<p><p>What is the good definiton ?
+<br>
+<p>Regards,
+<br>
+<p>=============================================================
+<br>
+William KUNKEL, Software Development Engineer
+<br>
+opt[e]way S.A., BP. 37, 80 route des Lucioles, Immeuble Delta
+<br>
+06901 Sophia Antipolis Cedex, FRANCE
+<br>
+Ph: +33493956651, Fx: +33493956652, <a href="http://www.opteway.com">http://www.opteway.com</a>
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Conflict%20between%20namespaces%20and%20external%20DTD%20declaration">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Conflict%20between%20namespaces%20and%20external%20DTD%20declaration">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0435.html">Daniel Veillard: "[xml] Re: [gdome] gdome2"</a>
+<li><strong>Previous message:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:09 EDT</em>
+</em>
+</small>
+</body>
+</html>

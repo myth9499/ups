@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XSLT II</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] XSLT II">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XSLT II</h1>
+<!-- received="Tue Dec 21 09:40:20 1999" -->
+<!-- isoreceived="19991221144020" -->
+<!-- sent="Tue, 21 Dec 1999 09:40:18 -0500" -->
+<!-- isosent="19991221144018" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] XSLT II" -->
+<!-- id="19991221094018.R3165@w3.org" -->
+<!-- inreplyto="385F81A4.EC86432C@gmx.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XSLT%20II"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Dec 21 1999 - 09:40:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0263.html">pj@walter-graphtek.com: "[xml] 1.8.1 defect"</a>
+<li><strong>Previous message:</strong> <a href="0261.html">Mathias Hasselmann: "Re: [xml] XSLT II"</a>
+<li><strong>In reply to:</strong> <a href="0261.html">Mathias Hasselmann: "Re: [xml] XSLT II"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Dec 21, 1999 at 02:33:24PM +0100, Mathias Hasselmann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; On Tue, Dec 21, 1999 at 02:03:13AM +0100, Mathias Hasselmann wrote:
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; Pardon to all xml-list recipients:
+</em><br>
+<em>&gt; &gt; &gt; The mail with subject &quot;XSLT&quot; was addressed toward Daniel...
+</em><br>
+<em>&gt; &gt; &gt; But my address book seems to be wracked...
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; BUT while playing around with XSLT I've found a misbehavior of libxml.
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; When parsing a the W3C XSLT/doc-example which starts with:
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; &lt;xsl:stylesheet version=&quot;1.0&quot;
+</em><br>
+<em>&gt; &gt; &gt;                 xmlns:xsl=&quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot;
+</em><br>
+<em>&gt; &gt; &gt;                 xmlns=&quot;<a href="http://www.w3.org/TR/xhtml1/strict">http://www.w3.org/TR/xhtml1/strict</a>&quot;&gt;
+</em><br>
+<em>&gt; &gt; &gt; ...
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; the call
+</em><br>
+<em>&gt; &gt; &gt; xmlGetNsProp (stylesheet-&gt;root, &quot;version&quot;,
+</em><br>
+<em>&gt; &gt; &gt; &quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot;),
+</em><br>
+<em>&gt; &gt; &gt; returns NULL.
+</em><br>
+<em>&gt; &gt;   You didn't tell which version of the library you used,
+</em><br>
+<em>&gt; &gt;   libxml-1.8.0 broke default namespaces support :-( that's the reason
+</em><br>
+<em>&gt; &gt; why i released libxml-1.8.1 (which in turn has troubles with C++ so I
+</em><br>
+<em>&gt; &gt; expect to release libxml-1.8.2 today :-( ))
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   So one easy answer may be 'upgrade', tell me if you still have troubles.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I tried with 1.8.1...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But after rereading W3C's namespace-specs and trying
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   xmlGetNsProp (stylesheet-&gt;root, &quot;xsl:version&quot;, ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; which returns &quot;1.0&quot; I'm confused:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is libxml or W3C's example invalid?
+</em><br>
+<p>&nbsp;Well in the example:
+<br>
+&nbsp;&nbsp;&nbsp;- the default namespace for the element is <a href="http://www.w3.org/TR/xhtml1/strict">http://www.w3.org/TR/xhtml1/strict</a>
+<br>
+&nbsp;&nbsp;&nbsp;- but the element namespace is <a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>
+<br>
+since the version attribute was not prefixed it's not obvious to which
+<br>
+namespace it belongs, so let's go back to the root:
+<br>
+<p>------------ Section 5.2 Namespace Defaulting, first paragraph
+<br>
+A default namespace is considered to apply to the element [...].
+<br>
+Note that default namespaces do not apply directly to attributes. 
+<br>
+------------
+<br>
+<p>&nbsp;&nbsp;Bingo,
+<br>
+<p>~/XML -&gt; gdb tester
+<br>
+[...]
+<br>
+(gdb) r --debug ns.xml 
+<br>
+Starting program: /u/veillard/XML/tester --debug ns.xml
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;ELEMENT xsl:stylesheet
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;namespace xsl href=<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;default namespace href=<a href="http://www.w3.org/TR/xhtml1/strict">http://www.w3.org/TR/xhtml1/strict</a>
+<br>
+<p>Breakpoint 1, xmlDebugDumpAttr (output=0x40115c60, attr=0x80861e8, depth=2)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at debugXML.c:103
+<br>
+103	    for (i = 0;((i &lt; depth) &amp;&amp; (i &lt; 25));i++)
+<br>
+(gdb) p *attr
+<br>
+$1 = {_private = 0x0, vepv = 0x0, type = XML_ATTRIBUTE_NODE, node = 0x8085fd0, 
+<br>
+&nbsp;&nbsp;next = 0x0, name = 0x8086230 &quot;version&quot;, val = 0x8086260, ns = 0x8086168}
+<br>
+(gdb) p *attr-&gt;ns
+<br>
+$2 = {next = 0x0, type = XML_LOCAL_NAMESPACE, 
+<br>
+&nbsp;&nbsp;href = 0x80861a0 &quot;<a href="http://www.w3.org/TR/xhtml1/strict">http://www.w3.org/TR/xhtml1/strict</a>&quot;, prefix = 0x0}
+<br>
+(gdb) 
+<br>
+<p>&nbsp;&nbsp;So this is a BUG !
+<br>
+The mistake was to try to apply the default namespace rule built for elements
+<br>
+to attributes too.
+<br>
+<p>Rereading the namespace specification it is also clear that an attribute
+<br>
+without prefix uses the namespace from the element carrying it.
+<br>
+<p>So the example is right (one could have assumed that :-),
+<br>
+an libxml needed to be fixed. It seems to be working fine now:
+<br>
+<p>Breakpoint 1, xmlDebugDumpAttr (output=0x40115c60, attr=0x8086208, depth=2)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at debugXML.c:103
+<br>
+103	    for (i = 0;((i &lt; depth) &amp;&amp; (i &lt; 25));i++)
+<br>
+(gdb) p *attr-&gt;node-&gt;ns
+<br>
+$1 = {next = 0x8086188, type = XML_LOCAL_NAMESPACE, 
+<br>
+&nbsp;&nbsp;href = 0x8086110 &quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot;, 
+<br>
+&nbsp;&nbsp;prefix = 0x8086160 &quot;xsl&quot;}
+<br>
+(gdb) call xmlGetNsProp(attr-&gt;node, &quot;version&quot;, &quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot;)
+<br>
+$2 = (xmlChar *) 0x8085c60 &quot;1.0&quot;
+<br>
+(gdb)
+<br>
+<p>&nbsp;&nbsp;I'm about to release 1.8.2, this will be corrected,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XSLT%20II">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XSLT%20II">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XSLT%20II">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0263.html">pj@walter-graphtek.com: "[xml] 1.8.1 defect"</a>
+<li><strong>Previous message:</strong> <a href="0261.html">Mathias Hasselmann: "Re: [xml] XSLT II"</a>
+<li><strong>In reply to:</strong> <a href="0261.html">Mathias Hasselmann: "Re: [xml] XSLT II"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:55 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Sat Oct 14 13:06:38 2000" -->
+<!-- isoreceived="20001014170638" -->
+<!-- sent="Sat, 14 Oct 2000 19:06:34 +0200" -->
+<!-- isosent="20001014170634" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="20001014190634.K23022@w3.org" -->
+<!-- inreplyto="39E87E2E.DC15FFB@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Oct 14 2000 - 13:06:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0957.html">Bjorn Reese: "[xml] Patch for HTML SCRIPT"</a>
+<li><strong>Previous message:</strong> <a href="0955.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0955.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>Reply:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Oct 14, 2000 at 03:39:26PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   - this introduce a binary incompatible change, some data
+</em><br>
+<em>&gt; &gt;     structures are changed and that a first thing I will have
+</em><br>
+<em>&gt; &gt;     to correct
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Why is binary compatibility an issue?
+</em><br>
+<p>&nbsp;&nbsp;Because I distribute RPM binaries, this is something I got troubles
+<br>
+with in the past and I have learnt the hard way to avoid this :-\,
+<br>
+adding to a structure is no problem but removing can led to problems.
+<br>
+<p><em>&gt; &gt;   - an hash table only makes sense if the pool of object is
+</em><br>
+<em>&gt; &gt;     clearly larger than the number of entries, and whatever how I
+</em><br>
+<em>&gt; &gt;     turn the problem, I don't see how i would need to register
+</em><br>
+<em>&gt; &gt;     250 functions, if you have such an use case please enlighten me
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Let me reiterate, the number is arbitrarily chosen. Change it to
+</em><br>
+<em>&gt; whatever pleases you.
+</em><br>
+<p>&nbsp;&nbsp;Okay I was wondering if you had a specific need for a large number
+<br>
+of functions or variables, that's all !
+<br>
+<p><em>&gt; &gt;   - the function used to compute the hash looks rather costly
+</em><br>
+<em>&gt; &gt;     you have a multiply and an add per char in the string, I
+</em><br>
+<em>&gt; &gt;     usually simply compute the sum of all chars in the string
+</em><br>
+<em>&gt; &gt;     which for a 256 hash size should be good enough.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I use a standard hash key computation algorithm. If you disapprove
+</em><br>
+<em>&gt; of it, change it (if you feel the distribution of your algorithm is
+</em><br>
+<em>&gt; good enough). I don't see the issue here.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Okay
+<br>
+<p><em>&gt; &gt;   - the overall memory used for storing the hash table seems a
+</em><br>
+<em>&gt; &gt;     bit inappropriate in that specific case of the few XPath
+</em><br>
+<em>&gt; &gt;     functions (but tiny compare to a DOM tree size and other use
+</em><br>
+<em>&gt; &gt;     of hash tables in libxml).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As you mention, the size of the hash table is neglible compared to
+</em><br>
+<em>&gt; the size of the parse tree. We are talking peanuts here. Again, I
+</em><br>
+<em>&gt; don't see the issue here.
+</em><br>
+<p>&nbsp;&nbsp;Okay
+<br>
+<p><em>&gt; &gt;   - adding a new header and C file would only really make sense if
+</em><br>
+<em>&gt; &gt;     those were reused in multiple places.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  I think integrating the patch as is is a bit problematic right now.
+</em><br>
+<em>&gt; &gt; But I think it does make sense to try to reuse it to make it the
+</em><br>
+<em>&gt; &gt; hash table interfaces used in other parts as well (entities, element/
+</em><br>
+<em>&gt; &gt; attributes/notations declarations, and the XPath registry).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This was exactly the reason why I made the hash functions generic,
+</em><br>
+<em>&gt; and put them in separate files (well, this and the good software
+</em><br>
+<em>&gt; engineering practice of modulability).
+</em><br>
+<p>&nbsp;&nbsp;Okay
+<br>
+<p><em>&gt; &gt;   I hope that you won't take offense if I don't integrate it for
+</em><br>
+<em>&gt; &gt; 2.2.5, I think I will reuse it but as explained in a larger context :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Well, I was only trying to be helpful.
+</em><br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;Well, it is helpful !
+<br>
+<p><em>&gt; I do not take personal
+</em><br>
+<em>&gt; offence, but I will, in all likelihood, be more cautious with
+</em><br>
+<em>&gt; future submissions.
+</em><br>
+<p>&nbsp;&nbsp;I didn't want to discourage you, I just raised a few issues.
+<br>
+I was wondering if any of those point was important to you, especially
+<br>
+if you really needed hash tables in next release or if you could wait
+<br>
+a bit until completely integrated.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0957.html">Bjorn Reese: "[xml] Patch for HTML SCRIPT"</a>
+<li><strong>Previous message:</strong> <a href="0955.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0955.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>Reply:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 14 2000 - 13:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

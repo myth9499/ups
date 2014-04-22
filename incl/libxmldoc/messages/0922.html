@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml for CE</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml for CE">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml for CE</h1>
+<!-- received="Wed Oct 11 07:20:38 2000" -->
+<!-- isoreceived="20001011112038" -->
+<!-- sent="Wed, 11 Oct 2000 13:20:33 +0200" -->
+<!-- isosent="20001011112033" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml for CE" -->
+<!-- id="20001011132033.G28988@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.10010061038520.6803-100000@fisty.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20for%20CE"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Oct 11 2000 - 07:20:33 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0923.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0921.html">Daniel Veillard: "Re: [xml] nanohttp.c and winsock"</a>
+<li><strong>In reply to:</strong> <a href="0883.html">FiSTY: "[xml] libxml for CE"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0927.html">FiSTY: "Re: [xml] libxml for CE"</a>
+<li><strong>Reply:</strong> <a href="0927.html">FiSTY: "Re: [xml] libxml for CE"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 06, 2000 at 12:04:21PM -0400, FiSTY wrote:
+<br>
+<em>&gt; Just out of curiosity, is there anyone else wanting to use libxml on a CE
+</em><br>
+<em>&gt; platform? 
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Seems at least another person might be interested.
+<br>
+<p><em>&gt; I need to use libxml on a CE platform, but it required some porting power
+</em><br>
+<em>&gt; on my part.  Basically because silly CE doesn't support 'getenv', 'open',
+</em><br>
+<em>&gt; 'close', 'read', 'write' and such.  So I had to change some stuff to
+</em><br>
+<em>&gt; fopen/fread/etc. and closesocket.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If no one else wants CE, then I'm content in porting the distributions
+</em><br>
+<em>&gt; when I download.  But if others are in the same boat, then may I suggest
+</em><br>
+<em>&gt; some strategy.  I know that Daniel mentioned he didn't want compiler
+</em><br>
+<em>&gt; specific #ifdef's in the distribution (which I think this would require).
+</em><br>
+<em>&gt; Atleast, that's how I did the porting.
+</em><br>
+<p>&nbsp;&nbsp;Not that i think that Windows code is what I would like to see on
+<br>
+one of my embedded platform or appliances ;-), but yes patches are welcome
+<br>
+(but please relative to a recent version, i.e. libxml1 patches won't help
+<br>
+me much).
+<br>
+I dislike compiler specific defines, but platform specific ones are okay
+<br>
+(seems there is common agreement to say that CE is not the same platform
+<br>
+as WIN32 :-). I also prefer changes encapsulated in header files like
+<br>
+win32config.h than scattered around the code.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20for%20CE">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20for%20CE">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20for%20CE">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0923.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0921.html">Daniel Veillard: "Re: [xml] nanohttp.c and winsock"</a>
+<li><strong>In reply to:</strong> <a href="0883.html">FiSTY: "[xml] libxml for CE"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0927.html">FiSTY: "Re: [xml] libxml for CE"</a>
+<li><strong>Reply:</strong> <a href="0927.html">FiSTY: "Re: [xml] libxml for CE"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 11 2000 - 09:43:41 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?</h1>
+<!-- received="Thu Sep 28 16:37:21 2000" -->
+<!-- isoreceived="20000928203721" -->
+<!-- sent="Thu, 28 Sep 2000 22:37:12 +0200" -->
+<!-- isosent="20000928203712" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?" -->
+<!-- id="20000928223712.A7512@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A086743B@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Sep 28 2000 - 16:37:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0835.html">Marc Sanfacon: "RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<li><strong>In reply to:</strong> <a href="0835.html">Marc Sanfacon: "RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Sep 28, 2000 at 04:18:02PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi Daniel,
+</em><br>
+<em>&gt; 	I continued my work on that today.  I identified the difference
+</em><br>
+<em>&gt; between the 2 generated xml tree, one in ST and the other in MT.  The
+</em><br>
+<em>&gt; difference I can see is that in the MT tree, some of the nodes are not
+</em><br>
+<em>&gt; positionned under the same node as the one in ST.  They are indented one
+</em><br>
+<em>&gt; node more in the MT trees.  Not all the nodes, sometimes just one.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So I found this problem in HTMLParser.c
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; void
+</em><br>
+<em>&gt; htmlInitAutoClose(void) {
+</em><br>
+<em>&gt;     int index, i = 0;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if (htmlStartCloseIndexinitialized) return;
+</em><br>
+<p>&nbsp;&nbsp;Right from a theorical point of view there should be a synchronization
+<br>
+barier here ... This code is not reentrant and the initialization have
+<br>
+to take place before further processing ...
+<br>
+<p><em>&gt;     for (index = 0;index &lt; 100;index ++) htmlStartCloseIndex[index] = NULL;
+</em><br>
+<em>&gt;     index = 0;
+</em><br>
+<em>&gt;     while ((htmlStartClose[i] != NULL) &amp;&amp; (index &lt; 100 - 1)) {
+</em><br>
+<em>&gt;         htmlStartCloseIndex[index++] = &amp;htmlStartClose[i];
+</em><br>
+<em>&gt;         while (htmlStartClose[i] != NULL) i++;
+</em><br>
+<em>&gt;         i++;
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     /* NEW LINE */
+</em><br>
+<em>&gt;     htmlStartCloseIndexinitialized = 1;
+</em><br>
+<em>&gt; }
+</em><br>
+<p>[...]
+<br>
+<p><em>&gt; int htmlParseDocument(htmlParserCtxtPtr ctxt) {
+</em><br>
+<em>&gt;     xmlDtdPtr dtd;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     htmlDefaultSAXHandlerInit();
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is another place.  Why do we need to initalize 'htmlDefaultSAXHandler' here
+</em><br>
+<em>&gt; ?  It was already initialized when instantiated.
+</em><br>
+<p>&nbsp;&nbsp;Well since htmlParserCtxtPtr if a public structure there it is not
+<br>
+formally forbidden to enter here without having called any of the context
+<br>
+initialization routines. 
+<br>
+<p><em>&gt; Am I right by saying that
+</em><br>
+<em>&gt; it should not (must not) be modified by any function ?
+</em><br>
+<p>&nbsp;&nbsp;Well some people might prefer changing directly the default structure
+<br>
+than calling the SAX functions instead of the normal ones.
+<br>
+<p><em>&gt; To be thread safe,
+</em><br>
+<em>&gt; actually, every parsing should have its own context (which is true) and its
+</em><br>
+<em>&gt; own sax handler, which in some cases seem not to be true.
+</em><br>
+<p>&nbsp;&nbsp;Possible, but impossible to guarantee in a formal way, libxml APIs
+<br>
+are too &quot;open&quot; to allow too many assumptions, makes writing the inner code
+<br>
+a bit more complex, I agree ...
+<br>
+<p><em>&gt; I will continue my testing to be sure this does the trick.  But for now, the
+</em><br>
+<em>&gt; test has been running for 1 hour without a crash.
+</em><br>
+<p>&nbsp;&nbsp;I think the problem will either show up early or not at all ...
+<br>
+unless there is a race condition occuring only in a very short sequence
+<br>
+of code that only long burning test could trigger ...
+<br>
+<p><em>&gt; Of course, As I said, since I call the parser in ST first, some of the bugs
+</em><br>
+<em>&gt; might be there also.  It would be a good idea to have an initialization
+</em><br>
+<em>&gt; routine available, so I could call it when starting the system and ensure
+</em><br>
+<em>&gt; all the globals variables are initialized.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Yes, this is the best way to handle this in threaded contexts.
+<br>
+We just need to define xmlInitParser() (like was done for cleanup
+<br>
+xmlCleanupParser() ) and probably an HTML counterpart.
+<br>
+<p>&nbsp;&nbsp;&nbsp;I will look at this, either tonight or during this w.e.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0835.html">Marc Sanfacon: "RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<li><strong>In reply to:</strong> <a href="0835.html">Marc Sanfacon: "RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Sep 28 2000 - 16:43:33 EDT</em>
+</em>
+</small>
+</body>
+</html>

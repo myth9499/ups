@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Sat Feb  3 03:18:31 2001" -->
+<!-- isoreceived="20010203081831" -->
+<!-- sent="Sat, 3 Feb 2001 09:18:26 +0100" -->
+<!-- isosent="20010203081826" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="20010203091825.A20986@imag.fr" -->
+<!-- inreplyto="3A7B052A.79155376@cddb.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Sat Feb 03 2001 - 03:18:26 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1418.html">Daniel Veillard: "Re: [xml] xmlCheckFilename breaking stuff in 2.2.12"</a>
+<li><strong>Previous message:</strong> <a href="1416.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1416.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 02, 2001 at 11:06:18AM -0800, Dave Madole wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I feel that my original comment could use a little clarification.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; First, I tried using &quot;iconv&quot;, but it didn't really cut it for a couple of
+</em><br>
+<em>&gt; reasons, not the least of which was the fact that its use was completely opaque
+</em><br>
+<em>&gt; on my Red Hat  linux box - man iconv, man -k iconv, man unicode, etc. produce
+</em><br>
+<em>&gt; nothing appropriate.
+</em><br>
+<p>&nbsp;&nbsp;Your systeme is probably misinstalled:
+<br>
+--------
+<br>
+man iconv:
+<br>
+ICONV(3)            Linux Programmer's Manual            ICONV(3)
+<br>
+<p>NAME
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iconv - perform character set conversion
+<br>
+<p>SYNOPSIS
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;iconv.h&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t iconv (iconv_t cd,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const char* * inbuf, size_t * inbytesleft,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char* * outbuf, size_t * outbytesleft);
+<br>
+...
+<br>
+--------
+<br>
+&nbsp;&nbsp;info iconv returns the information too
+<br>
+<p><em>&gt; I searched around for the data files, etc. to no avail.
+</em><br>
+<em>&gt; There are man pages on my solaris box, but they aren't really appropriate, as
+</em><br>
+<em>&gt; the character encodings actually SEEM to have different names (cross platform
+</em><br>
+<em>&gt; transparency is critical to my app).
+</em><br>
+<p>&nbsp;&nbsp;Simply compile GNU iconv on Solaris and you will get same behaviour.
+<br>
+<p><em>&gt; Our friends at Red Hat could use a little prodding as far as the doc goes.
+</em><br>
+<em>&gt; Doing a search for &quot;iconv&quot; on the RedHat sites turns up nothing useful.
+</em><br>
+<p>&nbsp;&nbsp;Depends what you call useful ...
+<br>
+<p><em>&gt; May I suggest adding a link to the online Linux iconv documentation to the
+</em><br>
+<em>&gt; xmlsoft.org web site?
+</em><br>
+<p>&nbsp;&nbsp;It is in the FAQ:
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/FAQ.html#Compilatio">http://xmlsoft.org/FAQ.html#Compilatio</a>
+<br>
+with pointers to both the official specification at the opengroup and
+<br>
+a pointer to at least one portable implementation of the library
+<br>
+<p><em>&gt; Secondly, the data from which I am building my document is coming from various
+</em><br>
+<em>&gt; sources, some in utf-8, some in &quot;wrong endian&quot; utf-16 (Oracle), some in &quot;wierd&quot;
+</em><br>
+<em>&gt; and basically unpredictable multi-byte Asian character encodings.  In my case
+</em><br>
+<em>&gt; it actually makes sense to convert to a &quot;neutral&quot; utf-16 intermediate
+</em><br>
+<em>&gt; encoding.
+</em><br>
+<p>&nbsp;&nbsp;libxml will natively (without iconv) support utf8 and both UTF16 encodings.
+<br>
+Converting the asian to UTF8 directly does make sense...
+<br>
+<p><em>&gt;  Also I am dealing with a situation where I need to be told on the
+</em><br>
+<em>&gt; fly what destination encoding to use from a very large range of Asian character
+</em><br>
+<em>&gt; encodings - ICU makes this much easier because it accepts just about anything
+</em><br>
+<em>&gt; the user might enter as the name of the encoding.  It also provides support for
+</em><br>
+<em>&gt; collating and sorting, etc.
+</em><br>
+<p>&nbsp;&nbsp;Okay, that's something I can't comment on ...
+<br>
+<p><em>&gt; Finally, I had meant to add that I certainly appreciate the work that went into
+</em><br>
+<em>&gt; putting iconv support into libxml, and understand that it IS the standard and
+</em><br>
+<em>&gt; that it should be used when possible and didn't mean to imply that it was a
+</em><br>
+<em>&gt; wrong choice in any way.  No doubt in most cases it is more than adequate.
+</em><br>
+<em>&gt; ICU probably is more than most people would need and is a bit fat, but it works
+</em><br>
+<em>&gt; very well and is copiously documented.
+</em><br>
+<p>&nbsp;&nbsp;Okay,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Encoding%20and%20Win32">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1418.html">Daniel Veillard: "Re: [xml] xmlCheckFilename breaking stuff in 2.2.12"</a>
+<li><strong>Previous message:</strong> <a href="1416.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1416.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Feb 03 2001 - 04:47:47 EST</em>
+</em>
+</small>
+</body>
+</html>

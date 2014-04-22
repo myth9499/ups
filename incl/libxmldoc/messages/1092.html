@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in parser (HTML)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug in parser (HTML)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in parser (HTML)</h1>
+<!-- received="Fri Oct 27 18:48:47 2000" -->
+<!-- isoreceived="20001027224847" -->
+<!-- sent="Sat, 28 Oct 2000 00:48:42 +0200" -->
+<!-- isosent="20001027224842" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug in parser (HTML)" -->
+<!-- id="20001028004842.D29045@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0010271508430.9364-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 27 2000 - 18:48:42 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1091.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1091.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 27, 2000 at 03:18:16PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; I don't see how that follows.  Any whitespace inside a paragraph-like
+</em><br>
+<em>&gt; container is significant,
+</em><br>
+<p>&nbsp;&nbsp;That's not how it's done now :-)
+<br>
+<p><em>&gt; with the possible exception of leading and
+</em><br>
+<em>&gt; trailing whitespace (which occurs at paragraph boundaries).  So,
+</em><br>
+<em>&gt; whitespace inside of &lt;p&gt;, &lt;h1&gt;, &lt;td&gt;, etc. is all significant, but
+</em><br>
+<em>&gt; whitespace directly inside something like &lt;table&gt; or &lt;body&gt; is not.
+</em><br>
+<p>&nbsp;&nbsp;Hum, currently there wasn't a distinction made between 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ mixed content
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ element child only
+<br>
+in the HTML parser. This could be added
+<br>
+<p><em>&gt; So, your &quot;that ain't true for &lt;b&gt;&quot; example confused me (but maybe I'm
+</em><br>
+<em>&gt; missing something).  Are you saying that these are somehow different?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;html&gt;&lt;body&gt;&lt;p&gt;
+</em><br>
+<em>&gt; &lt;b&gt;bbbbbbbbbbbb&lt;/b&gt;
+</em><br>
+<em>&gt; &lt;b&gt;cccccccccccc&lt;/b&gt;
+</em><br>
+<em>&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;html&gt;&lt;body&gt;&lt;p&gt;
+</em><br>
+<em>&gt; &lt;b&gt;bbbbbbbbbbbb&lt;/b&gt; &lt;b&gt;cccccccccccc&lt;/b&gt;
+</em><br>
+<em>&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</em><br>
+<p>&nbsp;&nbsp;I think they are different. At a rendering level b is a text node
+<br>
+which just happen to possibly be rendered with a different font. That's
+<br>
+why I suggest handling spaces encountered after it as being significant.
+<br>
+&nbsp;&nbsp;I may not be right, but the enclosed patch does this. If you prefer
+<br>
+something better see areBlanks(), modify it and send me the patch :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1092/01-blanks.diff">blanks.diff</a>
+</ul>
+<!-- attachment="01-blanks.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1091.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1091.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 27 2000 - 19:45:57 EDT</em>
+</em>
+</small>
+</body>
+</html>

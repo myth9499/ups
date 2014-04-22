@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Win32 compilation instructions and makefiles</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Win32 compilation instructions and makefiles">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Win32 compilation instructions and makefiles</h1>
+<!-- received="Fri Sep 29 15:30:57 2000" -->
+<!-- isoreceived="20000929193057" -->
+<!-- sent="Fri, 29 Sep 2000 21:30:53 +0200" -->
+<!-- isosent="20000929193053" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Win32 compilation instructions and makefiles" -->
+<!-- id="20000929213053.B930@w3.org" -->
+<!-- inreplyto="39D4E2CA.2030505@qeradiant.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Win32%20compilation%20instructions%20and%20makefiles"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 29 2000 - 15:30:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0838.html">Timothee Besset: "[xml] Win32 compilation instructions and makefiles"</a>
+<li><strong>In reply to:</strong> <a href="0838.html">Timothee Besset: "[xml] Win32 compilation instructions and makefiles"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Sep 29, 2000 at 01:43:22PM -0500, Timothee Besset wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello everyone
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm involved in a cross-platform project and we decided to use XML for 
+</em><br>
+<em>&gt; some new stuff. Looking for a cross-platform LGPL lib for XML lead 
+</em><br>
+<em>&gt; directly to libxml, which we've been using on linux for a while already. 
+</em><br>
+<em>&gt; libxml compiles out of the box with cygwin and that's very good. But I 
+</em><br>
+<em>&gt; needed to end up with .lib files compatible with MS tools .. after 
+</em><br>
+<em>&gt; looking a bit in the archive I finally found the page:
+</em><br>
+<em>&gt; <a href="http://www.ce.berkeley.edu/~doolin/code/libxmlwin32/">http://www.ce.berkeley.edu/~doolin/code/libxmlwin32/</a>
+</em><br>
+<p>&nbsp;&nbsp;You know it's listed in the contrib section at the bottom of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/">http://xmlsoft.org/</a> 
+<br>
+&nbsp;&nbsp;i.e. the main page referred in the README  :-)
+<br>
+<p><em>&gt; Why is the MSVC win32 stuff not included in the main release? Or at 
+</em><br>
+<p>&nbsp;&nbsp;What do you mean by &quot;MSVC win32 stuff&quot; ??? Gimme a list.
+<br>
+Also how different is it from the &quot;others compilers stuff&quot; available on
+<br>
+windows ... Adding win32config.h in the main release was okay since
+<br>
+it covers all the compilers on Windows. I would feel vary about adding
+<br>
+compiler specific stuff in the distrib... Linking to it as contributed is
+<br>
+no problem. Is everybody using the same compiler on Windows, or can you
+<br>
+guys come up with only a couple more files wich would satify 80% of the
+<br>
+windows users? If yes I would add this, but I simply can't maintain it.
+<br>
+<p><em>&gt; least put the <a href="http://www.ce.berkeley.edu/~doolin/code/libxmlwin32/">http://www.ce.berkeley.edu/~doolin/code/libxmlwin32/</a> link 
+</em><br>
+<em>&gt; in the README?
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;This README was initally targetted at the Gnome CVs base hackers,
+<br>
+and was probably last changed before this had been on-line. I would feel
+<br>
+Okay to link it from the README instead of just the web page if I had
+<br>
+some assurance that this won't disapear in the next year. If I can get
+<br>
+this then yes, if it's unlikely to stay stable then I would prefer to
+<br>
+just list it in the contrib section.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Win32%20compilation%20instructions%20and%20makefiles">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Win32%20compilation%20instructions%20and%20makefiles">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Win32%20compilation%20instructions%20and%20makefiles">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0838.html">Timothee Besset: "[xml] Win32 compilation instructions and makefiles"</a>
+<li><strong>In reply to:</strong> <a href="0838.html">Timothee Besset: "[xml] Win32 compilation instructions and makefiles"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 29 2000 - 15:43:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

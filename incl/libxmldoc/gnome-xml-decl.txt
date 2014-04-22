@@ -1,0 +1,1150 @@
+<MACRO>
+<NAME>XML_INTERNAL_GENERAL_ENTITY</NAME>
+#define XML_INTERNAL_GENERAL_ENTITY		1
+</MACRO>
+<MACRO>
+<NAME>XML_EXTERNAL_GENERAL_PARSED_ENTITY</NAME>
+#define XML_EXTERNAL_GENERAL_PARSED_ENTITY	2
+</MACRO>
+<MACRO>
+<NAME>XML_EXTERNAL_GENERAL_UNPARSED_ENTITY</NAME>
+#define XML_EXTERNAL_GENERAL_UNPARSED_ENTITY	3
+</MACRO>
+<MACRO>
+<NAME>XML_INTERNAL_PARAMETER_ENTITY</NAME>
+#define XML_INTERNAL_PARAMETER_ENTITY		4
+</MACRO>
+<MACRO>
+<NAME>XML_EXTERNAL_PARAMETER_ENTITY</NAME>
+#define XML_EXTERNAL_PARAMETER_ENTITY		5
+</MACRO>
+<MACRO>
+<NAME>XML_INTERNAL_PREDEFINED_ENTITY</NAME>
+#define XML_INTERNAL_PREDEFINED_ENTITY		6
+</MACRO>
+<TYPEDEF>
+<NAME>xmlEntityPtr</NAME>
+typedef xmlEntity *xmlEntityPtr;
+</TYPEDEF>
+<MACRO>
+<NAME>XML_MIN_ENTITIES_TABLE</NAME>
+#define XML_MIN_ENTITIES_TABLE	32
+</MACRO>
+<TYPEDEF>
+<NAME>xmlEntitiesTablePtr</NAME>
+typedef xmlEntitiesTable *xmlEntitiesTablePtr;
+</TYPEDEF>
+<FUNCTION>
+<NAME>xmlAddDocEntity</NAME>
+<RETURNS>void  </RETURNS>
+xmlDocPtr doc, const CHAR *name, int type,const CHAR *ExternalID, const CHAR *SystemID, CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlAddDtdEntity</NAME>
+<RETURNS>void  </RETURNS>
+xmlDocPtr doc, const CHAR *name, int type,const CHAR *ExternalID, const CHAR *SystemID, CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetPredefinedEntity</NAME>
+<RETURNS>xmlEntityPtr  </RETURNS>
+const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetDocEntity</NAME>
+<RETURNS>xmlEntityPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetDtdEntity</NAME>
+<RETURNS>xmlEntityPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlEncodeEntities</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlDocPtr doc, const CHAR *input
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCreateEntitiesTable</NAME>
+<RETURNS>xmlEntitiesTablePtr  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyEntitiesTable</NAME>
+<RETURNS>xmlEntitiesTablePtr  </RETURNS>
+xmlEntitiesTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeEntitiesTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlEntitiesTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDumpEntitiesTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlEntitiesTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewEntityInputStream</NAME>
+<RETURNS>xmlParserInputPtr  </RETURNS>
+xmlParserCtxtPtr ctxt,xmlEntityPtr entity
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyEntitiesTable</NAME>
+<RETURNS>xmlEntitiesTablePtr  </RETURNS>
+xmlEntitiesTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParserError</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt, const char *msg, ...
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParserWarning</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt, const char *msg, ...
+</FUNCTION>
+<MACRO>
+<NAME>XML_DEFAULT_VERSION</NAME>
+#define XML_DEFAULT_VERSION	"1.0"
+</MACRO>
+<TYPEDEF>
+<NAME>xmlParserInputPtr</NAME>
+typedef xmlParserInput *xmlParserInputPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlParserNodeInfo</NAME>
+typedef _xmlParserNodeInfo xmlParserNodeInfo;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlParserNodeInfoSeq</NAME>
+typedef _xmlParserNodeInfoSeq xmlParserNodeInfoSeq;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlParserNodeInfoSeqPtr</NAME>
+typedef xmlParserNodeInfoSeq *xmlParserNodeInfoSeqPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlParserCtxt</NAME>
+typedef _xmlParserCtxt xmlParserCtxt;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlParserCtxtPtr</NAME>
+typedef xmlParserCtxt *xmlParserCtxtPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlSAXLocator</NAME>
+typedef _xmlSAXLocator xmlSAXLocator;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlSAXLocatorPtr</NAME>
+typedef xmlSAXLocator *xmlSAXLocatorPtr;
+</TYPEDEF>
+<USER_FUNCTION>
+<NAME>resolveEntitySAXFunc</NAME>
+<RETURNS>xmlParserInputPtr </RETURNS>
+xmlParserCtxtPtr ctxt,
+			    const CHAR *publicId, const CHAR *systemId
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>notationDeclSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR *name,
+			    const CHAR *publicId, const CHAR *systemId
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>unparsedEntityDeclSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt,
+                            const CHAR *name, const CHAR *publicId,
+			    const CHAR *systemId, const CHAR *notationName
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>setDocumentLocatorSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt,
+                            xmlSAXLocatorPtr loc
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>startDocumentSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>endDocumentSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>startElementSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR *name
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>endElementSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR *name
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>attributeSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR *name,
+                                  const CHAR *value
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>charactersSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR *ch,
+		            int start, int len
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>ignorableWhitespaceSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt,
+			    const CHAR *ch, int start, int len
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>processingInstructionSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt,
+                            const CHAR *target, const CHAR *data
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>warningSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const char *msg, ...
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>errorSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const char *msg, ...
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>fatalErrorSAXFunc</NAME>
+<RETURNS>void </RETURNS>
+xmlParserCtxtPtr ctxt, const char *msg, ...
+</USER_FUNCTION>
+<TYPEDEF>
+<NAME>xmlSAXHandlerPtr</NAME>
+typedef xmlSAXHandler *xmlSAXHandlerPtr;
+</TYPEDEF>
+<FUNCTION>
+<NAME>xmlStrdup</NAME>
+<RETURNS>CHAR  *</RETURNS>
+const CHAR *cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrndup</NAME>
+<RETURNS>CHAR  *</RETURNS>
+const CHAR *cur, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrchr</NAME>
+<RETURNS>CHAR  *</RETURNS>
+const CHAR *str, CHAR val
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrcmp</NAME>
+<RETURNS>int  </RETURNS>
+const CHAR *str1, const CHAR *str2
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrncmp</NAME>
+<RETURNS>int  </RETURNS>
+const CHAR *str1, const CHAR *str2, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrlen</NAME>
+<RETURNS>int  </RETURNS>
+const CHAR *str
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrcat</NAME>
+<RETURNS>CHAR  *</RETURNS>
+CHAR *cur, const CHAR *add
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStrncat</NAME>
+<RETURNS>CHAR  *</RETURNS>
+CHAR *cur, const CHAR *add, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseDoc</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+CHAR *cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseMemory</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+char *buffer, int size
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseFile</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+const char *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlRecoverDoc</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+CHAR *cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlRecoverMemory</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+char *buffer, int size
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlRecoverFile</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+const char *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseDocument</NAME>
+<RETURNS>int  </RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSAXParseDoc</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+xmlSAXHandlerPtr sax, CHAR *cur, int recovery
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSAXParseMemory</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+xmlSAXHandlerPtr sax, char *buffer,int size, int recovery
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSAXParseFile</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+xmlSAXHandlerPtr sax, const char *filename,int recovery
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlInitParserCtxt</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlClearParserCtxt</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSetupParserForBuffer</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt, const CHAR* buffer,const char* filename
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParserFindNodeInfo</NAME>
+<RETURNS>const xmlParserNodeInfo *</RETURNS>
+const xmlParserCtxt* ctxt,const xmlNode* node
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlInitNodeInfoSeq</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserNodeInfoSeqPtr seq
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlClearNodeInfoSeq</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserNodeInfoSeqPtr seq
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParserFindNodeInfoIndex</NAME>
+<RETURNS>unsigned long  </RETURNS>
+const xmlParserNodeInfoSeq* seq,const xmlNode* node
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParserAddNodeInfo</NAME>
+<RETURNS>void  </RETURNS>
+xmlParserCtxtPtr ctxt,const xmlParserNodeInfo* info
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDefaultSAXHandlerInit</NAME>
+<RETURNS>void  </RETURNS>
+void
+</FUNCTION>
+<ENUM>
+<NAME>xmlElementType</NAME>
+typedef enum {
+    XML_ELEMENT_NODE=		1,
+    XML_ATTRIBUTE_NODE=		2,
+    XML_TEXT_NODE=		3,
+    XML_CDATA_SECTION_NODE=	4,
+    XML_ENTITY_REF_NODE=	5,
+    XML_ENTITY_NODE=		6,
+    XML_PI_NODE=		7,
+    XML_COMMENT_NODE=		8,
+    XML_DOCUMENT_NODE=		9,
+    XML_DOCUMENT_TYPE_NODE=	10,
+    XML_DOCUMENT_FRAG_NODE=	11,
+    XML_NOTATION_NODE=		12
+} xmlElementType;
+</ENUM>
+<TYPEDEF>
+<NAME>CHAR</NAME>
+typedef unsigned short CHAR;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>CHAR</NAME>
+typedef unsigned char CHAR;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlNotationPtr</NAME>
+typedef xmlNotation *xmlNotationPtr;
+</TYPEDEF>
+<ENUM>
+<NAME>xmlAttributeType</NAME>
+typedef enum {
+    XML_ATTRIBUTE_CDATA = 1,
+    XML_ATTRIBUTE_ID,
+    XML_ATTRIBUTE_IDREF	,
+    XML_ATTRIBUTE_IDREFS,
+    XML_ATTRIBUTE_ENTITY,
+    XML_ATTRIBUTE_ENTITIES,
+    XML_ATTRIBUTE_NMTOKEN,
+    XML_ATTRIBUTE_NMTOKENS,
+    XML_ATTRIBUTE_ENUMERATION,
+    XML_ATTRIBUTE_NOTATION
+} xmlAttributeType;
+</ENUM>
+<ENUM>
+<NAME>xmlAttributeDefault</NAME>
+typedef enum {
+    XML_ATTRIBUTE_NONE = 1,
+    XML_ATTRIBUTE_REQUIRED,
+    XML_ATTRIBUTE_IMPLIED,
+    XML_ATTRIBUTE_FIXED
+} xmlAttributeDefault;
+</ENUM>
+<TYPEDEF>
+<NAME>xmlEnumerationPtr</NAME>
+typedef xmlEnumeration *xmlEnumerationPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlAttributePtr</NAME>
+typedef xmlAttribute *xmlAttributePtr;
+</TYPEDEF>
+<ENUM>
+<NAME>xmlElementContentType</NAME>
+typedef enum {
+    XML_ELEMENT_CONTENT_PCDATA = 1,
+    XML_ELEMENT_CONTENT_ELEMENT,
+    XML_ELEMENT_CONTENT_SEQ,
+    XML_ELEMENT_CONTENT_OR
+} xmlElementContentType;
+</ENUM>
+<ENUM>
+<NAME>xmlElementContentOccur</NAME>
+typedef enum {
+    XML_ELEMENT_CONTENT_ONCE = 1,
+    XML_ELEMENT_CONTENT_OPT,
+    XML_ELEMENT_CONTENT_MULT,
+    XML_ELEMENT_CONTENT_PLUS
+} xmlElementContentOccur;
+</ENUM>
+<TYPEDEF>
+<NAME>xmlElementContentPtr</NAME>
+typedef xmlElementContent *xmlElementContentPtr;
+</TYPEDEF>
+<ENUM>
+<NAME>xmlElementTypeVal</NAME>
+typedef enum {
+    XML_ELEMENT_TYPE_EMPTY = 1,
+    XML_ELEMENT_TYPE_ANY,
+    XML_ELEMENT_TYPE_MIXED,
+    XML_ELEMENT_TYPE_ELEMENT
+} xmlElementTypeVal;
+</ENUM>
+<TYPEDEF>
+<NAME>xmlElementPtr</NAME>
+typedef xmlElement *xmlElementPtr;
+</TYPEDEF>
+<ENUM>
+<NAME>xmlNsType</NAME>
+typedef enum {
+    XML_GLOBAL_NAMESPACE = 1,	/* old style global namespace */
+    XML_LOCAL_NAMESPACE		/* new style local scoping */
+} xmlNsType;
+</ENUM>
+<TYPEDEF>
+<NAME>xmlNsPtr</NAME>
+typedef xmlNs *xmlNsPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlDtdPtr</NAME>
+typedef xmlDtd *xmlDtdPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlAttrPtr</NAME>
+typedef xmlAttr *xmlAttrPtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlNode</NAME>
+typedef _xmlNode xmlNode;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlNodePtr</NAME>
+typedef _xmlNode *xmlNodePtr;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlDoc</NAME>
+typedef _xmlDoc xmlDoc;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>xmlDocPtr</NAME>
+typedef xmlDoc *xmlDocPtr;
+</TYPEDEF>
+<FUNCTION>
+<NAME>xmlCreateIntSubset</NAME>
+<RETURNS>xmlDtdPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name,const CHAR *ExternalID, const CHAR *SystemID
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDtd</NAME>
+<RETURNS>xmlDtdPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name,const CHAR *ExternalID, const CHAR *SystemID
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeDtd</NAME>
+<RETURNS>void  </RETURNS>
+xmlDtdPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewGlobalNs</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *href, const CHAR *prefix
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewNs</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlNodePtr node, const CHAR *href, const CHAR *prefix
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeNs</NAME>
+<RETURNS>void  </RETURNS>
+xmlNsPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDoc</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+const CHAR *version
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeDoc</NAME>
+<RETURNS>void  </RETURNS>
+xmlDocPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDocProp</NAME>
+<RETURNS>xmlAttrPtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name,const CHAR *value
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewProp</NAME>
+<RETURNS>xmlAttrPtr  </RETURNS>
+xmlNodePtr node, const CHAR *name,const CHAR *value
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreePropList</NAME>
+<RETURNS>void  </RETURNS>
+xmlAttrPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeProp</NAME>
+<RETURNS>void  </RETURNS>
+xmlAttrPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyProp</NAME>
+<RETURNS>xmlAttrPtr  </RETURNS>
+xmlAttrPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyPropList</NAME>
+<RETURNS>xmlAttrPtr  </RETURNS>
+xmlAttrPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyDtd</NAME>
+<RETURNS>xmlDtdPtr  </RETURNS>
+xmlDtdPtr dtd
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyDoc</NAME>
+<RETURNS>xmlDocPtr  </RETURNS>
+xmlDocPtr doc, int recursive
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDocNode</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, xmlNsPtr ns,const CHAR *name, CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewNode</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNsPtr ns, const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewChild</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr parent, xmlNsPtr ns,const CHAR *name, CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDocText</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, const CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewText</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+const CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDocTextLen</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, const CHAR *content, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewTextLen</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+const CHAR *content, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewDocComment</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewComment</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewReference</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyNode</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr node, int recursive
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyNodeList</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr node
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetLastChild</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr parent
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeIsText</NAME>
+<RETURNS>int  </RETURNS>
+xmlNodePtr node
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlAddChild</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr parent, xmlNodePtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlUnlinkNode</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlTextMerge</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlNodePtr first, xmlNodePtr second
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlTextConcat</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr node, const CHAR *content, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeNodeList</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeNode</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSearchNs</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlDocPtr doc, xmlNodePtr node,const CHAR *nameSpace
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSearchNsByHref</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlDocPtr doc, xmlNodePtr node,const CHAR *href
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSetNs</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr node, xmlNsPtr ns
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyNamespace</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlNsPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyNamespaceList</NAME>
+<RETURNS>xmlNsPtr  </RETURNS>
+xmlNsPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSetProp</NAME>
+<RETURNS>xmlAttrPtr  </RETURNS>
+xmlNodePtr node, const CHAR *name,const CHAR *value
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetProp</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlNodePtr node, const CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStringGetNodeList</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, const CHAR *value
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlStringLenGetNodeList</NAME>
+<RETURNS>xmlNodePtr  </RETURNS>
+xmlDocPtr doc, const CHAR *value,int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeListGetString</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlDocPtr doc, xmlNodePtr list, int inLine
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeSetContent</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur, const CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeSetContentLen</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur, const CHAR *content, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeAddContent</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur, const CHAR *content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeAddContentLen</NAME>
+<RETURNS>void  </RETURNS>
+xmlNodePtr cur, const CHAR *content, int len
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNodeGetContent</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlNodePtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlBufferWriteCHAR</NAME>
+<RETURNS>void  </RETURNS>
+const CHAR *string
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlBufferWriteChar</NAME>
+<RETURNS>void  </RETURNS>
+const char *string
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDocDumpMemory</NAME>
+<RETURNS>void  </RETURNS>
+xmlDocPtr cur, CHAR**mem, int *size
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDocDump</NAME>
+<RETURNS>void  </RETURNS>
+FILE *f, xmlDocPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSaveFile</NAME>
+<RETURNS>int  </RETURNS>
+const char *filename, xmlDocPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetDocCompressMode</NAME>
+<RETURNS>int  </RETURNS>
+xmlDocPtr doc
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSetDocCompressMode</NAME>
+<RETURNS>void  </RETURNS>
+xmlDocPtr doc, int mode
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlGetCompressMode</NAME>
+<RETURNS>int  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlSetCompressMode</NAME>
+<RETURNS>void  </RETURNS>
+int mode
+</FUNCTION>
+<MACRO>
+<NAME>XML_MIN_NOTATION_TABLE</NAME>
+#define XML_MIN_NOTATION_TABLE	32
+</MACRO>
+<TYPEDEF>
+<NAME>xmlNotationTablePtr</NAME>
+typedef xmlNotationTable *xmlNotationTablePtr;
+</TYPEDEF>
+<MACRO>
+<NAME>XML_MIN_ELEMENT_TABLE</NAME>
+#define XML_MIN_ELEMENT_TABLE	32
+</MACRO>
+<TYPEDEF>
+<NAME>xmlElementTablePtr</NAME>
+typedef xmlElementTable *xmlElementTablePtr;
+</TYPEDEF>
+<MACRO>
+<NAME>XML_MIN_ATTRIBUTE_TABLE</NAME>
+#define XML_MIN_ATTRIBUTE_TABLE	32
+</MACRO>
+<TYPEDEF>
+<NAME>xmlAttributeTablePtr</NAME>
+typedef xmlAttributeTable *xmlAttributeTablePtr;
+</TYPEDEF>
+<FUNCTION>
+<NAME>xmlAddNotationDecl</NAME>
+<RETURNS>xmlNotationPtr  </RETURNS>
+xmlDtdPtr dtd, CHAR *name,CHAR *PublicID, CHAR *SystemID
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyNotationTable</NAME>
+<RETURNS>xmlNotationTablePtr  </RETURNS>
+xmlNotationTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeNotationTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlNotationTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDumpNotationTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlNotationTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNewElementContent</NAME>
+<RETURNS>xmlElementContentPtr  </RETURNS>
+CHAR *name, int type
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyElementContent</NAME>
+<RETURNS>xmlElementContentPtr  </RETURNS>
+xmlElementContentPtr content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeElementContent</NAME>
+<RETURNS>void  </RETURNS>
+xmlElementContentPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlAddElementDecl</NAME>
+<RETURNS>xmlElementPtr  </RETURNS>
+xmlDtdPtr dtd, CHAR *name, int type,xmlElementContentPtr content
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyElementTable</NAME>
+<RETURNS>xmlElementTablePtr  </RETURNS>
+xmlElementTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeElementTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlElementTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDumpElementTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlElementTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCreateEnumeration</NAME>
+<RETURNS>xmlEnumerationPtr  </RETURNS>
+CHAR *name
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeEnumeration</NAME>
+<RETURNS>void  </RETURNS>
+xmlEnumerationPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyEnumeration</NAME>
+<RETURNS>xmlEnumerationPtr  </RETURNS>
+xmlEnumerationPtr cur
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlAddAttributeDecl</NAME>
+<RETURNS>xmlAttributePtr  </RETURNS>
+xmlDtdPtr dtd, CHAR *elem,CHAR *name, int type, int def,CHAR *defaultValue, xmlEnumerationPtr tree
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlCopyAttributeTable</NAME>
+<RETURNS>xmlAttributeTablePtr  </RETURNS>
+xmlAttributeTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlFreeAttributeTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlAttributeTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlDumpAttributeTable</NAME>
+<RETURNS>void  </RETURNS>
+xmlAttributeTablePtr table
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlHandleEntity</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt, xmlEntityPtr entity
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNamespaceParseNCName</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNamespaceParseQName</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt, CHAR **prefix
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlNamespaceParseNSDef</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseQuotedString</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseNamespace</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseName</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseNmtoken</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEntityValue</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseAttValue</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseSystemLiteral</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParsePubidLiteral</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseCharData</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt, int cdata
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseExternalID</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt, CHAR **publicID, int strict
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseComment</NAME>
+<RETURNS>xmlNodePtr</RETURNS>
+xmlParserCtxtPtr ctxt, int create
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParsePITarget</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParsePI</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseNotationDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEntityDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseDefaultDecl</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt, CHAR **value
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseNotationType</NAME>
+<RETURNS>xmlEnumerationPtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEnumerationType</NAME>
+<RETURNS>xmlEnumerationPtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEnumeratedType</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt, xmlEnumerationPtr *tree
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseAttributeType</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt, xmlEnumerationPtr *tree
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseAttributeListDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseElementMixedContentDecl</NAME>
+<RETURNS>xmlElementContentPtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseElementChildrenContentDecl</NAME>
+<RETURNS>xmlElementContentPtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseElementContentDecl</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt, CHAR *name,xmlElementContentPtr *result
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseElementDecl</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseMarkupDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseCharRef</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEntityRef</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseReference</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParsePEReference</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseDocTypeDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseAttribute</NAME>
+<RETURNS>xmlAttrPtr</RETURNS>
+xmlParserCtxtPtr ctxt, xmlNodePtr node
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseStartTag</NAME>
+<RETURNS>xmlNodePtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEndTag</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt, xmlNsPtr *nsPtr, CHAR **tagPtr
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseCDSect</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseContent</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseElement</NAME>
+<RETURNS>xmlNodePtr</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseVersionNum</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseVersionInfo</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEncName</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseEncodingDecl</NAME>
+<RETURNS>CHAR  *</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseSDDecl</NAME>
+<RETURNS>int</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseXMLDecl</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>
+<FUNCTION>
+<NAME>xmlParseMisc</NAME>
+<RETURNS>void</RETURNS>
+xmlParserCtxtPtr ctxt
+</FUNCTION>

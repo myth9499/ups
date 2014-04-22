@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Change from 1.8.2 to 1.8.7 causes major failure</title>
+<meta name="Author" content="Byron Ellacott (bje@apnic.net)">
+<meta name="Subject" content="[xml] Change from 1.8.2 to 1.8.7 causes major failure">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Change from 1.8.2 to 1.8.7 causes major failure</h1>
+<!-- received="Wed Apr  5 00:24:46 2000" -->
+<!-- isoreceived="20000405042446" -->
+<!-- sent="Wed, 5 Apr 2000 14:24:16 +1000 (EST)" -->
+<!-- isosent="20000405042416" -->
+<!-- name="Byron Ellacott" -->
+<!-- email="bje@apnic.net" -->
+<!-- subject="[xml] Change from 1.8.2 to 1.8.7 causes major failure" -->
+<!-- id="Pine.UW2.4.10.10004051418010.4193-100000@hadrian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Byron Ellacott (<a href="mailto:bje@apnic.net?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure"><em>bje@apnic.net</em></a>)<br>
+<strong>Date:</strong> Wed Apr 05 2000 - 00:24:16 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<li><strong>Previous message:</strong> <a href="0440.html">Daniel Veillard: "Re: [xml] saving parser state"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<li><strong>Reply:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I recently updated my libxml from 1.8.2 to 1.8.7; this immediately broke
+<br>
+the application I am writing.
+<br>
+<p>The application reads a number of XML files, converting them to an
+<br>
+internal tree structure.  I do this by glob()ing over the files and
+<br>
+reading each in turn.
+<br>
+<p>Now, the first problem is the files have some header details.  This means
+<br>
+I can't use xmlParseFile()[0].  So I skip the header, and read the
+<br>
+remainder of the file into a memory buffer, and call xmlParseMemory().
+<br>
+This used to work.  Now, it only works for the first file, and fails for
+<br>
+the second and subsequent files.  It's not an error in the files, since
+<br>
+removing or renaming the first file causes the second to be read and
+<br>
+parsed, and the third and subsequent to fail.
+<br>
+<p>Now, to top it all off, I cannot find any way short of debugging through
+<br>
+xmlParseMemory to find out what is causing the parse to fail.  There are
+<br>
+no error messages printed, which is probably a good thing, but there is no
+<br>
+way (that I could find) to discover what went wrong[1].
+<br>
+<p>Does anyone know why this would happen, if there's a way to find errors
+<br>
+that I've just missed, or what I can do short of installing an older
+<br>
+version?
+<br>
+<p><pre>
+--
+bje
+<p>[0] Why isn't there an xmlParseStream(FILE *input) method?  I'm sure I'm
+not the only one who would find it useful.
+[1] xmlParseMemory(buffer, buffer_size, &amp;error_code) perhaps.
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Change%20from%201.8.2%20to%201.8.7%20causes%20major%20failure">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<li><strong>Previous message:</strong> <a href="0440.html">Daniel Veillard: "Re: [xml] saving parser state"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<li><strong>Reply:</strong> <a href="0442.html">Daniel Veillard: "Re: [xml] Change from 1.8.2 to 1.8.7 causes major failure"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:09 EDT</em>
+</em>
+</small>
+</body>
+</html>

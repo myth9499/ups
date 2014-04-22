@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Linx number available via SAX interface?</title>
+<meta name="Author" content="Shane Adams (adamsch1@yahoo.com)">
+<meta name="Subject" content="Re: [xml] Linx number available via SAX interface?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Linx number available via SAX interface?</h1>
+<!-- received="Fri Jul 28 14:54:10 2000" -->
+<!-- isoreceived="20000728185410" -->
+<!-- sent="Fri, 28 Jul 2000 11:49:30 -0700 (PDT)" -->
+<!-- isosent="20000728184930" -->
+<!-- name="Shane Adams" -->
+<!-- email="adamsch1@yahoo.com" -->
+<!-- subject="Re: [xml] Linx number available via SAX interface?" -->
+<!-- id="20000728184931.23841.qmail@web114.yahoomail.com" -->
+<!-- inreplyto="[xml] Linx number available via SAX interface?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Shane Adams (<a href="mailto:adamsch1@yahoo.com?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?"><em>adamsch1@yahoo.com</em></a>)<br>
+<strong>Date:</strong> Fri Jul 28 2000 - 14:49:30 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0629.html">marcus@levonline.com: "[xml] Patch for bug in encoding.c when creating new encoding handlers in 2.2.1"</a>
+<li><strong>Previous message:</strong> <a href="0627.html">Dave Doolin: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0622.html">Shane Adams: "[xml] Linx number available via SAX interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+/* Setup parser and callbacks */
+<br>
+strcpy(filename, &quot;testfile.xml&quot;);
+<br>
+ctxt = xmlCreateFileParserCtxt(filename);
+<br>
+ctxt-&gt;sax = debugSAXHandler; /* struct of func
+<br>
+callbacks - required to do something useful in SAX */
+<br>
+ctxt-&gt;userData = my_data; /* See below */
+<br>
+my_data-&gt;p_ctxt = ctxt; /* This is the important bit
+<br>
+*/
+<br>
+xmlParseDocument(ctxt); /* Parse the file */
+<br>
+<p>where my_data is defined as
+<br>
+<p>typedef struct _mydata {
+<br>
+&nbsp;&nbsp;/* Other pointers to your data here */
+<br>
+&nbsp;&nbsp;void *p_ctxt;  /* Hold a refernce to the parser
+<br>
+context */
+<br>
+} mydata;
+<br>
+<p><p>Now for your error handler:  The error handler is one
+<br>
+of the callbacks that you setup for SAX.  The real
+<br>
+trick is that the first arg (in the callbacks) is a
+<br>
+pointer to 'your' data.  Useful for maintaining state
+<br>
+information.  I just cast it to a pointer to a struct
+<br>
+('my' data is a structure).  One of the struct fields
+<br>
+is a pointer back to the parsing context.  This
+<br>
+context hold state information about the parser, which
+<br>
+contains things like the line number.
+<br>
+<p><p>void
+<br>
+errorDebug(void *ctx, const char *msg, ...)
+<br>
+{
+<br>
+&nbsp;&nbsp;xmlParserCtxtPtr ctxt;
+<br>
+&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;mydata *p = (mydata *)ctx;
+<br>
+<p>&nbsp;&nbsp;ctxt = (xmlParserCtxtPtr) p-&gt;p_ctxt;
+<br>
+&nbsp;&nbsp;input = ctxt-&gt;input;
+<br>
+<p>&nbsp;&nbsp;fprintf(stderr,&quot;Error: %d %s\n&quot;, input-&gt;line,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;filename );
+<br>
+<p>}
+<br>
+<p>--- Dave Doolin &lt;<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">doolin@cs.utk.edu</a>&gt; wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I managed to figure it out after looking through
+</em><br>
+<em>&gt; the
+</em><br>
+<em>&gt; &gt; library more.  I create a FileParserCtxt, then set
+</em><br>
+<em>&gt; my
+</em><br>
+<em>&gt; &gt; SAXHandler and set my 'user data'.  The 'user
+</em><br>
+<em>&gt; data'
+</em><br>
+<em>&gt; &gt; structure contains a pointer back to the
+</em><br>
+<em>&gt; &gt; FileParserCtxt.  When each SAX callback is
+</em><br>
+<em>&gt; invoked, I
+</em><br>
+<em>&gt; &gt; receive my own datastructure that now contains a
+</em><br>
+<em>&gt; &gt; pointer to the original context, and hence has the
+</em><br>
+<em>&gt; &gt; line number, file name etc.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; If anyone is interested, I can provide the code
+</em><br>
+<em>&gt; &gt; example to explain more.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This is for error handling right?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Example code would be great!  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Dave D
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail 
+</em><br>
+<a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">majordomo@xmlsoft.org</a>
+<br>
+<p><p>__________________________________________________
+<br>
+Do You Yahoo!?
+<br>
+Kick off your party with Yahoo! Invites.
+<br>
+<a href="http://invites.yahoo.com/">http://invites.yahoo.com/</a>
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0629.html">marcus@levonline.com: "[xml] Patch for bug in encoding.c when creating new encoding handlers in 2.2.1"</a>
+<li><strong>Previous message:</strong> <a href="0627.html">Dave Doolin: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0622.html">Shane Adams: "[xml] Linx number available via SAX interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

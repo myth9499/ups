@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Core dumped (Floating exception) with libxml2-2-</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0</h1>
+<!-- received="Fri Feb  2 12:09:52 2001" -->
+<!-- isoreceived="20010202170952" -->
+<!-- sent="Fri, 2 Feb 2001 18:09:47 +0100" -->
+<!-- isosent="20010202170947" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0" -->
+<!-- id="20010202180947.N6648@imag.fr" -->
+<!-- inreplyto="3A7AE5C3.D316003A@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 12:09:47 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<li><strong>Previous message:</strong> <a href="1412.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>In reply to:</strong> <a href="1411.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<li><strong>Reply:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 02, 2001 at 04:52:19PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Caran julien wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; /bin/sh: 17188 Floating exception - core dumped
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Adding a stacktrace could be helpful. The way you do this is to
+</em><br>
+<p>&nbsp;&nbsp;I bet it's actually XPath initialization, there is some floating point
+<br>
+divide by zero tricks used to get NaN, +Infinity and -Infinity and
+<br>
+I heard consistent reports that this hang on Digital Unix ... Now
+<br>
+a patch to get those on DU would be welcome. I have access to an
+<br>
+alpha, but under Linux and behaviour is different.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<li><strong>Previous message:</strong> <a href="1412.html">Daniel Veillard: "Re: [xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>In reply to:</strong> <a href="1411.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<li><strong>Reply:</strong> <a href="1414.html">Bjorn Reese: "Re: [xml] Core dumped (Floating exception) with libxml2-2-[11|12] on  Digital Unix V4.0"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 12:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

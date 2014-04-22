@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?</h1>
+<!-- received="Fri Nov  3 08:56:46 2000" -->
+<!-- isoreceived="20001103135646" -->
+<!-- sent="Fri, 3 Nov 2000 13:29:01 +0100" -->
+<!-- isosent="20001103122901" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?" -->
+<!-- id="20001103132901.A4932@debian" -->
+<!-- inreplyto="726667547.20001103115045@triplex.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Fri Nov 03 2000 - 07:29:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>In reply to:</strong> <a href="1132.html">Stefan Bambach: "Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 03/11/2000 11:50:45 Stefan Bambach wrote:
+<br>
+<em>&gt; DV&gt;   you can still do
+</em><br>
+<em>&gt; DV&gt;     ctxt =  xmlXPathNewContext(doc);
+</em><br>
+<em>&gt; DV&gt;     ctxt-&gt;node = the_node_you_want_to-start_from;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I tried it. But it doesn't work. You know that I'm writing an
+</em><br>
+<em>&gt; object oriented Python XML Wrapper. So what I really want to do is
+</em><br>
+<em>&gt; an relative xpath expression this way:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; tag.xpath('p')    # REALIZE: ONLY 'p', NO '/p' OR SOMETHING LIKE THIS
+</em><br>
+<p>A relative XPath expression does not have any sense ouside a context.
+<br>
+This context consists of (as describe in the Rec) :
+<br>
+&nbsp;- a context node
+<br>
+&nbsp;- a context node list (which contains the context node)
+<br>
+&nbsp;- 2 integers : the size of the list and the position of the context
+<br>
+node in this list
+<br>
+&nbsp;- a set of functions (I guess the core XPath library is sufficient for
+<br>
+you, so forget this &quot;field&quot;)
+<br>
+&nbsp;- a set of namespaces (not yet done in libxml)
+<br>
+<p><em>&gt; Python Source Code:
+</em><br>
+<em>&gt; 1.) doc = open('test.xml')               # loads xml document
+</em><br>
+<em>&gt; 2.) chapters = doc.xpath('//chapter')    # gets list of 5 chapter
+</em><br>
+<em>&gt; nodes
+</em><br>
+<p>The context node is the root node (/), the context node list contains
+<br>
+only /, the 'value' field contains the result of the expression
+<br>
+evaluation.
+<br>
+<p><em>&gt; 3.) for chapter in chapters:             # iterate over chapters
+</em><br>
+<em>&gt; list
+</em><br>
+<p>Set the precedent value as the context node list and iterate on it (set
+<br>
+each node as the context node and grow the proximityPosition).
+<br>
+<p><em>&gt; 4.)     p_tags = chapter.xpath('p')      # gets p nodes for each
+</em><br>
+<em>&gt; chapter
+</em><br>
+<p>...and evaluate the expression with that context.
+<br>
+<p>What you want to do is much like what's done when evaluating a
+<br>
+predicate. Take a look at xmlXPathEvalPredicate() in xpath.c. The only difference
+<br>
+is that you don't want to know if the expression evaluates to true or
+<br>
+false, you want the result of the expression evaluation : you just need to
+<br>
+skip the call to xmlXPathEvaluatePredicateResult().
+<br>
+<p><p><em>&gt; Workaround:
+</em><br>
+<em>&gt; ===========
+</em><br>
+<em>&gt; ctxt =  xmlXPathNewContext((xmlDocPtr) node);
+</em><br>
+[...]
+<br>
+<em>&gt; - The syntax of the relative xpath expression is NOT compatible
+</em><br>
+<em>&gt; with XSLT. So it works for me, but I what to release my pyxml
+</em><br>
+<em>&gt; module and it should be as compatible as possible with XSLT path
+</em><br>
+<em>&gt; expressions before I release it :-)
+</em><br>
+<p>What does it mean ? There isn't &quot;XSLT path expression&quot;. The difference
+<br>
+between the match, test and select XSLT attributes is how you use the
+<br>
+result :
+<br>
+&nbsp;- match : is the current node contained in the result node-set ?
+<br>
+&nbsp;- test : does the result evaluates to true or false ?
+<br>
+&nbsp;- select : iterate over the result node-set.
+<br>
+When processing XSLT, you need to evaluate the match attribute of each
+<br>
+template relative to the current context and look for the current node in
+<br>
+the result node-set. If you find it, you've found the appropriate
+<br>
+template, otherwise you need to search agin with other templates.
+<br>
+<p>If you're interested in developping an XSLT processor based on libxml,
+<br>
+subscribe to the <a href="mailto:xslt@ml.free.fr?subject=Re:%20Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">xslt@ml.free.fr</a> list by sending a mail to
+<br>
+<a href="mailto:xslt-request@ml.free.fr?subject=Re:%20Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">xslt-request@ml.free.fr</a> with subscribe in the subject or body.
+<br>
+<p><em>&gt; Your xmlXPathRoot(ctxt) does the job. It copies the doc Ptr to
+</em><br>
+<em>&gt; node Ptr. So if I specify the node by myself in your way (see on
+</em><br>
+<em>&gt; top of this mail) it should work for this, but it seems that a bug
+</em><br>
+<em>&gt; in libxml forbit that kind of needed xpath expression ('p') in
+</em><br>
+<em>&gt; parsing expression.
+</em><br>
+<p>The bug is in your reasoning : you want to evaluate a relative path
+<br>
+expression... relative to nothing.
+<br>
+<p>HTH
+<br>
+<p>Tom.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>In reply to:</strong> <a href="1132.html">Stefan Bambach: "Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 03 2000 - 09:44:24 EST</em>
+</em>
+</small>
+</body>
+</html>

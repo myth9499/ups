@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] MinGW fixes for 2.2.7</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] MinGW fixes for 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] MinGW fixes for 2.2.7</h1>
+<!-- received="Tue Nov  7 08:28:51 2000" -->
+<!-- isoreceived="20001107132851" -->
+<!-- sent="Tue, 7 Nov 2000 14:28:48 +0100" -->
+<!-- isosent="20001107132848" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] MinGW fixes for 2.2.7" -->
+<!-- id="20001107142848.F14384@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0011052232180.23948-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20MinGW%20fixes%20for%202.2.7"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Nov 07 2000 - 08:28:48 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1142.html">Daniel Veillard: "Re: [xml] xmlValidCtxt.error called, but not invalid?"</a>
+<li><strong>In reply to:</strong> <a href="1136.html">Wayne Davison: "[xml] MinGW fixes for 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 05, 2000 at 11:18:01PM -0800, Wayne Davison wrote:
+<br>
+<em>&gt; The addition of the external error-reporting variables in 2.2.7 broke the
+</em><br>
+<em>&gt; linking of testHTML and testSAX against the *.dll version of libxml (when
+</em><br>
+<em>&gt; building using the MinGW compiler for Win32).  To fix it, I needed to add
+</em><br>
+<em>&gt; &quot;__declspec(dllimport)&quot; to the external variables, but only when they are
+</em><br>
+<em>&gt; included from code that is outside the DLL.
+</em><br>
+<p>&nbsp;&nbsp;&lt;grin/&gt; Is this really MinGW specific or do other compilers have this
+<br>
+kind of annoying behaviour. I remember the feedback from someone who
+<br>
+ported to the PSion who was complaining about global variable use. At least
+<br>
+at the API level, that's right that a purely procedural interface sounds
+<br>
+better. 
+<br>
+<p><em>&gt; The solution is to define LIBXML_DLL_IMPORT as nothing when creating code
+</em><br>
+<em>&gt; that goes in the DLL, and as the aforementioned incantation for library-
+</em><br>
+<em>&gt; using code.  I chose to put the empty define into &quot;win32config.h&quot; (which
+</em><br>
+<em>&gt; was not being included by hash.c, so I fixed that), and to put the
+</em><br>
+<p>&nbsp;ohh, right !
+<br>
+&nbsp;
+<br>
+<em>&gt; conditional define of the magic version into xmlversion.h[.in] (which was
+</em><br>
+<em>&gt; included by all the macro-using .h headers through their direct/indirect
+</em><br>
+<em>&gt; inclusion of tree.h).
+</em><br>
+<p>&nbsp;&nbsp;Hum, this seems a bit complex, but unless redesigning the API to avoid
+<br>
+any global variable sharing between the library and the app there is no
+<br>
+obvious solution it seems. Probably a good incentive to rework the API
+<br>
+to at least allow to use function to get the variable content.
+<br>
+<p><em>&gt; I think I found and changed all external variable references in the .h
+</em><br>
+<em>&gt; files.  (I also eliminated the word &quot;extern&quot; from a few function
+</em><br>
+<em>&gt; prototypes in xmlmemory.h, just for consistency's sake.)
+</em><br>
+<p>&nbsp;&nbsp;okay, thanks,
+<br>
+<p><em>&gt; Because the files testHTML.c and testSAX.c include both the win32config.h
+</em><br>
+<em>&gt; include and expect to link with the DLL, I had to manually undefine the
+</em><br>
+<em>&gt; LIBXML_DLL_IMPORT macro.  Normal code that uses the DLL won't have
+</em><br>
+<em>&gt; included win32config.h, so this shouldn't be a problem.
+</em><br>
+<p>&nbsp;&nbsp;Right, sounds good.
+<br>
+<p><em>&gt; The patch is appended.
+</em><br>
+<p>&nbsp;&nbsp;Thanks, I applied it, but I wonder if there isn't the need for a deeper
+<br>
+change of the API. Well this solution is good enough for now.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20MinGW%20fixes%20for%202.2.7">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20MinGW%20fixes%20for%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20MinGW%20fixes%20for%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1142.html">Daniel Veillard: "Re: [xml] xmlValidCtxt.error called, but not invalid?"</a>
+<li><strong>In reply to:</strong> <a href="1136.html">Wayne Davison: "[xml] MinGW fixes for 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Nov 07 2000 - 09:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

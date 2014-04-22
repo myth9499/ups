@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Generating XML including &lt;!DOCTYPE&gt; extern</title>
+<meta name="Author" content="Kenneth Pronovici (pronovic@skyjammer.com)">
+<meta name="Subject" content="RE: [xml] Generating XML including &lt;!DOCTYPE&gt; external reference">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Generating XML including &lt;!DOCTYPE&gt; external reference</h1>
+<!-- received="Tue Sep 26 14:50:44 2000" -->
+<!-- isoreceived="20000926185044" -->
+<!-- sent="Tue, 26 Sep 2000 13:50:38 -0500 (CDT)" -->
+<!-- isosent="20000926185038" -->
+<!-- name="Kenneth Pronovici" -->
+<!-- email="pronovic@skyjammer.com" -->
+<!-- subject="RE: [xml] Generating XML including &lt;!DOCTYPE&gt; external reference" -->
+<!-- id="Pine.LNX.3.96.1000926134712.791Q-100000@skyjammer.com" -->
+<!-- inreplyto="[xml] Generating XML including &lt;!DOCTYPE&gt; external reference" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kenneth Pronovici (<a href="mailto:pronovic@skyjammer.com?subject=RE:%20[xml]%20Generating%20XML%20including%20&lt;!DOCTYPE&gt;%20external%20reference"><em>pronovic@skyjammer.com</em></a>)<br>
+<strong>Date:</strong> Tue Sep 26 2000 - 14:50:38 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0821.html">Bjorn Reese: "Re: [xml] XPath normalize-string"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0653.html">Kenneth Pronovici: "[xml] Generating XML including &lt;!DOCTYPE&gt; external reference"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I've received a number of private requests for information on how
+<br>
+I finally resolved this DOCTYPE issue (recall, I wanted to include
+<br>
+a reference to an external DOCTYPE in my XML document).  Since people
+<br>
+seem to need this information and don't seem to be able to find it for
+<br>
+whatever reason, I think it's worth having my standard reply in the 
+<br>
+mailing list archives:
+<br>
+<p><em>&gt; Here's an example of how I got it to work:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   /* Here's the document */
+</em><br>
+<em>&gt;   doc = xmlNewDoc((xmlChar *)&quot;1.0&quot;);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   /* Set dtd */
+</em><br>
+<em>&gt;   xmlCreateIntSubset(doc, (xmlChar *)&quot;fds_cooked_oms&quot;, NULL,
+</em><br>
+<em>&gt;                      (xmlChar *)&quot;fds_cooked_oms.dtd&quot;);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   /* Here's the fds_cooked_oms node */
+</em><br>
+<em>&gt;   doc-&gt;children-&gt;next = xmlNewDocNode(doc, NULL, (xmlChar*)&quot;fds_cooked_oms&quot;,
+</em><br>
+<em>&gt;                                       NULL);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I believe that means that the &lt;!DOCTYPE&gt; tag ends up being the first
+</em><br>
+<em>&gt; child of the document.
+</em><br>
+<p>KEN
+<br>
+<p><pre>
+--
+Kenneth J. Pronovici &lt;<a href="mailto:pronovic@ieee.org?subject=RE:%20[xml]%20Generating%20XML%20including%20&lt;!DOCTYPE&gt;%20external%20reference">pronovic@ieee.org</a>&gt;
+Alliance of Computer Professionals (<a href="http://www.acpros.com/">http://www.acpros.com/</a>)
+Personal Homepage: <a href="http://www.skyjammer.com/~pronovic/">http://www.skyjammer.com/~pronovic/</a>
+&quot;Hell hath no fury like the weather when I'm camping...&quot;
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Generating%20XML%20including%20&lt;!DOCTYPE&gt;%20external%20reference">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Generating%20XML%20including%20&lt;!DOCTYPE&gt;%20external%20reference">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0821.html">Bjorn Reese: "Re: [xml] XPath normalize-string"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0653.html">Kenneth Pronovici: "[xml] Generating XML including &lt;!DOCTYPE&gt; external reference"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Sep 26 2000 - 15:43:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

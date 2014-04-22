@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</h1>
+<!-- received="Mon Nov 13 09:17:14 2000" -->
+<!-- isoreceived="20001113141714" -->
+<!-- sent="Mon, 13 Nov 2000 14:37:13 +0100" -->
+<!-- isosent="20001113133713" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7" -->
+<!-- id="20001113143713.A2479@debian" -->
+<!-- inreplyto="Pine.GSO.4.21.0011121748440.23561-100000@inky" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 08:37:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1176.html">Daniel Veillard: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1173.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 13/11/2000 03:17:02 David Moore wrote:
+<br>
+<em>&gt; The other day I sent a message regarding a bug in libxml's 2.2.7
+</em><br>
+<em>&gt; xpath support in regards to evaluating relative paths.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think I've found the source of the bug.  In 2.2.6, the following
+</em><br>
+<em>&gt; code appeared in xmlXPathEval() just before xmlXPathEvalExpr()
+</em><br>
+<em>&gt; gets called:
+</em><br>
+<em>&gt;     if (ctx-&gt;node != NULL) {
+</em><br>
+<em>&gt;        init = xmlXPathNewNodeSet(ctx-&gt;node);
+</em><br>
+<em>&gt;        valuePush(ctxt, init);
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In the case of relative paths, the user specifies a value for
+</em><br>
+<em>&gt; ctx-&gt;node and thus it is not null.  Without doing the above (as it
+</em><br>
+<em>&gt; is in 2.2.7 and the current CVS), the CHECK_TYPE(XPATH_NODESET)
+</em><br>
+<em>&gt; assertion in xmlXPathNodeCollectAndTest() will fail later on.
+</em><br>
+<p>Wouldn't it be better to add a function for setting a node as the
+<br>
+context node, as it is done for the root node in xmlXPathRoot ?
+<br>
+<p>Something like this :
+<br>
+/**
+<br>
+&nbsp;* xmlXPathSetContextNode:
+<br>
+&nbsp;* @ctxt:  the XPath Parser context
+<br>
+&nbsp;* @node:  the new context node
+<br>
+&nbsp;*
+<br>
+&nbsp;* Initialize the context to @node
+<br>
+&nbsp;*/
+<br>
+void
+<br>
+xmlXPathSetContextNode(xmlXPathParserContextPtr ctxt,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr node) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;context-&gt;node = node;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;valuePush(ctxt, xmlXPathNewNodeSet(node));
+<br>
+}
+<br>
+<p>Tom.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1176.html">Daniel Veillard: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1173.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 09:43:42 EST</em>
+</em>
+</small>
+</body>
+</html>

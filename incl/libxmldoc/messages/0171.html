@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml bug and fix for single quoted item</title>
+<meta name="Author" content="Tim Josling (tej@melbpc.org.au)">
+<meta name="Subject" content="Re: [xml] libxml bug and fix for single quoted item">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml bug and fix for single quoted item</h1>
+<!-- received="Sat Oct  9 17:05:25 1999" -->
+<!-- isoreceived="19991009210525" -->
+<!-- sent="Sun, 10 Oct 1999 07:00:30 +1000" -->
+<!-- isosent="19991009210030" -->
+<!-- name="Tim Josling" -->
+<!-- email="tej@melbpc.org.au" -->
+<!-- subject="Re: [xml] libxml bug and fix for single quoted item" -->
+<!-- id="37FFACEE.846AF482@melbpc.org.au" -->
+<!-- inreplyto="19991009045606.D8112@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tim Josling (<a href="mailto:tej@melbpc.org.au?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item"><em>tej@melbpc.org.au</em></a>)<br>
+<strong>Date:</strong> Sat Oct 09 1999 - 17:00:30 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Previous message:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>In reply to:</strong> <a href="0168.html">Daniel Veillard: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Reply:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks - however is_pubidchar allows for '\'' so my test failed
+<br>
+again when I put this patch in. 
+<br>
+<p>This worked though. Maybe the definition of is_pubidchar needs to
+<br>
+be changed, not sure.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (IS_PUBIDCHAR(CUR) &amp;&amp; (CUR!='\'') NEXT;
+<br>
+<p>I appreciate the quick response!
+<br>
+<p>Regards,
+<br>
+Tim Josling
+<br>
+<p><p>Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Sat, Oct 09, 1999 at 09:16:34AM +1000, Tim Josling wrote:
+</em><br>
+<em>&gt; &gt; The string after PUBLIC needs to be double quoted at present -
+</em><br>
+<em>&gt; &gt; single quoted gives a syntax error. Here is the diff for a fix
+</em><br>
+<em>&gt; &gt; (attached).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Yep, this part of the function was clealy buggy, thanks for the
+</em><br>
+<em>&gt; patch. Note, the actual correct code is:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         while (IS_PUBIDCHAR(CUR)) NEXT;
+</em><br>
+<em>&gt;         if (CUR != '\'') {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Fixed, and commited. Will be in next release.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; Can anyone point me to the w3c licence details - accordig to the
+</em><br>
+<em>&gt; &gt; doc you have a choice of GPL/LGPL or w3c licence for libxml?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    X11 like, and compatible with GPL/LGPL . The library is also
+</em><br>
+<em>&gt; licenced as LGPL.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   <a href="http://www.w3.org/Consortium/Legal/copyright-software.html">http://www.w3.org/Consortium/Legal/copyright-software.html</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Linked from W3C OpenSource Page,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   <a href="http://www.w3.org/Status.html">http://www.w3.org/Status.html</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+</em><br>
+<em>&gt; <a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">xml@rufus.w3.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">majordomo@rufus.w3.org</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml%20bug%20and%20fix%20for%20single%20quoted%20item">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Previous message:</strong> <a href="0170.html">Kristian Hogsberg Kristensen: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>In reply to:</strong> <a href="0168.html">Daniel Veillard: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<li><strong>Reply:</strong> <a href="0172.html">Tim Josling: "Re: [xml] libxml bug and fix for single quoted item"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

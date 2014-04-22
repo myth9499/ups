@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="James McCann (james@votehere.net)">
+<meta name="Subject" content="RE: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] encoding, SAX callbacks</h1>
+<!-- received="Mon Feb 26 13:17:02 2001" -->
+<!-- isoreceived="20010226181702" -->
+<!-- sent="Mon, 26 Feb 2001 10:16:18 -0800" -->
+<!-- isosent="20010226181618" -->
+<!-- name="James McCann" -->
+<!-- email="james@votehere.net" -->
+<!-- subject="RE: [xml] encoding, SAX callbacks" -->
+<!-- id="0102AE2D3200D4118AE20050DACDB02E36341E@congress.vhcorp.com" -->
+<!-- inreplyto="[xml] encoding, SAX callbacks" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> James McCann (<a href="mailto:james@votehere.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks"><em>james@votehere.net</em></a>)<br>
+<strong>Date:</strong> Mon Feb 26 2001 - 13:16:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1502.html">Daniel Veillard: "Re: [xml] segfault at xmlParseFile()"</a>
+<li><strong>Previous message:</strong> <a href="1500.html">Gary Pennington: "[xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Reply:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;
+</em><br>
+<em>&gt;As libxml uses UTF-8 internally, it seems to me that the only proper
+</em><br>
+<em>&gt;solution to your suggestion would be to insert a wrapper layer for the
+</em><br>
+<em>&gt;SAX functions. The purpose of this layer would be to convert the data
+</em><br>
+<em>&gt;into to the application-requested encoding and then pass the data on
+</em><br>
+<em>&gt;to the application through the &quot;real&quot; SAX interface.
+</em><br>
+<p>This is exactly what I intended to suggest.  Permit the user to control
+<br>
+the encoding used in callbacks without putting the burden on the user to
+<br>
+convert from an undesired encoding to the desired encoding.
+<br>
+<p><em>&gt;I would like to support Craig's idea of putting this wrapper in your
+</em><br>
+<em>&gt;application, since it is the one that is dependent on a specific
+</em><br>
+<em>&gt;encoding. You can use the functions from libxml to do this conversion
+</em><br>
+<em>&gt;for you (this is fairly easy; I have done something similar for UTF-8
+</em><br>
+<em>&gt;to HTML).
+</em><br>
+<p>Yes it is easy to copy and paste, but that is error prone and bad design.  
+<br>
+This is what Larry Wall calls &quot;false laziness&quot;.  If a large fraction of 
+<br>
+people who use SAX end up copying and pasting the same chunk of code then 
+<br>
+libxml has missed a chance to increase software reliability.  You have 
+<br>
+copied and pasted chunks of the library source as have I.  This is not a 
+<br>
+good solution.  libxml is quite good at doing various encodings, using 
+<br>
+iconv, potentially ones not in existence yet.  Why not make this power
+<br>
+available to the users of the library in a fashion convenient for the apps?
+<br>
+<p>Some of the arguments I have read in this thread against seem to assume 
+<br>
+that every project which uses XML will encounter documents in many 
+<br>
+encodings and that it is better to simply use UTF8 so that the app doesn't
+<br>
+encounter &quot;a myriad&quot; of undesired encodings.  In the project I am working 
+<br>
+on, we are using XML to send data over the network from one app to another.
+<br>
+<p>So we control the encoding of every document.  If our app(s) were processing
+<br>
+documents in
+<br>
+numerous encodings, then getting all of the characters in UTF8 would be 
+<br>
+better than a &quot;myriad&quot; of encodings.  However since we control both ends
+<br>
+of our transactions, and we use only a single encoding, UTF8 becomes a 
+<br>
+burden not a convenience.  It turns out that oddly enough for systems like
+<br>
+ours a naive XML parser is preferable to libxml because we do not have to
+<br>
+deal w/ an additional encoding.
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1502.html">Daniel Veillard: "Re: [xml] segfault at xmlParseFile()"</a>
+<li><strong>Previous message:</strong> <a href="1500.html">Gary Pennington: "[xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Reply:</strong> <a href="1504.html">Bjorn Reese: "Re: [xml] encoding, SAX callbacks"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 26 2001 - 14:43:49 EST</em>
+</em>
+</small>
+</body>
+</html>

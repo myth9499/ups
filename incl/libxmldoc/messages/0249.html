@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: Re: [xml] libxml linking using rpms</title>
+<meta name="Author" content="Steve Webster (swebster@rayva.org)">
+<meta name="Subject" content="Re: Re: [xml] libxml linking using rpms">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: Re: [xml] libxml linking using rpms</h1>
+<!-- received="Sat Dec 11 11:03:38 1999" -->
+<!-- isoreceived="19991211160338" -->
+<!-- sent="Sat, 11 Dec 1999 10:57:17 -0500" -->
+<!-- isosent="19991211155717" -->
+<!-- name="Steve Webster" -->
+<!-- email="swebster@rayva.org" -->
+<!-- subject="Re: Re: [xml] libxml linking using rpms" -->
+<!-- id="3852745D.918EBE09@rayva.org" -->
+<!-- inreplyto="Re: [xml] libxml linking using rpms" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Steve Webster (<a href="mailto:swebster@rayva.org?subject=Re:%20Re:%20[xml]%20libxml%20linking%20using%20rpms"><em>swebster@rayva.org</em></a>)<br>
+<strong>Date:</strong> Sat Dec 11 1999 - 10:57:17 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0250.html">Daniel Veillard: "[xml] libxml-1.8.0 released"</a>
+<li><strong>Previous message:</strong> <a href="0248.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+<p>Thanks for your rapid response. The rpms I'm using came from the url you
+<br>
+mention, <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a>. Here's my output, as you
+<br>
+requested, which looks identical to your sample. Consquently, my issue
+<br>
+looks be related to my environment, beyond libxml.If you think
+<br>
+differently, please let me know.
+<br>
+<p>Thanks once again,
+<br>
+Steve
+<br>
+<p>[root@crusher packages]# rpm -qf /usr/lib/libxml.so.1.7.4
+<br>
+libxml-1.7.4-SNAP
+<br>
+[root@crusher packages]# nm /usr/lib/libxml.so.1.7.4 | grep htmlParseDoc
+<br>
+0002ccc0 T htmlParseDoc
+<br>
+0002b540 T htmlParseDocTypeDecl
+<br>
+0002c600 T htmlParseDocument
+<br>
+[root@crusher packages]# rpm -qf /usr/lib/libxml.a
+<br>
+libxml-devel-1.7.4-SNAP
+<br>
+[root@crusher packages]#  nm /usr/lib/libxml.a | grep htmlParseDoc
+<br>
+00003d80 T htmlParseDoc
+<br>
+00002780 T htmlParseDocTypeDecl
+<br>
+00003750 T htmlParseDocument
+<br>
+[root@crusher packages]# ls -l /usr/lib/libxml.so.1
+<br>
+lrwxrwxrwx   1 root     root           15 Dec  7 07:51
+<br>
+/usr/lib/libxml.so.1 -&gt; libxml.so.1.7.4
+<br>
+<p><em>&gt; On Sat, Dec 11, 1999 at 06:50:46AM - 0500 Daniel Veillard wrote:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; On Fri, Dec 10, 1999 at 01:56:25PM -0500, Steve Webster wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Greetings,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I'm having troubles linking with the library that's provided with
+</em><br>
+<em>&gt; &gt; libxml[-devel]-1.7.4-SNAP.i386.rpm. After using the htmlParseDoc method,
+</em><br>
+<em>&gt; &gt; I get an &quot;undefined reference to htmlParseDoc(unsigned char *, char
+</em><br>
+<em>&gt; &gt; const *)&quot; linker error upon compiling. I found this behavior strange,
+</em><br>
+<em>&gt; &gt; since I've been running successfully with the xml portion of the api.
+</em><br>
+<em>&gt; &gt; Was this binary built so as not to expose the html features? Where might
+</em><br>
+<em>&gt; &gt; I find documentation to enable html if a binary rebuild is required?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Hum, strange:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Can you double-check the following ?
+</em><br>
+<em>&gt; [root@orchis /root]# rpm -qf /usr/lib/libxml.so.1.7.4
+</em><br>
+<em>&gt; libxml-1.7.4-SNAP
+</em><br>
+<em>&gt; [root@orchis /root]# nm /usr/lib/libxml.so.1.7.4 | grep htmlParseDoc
+</em><br>
+<em>&gt; 0002ccc0 T htmlParseDoc
+</em><br>
+<em>&gt; 0002b540 T htmlParseDocTypeDecl
+</em><br>
+<em>&gt; 0002c600 T htmlParseDocument
+</em><br>
+<em>&gt; [root@orchis /root]# rpm -qf /usr/lib/libxml.a
+</em><br>
+<em>&gt; libxml-devel-1.7.4-SNAP
+</em><br>
+<em>&gt; [root@orchis /root]# nm /usr/lib/libxml.a | grep htmlParseDoc
+</em><br>
+<em>&gt; 00003d80 T htmlParseDoc
+</em><br>
+<em>&gt; 00002780 T htmlParseDocTypeDecl
+</em><br>
+<em>&gt; 00003750 T htmlParseDocument
+</em><br>
+<em>&gt; [root@orchis /root]# ls -l /usr/lib/libxml.so.1
+</em><br>
+<em>&gt; lrwxrwxrwx   1 root     root           15 Dec 11 13:42 /usr/lib/libxml.so.1
+</em><br>
+<em>&gt; -&gt; libxml.so.1.7.4
+</em><br>
+<em>&gt; [root@orchis /root]#
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  The RPMs as found at <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a> are definitely
+</em><br>
+<em>&gt; compiled with the HTML (this is not a configure option)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20Re:%20[xml]%20libxml%20linking%20using%20rpms">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20Re:%20[xml]%20libxml%20linking%20using%20rpms">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0250.html">Daniel Veillard: "[xml] libxml-1.8.0 released"</a>
+<li><strong>Previous message:</strong> <a href="0248.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:54 EDT</em>
+</em>
+</small>
+</body>
+</html>

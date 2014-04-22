@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: R: [xml] very large XML docs</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: R: [xml] very large XML docs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: R: [xml] very large XML docs</h1>
+<!-- received="Thu Oct 19 10:00:54 2000" -->
+<!-- isoreceived="20001019140054" -->
+<!-- sent="Thu, 19 Oct 2000 16:00:48 +0200" -->
+<!-- isosent="20001019140048" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: R: [xml] very large XML docs" -->
+<!-- id="20001019160047.J31494@w3.org" -->
+<!-- inreplyto="200010191328.JAA15345@vixen.cs.utk.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Oct 19 2000 - 10:00:48 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1002.html">David Doolin: "Re: R: [xml] very large XML docs"</a>
+<li><strong>In reply to:</strong> <a href="1002.html">David Doolin: "Re: R: [xml] very large XML docs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Oct 19, 2000 at 09:28:42AM -0400, David Doolin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; In message &lt;00b701c039a7$34010e60$<a href="mailto:1000000a@icteam.it?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">1000000a@icteam.it</a>&gt;, &quot;Andrea LUCIANO&quot; writes:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;I don't know and can't imagine your requirements, but just one question: is
+</em><br>
+<em>&gt; &gt;it really necessary in your project to store a so long data stream in a tag?
+</em><br>
+<em>&gt; &gt;Sometime it's better to use a property that specify a media reference that
+</em><br>
+<em>&gt; &gt;provides data stream (i.e. a link to a file on your file system).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; HD5 is supposed to be using xml description now.  They have 
+</em><br>
+<em>&gt; probably already crossed this bridge.  (HD5 is at NCSA, for 
+</em><br>
+<em>&gt; ultra large data sets).
+</em><br>
+<p>&nbsp;&nbsp;yeah, libxml DOM tree is not adequate as is for very large files.
+<br>
+And the SAX API is a bit limited too  ...
+<br>
+I have a bit less time now to hack on libxml, i don't know when I will be
+<br>
+able to try to code stuff. Here are at least some suggestions wich need
+<br>
+to be chewed upon for a while before adding more code anyway:
+<br>
+<p>&nbsp;&nbsp;&nbsp;- in the case of validating on top of SAX:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defining a SAX plugin mechanism (i.e. a way ro register multiple
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAX callbacks) seems architecturally the best way to extend SAX
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Then depending on the use the DOM tree building or validation or
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;whatever specific processing. Might be a good solution to some of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the modularity problems.
+<br>
+&nbsp;&nbsp;&nbsp;- for saving very large data sets:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;James Hendridge suggested SAX like functions to save a document
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ie. call a function to open a new element with given attributes,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write character data, close last element, etc
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sounds like a great idea !
+<br>
+<p>&nbsp;&nbsp;In the meantime the best solution to David Sacerdoti's problem
+<br>
+is probably to use lower level functions:
+<br>
+void xmlNodeDumpOutput(...)
+<br>
+in particular.
+<br>
+Sounds a bit like the previous problem exposed by Mike Cunningham
+<br>
+<a href="http://xmlsoft.org/messages/0759.html">http://xmlsoft.org/messages/0759.html</a>
+<br>
+<a href="http://xmlsoft.org/messages/0777.html">http://xmlsoft.org/messages/0777.html</a>
+<br>
+and associated threads
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1002.html">David Doolin: "Re: R: [xml] very large XML docs"</a>
+<li><strong>In reply to:</strong> <a href="1002.html">David Doolin: "Re: R: [xml] very large XML docs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 19 2000 - 10:47:34 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] patch for 'make check'</title>
+<meta name="Author" content="Martin Vidner (martin@artax.karlin.mff.cuni.cz)">
+<meta name="Subject" content="[xml] patch for 'make check'">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] patch for 'make check'</h1>
+<!-- received="Sat Jan  6 12:57:36 2001" -->
+<!-- isoreceived="20010106175736" -->
+<!-- sent="Sat, 6 Jan 2001 18:57:19 +0100 (CET)" -->
+<!-- isosent="20010106175719" -->
+<!-- name="Martin Vidner" -->
+<!-- email="martin@artax.karlin.mff.cuni.cz" -->
+<!-- subject="[xml] patch for 'make check'" -->
+<!-- id="Pine.LNX.3.96.1010106185409.8582D-200000@artax.karlin.mff.cuni.cz" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Martin Vidner (<a href="mailto:martin@artax.karlin.mff.cuni.cz?subject=Re:%20[xml]%20patch%20for%20'make%20check'"><em>martin@artax.karlin.mff.cuni.cz</em></a>)<br>
+<strong>Date:</strong> Sat Jan 06 2001 - 12:57:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>Previous message:</strong> <a href="1330.html">James LewisMoss: "Re: [xml] Bug in xmlElemDump?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>Reply:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>'make check' was broken because of missing path to testHTML in
+<br>
+Makefile.am.
+<br>
+Patch is included, enjoy.
+<br>
+<p>Martin
+<br>
+<p><p>
+--- Makefile.am~	Fri Jan  5 07:39:25 2001
+<br>
++++ Makefile.am	Sat Jan  6 17:13:34 2001
+<br>
+@@ -95,14 +95,14 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -d $$i ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -f $(srcdir)/result/HTML/$$name ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo New test file $$name ; \
+<br>
+-	      testHTML $$i &gt; $(srcdir)/result/HTML/$$name 2&gt;$(srcdir)/result/HTML/$$name.err ; \
+<br>
++	      $(top_builddir)/testHTML $$i &gt; $(srcdir)/result/HTML/$$name 2&gt;$(srcdir)/result/HTML/$$name.err ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo Testing $$name ; \
+<br>
+-	      testHTML $$i &gt; result.$$name 2&gt; error.$$name ; \
+<br>
++	      $(top_builddir)/testHTML $$i &gt; result.$$name 2&gt; error.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grep &quot;MORY ALLO&quot; .memdump  | grep -v &quot;MEMORY ALLOCATED : 0&quot;;\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff $(srcdir)/result/HTML/$$name result.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff -b $(srcdir)/result/HTML/$$name.err error.$$name ; \
+<br>
+-	      testHTML result.$$name &gt; result2.$$name 2&gt;error.$$name ; \
+<br>
++	      $(top_builddir)/testHTML result.$$name &gt; result2.$$name 2&gt;error.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff result.$$name result2.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm result.$$name result2.$$name error.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi ; fi ; done)
+<br>
+@@ -114,16 +114,16 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -d $$i ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -f $(srcdir)/result/HTML/$$name ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo New test file $$name ; \
+<br>
+-	      testHTML $$i &gt; $(srcdir)/result/HTML/$$name 2&gt;$(srcdir)/result/HTML/$$name.err ; \
+<br>
++	      $(top_builddir)/testHTML $$i &gt; $(srcdir)/result/HTML/$$name 2&gt;$(srcdir)/result/HTML/$$name.err ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo Testing $$name ; \
+<br>
+-	      testHTML --push $$i &gt; result.$$name 2&gt; error.$$name ; \
+<br>
++	      $(top_builddir)/testHTML --push $$i &gt; result.$$name 2&gt; error.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grep &quot;MORY ALLO&quot; .memdump  | grep -v &quot;MEMORY ALLOCATED : 0&quot;;\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff $(srcdir)/result/HTML/$$name result.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cut -b 1-15 $(srcdir)/result/HTML/$$name.err &gt; errorcut.$$name; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cut -b 1-15 error.$$name &gt; errorcut2.$$name; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff -b errorcut.$$name errorcut2.$$name ; \
+<br>
+-	      testHTML --push result.$$name &gt; result2.$$name 2&gt;error.$$name ; \
+<br>
++	      $(top_builddir)/testHTML --push result.$$name &gt; result2.$$name 2&gt;error.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff result.$$name result2.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm result.$$name result2.$$name error.$$name errorcut.$$name errorcut2.$$name ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi ; fi ; done)
+<br>
+@@ -135,10 +135,10 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -d $$i ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -f $(srcdir)/result/HTML/$$name.sax ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo New test file $$name ; \
+<br>
+-	      testHTML --sax $$i &gt; $(srcdir)/result/HTML/$$name.sax ; \
+<br>
++	      $(top_builddir)/testHTML --sax $$i &gt; $(srcdir)/result/HTML/$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo Testing $$name ; \
+<br>
+-	      testHTML --sax $$i &gt; result.$$name.sax ; \
+<br>
++	      $(top_builddir)/testHTML --sax $$i &gt; result.$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grep &quot;MORY ALLO&quot; .memdump  | grep -v &quot;MEMORY ALLOCATED : 0&quot;;\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff $(srcdir)/result/HTML/$$name.sax result.$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm result.$$name.sax ; \
+<br>
+@@ -151,10 +151,10 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -d $$i ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ ! -f $(srcdir)/result/HTML/$$name ] ; then \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo New test file $$name ; \
+<br>
+-	      testHTML --sax $$i &gt; $(srcdir)/result/HTML/$$name.sax ; \
+<br>
++	      $(top_builddir)/testHTML --sax $$i &gt; $(srcdir)/result/HTML/$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo Testing $$name ; \
+<br>
+-	      testHTML --push --sax $$i &gt; result.$$name.sax ; \
+<br>
++	      $(top_builddir)/testHTML --push --sax $$i &gt; result.$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grep &quot;MORY ALLO&quot; .memdump  | grep -v &quot;MEMORY ALLOCATED : 0&quot;;\
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diff $(srcdir)/result/HTML/$$name.sax result.$$name.sax ; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm result.$$name.sax ; \
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20patch%20for%20'make%20check'">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20patch%20for%20'make%20check'">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>Previous message:</strong> <a href="1330.html">James LewisMoss: "Re: [xml] Bug in xmlElemDump?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<li><strong>Reply:</strong> <a href="1332.html">Daniel Veillard: "Re: [xml] patch for 'make check'"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Jan 06 2001 - 13:43:45 EST</em>
+</em>
+</small>
+</body>
+</html>

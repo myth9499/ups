@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another encoder truncation bug</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Another encoder truncation bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another encoder truncation bug</h1>
+<!-- received="Tue Aug 22 14:38:28 2000" -->
+<!-- isoreceived="20000822183828" -->
+<!-- sent="Tue, 22 Aug 2000 23:36:04 +0200" -->
+<!-- isosent="20000822213604" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Another encoder truncation bug" -->
+<!-- id="20000822233604.F6387@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0008221158040.28317-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 22 2000 - 17:36:04 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<li><strong>In reply to:</strong> <a href="0662.html">Wayne Davison: "[xml] Another encoder truncation bug"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 22, 2000 at 01:32:08PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; I found another case where the push code can truncate the HTML input.  
+</em><br>
+<em>&gt; If the input file has a high-bit character in it (e.g. 0xA0 = nbsp)
+</em><br>
+<em>&gt; but there is currently no encoding, the input is assumed to be
+</em><br>
+<em>&gt; ISO-8859-1 and the first line is decoded (about 40 chars or so).  
+</em><br>
+<em>&gt; However, after these characters get parsed, the htmlParseChunk() call
+</em><br>
+<em>&gt; returns without processing the rest of the raw buffer.  If the very
+</em><br>
+<em>&gt; next call is a flush, all the remaining (raw) data is lost.  I've
+</em><br>
+<em>&gt; attached a simple html file that will cause &quot;testHTML --sax --push&quot; to
+</em><br>
+<em>&gt; fail.
+</em><br>
+<p>&nbsp;&nbsp;thanks for the report and the test, it helps a lot !
+<br>
+Problem understood, and agreed ...
+<br>
+<p><em>&gt; I whipped up a solution that works for me -- when the user flushes the
+</em><br>
+<em>&gt; buffer, make sure that we've encoded all of &quot;raw&quot; into &quot;buffer&quot; before
+</em><br>
+<em>&gt; the call to htmlParseTryOrFinish().  A better solution might be to
+</em><br>
+<em>&gt; ensure that the characters get processed before returning from the
+</em><br>
+<em>&gt; htmlParseChunk() call so that there isn't such a potential for delayed
+</em><br>
+<em>&gt; handling.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; My quick fix is as follows:
+</em><br>
+<p>&nbsp;&nbsp;I think one first fix is to get xmlSwitchEncoding() to convert the
+<br>
+full parser content in the case of HTML documents. Your patch certainly
+<br>
+applies too. With both and the xmlParserInputBufferPush() in the case
+<br>
+were there is stuff pushed, I think all cases are covered and as soon
+<br>
+as possible (i.e. as soon as the new encoding is detected or as soon
+<br>
+as the data are pushed).
+<br>
+<p><em>&gt; Also, I'm curious why the htmlParserInputRead() function goes to the
+</em><br>
+<em>&gt; trouble of shifting a buffer of pushed data since it can't read any
+</em><br>
+<em>&gt; new data into the buffer.  Adding the following check makes the
+</em><br>
+<em>&gt; function return without doing anything if there is no readcallback
+</em><br>
+<em>&gt; defined:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Index: parser.c
+</em><br>
+<em>&gt; @@ -443,6 +443,7 @@
+</em><br>
+<em>&gt;      if (in-&gt;base == NULL) return(-1);
+</em><br>
+<em>&gt;      if (in-&gt;cur == NULL) return(-1);
+</em><br>
+<em>&gt;      if (in-&gt;buf-&gt;buffer == NULL) return(-1);
+</em><br>
+<em>&gt; +    if (in-&gt;buf-&gt;readcallback == NULL) return(-1);
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;      CHECK_BUFFER(in);
+</em><br>
+<p>&nbsp;&nbsp;Hum, this really changes the semantic of the function, the goal
+<br>
+is not only to read data but also to shrink the buffer use by
+<br>
+discarding scanned characters. Well I applied the patch, tested it
+<br>
+it doesn't seem to choke with the testsuite nor http even in push
+<br>
+mode, so I assume ti doesn't break anything :-)
+<br>
+<p>&nbsp;&nbsp;thanks for the reports, patch enclosed,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-0666/01-waine.patch">waine.patch</a>
+</ul>
+<!-- attachment="01-waine.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0665.html">Marc Sanfacon: "RE: [xml] Bug in uri.c"</a>
+<li><strong>In reply to:</strong> <a href="0662.html">Wayne Davison: "[xml] Another encoder truncation bug"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 22 2000 - 14:43:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

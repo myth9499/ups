@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Comments from a LibXml newbie</title>
+<meta name="Author" content="Leo Davidson (leo@ox.compsoc.net)">
+<meta name="Subject" content="[xml] Comments from a LibXml newbie">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Comments from a LibXml newbie</h1>
+<!-- received="Mon Oct 16 05:51:05 2000" -->
+<!-- isoreceived="20001016095105" -->
+<!-- sent="Mon, 16 Oct 2000 10:51:56 +0100" -->
+<!-- isosent="20001016095156" -->
+<!-- name="Leo Davidson" -->
+<!-- email="leo@ox.compsoc.net" -->
+<!-- subject="[xml] Comments from a LibXml newbie" -->
+<!-- id="000201c03756$bf22add0$978a01d5@n" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Leo Davidson (<a href="mailto:leo@ox.compsoc.net?subject=Re:%20[xml]%20Comments%20from%20a%20LibXml%20newbie"><em>leo@ox.compsoc.net</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 05:51:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0982.html">Daniel Veillard: "Re: [xml] Tree in libxml vs. gdome"</a>
+<li><strong>Previous message:</strong> <a href="0980.html">Leo Davidson: "RE: [xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+A couple of small comments which I hope are helpful. As mentioned in my
+<br>
+previous message, I'm a LibXml newbie so please forgive me if I'm being an
+<br>
+idiot!
+<br>
+<p>Before anything else, let me say that LibXml looks great and I thank you for
+<br>
+your time, effort and kindness in developing it and allowing other people to
+<br>
+use it freely.
+<br>
+<p>What I say below is based on 2.2.4 but, from inspection, is still valid for
+<br>
+2.2.5.
+<br>
+<p>SAX handler overrides:
+<br>
+<p>Although I've decided to go the SAX route now, my initial experiments were
+<br>
+using the DOM route, specifically xmlParseFile. Since I'm writing a GUI
+<br>
+application, errors going to stderr would never reach the user so I wanted
+<br>
+to override the error functions.
+<br>
+<p>I saw that xmlParseFile just calls the similar SAX function with the default
+<br>
+handlers which build a DOM tree, so I created a copy of those handlers,
+<br>
+replaced the error functions with my own and then passed this to
+<br>
+xmlSAXParseFile.
+<br>
+<p>When I called xmlParseFile my program crashed because the default handlers
+<br>
+assume that ctxt-&gt;userData is set to ctxt, but ctxt-&gt;userData gets NULLed if
+<br>
+you provide your own set of SAX handlers.
+<br>
+<p>This may sound stupid, but what if you could provide a xmlSAXHandlerPtr
+<br>
+block which says for each function one of three things:
+<br>
+1) use the default
+<br>
+2) do nothing
+<br>
+3) use my function
+<br>
+<p>This allows people to take advantage of the default DOM building functions
+<br>
+while being able to override or disable those they may need to change, like
+<br>
+the error functions.
+<br>
+<p>...Ah, but what about the user data? Well, it makes things a bit messier,
+<br>
+but if you know whether a function is user-provided or not you can pass the
+<br>
+function either ctxt or ctxt-&gt;userdata when you call it...
+<br>
+<p>Heh, well, I hope this suggestion makes sense. Sorry if I have totally
+<br>
+missed the point or said something stupid! As I say, I'm no longer planning
+<br>
+on using a DOM tree at load time so, personally, I don't need this anymore,
+<br>
+but I figure someone else might.
+<br>
+<p>ParseFile error feedback:
+<br>
+<p>If I call xml(SAX)ParseFile and the file doesn't exist (or can't be read,
+<br>
+and so on), it returns NULL without calling an error handler. If there a way
+<br>
+to get the reason for failure? Writing my own LibXml I/O handler looked like
+<br>
+too much effort for me at the moment and for now I'm going to read the files
+<br>
+to a buffer and use xmlSAXUserParseMemory.
+<br>
+<p>This list:
+<br>
+<p>BTW, some posts seem to be sent to <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Comments%20from%20a%20LibXml%20newbie">xml@rpmfind.net</a> and others to
+<br>
+<a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Comments%20from%20a%20LibXml%20newbie">xml@xmlsoft.org</a> -- does it matter which I use?
+<br>
+<p>Thanks for reading,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leo
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Comments%20from%20a%20LibXml%20newbie">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Comments%20from%20a%20LibXml%20newbie">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0982.html">Daniel Veillard: "Re: [xml] Tree in libxml vs. gdome"</a>
+<li><strong>Previous message:</strong> <a href="0980.html">Leo Davidson: "RE: [xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 09:43:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

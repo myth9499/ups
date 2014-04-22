@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] A Tool for making an XML file more readable</title>
+<meta name="Author" content="Adam Potolsky (APotolsky@Connex.com)">
+<meta name="Subject" content="[xml] A Tool for making an XML file more readable">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] A Tool for making an XML file more readable</h1>
+<!-- received="Fri Dec 15 14:51:02 2000" -->
+<!-- isoreceived="20001215195102" -->
+<!-- sent="Fri, 15 Dec 2000 11:48:27 -0800" -->
+<!-- isosent="20001215194827" -->
+<!-- name="Adam Potolsky" -->
+<!-- email="APotolsky@Connex.com" -->
+<!-- subject="[xml] A Tool for making an XML file more readable" -->
+<!-- id="B14BF8753E65D211ABCA00104B301EF501243160@cairn-gorm.cragtech.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Adam Potolsky (<a href="mailto:APotolsky@Connex.com?subject=Re:%20[xml]%20A%20Tool%20for%20making%20an%20XML%20file%20more%20readable"><em>APotolsky@Connex.com</em></a>)<br>
+<strong>Date:</strong> Fri Dec 15 2000 - 14:48:27 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1289.html">Timothee Besset: "[xml] using large binary chunks / binary XML?"</a>
+<li><strong>Previous message:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+For immediate release under the LGPL from Connex Inc. <a href="http://www.connex.com">http://www.connex.com</a>
+<br>
+<p>&nbsp;&nbsp;&nbsp;Attached is a program I wrote which does a simple XML conversion to a
+<br>
+more human readable format and keep enough information to reverse the
+<br>
+process. New lines found in the XML are converted to &amp;nl; and tabs are
+<br>
+converted to &amp;tab; Please note, by the definition of XML, the output of this
+<br>
+program is _NOT_ the same XML as the file it converted, and heck, it might
+<br>
+not even be legal XML. The same file, however, reversed back through
+<br>
+xml2text will be the same as what went in.
+<br>
+<p>Here is an example:
+<br>
+---------------- Begin Example ----------------
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;root&gt;1&lt;Parent Level=&quot;1&quot;
+<br>
+<em>&gt;&lt;Child&gt;data&lt;/Child&gt;&lt;AnotherChild&gt;&lt;GrandChild&gt;&lt;GreatGrandChild&gt;none&lt;/GreatGr
+</em><br>
+andChild&gt;&lt;/GrandChild&gt;&lt;/AnotherChild&gt;&lt;/Parent&gt;&lt;/root&gt;
+<br>
+---------------- End Example ----------------
+<br>
+converts to: (Yes, there is a leading newline.)
+<br>
+---------------- Begin Example ----------------
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;&amp;nl;
+<br>
+&lt;root&gt;1
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Parent Level=&quot;1&quot; &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Child&gt;data&lt;/Child&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;AnotherChild&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;GrandChild&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;GreatGrandChild&gt;none&lt;/GreatGrandChild&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/GrandChild&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/AnotherChild&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Parent&gt;
+<br>
+&lt;/root&gt;&amp;nl;
+<br>
+---------------- End Example ----------------
+<br>
+&nbsp;&nbsp;&nbsp;The reason for creating this tool is I was working with an XML file which
+<br>
+contained a few levels of depth and number of tags which all ended up on one
+<br>
+line. The file needed to be read and edited for testing, which is very
+<br>
+difficult when there is 6k of text on one line. The tool would convert the
+<br>
+file, I could review and edit, then convert it back and reuse the file.
+<br>
+&nbsp;&nbsp;&nbsp;I hope people find it useful! 
+<br>
+<p>Planned functionality: Add the ability to read directly from stdin. Right
+<br>
+now it reads from a file, and outputs to stdout. Also, I want to remove the
+<br>
+leading new line from the output.
+<br>
+<p>Disclaimer: It's not very robust with DTDs, and that is mainly because the
+<br>
+XML files I deal with do not have DTDs. I tried to add code to the
+<br>
+conversion process that would ignore DTDs as they tend not to be so
+<br>
+inherently difficult to read. (xml2text does not simplify XML, only formats
+<br>
+it... =) I would be happy to continue updating the program if folks want to
+<br>
+contribute changes. I can be emailed at <a href="mailto:apotolsky@connex.com?subject=Re:%20[xml]%20A%20Tool%20for%20making%20an%20XML%20file%20more%20readable">apotolsky@connex.com</a> or
+<br>
+<a href="mailto:speaker@potolsky.com?subject=Re:%20[xml]%20A%20Tool%20for%20making%20an%20XML%20file%20more%20readable">speaker@potolsky.com</a> 
+<br>
+&nbsp;&lt;&lt;xml2text-0.1.tar.gz&gt;&gt; 
+<br>
+<p><hr noshade>
+<ul>
+<li>application/octet-stream attachment: <a href="att-1288/01-xml2text-0.1.tar.gz">xml2text-0.1.tar.gz</a>
+</ul>
+<!-- attachment="01-xml2text-0.1.tar.gz" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20A%20Tool%20for%20making%20an%20XML%20file%20more%20readable">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20A%20Tool%20for%20making%20an%20XML%20file%20more%20readable">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1289.html">Timothee Besset: "[xml] using large binary chunks / binary XML?"</a>
+<li><strong>Previous message:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Dec 15 2000 - 15:43:53 EST</em>
+</em>
+</small>
+</body>
+</html>

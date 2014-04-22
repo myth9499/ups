@@ -1,0 +1,157 @@
+Index: hash.c
+@@ -17,6 +17,12 @@
+  * Author: bjorn.reese@systematic.dk
+  */
+ 
++#ifdef WIN32
++#include "win32config.h"
++#else
++#include "config.h"
++#endif
++
+ #include <string.h>
+ #include <libxml/hash.h>
+ #include <libxml/xmlmemory.h>
+Index: parser.h
+@@ -294,19 +294,19 @@
+  * Global variables: just the default SAX interface tables and XML
+  * version infos.
+  */
+-extern const char *xmlParserVersion;
++LIBXML_DLL_IMPORT extern const char *xmlParserVersion;
+ 
+-extern xmlSAXLocator xmlDefaultSAXLocator;
+-extern xmlSAXHandler xmlDefaultSAXHandler;
+-extern xmlSAXHandler htmlDefaultSAXHandler;
+-extern xmlSAXHandler sgmlDefaultSAXHandler;
++LIBXML_DLL_IMPORT extern xmlSAXLocator xmlDefaultSAXLocator;
++LIBXML_DLL_IMPORT extern xmlSAXHandler xmlDefaultSAXHandler;
++LIBXML_DLL_IMPORT extern xmlSAXHandler htmlDefaultSAXHandler;
++LIBXML_DLL_IMPORT extern xmlSAXHandler sgmlDefaultSAXHandler;
+ 
+ /**
+  * entity substitution default behaviour.
+  */
+ 
+-extern int xmlSubstituteEntitiesDefaultValue;
+-extern int xmlGetWarningsDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlSubstituteEntitiesDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlGetWarningsDefaultValue;
+ 
+ 
+ /**
+Index: parserInternals.h
+@@ -101,13 +101,13 @@
+  * Global vaiables affecting the default parser behaviour.
+  */
+ 
+-extern int xmlParserDebugEntities;
+-extern int xmlGetWarningsDefaultValue;
+-extern int xmlParserDebugEntities;
+-extern int xmlSubstituteEntitiesDefaultValue;
+-extern int xmlDoValidityCheckingDefaultValue;
+-extern int xmlPedanticParserDefaultValue;
+-extern int xmlKeepBlanksDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlParserDebugEntities;
++LIBXML_DLL_IMPORT extern int xmlGetWarningsDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlParserDebugEntities;
++LIBXML_DLL_IMPORT extern int xmlSubstituteEntitiesDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlDoValidityCheckingDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlPedanticParserDefaultValue;
++LIBXML_DLL_IMPORT extern int xmlKeepBlanksDefaultValue;
+ 
+ /*
+  * Function to finish teh work of the macros where needed
+Index: testHTML.c
+@@ -8,6 +8,7 @@
+ 
+ #ifdef WIN32
+ #include "win32config.h"
++#undef LIBXML_DLL_IMPORT
+ #else
+ #include "config.h"
+ #endif
+Index: testSAX.c
+@@ -8,6 +8,7 @@
+ 
+ #ifdef WIN32
+ #include "win32config.h"
++#undef LIBXML_DLL_IMPORT
+ #else
+ #include "config.h"
+ #endif
+Index: tree.h
+@@ -374,11 +374,11 @@
+ /*
+  * Variables.
+  */
+-extern xmlNsPtr baseDTD;
+-extern int oldXMLWDcompatibility;/* maintain compatibility with old WD */
+-extern int xmlIndentTreeOutput;  /* try to indent the tree dumps */
+-extern xmlBufferAllocationScheme xmlBufferAllocScheme; /* alloc scheme to use */
+-extern int xmlSaveNoEmptyTags;   /* save empty tags as <empty></empty> */
++LIBXML_DLL_IMPORT extern xmlNsPtr baseDTD;
++LIBXML_DLL_IMPORT extern int oldXMLWDcompatibility;/* maintain compatibility with old WD */
++LIBXML_DLL_IMPORT extern int xmlIndentTreeOutput;  /* try to indent the tree dumps */
++LIBXML_DLL_IMPORT extern xmlBufferAllocationScheme xmlBufferAllocScheme; /* alloc scheme to use */
++LIBXML_DLL_IMPORT extern int xmlSaveNoEmptyTags;   /* save empty tags as <empty></empty> */
+ 
+ /*
+  * Handling Buffers.
+Index: xmlerror.h
+@@ -146,8 +146,8 @@
+  * when when there is an error and no parsing or validity context available
+  */
+ 
+-extern xmlGenericErrorFunc xmlGenericError;
+-extern void *xmlGenericErrorContext;
++LIBXML_DLL_IMPORT extern xmlGenericErrorFunc xmlGenericError;
++LIBXML_DLL_IMPORT extern void *xmlGenericErrorContext;
+ 
+ /*
+  * Use the following function to reset the two previous global variables.
+Index: xmlmemory.h
+@@ -42,10 +42,10 @@
+ /*
+  * The 4 interfaces used for all memory handling within libxml
+  */
+-extern xmlFreeFunc xmlFree;
+-extern xmlMallocFunc xmlMalloc;
+-extern xmlReallocFunc xmlRealloc;
+-extern xmlStrdupFunc xmlMemStrdup;
++LIBXML_DLL_IMPORT extern xmlFreeFunc xmlFree;
++LIBXML_DLL_IMPORT extern xmlMallocFunc xmlMalloc;
++LIBXML_DLL_IMPORT extern xmlReallocFunc xmlRealloc;
++LIBXML_DLL_IMPORT extern xmlStrdupFunc xmlMemStrdup;
+ 
+ /*
+  * The way to overload the existing functions
+@@ -78,9 +78,9 @@
+ #define xmlRealloc(p, x) xmlReallocLoc((p), (x), __FILE__, __LINE__)
+ #define xmlMemStrdup(x) xmlMemStrdupLoc((x), __FILE__, __LINE__)
+ 
+-extern void *	xmlMallocLoc(int size, const char *file, int line);
+-extern void *	xmlReallocLoc(void *ptr,int size, const char *file, int line);
+-extern char *	xmlMemStrdupLoc(const char *str, const char *file, int line);
++void *	xmlMallocLoc(int size, const char *file, int line);
++void *	xmlReallocLoc(void *ptr,int size, const char *file, int line);
++char *	xmlMemStrdupLoc(const char *str, const char *file, int line);
+ #endif /* DEBUG_MEMORY_LOCATION */
+ 
+ #ifdef __cplusplus
+Index: xmlversion.h.in
+@@ -111,6 +111,14 @@
+ #define DEBUG_MEMORY_LOCATION
+ #endif
+ 
++#ifndef LIBXML_DLL_IMPORT
++#if defined(WIN32) && !defined(STATIC)
++#define LIBXML_DLL_IMPORT __declspec(dllimport)
++#else
++#define LIBXML_DLL_IMPORT
++#endif
++#endif
++
+ #ifdef __cplusplus
+ }
+ #endif /* __cplusplus */

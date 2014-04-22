@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] + broke??</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] + broke??">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] + broke??</h1>
+<!-- received="Fri Oct 20 08:47:01 2000" -->
+<!-- isoreceived="20001020124701" -->
+<!-- sent="Fri, 20 Oct 2000 14:46:53 +0200" -->
+<!-- isosent="20001020124653" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] + broke??" -->
+<!-- id="20001020144653.J16308@w3.org" -->
+<!-- inreplyto="20001019234545.A8810@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20%2B%20broke??"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 20 2000 - 08:46:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1010.html">Marc Sanfacon: "[xml] HTMLParser from libxml concerns."</a>
+<li><strong>Previous message:</strong> <a href="1008.html">Marc Sanfacon: "[xml] bug in HTML parser and request..."</a>
+<li><strong>In reply to:</strong> <a href="1005.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Oct 19, 2000 at 11:45:45PM +0200, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Thu, Oct 19, 2000 at 01:54:39PM -0700, Bill Kendrick wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I just installed libxml2-2.2.5 and tried running my little validation test
+</em><br>
+<em>&gt; &gt; program on an XML version of &quot;The Tragedy of Antony and Cleopatra&quot;.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Suddenly, I'm getting this over and over again:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;     Element PGROUP content doesn't follow the Dtd
+</em><br>
+<em>&gt; &gt;     Expecting (PERSONA+ , GRPDESCR), got (PERSONA PERSONA PERSONA GRPDESCR )
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Isn't the &quot;PERSONA PERSONA PERSONA&quot; found in the XML supposed to be
+</em><br>
+<em>&gt; &gt; covered by &quot;PERSONA+&quot; in the DTD?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Eek ... seems the blank space fix broke something else ...
+</em><br>
+<em>&gt; Ouch this part is a real pain to debug !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; Daniel, should I e-mail you the XML and DTD files? :)
+</em><br>
+<p>&nbsp;&nbsp;Actually I like this example a LOT ! Can I include it in the
+<br>
+libxml testsuite ?
+<br>
+<p><em>&gt;   yep, directly to avoid bothering the full ML...
+</em><br>
+<p>&nbsp;&nbsp;Okay I had a look, first when referencing the DTd directly from
+<br>
+the doctype and asking for validation, no error is raised:
+<br>
+<p>------------------ cleo.xml
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE PLAY PUBLIC &quot;xxx&quot; &quot;cleo.dtd&quot;&gt;
+<br>
+&lt;PLAY&gt;
+<br>
+[...]
+<br>
+------------------
+<br>
+~/XML -&gt; ./xmllint --noout --valid cleo.xml 
+<br>
+~/XML -&gt; 
+<br>
+------------------
+<br>
+<p>&nbsp;&nbsp;If removing the DTD reference and asking for a-posteriori validation
+<br>
+then the bug is triggered:
+<br>
+<p>------------------
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;PLAY&gt;
+<br>
+[...]
+<br>
+------------------
+<br>
+~/XML -&gt; ./xmllint --noout --dtdvalid cleo.dtd cleo.xml 
+<br>
+Element PGROUP content doesn't follow the Dtd
+<br>
+Expecting (PERSONA+ , GRPDESCR), got (PERSONA PERSONA PERSONA GRPDESCR )
+<br>
+Element PGROUP content doesn't follow the Dtd
+<br>
+[...]
+<br>
+------------------
+<br>
+<p>&nbsp;&nbsp;I found 2 problems, the enclosed patch fixes them !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20%2B%20broke??">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1009/01-valid.diff">valid.diff</a>
+</ul>
+<!-- attachment="01-valid.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1010.html">Marc Sanfacon: "[xml] HTMLParser from libxml concerns."</a>
+<li><strong>Previous message:</strong> <a href="1008.html">Marc Sanfacon: "[xml] bug in HTML parser and request..."</a>
+<li><strong>In reply to:</strong> <a href="1005.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 20 2000 - 09:43:40 EDT</em>
+</em>
+</small>
+</body>
+</html>

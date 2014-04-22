@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] 2 Problems</title>
+<meta name="Author" content="Charlie Bozeman (cbozeman@HiWAAY.net)">
+<meta name="Subject" content="[xml] 2 Problems">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] 2 Problems</h1>
+<!-- received="Sat Nov 25 11:31:19 2000" -->
+<!-- isoreceived="20001125163119" -->
+<!-- sent="Sat, 25 Nov 2000 10:31:19 -0600" -->
+<!-- isosent="20001125163119" -->
+<!-- name="Charlie Bozeman" -->
+<!-- email="cbozeman@HiWAAY.net" -->
+<!-- subject="[xml] 2 Problems" -->
+<!-- id="3A1FE957.22D8CEF0@HiWAAY.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Charlie Bozeman (<a href="mailto:cbozeman@HiWAAY.net?subject=Re:%20[xml]%202%20Problems"><em>cbozeman@HiWAAY.net</em></a>)<br>
+<strong>Date:</strong> Sat Nov 25 2000 - 11:31:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<li><strong>Previous message:</strong> <a href="1232.html">Neville Franks: "Re: [xml] Release of libxml 2.2.9"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<li><strong>Maybe reply:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have discovered two problems, the first I have a solution for and the
+<br>
+second needs discussion.
+<br>
+<p>First Problem:
+<br>
+If an application copies a tree or subtree the doc pointer for every
+<br>
+node does not get set to the proper document. Try: xmllint --copy
+<br>
+--debug test/ns. The properties of an element are not getting the doc
+<br>
+pointer set. I have investigated the code an bit and I have found that
+<br>
+when nodes get attached to a tree the doc pointer is only set in the
+<br>
+attached nodes if the doc pointers differ; the subtree that is being
+<br>
+attached may have new nodes that do not have a doc pointer set at all. I
+<br>
+have included a patch that a) modifies xmlSetTreeDoc so that it
+<br>
+unconditionally sets the doc pointer in all nodes of the given tree
+<br>
+(including properties), b) every routine that attaches a subtree will
+<br>
+set the doc pointer to the parent (or sibling) doc pointer if the parent
+<br>
+doc pointer is not NULL.
+<br>
+<p>Second Problem:
+<br>
+My application copies a subtree from one part of the document to another
+<br>
+(possibly in multiple places) using the xmlCopyNode routine.
+<br>
+xmlStaticCopyNode creates an new namespace definition in the subtree to
+<br>
+match the one it was previously using. When I post-process the tree, the
+<br>
+test &quot;if (cur-&gt;ns == ns) fails because the namespace pointers are
+<br>
+pointing to different namespace definitions in the tree even though
+<br>
+their content is the same. My workaround was to set the namespace
+<br>
+definition in the &quot;copied&quot; subtree to NULL and set the ns pointers to
+<br>
+the original.
+<br>
+<p>I believe this is also the problem where a document with a DTD reference
+<br>
+cannot be copied with the xmlCopyDoc procedure; xmlStaticCopyNode
+<br>
+creates a new namespace definition on the top of the subtree even if it
+<br>
+is not an element or attribute node. Try xmllint --copy --debug
+<br>
+test/dtd1, it will segfault.
+<br>
+<p>After looking at the code I can see why the namespace definition was
+<br>
+created but I don't think this is the best solution. I probably don't
+<br>
+know all the implications of the workings of namespaces but I have a
+<br>
+possible solution.
+<br>
+<p>Create a global hash table that contains all the namespace uri's; this
+<br>
+is can be what the node ns pointers reference. This will allow the test
+<br>
+(cur-&gt;ns == ns) for namespace equality to still be used independent of
+<br>
+namespace declaration and document. The namespace definitions can remain
+<br>
+the same (or similar) but the prefix would have to be stored in the
+<br>
+element and attribute nodes.
+<br>
+<p>I may be missing something but this could be an simple fix. What do
+<br>
+y'all think.
+<br>
+<p>Charlie Bozeman
+<br>
+<p>
+*** tree.c	Sat Nov 25 09:42:41 2000
+<br>
+--- tree.orig	Sat Nov 25 04:39:37 2000
+<br>
+*************** xmlSetTreeDoc(xmlNodePtr tree, xmlDocPtr
+<br>
+*** 1704,1714 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tree-&gt;type == XML_ENTITY_DECL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+!     if (tree-&gt;children != NULL)
+<br>
+! 	xmlSetListDoc(tree-&gt;children, doc);
+<br>
+!     if ((tree-&gt;type == XML_ELEMENT_NODE) &amp;&amp; (tree-&gt;properties != NULL))
+<br>
+! 	xmlSetListDoc((xmlNodePtr)tree-&gt;properties, doc);
+<br>
+!     tree-&gt;doc = doc;
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+--- 1704,1714 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tree-&gt;type == XML_ENTITY_DECL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+!     if (tree-&gt;doc != doc) {
+<br>
+! 	if (tree-&gt;children != NULL)
+<br>
+! 	    xmlSetListDoc(tree-&gt;children, doc);
+<br>
+! 	tree-&gt;doc = doc;
+<br>
+!     }
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+*************** xmlSetListDoc(xmlNodePtr list, xmlDocPtr
+<br>
+*** 1726,1732 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = list;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur != NULL) {
+<br>
+! 	xmlSetTreeDoc(cur, doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = cur-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;}
+<br>
+--- 1726,1733 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = list;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur != NULL) {
+<br>
+! 	if (cur-&gt;doc != doc)
+<br>
+! 	    xmlSetTreeDoc(cur, doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = cur-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;}
+<br>
+*************** xmlAddNextSibling(xmlNodePtr cur, xmlNod
+<br>
+*** 1857,1863 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (cur-&gt;doc != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elem-&gt;parent = cur-&gt;parent;
+<br>
+--- 1858,1864 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (elem-&gt;doc != cur-&gt;doc) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elem-&gt;parent = cur-&gt;parent;
+<br>
+*************** xmlAddPrevSibling(xmlNodePtr cur, xmlNod
+<br>
+*** 1929,1935 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (cur-&gt;doc != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elem-&gt;parent = cur-&gt;parent;
+<br>
+--- 1930,1936 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (elem-&gt;doc != cur-&gt;doc) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elem-&gt;parent = cur-&gt;parent;
+<br>
+*************** xmlAddSibling(xmlNodePtr cur, xmlNodePtr
+<br>
+*** 2000,2006 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(cur);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (cur-&gt;doc != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent = cur-&gt;parent;
+<br>
+--- 2001,2007 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(cur);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+!     if (elem-&gt;doc != cur-&gt;doc) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(elem, cur-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent = cur-&gt;parent;
+<br>
+*************** xmlAddChildList(xmlNodePtr parent, xmlNo
+<br>
+*** 2085,2091 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur-&gt;next != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;parent = parent;
+<br>
+! 	if (parent-&gt;doc != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(cur, parent-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = cur-&gt;next;
+<br>
+--- 2086,2092 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur-&gt;next != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;parent = parent;
+<br>
+! 	if (cur-&gt;doc != parent-&gt;doc) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(cur, parent-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = cur-&gt;next;
+<br>
+*************** xmlAddChild(xmlNodePtr parent, xmlNodePt
+<br>
+*** 2166,2172 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* add the new element at the end of the children list.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;parent = parent;
+<br>
+!     if (parent-&gt;doc != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(cur, parent-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+--- 2167,2173 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* add the new element at the end of the children list.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;parent = parent;
+<br>
+!     if (cur-&gt;doc != parent-&gt;doc) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetTreeDoc(cur, parent-&gt;doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+*************** xmlCopyDoc(xmlDocPtr doc, int recursive)
+<br>
+*** 2737,2743 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp = tmp-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+-     xmlSetTreeDoc(ret-&gt;children, ret);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+--- 2738,2743 ----
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%202%20Problems">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%202%20Problems">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<li><strong>Previous message:</strong> <a href="1232.html">Neville Franks: "Re: [xml] Release of libxml 2.2.9"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<li><strong>Maybe reply:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Nov 25 2000 - 11:43:53 EST</em>
+</em>
+</small>
+</body>
+</html>

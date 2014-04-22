@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] using large binary chunks / binary XML?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] using large binary chunks / binary XML?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] using large binary chunks / binary XML?</h1>
+<!-- received="Wed Jan  3 14:35:30 2001" -->
+<!-- isoreceived="20010103193530" -->
+<!-- sent="Wed, 3 Jan 2001 20:25:15 +0100" -->
+<!-- isosent="20010103192515" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] using large binary chunks / binary XML?" -->
+<!-- id="20010103202515.A28692@w3.org" -->
+<!-- inreplyto="5.0.2.1.2.20001215114925.031bfe10@spc.sugar-land.omnes.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 03 2001 - 14:25:15 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1303.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1289.html">Timothee Besset: "[xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Dec 15, 2000 at 02:11:42PM -0600, Timothee Besset wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm looking for a solution to handle binary objects in an easy to 
+</em><br>
+<em>&gt; manipulate file format. I like the chunk-based approach of XML and would 
+</em><br>
+<em>&gt; want something similar.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; To give an idea, I would like to do something similar to tar archives, but 
+</em><br>
+<em>&gt; benefit from the XML API (doing SAX parsing for streaming applications for 
+</em><br>
+<em>&gt; example). (and also benefit from all the processing tools that rely on XML)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I know that it is possible to include binary data into an XML file by 
+</em><br>
+<em>&gt; encoding it like it's done for mail attachements. But I want to avoid the 
+</em><br>
+<em>&gt; overhead of having to convert back and forth to getter best performances.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I also know that libxml supports gzipped streams, so my natural idea would 
+</em><br>
+<em>&gt; be to extend this mechanism and be able to store the binary objects &quot;as-is&quot; 
+</em><br>
+<em>&gt; in the &quot;binary&quot; XML file.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Maybe there are projects that I don't know of which provide this binary-XML 
+</em><br>
+<em>&gt; feature already (under LGPL licensing preferably). Or maybe you don't think 
+</em><br>
+<em>&gt; this is the right way to go, or even you'd like to give me a few hints on 
+</em><br>
+<em>&gt; how to proceed..
+</em><br>
+<p>&nbsp;&nbsp;I think this is a packaging format problem. I have already suggested
+<br>
+a format (in other forums), basically it's the following:
+<br>
+<p>&nbsp;&nbsp;- a ZIP file encapsulating a set of files
+<br>
+&nbsp;&nbsp;- the first file is in an XML format and provides metadata
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(filename, URL, mime type, ...) for the content of the archive
+<br>
+&nbsp;&nbsp;- the other elements in the archive can be either XML or binary
+<br>
+<p>&nbsp;binary blurbs *within* XML files don't fit well at all.
+<br>
+I will probably add native support for this package format in
+<br>
+a not too distant future version of libxml, I suggest you look at
+<br>
+the discussion taking place in the OpenOffice XML devel list
+<br>
+&nbsp;&nbsp;<a href="http://xml.openoffice.org/">http://xml.openoffice.org/</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1303.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1289.html">Timothee Besset: "[xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 03 2001 - 14:43:51 EST</em>
+</em>
+</small>
+</body>
+</html>

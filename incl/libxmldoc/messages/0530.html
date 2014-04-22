@@ -1,0 +1,466 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] libxml 2.0 on HP-UX</title>
+<meta name="Author" content="John Kroll (jkroll@mke.catalystwms.com)">
+<meta name="Subject" content="[xml] libxml 2.0 on HP-UX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] libxml 2.0 on HP-UX</h1>
+<!-- received="Fri Jun 23 04:44:53 2000" -->
+<!-- isoreceived="20000623084453" -->
+<!-- sent="Thu, 22 Jun 2000 18:08:11 -0500" -->
+<!-- isosent="20000622230811" -->
+<!-- name="John Kroll" -->
+<!-- email="jkroll@mke.catalystwms.com" -->
+<!-- subject="[xml] libxml 2.0 on HP-UX" -->
+<!-- id="F541F4AB5C0CD311B17F0090274EC2EDD68D5C@catus7.catalystwms.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> John Kroll (<a href="mailto:jkroll@mke.catalystwms.com?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX"><em>jkroll@mke.catalystwms.com</em></a>)<br>
+<strong>Date:</strong> Thu Jun 22 2000 - 19:08:11 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0531.html">Daniel Veillard: "Re: [xml] Additional examples"</a>
+<li><strong>Previous message:</strong> <a href="0529.html">Daniel Veillard: "Re: [xml] Query"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Reply:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Reply:</strong> <a href="0533.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Maybe reply:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+1.  libxml 2.0 does not compile with HP-UX's optional ANSI-C compiler under
+<br>
+HP-UX 11.00 due to macro limitations.  While this has been discussed in the
+<br>
+newsgroup threads, the solution of compiling with gcc is not an option for
+<br>
+me.
+<br>
+<p>2.  Therefore the enclosed proposed fix replaces the macros with function
+<br>
+calls that perform a lookup equating to the original macro call.  Note that
+<br>
+under Sun 5.6 (the only OS I have access to that compiles the macro
+<br>
+version), the resulting debug (&quot;-g&quot;) versions of the libraries are about
+<br>
+116K smaller with the proposed changes.
+<br>
+<p>3.  The proposed fix has been compiled under HP-UX 11.00, AIX 4.3.2, and Sun
+<br>
+5.6.
+<br>
+<p>Sincerely,
+<br>
+John Kroll
+<br>
+<p>P.S.  Note the initialization code for the fix was programmatically
+<br>
+generated and verified using a test program.
+<br>
+<p><p><p>begin 600 libxml2-2.0.0_chgs.tar.gz
+<br>
+M'XL(&quot;/./4CD``VQI8GAM;#(M,BXP+C!?8VAG&lt;RYT87(`[9U]3UL'FD?[;_@4
+<br>
+M=U5IMZUF6QL,(9K=D7A+BV::5$TJC30:190XB;4$LD!FNCL[WWUY&quot;&lt;_/#L;8
+<br>
+MQ(!]&lt;IB1W-@^]O4]]]YS;5Z&gt;W][NO=_O[;[9.?QV]XM;^FJU6ZV5E&lt;X7K=;)
+<br>
+M?SU&lt;/+UL+;7/+]LKG8=+[=87K8?MQ&lt;YRZ^'*\NG]VDO+G9/K;FN!^K_&gt;'QWO
+<br>
+M')X\Y&lt;%JZ]WAP&gt;LK[_?RUYV1CW/Z8A;/%O[T52U-&gt;S%OZ^O+WO[NWON7W&gt;8_
+<br>
+M]GJ__O9V[[MW.X='W&lt;/M_&gt;/NX?[.WM&amp;W;_ZPL+#PY&lt;ONJ]Y^M]GX8&gt;WG%\^W
+<br>
+MGCU_L;[]_,&amp;#KYIV\W7=N/ZGM2=_'+AUL?_6M6=;@_A73:?O]LWM[[&gt;?#]&quot;K
+<br>
+M?;=N//UQ??O)]I/O^_'V2M\]MO[\?.O)YM;`XR_U+\#VYM;3[W]&gt;^^F'_GNL
+<br>
+M]&quot;_&quot;3[^L;V]^O(SMQ=/E6/BR]VK_Y&amp;[-+\^V7OSR9'OCZ&gt;;6BQ_7-GY^^FQA
+<br>
+MX;MO%K[YIFF&gt;';SM-KL';]_U]KJ'1\V;G;]UFY--ZM&gt;][MNCYN^]XS?-T&gt;D]
+<br>
+M#EXUQV].%N?9BV^:MSN[AP='36__[`$NK?IOF^;QP&gt;'IW8_Z'OEWS6'WW=[.
+<br>
+M;O?L&lt;3X\Q-D#G#W)J_?[N\&gt;]@_UF=V?OY$$6OOEN8&gt;%D&amp;S_N[9X\Q/[1&lt;?-^
+<br>
+M_ZCW&gt;K_[LCG=ZQ]\V/M?''&gt;/CO_2_+7YSX5_+#QH_=9J_:YI)KSHYY;.+E:7
+<br>
+MAMSSTI73&gt;+Y)N0\+L=H^O[+=_Z_!B]QVQHVXYU479]RC\W]-&lt;C&amp;$NV+)/EK.
+<br>
+MA0???7/^6CNMICG=`/J6?'F&quot;BS-N$N&quot;VN%;[ZHL/:[A%?7VM`:.K,7H--/R1
+<br>
+MY*;'+7[&quot;\\7H1I_1#UO#)!=WR[7O^/GFZ/65T9/3W3DR.M?&lt;X&amp;XU[2TA1CN7
+<br>
+MC[HW7?))\!E8PR!NP.BJ^RB&quot;B]%Q._J)9P#W_HKOD1MCA8Q:GQ,:79S'CL[Z
+<br>
+M.&gt;M]&lt;#$ZI*-WMN3SL@7-`Q&gt;C=G1L[G[WT;&amp;-7MW16U_RQ7I??9]K&quot;L*5T:6^
+<br>
+MCK;/;Y_H0FY&amp;N!CMW,3H'&amp;[#EU[?[&quot;[G)^ZC-_M&lt;]_S`O#CJ#*&lt;]XE\ST=&amp;/
+<br>
+M%^FVG^^.SHR6[N5SW9N&gt;ZXYZOS;Z7S/WV=:M[:.=UO0^!1SC!&lt;S?MC\O7(QV
+<br>
+M[O'=BUO0;1B]^OWH6&quot;=(?L(P(UR,3MC1CQ-V]3OP41S(Z!4O&gt;L+G&amp;[5&gt;)NSH
+<br>
+M\I&quot;.SO19^AQR=[N/+M]G1R?FAJZIV5S#]W;47?ZDSW6GL@W?TV&lt;QXSW[_7]F
+<br>
+M-&amp;HY&lt;UN?T8U+1]U1#SC=H](\;/O7?8(R\&gt;N[I:-\&amp;5WY##N*W()BM*^CB]-\
+<br>
+MQ3&lt;]*MVFT?,?:9[H8@@W]O.U[W(+BE&amp;_/SI[W.#F,=[Y3(S.ZN&gt;Z`R_GSLY4
+<br>
+M+AUG^O&gt;U,?#[.R:4T8&gt;?84&gt;17(S&gt;Y\\9R=V&amp;47_OA&lt;'%Z.7WH[.]Y'+7&amp;%VU
+<br>
+MHPPN1NTH@XM1.\K@8M2.,K@R^NC*CH[\&lt;&amp;X^/XN93VZ8E&lt;N?O,3HC7Y&gt;]Z:?
+<br>
+MX0S=%L&lt;#^KFIK*F13S3J,YSQ/_NYGWWT&lt;D='KMJ;;HL?/TH_-_H99F&gt;?&amp;6L!
+<br>
+MK^4F/N8-W4&lt;O[5DQNC'1/GKIX2]_[CG.=G'#;;$]!G?%I\/WLH^.VJAO;1]=
+<br>
+MF_#]Z/C;_NA'^7SWT=%7?OH^NG9=1\?89^YL'_V(&amp;^,HOWS#YYO*/CKJVSI7
+<br>
+M;?=3V$=ONZ-#(S*?OX=R^_OH-,YUUR;KZ.6?6+J\+=[9/CHQ-W[0YOA&lt;=_UR
+<br>
+M1SW7O&lt;-]]./;/GT?71_S_&gt;C]=G3P_&gt;\U)UU#UL;U:PJTCU[YN&gt;ZG[J.CU_&gt;$
+<br>
+MV_[05SQ6L/N?;_Q-8.C1^J:O;_Q#V*1;WM!]]+J.CK'/W/CG&lt;&quot;;=%L?91Z&gt;Z
+<br>
+M[&lt;_C/KIQMQV=:I_FI:-CK9&quot;I[:,;DWVN&gt;]?[Z&quot;5\&amp;N&gt;Z[(YNW%I'W4?O:1^]
+<br>
+MT&gt;&gt;Z&lt;[./+@]PG\4^NCGA]T?=1^]\.2?&lt;1S=O]'YT3L]U/X]]U)\S8G`QZL\9
+<br>
+M,;@RNG5'?\_H\^*&amp;?F=@X&quot;Y7M&gt;E&amp;W]4&lt;-'JCO\.P&gt;/T27)/33^K3#7^?&lt;R[V
+<br>
+MM4_?1X=T=-19:ONC*Z_&gt;%C^^YX1+/FJ?N&gt;FQ9!0W=#G'^'W.*Z[L6R]#O^,]
+<br>
+M_C[:&amp;KI/7%J?,7JCOV&gt;T.&amp;!FXN^KNH_&gt;XC[Z&gt;`Y_[V6BP,SV%C3T)PB&amp;WC8*
+<br>
+M'W@_^G@:?\_HID?!F3_#F?C[JL.,3G2:&lt;:/SDD&amp;CJU/[%'&quot;B4[0;':V';L.W
+<br>
+MO*8^I2HW?+[Q]]&amp;A1UW?CS*X&quot;Z/MUAQV5&amp;ZD47]_E,'%Z&amp;?XN&gt;Z&lt;G8F-Q\7H
+<br>
+MS?Z&gt;T736\#RLJ?OX]/&quot;3]M%A\T&gt;';LI7;-]#MOVQ\*M?\&gt;SNVS/!#5V?`T:'
+<br>
+MO!^]DR6X[OG&amp;.&quot;:,O[AC_%;&amp;%?\:]_G&amp;V-?&amp;&gt;/:I[*/LCG[ZT&gt;S*+6_4E:-^
+<br>
+M/GC\+6^,0]^0CEX_?W0FS,P@-WKU3..8-]%G5&amp;5TT?&gt;C#&quot;Y&amp;?3_*X&amp;*4W='/
+<br>
+MAXM1/]=E&lt;&amp;5TR8XRN!BUHPPN1NTH@XM1.\K@RNBP^:,SO&gt;1RUQFUHPPN1NTH
+<br>
+M@XM1.\K@RJCS1R%&lt;C-I1!A&gt;C=I3!Q:@=97!E]'.&lt;/XKD8M2.,K@8M:,,+D;M
+<br>
+M*(,KH\X?A7`Q:D&lt;97(S:4087HW:4P951YX]&quot;N!BUHPPN1NTH@XM1.\K@RNC5
+<br>
+M\T=G=,GEKC-J1QE&lt;C-I1!A&gt;C=I3!E=%)YX_&gt;^Y++76?4CC*X&amp;+6C#&quot;Y&amp;[2B#
+<br>
+M*Z-#YH_.]I++76?4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z-#YH_.]I++76?4CC*X&amp;+6C#&quot;Y&amp;
+<br>
+M[2B#*Z-7SQ^=T267N\ZH'65P,6I'&amp;5R,VE$&amp;5T:WAOR=^MG]R_QRU_\-[)O-
+<br>
+M'YW#5TSG8G059G34T6R6EO/VC-YLWLO\O&gt;+YY2;LZ./YZ.A-][7/&lt;!^]X?S1
+<br>
+M^UW#[6&amp;/.?I?&lt;V/FINLS1FD=G3.N/15NP.C5[T=O8PG&amp;WT&gt;O6)99/3,:XWWE
+<br>
+M[:[/&quot;Z.+SA^%&lt;#'JY[H,+D;]7)?!Q&gt;@]?JY[BY/21RWG9!//Y\YHVXX.NU@&gt;
+<br>
+MP8UQ!G&gt;O1NTH@XO1:]^/SMB2RUUGU.^/,K@RZOQ1&quot;!&gt;C=I3!Q:CO1QE&lt;C-I1
+<br>
+M!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/
+<br>
+M0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH
+<br>
+M@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XR
+<br>
+MN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#
+<br>
+M*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,KHEAUE
+<br>
+M&lt;#%J1QE&lt;C-I1!A&gt;C=I3!E=''=I3!Q:@=97`Q:D&lt;97(S:409W871IPOFCBP/_
+<br>
+MZLS1*W[0O]3C7YQR@U&gt;./[%O&lt;)V-NIBJT2$=G:6IR')C&lt;C$ZXW.\1VS#@_O%
+<br>
+M-;L`?HN-T8W9-BHWN&amp;U?N&lt;66T4GGC\[N*Y[98\D=GQDY?Q3&quot;Q:CO1QE&lt;C/I^
+<br>
+ME,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3Y
+<br>
+MHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[
+<br>
+MRN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C
+<br>
+M#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*
+<br>
+MX,JH\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1
+<br>
+M&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE
+<br>
+M&lt;#%J1QE&lt;C-I1!G=AM#/A_-'[7W*YZXS:4087HW:4P&lt;6H'65P9732^:/WON1R
+<br>
+MUQFUHPPN1NTH@XM1.\K@RJCS1R%&lt;C-I1!A&gt;C=I3!Q:@=97!EU/FC$&quot;Y&amp;[2B#
+<br>
+MBU$[RN!BU(XRN#+J_%$(%Z-VE,'%J!UE&lt;#%J1QE&lt;&amp;77^*(2+43O*X&amp;+4CC*X
+<br>
+M&amp;+6C#*Z,.G\4PL6H'65P,6I'&amp;5R,VE$&amp;5T:=/PKA8M2.,K@8M:,,+D;M*(,K
+<br>
+MH\X?A7`Q:D&lt;97(S:4087HW:4P951YX]&quot;N!BUHPPN1NTH@XM1.\K@RJCS1R%&lt;
+<br>
+MC-I1!A&gt;C=I3!Q:@=97!EU/FC$&quot;Y&amp;[2B#BU$[RN!BU(XRN#+J_%$(%Z-VE,'%
+<br>
+MJ!UE&lt;#%J1QE&lt;&amp;77^*(2+43O*X&amp;+4CC*X&amp;+6C#*Z,]L\?[9S?/M&amp;%W(QP,=K1
+<br>
+M*(*+T56-(K@8W=`H@BNCC^TH@XM1.\K@8M2.,K@8M:,,[L+H&lt;LN.,K@8M:,,
+<br>
+M+D;M*(.+43O*X,IHVXXRN!BUHPPN1NTH@XM1.\K@RNBB'65P,6I'&amp;5R,VE$&amp;
+<br>
+M%Z-VE,&amp;5T24[RN!BU(XRN!BUHPPN1NTH@RNC'3O*X&amp;+4CC*X&amp;+6C#&quot;Y&amp;[2B#
+<br>
+M*Z/+=I3!Q:@=97`Q:D&lt;97(S:40971E?L*(.+43O*X&amp;+4CC*X&amp;+6C#*Z,/K2C
+<br>
+M#&quot;Y&amp;[2B#BU$[RN!BU(XRN#*Z:D&lt;97(S:4087HW:4P&lt;6H'65P9?21'65P,6I'
+<br>
+M&amp;5R,VE$&amp;%Z-VE,&amp;5T34[RN!BU(XRN!BUHPPN1NTH@RNCZW:4P&lt;6H'65P,6I'
+<br>
+M&amp;5R,VE$&amp;5T8W[&quot;B#BU$[RN!BU(XRN!BUHPRNC&amp;[:4087HW:4P&lt;6H'65P,6I'
+<br>
+M&amp;5P9=?XHA(M1.\K@8M2.,K@8M:,,KHPZ?Q3&quot;Q:@=97`Q:D&lt;97(S:409W873%
+<br>
+M^:,0+D;M*(.+43O*X&amp;+4CC*X,NK\40@7HW:4P&lt;6H'65P,6I'&amp;5P9=?XHA(M1
+<br>
+M.\K@8M2.,K@8M:,,KHPZ?Q3&quot;Q:@=97`Q:D&lt;97(S:40971IT_&quot;N%BU(XRN!BU
+<br>
+MHPPN1NTH@RNCSA^%&lt;#%J1QE&lt;C-I1!A&gt;C=I3!E5'GCT*X&amp;+6C#&quot;Y&amp;[2B#BU$[
+<br>
+MRN#*J/-'(5R,VE$&amp;%Z-VE,'%J!UE&lt;&amp;74^:,0+D;M*(.+43O*X&amp;+4CC*X,NK\
+<br>
+M40@7HW:4P&lt;6H'65P,6I'&amp;5P9=?XHA(M1.\K@8M2.,K@8M:,,KHPZ?Q3&quot;Q:@=
+<br>
+M97`Q:D&lt;97(S:40971IT_&quot;N%BU(XRN!BUHPPN1NTH@RNCSA^%&lt;#%J1QE&lt;C-I1
+<br>
+M!A&gt;C=I3!E5'GCT*X&amp;+6C#&quot;Y&amp;[2B#BU$[RN#*J/-'(5R,VE$&amp;%Z-VE,'%J!UE
+<br>
+M&lt;!=&amp;'SI_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.
+<br>
+M'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:
+<br>
+M4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=
+<br>
+M97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1
+<br>
+M!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/
+<br>
+M0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH
+<br>
+M@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XR
+<br>
+MN!BUHPSNPNBJ\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.
+<br>
+M,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_
+<br>
+M%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'
+<br>
+M&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:4087HW:4
+<br>
+MP&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;9
+<br>
+M7!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*
+<br>
+MX6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,
+<br>
+M+D;M*(.+43O*X&quot;Z,/G+^*(2+43O*X&amp;+4CC*X&amp;+6C#*Z,.G\4PL6H'65P,6I'
+<br>
+M&amp;5R,VE$&amp;5T:=/PKA8M2.,K@8M:,,+D;M*(,KH\X?A7`Q:D&lt;97(S:4087HW:4
+<br>
+MP951YX]&quot;N!BUHPPN1NTH@XM1.\K@RJCS1R%&lt;C-I1!A&gt;C=I3!Q:@=97!EU/FC
+<br>
+M$&quot;Y&amp;[2B#BU$[RN!BU(XRN#+J_%$(%Z-VE,'%J!UE&lt;#%J1QE&lt;&amp;77^*(2+43O*
+<br>
+MX&amp;+4CC*X&amp;+6C#*Z,.G\4PL6H'65P,6I'&amp;5R,VE$&amp;5T:=/PKA8M2.,K@8M:,,
+<br>
+M+D;M*(,KH\X?A7`Q:D&lt;97(S:4087HW:4P951YX]&quot;N!BUHPPN1NTH@XM1.\K@
+<br>
+MRJCS1R%&lt;C-I1!A&gt;C=I3!Q:@=97!EU/FC$&quot;Y&amp;[2B#BU$[RN!BU(XRN#+J_%$(
+<br>
+M%Z-VE,'%J!T=&lt;M&amp;JBU.N]?&amp;58US&lt;.1&gt;C?1V=BR67&amp;VUTK7_^Z%PLN=QU1CL:
+<br>
+M17`QNJI1!!&gt;C=I3!E=&amp;V'65P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;5T44[RN!BU(XRN!BU
+<br>
+MHPPN1NTH@RNC2W:4P&lt;6H'65P,6I'&amp;5R,VE$&amp;5T8[=I3!Q:@=97`Q:D&lt;97(S:
+<br>
+M40971I?M*(.+43O*X&amp;+4CC*X&amp;+6C#*Z,KMA1!A&gt;C=I3!Q:@=97`Q:D&lt;97!E]
+<br>
+M:$&lt;97(S:4087HW:4P&lt;6H'65P9735CC*X&amp;+6C#&quot;Y&amp;[2B#BU$[RN#*Z&quot;,[RN!B
+<br>
+MU(XRN!BUHPPN1NTH@RNC:W:4P&lt;6H'65P,6I'&amp;5R,VE$&amp;5T;7[2B#BU$[RN!B
+<br>
+MU(XRN!BUHPRNC/;/'VTMG]\^R87&lt;C'`QVM$H@HO158TBN!C=T&quot;B&quot;*Z.;=I3!
+<br>
+MQ:@=97`Q:D&lt;97(S:40971K?L*(.+43O*X&amp;+4CC*X&amp;+6C#*Z,/K:C#&quot;Y&amp;[2B#
+<br>
+MBU$[RN!BU(XRN`NCZRT[RN!BU(XRN!BUHPPN1NTH@RNC;3O*X&amp;+4CC*X&amp;+6C
+<br>
+M#&quot;Y&amp;[2B#*Z.+=I3!Q:@=97`Q:D&lt;97(S:40971I?L*(.+43O*X&amp;+4CC*X&amp;+6C
+<br>
+M#*Z,=NPH@XM1.\K@8M2.,K@8M:,,KHPNVU$&amp;%Z-VE,'%J!UE&lt;#%J1QE&lt;&amp;5VQ
+<br>
+MHPPN1NTH@XM1.\K@8M2.,K@R^M&quot;.,K@8M:,,+D;M*(.+43O*X,KHJAUE&lt;#%J
+<br>
+M1QE&lt;C-I1!A&gt;C=I3!E=%'=I3!Q:@=97`Q:D&lt;97(S:40971M?L*(.+43O*X&amp;+4
+<br>
+MCC*X&amp;+6C#*Z,KMM1!A&gt;C=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BU
+<br>
+MHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.
+<br>
+M'X5P,6I'&amp;5R,VE$&amp;%Z-VE,%=&amp;-UP_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%
+<br>
+MJ!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,
+<br>
+MVE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A7(S:4087HW:4P&lt;6H
+<br>
+M'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;97!EU
+<br>
+M_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;G3\*X6+4
+<br>
+MCC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M
+<br>
+M*(.+43O*X,JH\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.
+<br>
+M,K@RZOQ1&quot;!&gt;C=I3!Q:@=97`Q:D&lt;9W(713&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH
+<br>
+M\T&lt;A7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C
+<br>
+M=I3!Q:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J
+<br>
+M1QE&lt;C-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/.'X5P,6I'&amp;5R,VM'SB_;P
+<br>
+MBS/NBMMFBHO1_H[.PY++76-T8/YHZ_SV22[D9H2+T8Y&amp;$5R,KFH4P&lt;7HAD81
+<br>
+M7!E]9$&lt;97(S:4087HW:4P&lt;6H'65P973-CC*X&amp;+6C#&quot;Y&amp;[2B#BU$[RN#*Z+H=
+<br>
+M97`Q:D&lt;97(S:4087HW:4P971#3O*X&amp;+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z.;=I3!Q:@=
+<br>
+M97`Q:D&lt;97(S:40971K?L*(.+43O*X&amp;+4CC*X&amp;+6C#*Z,/K:C#&quot;Y&amp;[2B#BU$[
+<br>
+MRN!BU(XRN`NC6P/S1^?A-U_EAG,QVM$H@HO158TBN!CU[S`PN#+:MJ,,+D;M
+<br>
+M*(.+43O*X&amp;+4CC*X,KIH1QE&lt;C-I1!A&gt;C=I3!Q:@=97!E=,F.,K@8M:,,+D;M
+<br>
+M*(.+43O*X,IHQXXRN!BUHPPN1NTH@XM1.\K@RNBR'65P,6I'&amp;5R,VE$&amp;%Z-V
+<br>
+ME,&amp;5T14[RN!BU(XRN!BUHPPN1NTH@RNC#^TH@XM1.\K@8M2.,K@8M:,,KHRN
+<br>
+MVE$&amp;%Z-VE,'%J!UE&lt;#%J1QE&lt;&amp;7UD1QE&lt;C-I1!A&gt;C=I3!Q:@=97!E=,V.,K@8
+<br>
+MM:,,+D;M*(.+43O*X,KHNAUE&lt;#%J1QE&lt;C-I1!A&gt;C=I3!E=$-.\K@8M2.,K@8
+<br>
+MM:,,+D;M*(,KHYMVE,'%J!UE&lt;#%J1QE&lt;C-I1!E=&amp;M^PH@XM1.\K@8M2.,K@8
+<br>
+MM:,,KHP^MJ,,+D;M*(.+43O*X&amp;+4CC*X&quot;Z./G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#
+<br>
+M*Z/.'X5P,6I'&amp;5R,VE$&amp;%Z-VE,&amp;54&gt;&gt;/0K@8M:,,+D;M*(.+43O*X,JH\T&lt;A
+<br>
+M7(S:4087HW:4P&lt;6H'65P9=3YHQ`N1NTH@XM1.\K@8M2.,K@RZOQ1&quot;!&gt;C=I3!
+<br>
+MQ:@=97`Q:D&lt;97!EU_BB$BU$[RN!BU(XRN!BUHPRNC#I_%,+%J!UE&lt;#%J1QE&lt;
+<br>
+MC-I1!E=&amp;G3\*X6+4CC*X&amp;+6C#&quot;Y&amp;[2B#*Z/]\T&lt;[Y[=/=&quot;$W(UR,=C2*X&amp;)T
+<br>
+M5:,(+D8W-(K@RNB:'9TB-PMG1LX?A7`QZOM1!A&gt;COA]E&lt;&amp;74^:,0+D;M*(.+
+<br>
+M43O*X&amp;+4CC*X,NK\40@7HW:4P&lt;6H'65P,6I'&amp;5P9=?XHA(M1.\K@8M2.,K@8
+<br>
+MM:,,KHPZ?Q3&quot;Q:@=97`Q:D&lt;97(S:40971IT_&quot;N%BU(XRN!BUHPPN1NWH/'.M
+<br>
+M#Q&lt;+&quot;__\?=.&lt;.MW:?]F\W^_MOMDY?''&lt;/3IN=@X/=_ZGZ&gt;WWCGL[&gt;[W_W3GN
+<br>
+M'&gt;R?*S^]^^/W^[NGUQPUNP&gt;'A]VC=P?[+WO[KYOC@^;X3;?I_O?[WM]V]KK[
+<br>
+MQ\WVLQ??-&amp;]W=@\/SNG&gt;_O'&quot;J]_&gt;[KWH';TX?;:OFH7FY.ODZ@&lt;/3I_X[,J%
+<br>
+MKQ?^&lt;7;U8??X_&gt;%^\]7)__J7[B]-W;7Y:_.OS&lt;8/:S^_&gt;+[U[/F+]&gt;WGS=?-
+<br>
+MO_QGTVJ^_OW&quot;/Q&lt;&amp;G_#7O9W]_YK*,Z[_:&gt;W)'\=ZRIVC[M1&gt;Y_K:LZU1KW7@
+<br>
+MF5_V7O&gt;.I_*TF]O?;S\?Y\7N'KS]]623V7\]':M/?US??K+]Y/MQGKK[VW%W
+<br>
+M_V5W.NMYZ\_/MYYL;HVU3?5&gt;=@]&gt;'^Z\&gt;]/;G&lt;IS;V]N/?W^Y[6??ACGR=^]
+<br>
+M_[7W&lt;FJ;UT^_K&amp;]OCKLO[76/CT]6]Z&lt;_[&lt;*#!U\-V;+_;_B:&amp;%B@+T^4]UXM
+<br>
+MS/&quot;1=D@[9^?G_][M'!YU#[?W3SSN[^P=??OFVY.U^&gt;KHBVE^M=JMULI*YXM6
+<br>
+MZ^2_'BZ&gt;7K:6VN&gt;7I]=UEE&gt;^:#UL+W:66P]7%MLGU[&gt;75Q:7OVA-=2FN^'I_
+<br>
+M=+QS&gt;/*4!ZNM=X&lt;'KZ^\W\M?=T8^SNDK65SNG+^H]M*T%_.VOMJ/=A9;&quot;W]H
+<br>
+MONR]&gt;ME]U?SR;.O%+T^V-YYN;KWX&lt;6WCYZ?/%CJ+2SN=Q&gt;7?=3H/3^_7W3OJ
+<br>
+MGI\O/#XX/$G_VW&gt;]O&gt;[A4?/WDX/?FV9W9__?CILW._LO][K-WL[AZV[SXVGX
+<br>
+MCYI_;WK?=K]M?OCI;,/_0W/R_]-#QN!YP,DUI[OUX$T?BCW\MDKKT)L_]&amp;_H
+<br>
+M;7VA&amp;GI[:C+TYH%C_M![]!V8Z_;3-7BRGGO[W=.SHM.CW5?-;O/U@X_6P\E5
+<br>
+M@_&lt;\.]?XZ*X?ULOE^WXXCI[?_?*:N@2&lt;M?VC!_^PYB[=MX(\^.A]*_,2&lt;E'2
+<br>
+M02*K]Q)0!_WMC4%F8)U?PBI=@U&quot;?ADO(G[:&gt;/]_Z6,&amp;'JGVX]]DV?Y:8D_^^
+<br>
+4[[W5+[_\\FMZ7_\/6#$U*P!&lt;!P`=
+<br>
+`
+<br>
+end
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0531.html">Daniel Veillard: "Re: [xml] Additional examples"</a>
+<li><strong>Previous message:</strong> <a href="0529.html">Daniel Veillard: "Re: [xml] Query"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Reply:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Reply:</strong> <a href="0533.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Maybe reply:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

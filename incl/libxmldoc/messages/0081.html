@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] suggestion with libxml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] suggestion with libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] suggestion with libxml</h1>
+<!-- received="Mon Jun 28 08:01:20 1999" -->
+<!-- isoreceived="19990628120120" -->
+<!-- sent="Mon, 28 Jun 1999 08:01:18 -0400" -->
+<!-- isosent="19990628120118" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] suggestion with libxml" -->
+<!-- id="19990628080118.C6092@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.9906262015300.10262-100000@obelix.ncserver.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Jun 28 1999 - 08:01:18 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0082.html">Daniel Veillard: "[xml] Upgates of the XML library"</a>
+<li><strong>Previous message:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>In reply to:</strong> <a href="0079.html">hilaire@seul.org: "[xml] suggestion with libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Hilaire,
+<br>
+<p><em>&gt; I may use libxml to parse xml file format for an interactive geometry
+</em><br>
+<em>&gt; application. 
+</em><br>
+<em>&gt; I've a couple of question.
+</em><br>
+<em>&gt;  Here are examples - valid ? - to define points :
+</em><br>
+<em>&gt;   
+</em><br>
+<em>&gt;   &lt;freepoint label=&quot;A&quot; x=&quot;1.3&quot; y=&quot;10&quot; /&gt;
+</em><br>
+<p>&nbsp;&nbsp;ok
+<br>
+<p><em>&gt;   &lt;freepoint label=&quot;B&quot; x=&quot;13&quot; y=&quot;10&quot; /&gt;
+</em><br>
+<p>&nbsp;&nbsp;ok
+<br>
+&nbsp;&nbsp;
+<br>
+<em>&gt;   &lt;middle label=&quot;I&quot; point=&quot;A&quot; point=&quot;B&quot;/&gt;
+</em><br>
+<p>&nbsp;&nbsp;Wrong.
+<br>
+<p><em>&gt;  The 1st things I don't like is I need to define different tags for each
+</em><br>
+<em>&gt;  kind of point (and there is a lot) althought this is always point I
+</em><br>
+<em>&gt;  define. Do I have the choice ?
+</em><br>
+<p>&nbsp;&nbsp;You can either express your semantic:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- in the tag name
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- using an extra attribute defining the type, i.e.the kind of point
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- use the structure to express the semantic
+<br>
+<p><em>&gt;  The 2nd things. Is it valid, in the middle definition, to have twice the
+</em><br>
+<em>&gt;  point attribut ? Or should I write somethings like :
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;   &lt;middle label=&quot;I&quot; point1=&quot;A&quot; point2=&quot;B&quot;/&gt;
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Yes you will have to change a given attribute can occur only once
+<br>
+&nbsp;&nbsp;&nbsp;other (suggested) way:
+<br>
+&nbsp;&nbsp;&nbsp;&lt;middle label=&quot;I&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;point value=&quot;A&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;point value=&quot;B&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/middle&gt;
+<br>
+&nbsp;&nbsp;&nbsp;Basically it uses the structure to express the relationship, that's
+<br>
+IMHO the best method to use, it scale and can be extended to other 
+<br>
+relationships.
+<br>
+<p><em>&gt;  This appear to be more easy to parse this with libxml but may be less
+</em><br>
+<em>&gt;  readble/conistant for users
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  The situation is even worst with intersection point:
+</em><br>
+<em>&gt;  Here the intersection of line &amp; cercle ; segment &amp; half-line :
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  &lt;intersection label=&quot;A&quot; line=&quot;(MN)&quot; circle=&quot;(C1)&quot; k=&quot;1&quot; /&gt;
+</em><br>
+<em>&gt;  &lt;intersection label=&quot;B&quot; segment=&quot;[MN]&quot; halfline=&quot;[OP)&quot; /&gt;
+</em><br>
+<p>&nbsp;&nbsp;Same
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;intersection label=&quot;A&quot; k=&quot;1&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;line value=&quot;(MN)&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;circle value=&quot;(C1)&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/intersection&gt;
+<br>
+<p><em>&gt;  This really look like a nightmare to parse with libxml as there is 10th
+</em><br>
+<em>&gt; kind of intersection point.
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  Alternatively I could make a horrible things like this :
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  &lt;intersection_line_circle label=&quot;A&quot; line=&quot;(MN)&quot; circle=&quot;(C1)&quot; k=&quot;1&quot; /&gt;
+</em><br>
+<em>&gt;  &lt;intersection_segment_halfline label=&quot;B&quot; segment=&quot;[MN]&quot; halfline=&quot;[OP)&quot; /&gt;
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  Horrible for the users but easy to parse.
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  Any ideas, suggestion ?
+</em><br>
+<p>&nbsp;&nbsp;use the structure to express the logical concepts. It won't be harder to parse
+<br>
+is expendable, and basically makes sense ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20suggestion%20with%20libxml">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0082.html">Daniel Veillard: "[xml] Upgates of the XML library"</a>
+<li><strong>Previous message:</strong> <a href="0080.html">Owen Cliffe: "Re: [xml] suggestion with libxml"</a>
+<li><strong>In reply to:</strong> <a href="0079.html">hilaire@seul.org: "[xml] suggestion with libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

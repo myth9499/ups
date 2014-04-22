@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] RE: Question about libxml...</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="[xml] RE: Question about libxml...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] RE: Question about libxml...</h1>
+<!-- received="Wed Nov 15 16:45:12 2000" -->
+<!-- isoreceived="20001115214512" -->
+<!-- sent="Wed, 15 Nov 2000 16:45:10 -0500" -->
+<!-- isosent="20001115214510" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="[xml] RE: Question about libxml..." -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0B199BF@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml..."><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Wed Nov 15 2000 - 16:45:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1197.html">TOM: "Re: [xml] Question about libxml..."</a>
+<li><strong>Previous message:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I am not sure this is the fix we should add, but it solved one of the
+<br>
+problem:
+<br>
+<p>I added the following code in htmlParseStartTag in HTMLParser.c 
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (xmlStrEqual(name, BAD_CAST&quot;meta&quot;))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meta = 1;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check to see if we already have the html tag
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;nameNr &gt; 0 &amp;&amp; xmlStrEqual(name, BAD_CAST&quot;html&quot;)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree(name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Check for auto-closure of HTML elements.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;htmlAutoClose(ctxt, name);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+<p>So don't add an 'html' tag if the nameNr is greater than 0, so we already
+<br>
+have a html tag.  No the result is better, but I still have 2 head tag.
+<br>
+<p>I tough of another way to solve this.  Add a table of tag that should not be
+<br>
+added if they are already there, and ensure the are not already in the
+<br>
+stack.
+<br>
+<p>What do you think ?
+<br>
+<p>Marc.
+<br>
+<p><em>&gt;  -----Original Message-----
+</em><br>
+<em>&gt; From: 	<a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">xml-request@rufus.w3.org</a>]
+</em><br>
+<em>&gt; On Behalf Of Marc Sanfacon
+</em><br>
+<em>&gt; Sent:	November 15, 2000 14:51 PM
+</em><br>
+<em>&gt; To:	'<a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">xml@rpmfind.net</a>'
+</em><br>
+<em>&gt; Subject:	Question about libxml...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	we have found a problem in the HTML parser.  Here is my HTML code:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;SCRIPT LANGUAGE=&quot;JavaScript&quot;&gt;
+</em><br>
+<em>&gt; &lt;!--
+</em><br>
+<em>&gt; var cobrand_directory = &quot;&quot;;
+</em><br>
+<em>&gt; //--&gt;
+</em><br>
+<em>&gt; &lt;/SCRIPT&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+</em><br>
+<em>&gt; &lt;HTML&gt;
+</em><br>
+<em>&gt; &lt;HEAD&gt;
+</em><br>
+<em>&gt; &lt;TITLE&gt;Title&lt;/TITLE&gt;
+</em><br>
+<em>&gt; &lt;/HEAD&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;BODY&gt;
+</em><br>
+<em>&gt; This is a test
+</em><br>
+<em>&gt; &lt;/BODY&gt;
+</em><br>
+<em>&gt; &lt;/HTML&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; libxml (2.2.7) outputs the following:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+</em><br>
+<em>&gt; &lt;html&gt;&lt;head&gt;
+</em><br>
+<em>&gt; &lt;script language=&quot;JavaScript&quot;&gt;
+</em><br>
+<em>&gt; &lt;!--
+</em><br>
+<em>&gt; var cobrand_directory = &quot;&quot;;
+</em><br>
+<em>&gt; //--&gt;
+</em><br>
+<em>&gt; &lt;/script&gt;
+</em><br>
+<em>&gt; &lt;html&gt;
+</em><br>
+<em>&gt; &lt;head&gt;&lt;title&gt;Title&lt;/title&gt;&lt;/head&gt;
+</em><br>
+<em>&gt; &lt;body&gt;&lt;p&gt;
+</em><br>
+<em>&gt; This is a test
+</em><br>
+<em>&gt; &lt;/p&gt;&lt;/body&gt;
+</em><br>
+<em>&gt; &lt;/html&gt;
+</em><br>
+<em>&gt; &lt;/html&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As you can see, the results contain 2 html tags, 2 head tags, 2 ending
+</em><br>
+<em>&gt; html and only 1 head tag.
+</em><br>
+<em>&gt; I have pinpointed where this comes from (htmlcheckImplied), but haven't
+</em><br>
+<em>&gt; found where to fix it yet.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think there should be only 1 html and 1 head tag with the proper ending
+</em><br>
+<em>&gt; tag.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I posted this, just in case Daniel, or somebody else, can fix the problem
+</em><br>
+<em>&gt; or can help me fix it.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Regards,
+</em><br>
+<em>&gt; 	Marc
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ---------------------------------------------------------------------
+</em><br>
+<em>&gt;  &quot;Better the pride that resides, in a citizen of the world.
+</em><br>
+<em>&gt;   Than the pride that divides, when a colorful rag is 
+</em><br>
+<em>&gt;   unfurled.&quot;  Neil Peart
+</em><br>
+<em>&gt; ---------------------------------------------------------------------
+</em><br>
+<em>&gt; Marc Sanfacon, Software developer	Copernic.com 
+</em><br>
+<em>&gt; e-mail: <a href="mailto:msanfacon@copernic.com?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">msanfacon@copernic.com</a>		R&amp;D Group
+</em><br>
+<em>&gt; Tel   : (418) 527-0528 ext 1212	
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<p><hr noshade>
+<ul>
+<li>application/ms-tnef attachment: <a href="att-1196/01-part">stored</a>
+</ul>
+<!-- attachment="01-part" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20RE:%20Question%20about%20libxml...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1197.html">TOM: "Re: [xml] Question about libxml..."</a>
+<li><strong>Previous message:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 15 2000 - 17:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

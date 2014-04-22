@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Internationalization issue</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Internationalization issue">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Internationalization issue</h1>
+<!-- received="Wed Jul 19 16:52:36 2000" -->
+<!-- isoreceived="20000719205236" -->
+<!-- sent="Wed, 19 Jul 2000 22:48:05 +0200" -->
+<!-- isosent="20000719204805" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Internationalization issue" -->
+<!-- id="20000719224805.A2219@w3.org" -->
+<!-- inreplyto="397455D7.624753E7@lmt.lv" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Internationalization%20issue"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jul 19 2000 - 16:48:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0608.html">Vjacheslav Chekushin: "Re: [xml] Internationalization issue"</a>
+<li><strong>Previous message:</strong> <a href="0606.html">Vjacheslav Chekushin: "[xml] Internationalization issue"</a>
+<li><strong>In reply to:</strong> <a href="0606.html">Vjacheslav Chekushin: "[xml] Internationalization issue"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0608.html">Vjacheslav Chekushin: "Re: [xml] Internationalization issue"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Jul 18, 2000 at 04:04:23PM +0300, Vjacheslav Chekushin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi all.
+</em><br>
+<em>&gt; I have some problem with encoding.
+</em><br>
+<em>&gt; I try parse (using xmlParseMemory) file with encoding &quot;CP1257&quot;.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I get following stderr:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Unknown encoding CP1257
+</em><br>
+<em>&gt; Registered encoding handler for UTF-8
+</em><br>
+<em>&gt; Registered encoding handler for UTF-16LE
+</em><br>
+<em>&gt; Registered encoding handler for UTF-16BE
+</em><br>
+<em>&gt; Registered encoding handler for ISO-8859-1
+</em><br>
+<em>&gt; Found iconv handler for encoding CP1257
+</em><br>
+<em>&gt; Entity: line 1: error: xmlSwitchEncoding : no input
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot; encoding=&quot;CP1257&quot;?&gt;
+</em><br>
+<em>&gt;                                      ^
+</em><br>
+<em>&gt; Entity: line 6: error: Input is not proper UTF-8, indicate encoding !
+</em><br>
+<em>&gt;     &lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;/wap/windex.cfm&quot;&gt;Latvijas Bankas noteiktie valÙt
+</em><br>
+<em>&gt;                                                                              ^
+</em><br>
+<em>&gt; Entity: line 6: error: Bytes: 0xFB 0x74 0x75 0x20
+</em><br>
+<em>&gt;     &lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;/wap/windex.cfm&quot;&gt;Latvijas Bankas noteiktie valÙt
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But iconv supports CP1257.
+</em><br>
+<em>&gt; What wrong in my case and how can I work with this encoding?
+</em><br>
+<em>&gt; Thank You.
+</em><br>
+<p>&nbsp;&nbsp;Prerequisite: are you using 2.2.0 ? If not upgrade, if yes
+<br>
+can you send me a copy of your input, I'm surprized.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Internationalization%20issue">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Internationalization%20issue">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Internationalization%20issue">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0608.html">Vjacheslav Chekushin: "Re: [xml] Internationalization issue"</a>
+<li><strong>Previous message:</strong> <a href="0606.html">Vjacheslav Chekushin: "[xml] Internationalization issue"</a>
+<li><strong>In reply to:</strong> <a href="0606.html">Vjacheslav Chekushin: "[xml] Internationalization issue"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0608.html">Vjacheslav Chekushin: "Re: [xml] Internationalization issue"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

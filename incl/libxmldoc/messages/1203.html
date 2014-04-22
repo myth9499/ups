@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Another HTML parser issue...</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="[xml] Another HTML parser issue...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Another HTML parser issue...</h1>
+<!-- received="Fri Nov 17 09:57:12 2000" -->
+<!-- isoreceived="20001117145712" -->
+<!-- sent="Fri, 17 Nov 2000 09:57:13 -0500" -->
+<!-- isosent="20001117145713" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="[xml] Another HTML parser issue..." -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0B19A42@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue..."><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Fri Nov 17 2000 - 09:57:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1202.html">JohnnyXia@acersoftech.com.cn: "Re: [xml] link errors when I called the library function"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi again,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I found another problem with the HTML parser.  I know, that this is
+<br>
+non-valid HTML, but...  Here is the case:
+<br>
+<p>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+<br>
+&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Title&lt;/TITLE&gt;
+<br>
+&lt;META http-equiv=Content-Type content=&quot;text/html; charset=windows-1252&quot;&gt;
+<br>
+&lt;/HEAD&gt;
+<br>
+&lt;BODY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So &lt;A href=&quot;<a href="http://www.ebay.com/">http://www.ebay.com/</a>&quot;&gt;eBay&amp;#174 Company&lt;/A&gt;
+<br>
+&lt;/BODY&gt;&lt;/HTML&gt;
+<br>
+<p>As you can see, the line that contains the href contains the following
+<br>
+'&amp;#174' and it doesn't end with a ';'.  So the result from libxml is:
+<br>
+<p>BUGSun.txt:6: error: htmlParseCharRef: invalid decimal value
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So &lt;A href=&quot;<a href="http://www.ebay.com/">http://www.ebay.com/</a>&quot;&gt;eBay&amp;#174 Company&lt;/A&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+BUGSun.txt:6: error: htmlParseCharRef: invalid xmlChar value 0
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So &lt;A href=&quot;<a href="http://www.ebay.com/">http://www.ebay.com/</a>&quot;&gt;eBay&amp;#174 Company&lt;/A&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;
+<br>
+&lt;title&gt;Title&lt;/title&gt;
+<br>
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=windows-1252&quot;&gt;
+<br>
+&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;p&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So &lt;a href=&quot;<a href="http://www.ebay.com/">http://www.ebay.com/</a>&quot;&gt;eBay&lt;/a&gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+<p>I lost the caracter, but also the subsequent caracters ' Company'.  The
+<br>
+reason for that is the following:
+<br>
+<p>SAX.startElement(a, href='<a href="http://www.ebay.com/">http://www.ebay.com/</a>')
+<br>
+SAX.characters(eBay, 4)
+<br>
+SAX.error: htmlParseCharRef: invalid decimal value
+<br>
+SAX.error: htmlParseCharRef: invalid xmlChar value 0
+<br>
+SAX.characters(&amp;#0;, 1)
+<br>
+SAX.characters( Company, 8)
+<br>
+SAX.endElement(a)
+<br>
+<p>In the sax parser, the library send me a caracter '&amp;#0' which ends the
+<br>
+string, so any subsequent caracters are not used.
+<br>
+<p>I fixed it doing the following in method: htmlParseReference
+<br>
+<p>void
+<br>
+htmlParseReference(htmlParserCtxtPtr ctxt) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;htmlEntityDescPtr ent;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlChar out[6];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlChar *name;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (CUR != '&amp;') return;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (NXT(1) == '#') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned int c;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int bits, i = 0;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c = htmlParseCharRef(ctxt);
+<br>
+-&gt;        if (c != 0) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if      (c &lt;    0x80) { out[i++]= c;                bits= -6; }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (c &lt;   0x800) { out[i++]=((c &gt;&gt;  6) &amp; 0x1F) | 0xC0;
+<br>
+bits=  0; }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (c &lt; 0x10000) { out[i++]=((c &gt;&gt; 12) &amp; 0x0F) | 0xE0;
+<br>
+bits=  6; }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else                  { out[i++]=((c &gt;&gt; 18) &amp; 0x07) | 0xF0;
+<br>
+bits= 12; }
+<br>
+-&gt;        }
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for ( ; bits &gt;= 0; bits-= 6) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out[i++]= ((c &gt;&gt; bits) &amp; 0x3F) | 0x80;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out[i] = 0;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlCheckParagraph(ctxt);
+<br>
+-&gt;        if (i &gt; 0 &amp;&amp; (ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;characters !=
+<br>
+NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax-&gt;characters(ctxt-&gt;userData, out, i);
+<br>
+<p>Regards,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marc.
+<br>
+<p>---------------------------------------------------------------------
+<br>
+&nbsp;&quot;Better the pride that resides, in a citizen of the world.
+<br>
+&nbsp;&nbsp;Than the pride that divides, when a colorful rag is 
+<br>
+&nbsp;&nbsp;unfurled.&quot;  Neil Peart
+<br>
+---------------------------------------------------------------------
+<br>
+Marc Sanfacon, Software developer	Copernic.com 
+<br>
+e-mail: <a href="mailto:msanfacon@copernic.com?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">msanfacon@copernic.com</a>		R&amp;D Group
+<br>
+Tel   : (418) 527-0528 ext 1212	
+<br>
+<p><p><p><hr noshade>
+<ul>
+<li>application/ms-tnef attachment: <a href="att-1203/01-part">stored</a>
+</ul>
+<!-- attachment="01-part" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1202.html">JohnnyXia@acersoftech.com.cn: "Re: [xml] link errors when I called the library function"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 17 2000 - 10:43:40 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Don't read XML from directories.</title>
+<meta name="Author" content="Alejandro Forero Cuervo (bachue@bachue.com)">
+<meta name="Subject" content="Re: [xml] Don't read XML from directories.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Don't read XML from directories.</h1>
+<!-- received="Wed Jan 24 04:26:21 2001" -->
+<!-- isoreceived="20010124092621" -->
+<!-- sent="Wed, 24 Jan 2001 00:37:31 -0500" -->
+<!-- isosent="20010124053731" -->
+<!-- name="Alejandro Forero Cuervo" -->
+<!-- email="bachue@bachue.com" -->
+<!-- subject="Re: [xml] Don't read XML from directories." -->
+<!-- id="20010124003728.A5801@azul.dhis.org" -->
+<!-- inreplyto="001501c08546$03752e30$0b01a8c0@home.loc" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alejandro Forero Cuervo (<a href="mailto:bachue@bachue.com?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories."><em>bachue@bachue.com</em></a>)<br>
+<strong>Date:</strong> Wed Jan 24 2001 - 00:37:31 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1376.html">Charlie Bozeman: "Re: [xml] defaults in DTD defns?"</a>
+<li><strong>In reply to:</strong> <a href="1368.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+Igor does raise an interesting question as to whether libxml should or
+<br>
+should not check to see if a filename points to a directory before
+<br>
+actually open it and attempting to parse it.  My reasoning is that,
+<br>
+even though there are some valid points as to why it should not do it,
+<br>
+it should.  In this message I'll explain my arguments as to why it
+<br>
+should do it.
+<br>
+<p>My setup is as follows.  I guess it is pretty common.  My program asks
+<br>
+the user to pickup a file (showing an appropiate file/URL dialog) and
+<br>
+immediately asks libxml to parse it.  The following options are
+<br>
+possible:
+<br>
+<p>1. I don't check to see if the user is attempting to open a
+<br>
+&nbsp;&nbsp;&nbsp;directory, I still try to read XML from it.  Rather than seeing an
+<br>
+&nbsp;&nbsp;&nbsp;appropiate message telling him he picked a directory, he sees
+<br>
+&nbsp;&nbsp;&nbsp;messages telling him how the contents of the directory are not a
+<br>
+&nbsp;&nbsp;&nbsp;valid XML document.
+<br>
+<p>2. Before calling the functions in libxml, my program makes sure the
+<br>
+&nbsp;&nbsp;&nbsp;user did not pick a directory.  If it did, boom, it signals an
+<br>
+&nbsp;&nbsp;&nbsp;error.  If it didn't, it does call libxml's parsing functions.
+<br>
+<p>3. The checks are added inside libxml, right next to the open(2)
+<br>
+&nbsp;&nbsp;&nbsp;calls.
+<br>
+<p>One might argue for the first option, stating that it will make the
+<br>
+program more flexible than the others.  Sure, if the user does tell us
+<br>
+to try to read XML from a directory, however absurd it might sound to
+<br>
+us, the programmers, let's not assume he made a mistake and lets
+<br>
+actually do what he told us.  In reality, there will hardly ever be
+<br>
+any motivation to open a directory and parse it as XML, while it is a
+<br>
+common user mistake to select a directory (in the file-selection
+<br>
+dialog I'm using) rather than a file.  Lets not waste much time
+<br>
+talking about this option and discard it already.
+<br>
+<p>Arguments for the second option exist as well.  Igor states that
+<br>
+&quot;Libraries like libxml (and libxml2) should not go any deeper into the
+<br>
+matter of checking if a passed parameter is sane or not.&quot;  Having
+<br>
+every different library repeat the same check all over again is one of
+<br>
+the problems he states.
+<br>
+<p>Besides, if the programmer tells libxml to actually parse XML from a
+<br>
+directory, libxml should not try to be smarter (&quot;Hey, BonzoProgrammer,
+<br>
+that's an error, you crap!&quot;) but rather do exactly what the programmer
+<br>
+wanted, however absurd.  Like Igor says, the library shouldn't act as
+<br>
+a shield against programmer's own mistakes.  And, again, flexibility.
+<br>
+<p>But I said that in this message I would argue for the 3rd option.  So
+<br>
+enough.
+<br>
+<p>First, I don't agree with the strlen example and I think Igor abuses
+<br>
+it.  I could talk about other examples where functions in libc (at
+<br>
+least in glibc's implementation) do make those check against NULL
+<br>
+pointers (such as printf(&quot;%s&quot;, NULL) or free(NULL)).  Also (though you
+<br>
+might just ignore this argument if you don't agree with it), libxml's
+<br>
+xmlParseFile and strlen are completely different in that the first is
+<br>
+a high-level function that is supposed to be called once or twice
+<br>
+during the whole program execution (where adding a few microseconds of
+<br>
+delay does not matter), while strlen is a low-lever function that must
+<br>
+be -fast-.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;I am simply against the library acting as a shield before
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;programmer's own mistakes. What would be next? Patching strlen
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;routine in glibc so it checks for NULL argument before parsing the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;string and, if it is NULL, sends an email to
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;strlenwatch@localhost, sets the appropriate errno and returns -1?
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Correctness and sanity of parameters any program passes to any
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;library function must be enforced by the program itself. No
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;library can ever know better what the program is about to do.
+<br>
+<p>I agree completely with your second paragraph.
+<br>
+<p>However, you see, correctness and sanity of parameters are completely
+<br>
+relative to the function's precondition.
+<br>
+<p>Following your logic, why bother checking the return value for the
+<br>
+open(2) call in libxml at all?  After all, the programmer passed a
+<br>
+filename that can't be opened so it's his fault for not establishing
+<br>
+the correctness and sanity of parameters.
+<br>
+<p>Would you suggest that everyone who calls functions on libxml to parse
+<br>
+a file better calls open(2) on the file to make sure it can be opened
+<br>
+or else the unpredictable will happen?
+<br>
+<p>Currently, the (implicit) precondition is &quot;pass a filename that points
+<br>
+to a file (not directory; if it points to directory, errors will
+<br>
+occur)&quot;.  So yes, for that precondition, you must make sure your
+<br>
+filename does point to a file, not a directory.  I am just proposing
+<br>
+changing that (again, implicit) precondition to &quot;pass a filename that
+<br>
+can point to both a file or a directory and let libxml signal an error
+<br>
+if it is a directory&quot;.
+<br>
+<p>There is more to this, however.
+<br>
+<p>The functions in libxml receive a ``filename'' but hey, it can be a
+<br>
+URL too.  Before actually calling open on ``filename'', libxml checks
+<br>
+it to see if it is an HTTP URL, an FTP URL or something that must be
+<br>
+passed to open(2).  And, of course, it only gets open(2)ed if it isn't
+<br>
+a URL.  So doing things your way, with these checks on the caller
+<br>
+programs, everybody and their dog would have to copy and paste all the
+<br>
+code that, given the ``filename'', checks to see if it is an HTTP URL,
+<br>
+FTP URL or, finally, something that will get passed to open.  Only
+<br>
+then, when the caller programs notices it is something that will get
+<br>
+passed to open(2), it can call stat.
+<br>
+<p>What would be next? Patching all libxml caller programs so they
+<br>
+contain a modified version of all the code in libxml such that, before
+<br>
+actually calling functions in libxml, they know for sure nothing will
+<br>
+fail inside them and, in case they find errors (hey, the contents of
+<br>
+this URL that libxml will eventually download looking for XML does not
+<br>
+parse correctly), log them calling syslog(3) and family, send an email
+<br>
+to couldntestablishcorrectnessinparametersforlibxml@localhost and
+<br>
+call raise(SIGSEGV)?
+<br>
+<p>Well, even if we did this, as libxml is supposed to evolve, the checks
+<br>
+might change and the programs' versions of them will get out-of-sync.
+<br>
+<p>The reasoning behind having libxml accept URLs as well as filenames
+<br>
+and handling it all automatically is (I'm guessing) to allow the
+<br>
+programmer to forget about this (which is the whole purpose of
+<br>
+libraries).  The programmer just gets a resource descriptor of some
+<br>
+kind and libxml will take care of finding out what it is (file, FTP
+<br>
+URL, HTTP URL...) and how to read it.  I fail to see why would it be
+<br>
+wrong to add a call to stat(2) to check if ``filename'' is a file or a
+<br>
+directory in a function that is already examining if ``filename'' is a
+<br>
+path or a URL.
+<br>
+<p>But I still need to make that patch. :)
+<br>
+<p>Thanks.
+<br>
+<p>Alejo.
+<br>
+<a href="http://bachue.com/alejo">http://bachue.com/alejo</a>
+<br>
+<p><pre>
+--
+The mere formulation of a problem is far more essential than its solution.
+      -- Albert Einstein.
+<p>$0='!/sfldbi!yjoV0msfQ!sfiupob!utvK'x44;print map{(&quot;\e[7m \e[0m&quot;,chr ord
+(chop$0)-1)[$_].(&quot;\n&quot;)[++$i%77]}split//,unpack'B*',pack'H*',($F='F'x19).
+&quot;F0F3E0607879CC1E0F0F339F3FF399C666733333CCF87F99E6133999999E67CFFCCF3&quot;.
+&quot;219CC1CCC033E7E660198CCE4E66798303873CCE60F3387$F&quot;#Don't you love Perl?
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1376.html">Charlie Bozeman: "Re: [xml] defaults in DTD defns?"</a>
+<li><strong>In reply to:</strong> <a href="1368.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 24 2001 - 04:43:34 EST</em>
+</em>
+</small>
+</body>
+</html>

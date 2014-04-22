@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: update of the XML CVS code</title>
+<meta name="Author" content="Miguel de Icaza (miguel@gnu.org)">
+<meta name="Subject" content="[xml] Re: update of the XML CVS code">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: update of the XML CVS code</h1>
+<!-- received="Mon Jun 21 23:57:49 1999" -->
+<!-- isoreceived="19990622035749" -->
+<!-- sent="Mon, 21 Jun 1999 22:31:03 -0500" -->
+<!-- isosent="19990622033103" -->
+<!-- name="Miguel de Icaza" -->
+<!-- email="miguel@gnu.org" -->
+<!-- subject="[xml] Re: update of the XML CVS code" -->
+<!-- id="199906220331.WAA09305@erandi.nuclecu.unam.mx" -->
+<!-- inreplyto="19990621101219.D6720@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Miguel de Icaza (<a href="mailto:miguel@gnu.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code"><em>miguel@gnu.org</em></a>)<br>
+<strong>Date:</strong> Mon Jun 21 1999 - 23:31:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Previous message:</strong> <a href="0071.html">Daniel Veillard: "[xml] update of the XML CVS code"</a>
+<li><strong>In reply to:</strong> <a href="0071.html">Daniel Veillard: "[xml] update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;  I just commited a bunch of changes. At least one breaks the libxml.so.0.0.0 
+</em><br>
+<em>&gt; binary interface, more precisely xmlEncodeEntities() is now reentrant, but
+</em><br>
+<em>&gt; the result string has to freed now. Problem is that freeing the result of
+</em><br>
+<em>&gt; the previous implementation results in a SIGSEGV :-\
+</em><br>
+<p>Daniel, this change is pretty bad, because it means that both released
+<br>
+Gnumeric and released GnoRPM will memory leak with the the new
+<br>
+libraries and they will crash if used with the new libraries.
+<br>
+<p>Could you please consider making a new release of the XML libraries
+<br>
+reverting this change?
+<br>
+<p>I suggest a binary compatible change like this:
+<br>
+<p>&nbsp;&nbsp;1. Revert the patch.
+<br>
+&nbsp;&nbsp;2. Make the prototype for xmlEncodeEntities be:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const CHAR *xmlEncodeEntities(xmlDocPtr doc, const CHAR *input);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The &quot;const&quot; can be used to tell the user &quot;I am returning
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;something that I own, do not dare free()ing it&quot;, which is a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;convention we use on the gnome-libs.  
+<br>
+<p>&nbsp;&nbsp;3. Provide a *new* function entry point:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHAR *xmlEncodeEntities_r (xmlDocPtr doc, const CHAR *input);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Which can just be:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHAR *xmlEncodeEntities_r (xmlDocPtr doc, const CHAR *input)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return g_strdup (xmlEncodeEntities (doc, input));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>That way we do not have to resort to terrible hacks in Gnumeric/GnoRPM
+<br>
+nor any other applications to handle the 2 different APIs.
+<br>
+<p>Miguel.
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Previous message:</strong> <a href="0071.html">Daniel Veillard: "[xml] update of the XML CVS code"</a>
+<li><strong>In reply to:</strong> <a href="0071.html">Daniel Veillard: "[xml] update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

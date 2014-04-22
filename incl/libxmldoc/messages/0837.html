@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?</h1>
+<!-- received="Thu Sep 28 17:17:28 2000" -->
+<!-- isoreceived="20000928211728" -->
+<!-- sent="Thu, 28 Sep 2000 17:18:50 -0400" -->
+<!-- isosent="20000928211850" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] [Q] libxml-2.2.2.3  Thread Safe ?" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A086745A@EXCHANGE" -->
+<!-- inreplyto="[xml] [Q] libxml-2.2.2.3  Thread Safe ?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Thu Sep 28 2000 - 17:18:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0836.html">Daniel Veillard: "Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0828.html">Marc Sanfacon: "[xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;&gt; int htmlParseDocument(htmlParserCtxtPtr ctxt) {
+</em><br>
+<em>&gt;&gt;     xmlDtdPtr dtd;
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt;     htmlDefaultSAXHandlerInit();
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Is another place.  Why do we need to initalize 'htmlDefaultSAXHandler'
+</em><br>
+here
+<br>
+<em>&gt;&gt; ?  It was already initialized when instantiated.
+</em><br>
+<p><em>&gt;  Well since htmlParserCtxtPtr if a public structure there it is not
+</em><br>
+<em>&gt;formally forbidden to enter here without having called any of the context
+</em><br>
+<em>&gt;initialization routines. 
+</em><br>
+<p>I agree with you, but 'htmlDefaultSAXHandler' will be initialized anyway
+<br>
+since it is declared like this:
+<br>
+<p>xmlSAXHandler htmlDefaultSAXHandler = {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;internalSubset,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;getEntity,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;setDocumentLocator,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;startDocument,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;endDocument,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;startElement,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;endElement,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;characters,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ignorableWhitespace,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;comment,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserWarning,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserError,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserError,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;getParameterEntity,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NULL,
+<br>
+};
+<br>
+<p>Of course, if someone changed the default value, then we have a problem...
+<br>
+But it the default value was changed, it is not taken into account in this
+<br>
+call, since the default values are resetted.  So maybe we should remove this
+<br>
+function call from there and leave it there.  So if people want to reset to
+<br>
+the default, after having modified it, they can call this function.
+<br>
+<p>Is it logical ?  Will it break existing code ?
+<br>
+<p><em>&gt;&gt; Of course, As I said, since I call the parser in ST first, some of the
+</em><br>
+bugs
+<br>
+<em>&gt;&gt; might be there also.  It would be a good idea to have an initialization
+</em><br>
+<em>&gt;&gt; routine available, so I could call it when starting the system and ensure
+</em><br>
+<em>&gt;&gt; all the globals variables are initialized.
+</em><br>
+<p><em>&gt;   Yes, this is the best way to handle this in threaded contexts.
+</em><br>
+<em>&gt;We just need to define xmlInitParser() (like was done for cleanup
+</em><br>
+<em>&gt;xmlCleanupParser() ) and probably an HTML counterpart.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   I will look at this, either tonight or during this w.e.
+</em><br>
+<p>Excellent.
+<br>
+Thank you.
+<br>
+<p>Marc.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20[Q]%20libxml-2.2.2.3%20%20Thread%20Safe%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0836.html">Daniel Veillard: "Re: [xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0828.html">Marc Sanfacon: "[xml] [Q] libxml-2.2.2.3  Thread Safe ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Sep 28 2000 - 17:43:17 EDT</em>
+</em>
+</small>
+</body>
+</html>

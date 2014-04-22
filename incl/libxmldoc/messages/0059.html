@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] SAX and userData</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="[xml] SAX and userData">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] SAX and userData</h1>
+<!-- received="Thu Jun  3 21:05:32 1999" -->
+<!-- isoreceived="19990604010532" -->
+<!-- sent="04 Jun 1999 03:05:28 +0200" -->
+<!-- isosent="19990604010528" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="[xml] SAX and userData" -->
+<!-- id="y6ybtewlqqv.fsf@gallus.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20SAX%20and%20userData"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Thu Jun 03 1999 - 21:05:28 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<li><strong>Previous message:</strong> <a href="0058.html">Preben Randhol: "Re: [xml] Mail delivery failed: returning message to sender"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<li><strong>Reply:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I've been reading through the sources for gnome-xml the last few days,
+<br>
+and I've got a couple of questions:
+<br>
+<p>When using SAX shouldn't you be able to specify the userData that is
+<br>
+always passed as first argument to the handlers?  As it is,
+<br>
+ctxt-&gt;userData is just cleared when the SAX interface is used, whereas
+<br>
+the default SAX handler uses this to get at the xmlParserCtxt.  If you
+<br>
+were to do anything serious [ie. other than 'printf(&quot;startTag: %s\n&quot;,
+<br>
+...)'] _a_n_d threadsafe you would need this.  It's a fairly
+<br>
+simple extension, something like
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xmlSAXParseMemory(xmlSAXHandlerPtr sax, void *userData,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *buffer, int size, int recovery) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (sax != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax = sax;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;userData = userData;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>and similar for the rest of xmlSAXParse*.
+<br>
+&nbsp;&nbsp;
+<br>
+Another thing: since this is an XML parser for Gnome, how come it is
+<br>
+kept independent of glib?  (I can see from the ChangeLog that snprintf
+<br>
+was preferred over g_snprintf).  Surely glib would save some lines of
+<br>
+code and if GHash was used instead of xmlElementTable and others maybe
+<br>
+a speedup could be expected?
+<br>
+<p>regards, Kristian
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20SAX%20and%20userData">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20SAX%20and%20userData">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<li><strong>Previous message:</strong> <a href="0058.html">Preben Randhol: "Re: [xml] Mail delivery failed: returning message to sender"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<li><strong>Reply:</strong> <a href="0060.html">Daniel Veillard: "Re: [xml] SAX and userData"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

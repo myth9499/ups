@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Conditional Sections and the X3D DTD</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Conditional Sections and the X3D DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Conditional Sections and the X3D DTD</h1>
+<!-- received="Sun Nov 12 16:21:39 2000" -->
+<!-- isoreceived="20001112212139" -->
+<!-- sent="Sun, 12 Nov 2000 22:21:36 +0100" -->
+<!-- isosent="20001112212136" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Conditional Sections and the X3D DTD" -->
+<!-- id="20001112222136.A21602@w3.org" -->
+<!-- inreplyto="20001112120140.A14477@buffy" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Nov 12 2000 - 16:21:36 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1171.html">Jonathan P Springer: "Re: [xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 12, 2000 at 12:01:40PM -0500, Jonathan P Springer wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've been fiddling with using libxml to parse Web3D X3D files.  I'd had no
+</em><br>
+<em>&gt; problems parsing them until I turned on validation, at which point all heck
+</em><br>
+<em>&gt; broke
+</em><br>
+<em>&gt; loose, primarily around conditional sections.
+</em><br>
+<p>&nbsp;&nbsp;Okay I checked the patch, it looks good. I had to update it because
+<br>
+it didn't applied cleanly. Once updated validating a test file don't
+<br>
+raise the problem to pointed out, but there is still the 4 warnings about
+<br>
+the unavailable 4 entities
+<br>
+&nbsp;&nbsp;<a href="file://localhost/C%3A/www.web3D.org/TaskGroups/x3d/translation/xxxx">file://localhost/C%3A/www.web3D.org/TaskGroups/x3d/translation/xxxx</a>
+<br>
+<p>&nbsp;&nbsp;Itm passes the regression tests and one can still validate against
+<br>
+Docbook DTD which makes heavy use of conditional section so this really
+<br>
+looks solid, thanks for the patch and the work spent finding this out.
+<br>
+I will commit it and it will be in next version,
+<br>
+<p>&nbsp;&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p>PS: Web3D DTD makes a strange use of Public identifiers:
+<br>
+&nbsp;&nbsp;&lt;!ENTITY % GeoVrmlDTD PUBLIC
+<br>
+&nbsp;&nbsp;&nbsp;&quot;<a href="http://www.web3D.org/TaskGroups/x3d/translation/GeoVrml.dtd">http://www.web3D.org/TaskGroups/x3d/translation/GeoVrml.dtd</a>&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&quot;<a href="file://localhost/C:/www.web3D.org/TaskGroups/x3d/translation/GeoVrml.dtd">file://localhost/C:/www.web3D.org/TaskGroups/x3d/translation/GeoVrml.dtd</a>&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;looks weid to me, at least they should not use the file:// URL in the
+<br>
+&nbsp;&nbsp;&nbsp;published, online version.
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1171.html">Jonathan P Springer: "Re: [xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1168.html">Jonathan P Springer: "[xml] Conditional Sections and the X3D DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Nov 12 2000 - 16:43:27 EST</em>
+</em>
+</small>
+</body>
+</html>

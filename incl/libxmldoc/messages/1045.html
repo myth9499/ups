@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Auto-close in HTML parser.</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Auto-close in HTML parser.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Auto-close in HTML parser.</h1>
+<!-- received="Mon Oct 23 14:25:27 2000" -->
+<!-- isoreceived="20001023182527" -->
+<!-- sent="Mon, 23 Oct 2000 18:29:25 +0200" -->
+<!-- isosent="20001023162925" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Auto-close in HTML parser." -->
+<!-- id="20001023182925.A1475@debian" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B19061@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser."><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 12:29:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1044.html">TOM: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<li><strong>In reply to:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 23/10/2000 16:59:36 Marc Sanfacon wrote:
+<br>
+<em>&gt;             &lt;SELECT NAME=frmOS class=&quot;BodyText&quot;
+</em><br>
+style=&quot;width:250px;&quot;&gt;&lt;OPTION
+<br>
+<em>&gt; VALUE=&quot;98&quot; Selected&gt;Windows 98 &amp;nbsp; &lt;OPTION VALUE=&quot;95&quot; &gt;Windows 95
+</em><br>
+&amp;nbsp;
+<br>
+<em>&gt; &lt;OPTION VALUE=&quot;NT&quot; &gt;Windows NT &amp;nbsp;
+</em><br>
+<em>&gt;             &lt;/SELECT&gt;
+</em><br>
+[...]
+<br>
+<em>&gt; when ran through libxml, the nodes look like this: [...]
+</em><br>
+<em>&gt; &lt;td&gt;&lt;select name=&quot;frmOS&quot; class=&quot;BodyText&quot;
+</em><br>
+<em>&gt; style=&quot;width:250px;&quot;&gt;&lt;option
+</em><br>
+<em>&gt; value=&quot;98&quot; selected&gt;Windows 98 &amp;nbsp; &lt;option value=&quot;95&quot;&gt;Windows 95
+</em><br>
+&amp;nbsp;
+<br>
+<em>&gt; &lt;option value=&quot;NT&quot;&gt;Windows NT &amp;nbsp;             &lt;/option&gt;
+</em><br>
+<em>&gt; &lt;/option&gt;
+</em><br>
+<em>&gt; &lt;/option&gt;&lt;/select&gt;&lt;/td&gt;
+</em><br>
+[...]
+<br>
+<em>&gt; As you can see, the /option is given only when the /select is
+</em><br>
+<em>&gt; found.  I would have like to get the /option when the other
+</em><br>
+<em>&gt; &lt;option&gt; was found.  The problem is when I parse files that has a
+</em><br>
+<em>&gt; lot of &lt;option&gt; without the closing &lt;/option&gt;....
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I fixed the problem by adding:
+</em><br>
+<em>&gt; &quot;option&quot;,          &quot;option&quot;, NULL,
+</em><br>
+<em>&gt; in htmlStartClose table.  I don't know if it is OK.
+</em><br>
+<p>No, since &lt;option&gt; isn't an empty element but an element whose closing
+<br>
+tag is ignorable.
+<br>
+Doing this (considere &lt;option&gt; an empty element) you break up parsing
+<br>
+when you have the closing tag : &lt;option&gt;My option&lt;/option&gt;
+<br>
+<p>The problem is rather in the SAX callbacks which considere an &lt;option&gt;
+<br>
+can have an &lt;option&gt; child (I don't know the HTML implementation enough to
+<br>
+affirm anything here but libxml considere your &lt;option&gt;s are children of
+<br>
+the precedent ones [xmllint --debug --html wil prouve you]).
+<br>
+I believe you should convert to quite well-formed XML (XHTML), i.e.
+<br>
+don't have any ignored close tag, until the libxml HTML parser is fixed
+<br>
+(Daniel, there must be something to borrow to HTML Tidy here ;o).
+<br>
+<p>Perhaps if you add a DOCTYPE declaration and validate at parsing it will
+<br>
+do the trick...
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1044.html">TOM: "Re: [xml] xmlNodeSetContent that doesn't wipe out child elements?"</a>
+<li><strong>In reply to:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 14:43:56 EDT</em>
+</em>
+</small>
+</body>
+</html>

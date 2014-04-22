@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] bug in xmlIO.c:xmlGzfileOpen</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="[xml] bug in xmlIO.c:xmlGzfileOpen">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] bug in xmlIO.c:xmlGzfileOpen</h1>
+<!-- received="Thu Jan 18 08:54:58 2001" -->
+<!-- isoreceived="20010118135458" -->
+<!-- sent="Thu, 18 Jan 2001 13:51:18 +0000" -->
+<!-- isosent="20010118135118" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="[xml] bug in xmlIO.c:xmlGzfileOpen" -->
+<!-- id="3A66F4D6.537F7450@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20bug%20in%20xmlIO.c:xmlGzfileOpen"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 18 2001 - 08:51:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<li><strong>Previous message:</strong> <a href="1351.html">H.-Arno Jacobsen: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<li><strong>Reply:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>There are a couple of small bugs in the named function. We need to keep
+<br>
+one of the slashes in the match for file:/// otherwise we lose the start
+<br>
+of our path and we should open path after working out what it is rather
+<br>
+than filename.
+<br>
+<p>Patch is :-
+<br>
+<p>bash-2.03# diff -c ~garyp/orig/libxml2-2.2.11/xmlIO.c xmlIO.c
+<br>
+*** /home/garyp/orig/libxml2-2.2.11/xmlIO.c     Fri Jan  5 06:39:29 2001
+<br>
+<p>--- xmlIO.c     Thu Jan 18 13:43:47 2001
+<br>
+***************
+<br>
+*** 400,410 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!strncmp(filename, &quot;<a href="file://localhost">file://localhost</a>&quot;, 16))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = &amp;filename[16];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (!strncmp(filename, &quot;file:///&quot;, 8))
+<br>
+!       path = &amp;filename[8];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = filename;
+<br>
+<p>!     fd = gzopen(filename, &quot;rb&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return((void *) fd);
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>--- 400,410 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!strncmp(filename, &quot;<a href="file://localhost">file://localhost</a>&quot;, 16))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = &amp;filename[16];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (!strncmp(filename, &quot;file:///&quot;, 8))
+<br>
+!       path = &amp;filename[7];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = filename;
+<br>
+<p>!     fd = gzopen(path, &quot;rb&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return((void *) fd);
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>bash-2.03#
+<br>
+<p>Yours,
+<br>
+<p>Gary
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20xmlIO.c:xmlGzfileOpen">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20xmlIO.c:xmlGzfileOpen">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<li><strong>Previous message:</strong> <a href="1351.html">H.-Arno Jacobsen: "Re: [xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<li><strong>Reply:</strong> <a href="1353.html">Daniel Veillard: "Re: [xml] bug in xmlIO.c:xmlGzfileOpen"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 18 2001 - 10:44:37 EST</em>
+</em>
+</small>
+</body>
+</html>

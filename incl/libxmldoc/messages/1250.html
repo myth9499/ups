@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] validating and xmlExternalEntityLoader's argumen</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] validating and xmlExternalEntityLoader's arguments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] validating and xmlExternalEntityLoader's arguments</h1>
+<!-- received="Mon Dec  4 08:31:46 2000" -->
+<!-- isoreceived="20001204133146" -->
+<!-- sent="Mon, 4 Dec 2000 14:31:39 +0100" -->
+<!-- isosent="20001204133139" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] validating and xmlExternalEntityLoader's arguments" -->
+<!-- id="20001204143139.F14628@w3.org" -->
+<!-- inreplyto="20001203182006.H6081@bailey.dscga.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Dec 04 2000 - 08:31:39 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1249.html">Michael Mealling: "[xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>In reply to:</strong> <a href="1249.html">Michael Mealling: "[xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Dec 03, 2000 at 06:20:06PM -0500, Michael Mealling wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt;   I'm building a client application that will receive XML back from
+</em><br>
+<em>&gt; several different servers which may decide to put different values in
+</em><br>
+<em>&gt; thier SYSTEM identifier in their DOCTYPE. After poking around
+</em><br>
+<em>&gt; trying to find an example of validatinog as you parsed (i.e. 
+</em><br>
+<em>&gt; xmlDoValidityCheckingDefaultValue = 1) it became obvious that 
+</em><br>
+<em>&gt; default behavior was to access whatever was in the SYSTEM ID regardless
+</em><br>
+<em>&gt; of what the PUBLIC ID was. So I decided to  write an ExternalEntityLoader.
+</em><br>
+<em>&gt; Not finding an example of one I looked at the default one in xmlIO.c.
+</em><br>
+<em>&gt; Its header looks like this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  * xmlDefaultExternalEntityLoader:
+</em><br>
+<em>&gt;  * @URL:  the URL for the entity to load
+</em><br>
+<em>&gt;  * @ID:  the System ID for the entity to load
+</em><br>
+<em>&gt;  * @ctxt:  the context in which the entity is called or NULL
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is this correct?
+</em><br>
+<p>&nbsp;&nbsp;I think so except that ID is actually the PUBLIC id.
+<br>
+<p><em>&gt; Does the external entity loader not get the PUBLIC 
+</em><br>
+<em>&gt; identifier?
+</em><br>
+<p>&nbsp;&nbsp;URL -&gt; SYSTEM ID
+<br>
+&nbsp;&nbsp;ID  -&gt; PUBLIC ID
+<br>
+<p><em>&gt; If so, how do I know what entity I'm being asked to resolve
+</em><br>
+<em>&gt; if I don't trust the SYSTEM ID?
+</em><br>
+<p>&nbsp;&nbsp;Put a breakpoint at the function call, you will be 100% sure of what
+<br>
+is provided,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1249.html">Michael Mealling: "[xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>In reply to:</strong> <a href="1249.html">Michael Mealling: "[xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 09:44:03 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] BUG: &lt;table&gt; tag ends paragraph</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] BUG: &lt;table&gt; tag ends paragraph">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] BUG: &lt;table&gt; tag ends paragraph</h1>
+<!-- received="Wed Feb 21 19:43:56 2001" -->
+<!-- isoreceived="20010222004356" -->
+<!-- sent="Thu, 22 Feb 2001 01:43:06 +0100" -->
+<!-- isosent="20010222004306" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] BUG: &lt;table&gt; tag ends paragraph" -->
+<!-- id="20010222014306.H24118@imag.fr" -->
+<!-- inreplyto="20010221150114.4915C19073@skinner.codefactory.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Wed Feb 21 2001 - 19:43:06 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1483.html">Jonas Borgströ: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<li><strong>In reply to:</strong> <a href="1475.html">Jonas Borgström: "[xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Feb 21, 2001 at 04:00:20PM +0100, Jonas Borgström wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think I might have found a bug in the HTMLparser in gnome-xml.
+</em><br>
+<em>&gt; if you have some code like this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;.p&gt;
+</em><br>
+<em>&gt;   Some text
+</em><br>
+<em>&gt;   &lt;.table style=&quot;display: inline-table&quot;&gt;
+</em><br>
+<em>&gt;     ..some table rows....
+</em><br>
+<em>&gt;   &lt;./table&gt;
+</em><br>
+<em>&gt;   Some more text
+</em><br>
+<em>&gt; &lt;./p&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But when gnome-xml parses this file it will convert it to this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;.p&gt;
+</em><br>
+<em>&gt;   Some text
+</em><br>
+<em>&gt; &lt;./p&gt;
+</em><br>
+<em>&gt; &lt;.table style=&quot;display: inline-table&quot;&gt;
+</em><br>
+<em>&gt;   ..some table rows....
+</em><br>
+<em>&gt; &lt;./table&gt;
+</em><br>
+<em>&gt; &lt;.p&gt;
+</em><br>
+<em>&gt;   Some more text
+</em><br>
+<em>&gt; &lt;./p&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But this is not correct, because the &quot;display: inline-table&quot; tells the browser
+</em><br>
+<em>&gt; to put the table on the same line as the other text. But gnome-xml makes new paragraphs
+</em><br>
+<em>&gt; so it becomes impossible for the browser (gtkhtml2) to do this.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; after a quick look at the code in HTMLparser.c it looks like the line:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &quot;table&quot;,        &quot;p&quot;, &quot;head&quot;, &quot;h1&quot;, &quot;h2&quot;, &quot;h3&quot;, &quot;h4&quot;, &quot;h5&quot;, &quot;h6&quot;, &quot;pre&quot;,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; should be removed from the char *htmlStartClose[] initialisation.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What do you think about this?
+</em><br>
+<p>&nbsp;&nbsp;Nothing, let's look at the spec:
+<br>
+<p><a href="http://www.w3.org/TR/html401/struct/text.html">http://www.w3.org/TR/html401/struct/text.html</a>
+<br>
+9.3.1
+<br>
+&lt;!ELEMENT P - O (%inline;)*            -- paragraph --&gt;
+<br>
+<p><a href="http://www.w3.org/TR/html401/sgml/dtd.html">http://www.w3.org/TR/html401/sgml/dtd.html</a>
+<br>
+&lt;!ENTITY % inline &quot;#PCDATA | %fontstyle; | %phrase; | %special; | %formctrl;&quot;&gt;
+<br>
+&lt;!ENTITY % fontstyle
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;TT | I | B | BIG | SMALL&quot;&gt;
+<br>
+<p>&lt;!ENTITY % phrase &quot;EM | STRONG | DFN | CODE |
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAMP | KBD | VAR | CITE | ABBR | ACRONYM&quot; &gt;
+<br>
+<p>&lt;!ENTITY % special
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;A | IMG | OBJECT | BR | SCRIPT | MAP | Q | SUB | SUP | SPAN | BDO&quot;&gt;
+<br>
+<p>&lt;!ENTITY % formctrl &quot;INPUT | SELECT | TEXTAREA | LABEL | BUTTON&quot;&gt;
+<br>
+<p>&nbsp;&nbsp;So as far as I can tell, a table cannot be the child of a paragraph
+<br>
+I thing whoever accepts it as such is just making a non conformant
+<br>
+application, you guys believe in standards, right ;-)
+<br>
+<p>&nbsp;&nbsp;There might perfectly be mistakes in htmlStartClose, but in this
+<br>
+case it doesn't seems it's the case...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1483.html">Jonas Borgströ: "Re: [xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<li><strong>In reply to:</strong> <a href="1475.html">Jonas Borgström: "[xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 21 2001 - 20:43:46 EST</em>
+</em>
+</small>
+</body>
+</html>

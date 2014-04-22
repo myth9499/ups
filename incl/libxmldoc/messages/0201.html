@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Weirdness in XML parser</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re: [xml] Weirdness in XML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Weirdness in XML parser</h1>
+<!-- received="Fri Nov 12 04:30:56 1999" -->
+<!-- isoreceived="19991112093056" -->
+<!-- sent="Fri, 12 Nov 1999 10:30:40 +0100" -->
+<!-- isosent="19991112093040" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re: [xml] Weirdness in XML parser" -->
+<!-- id="0437.991112@triplex.de" -->
+<!-- inreplyto="y6yk8nolq7f.fsf@decius.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Fri Nov 12 1999 - 04:30:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>In reply to:</strong> <a href="0199.html">Kristian Hogsberg Kristensen: "[xml] Weirdness in XML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Kristian,
+<br>
+<p>Thursday, November 11, 1999, 9:37:40 PM, you wrote:
+<br>
+<p><p><p>KHK&gt; [ I sent this earlier, but apparently it didn't show up on the
+<br>
+KHK&gt;   list... It's not on the list archive page either, which by the way
+<br>
+KHK&gt;   seems to have stopped updating around October 11. Anyway, here
+<br>
+KHK&gt;   goes... ]
+<br>
+<p>KHK&gt; Hi,
+<br>
+<p>KHK&gt; When parsing this document:
+<br>
+<p>KHK&gt;     &lt;HTML&gt;
+<br>
+KHK&gt;       &lt;BODY&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+KHK&gt;       &lt;P&gt; 
+<br>
+KHK&gt;       &lt;HR&gt;
+<br>
+KHK&gt;       foo
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+KHK&gt;       &lt;/BODY&gt;
+<br>
+KHK&gt;     &lt;/HTML&gt;
+<br>
+<p>KHK&gt; The HTML parser makes &quot;foo&quot; a child of &lt;HR&gt;...  I tracked the problem
+<br>
+KHK&gt; to this piece of code in htmlParseElement (lines 2310-2317):
+<br>
+<p>KHK&gt;     if (((depth == ctxt-&gt;nameNr) &amp;&amp; (oldname == ctxt-&gt;name)) ||
+<br>
+KHK&gt;         (name == NULL)) {
+<br>
+KHK&gt;         if (CUR == '&gt;')
+<br>
+KHK&gt;             NEXT;
+<br>
+KHK&gt;         return;
+<br>
+KHK&gt;     }
+<br>
+<p>KHK&gt; which look a bit weird to me... I dont see what it's supposed to do.
+<br>
+KHK&gt; What happens is that &lt;HR&gt; autocloses &lt;P&gt;, and when control reaches
+<br>
+KHK&gt; these lines, oldname points to freed memory.  Accidently, this memory
+<br>
+KHK&gt; is used for the name of the new name, so oldname == ctxt-&gt;name and
+<br>
+KHK&gt; thus htmlParseElement returns prematurely (it doesn't reach the test
+<br>
+for info-&gt;&gt;empty).
+<br>
+<p>KHK&gt; I see you've made &lt;DD&gt; autoclose &lt;DT&gt; and &lt;DT&gt; autoclose &lt;DD&gt;, but
+<br>
+KHK&gt; what about also making &lt;DD&gt; autoclose &lt;DD&gt; and likewise for &lt;DT&gt;?
+<br>
+KHK&gt; This would make the parser a bit more robust; suppose someone were to
+<br>
+KHK&gt; do something like:
+<br>
+<p>KHK&gt;     &lt;DL&gt;
+<br>
+KHK&gt;       &lt;DD&gt;foo
+<br>
+KHK&gt;       &lt;DD&gt;bar
+<br>
+KHK&gt;     &lt;/DL&gt;
+<br>
+<p>KHK&gt; it would get parsed as
+<br>
+<p>KHK&gt;     &lt;DL&gt;
+<br>
+KHK&gt;       &lt;DD&gt;foo&lt;/DD&gt;
+<br>
+KHK&gt;       &lt;DD&gt;bar&lt;/DD&gt;
+<br>
+KHK&gt;     &lt;/DL&gt;
+<br>
+<p>KHK&gt; which I believe is a bit more useful than
+<br>
+<p>KHK&gt;     &lt;DL&gt;
+<br>
+KHK&gt;       &lt;DD&gt;foo
+<br>
+KHK&gt;         &lt;DD&gt;bar&lt;/DL&gt;
+<br>
+KHK&gt;       &lt;/DD&gt;
+<br>
+KHK&gt;     &lt;/DL&gt;
+<br>
+<p>KHK&gt; regards,
+<br>
+KHK&gt; Kristian
+<br>
+KHK&gt; ----
+<br>
+KHK&gt; Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">xml@rufus.w3.org</a>
+<br>
+KHK&gt; Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+<br>
+KHK&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">majordomo@rufus.w3.org</a>
+<br>
+<p>Yes you are right, but it's in the users resposibility closing the
+<br>
+tags. The Parser tries to go on parsing when such an error occures
+<br>
+and this is the result. It tries to analyse and handle such cases
+<br>
+with errors. Normally you have to break parsing and print out some
+<br>
+kind of error messages. In my opionion there are too many possibilities
+<br>
+that you can handle each type of errors correctly.
+<br>
+<p><p>ciao. Stefan
+<br>
+<p>-----------------------------------------------------------------------
+<br>
+Stefan Bambach
+<br>
+<p>triplex - agentur für neue medien GmbH
+<br>
+Erhardtstr. 8
+<br>
+80469 München
+<br>
+<p>Tel: +49 89 209138-21
+<br>
+Fax: +49 89 209138-10
+<br>
+mailto:<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">bambach@triplex.de</a>
+<br>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<br>
+-----------------------------------------------------------------------
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Weirdness%20in%20XML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0200.html">Daniel Veillard: "Re: [xml] Weirdness in XML parser"</a>
+<li><strong>In reply to:</strong> <a href="0199.html">Kristian Hogsberg Kristensen: "[xml] Weirdness in XML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

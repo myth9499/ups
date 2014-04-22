@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] bug in libxml-1.8.10</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] bug in libxml-1.8.10">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] bug in libxml-1.8.10</h1>
+<!-- received="Thu Sep  7 11:51:38 2000" -->
+<!-- isoreceived="20000907155138" -->
+<!-- sent="Thu, 7 Sep 2000 17:51:33 +0200" -->
+<!-- isosent="20000907155133" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] bug in libxml-1.8.10" -->
+<!-- id="20000907175133.C18722@w3.org" -->
+<!-- inreplyto="C02C9AA5C528D411A7840060B057CE011D323E@daynt1.daas.dla.mil" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20bug%20in%20libxml-1.8.10"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Sep 07 2000 - 11:51:33 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0744.html">Jordan Henderson: "RE: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Previous message:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>In reply to:</strong> <a href="0741.html">Jordan Henderson: "RE: [xml] bug in libxml-1.8.10"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Sep 07, 2000 at 11:33:29AM -0400, Jordan Henderson wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Can anyone point me to the justification for making white space significant in
+</em><br>
+<em>&gt; XML?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When I heard about this, I couldn't hardly believe it.  I know this is going to
+</em><br>
+<em>&gt; cause a 
+</em><br>
+<em>&gt; million niggling problems like this one.
+</em><br>
+<p>&nbsp;I don't have pointer handy, but there were quite some discussions
+<br>
+about this problem in the markup community. Here is what I understand:
+<br>
+<p>&nbsp;&nbsp;Let's take the following document, now design a rule where
+<br>
+you can be sure what spaces are ignorable and whose are really the
+<br>
+author intent (remember that carriage returns are spaces):
+<br>
+---------------------
+<br>
+&lt;p&gt;  
+<br>
+&lt;a&gt;&lt;/a&gt;
+<br>
+&lt;a&gt; &lt;/a&gt;
+<br>
+&lt;a&gt;  abc &lt;/a&gt;
+<br>
+&lt;a&gt;  &lt;b&gt;abc&lt;/b&gt;  &lt;/a&gt;
+<br>
+&lt;a&gt;
+<br>
+&lt;b&gt;abc&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b&gt;abc&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+&lt;a&gt;&lt;b&gt;abc
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/b&gt;&lt;/a&gt;
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b&gt;abc
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+&lt;/p&gt;
+<br>
+---------------------
+<br>
+&nbsp;&nbsp;If you don't have a DTD to check against a content model this is
+<br>
+impossible. Even with a DTD it's not possible to always tell.
+<br>
+&nbsp;&nbsp;More than 10 years of work on SGML were not able to bring a decent
+<br>
+solution to this problem. As a result all spaces are significant
+<br>
+(and even if you validate, and are guaranteed that one doesn't have
+<br>
+a mixed content-model, most of the XML DOM parser will provide the
+<br>
+white spaces).
+<br>
+&nbsp;&nbsp;It's better to have a specific policy enforced at the application
+<br>
+level than a broken policy at the parser level.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20bug%20in%20libxml-1.8.10">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20libxml-1.8.10">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20libxml-1.8.10">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0744.html">Jordan Henderson: "RE: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Previous message:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>In reply to:</strong> <a href="0741.html">Jordan Henderson: "RE: [xml] bug in libxml-1.8.10"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Sep 07 2000 - 12:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

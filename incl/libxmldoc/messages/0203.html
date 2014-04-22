@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: gnome-xml attribute quoting question</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: gnome-xml attribute quoting question">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: gnome-xml attribute quoting question</h1>
+<!-- received="Fri Nov 12 11:50:23 1999" -->
+<!-- isoreceived="19991112165023" -->
+<!-- sent="Fri, 12 Nov 1999 11:49:56 -0500" -->
+<!-- isosent="19991112164956" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: gnome-xml attribute quoting question" -->
+<!-- id="19991112114955.X21823@w3.org" -->
+<!-- inreplyto="199910280510.WAA05992@onan.artofcode.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20gnome-xml%20attribute%20quoting%20question"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Nov 12 1999 - 11:49:56 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<li><strong>Previous message:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<li><strong>Reply:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Oct 27, 1999 at 10:10:20PM -0700, Raph Levien wrote:
+<br>
+<em>&gt; Hi Daniel,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    I have a question about attribute quoting, and wondering if it's
+</em><br>
+<em>&gt; something I'm doing wrong, or perhaps a problem with gnome-xml.
+</em><br>
+<p>&nbsp;&nbsp;A problem with libxml :-)
+<br>
+<p><em>&gt;    If I have &lt;tag attr=&quot;bits &amp;amp; pieces&quot;&gt;, then the xmlGetProp()
+</em><br>
+<em>&gt; call quite reasonably returns &quot;bits &amp; pieces&quot;. But if I pass this
+</em><br>
+<em>&gt; string into xmlSetProp() and write the file, it complains of an
+</em><br>
+<em>&gt; unterminated entity.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    It looks to me like this is an asymmetry between the use of
+</em><br>
+<em>&gt; xmlNodeListGetString in xmlGetProp (which sets inLine = 1), and
+</em><br>
+<em>&gt; xmlStringGetNodeList in xmlSetProp, which seems to expect its value to
+</em><br>
+<em>&gt; have its entities quoted.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    So to do a roundtrip, it looks like I have to do an
+</em><br>
+<em>&gt; xmlEncodeEntitiesReentrant() between the Get and the Set. This doesn't
+</em><br>
+<em>&gt; seem right to me. What am I missing here?
+</em><br>
+<p>&nbsp;&nbsp;Right, and Fred Drake triggered that as a bug 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://bugs.gnome.org/db/35/3504.html">http://bugs.gnome.org/db/35/3504.html</a>
+<br>
+<p>So basically I changed xmlSetProp() and xmlNewProp() to do the
+<br>
+call to xmlEncodeEntitiesReentrant() so that the functions 
+<br>
+New, Set and Get are at the same level. This makes far more sense
+<br>
+and I hope won't break too many things, this should be commited within
+<br>
+an hour in CVS. 
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20gnome-xml%20attribute%20quoting%20question">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20gnome-xml%20attribute%20quoting%20question">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20gnome-xml%20attribute%20quoting%20question">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<li><strong>Previous message:</strong> <a href="0202.html">Kristian Hogsberg Kristensen: "Re: [xml] Weirdness in XML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<li><strong>Reply:</strong> <a href="0204.html">Fred L. Drake, Jr.: "[xml] Re: gnome-xml attribute quoting question"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

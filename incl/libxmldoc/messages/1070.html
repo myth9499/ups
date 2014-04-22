@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] BIG PATCH: libxml and use of stderr</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] BIG PATCH: libxml and use of stderr">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] BIG PATCH: libxml and use of stderr</h1>
+<!-- received="Wed Oct 25 15:27:59 2000" -->
+<!-- isoreceived="20001025192759" -->
+<!-- sent="Wed, 25 Oct 2000 21:27:21 +0200" -->
+<!-- isosent="20001025192721" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] BIG PATCH: libxml and use of stderr" -->
+<!-- id="20001025212721.B15974@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10010241546530.24462-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20BIG%20PATCH:%20libxml%20and%20use%20of%20stderr"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Oct 25 2000 - 15:27:21 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1071.html">TOM: "[xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1069.html">Wayne Davison: "Re: [xml] libxml-2.2.6 released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 24, 2000 at 04:01:12PM -0400, Harry Blundell wrote:
+<br>
+<em>&gt; Daniel,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; A while back, there was a posting to the list from a guy wanting to
+</em><br>
+<em>&gt; prevent libxml from sending errors to stderr.  No one answered his
+</em><br>
+<em>&gt; question, and now we're faced with the same issue.
+</em><br>
+<p>&nbsp;&nbsp;Okay I think this was really needed. there was a number of places
+<br>
+where the library needed some reporting due to an error while being
+<br>
+outside the context of parsing or validating (where such callbacks
+<br>
+are already defined).
+<br>
+<p>&nbsp;&nbsp;I patched a virgin 2.2.6 to redirrect all &quot;out of context&quot; error
+<br>
+messages to a reconfigurable routine. The changes are:
+<br>
+&nbsp;&nbsp;&nbsp;- in xmlerror.h : I added the export of an error context type (void *)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an error handler type xmlGenericErrorFunc
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there is an interface 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSetGenericErrorFunc  (void *ctx, xmlGenericErrorFunc handler);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to reset the error handling routine and its argument
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(by default it's equivalent to respectively fprintf and stderr.
+<br>
+&nbsp;&nbsp;&nbsp;- in all the c files, all wild accesses to stderr or stdout within
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the library have been replaced to the handler.
+<br>
+<p>&nbsp;&nbsp;The result is a Jumbo Patch of 450KBytes, I saved it at
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="ftp://xmlsoft.org/test/messages226.diff">ftp://xmlsoft.org/test/messages226.diff</a>
+<br>
+<p>&nbsp;&nbsp;to avoid filling up everybody mailboxes :-\
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20BIG%20PATCH:%20libxml%20and%20use%20of%20stderr">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20BIG%20PATCH:%20libxml%20and%20use%20of%20stderr">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20BIG%20PATCH:%20libxml%20and%20use%20of%20stderr">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1071.html">TOM: "[xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1069.html">Wayne Davison: "Re: [xml] libxml-2.2.6 released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 25 2000 - 19:43:32 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,18 @@
+Index: HTMLparser.c
+@@ -492,12 +492,13 @@
+  * start tags that imply the end of current element
+  */
+ char *htmlStartClose[] = {
+-"form",		"form", "p", "hr", "h1", "h2", "h3", "h4", "h5", "h6",
++"form",		"form", "p", "h1", "h2", "h3", "h4", "h5", "h6",
+ 		"dl", "ul", "ol", "menu", "dir", "address", "pre",
+ 		"listing", "xmp", "head", NULL,
+-"head",		"p", NULL,
++"head",		"p", "head", "body", NULL,
++"html",		"p", "head", "body", "html", NULL,
+ "title",	"p", NULL,
+-"body",		"head", "style", "link", "title", "p", NULL,
++"body",		"head", "body", "style", "link", "title", "p", NULL,
+ "li",		"p", "h1", "h2", "h3", "h4", "h5", "h6", "dl", "address",
+ 		"pre", "listing", "xmp", "head", "li", NULL,
+ "hr",		"p", "head", NULL,

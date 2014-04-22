@@ -1,0 +1,25 @@
+Index: HTMLparser.c
+@@ -2895,6 +2895,9 @@
+ 	    ctxt->sax->error(ctxt->userData, 
+ 	     "htmlParseStartTag: invalid element name\n");
+ 	ctxt->wellFormed = 0;
++	/* Dump the bogus tag like browsers do */
++	while ((IS_CHAR(CUR)) && (CUR != '>'))
++	    NEXT;
+         return;
+     }
+     if (xmlStrEqual(name, BAD_CAST"meta"))
+@@ -2969,6 +2972,13 @@
+ 	    atts[nbatts++] = attvalue;
+ 	    atts[nbatts] = NULL;
+ 	    atts[nbatts + 1] = NULL;
++	}
++	else {
++	    /* Dump the bogus attribute string up to the next blank or
++	     * the end of the tag. */
++	    while ((IS_CHAR(CUR)) && !(IS_BLANK(CUR)) && (CUR != '>')
++	     && ((CUR != '/') || (NXT(1) != '>')))
++		NEXT;
+ 	}
+ 
+ failed:

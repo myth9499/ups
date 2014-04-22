@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Win32 porting</title>
+<meta name="Author" content="Peter Jacobi (pj@walter-graphtek.com)">
+<meta name="Subject" content="Re: [xml] Win32 porting">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Win32 porting</h1>
+<!-- received="Tue Dec 21 16:59:15 1999" -->
+<!-- isoreceived="19991221215915" -->
+<!-- sent="Tue, 21 Dec 1999 22:45:37 +0100" -->
+<!-- isosent="19991221214537" -->
+<!-- name="Peter Jacobi" -->
+<!-- email="pj@walter-graphtek.com" -->
+<!-- subject="Re: [xml] Win32 porting" -->
+<!-- id="385FF501.5F06F8DA@walter-graphtek.com" -->
+<!-- inreplyto="19991221122518.X3165@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Peter Jacobi (<a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20Win32%20porting"><em>pj@walter-graphtek.com</em></a>)<br>
+<strong>Date:</strong> Tue Dec 21 1999 - 16:45:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<li><strong>Previous message:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>In reply to:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0280.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>Reply:</strong> <a href="0280.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard commenting on my post:
+<br>
+<em>&gt; &gt; nt isinf (double d) {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I assume that's a cut'n paste problem and actually this line reads
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; static int isinf (double d) {
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; right ?
+</em><br>
+<p>Yes
+<br>
+<p><em>&gt; &gt; C) In the sys directory relative to the compiler default include
+</em><br>
+<em>&gt; &gt; directory I put a dummy socket.h:
+</em><br>
+<em>&gt; &gt; #include &lt;winsock2.h&gt;
+</em><br>
+<em>&gt; &gt; #define EWOULDBLOCK             WSAEWOULDBLOCK
+</em><br>
+<em>&gt; [more #define removed]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Well this seems rather fragile, can't we just remove HAVE_SYS_SOCKET_H
+</em><br>
+<em>&gt; and include this right away in win32config.h instead ?
+</em><br>
+<em>&gt; The only include of &lt;sys/socket.h&gt; is in nanohttp.c and is protected
+</em><br>
+<em>&gt; by HAVE_SYS_SOCKET_H,
+</em><br>
+<p>When putting it into win32config.h, it will be included in every source
+<br>
+file and so it will include winsock2.h and that will include zillions of
+<br>
+lines of obscure Microsoft Windows headers in each .c file.
+<br>
+<p>Even if this doesn't break the code due to polluting the global
+<br>
+namespace with MS stuff, it's a terrible waste. 
+<br>
+<p>But I agree not everybody would like to modify the compiler's include
+<br>
+directories. Perhaps in nanohttp.h it should read:
+<br>
+<p>#ifdef WIN32
+<br>
+#define INCLUDE_WINSOCK
+<br>
+#include &quot;win32config.h&quot;
+<br>
+#else
+<br>
+<p>and in win32config.h:
+<br>
+<p>#ifdef INCLUDE_WINSOCK
+<br>
+#include &lt;winsock2.h&gt;
+<br>
+#define EWOULDBLOCK             WSAEWOULDBLOCK
+<br>
+[more #define removed]
+<br>
+#endif
+<br>
+<p>Regards,
+<br>
+Peter
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Win32%20porting">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Win32%20porting">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<li><strong>Previous message:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>In reply to:</strong> <a href="0269.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0280.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<li><strong>Reply:</strong> <a href="0280.html">Daniel Veillard: "Re: [xml] Win32 porting"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:56 EDT</em>
+</em>
+</small>
+</body>
+</html>

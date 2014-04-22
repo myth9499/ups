@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: [gdome] Future development of gdome</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: [gdome] Future development of gdome">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: [gdome] Future development of gdome</h1>
+<!-- received="Tue Jan 25 14:27:37 2000" -->
+<!-- isoreceived="20000125192737" -->
+<!-- sent="Tue, 25 Jan 2000 14:27:34 -0500" -->
+<!-- isosent="20000125192734" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: [gdome] Future development of gdome" -->
+<!-- id="20000125142734.B2822@w3.org" -->
+<!-- inreplyto="200001251845.KAA07592@adsl-63-196-208-218.dsl.snfc21.pacbell.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20[gdome]%20Future%20development%20of%20gdome"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Jan 25 2000 - 14:27:34 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0305.html">Art Gillespie: "[xml] XSLT"</a>
+<li><strong>Previous message:</strong> <a href="0303.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Raph Levien &lt;<a href="mailto:raph@acm.org?subject=Re:%20[xml]%20Re:%20[gdome]%20Future%20development%20of%20gdome">raph@acm.org</a>&gt; wrote in the gdome mailing-list:
+<br>
+[one of the prossibilities w.r.t. gdome (DOM) implementation]
+<br>
+<em>&gt;    Using our own data structures would avoid inconsistencies between
+</em><br>
+<em>&gt; the gnome-xml data structures and DOM. In particular, gnome-xml uses
+</em><br>
+<em>&gt; hashtables to store dtd items, while DOM requires a list structure.
+</em><br>
+<em>&gt; It's possible to change gnome-xml to fix this (and is in fact a
+</em><br>
+<em>&gt; wishlist bug: <a href="http://bugs.gnome.org/db/51/5190.html">http://bugs.gnome.org/db/51/5190.html</a>).
+</em><br>
+<p>By doing this you would loose directly 80% of libxml code usefulness,
+<br>
+and definitely more in the long term, DOM manipulations are just one
+<br>
+of the interractions one may use XML/HTML structure for:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- searching (XPath Xpointer).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- hypertext (Xlink)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- validation
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- export/translation
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- transformations
+<br>
+by moving to your own structure the libxml code in those area won't
+<br>
+be usable in the Gnome/DOM framework.
+<br>
+<p>&nbsp;&nbsp;I agreed to made changes to ease DOM implementation, they include :
+<br>
+<p>&nbsp;&nbsp;- provide the list structures from your wish list
+<br>
+&nbsp;&nbsp;- reunify all the DOM adressable data structure so that for most of the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;operation you won't need a switch on the type and working with
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a casted pointer
+<br>
+<p>&nbsp;&nbsp;I suggest to make those changes which will break binary compatibility
+<br>
+at version 2.0 . The 2.0 release is overwise mostly dependant on adding
+<br>
+proper I18N support.
+<br>
+<p>&nbsp;&nbsp;One think I will need to know from the DOM implementors
+<br>
+is whether they need the 2 pointer fields present at the beginning 
+<br>
+of the DOM adressable nodes:
+<br>
+<p>struct _xmlNode {
+<br>
+#ifndef XML_WITHOUT_CORBA
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void           *_private;   /* for Corba, must be first ! */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void           *vepv;       /* for Corba, must be next ! */
+<br>
+#endif
+<br>
+<p>&nbsp;I would happily remove them if not needed. Also tell me if something
+<br>
+else is specifically needed for DOM operation. I understand that
+<br>
+having a pointer to an application (be it DOM or other) datatype
+<br>
+may still be useful. Feedback on those issues is needed,
+<br>
+<p>Daniel.
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20[gdome]%20Future%20development%20of%20gdome">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20[gdome]%20Future%20development%20of%20gdome">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20[gdome]%20Future%20development%20of%20gdome">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0305.html">Art Gillespie: "[xml] XSLT"</a>
+<li><strong>Previous message:</strong> <a href="0303.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:59 EDT</em>
+</em>
+</small>
+</body>
+</html>

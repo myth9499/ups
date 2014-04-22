@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Apparent XPath bug in libxml 2.2.7</h1>
+<!-- received="Mon Nov 13 05:46:25 2000" -->
+<!-- isoreceived="20001113104625" -->
+<!-- sent="Mon, 13 Nov 2000 11:46:21 +0100" -->
+<!-- isosent="20001113104621" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: Apparent XPath bug in libxml 2.2.7" -->
+<!-- id="20001113114621.C27672@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.21.0011121748440.23561-100000@inky" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 05:46:21 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1175.html">Daniel Veillard: "Re: [xml] MSDev project file on 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1173.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Nov 12, 2000 at 06:17:02PM -0800, David Moore wrote:
+<br>
+<em>&gt; The other day I sent a message regarding a bug in libxml's 2.2.7 xpath
+</em><br>
+<em>&gt; support in regards to evaluating relative paths.
+</em><br>
+<p>&nbsp;&nbsp;Right,
+<br>
+<p><em>&gt; I think I've found the source of the bug.  In 2.2.6, the following code
+</em><br>
+<em>&gt; appeared in xmlXPathEval() just before xmlXPathEvalExpr() gets called:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if (ctx-&gt;node != NULL) {
+</em><br>
+<em>&gt;        init = xmlXPathNewNodeSet(ctx-&gt;node);
+</em><br>
+<em>&gt;        valuePush(ctxt, init);
+</em><br>
+<em>&gt;     }
+</em><br>
+<p>&nbsp;&nbsp;Humm, exact, I cleaned up this part but obviously went a bit too far :-)
+<br>
+<p><em>&gt; I hope this is helpful (relative path evaluation is very important to my
+</em><br>
+<em>&gt; application).
+</em><br>
+<p>&nbsp;&nbsp;yes actually xmllint uses it for its shell code:
+<br>
+<p>~/XML -&gt; xmllint --shell --valid test/valid/REC-xml-19980210.xml 
+<br>
+/ &gt; cd spec
+<br>
+spec &gt; ls
+<br>
+---       15 header
+<br>
+---       10 body
+<br>
+---        9 back
+<br>
+spec &gt; cd body
+<br>
+body &gt; ls
+<br>
+-a-        6 div1
+<br>
+c--        8 
+<br>
+[...]
+<br>
+<p>&nbsp;&nbsp;&nbsp;the cd comand uses it for its argument evaluation.
+<br>
+&nbsp;&nbsp;&nbsp;This was broken in 2.2.7, I restaured it, thanks for raising this
+<br>
+point !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1175.html">Daniel Veillard: "Re: [xml] MSDev project file on 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1173.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1177.html">TOM: "Re: [xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 09:43:42 EST</em>
+</em>
+</small>
+</body>
+</html>

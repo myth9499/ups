@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XPath Node Selection Using ...[@attr=&quot;value</title>
+<meta name="Author" content="Tim Ruddick (truddick@eng.us.uu.net)">
+<meta name="Subject" content="Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]</h1>
+<!-- received="Wed May 10 19:34:25 2000" -->
+<!-- isoreceived="20000510233425" -->
+<!-- sent="Wed, 10 May 2000 19:30:25 -0400 (EDT)" -->
+<!-- isosent="20000510233025" -->
+<!-- name="Tim Ruddick" -->
+<!-- email="truddick@eng.us.uu.net" -->
+<!-- subject="Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]" -->
+<!-- id="Pine.BSI.4.05Lt.10005101910550.11842-100000@perrier.eng.us.uu.net" -->
+<!-- inreplyto="Pine.BSI.4.05Lt.10004260934160.15387-100000@perrier.eng.us.uu.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tim Ruddick (<a href="mailto:truddick@eng.us.uu.net?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]"><em>truddick@eng.us.uu.net</em></a>)<br>
+<strong>Date:</strong> Wed May 10 2000 - 19:30:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0475.html">Daniel Veillard: "Re: [xml] xmlMemoryParse leak?"</a>
+<li><strong>In reply to:</strong> <a href="0470.html">Tim Ruddick: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, 26 Apr 2000, Tim Ruddick wrote:
+<br>
+<p><em>&gt; On Wed, 26 Apr 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; Sorry I didn't focuse on the XPath state lately but rather on interfaces
+</em><br>
+<em>&gt; &gt; XML conformances for libxml2.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Understood.  That seems to me like the right approach, too.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; I would appreciate if volunteers could look at those issues (and
+</em><br>
+<em>&gt; &gt; possibly send patches ;-). At least a good pinpointing of the problem
+</em><br>
+<em>&gt; &gt; would help me fix them quickly.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'll see what I can do.  Acquainting myself with the code may take a
+</em><br>
+<em>&gt; little while, of course.
+</em><br>
+<p>I've been looking through the xpath code.  Interesting.
+<br>
+<p>One thing that strikes me is that the comments appear to reflect a version
+<br>
+of the grammar that is specified in
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/1999/07/WD-xpath-19990709">http://www.w3.org/1999/07/WD-xpath-19990709</a>
+<br>
+<p>(or perhaps earlier), but the latest version of the grammar is different
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a>
+<br>
+<p>I believe that some of the [@attr=&quot;value&quot;] confusion arises in grammar
+<br>
+rule [4], which the xpath.c code lists as
+<br>
+<p>&nbsp;&nbsp;&nbsp;[4]  Step ::= Basis Predicate*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| AbbreviatedStep
+<br>
+<p>But which the most recent grammar lists as
+<br>
+<p>&nbsp;&nbsp;&nbsp;[4]  Step ::= AxisSpecifier NodeTest Predicate*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| AbbreviatedStep 
+<br>
+<p>This leads to two or more possible theories, including: (1) the code
+<br>
+implements the grammar listed in the comments, but that grammar is now out
+<br>
+of date; or (2) the code implements the new grammar, but the comments
+<br>
+haven't been changed to reflect that.
+<br>
+<p>I'm not at all certain whether this is causing the problem, but it bears
+<br>
+looking into.
+<br>
+<p>I also note that when the time comes to compare the attributes, the parser
+<br>
+is pushing &quot;attribute&quot; nodes onto its context stack, and not &quot;child&quot; nodes
+<br>
+as I would expect.  To manufacture an example, given the XML snippet
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;base&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;node num=&quot;1&quot;&gt;one&lt;/node&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;node num=&quot;2&quot;&gt;two&lt;/node&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;node num=&quot;3&quot;&gt;three&lt;/node&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/base&gt;
+<br>
+<p>and the xpath expression
+<br>
+<p>&nbsp;&nbsp;&nbsp;/base/node[@num=&quot;1&quot;]
+<br>
+<p>the parser appears to push three attribute nodes onto the context stack,
+<br>
+and never gets around to finding the match against &quot;1&quot; and pushing the
+<br>
+single matching child node.  I fear I may not be explaining this very
+<br>
+clearly.  I'm still investigating.
+<br>
+<p>Tim.
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0475.html">Daniel Veillard: "Re: [xml] xmlMemoryParse leak?"</a>
+<li><strong>In reply to:</strong> <a href="0470.html">Tim Ruddick: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

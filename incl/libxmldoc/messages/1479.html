@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] xml error functionality</title>
+<meta name="Author" content="Todd Babinski (todd.babinski@dynetics.com)">
+<meta name="Subject" content="[xml] xml error functionality">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] xml error functionality</h1>
+<!-- received="Wed Feb 21 15:44:28 2001" -->
+<!-- isoreceived="20010221204428" -->
+<!-- sent="Wed, 21 Feb 2001 14:44:23 -0600" -->
+<!-- isosent="20010221204423" -->
+<!-- name="Todd Babinski" -->
+<!-- email="todd.babinski@dynetics.com" -->
+<!-- subject="[xml] xml error functionality" -->
+<!-- id="3A9428A7.7A747648@dynetics.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Todd Babinski (<a href="mailto:todd.babinski@dynetics.com?subject=Re:%20[xml]%20xml%20error%20functionality"><em>todd.babinski@dynetics.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 21 2001 - 15:44:23 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1480.html">Daniel Veillard: "Re: [xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<li><strong>Previous message:</strong> <a href="1478.html">Marc Sanfacon: "[xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1481.html">Daniel Veillard: "Re: [xml] xml error functionality"</a>
+<li><strong>Reply:</strong> <a href="1481.html">Daniel Veillard: "Re: [xml] xml error functionality"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have been working with the library on WinNT for a couple of weeks now,
+<br>
+seeing if it will fit the needs for a project that I am on.  I've
+<br>
+noticed a problem with how the errors are handled.  The programmer is
+<br>
+allowed to set the context and function used to handle the errors using
+<br>
+the xmlSetGenericErrorFunc, and then that is supposed to be used in
+<br>
+error handling from there on out.  The problem I've encountered is how
+<br>
+the context (xmlGenericErrorContext) gets used in the functions
+<br>
+xmlParserWarning, xmlParserValidityError, and xmlParserValidityWarning. 
+<br>
+The context is treaded as a FILE* in these functions with the following
+<br>
+code snippet (similar in all the functions):
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_start(args,msg);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vfprintf(xmlGenericErrorContext,msg, args);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_end(args);
+<br>
+<p>This works for contexts such as stderr, but in my case, the context will
+<br>
+be a pointer to a GUI interpreter, and the above code causes the program
+<br>
+to hang.  I've changed the above code on my machine to the following to
+<br>
+allow more flexibility in reporting of parser warnings and errors:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char buf[8192] = {'\0'};
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_start(args,msg);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vsprintf(buf, msg, args);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_end(args);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlGenericError(xmlGenericErrorContext, buf);
+<br>
+<p>I choose 8192 as the string length because it worked in my code, though
+<br>
+I know that it could have a potential overrun for long errors.  It
+<br>
+shouldn't be that hard to cobble together a function that would
+<br>
+dynamically allocate a long enough char* to fit the entire message
+<br>
+without overruns.
+<br>
+<p>Anyways, this is just a suggestion to bring back into the code base
+<br>
+since I did not find a more elegant way to do it in the existing code
+<br>
+base, and this seems to fit the intent of the generic error handler
+<br>
+better.
+<br>
+<p>Todd B.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xml%20error%20functionality">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xml%20error%20functionality">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1480.html">Daniel Veillard: "Re: [xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<li><strong>Previous message:</strong> <a href="1478.html">Marc Sanfacon: "[xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1481.html">Daniel Veillard: "Re: [xml] xml error functionality"</a>
+<li><strong>Reply:</strong> <a href="1481.html">Daniel Veillard: "Re: [xml] xml error functionality"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 21 2001 - 16:43:50 EST</em>
+</em>
+</small>
+</body>
+</html>

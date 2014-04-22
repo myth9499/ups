@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Incremental output (kinda followup to: streaming out</title>
+<meta name="Author" content="Lutz Behnke (behnke@trustcenter.de)">
+<meta name="Subject" content="[xml] Incremental output (kinda followup to: streaming output)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Incremental output (kinda followup to: streaming output)</h1>
+<!-- received="Fri Feb 18 11:00:20 2000" -->
+<!-- isoreceived="20000218160020" -->
+<!-- sent="Fri, 18 Feb 2000 16:56:14 +0100" -->
+<!-- isosent="20000218155614" -->
+<!-- name="Lutz Behnke" -->
+<!-- email="behnke@trustcenter.de" -->
+<!-- subject="[xml] Incremental output (kinda followup to: streaming output)" -->
+<!-- id="38AD6B9E.8EAC8C28@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Lutz Behnke (<a href="mailto:behnke@trustcenter.de?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)"><em>behnke@trustcenter.de</em></a>)<br>
+<strong>Date:</strong> Fri Feb 18 2000 - 10:56:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Previous message:</strong> <a href="0378.html">Havoc Pennington: "Re: [xml] GPL and other licensing issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Reply:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there,
+<br>
+<p>I want to use libxml in an application that sends data over a http connection.
+<br>
+<p>David, I have read your answer to Havocs question, stating that you would not
+<br>
+use such large trees, but rather either do it all in one streaming go, or split
+<br>
+the messages.
+<br>
+<p>My problem is a little bit different: while each individual document is small 
+<br>
+enough to write to memory w/o using all VM, there are some issues:
+<br>
+&nbsp;&nbsp;a) I have to watch the memory footprint of each message and its environment as
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this is a server application and I need to be able to process more than one
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message in parrallel.
+<br>
+&nbsp;&nbsp;b) As I have to write the outgoing data to the network, I costs a lot of overhead
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to write data to a file first and then pump the file back into the socket.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And as this is somewhat security sensitive I also have to watch temp files
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in general (lets say that I was brainwashed to simply dislike temp files).
+<br>
+&nbsp;&nbsp;c) If I dump the tree to memory I allmost double the mem footprint instantly.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I would really like to avoid this.
+<br>
+&nbsp;&nbsp;d) generating the tree for outgoing messages from the tree of incomming messages
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makes some sense as there are rather complex operations on both before I write
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all of it back to the net.
+<br>
+<p>I would assume that there are some kind of iterators to go over the tree in order
+<br>
+to dump it to mem or to a file. would it not be possible to adapt them to a producer-
+<br>
+consumer style dumper that stop when a number of bytes are written?
+<br>
+I would like to write it, but unfortunately am I only stalking around the lib trying
+<br>
+to understand how to use it, let alone how to extend it.
+<br>
+<p>mfg lutz
+<br>
+<pre>
+-- 
+Lutz Behnke, TC TrustCenter GmbH
+Sonninstrasse 24-28, D-20097 Hamburg, Germany
+Tel:040/80 80 26-0  Fax:040/80 80 26-1 26   <a href="http://www.trustcenter.de">http://www.trustcenter.de</a>
+-----BEGIN GEEK CODE BLOCK-----
+ Version: 3.1  
+GCS/IT d- s+:+ a C++ ULS+++$ P+++ L+++ E+++ W++ !N o? k? !w@++ !O
+!M !V PS+ PE Y+ PGP t+ 5+ X R+ tv+ b+++ DI+++ D G++ e++ h* r y+  
+------END GEEK CODE BLOCK------
+</pre>
+<hr noshade>
+<ul>
+<li>application/x-pkcs7-signature attachment: <a href="att-0379/01-smime.p7s">S/MIME Cryptographic Signature</a>
+</ul>
+<!-- attachment="01-smime.p7s" -->
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Incremental%20output%20(kinda%20followup%20to:%20streaming%20output)">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Previous message:</strong> <a href="0378.html">Havoc Pennington: "Re: [xml] GPL and other licensing issues"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<li><strong>Reply:</strong> <a href="0380.html">Daniel Veillard: "Re: [xml] Incremental output (kinda followup to: streaming output)"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:04 EDT</em>
+</em>
+</small>
+</body>
+</html>

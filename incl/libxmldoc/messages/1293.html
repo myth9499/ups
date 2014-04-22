@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] ipv6 and gnome-xml</title>
+<meta name="Author" content="winterlion (winterlion@fsj.net)">
+<meta name="Subject" content="Re: [xml] ipv6 and gnome-xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] ipv6 and gnome-xml</h1>
+<!-- received="Sat Dec 16 19:35:41 2000" -->
+<!-- isoreceived="20001217003541" -->
+<!-- sent="Sat, 16 Dec 2000 16:34:05 -0800 (PST)" -->
+<!-- isosent="20001217003405" -->
+<!-- name="winterlion" -->
+<!-- email="winterlion@fsj.net" -->
+<!-- subject="Re: [xml] ipv6 and gnome-xml" -->
+<!-- id="Pine.LNX.4.30.0012161543050.2290-100000@sigil" -->
+<!-- inreplyto="20001216110703.E13200@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> winterlion (<a href="mailto:winterlion@fsj.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml"><em>winterlion@fsj.net</em></a>)<br>
+<strong>Date:</strong> Sat Dec 16 2000 - 19:34:05 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1292.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, 16 Dec 2000, Daniel Veillard wrote:
+<br>
+<p><em>&gt; &gt; I've just discovered libxml (and switched to libxml2 - hope it doesn't
+</em><br>
+<em>&gt; &gt; break anything. v2.2.2) and discovered that the URL parser can't handle
+</em><br>
+<em>&gt; &gt; ipv6 defined addresses...
+</em><br>
+<em>&gt; &gt; ie:  http://[::1]:80 == <a href="http://localhost:80">http://localhost:80</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Well I never looked at the IPv6 URI support, this should be added to the
+</em><br>
+<em>&gt; TODO list :-)
+</em><br>
+<em>&gt;   I have pointers but never got the time to look at those.
+</em><br>
+<em>&gt; If you could provide a brief summary of the changes needed to both
+</em><br>
+<em>&gt; the URI parsing algorithms and possibly the changes needed when dealing
+</em><br>
+<em>&gt; with the socket interfaces, that would be really useful.
+</em><br>
+<em>&gt;   Patches are welcome too, but I would like first to understand the
+</em><br>
+<em>&gt; basic changes needed :-)
+</em><br>
+<p>First:  There IS windows 98+ IPv6 support although I think it's a
+<br>
+commercial extra..  I haven't looked for it yet.  Also for FreeBSD,
+<br>
+NetBSD, probably MacOS X.  FreeBSD, NetBSD and Linux are the testing
+<br>
+ground for the standard so.... *g*
+<br>
+<p>The socket interface requires minimal changes thankfully.  At least to get
+<br>
+operational...
+<br>
+<p>Now for the URI format:  (paraphrasing rfc 2732)
+<br>
+markers &quot;[&quot; and &quot;]&quot; are to be moved from unwise character set to reserved
+<br>
+character set.
+<br>
+<p>host address specification:
+<br>
+host          = hostname | IPv4address | IPv6reference
+<br>
+IPv6reference = &quot;[&quot; IPv6address &quot;]&quot;
+<br>
+<p>rfc 2373 describes the IPv6 address format.  The basic outline from what
+<br>
+I've seen though is:
+<br>
+::1                       -- localhost
+<br>
+fe80::248:54ff:fe8a:5bef  -- real example - my second ethernet card *g*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(not accessible to the internet)
+<br>
+::FFFF:129.144.52.38      -- from rfc2732; a site that doesn't understand
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6
+<br>
+<p>There's lots of details.. hrm..  I'll look into that next.
+<br>
+ipv6 addresses are 128bit;
+<br>
+preferred form x:x:x:x:x:x:x:x
+<br>
+- x is a 16-bit hexadecimal code
+<br>
+- &quot;::&quot; refers to a group of missing zeros.  Any number; so &quot;::1&quot; implies
+<br>
+that the entire address except the last 16bits are 0.  and the second
+<br>
+code above (my ethernet card) implies that fe80:0:0:0:248...  Only one
+<br>
+such block is allowed to be present in an address.
+<br>
+- an IPv4 varient is when the last two 16-bit values are replaced with a
+<br>
+standard IPv4 address... eg: ::192.168.0.1 or ::FFFF:142.27.10.30 or
+<br>
+0:0:0:0:0:ffff:204.244.132.1 if that helps *g*  (fsj.net's not setup for
+<br>
+ipv6 :)
+<br>
+<p>special addresses:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0:0:0:0:0:0:0:0  - unspecified address; also the &quot;any&quot; address
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when binding to a port to allow any incoming site...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(I think - according to glibc docs IIRC)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0:0:0:0:0:0:0:1  - loopback address *g*  (or ::1 for ease)
+<br>
+<p>ipv4 addresses:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::&lt;ip address&gt;      - reference to an IP address
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::FFFF:&lt;ip address&gt; - reference to a site that doesn't understand
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6
+<br>
+<p>special:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FE80:0:0:0:y:y:y:y  - link-local address for when finding
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbour addresses, local nodes, or
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when no ipv6 router is available.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(my ethernet card defaulted to this)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FEC0:0:0:x:y:y:y:y  - internal site address; do not allow into
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;internet;  (private site addresses)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I use 192.y.y.y in this manner
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x - subnet ID; y - interface ID
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(I've deliberately not compressed these ID's)
+<br>
+<p>- IPX addresses are also described a little (leading bits are 0000010)
+<br>
+- global aggregratable unicast addresses start with bits 001
+<br>
+- multicast addresses start with bits 11111111 (ie:FF)
+<br>
+- anycast addresses (sort of the equivalent of broadcast addresses)
+<br>
+start with subnet y:y:y:y... and finish with ...0:0:0:0
+<br>
+though the number of bits of both vary.... an address ending with a 0 bit
+<br>
+is by nature an &quot;anycast&quot; address as near as I can tell.
+<br>
+<p>Now I've cut out a lot of details and skipped most of what involved
+<br>
+address formation - just including a couple bits of reserved address
+<br>
+handling.  Does this help, or is it too much detail?  Or did I skip
+<br>
+something important?
+<br>
+<p>I'm not including how IPv6 communicates or how routing, packets, and so on
+<br>
+are formed.  Just address formation.  glibc-2.1 and newer include ipv6
+<br>
+support (it was a patch for glibc-2.0 iirc) and designed their interface
+<br>
+to require as little modifications as possible.  IPv6 allows a lot of
+<br>
+features that IPv4 doesn't - including encrypted communications where a
+<br>
+significant portion of the headers can be encrypted as well.  *g*.  I
+<br>
+haven't really explored it all that much yet outside of addresses though.
+<br>
+<p>one thing:  definitions present for identifying ipv6:
+<br>
+if ipv6 is present, ISC_PLATFORM_HAVEIPV6 in isc/platform.h;
+<br>
+RES_USE_INET6 in resolv.h; IPV6_ADDRFORM (plus lots more) in bits/in.h;
+<br>
+DNS_DISPATCHATTR_IPV6 in dns/dispatch.h; and IPPROTO_IPV6 in netinet/in.h
+<br>
+<p>I dinna have the foggiest which one(s) are guaranteed when ipv6 is present
+<br>
+*g*.
+<br>
+<p>Feel free to ask me anything about this.  If I don't know I'll happily
+<br>
+RTFM :)  (or RTFS really - I don't have any manuals outside of rfc's)
+<br>
+<p>G'day, eh? :)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Teunis
+<br>
+<p>(PS: does anyone know if the &quot;192&quot; A-block is still reserved for internal
+<br>
+use?)
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1292.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1291.html">Daniel Veillard: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Dec 16 2000 - 19:43:31 EST</em>
+</em>
+</small>
+</body>
+</html>

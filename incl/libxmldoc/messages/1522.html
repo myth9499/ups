@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Some words about libxslt</title>
+<meta name="Author" content="Tom . (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Some words about libxslt">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Some words about libxslt</h1>
+<!-- received="Mon Mar  5 09:31:10 2001" -->
+<!-- isoreceived="20010305143110" -->
+<!-- sent="Mon, 5 Mar 2001 15:32:21 +0100" -->
+<!-- isosent="20010305143221" -->
+<!-- name="Tom ." -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Some words about libxslt" -->
+<!-- id="20010305153221.C414@debian" -->
+<!-- inreplyto="20010305084843.B28590@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tom . (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Some%20words%20about%20libxslt"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Mon Mar 05 2001 - 09:32:21 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Previous message:</strong> <a href="1521.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1521.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Reply:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Le 05/03/01 14:48:43, Daniel Veillard a écrit :
+<br>
+<em>&gt; &gt; I'm writing such an API and will keep you informed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Humm, open source projects don't work that way ... You can't say
+</em><br>
+<em>&gt; &quot;hold on I'm writing some code you may look at later&quot;, sorry :-)
+</em><br>
+<p>Well, it hasn't yet passed the stage of ideas and drafts. I'll first write
+<br>
+a paper explaining its goals etc. I think of proposing it on the
+<br>
+<a href="mailto:www-xpath-comments@w3.org?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">www-xpath-comments@w3.org</a> mailing list for discussion and improvements.
+<br>
+Then will begin the implementation stage with whoever will want to
+<br>
+participate: for libxml, in Java, etc.
+<br>
+I think this is open-source-oriented, isn't it? ;o)
+<br>
+<p>Its first goal is XPath evaluation improvement.
+<br>
+One important point is a &quot;compilation&quot; phase, to separate parsing from
+<br>
+evaluation and allow reuse of the expression without parsing it each time.
+<br>
+Imagine you have a huge DOM tree and you want to apply an non-well-formed
+<br>
+expression. Without separating parsing from evaluation, you may have done
+<br>
+90% of the work (expensive for a huge document) to finally abandon it :
+<br>
+there is an error in the expression. It seems to me it's too much work for
+<br>
+nothing in result, and it can be prevented by parsing the expression before
+<br>
+trying to evaluate it.
+<br>
+A second goal is to provide a single parser for every XPath-like expression
+<br>
+: XPointer XPtrExpr's, XSLT Pattern's, etc. and their future evolution. I
+<br>
+first need to have a less restrictive language than the ones described on
+<br>
+the Recs, like CSS have a «forward-compatible language common to all
+<br>
+versions of CSS» (in SAC &lt;<a href="http://www.w3.org/TR/SAC">http://www.w3.org/TR/SAC</a>&gt; ).
+<br>
+<p>I have projects for other kinds of XPath evaluation and XSLT processing
+<br>
+improvements (allowing XPath and XSLT not needing complete DOM trees =&gt;
+<br>
+incremental XPath/XSLT), leading to some &quot;intelligent processors&quot; that I'll
+<br>
+expose later on...
+<br>
+<p><em>&gt; &gt; Another solution should be to evaluate the XPointer expression
+</em><br>
+<em>&gt; &gt; and test the result type.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   yes and it seems quite simpler.
+</em><br>
+<p>Sure, and I know you're a KISS follower ;o) , but quite more time
+<br>
+consuming...
+<br>
+<p>Tom.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Previous message:</strong> <a href="1521.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1521.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Reply:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Mar 05 2001 - 10:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

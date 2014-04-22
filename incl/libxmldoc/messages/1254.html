@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace rears its ugly head again</title>
+<meta name="Author" content="Matthew Kellett (matthewk@rebel.com)">
+<meta name="Subject" content="Re: [xml] Whitespace rears its ugly head again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace rears its ugly head again</h1>
+<!-- received="Mon Dec  4 15:50:22 2000" -->
+<!-- isoreceived="20001204205022" -->
+<!-- sent="Mon, 04 Dec 2000 15:31:08 -0500" -->
+<!-- isosent="20001204203108" -->
+<!-- name="Matthew Kellett" -->
+<!-- email="matthewk@rebel.com" -->
+<!-- subject="Re: [xml] Whitespace rears its ugly head again" -->
+<!-- id="5.0.0.25.2.20001204152522.00a3b0f0@quad.rebel.com" -->
+<!-- inreplyto="Pine.GSO.4.05.10012041434050.14618-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Matthew Kellett (<a href="mailto:matthewk@rebel.com?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again"><em>matthewk@rebel.com</em></a>)<br>
+<strong>Date:</strong> Mon Dec 04 2000 - 15:31:08 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Previous message:</strong> <a href="1253.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>In reply to:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Reply:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Harry,
+<br>
+<p>The change was made because the introduced newlines became significant when 
+<br>
+you tried to parse the xml.  The change was a simple one of turning off the 
+<br>
+formatting parameter in the call to the function that dumps the contents of 
+<br>
+the tree.  You'll notice that the carriage return after the xml tag and 
+<br>
+after the one-line of the xml remain because these aren't significant.
+<br>
+<p>Now that change has been accomplished there is no way that I know of 
+<br>
+getting a formatted dump of the tree, since the function being called is 
+<br>
+static.  I would find it useful as well, for logging of the xml in 
+<br>
+human-readable format.  Maybe Daniel could consider adding an 
+<br>
+xmlDocDumpMemoryFormatted call for the next version.
+<br>
+<p>Cheers,
+<br>
+Matthew
+<br>
+<p>At 03:06 PM 2000/12/04, you wrote:
+<br>
+<p><em>&gt;Hi folks,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;I just upgraded from 2.2.6 to 2.2.10, and now when I read in and save an
+</em><br>
+<em>&gt;XML document, I get back a document where the XML is all on one line.
+</em><br>
+<em>&gt;Previously, it had some newlines in there, which was more readable.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;I found a dialog between Matthew Kellett and Daniel in the archive, where
+</em><br>
+<em>&gt;it was decided that the xmlDocDumpMemory function should no longer add
+</em><br>
+<em>&gt;newlines when dumping a document into a buffer, for 2.2.8.  I suspect
+</em><br>
+<em>&gt;that this is what has changed.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Using whitespace in my input document and trying to preserve it with the
+</em><br>
+<em>&gt;xmlKeepBlanksDefault function doesn't help because none of my elements
+</em><br>
+<em>&gt;have mixed content, so the areBlanks function always returns 1.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Is there a way to format the output XML in the current version?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Thanks,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Harry
+</em><br>
+<em>&gt;----------------------------------------------------------------------
+</em><br>
+<em>&gt;Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+</em><br>
+<em>&gt;2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+</em><br>
+<em>&gt;PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">harry@HalcyonInc.com</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Previous message:</strong> <a href="1253.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>In reply to:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Reply:</strong> <a href="1255.html">Harry Blundell: "Re: [xml] Whitespace rears its ugly head again"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 16:43:55 EST</em>
+</em>
+</small>
+</body>
+</html>

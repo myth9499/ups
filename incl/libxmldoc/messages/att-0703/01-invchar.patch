@@ -1,0 +1,106 @@
+Index: parser.c
+===================================================================
+RCS file: /sources/public/XML/parser.c,v
+retrieving revision 1.223
+diff -p -r1.223 parser.c
+*** parser.c	2000/08/28 12:59:16	1.223
+--- parser.c	2000/08/29 18:15:46
+*************** xmlParseContent(xmlParserCtxtPtr ctxt) {
+*** 8597,8602 ****
+--- 8597,8603 ----
+  	    ctxt->errNo = XML_ERR_INTERNAL_ERROR;
+  	    ctxt->wellFormed = 0;
+  	    ctxt->disableSAX = 1;
++ 	    ctxt->instate = XML_PARSER_EOF;
+              break;
+  	}
+      }
+*************** xmlParseTryOrFinish(xmlParserCtxtPtr ctx
+*** 9982,9988 ****
+  #endif
+                  break;
+  	    }
+!             case XML_PARSER_CONTENT:
+                  /*
+  		 * Handle preparsed entities and charRef
+  		 */
+--- 9983,9993 ----
+  #endif
+                  break;
+  	    }
+!             case XML_PARSER_CONTENT: {
+! 		const xmlChar *test;
+! 		int cons;
+! 		xmlChar tok;
+! 
+                  /*
+  		 * Handle preparsed entities and charRef
+  		 */
+*************** xmlParseTryOrFinish(xmlParserCtxtPtr ctx
+*** 9999,10004 ****
+--- 10004,10013 ----
+  		    goto done;
+  		cur = ctxt->input->cur[0];
+  		next = ctxt->input->cur[1];
++ 
++ 		test = CUR_PTR;
++ 	        cons = ctxt->input->consumed;
++ 	        tok = ctxt->token;
+  	        if ((cur == '<') && (next == '?')) {
+  		    if ((!terminate) &&
+  		        (xmlParseLookupSequence(ctxt, '?', '>', 0) < 0))
+*************** xmlParseTryOrFinish(xmlParserCtxtPtr ctx
+*** 10082,10088 ****
+--- 10091,10109 ----
+  		 */
+  		while ((RAW == 0) && (ctxt->inputNr > 1))
+  		    xmlPopInput(ctxt);
++ 		if ((cons == ctxt->input->consumed) && (test == CUR_PTR) &&
++ 		    (tok == ctxt->token)) {
++ 		    if ((ctxt->sax != NULL) && (ctxt->sax->error != NULL))
++ 			ctxt->sax->error(ctxt->userData,
++ 			     "detected an error in element content\n");
++ 		    ctxt->errNo = XML_ERR_INTERNAL_ERROR;
++ 		    ctxt->wellFormed = 0;
++ 		    ctxt->disableSAX = 1;
++ 		    ctxt->instate = XML_PARSER_EOF;
++ 		    break;
++ 		}
+  		break;
++ 	    }
+              case XML_PARSER_CDATA_SECTION: {
+  	        /*
+  		 * The Push mode need to have the SAX callback for 
+Index: xmllint.c
+===================================================================
+RCS file: /sources/public/XML/xmllint.c,v
+retrieving revision 1.13
+diff -p -r1.13 xmllint.c
+*** xmllint.c	2000/08/26 19:52:45	1.13
+--- xmllint.c	2000/08/29 18:15:46
+*************** void parseAndPrintFile(char *filename) {
+*** 382,387 ****
+--- 382,388 ----
+  
+  	    f = fopen(filename, "r");
+  	    if (f != NULL) {
++ 		int ret;
+  	        int res, size = 3;
+  	        char chars[1024];
+                  xmlParserCtxtPtr ctxt;
+*************** void parseAndPrintFile(char *filename) {
+*** 397,403 ****
+--- 398,409 ----
+  		    }
+  		    xmlParseChunk(ctxt, chars, 0, 1);
+  		    doc = ctxt->myDoc;
++ 		    ret = ctxt->wellFormed;
+  		    xmlFreeParserCtxt(ctxt);
++ 		    if (!ret) {
++ 			xmlFreeDoc(doc);
++ 			doc = NULL;
++ 		    }
+  	        }
+  	    }
+  	} else if (testIO) {
+

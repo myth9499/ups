@@ -1,0 +1,42 @@
+Index: xmlIO.c
+===================================================================
+RCS file: /sources/public/XML/xmlIO.c,v
+retrieving revision 1.35
+diff -p -r1.35 xmlIO.c
+*** xmlIO.c	2000/10/12 23:23:35	1.35
+--- xmlIO.c	2000/10/22 12:28:17
+*************** xmlParserInputBufferCreateFile(FILE *fil
+*** 990,996 ****
+      if (ret != NULL) {
+          ret->context = file;
+  	ret->readcallback = xmlFileRead;
+! 	ret->closecallback = xmlFileClose;
+      }
+  
+      return(ret);
+--- 990,996 ----
+      if (ret != NULL) {
+          ret->context = file;
+  	ret->readcallback = xmlFileRead;
+! 	ret->closecallback = NULL;
+      }
+  
+      return(ret);
+*************** xmlOutputBufferCreateFile(FILE *file, xm
+*** 1019,1025 ****
+      if (ret != NULL) {
+          ret->context = file;
+  	ret->writecallback = xmlFileWrite;
+! 	ret->closecallback = xmlFileClose;
+      }
+  
+      return(ret);
+--- 1019,1025 ----
+      if (ret != NULL) {
+          ret->context = file;
+  	ret->writecallback = xmlFileWrite;
+! 	ret->closecallback = NULL;
+      }
+  
+      return(ret);
+

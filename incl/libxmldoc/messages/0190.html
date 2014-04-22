@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml looses namespace info</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml looses namespace info">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml looses namespace info</h1>
+<!-- received="Wed Nov  3 16:00:17 1999" -->
+<!-- isoreceived="19991103210017" -->
+<!-- sent="Wed, 3 Nov 1999 16:00:11 -0500" -->
+<!-- isosent="19991103210011" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml looses namespace info" -->
+<!-- id="19991103160011.B2510@w3.org" -->
+<!-- inreplyto="m11j4ug-001MCMC@gliep" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20looses%20namespace%20info"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 03 1999 - 16:00:11 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0191.html">Daniel Veillard: "[xml] Re: libxml 1.7.4 configure bug"</a>
+<li><strong>Previous message:</strong> <a href="0189.html">Joerg Wittenberger: "[xml] libxml looses namespace info"</a>
+<li><strong>In reply to:</strong> <a href="0189.html">Joerg Wittenberger: "[xml] libxml looses namespace info"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0224.html">Daniel Veillard: "Re: [xml] libxml looses namespace info"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 03, 1999 at 07:13:38PM +0100, Joerg Wittenberger wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've build the following xml document (with libxml, naturally), wrote
+</em><br>
+<em>&gt; it out and parsed in back again.  Easy to spot, the namespace info is
+</em><br>
+<em>&gt; being lost.  Anything I could have done wrong or is this a bug?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; version build:
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;prefix:doc xmlns:prefix=&quot;href&quot; xmlns:prefixi=&quot;hrefi&quot;&gt;
+</em><br>
+<em>&gt;   &lt;prefixi:a p=&quot;3&quot;&gt;
+</em><br>
+<em>&gt;     &lt;prefixi:b p=&quot;3&quot;/&gt;
+</em><br>
+<em>&gt;   &lt;/prefixi:a&gt;
+</em><br>
+<em>&gt; &lt;/prefix:doc&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; document after reading via xmlParseFile:
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;prefix:doc xmlns:prefix=&quot;href&quot;&gt;
+</em><br>
+<em>&gt;   &lt;a p=&quot;3&quot;&gt;
+</em><br>
+<em>&gt;     &lt;b p=&quot;3&quot;/&gt;
+</em><br>
+<em>&gt;   &lt;/a&gt;
+</em><br>
+<em>&gt; &lt;/prefix:doc&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; where is my prefixi????
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; thanks for any hint,
+</em><br>
+<p><p>&nbsp;Oops, sounds like an ugly bug, I willcheck and fix that as soon as
+<br>
+possible, I will send status back to this list,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20looses%20namespace%20info">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml%20looses%20namespace%20info">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml%20looses%20namespace%20info">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0191.html">Daniel Veillard: "[xml] Re: libxml 1.7.4 configure bug"</a>
+<li><strong>Previous message:</strong> <a href="0189.html">Joerg Wittenberger: "[xml] libxml looses namespace info"</a>
+<li><strong>In reply to:</strong> <a href="0189.html">Joerg Wittenberger: "[xml] libxml looses namespace info"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0224.html">Daniel Veillard: "Re: [xml] libxml looses namespace info"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

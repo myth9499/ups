@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Tag format</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Tag format">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Tag format</h1>
+<!-- received="Wed Jan 26 08:24:06 2000" -->
+<!-- isoreceived="20000126132406" -->
+<!-- sent="Wed, 26 Jan 2000 08:24:04 -0500" -->
+<!-- isosent="20000126132404" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Tag format" -->
+<!-- id="20000126082404.H10714@w3.org" -->
+<!-- inreplyto="388EE1E8.5DCBE395@ait.co.uk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Tag%20format"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 26 2000 - 08:24:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0314.html">David Doolin: "Re: [xml] s-exprs"</a>
+<li><strong>Previous message:</strong> <a href="0312.html">Verstraete Nicolas: "RE: [xml] WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0311.html">Mike Cunningham: "[xml] Tag format"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0316.html">Mike Cunningham: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0316.html">Mike Cunningham: "Re: [xml] Tag format"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jan 26, 2000 at 12:00:40PM +0000, Mike Cunningham wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; libxml seems to default to this style of tag:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;foo property=&quot;whatever&quot;/&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I need it to produce the long-form. I.e.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;foo&gt; .... &lt;/foo&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Is there a flag I can set to make it do this? I've only just started
+</em><br>
+<em>&gt; using it this morning so apologies in advance if this is a really dumb
+</em><br>
+<em>&gt; question.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I don't know if it's relevant, but I'm building a document manually and
+</em><br>
+<em>&gt; then calling xmlSaveFile.
+</em><br>
+<p>&nbsp;&nbsp;hum, there is no such flag, althrough this could be easily added .
+<br>
+&nbsp;&nbsp;The place where the choice is made is in tree.c, function xmlNodeDump
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if ((cur-&gt;content == NULL) &amp;&amp; (cur-&gt;childs == NULL)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;/&gt;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Tag%20format">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Tag%20format">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0314.html">David Doolin: "Re: [xml] s-exprs"</a>
+<li><strong>Previous message:</strong> <a href="0312.html">Verstraete Nicolas: "RE: [xml] WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0311.html">Mike Cunningham: "[xml] Tag format"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0316.html">Mike Cunningham: "Re: [xml] Tag format"</a>
+<li><strong>Reply:</strong> <a href="0316.html">Mike Cunningham: "Re: [xml] Tag format"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:59 EDT</em>
+</em>
+</small>
+</body>
+</html>

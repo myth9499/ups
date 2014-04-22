@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Loss of whitespace</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Loss of whitespace">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Loss of whitespace</h1>
+<!-- received="Sat Mar  4 10:13:15 2000" -->
+<!-- isoreceived="20000304151315" -->
+<!-- sent="Sat, 4 Mar 2000 16:13:10 +0100" -->
+<!-- isosent="20000304151310" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Loss of whitespace" -->
+<!-- id="20000304161310.I30610@w3.org" -->
+<!-- inreplyto="p04310103b4e6c801b78b@[192.168.0.6]" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Mar 04 2000 - 10:13:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Mar 04, 2000 at 08:04:21AM -0600, Paul DuBois wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   Following the feedback received I have made version 2.x comply with
+</em><br>
+<em>&gt; &gt;the XML specification. All blanks spaces are passed to SAX as characters()
+</em><br>
+<em>&gt; &gt;with the only exception of doing validating parsing and the element
+</em><br>
+<em>&gt; &gt;is not defined as CDATA nor mixed content. The xml:space=&quot;preserve&quot;
+</em><br>
+<em>&gt; &gt;is looked for in 2.x code and in that case blanks which can be ignored
+</em><br>
+<em>&gt; &gt;accordingly to the Dtd are passed anyway through characters(), and will
+</em><br>
+<em>&gt; &gt;generate nodes in the DOM tree.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Does this apply to newlines as well?  In particular, will a text segment
+</em><br>
+<em>&gt; consisting only of a newline generate an XML_TEXT_NODE node?  (I ask
+</em><br>
+<em>&gt; because of the behavior I posted a note to the list about yesterday.)
+</em><br>
+<p>Yes, by default in version 2.0 no blank is ever ignored unless one is
+<br>
+using a DTD and the element are not mixed content nor CDTATA. Note also
+<br>
+taht this version does the end of line normalization:
+<br>
+<p>~/XML -&gt; cat tst.xml
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b&gt;  &lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+~/XML -&gt;
+<br>
+<p>&nbsp;&nbsp;The default behaviour:
+<br>
+<p>~/XML -&gt; ./tester --debug tst.xml
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;ELEMENT a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content=    
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=  
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content= 
+<br>
+<p>&nbsp;&nbsp;The old behaviour using a compatibility switch:
+<br>
+<p>~/XML -&gt; ./tester --noblanks --debug tst.xml
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;ELEMENT a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=  
+<br>
+~/XML -&gt; 
+<br>
+<p>&nbsp;&nbsp;The behaviour in case of presence of DTD declaration for the
+<br>
+parent element:
+<br>
+<p>~/XML -&gt; cat tst2.xml 
+<br>
+&lt;!DOCTYPE a [
+<br>
+&lt;!ELEMENT a (b*)&gt;
+<br>
+&lt;!ELEMENT b EMPTY&gt;
+<br>
+]&gt;
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b/&gt;   &lt;b&gt;&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+~/XML -&gt; ./tester --debug --valid tst2.xml 
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(a)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(a), MIXED (b)*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(b), EMPTY
+<br>
+&nbsp;&nbsp;ELEMENT a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+~/XML -&gt; 
+<br>
+<p>&nbsp;&nbsp;And the limit case where the document is well formed but not
+<br>
+valid:
+<br>
+<p>~/XML -&gt; cat tst3.xml 
+<br>
+&lt;!DOCTYPE a [
+<br>
+&lt;!ELEMENT a (b*)&gt;
+<br>
+&lt;!ELEMENT b EMPTY&gt;
+<br>
+]&gt;
+<br>
+&lt;a&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b/&gt; validity error &lt;b&gt;&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+~/XML -&gt; ./tester --debug tst3.xml 
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(a)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(a), MIXED (b)*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(b), EMPTY
+<br>
+&nbsp;&nbsp;ELEMENT a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content= validity error 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+~/XML -&gt; 
+<br>
+<p>&nbsp;&nbsp;Note that this version also support xml:space:
+<br>
+<p>~/XML -&gt; cat tst4.xml 
+<br>
+&lt;!DOCTYPE a [
+<br>
+&lt;!ELEMENT a (b*)&gt;
+<br>
+&lt;!ELEMENT b EMPTY&gt;
+<br>
+]&gt;
+<br>
+&lt;a xml:space=&quot;preserve&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;b/&gt; validity error &lt;b&gt;&lt;/b&gt;
+<br>
+&lt;/a&gt;
+<br>
+~/XML -&gt; ./tester --debug tst4.xml 
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(a)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(a), MIXED (b)*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMDECL(b), EMPTY
+<br>
+&nbsp;&nbsp;ELEMENT a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ATTRIBUTE xml:space
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=preserve
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content=    
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content= validity error 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content= 
+<br>
+~/XML -&gt; 
+<br>
+<p>For version 1.x the gnome CVS tree has the default mapped to the old 
+<br>
+behaviour and one need to call xmlKeepBlanksDefault(1); to activate
+<br>
+the mormal blanks handling. I will probably release 1.8.7 with this over
+<br>
+the week-end (or Monday).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0419.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:08 EDT</em>
+</em>
+</small>
+</body>
+</html>

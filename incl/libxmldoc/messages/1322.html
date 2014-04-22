@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Undefined references: gjobread.c won't compile</title>
+<meta name="Author" content="Alfred Reibenschuh (alfred.reibenschu@chello.at)">
+<meta name="Subject" content="RE: [xml] Undefined references: gjobread.c won't compile">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Undefined references: gjobread.c won't compile</h1>
+<!-- received="Thu Jan  4 13:39:37 2001" -->
+<!-- isoreceived="20010104183937" -->
+<!-- sent="Thu, 4 Jan 2001 19:43:35 +0100" -->
+<!-- isosent="20010104184335" -->
+<!-- name="Alfred Reibenschuh" -->
+<!-- email="alfred.reibenschu@chello.at" -->
+<!-- subject="RE: [xml] Undefined references: gjobread.c won't compile" -->
+<!-- id="000401c0767e$3ea60b40$0400a8c0@etherite" -->
+<!-- inreplyto="01C07631.77FB3200.dan@aeroprise.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alfred Reibenschuh (<a href="mailto:alfred.reibenschu@chello.at?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile"><em>alfred.reibenschu@chello.at</em></a>)<br>
+<strong>Date:</strong> Thu Jan 04 2001 - 13:43:35 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1321.html">Dan Turchin: "[xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>In reply to:</strong> <a href="1321.html">Dan Turchin: "[xml] Undefined references: gjobread.c won't compile"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+hi !
+<br>
+<p>you seem to lack the 
+<br>
+<p>-lxml -L/usr/local/libxml2-2.10/
+<br>
+<p>options since you must link against the library too :)
+<br>
+<p>-- Alfred Reibenschuh
+<br>
+<p>linux  geek, | Sometimes I hear voices in my head ,  telling me to do 
+<br>
+perl monger, | strange things,  but I always wonder  if that's just me
+<br>
+ roleplayer  | thinking about things I really want to do anyway. Why 
+<br>
+&amp; sf-fanatic | do the voices never say, &quot;Your dosage needs adjustment&quot;?
+<br>
+        look @ <a href="http://penguin.at0.net/~fredo/">http://penguin.at0.net/~fredo/</a>
+<br>
+&lt;<a href="http://penguin.at0.net/~fredo/">http://penguin.at0.net/~fredo/</a>&gt; 
+<br>
+<p><p><p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml-request@rufus.w3.org</a>]On
+</em><br>
+<em>&gt; Behalf Of Dan Turchin
+</em><br>
+<em>&gt; Sent: Thursday, January 04, 2001 6:34 PM
+</em><br>
+<em>&gt; To: '<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml@rpmfind.net</a>'
+</em><br>
+<em>&gt; Subject: [xml] Undefined references: gjobread.c won't compile
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I untarred the package, ran configure and did a make - all without 
+</em><br>
+<em>&gt; problems.  When I try to compile the sample file, though, I'm 
+</em><br>
+<em>&gt; told that the 
+</em><br>
+<em>&gt; functions in the header files can't be found.  I think I'm missing 
+</em><br>
+<em>&gt; something simple...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's my gcc command (using a -l flag to find the correct header files):
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; # gcc -I/usr/local/libxml2-2.10/libxml -g -Wall gjobread.c -o gjobread
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and here's the output:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /tmp/ccubsU6P.o: In function `parsePerson':
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:63: undefined reference to 
+</em><br>
+<em>&gt; `xmlNodeListGetString'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:65: undefined reference to 
+</em><br>
+<em>&gt; `xmlNodeListGetString'
+</em><br>
+<em>&gt; /tmp/ccubsU6P.o: In function `parseJob':
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:122: undefined reference to 
+</em><br>
+<em>&gt; `xmlGetProp'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:128: undefined reference to 
+</em><br>
+<em>&gt; `xmlNodeListGetString'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:130: undefined reference to 
+</em><br>
+<em>&gt; `xmlNodeListGetString'
+</em><br>
+<em>&gt; /tmp/ccubsU6P.o: In function `parseGjobFile':
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:176: undefined reference to 
+</em><br>
+<em>&gt; `xmlParseFile'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:183: undefined reference to 
+</em><br>
+<em>&gt; `xmlDocGetRootElement'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:186: undefined reference to 
+</em><br>
+<em>&gt; `xmlFreeDoc'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:189: undefined reference to 
+</em><br>
+<em>&gt; `xmlSearchNsByHref'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:193: undefined reference to 
+</em><br>
+<em>&gt; `xmlFreeDoc'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:198: undefined reference to 
+</em><br>
+<em>&gt; `xmlFreeDoc'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:208: undefined reference to 
+</em><br>
+<em>&gt; `xmlFreeDoc'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:218: undefined reference to 
+</em><br>
+<em>&gt; `xmlIsBlankNode'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:228: undefined reference to 
+</em><br>
+<em>&gt; `xmlDocDump'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:230: undefined reference to 
+</em><br>
+<em>&gt; `xmlFreeDoc'
+</em><br>
+<em>&gt; /tmp/ccubsU6P.o: In function `main':
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:265: undefined reference to 
+</em><br>
+<em>&gt; `xmlCheckVersion'
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/example/gjobread.c:266: undefined reference to 
+</em><br>
+<em>&gt; `xmlKeepBlanksDefault'
+</em><br>
+<em>&gt; collect2: ld returned 1 exit status
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The package is in /usr/local/libxml2-2.10 and the header files are in 
+</em><br>
+<em>&gt; /usr/local/libxml2-2.10/libxml.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Any ideas?
+</em><br>
+<em>&gt; Thanks,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -dan
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1321.html">Dan Turchin: "[xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>In reply to:</strong> <a href="1321.html">Dan Turchin: "[xml] Undefined references: gjobread.c won't compile"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 04 2001 - 13:43:36 EST</em>
+</em>
+</small>
+</body>
+</html>

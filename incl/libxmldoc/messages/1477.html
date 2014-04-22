@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] BUG: &lt;table&gt; tag ends paragraph</title>
+<meta name="Author" content="Wayne Davison (wayned@users.sourceforge.net)">
+<meta name="Subject" content="Re: [xml] BUG: &lt;table&gt; tag ends paragraph">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] BUG: &lt;table&gt; tag ends paragraph</h1>
+<!-- received="Wed Feb 21 13:48:04 2001" -->
+<!-- isoreceived="20010221184804" -->
+<!-- sent="Wed, 21 Feb 2001 10:50:42 -0800 (PST)" -->
+<!-- isosent="20010221185042" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@users.sourceforge.net" -->
+<!-- subject="Re: [xml] BUG: &lt;table&gt; tag ends paragraph" -->
+<!-- id="Pine.LNX.4.21.0102211023090.6361-100000@phong.blorf.net" -->
+<!-- inreplyto="20010221150114.4915C19073@skinner.codefactory.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph"><em>wayned@users.sourceforge.net</em></a>)<br>
+<strong>Date:</strong> Wed Feb 21 2001 - 13:50:42 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1478.html">Marc Sanfacon: "[xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<li><strong>Previous message:</strong> <a href="1476.html">Fabrizio Ammollo: "Re: [xml] SAX and user_data trouble"</a>
+<li><strong>In reply to:</strong> <a href="1475.html">Jonas Borgström: "[xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 21 Feb 2001, Jonas Borgström wrote:
+<br>
+<em>&gt; after a quick look at the code in HTMLparser.c it looks like the line:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &quot;table&quot;,        &quot;p&quot;, &quot;head&quot;, &quot;h1&quot;, &quot;h2&quot;, &quot;h3&quot;, &quot;h4&quot;, &quot;h5&quot;, &quot;h6&quot;, &quot;pre&quot;,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; should be removed from the char *htmlStartClose[] initialisation.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What do you think about this?
+</em><br>
+<p>No, that would break all other table tags that didn't have an inline
+<br>
+display style.
+<br>
+<p>The problem you've noticed is just the tip of a larger issue:  libxml
+<br>
+doesn't parse styles at all.  In order to allow styles (from sheets or
+<br>
+inline elements) to affect the paragraph-ness of the standard elements
+<br>
+(and also to support user-defined paragraph elements), it becomes
+<br>
+necessary for libxml to parse all aspects of style (including loading
+<br>
+and parsing all linked style sheets).  Once this is done, libxml could
+<br>
+eliminate some of the elements in htmlStartClose[] array, and instead
+<br>
+query the paragraph-display-attribute of the tags and act accordingly.
+<br>
+<p>I personally would like to see full style support in libxml.  I would
+<br>
+like the parser to keep track of the current state of all of the
+<br>
+styles, and to allow me to query specific style settings PLUS ask what
+<br>
+has changed since the last time I asked for changes.  We could even
+<br>
+have the standard HTML tags, such as I, B, and FONT, affect the
+<br>
+current style settings.  This would allow client code to ignore how
+<br>
+italics got turned on, and just ask libxml, &quot;What's new?  Italics is
+<br>
+now on?  Great, I'll flip the switch in my rendering.&quot;
+<br>
+<p>The crux of the matter is whether this is an appropriate thing for
+<br>
+libxml to be doing.  While I would probably lean towards having the
+<br>
+user's code handle this, the problem is that libxml can't do the job
+<br>
+of paragraph-closing properly without understanding styles, and once
+<br>
+it has parsed all the available style information, why should the
+<br>
+user's code have to duplicate all that work?
+<br>
+<p>So Jonas, since you mention that the gtkhtml2 browser wants to act on
+<br>
+the inline display style, does this mean that it already has code to
+<br>
+parse styles?  If so, perhaps Daniel would be willing to allow some
+<br>
+style sheet code to be integrated into libxml (if it were compatible
+<br>
+with the LGPL and of an appropriate design for libxml, of course).
+<br>
+<p>Thoughts?
+<br>
+<p>..wayne..
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20BUG:%20&lt;table&gt;%20tag%20ends%20paragraph">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1478.html">Marc Sanfacon: "[xml] Infinite Loop in libxml, 2.3.1 while parsing a HTML file."</a>
+<li><strong>Previous message:</strong> <a href="1476.html">Fabrizio Ammollo: "Re: [xml] SAX and user_data trouble"</a>
+<li><strong>In reply to:</strong> <a href="1475.html">Jonas Borgström: "[xml] BUG: &lt;table&gt; tag ends paragraph"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 21 2001 - 14:43:50 EST</em>
+</em>
+</small>
+</body>
+</html>

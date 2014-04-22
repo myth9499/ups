@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlSearchNsByHref</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlSearchNsByHref">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlSearchNsByHref</h1>
+<!-- received="Sat Nov 18 11:47:30 2000" -->
+<!-- isoreceived="20001118164730" -->
+<!-- sent="Sat, 18 Nov 2000 17:47:25 +0100" -->
+<!-- isosent="20001118164725" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlSearchNsByHref" -->
+<!-- id="20001118174725.J30156@w3.org" -->
+<!-- inreplyto="3A16A22E.F95F6C7A@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlSearchNsByHref"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Nov 18 2000 - 11:47:25 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<li><strong>Previous message:</strong> <a href="1211.html">Bjorn Reese: "[xml] xmlSearchNsByHref"</a>
+<li><strong>In reply to:</strong> <a href="1211.html">Bjorn Reese: "[xml] xmlSearchNsByHref"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<li><strong>Reply:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Nov 18, 2000 at 03:37:18PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am trying to determine whether an element is part of a namespace
+</em><br>
+<em>&gt; or not. Consider the following example:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;root xmlns:ns=&quot;urn:ns&quot;&gt;
+</em><br>
+<em>&gt;     &lt;ns:first&gt;
+</em><br>
+<em>&gt;       &lt;second/&gt;
+</em><br>
+<em>&gt;     &lt;/ns:first&gt;
+</em><br>
+<em>&gt;   &lt;/root&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I parse this document and use xmlSearchNsByHref(doc, node, &quot;urn:ns&quot;);
+</em><br>
+<em>&gt; to determine the namespace.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As expected, this returns the ns namespace for &lt;ns:first&gt;.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; However, xmlSearchNsByHref() also returns the ns namespace for
+</em><br>
+<em>&gt; &lt;second/&gt;. I would expect it only to return the default namespace
+</em><br>
+<em>&gt; (of which there is none in the document). Is this an error in
+</em><br>
+<em>&gt; xmlSearchNsByHref(), or have I misinterpreted the purpose of that
+</em><br>
+<em>&gt; function?
+</em><br>
+<p>&nbsp;&nbsp;xmlSearchNsByHref() search the namespace in scope for node...
+<br>
+the declaration on &lt;root&gt; is still in scope on &lt;second&gt;, so searching
+<br>
+with node=&lt;second&gt; will return the same result as node=&lt;first&gt;.
+<br>
+&nbsp;&nbsp;The namespace of a node (if any) is node-&gt;ns, this is a pointer to
+<br>
+the namespace declaration (available from the nsDef list of the element
+<br>
+declaring it).
+<br>
+<p>&nbsp;&nbsp;&nbsp;hope this clarifies the situation,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlSearchNsByHref">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlSearchNsByHref">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlSearchNsByHref">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<li><strong>Previous message:</strong> <a href="1211.html">Bjorn Reese: "[xml] xmlSearchNsByHref"</a>
+<li><strong>In reply to:</strong> <a href="1211.html">Bjorn Reese: "[xml] xmlSearchNsByHref"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<li><strong>Reply:</strong> <a href="1213.html">Bjorn Reese: "Re: [xml] xmlSearchNsByHref"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Nov 18 2000 - 14:43:22 EST</em>
+</em>
+</small>
+</body>
+</html>

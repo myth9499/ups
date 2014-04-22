@@ -1,0 +1,33 @@
+Index: parser.c
+===================================================================
+RCS file: /sources/public/XML/parser.c,v
+retrieving revision 1.218
+diff -p -r1.218 parser.c
+*** parser.c	2000/08/07 13:43:51	1.218
+--- parser.c	2000/08/22 18:52:04
+*************** xmlStringDecodeEntities(xmlParserCtxtPtr
+*** 2484,2490 ****
+  	    }
+  	} else if ((c == '&') && (what & XML_SUBSTITUTE_REF)) {
+  	    ent = xmlParseStringEntityRef(ctxt, &str);
+! 	    if ((ent != NULL) && (ent->content != NULL)) {
+  		xmlChar *rep;
+  
+  		ctxt->depth++;
+--- 2484,2498 ----
+  	    }
+  	} else if ((c == '&') && (what & XML_SUBSTITUTE_REF)) {
+  	    ent = xmlParseStringEntityRef(ctxt, &str);
+! 	    if ((ent != NULL) && (ent->etype == XML_INTERNAL_PREDEFINED_ENTITY)) {
+! 		if (ent->content != NULL) {
+! 		    COPY_BUF(0,buffer,nbchars,ent->content[0]);
+! 		} else {
+! 		    if ((ctxt->sax != NULL) && (ctxt->sax->error != NULL))
+! 			ctxt->sax->error(ctxt->userData,
+! 			    "internal error entity has no content\n");
+! 		}
+! 	    } else if ((ent != NULL) && (ent->content != NULL)) {
+  		xmlChar *rep;
+  
+  		ctxt->depth++;
+

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Still validating while using SAX Interface?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Still validating while using SAX Interface?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Still validating while using SAX Interface?</h1>
+<!-- received="Sun Oct 15 15:51:18 2000" -->
+<!-- isoreceived="20001015195118" -->
+<!-- sent="Sun, 15 Oct 2000 21:51:13 +0200" -->
+<!-- isosent="20001015195113" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Still validating while using SAX Interface?" -->
+<!-- id="20001015215113.O6250@w3.org" -->
+<!-- inreplyto="200010151929.VAA20168@pointsman.pointsman.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 15:51:13 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0974.html">rolf@pointsman.de: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>Previous message:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<li><strong>In reply to:</strong> <a href="0967.html">rolf@pointsman.de: "[xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 15, 2000 at 09:29:54PM +0200, <a href="mailto:rolf@pointsman.de?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">rolf@pointsman.de</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Maybe I've overseen something obvious but as far as I see there are
+</em><br>
+<em>&gt; two ways to use libxml:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; o Let libxml build a DOM tree in memory. This allows to enable
+</em><br>
+<em>&gt;   validation, if needed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; o Use the SAX Interface (with an own xmlSAXHandlerPtr). Using this API
+</em><br>
+<em>&gt;   there is now way to use the validating facilities build in into the
+</em><br>
+<em>&gt;   libxml.
+</em><br>
+<p>&nbsp;&nbsp;right
+<br>
+<p><em>&gt; As pointed out within the documentation, the first way uses internaly
+</em><br>
+<em>&gt; also the SAX Interface and uses a special set of SAX handler
+</em><br>
+<em>&gt; funktions (xmlDefaultSAXHandler). This special SAX handlers are located
+</em><br>
+<em>&gt; in the file SAXvalidation.c
+</em><br>
+<p>&nbsp;&nbsp;no in SAX.c
+<br>
+<p><em>&gt; If validation is enabled, this special handler funktions do two things
+</em><br>
+<em>&gt; at once: they validate the document and they build the DOM tree.
+</em><br>
+<p>&nbsp;&nbsp;or rather build the DOM tree and then uses it for validation
+<br>
+<p><em>&gt; Well, I want to use the SAX Interface while still validating. In
+</em><br>
+<p>&nbsp;&nbsp;I don't know how to do this:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- SAX basically operate on constant memory use
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- the amount of memory needed for validating is not constant
+<br>
+So you have to keep informations ... I use DOM.
+<br>
+<p><em>&gt; theory, this should not be to difficult. There should be another set
+</em><br>
+<p>&nbsp;&nbsp;It is, thing about entities references !
+<br>
+<p><em>&gt; of default handlers, that does only the validation stuff and then,
+</em><br>
+<em>&gt; instead of building the libxml DOM tree, call my registered handler
+</em><br>
+<em>&gt; funktions.
+</em><br>
+<p>&nbsp;&nbsp;No the validation need state stored in the DOM
+<br>
+<p><em>&gt; I've scanned through the code in SAXvalidation.c and it seems, the
+</em><br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;SAXvalidation.c does not exist in my tree ... are you sure you're
+<br>
+talking about libxml ???
+<br>
+&nbsp;&nbsp;The validation basically uses the file valid.c
+<br>
+<p><em>&gt; validation stuff doesn't depend on the in memory tree. But I'm really
+</em><br>
+<em>&gt; not familiar with the code, therefor the question to the guru's:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Is it really true, that the validating code doesn't depend on the in
+</em><br>
+<em>&gt; memory DOM tree?
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Wrong, 
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0974.html">rolf@pointsman.de: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>Previous message:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<li><strong>In reply to:</strong> <a href="0967.html">rolf@pointsman.de: "[xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 16:43:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

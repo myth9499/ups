@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] streaming output</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] streaming output">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] streaming output</h1>
+<!-- received="Fri Jun  4 14:13:52 1999" -->
+<!-- isoreceived="19990604181352" -->
+<!-- sent="Fri, 4 Jun 1999 14:13:48 -0400" -->
+<!-- isosent="19990604181348" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] streaming output" -->
+<!-- id="19990604141348.B13824@w3.org" -->
+<!-- inreplyto="Pine.BSF.4.02A.9906041251330.23436-100000@zirx.pair.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20streaming%20output"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jun 04 1999 - 14:13:48 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0063.html">Steve Ratcliffe: "[xml] Memory leak in tree.c"</a>
+<li><strong>Previous message:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<li><strong>In reply to:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Havoc,
+<br>
+<p><em>&gt; I have the following problem: when writing out a Guppi file with an XML
+</em><br>
+<em>&gt; node for each value in a dataset, I exhausted 128 megs of real memory and
+</em><br>
+<em>&gt; 256 megs of swap (because the in-memory XML tree was huge). 
+</em><br>
+<p>&nbsp;&nbsp;Ouch, Real World apps are coming ...
+<br>
+<p><em>&gt; You'll be glad to know that libxml didn't crash, even after repeated
+</em><br>
+<em>&gt; malloc failures, but the save wasn't successful either. :-)
+</em><br>
+<p>&nbsp;&nbsp;Interesting, incidentally my 2.2.5 kernel crashed last week during
+<br>
+a &quot;make test&quot; malloc'ing all my virtual memory. Good to know that if the
+<br>
+kernel doesn't fail, the apps stays up :-)
+<br>
+<p><em>&gt; Any suggestions on how to handle this? Some kind of streaming output? Does
+</em><br>
+<em>&gt; the SAX interface allow that?
+</em><br>
+<p>&nbsp;&nbsp;Actually SAX is only for reading, it's just a predefined set of callbacks
+<br>
+from the parser. I understand that in your case you actually build an
+<br>
+in memory tree which was getting larger than your VM. Not exactly the same
+<br>
+time in the processing. If I understand correctly, I see only 2 ways to 
+<br>
+try to solve the problem:
+<br>
+&nbsp;&nbsp;&nbsp;1/ manage to split the document, either in multiple XML files or in
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple XML entities (loaded from the main one).
+<br>
+&nbsp;&nbsp;&nbsp;2/ avoid building the in-memory tree on output, if the tree is just
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;built to then be saved, bypassing the libxml processing and writing
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directly to disk may be more realistic. 
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;Here is a small rant against DOM: it eats too much memory, and really
+<br>
+makes sense when one actually modify the data in-memory for example when
+<br>
+loading a document, manipulating it's content and saving it back.
+<br>
+<p><em>&gt; Another issue that comes up with large files is a progress display during
+</em><br>
+<em>&gt; load/save. It would be nice to be able to provide a callback like:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; typedef int (*xmlPulseFunc) (void* user_data);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; where libxml would invoke the callback every second or so, and if the
+</em><br>
+<em>&gt; callback returned FALSE the load/save would end (to allow a Cancel button
+</em><br>
+<em>&gt; on the progress dialog).
+</em><br>
+<p>&nbsp;&nbsp;Hum, I never used test cases large enough to &quot;feel&quot; the time spent
+<br>
+processing files. Maybe I need a demo of Guppi :-), Ok, I'll try to
+<br>
+think about that.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20streaming%20output">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20streaming%20output">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20streaming%20output">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0063.html">Steve Ratcliffe: "[xml] Memory leak in tree.c"</a>
+<li><strong>Previous message:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<li><strong>In reply to:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

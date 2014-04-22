@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] validating</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] validating">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] validating</h1>
+<!-- received="Fri Oct 15 11:32:44 1999" -->
+<!-- isoreceived="19991015153244" -->
+<!-- sent="Fri, 15 Oct 1999 11:32:41 -0400" -->
+<!-- isosent="19991015153241" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] validating" -->
+<!-- id="19991015113241.P2125@w3.org" -->
+<!-- inreplyto="38073FF4.700F55E6@lri.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20validating"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 15 1999 - 11:32:41 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<li><strong>Previous message:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>In reply to:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<li><strong>Reply:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 15, 1999 at 04:53:40PM +0200, Stephane Conversy wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi all.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I can validate my xml documents using libxml.
+</em><br>
+<em>&gt; The problem is that I need the dtd to be in the same directory than the
+</em><br>
+<em>&gt; executable, otherwise libxml can't find it:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!DOCTYPE quasi_module SYSTEM &quot;qm.dtd&quot;&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; My application handles only 2 dtds, so I can get rid of the fact
+</em><br>
+<em>&gt; that the dtd must be there if I can build 2 'validater' in my
+</em><br>
+<em>&gt; application
+</em><br>
+<em>&gt; that don't need a dtd at run-time.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is it possible now with 1.7.3 ?
+</em><br>
+<p>&nbsp;&nbsp;I don't really understand what you are suggesting.
+<br>
+The usual way to solve this in authoring systems is to allow a registry
+<br>
+of DtDs inside the application. It can be managed independantly of the
+<br>
+parser, it's just called when the parser needs a file and it uses
+<br>
+for that the PUBLIC and/or SYSTEM identifiers to do so.
+<br>
+&nbsp;&nbsp;This can be done in libwww by providing your own entity loader,
+<br>
+check the routines xmlDefaultExternalEntityLoader, 
+<br>
+xmlSetExternalEntityLoader, xmlGetExternalEntityLoader
+<br>
+from xmlIO.c . However I'm not certain that those routines
+<br>
+are actually used now from the loading code. If this doesn't work
+<br>
+I will fix it.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20validating">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20validating">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20validating">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<li><strong>Previous message:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<li><strong>In reply to:</strong> <a href="0182.html">Stephane Conversy: "[xml] validating"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<li><strong>Reply:</strong> <a href="0184.html">Stephane Conversy: "Re: [xml] validating"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

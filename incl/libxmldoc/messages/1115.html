@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating a DTD from a plain text buffer?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Creating a DTD from a plain text buffer?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating a DTD from a plain text buffer?</h1>
+<!-- received="Mon Oct 30 11:45:25 2000" -->
+<!-- isoreceived="20001030164525" -->
+<!-- sent="Mon, 30 Oct 2000 17:45:22 +0100" -->
+<!-- isosent="20001030164522" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Creating a DTD from a plain text buffer?" -->
+<!-- id="20001030174522.K16260@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10010301118340.16262-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 11:45:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1116.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1113.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Reply:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 30, 2000 at 11:26:48AM -0500, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Okay, I've found the reason that I wasn't getting the &lt;!DOCTYPE ... &gt;
+</em><br>
+<em>&gt; written to the file when I called xmlSaveFile - as well as setting
+</em><br>
+<em>&gt; docPtr-&gt;intSubset = dtdPtr, I also needed to set
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   docPtr-&gt;children = (xmlNodePtr) dtdPtr;
+</em><br>
+<em>&gt;   docPtr-&gt;last = (xmlNodePtr) dtdPtr;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; so that the DTD is a child of the document.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I haven't looked into why I'm getting the Bus Error, but I've found a new
+</em><br>
+<em>&gt; problem (at least it is for me):
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel, in the new xmlIOParseDTD you provided, you call
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   xmlNewDtd(ctxt-&gt;myDoc, BAD_CAST &quot;none&quot;, BAD_CAST &quot;none&quot;, BAD_CAST
+</em><br>
+<em>&gt;             &quot;none&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What's the purpose of the &quot;none&quot; for the ExternalID and SystemID?
+</em><br>
+<em>&gt; When I attach the DTD to a document as an internal subset, and call
+</em><br>
+<em>&gt; xmlValidateDocument on it, it fails because it can't resolve the external
+</em><br>
+<em>&gt; entity &quot;none&quot;.  Similarly, when I call xmlSaveFile, I get the line
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;!DOCTYPE result PUBLIC &quot;none&quot; &quot;none&quot; [
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I can work around it by setting 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   dtdPtr-&gt;ExternalID = NULL;
+</em><br>
+<em>&gt;   dtdPtr-&gt;SystemID = NULL;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; after the call to xmlIOParseDTD, but is the &quot;none&quot; necessary for another
+</em><br>
+<em>&gt; purpose?
+</em><br>
+<p>&nbsp;&nbsp;Well simply that a memory buffer has:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- no ExternalID
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- no SystemID
+<br>
+&nbsp;and you asked me to be able to use it without refering to a file.
+<br>
+So it simply can't have those !
+<br>
+&nbsp;Now if you want to have them loadable dynamically save them to a file
+<br>
+and use the existing interface. Of course xmlValidateDocument fails
+<br>
+because you attach this DTd to the document like if it was part of
+<br>
+it while it's not. To validate a document against a xmlDtdPtr use
+<br>
+xmlValidateDtd() not xmlValidateDocument().
+<br>
+&nbsp;&nbsp;At that point I'm very tempted to simply not include xmlIOParseDTD()
+<br>
+and ask you to save your DTd to a file. Seems to raise more problems
+<br>
+than to fix any.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1116.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1113.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Reply:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 12:43:34 EST</em>
+</em>
+</small>
+</body>
+</html>

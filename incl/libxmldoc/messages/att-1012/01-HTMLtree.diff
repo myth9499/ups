@@ -1,0 +1,30 @@
+Index: HTMLtree.c
+===================================================================
+RCS file: /sources/public/XML/HTMLtree.c,v
+retrieving revision 1.31
+diff -p -r1.31 HTMLtree.c
+*** HTMLtree.c	2000/10/14 23:09:30	1.31
+--- HTMLtree.c	2000/10/20 16:01:30
+*************** htmlNodeDumpOutput(xmlOutputBufferPtr bu
+*** 849,857 ****
+  	return;
+      }
+      if ((cur->content == NULL) && (cur->children == NULL)) {
+!         if ((info != NULL) && (info->endTag != 0))
+  	    xmlOutputBufferWriteString(buf, ">");
+! 	else {
+  	    xmlOutputBufferWriteString(buf, "></");
+  	    xmlOutputBufferWriteString(buf, (const char *)cur->name);
+  	    xmlOutputBufferWriteString(buf, ">");
+--- 849,858 ----
+  	return;
+      }
+      if ((cur->content == NULL) && (cur->children == NULL)) {
+!         if ((info != NULL) && (info->endTag != 0) &&
+! 	    (strcmp(info->name, "html")) && (strcmp(info->name, "body"))) {
+  	    xmlOutputBufferWriteString(buf, ">");
+! 	} else {
+  	    xmlOutputBufferWriteString(buf, "></");
+  	    xmlOutputBufferWriteString(buf, (const char *)cur->name);
+  	    xmlOutputBufferWriteString(buf, ">");
+

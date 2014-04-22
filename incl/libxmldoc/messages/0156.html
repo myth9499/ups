@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Interactive node insertion</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Interactive node insertion">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Interactive node insertion</h1>
+<!-- received="Sun Oct  3 16:40:30 1999" -->
+<!-- isoreceived="19991003204030" -->
+<!-- sent="Sun, 3 Oct 1999 16:40:29 -0400" -->
+<!-- isosent="19991003204029" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Interactive node insertion" -->
+<!-- id="19991003164029.A10725@w3.org" -->
+<!-- inreplyto="37F7B740.51C45D27@gmx.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 03 1999 - 16:40:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Previous message:</strong> <a href="0155.html">Mathias Hasselmann: "[xml] Interactive node insertion"</a>
+<li><strong>In reply to:</strong> <a href="0155.html">Mathias Hasselmann: "[xml] Interactive node insertion"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Reply:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 03, 1999 at 10:06:24PM +0200, Mathias Hasselmann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; After parsing and validating a xml file I would like to insert new
+</em><br>
+<em>&gt; elements interactivly without breaking the validated tree. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Since users don't have to know the DTD I need a way to find out, which
+</em><br>
+<em>&gt; insertions are allowed for a selected elements.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a common way to do this?
+</em><br>
+<p>&nbsp;&nbsp;Hum, no, and that's a good point.
+<br>
+I added validation to the parsing step, but it's not really glued in
+<br>
+the tree manipulation functions yet.
+<br>
+<p>&nbsp;&nbsp;Would something like:
+<br>
+<p>&nbsp;&nbsp;int xmlIsValidChild(const xmlChar *parent, const xmlChar *child);
+<br>
+<p>&nbsp;&nbsp;suit your needs, or does something more prospective like returning
+<br>
+the list of valid child be more useful. In the later, I'm afraid it
+<br>
+won't be really more easy to use/remap the existing list based functions
+<br>
+and switch to arrays. All advanced structured editors I have seen in
+<br>
+the past were &quot;guiding&quot; the user with a list of possible childs. So 
+<br>
+the second kind of function would still be useful.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Previous message:</strong> <a href="0155.html">Mathias Hasselmann: "[xml] Interactive node insertion"</a>
+<li><strong>In reply to:</strong> <a href="0155.html">Mathias Hasselmann: "[xml] Interactive node insertion"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Reply:</strong> <a href="0157.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

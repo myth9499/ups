@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: Bug#21552: libxml fails to decode &amp;amp; prop</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly</h1>
+<!-- received="Tue Aug 22 13:25:11 2000" -->
+<!-- isoreceived="20000822172511" -->
+<!-- sent="Tue, 22 Aug 2000 22:22:37 +0200" -->
+<!-- isosent="20000822202237" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly" -->
+<!-- id="20000822222237.C6387@w3.org" -->
+<!-- inreplyto="udlvgwtfijo.fsf@multics.mit.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Bug#21552:%20libxml%20fails%20to%20decode%20&amp;amp;%20properly"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 22 2000 - 16:22:37 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<li><strong>Previous message:</strong> <a href="0659.html">Daniel Veillard: "Re: [xml] Aliases for encodings"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<li><strong>Reply:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 22, 2000 at 10:59:39AM -0400, Aaron M. Ucko wrote:
+<br>
+<em>&gt; Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Bug#21552:%20libxml%20fails%20to%20decode%20&amp;amp;%20properly">Daniel.Veillard@w3.org</a>&gt; writes:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; My regression tests of libxml have had &amp;amp; cases since the very
+</em><br>
+<em>&gt; &gt; beginning. Like test/ent3
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;        &lt;EXAMPLE prop1=&quot;a&amp;amp;b&quot; prop2=&quot;&amp;xml;&quot;&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; If libxml was choking on them I think I would have detected it
+</em><br>
+<em>&gt; &gt; immediately, before doing the packaging.
+</em><br>
+<em>&gt; &gt;   Do you have the testcase exhibiting the problem ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Compare the output of
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         xmllint --valid test/ent3
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; to that of
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         sed -e 's/&amp;amp;/\&amp;#38;/g' test/ent3 &gt; ent3b
+</em><br>
+<em>&gt;         xmllint --valid ent3b
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   Are you using the SAX interface or the DOM one ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using the DOM-style interface, but with validation enabled.
+</em><br>
+<p>&nbsp;&nbsp;Woah, this is a real bug, impressive that it never showed before,
+<br>
+seems that all the document i used to test the validations, none
+<br>
+uses &amp;amp; in attribute values !!!
+<br>
+<p>&nbsp;&nbsp;I fixed the problem (your suggested fix is invalid it doesn't
+<br>
+deliver the proper attribute value at the end and expose a number
+<br>
+of other problems). I enclose the patch, I will commit it to the CVS
+<br>
+bases in the next hour.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks a lot for catching this, and apologies to the person
+<br>
+&nbsp;&nbsp;who reported it previously it seems I didn't look at the problem.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Bug#21552:%20libxml%20fails%20to%20decode%20&amp;amp;%20properly">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20Bug#21552:%20libxml%20fails%20to%20decode%20&amp;amp;%20properly">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20Bug#21552:%20libxml%20fails%20to%20decode%20&amp;amp;%20properly">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<li><strong>Previous message:</strong> <a href="0659.html">Daniel Veillard: "Re: [xml] Aliases for encodings"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<li><strong>Reply:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 22 2000 - 13:43:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

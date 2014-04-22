@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlParseDocument bug in libxml-1.4?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlParseDocument bug in libxml-1.4?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlParseDocument bug in libxml-1.4?</h1>
+<!-- received="Thu Aug  5 01:54:59 1999" -->
+<!-- isoreceived="19990805055459" -->
+<!-- sent="Thu, 5 Aug 1999 01:54:55 -0400" -->
+<!-- isosent="19990805055455" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlParseDocument bug in libxml-1.4?" -->
+<!-- id="19990805015455.P12315@w3.org" -->
+<!-- inreplyto="19990804163121.A17828@ox.nssl.noaa.gov" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlParseDocument%20bug%20in%20libxml-1.4?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Aug 05 1999 - 01:54:55 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0090.html">Daniel Veillard: "[xml] New version of libxml"</a>
+<li><strong>Previous message:</strong> <a href="0088.html">Charles Kerr: "[xml] xmlParseDocument bug in libxml-1.4?"</a>
+<li><strong>In reply to:</strong> <a href="0088.html">Charles Kerr: "[xml] xmlParseDocument bug in libxml-1.4?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Aug 04, 1999 at 04:31:21PM -0500, Charles Kerr wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm having trouble getting libxml to parse a sax file.
+</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML rather, right ? ^^^
+<br>
+<p><em>&gt; It looks like the culprit is xmlParseDocument passing
+</em><br>
+<em>&gt; the userData to startDocument, which is expecting a
+</em><br>
+<em>&gt; context pointer:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #0  0xff16b4d8 in startDocument (ctx=0x0) at SAX.c:368
+</em><br>
+<em>&gt; #1  0xff18e77c in xmlParseDocument (ctxt=0x1c9bc8) at parser.c:4403
+</em><br>
+<em>&gt; #2  0xff18f520 in xmlSAXParseFile (sax=0xffbee238, filename=0x1762f8 &quot;/users/ckerr/.OPUP/product_table.xml&quot;, recovery=0)
+</em><br>
+<em>&gt;     at parser.c:4846
+</em><br>
+<p>&nbsp;&nbsp;The problem probably lay out at the level where xmlSAXParseFile()
+<br>
+is called.  Did you call xmlParseFile() from your application layer or
+<br>
+did you modify the SAX back-end ?
+<br>
+<p>&nbsp;&nbsp;My implementation of startDocument() SAX callback expect
+<br>
+to get a valid xmlParserCtxtPtr as the userData data block provided
+<br>
+for the callback, i.e. ctxt-&gt;userData == ctxt. This should be the case if
+<br>
+you called the standard API.
+<br>
+&nbsp;&nbsp;If you decided to use the SAX API instead then, you must provide
+<br>
+your own set of callbacks (or if reusing the ones from SAX.c you must
+<br>
+fullfill the assumption I made that the user data block is the current
+<br>
+xmlParserCtxtPtr block).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlParseDocument%20bug%20in%20libxml-1.4?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20xmlParseDocument%20bug%20in%20libxml-1.4?">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20xmlParseDocument%20bug%20in%20libxml-1.4?">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0090.html">Daniel Veillard: "[xml] New version of libxml"</a>
+<li><strong>Previous message:</strong> <a href="0088.html">Charles Kerr: "[xml] xmlParseDocument bug in libxml-1.4?"</a>
+<li><strong>In reply to:</strong> <a href="0088.html">Charles Kerr: "[xml] xmlParseDocument bug in libxml-1.4?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:40 EDT</em>
+</em>
+</small>
+</body>
+</html>

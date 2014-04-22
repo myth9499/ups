@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Why the strncasecmp() avoidance?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Why the strncasecmp() avoidance?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Why the strncasecmp() avoidance?</h1>
+<!-- received="Fri Sep 22 06:17:18 2000" -->
+<!-- isoreceived="20000922101718" -->
+<!-- sent="Fri, 22 Sep 2000 12:12:44 +0200" -->
+<!-- isosent="20000922101244" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Why the strncasecmp() avoidance?" -->
+<!-- id="20000922121244.D13300@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0009220115120.24931-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 06:12:44 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0790.html">Wayne Davison: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0790.html">Wayne Davison: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Sep 22, 2000 at 02:14:32AM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; On Fri, 22 Sep 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; I see no problem if you provide xmlStrncasecmp(), yes go ahead !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Excellent!  I had started working on this earlier today (before running
+</em><br>
+<em>&gt; off to play some music with my friends), and now I've taken the time to
+</em><br>
+<em>&gt; finish it up.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;cool, thanks for the patch,
+<br>
+<p><em>&gt; One of the reasons I decided to dive in was that I noticed that the
+</em><br>
+<em>&gt; xmlStrcmp() functions had a minor problems:  if presented with two zero-
+</em><br>
+<em>&gt; length strings, the comparison would run past the end of the strings.  I
+</em><br>
+<em>&gt; also noticed that the xmlStrncmp() function didn't do quite the same
+</em><br>
+<em>&gt; preliminary pointer-equality test as xmlStrcmp().
+</em><br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;huh ... right good catch !
+<br>
+<p><em>&gt; My patch also changes several places in the code to use the new case-
+</em><br>
+<em>&gt; ignoring string functions.  You'll have to check what I've done to see if
+</em><br>
+<em>&gt; it goes too far (i.e., if XML expects a case-significant string comparison
+</em><br>
+<em>&gt; in instances where HTML does not) or not far enough.  For instance, I did
+</em><br>
+<em>&gt; change xmlHasProp() and xmlGetProp() to use xmlStrcasecmp(), but I'm not
+</em><br>
+<em>&gt; sure if that was the right thing to do (or if the code really needs html
+</em><br>
+<em>&gt; versions of these functions).
+</em><br>
+<p>&nbsp;&nbsp;No you should not do this. XML is case sensitive and has to remain so.
+<br>
+I fixed it. 
+<br>
+The HTML parser automatically convert names to lower case when reading them.
+<br>
+The use in xmlNodeGetBase() is okay but should not be needed for this
+<br>
+reason.
+<br>
+<p><em>&gt; Also, I added an include of tree.h to nanohttp.c just to get the BAD_CAST
+</em><br>
+<em>&gt; define.  That seems like overkill to me, but I think that is what's
+</em><br>
+<em>&gt; currently required.
+</em><br>
+<p>&nbsp;&nbsp;I had to change that. I included parser.h instead, otherwise 
+<br>
+xmlStrcasecmp() is just not defined in nanohttp.c
+<br>
+<p>&nbsp;&nbsp;I will commit this to the CVS bases soon,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks again,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0790.html">Wayne Davison: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0790.html">Wayne Davison: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 09:43:42 EDT</em>
+</em>
+</small>
+</body>
+</html>

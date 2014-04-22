@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Re: embedded libxml</title>
+<meta name="Author" content="Gregory Babior (babior@acceleratetv.com)">
+<meta name="Subject" content="RE: [xml] Re: embedded libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Re: embedded libxml</h1>
+<!-- received="Mon Feb  7 14:05:01 2000" -->
+<!-- isoreceived="20000207190501" -->
+<!-- sent="Mon, 7 Feb 2000 11:04:23 -0800" -->
+<!-- isosent="20000207190423" -->
+<!-- name="Gregory Babior" -->
+<!-- email="babior@acceleratetv.com" -->
+<!-- subject="RE: [xml] Re: embedded libxml" -->
+<!-- id="000901bf719e$25b2ceb0$1601a8c0@KUMQUAT" -->
+<!-- inreplyto="20000207020936.A4761@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gregory Babior (<a href="mailto:babior@acceleratetv.com?subject=RE:%20[xml]%20Re:%20embedded%20libxml"><em>babior@acceleratetv.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 07 2000 - 14:04:23 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0341.html">Daniel Veillard: "[xml] Re: embedded libxml"</a>
+<li><strong>In reply to:</strong> <a href="0341.html">Daniel Veillard: "[xml] Re: embedded libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<li><strong>Reply:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Glad I could help.  By the way - in doing the following you can
+<br>
+keep a switch available to compile in either direction:
+<br>
+<p>#define COMPILE_FOR_SPEED
+<br>
+<p>#ifdef COMPILE_FOR_SPEED
+<br>
+<p>/* keep the current NEXT macro as is */
+<br>
+<p>#else
+<br>
+<p>void nextFunc(xmlParserCtxtPtr ctxt)
+<br>
+{
+<br>
+&nbsp;&nbsp;// blah blah blah
+<br>
+}
+<br>
+<p>#define NEXT nextFunc(ctxt)
+<br>
+<p>#endif  /* COMPILE_FOR_SPEED */
+<br>
+<p>This works because (fortunately) in all instances of NEXT the variable
+<br>
+holding the xmlParserCtxtPtr has the same name (ctxt).
+<br>
+<p>The best of both worlds, no??
+<br>
+<p>As a reminder - I also found significant size gains in turning the macro
+<br>
+SKIP_BLANKS into a function.  You can do the same thing with this
+<br>
+as done w/ the NEXT macro above - i.e. you can put in a switch so that
+<br>
+you don't have to sacrifice the speed if you wish to have it.
+<br>
+<p>_________________________________________________
+<br>
+Gregory Babior                                Accelerate Interactive
+<br>
+Lead Software Architect              <a href="mailto:babior@acceleratetv.com?subject=RE:%20[xml]%20Re:%20embedded%20libxml">babior@acceleratetv.com</a>
+<br>
+310.822.4762 (v)                                      310.822.8160 (f)
+<br>
+330 Washington Blvd. Suite 800 Marina del Rey, CA 90292
+<br>
+<p><p><p><p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: Sunday, February 06, 2000 5:10 PM
+<br>
+To: Gregory Babior
+<br>
+Cc: Daniel Veillard; <a href="mailto:xml@rufus.w3.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">xml@rufus.w3.org</a>
+<br>
+Subject: [xml] Re: embedded libxml
+<br>
+<p><p><p>On Sat, Jan 15, 2000 at 08:36:28AM -0500, Daniel Veillard wrote:
+<br>
+<em>&gt; On Fri, Jan 14, 2000 at 11:21:51AM -0800, Gregory Babior wrote:
+</em><br>
+<em>&gt; &gt; My current goal is to create a version of libxml that
+</em><br>
+<em>&gt; &gt; is as small as possible so it can run in an embedded
+</em><br>
+<em>&gt; &gt; system [...]
+</em><br>
+<em>&gt; &gt; studying the code base I've found there are some compile time
+</em><br>
+<em>&gt; &gt; options that could be added to improve the modularization
+</em><br>
+<em>&gt; &gt; of the code and allow the ability to significantly shrink
+</em><br>
+<em>&gt; &gt; the code size.  The options I have in mind (so far) are:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; 1) An option to use function calls rather than macros.
+</em><br>
+<em>&gt; &gt;    Because of your consistent use of, for example, ctxt
+</em><br>
+<em>&gt; &gt;    in the NEXT macro, it's very easy to sub in a function
+</em><br>
+<em>&gt; &gt;    with minimal impact on the code - specifically
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;    void nextFunc(xmlParserCtxtPtr ctxt) { /* do stuff*/;}
+</em><br>
+<em>&gt; &gt;    #define NEXT nextFunc(ctxt)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   yep agree, I want first to do some profiling to estimate
+</em><br>
+<em>&gt; the inpact and gauge what should be the option by default.
+</em><br>
+<p>&nbsp;&nbsp;Being stuck in an airport, I have looked at this.
+<br>
+I agree that the NEXT() macro is:
+<br>
+&nbsp;&nbsp;- used in a lot of places
+<br>
+&nbsp;&nbsp;- rather big
+<br>
+<p>So I demacroified it as suggested in the XML and HTML parsers
+<br>
+<p>Results of NEXT() demacroification on the XML parser
+<br>
+&nbsp;&nbsp;parse loop exec time      size in bytes
+<br>
+before      9.66            124376
+<br>
+after       9.80            91320
+<br>
+<p>&nbsp;&nbsp;This is a significant size improvement for a very small
+<br>
+speed penalty.
+<br>
+<p>Results of NEXT demacroification on the HTML parser
+<br>
+&nbsp;&nbsp;parse loop exec time      size in bytes
+<br>
+before      4.49            42800
+<br>
+after       4.63            38176
+<br>
+<p>&nbsp;&nbsp;So as a whole I think that the size/speed tradeoff is more than
+<br>
+interesting, so I will make that change in the code base accordingly.
+<br>
+It is interesting to note that this simple change reduced the code
+<br>
+size by the same amount than the FTP, HTTP and the XPath code cumuled
+<br>
+(36 KBytes).
+<br>
+<p>&nbsp;&nbsp;Thanks a lot for reporting this !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+--
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">majordomo@xmlsoft.org</a>
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Re:%20embedded%20libxml">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0341.html">Daniel Veillard: "[xml] Re: embedded libxml"</a>
+<li><strong>In reply to:</strong> <a href="0341.html">Daniel Veillard: "[xml] Re: embedded libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<li><strong>Reply:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

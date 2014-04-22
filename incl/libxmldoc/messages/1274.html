@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>XML: Re: [xml] Action of realloc</title>
+<meta name="Author" content="JohnnyXia@acersoftech.com.cn (JohnnyXia@acersoftech.com.cn)">
+<meta name="Subject" content="Re: [xml] Action of realloc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Action of realloc</h1>
+<!-- received="Thu Dec  7 00:21:08 2000" -->
+<!-- isoreceived="20001207052108" -->
+<!-- sent="Thu, 7 Dec 2000 13:20:10 +0800" -->
+<!-- isosent="20001207052010" -->
+<!-- name="JohnnyXia@acersoftech.com.cn" -->
+<!-- email="JohnnyXia@acersoftech.com.cn" -->
+<!-- subject="Re: [xml] Action of realloc" -->
+<!-- id="482569AE.001DAB5C.00@cnshans1.acersoftech.com.cn" -->
+<!-- charset="gb2312" -->
+<!-- inreplyto="[xml] Action of realloc" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:JohnnyXia@acersoftech.com.cn?subject=Re:%20[xml]%20Action%20of%20realloc"><em>JohnnyXia@acersoftech.com.cn</em></a><br>
+<strong>Date:</strong> Thu Dec 07 2000 - 00:20:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1273.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1260.html">JohnnyXia@acersoftech.com.cn: "[xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi All,
+<br>
+<p>I think of two ways to fix this problem, and post them here for discussion.
+<br>
+<p>1)The most direct way, change the codes in libxml where xmlRealloc is
+<br>
+called.
+<br>
+&nbsp;&nbsp;There are about 71 places need to be modified.
+<br>
+<p>2)Rewrite xmlRealloc, when realloc fails, free the old memory block and
+<br>
+returns null.
+<br>
+&nbsp;&nbsp;But xmlRealloc is used internally and externally. Internally it is called
+<br>
+by the
+<br>
+&nbsp;&nbsp;lib implementation, externally it maybe called by lib user. In lib
+<br>
+implementation
+<br>
+&nbsp;&nbsp;xmlRealloc is used as if it will clean the old memory block, when it
+<br>
+fails. But
+<br>
+&nbsp;&nbsp;how about external usage, can make the same assumption?
+<br>
+<p>Johnny Xia.
+<br>
+<p><p><p><p><p>On Tue, Dec 05, 2000 at 08:21:08PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt; <a href="mailto:JohnnyXia@acersoftech.com.cn?subject=Re:%20[xml]%20Action%20of%20realloc">JohnnyXia@acersoftech.com.cn</a> wrote:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt;      pOld = realloc( pOld, newsize );
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; You are right. If realloc() fails, then the old memory block is
+</em><br>
+<em>&gt; lost. This behaviour is not restricted to individual platforms,
+</em><br>
+<em>&gt; but a general ANSI/ISO stdlib behaviour.
+</em><br>
+<p>&nbsp;&nbsp;yes this is kind of unclean, but basically if the programs runs out
+<br>
+of memory, it will leak. That's a problem, I don't plan to fix this
+<br>
+immediately but I keep this in the list of things TODO. Patch welcome :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+--
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Action%20of%20realloc">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">majordomo@rpmfind.net</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1273.html">Daniel Veillard: "Re: [xml] Whitespace rears its ugly head again"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1260.html">JohnnyXia@acersoftech.com.cn: "[xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Dec 07 2000 - 00:43:28 EST</em>
+</em>
+</small>
+</body>
+</html>

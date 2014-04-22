@@ -1,0 +1,614 @@
+Index: nanoftp.c
+@@ -71,6 +71,14 @@
+ #endif
+ #endif
+ 
++/**
++ * A couple portability macros
++ */
++#ifndef _WINSOCKAPI_
++#define closesocket(s) close(s)
++#define SOCKET int
++#endif
++
+ static char hostname[100];
+ 
+ #define FTP_COMMAND_OK		200
+@@ -87,8 +95,8 @@
+     char *passwd;	/* passwd string */
+     struct sockaddr_in ftpAddr; /* the socket address struct */
+     int passive;	/* currently we support only passive !!! */
+-    int controlFd;	/* the file descriptor for the control socket */
+-    int dataFd;		/* the file descriptor for the data socket */
++    SOCKET controlFd;	/* the file descriptor for the control socket */
++    SOCKET dataFd;	/* the file descriptor for the data socket */
+     int state;		/* WRITE / READ / CLOSED */
+     int returnValue;	/* the protocol return value */
+     /* buffer for data received from the control connection */
+@@ -116,10 +124,18 @@
+ void
+ xmlNanoFTPInit(void) {
+     const char *env;
++#ifdef _WINSOCKAPI_
++    WSADATA wsaData;    
++#endif
+ 
+     if (initialized)
+ 	return;
+ 
++#ifdef _WINSOCKAPI_
++    if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
++	return;
++#endif
++
+     gethostname(hostname, sizeof(hostname));
+ 
+     proxyPort = 21;
+@@ -167,6 +183,10 @@
+ 	proxyPasswd = NULL;
+     }
+     hostname[0] = 0;
++#ifdef _WINSOCKAPI_
++    if (initialized)
++	WSACleanup();
++#endif
+     initialized = 0;
+     return;
+ }
+@@ -488,7 +508,7 @@
+     if (ctxt->protocol != NULL) xmlFree(ctxt->protocol);
+     if (ctxt->path != NULL) xmlFree(ctxt->path);
+     ctxt->passive = 1;
+-    if (ctxt->controlFd >= 0) close(ctxt->controlFd);
++    if (ctxt->controlFd >= 0) closesocket(ctxt->controlFd);
+     ctxt->controlFd = -1;
+     ctxt->controlBufIndex = -1;
+     ctxt->controlBufUsed = -1;
+@@ -590,7 +610,7 @@
+      */
+     if ((len = recv(ctxt->controlFd, &ctxt->controlBuf[ctxt->controlBufIndex],
+ 		    size, 0)) < 0) {
+-	close(ctxt->controlFd); ctxt->controlFd = -1;
++	closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+         ctxt->controlFd = -1;
+         return(-1);
+     }
+@@ -861,7 +881,7 @@
+      */
+     if (connect(ctxt->controlFd, (struct sockaddr *) &ctxt->ftpAddr,
+                 sizeof(struct sockaddr_in)) < 0) {
+-        close(ctxt->controlFd); ctxt->controlFd = -1;
++        closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+         ctxt->controlFd = -1;
+ 	return(-1);
+     }
+@@ -871,7 +891,7 @@
+      */
+     res = xmlNanoFTPGetResponse(ctxt);
+     if (res != 2) {
+-        close(ctxt->controlFd); ctxt->controlFd = -1;
++        closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+         ctxt->controlFd = -1;
+ 	return(-1);
+     }
+@@ -931,7 +951,7 @@
+ #endif
+ 	    res = send(ctxt->controlFd, buf, len, 0);
+ 	    if (res < 0) {
+-		close(ctxt->controlFd);
++		closesocket(ctxt->controlFd);
+ 		ctxt->controlFd = -1;
+ 	        return(res);
+ 	    }
+@@ -961,13 +981,13 @@
+ #endif
+ 		    res = send(ctxt->controlFd, buf, len, 0);
+ 		    if (res < 0) {
+-			close(ctxt->controlFd);
++			closesocket(ctxt->controlFd);
+ 			ctxt->controlFd = -1;
+ 			return(res);
+ 		    }
+ 		    res = xmlNanoFTPGetResponse(ctxt);
+ 		    if (res > 3) {
+-			close(ctxt->controlFd);
++			closesocket(ctxt->controlFd);
+ 			ctxt->controlFd = -1;
+ 			return(-1);
+ 		    }
+@@ -978,7 +998,7 @@
+ 		case 5:
+ 		case -1:
+ 		default:
+-		    close(ctxt->controlFd);
++		    closesocket(ctxt->controlFd);
+ 		    ctxt->controlFd = -1;
+ 		    return(-1);
+ 	    }
+@@ -1005,7 +1025,7 @@
+ #endif
+ 		res = send(ctxt->controlFd, buf, len, 0);
+ 		if (res < 0) {
+-		    close(ctxt->controlFd); ctxt->controlFd = -1;
++		    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		    ctxt->controlFd = -1;
+ 		    return(res);
+ 		}
+@@ -1016,7 +1036,7 @@
+ 		    break;
+ 		}    
+ 		if (proxyType == 1) {
+-		    close(ctxt->controlFd); ctxt->controlFd = -1;
++		    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		    ctxt->controlFd = -1;
+ 		    return(-1);
+ 		}
+@@ -1044,7 +1064,7 @@
+ #endif
+ 		res = send(ctxt->controlFd, buf, len, 0);
+ 		if (res < 0) {
+-		    close(ctxt->controlFd); ctxt->controlFd = -1;
++		    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		    ctxt->controlFd = -1;
+ 		    return(res);
+ 		}
+@@ -1073,7 +1093,7 @@
+ #endif
+ 		res = send(ctxt->controlFd, buf, len, 0);
+ 		if (res < 0) {
+-		    close(ctxt->controlFd); ctxt->controlFd = -1;
++		    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		    ctxt->controlFd = -1;
+ 		    return(res);
+ 		}
+@@ -1084,7 +1104,7 @@
+ 		    return(0);
+ 		}
+ 		if (proxyType == 2) {
+-		    close(ctxt->controlFd); ctxt->controlFd = -1;
++		    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		    ctxt->controlFd = -1;
+ 		    return(-1);
+ 		}
+@@ -1094,7 +1114,7 @@
+ 		 * send the code or at least the sequence in use.
+ 		 */
+ 	    default:
+-		close(ctxt->controlFd); ctxt->controlFd = -1;
++		closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 		ctxt->controlFd = -1;
+ 		return(-1);
+ 	}
+@@ -1104,7 +1124,7 @@
+      */
+     res = xmlNanoFTPSendUser(ctxt);
+     if (res < 0) {
+-        close(ctxt->controlFd); ctxt->controlFd = -1;
++        closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+         ctxt->controlFd = -1;
+ 	return(-1);
+     }
+@@ -1119,13 +1139,13 @@
+ 	case 5:
+         case -1:
+ 	default:
+-	    close(ctxt->controlFd); ctxt->controlFd = -1;
++	    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 	    ctxt->controlFd = -1;
+ 	    return(-1);
+     }
+     res = xmlNanoFTPSendPasswd(ctxt);
+     if (res < 0) {
+-        close(ctxt->controlFd); ctxt->controlFd = -1;
++        closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+         ctxt->controlFd = -1;
+ 	return(-1);
+     }
+@@ -1140,7 +1160,7 @@
+ 	case 5:
+         case -1:
+ 	default:
+-	    close(ctxt->controlFd); ctxt->controlFd = -1;
++	    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 	    ctxt->controlFd = -1;
+ 	    return(-1);
+     }
+@@ -1249,6 +1269,7 @@
+     ctxt->dataFd = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
+     if (ctxt->dataFd < 0) {
+         fprintf(stderr, "xmlNanoFTPGetConnection: failed to create socket\n");
++	return(-1);
+     }
+     dataAddrLen = sizeof(dataAddr);
+     memset(&dataAddr, 0, dataAddrLen);
+@@ -1262,19 +1283,19 @@
+ #endif
+ 	res = send(ctxt->controlFd, buf, len, 0);
+ 	if (res < 0) {
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(res);
+ 	}
+         res = xmlNanoFTPReadResponse(ctx);
+ 	if (res != 2) {
+ 	    if (res == 5) {
+-	        close(ctxt->dataFd); ctxt->dataFd = -1;
++	        closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 		return(-1);
+ 	    } else {
+ 		/*
+ 		 * retry with an active connection
+ 		 */
+-	        close(ctxt->dataFd); ctxt->dataFd = -1;
++	        closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	        ctxt->passive = 0;
+ 	    }
+ 	}
+@@ -1284,7 +1305,7 @@
+ 	            &temp[3], &temp[4], &temp[5]) != 6) {
+ 	    fprintf(stderr, "Invalid answer to PASV\n");
+ 	    if (ctxt->dataFd != -1) {
+-		close(ctxt->dataFd); ctxt->dataFd = -1;
++		closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    }
+ 	    return(-1);
+ 	}
+@@ -1293,7 +1314,7 @@
+ 	memcpy(&dataAddr.sin_port, &ad[4], 2);
+ 	if (connect(ctxt->dataFd, (struct sockaddr *) &dataAddr, dataAddrLen) < 0) {
+ 	    fprintf(stderr, "Failed to create a data connection\n");
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return (-1);
+ 	}
+     } else {
+@@ -1301,7 +1322,7 @@
+ 	dataAddr.sin_port = 0;
+ 	if (bind(ctxt->dataFd, (struct sockaddr *) &dataAddr, dataAddrLen) < 0) {
+ 	    fprintf(stderr, "Failed to bind a port\n");
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return (-1);
+ 	}
+         getsockname(ctxt->dataFd, (struct sockaddr *) &dataAddr, &dataAddrLen);
+@@ -1309,7 +1330,7 @@
+ 	if (listen(ctxt->dataFd, 1) < 0) {
+ 	    fprintf(stderr, "Could not listen on port %d\n",
+ 	            ntohs(dataAddr.sin_port));
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return (-1);
+ 	}
+ 	adp = (unsigned char *) &dataAddr.sin_addr;
+@@ -1331,12 +1352,12 @@
+ 
+ 	res = send(ctxt->controlFd, buf, len, 0);
+ 	if (res < 0) {
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(res);
+ 	}
+         res = xmlNanoFTPGetResponse(ctxt);
+ 	if (res != 2) {
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(-1);
+         }
+     }
+@@ -1360,7 +1381,7 @@
+     fd_set rfd, efd;
+     struct timeval tv;
+ 
+-    close(ctxt->dataFd); ctxt->dataFd = -1;
++    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+     tv.tv_sec = 15;
+     tv.tv_usec = 0;
+     FD_ZERO(&rfd);
+@@ -1372,18 +1393,18 @@
+ #ifdef DEBUG_FTP
+ 	perror("select");
+ #endif
+-	close(ctxt->controlFd); ctxt->controlFd = -1;
++	closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 	return(-1);
+     }
+     if (res == 0) {
+ #ifdef DEBUG_FTP
+ 	fprintf(stderr, "xmlNanoFTPCloseConnection: timeout\n");
+ #endif
+-	close(ctxt->controlFd); ctxt->controlFd = -1;
++	closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+     } else {
+ 	res = xmlNanoFTPGetResponse(ctxt);
+ 	if (res != 2) {
+-	    close(ctxt->controlFd); ctxt->controlFd = -1;
++	    closesocket(ctxt->controlFd); ctxt->controlFd = -1;
+ 	    return(-1);
+ 	}
+     }
+@@ -1567,12 +1588,12 @@
+ #endif
+     res = send(ctxt->controlFd, buf, len, 0);
+     if (res < 0) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(res);
+     }
+     res = xmlNanoFTPReadResponse(ctxt);
+     if (res != 1) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(-res);
+     }
+ 
+@@ -1588,29 +1609,29 @@
+ #ifdef DEBUG_FTP
+ 	    perror("select");
+ #endif
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(-1);
+ 	}
+ 	if (res == 0) {
+ 	    res = xmlNanoFTPCheckResponse(ctxt);
+ 	    if (res < 0) {
+-		close(ctxt->dataFd); ctxt->dataFd = -1;
++		closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 		ctxt->dataFd = -1;
+ 		return(-1);
+ 	    }
+ 	    if (res == 2) {
+-		close(ctxt->dataFd); ctxt->dataFd = -1;
++		closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 		return(0);
+ 	    }
+ 
+ 	    continue;
+ 	}
+ 
+-	if ((len = read(ctxt->dataFd, &buf[index], sizeof(buf) - (index + 1))) < 0) {
++	if ((len = recv(ctxt->dataFd, &buf[index], sizeof(buf) - (index + 1), 0)) < 0) {
+ #ifdef DEBUG_FTP
+-	    perror("read");
++	    perror("recv");
+ #endif
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    ctxt->dataFd = -1;
+ 	    return(-1);
+ 	}
+@@ -1661,12 +1682,12 @@
+ #endif
+     res = send(ctxt->controlFd, buf, len, 0);
+     if (res < 0) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(res);
+     }
+     res = xmlNanoFTPReadResponse(ctxt);
+     if (res != 2) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(-res);
+     }
+     if (filename == NULL)
+@@ -1688,12 +1709,12 @@
+ #endif
+     res = send(ctxt->controlFd, buf, len, 0);
+     if (res < 0) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(res);
+     }
+     res = xmlNanoFTPReadResponse(ctxt);
+     if (res != 1) {
+-	close(ctxt->dataFd); ctxt->dataFd = -1;
++	closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	return(-res);
+     }
+     return(ctxt->dataFd);
+@@ -1738,26 +1759,26 @@
+ #ifdef DEBUG_FTP
+ 	    perror("select");
+ #endif
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(-1);
+ 	}
+ 	if (res == 0) {
+ 	    res = xmlNanoFTPCheckResponse(ctxt);
+ 	    if (res < 0) {
+-		close(ctxt->dataFd); ctxt->dataFd = -1;
++		closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 		ctxt->dataFd = -1;
+ 		return(-1);
+ 	    }
+ 	    if (res == 2) {
+-		close(ctxt->dataFd); ctxt->dataFd = -1;
++		closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 		return(0);
+ 	    }
+ 
+ 	    continue;
+ 	}
+-	if ((len = read(ctxt->dataFd, &buf, sizeof(buf))) < 0) {
++	if ((len = recv(ctxt->dataFd, buf, sizeof(buf), 0)) < 0) {
+ 	    callback(userData, buf, len);
+-	    close(ctxt->dataFd); ctxt->dataFd = -1;
++	    closesocket(ctxt->dataFd); ctxt->dataFd = -1;
+ 	    return(-1);
+ 	}
+ 	callback(userData, buf, len);
+@@ -1787,9 +1808,9 @@
+     if (dest == NULL) return(-1);
+     if (len <= 0) return(0);
+ 
+-    len = read(ctxt->dataFd, dest, len);
++    len = recv(ctxt->dataFd, dest, len, 0);
+ #ifdef DEBUG_FTP
+-    printf("Read %d bytes\n", len);
++    printf("Recvd %d bytes\n", len);
+ #endif
+     if (len <= 0) {
+ 	xmlNanoFTPCloseConnection(ctxt);
+@@ -1846,12 +1867,12 @@
+ 	return(-1);
+ 
+     if (ctxt->dataFd >= 0) {
+-	close(ctxt->dataFd);
++	closesocket(ctxt->dataFd);
+ 	ctxt->dataFd = -1;
+     }
+     if (ctxt->controlFd >= 0) {
+ 	xmlNanoFTPQuit(ctxt);
+-	close(ctxt->controlFd);
++	closesocket(ctxt->controlFd);
+ 	ctxt->controlFd = -1;
+     }
+     xmlNanoFTPFreeCtxt(ctxt);
+Index: nanohttp.c
+@@ -65,6 +65,14 @@
+ #include <libxml/parser.h> /* for xmlStr(n)casecmp() */
+ #include <libxml/nanohttp.h>
+ 
++/**
++ * A couple portability macros
++ */
++#ifndef _WINSOCKAPI_
++#define closesocket(s) close(s)
++#define SOCKET int
++#endif
++
+ #ifdef STANDALONE
+ #define DEBUG_HTTP
+ #define xmlStrncasecmp(a, b, n) strncasecmp((char *)a, (char *)b, n)
+@@ -85,7 +93,7 @@
+     char *hostname;	/* the host name */
+     int port;		/* the port */
+     char *path;		/* the path within the URL */
+-    int fd;		/* the file descriptor for the socket */
++    SOCKET fd;		/* the file descriptor for the socket */
+     int state;		/* WRITE / READ / CLOSED */
+     char *out;		/* buffer sent (zero terminated) */
+     char *outptr;	/* index within the buffer sent */
+@@ -106,18 +114,8 @@
+ static unsigned int timeout = 60;/* the select() timeout in seconds */
+ 
+ /**
+- * A bit of portability macros and functions
++ * A portability function
+  */
+-#ifdef _WINSOCKAPI_
+-
+-WSADATA wsaData;
+-
+-#else
+-
+-#define closesocket(s) close(s)
+-
+-#endif
+-
+ int socket_errno(void) {
+ #ifdef _WINSOCKAPI_
+     return(WSAGetLastError());
+@@ -136,13 +134,16 @@
+ void
+ xmlNanoHTTPInit(void) {
+     const char *env;
++#ifdef _WINSOCKAPI_
++    WSADATA wsaData;    
++#endif
+ 
+     if (initialized)
+ 	return;
+ 
+ #ifdef _WINSOCKAPI_
+-    if (WSAStartup(0x0101, &wsaData) != 0)
+-	WSACleanup();
++    if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
++	return;
+ #endif
+ 
+     if (proxy == NULL) {
+@@ -175,10 +176,11 @@
+ xmlNanoHTTPCleanup(void) {
+     if (proxy != NULL)
+ 	xmlFree(proxy);
+-    initialized = 0;
+ #ifdef _WINSOCKAPI_
+-    WSACleanup();
++    if (initialized)
++	WSACleanup();
+ #endif
++    initialized = 0;
+     return;
+ }
+ 
+@@ -612,7 +614,7 @@
+ static int
+ xmlNanoHTTPConnectAttempt(struct in_addr ia, int port)
+ {
+-    int s=socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
++    SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+     struct sockaddr_in sin;
+     fd_set wfd;
+     struct timeval tv;
+@@ -663,11 +665,16 @@
+     sin.sin_addr   = ia;
+     sin.sin_port   = htons(port);
+     
+-    if ((connect(s, (struct sockaddr *)&sin, sizeof(sin))==-1) &&
+-       (socket_errno() != EINPROGRESS) && (socket_errno() != EWOULDBLOCK)) {
+-	perror("connect");
+-	closesocket(s);
+-	return(-1);
++    if ((connect(s, (struct sockaddr *)&sin, sizeof(sin))==-1)) {
++	switch (socket_errno()) {
++	    case EINPROGRESS:
++	    case EWOULDBLOCK:
++		break;
++	    default:
++		perror("connect");
++		closesocket(s);
++		return(-1);
++	}
+     }	
+     
+     tv.tv_sec = timeout;
+@@ -694,7 +701,7 @@
+     if ( FD_ISSET(s, &wfd) ) {
+ 	SOCKLEN_T len;
+ 	len = sizeof(status);
+-	if (getsockopt(s, SOL_SOCKET, SO_ERROR, &status, &len) < 0 ) {
++	if (getsockopt(s, SOL_SOCKET, SO_ERROR, (char*)&status, &len) < 0 ) {
+ 	    /* Solaris error code */
+ 	    return (-1);
+ 	}
+Index: xmlIO.c
+@@ -374,7 +374,7 @@
+     gzFile fd;
+ 
+     if (!strcmp(filename, "-")) {
+-        fd = gzdopen (fileno(stdin), "r");
++        fd = gzdopen(fileno(stdin), "rb");
+ 	return((void *) fd);
+     }
+ 
+@@ -385,7 +385,7 @@
+     else 
+ 	path = filename;
+ 
+-    fd = gzopen(filename, "r");
++    fd = gzopen(filename, "rb");
+     return((void *) fd);
+ }
+ 
+@@ -405,7 +405,7 @@
+     char mode[15];
+     gzFile fd;
+ 
+-    sprintf(mode, "w%d", compression);
++    sprintf(mode, "wb%d", compression);
+     if (!strcmp(filename, "-")) {
+         fd = gzdopen(1, mode);
+ 	return((void *) fd);

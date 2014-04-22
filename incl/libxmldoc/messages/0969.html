@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] internal tree ?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] internal tree ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] internal tree ?</h1>
+<!-- received="Sun Oct 15 15:43:17 2000" -->
+<!-- isoreceived="20001015194317" -->
+<!-- sent="Sun, 15 Oct 2000 21:43:13 +0200" -->
+<!-- isosent="20001015194313" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] internal tree ?" -->
+<!-- id="20001015214313.M6250@w3.org" -->
+<!-- inreplyto="39E9E3E7.902150D6@stud1.tuwien.ac.at" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20internal%20tree%20?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 15:43:13 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>Previous message:</strong> <a href="0968.html">Daniel Veillard: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>In reply to:</strong> <a href="0964.html">Michael Liehmann: "[xml] internal tree ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 15, 2000 at 07:05:43PM +0200, Michael Liehmann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; as this is my first message to this mailing list, i hope that
+</em><br>
+<em>&gt; my question or problem is not too dumb .
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; well i try to write a XMLmodule for MetaHTML.
+</em><br>
+<em>&gt; at the moment i am still probing around and try to understand the
+</em><br>
+<em>&gt; internal presentation of the tree, the parser returns.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; i used this small xml example file from xmlsoft.org
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;EXAMPLE prop1=&quot;gnome is great&quot; prop2=&quot;&amp;amp; linux too&quot;&gt;
+</em><br>
+<em>&gt;   &lt;head&gt;ddd
+</em><br>
+<em>&gt;    &lt;title&gt;Welcome to Gnome
+</em><br>
+<em>&gt;      &lt;sub&gt;suse&lt;/sub&gt;
+</em><br>
+<em>&gt;    &lt;/title&gt;
+</em><br>
+<em>&gt;   &lt;/head&gt;
+</em><br>
+<em>&gt;   &lt;chapter&gt;eins
+</em><br>
+<em>&gt;    &lt;title&gt;The Linux adventure&lt;/title&gt;
+</em><br>
+<em>&gt;    &lt;p&gt;bla bla bla ...&lt;/p&gt;   
+</em><br>
+<em>&gt;    &lt;p&gt;...&lt;/p&gt;
+</em><br>
+<em>&gt;   &lt;/chapter&gt;
+</em><br>
+<em>&gt; &lt;/EXAMPLE&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; here comes the testfile
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   doc = xmlParseFile(&quot;xmlFile2.xml&quot;);
+</em><br>
+<em>&gt;   if (doc == NULL) return(NULL);
+</em><br>
+<em>&gt;   cur = xmlDocGetRootElement(doc);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; now, cur is the root tag ( = &lt;EXAMPLE&gt; )
+</em><br>
+<em>&gt; and with printf(&quot;%s\n&quot;,cur-&gt;name) i get the right tagname
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; with printf(&quot;%s\n&quot;,cur-&gt;xmlChildrenNode-&gt;next-&gt;name) i get the name of
+</em><br>
+<em>&gt; the &lt;head&gt; tag
+</em><br>
+<p>&nbsp;&nbsp;Make sure you use libxml2
+<br>
+<p>&nbsp;&nbsp;you should have
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;children  pointing to a text node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;children-&gt;next pointing to head
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;children-&gt;next-&gt;next to  a text node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur-&gt;children-&gt;next-&gt;next-&gt;next to chapter
+<br>
+<p>&nbsp;use xmllint --debug xmlFile2.xml
+<br>
+<p>&nbsp;&nbsp;&nbsp;to get a complete view of the built tree
+<br>
+<p><em>&gt; ok, but then the questions start!
+</em><br>
+<em>&gt; how can i reference the &lt;chapter&gt; tag?
+</em><br>
+<em>&gt; or the second title tag ( = the linux adventure)
+</em><br>
+<em>&gt; how can i parse throug the whole tree!
+</em><br>
+<p>&nbsp;&nbsp;next &lt;-&gt; prev
+<br>
+&nbsp;&nbsp;children &lt;-&gt; parent
+<br>
+&nbsp;&nbsp;and attributes &lt;-&gt; parent to access the list of attributes
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20internal%20tree%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20internal%20tree%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20internal%20tree%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>Previous message:</strong> <a href="0968.html">Daniel Veillard: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<li><strong>In reply to:</strong> <a href="0964.html">Michael Liehmann: "[xml] internal tree ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 15:43:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

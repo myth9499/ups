@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XML fragments</title>
+<meta name="Author" content="Havoc Pennington (hp@Mcs.Net)">
+<meta name="Subject" content="Re: [xml] XML fragments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XML fragments</h1>
+<!-- received="Sun Feb 28 16:05:32 1999" -->
+<!-- isoreceived="19990228210532" -->
+<!-- sent="Sun, 28 Feb 1999 15:05:29 -0600 (CST)" -->
+<!-- isosent="19990228210529" -->
+<!-- name="Havoc Pennington" -->
+<!-- email="hp@Mcs.Net" -->
+<!-- subject="Re: [xml] XML fragments" -->
+<!-- id="Pine.BSF.3.95.990228145121.15989H-100000@Venus.mcs.net" -->
+<!-- inreplyto="19990228103403.A31090@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Havoc Pennington (<a href="mailto:hp@Mcs.Net?subject=Re:%20[xml]%20XML%20fragments"><em>hp@Mcs.Net</em></a>)<br>
+<strong>Date:</strong> Sun Feb 28 1999 - 16:05:29 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0012.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>In reply to:</strong> <a href="0012.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>Reply:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, 28 Feb 1999, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Yes, and yes :-)
+</em><br>
+<em>&gt;
+</em><br>
+<p>Thanks!
+<br>
+&nbsp;
+<br>
+<em>&gt;   BTW, could you indicate what kind of use you have in mind ? If this
+</em><br>
+<em>&gt; turn out to be useful to others I may move it directly in tree.h .
+</em><br>
+<em>&gt; 
+</em><br>
+<p>Well, it is sort of ugly. I am writing something for publication, and the
+<br>
+publisher wants it in some atrocious format that will work with their
+<br>
+Microsoft software (their setup is ridiculously inefficient and
+<br>
+wrongheaded). I don't want to write in that format, because I want to be
+<br>
+able to manipulate the document with automated tools. I couldn't find an
+<br>
+existing DTD that was really appropriate. So I made up a little standalone
+<br>
+tag-set which corresponds to the styles they use, and using libxml I load
+<br>
+in my document and spit it out again in a format they can deal with.
+<br>
+<p>Since the document is large I wanted #include type functionality, 
+<br>
+and I thought the easiest way to do that would be with a magic &lt;include&gt;
+<br>
+tag, since I'm using my own hacky program to generate output anyway.
+<br>
+Now that I think about it I guess SGML at least had an &quot;official&quot; way to
+<br>
+do this. Anyway the included file contains an XML fragment.
+<br>
+<p>Yesterday I hacked around it by loading the file into memory, placing 
+<br>
+&lt;dummy&gt; &lt;/dummy&gt; around the memory and parsing that, ignoring the top
+<br>
+node. But it sucks. :-) (The program is basically a single-use hack
+<br>
+though, so I'm not that concerned about it.)
+<br>
+<p>Thanks,
+<br>
+Havoc
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20XML%20fragments">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20XML%20fragments">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0012.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>In reply to:</strong> <a href="0012.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<li><strong>Reply:</strong> <a href="0014.html">Daniel Veillard: "Re: [xml] XML fragments"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml 2.2.0 xmlParseMemory bug</title>
+<meta name="Author" content="David Kågedal (davidk@lysator.liu.se)">
+<meta name="Subject" content="Re: [xml] libxml 2.2.0 xmlParseMemory bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml 2.2.0 xmlParseMemory bug</h1>
+<!-- received="Fri Jul 21 08:13:41 2000" -->
+<!-- isoreceived="20000721121341" -->
+<!-- sent="21 Jul 2000 14:09:25 +0200" -->
+<!-- isosent="20000721120925" -->
+<!-- name="David Kågedal" -->
+<!-- email="davidk@lysator.liu.se" -->
+<!-- subject="Re: [xml] libxml 2.2.0 xmlParseMemory bug" -->
+<!-- id="r9k8efvg5m.fsf@shs2.idasys.se" -->
+<!-- inreplyto="21 Jul 2000 12:37:08 +0200&quot;" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Kågedal (<a href="mailto:davidk@lysator.liu.se?subject=Re:%20[xml]%20libxml%202.2.0%20xmlParseMemory%20bug"><em>davidk@lysator.liu.se</em></a>)<br>
+<strong>Date:</strong> Fri Jul 21 2000 - 08:09:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Previous message:</strong> <a href="0610.html">David Kågedal: "[xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Reply:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Reply:</strong> <a href="0613.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<a href="mailto:davidk@lysator.liu.se?subject=Re:%20[xml]%20libxml%202.2.0%20xmlParseMemory%20bug">davidk@lysator.liu.se</a> (David Kågedal) writes:
+<br>
+<p><em>&gt; Someone else noticed that xmlParseMemory got character encodings
+</em><br>
+<em>&gt; wrong, and I can only confirm this.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have the following small XML document:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;test att=&quot;räka&quot;&gt;ohåj &lt;börje/&gt;&lt;/test&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; And the attached program which tries both xmlParseFile and
+</em><br>
+<em>&gt; xmlParseMemory, and fails on the latter.  The output is also attached.
+</em><br>
+<p>Oops, I seem to have included the wrong file.  Here it is instead:
+<br>
+<p>- From file
+<br>
+encoding: iso-8859-1
+<br>
+charset: 1
+<br>
+- From memory
+<br>
+Entity: line 1: error: xmlSwitchEncoding : no input
+<br>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+Entity: line 2: error: Input is not proper UTF-8, indicate encoding !
+<br>
+&lt;test att=&quot;räka&quot;&gt;ohåj &lt;börje/&gt;&lt;/test&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+Entity: line 2: error: Bytes: 0xE4 0x6B 0x61 0x22
+<br>
+&lt;test att=&quot;räka&quot;&gt;ohåj &lt;börje/&gt;&lt;/test&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+encoding: iso-8859-1
+<br>
+charset: 10
+<br>
+<p><p><pre>
+-- 
+David Kågedal
+<p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.2.0%20xmlParseMemory%20bug">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.2.0%20xmlParseMemory%20bug">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Previous message:</strong> <a href="0610.html">David Kågedal: "[xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Reply:</strong> <a href="0612.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<li><strong>Reply:</strong> <a href="0613.html">Daniel Veillard: "Re: [xml] libxml 2.2.0 xmlParseMemory bug"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

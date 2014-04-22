@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in parser (HTML)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug in parser (HTML)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in parser (HTML)</h1>
+<!-- received="Fri Oct 27 14:45:15 2000" -->
+<!-- isoreceived="20001027184515" -->
+<!-- sent="Fri, 27 Oct 2000 20:45:10 +0200" -->
+<!-- isosent="20001027184510" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug in parser (HTML)" -->
+<!-- id="20001027204510.A29045@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B19251@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 27 2000 - 14:45:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Reply:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 27, 2000 at 01:39:27PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi there the following document causes a bug in the resulting parsing:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;html&gt;&lt;body&gt;
+</em><br>
+<em>&gt; &lt;b&gt;bbbbbbbbbb&lt;/b&gt; &lt;b&gt;ccccccccccccccc&lt;/b&gt;
+</em><br>
+<em>&gt; &lt;/body&gt;&lt;/html&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The parsing looses the ' ' (space) between bbbbbbbb &amp; cccccccc.  Is it the
+</em><br>
+<em>&gt; normal behavior of libxml.  One of our developer found this bug and I
+</em><br>
+<em>&gt; haven't looked at it yet.  So if you tell me this is normal, I won't look.
+</em><br>
+<p>&nbsp;&nbsp;Well we would' like to lose the space between b's and c's in the
+<br>
+following:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bbbbbbbbbb ccccccccccccccc
+<br>
+<p>&nbsp;&nbsp;Well, it's kinda tricky, here is what's happening:
+<br>
+<p>Start of element body: pushed body
+<br>
+SAX.startElement(body)
+<br>
+Start of element body, was html
+<br>
+SAX.ignorableWhitespace(
+<br>
+, 1)
+<br>
+Start of element b: pushed b
+<br>
+SAX.startElement(b)
+<br>
+Start of element b, was body
+<br>
+SAX.characters(bbbbbbbbbb, 10)
+<br>
+Close of b stack: 3 elements
+<br>
+0 : html
+<br>
+1 : body
+<br>
+2 : b
+<br>
+SAX.endElement(b)
+<br>
+End of tag b: popping out b
+<br>
+SAX.ignorableWhitespace( , 1)
+<br>
+<p>&nbsp;&nbsp;the heuristic concludes it's an ignorable white space.
+<br>
+It should not really. The CR after the opening body should be
+<br>
+considered as such, as well as the one between the 2 p elements
+<br>
+in the following.
+<br>
+<p>&lt;p&gt;bla&lt;/p&gt;
+<br>
+&lt;p&gt;bla&lt;/p&gt;
+<br>
+<p>&nbsp;but b really indicates text plus style, but it's text not structure
+<br>
+while p is just structure. We should not consider ignorable white spaces
+<br>
+those occuring between elements representing stylistic info. &lt;em&gt; and
+<br>
+&lt;bold&gt; are two other examples coming to mind.
+<br>
+<p>&nbsp;&nbsp;We should add detection of those and avoid considering ignorable spaces
+<br>
+those in those context .... I will look at it,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Reply:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 27 2000 - 15:43:36 EDT</em>
+</em>
+</small>
+</body>
+</html>

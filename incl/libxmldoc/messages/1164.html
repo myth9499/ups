@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Apparent XPath bug in libxml 2.2.7</title>
+<meta name="Author" content="David Moore (dmoore@its.caltech.edu)">
+<meta name="Subject" content="[xml] Apparent XPath bug in libxml 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Apparent XPath bug in libxml 2.2.7</h1>
+<!-- received="Sat Nov 11 03:51:12 2000" -->
+<!-- isoreceived="20001111085112" -->
+<!-- sent="Fri, 10 Nov 2000 20:47:01 -0800 (PST)" -->
+<!-- isosent="20001111044701" -->
+<!-- name="David Moore" -->
+<!-- email="dmoore@its.caltech.edu" -->
+<!-- subject="[xml] Apparent XPath bug in libxml 2.2.7" -->
+<!-- id="Pine.GSO.4.21.0011102042290.17679-100000@blinky" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Moore (<a href="mailto:dmoore@its.caltech.edu?subject=Re:%20[xml]%20Apparent%20XPath%20bug%20in%20libxml%202.2.7"><em>dmoore@its.caltech.edu</em></a>)<br>
+<strong>Date:</strong> Fri Nov 10 2000 - 23:47:01 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1163.html">Wayne Davison: "Re: [xml] MinGW fixes for 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I'm not 100% sure if this is a bug, or a change in the API, but I've been
+<br>
+having some trouble with relative XPath queries in 2.2.7 (it worked in
+<br>
+2.2.6 and the few versions before that).
+<br>
+<p>I use the following code:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sitectx = xmlXPathNewContext(configdoc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;siteobj = xmlXPathEval(&quot;/child::auc/Site&quot;, sitectx);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sitectx-&gt;node = siteobj-&gt;nodesetval-&gt;nodeTab[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpathobj = xmlXPathEval(&quot;child::OrganizationName&quot;, sitectx);
+<br>
+<p>Basically, I do an xpath query off the document root, in order to find a
+<br>
+node that I'm interested in.  Then, I set the context node of my context
+<br>
+structure to the node I just found, and perform a new relative query.
+<br>
+<p>In previous versions of libxml, this has worked just fine, and returned
+<br>
+the desired result.  However, in 2.2.7, I get the following error message
+<br>
+when the second xmlXPathEval is executed:
+<br>
+<p>Error xpath.c:2461: Invalid type
+<br>
+child::OrganizationName
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+xmlXPathEval: evaluation failed
+<br>
+<p><p>This implies that there is a bug in the processing of relative xpath
+<br>
+queries, as the above query should be perfectly valid.  I've also tried
+<br>
+various abbreviations for a relative query with no success.
+<br>
+<p>Perhaps I need to do something more than set ctxt-&gt;node when setting up
+<br>
+the context structure?  Or is this a bug?
+<br>
+<p>By the way, I noticed in the test suite for xpath included with libxml,
+<br>
+there is no testing of relative queries, only absolute.  This is probably
+<br>
+why the bug was overlooked.
+<br>
+<p>Thanks for the great software.
+<br>
+<p>Regards,
+<br>
+<p>David
+<br>
+<p>------------------------------------------------------
+<br>
+&nbsp;&nbsp;David Moore       California Institute of Technology
+<br>
+&nbsp;&lt;<a href="mailto:dcm@acm.org?subject=Re:%20[xml]%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">dcm@acm.org</a>&gt;     <a href="http://www.ugcs.caltech.edu/~dmoore">http://www.ugcs.caltech.edu/~dmoore</a>
+<br>
+------------------------------------------------------
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1163.html">Wayne Davison: "Re: [xml] MinGW fixes for 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Nov 11 2000 - 04:46:42 EST</em>
+</em>
+</small>
+</body>
+</html>

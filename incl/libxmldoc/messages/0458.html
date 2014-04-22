@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Entities in dtd</title>
+<meta name="Author" content="Charlie & Barbara Bozeman (cbozeman@HiWAAY.net)">
+<meta name="Subject" content="Re: [xml] Entities in dtd">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Entities in dtd</h1>
+<!-- received="Thu Apr 13 21:59:54 2000" -->
+<!-- isoreceived="20000414015954" -->
+<!-- sent="Thu, 13 Apr 2000 20:59:39 -0500" -->
+<!-- isosent="20000414015939" -->
+<!-- name="Charlie & Barbara Bozeman" -->
+<!-- email="cbozeman@HiWAAY.net" -->
+<!-- subject="Re: [xml] Entities in dtd" -->
+<!-- id="38F67B8B.31BBF158@HiWAAY.net" -->
+<!-- inreplyto="20000413093750.B17589@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Charlie & Barbara Bozeman (<a href="mailto:cbozeman@HiWAAY.net?subject=Re:%20[xml]%20Entities%20in%20dtd"><em>cbozeman@HiWAAY.net</em></a>)<br>
+<strong>Date:</strong> Thu Apr 13 2000 - 21:59:39 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>Previous message:</strong> <a href="0457.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>In reply to:</strong> <a href="0457.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>Reply:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks for looking at this, my application is a bit large so I built a
+<br>
+short test that causes the same type errors. To test it use your test
+<br>
+program like:
+<br>
+xmllint --copy --postvalid --noout b1.xml
+<br>
+<p>Charlie B.
+<br>
+<p><p>Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, Apr 12, 2000 at 11:11:21PM -0500, Charlie &amp; Barbara Bozeman wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I have an application which parses an xml file, modifies the in-memory
+</em><br>
+<em>&gt; &gt; document, copies the document (using xmlCopyDoc), then validates the
+</em><br>
+<em>&gt; &gt; copy. I get error messages like the following:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; ado.dtd:39: error: SAX.entityDecl(ado-content.mix) called while not in
+</em><br>
+<em>&gt; &gt; subset
+</em><br>
+<em>&gt; &gt;        '(name, daddr?, eaddr?, (g-ref | f-ref | field)+ )'
+</em><br>
+<em>&gt; &gt;                                                          ^
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; &gt; ado.dtd:105: error: PEReference: %common-idreq.att; not found
+</em><br>
+<em>&gt; &gt;         ea                    NMTOKEN         #IMPLIED' &gt;
+</em><br>
+<em>&gt; &gt;                                                   ^
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; &gt; ado.dtd:208: error: Extra content at the end of the document
+</em><br>
+<em>&gt; &gt; &lt;!ELEMENT ado %ado-content.mix; &gt;
+</em><br>
+<em>&gt; &gt;                                 ^
+</em><br>
+<em>&gt; &gt; Could not load the external subset &quot;ado.dtd&quot;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I can reproduce these errors by typing:
+</em><br>
+<em>&gt; &gt; xmllint --postvalid --copy --noout test.xml
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; on my xml document. My dtd uses entities, is there some call I need to
+</em><br>
+<em>&gt; &gt; be making after the document is copied?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Seems a weakness of the xmlCopyDoc implementation. I added a lot
+</em><br>
+<em>&gt; of informations to the tree content since I checked it for the last
+</em><br>
+<em>&gt; time. At least some entities handling informations don't seems to be
+</em><br>
+<em>&gt; processed correctly (and I'm afraid some of the DTD element and attribute
+</em><br>
+<em>&gt; lookup tables need to be rebuilt).
+</em><br>
+<em>&gt;   Could you send me an exemple of:
+</em><br>
+<em>&gt;     - the code
+</em><br>
+<em>&gt;     - the dtd/xml
+</em><br>
+<em>&gt;  so it's faster for me to get those fixed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Entities%20in%20dtd">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">majordomo@xmlsoft.org</a>
+</em><br>
+<p>
+<p>&lt;!ENTITY % common.att
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'id                     ID              #IMPLIED
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;role                    NMTOKEN         #IMPLIED'&gt;
+<br>
+<p>&lt;!ENTITY % ref.att
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ref                    IDREF           #IMPLIED'&gt;
+<br>
+<p>&lt;!-- root element --&gt;
+<br>
+&lt;!ELEMENT roote (sub1, sub2*)&gt;
+<br>
+<p>&lt;!ELEMENT sub1 (first?, second+, last?) &gt;
+<br>
+<p>&lt;!ELEMENT first (#PCDATA)&gt;
+<br>
+&lt;!ATTLIST first %common.att;&gt;
+<br>
+<p><p>&lt;!ELEMENT second (name, cat?, dog?)&gt;
+<br>
+<p>&lt;!ELEMENT name  (#PCDATA)&gt;
+<br>
+&lt;!ELEMENT cat   EMPTY&gt;
+<br>
+&lt;!ELEMENT dog   EMPTY&gt;
+<br>
+<p>&lt;!ELEMENT last (#PCDATA)&gt;
+<br>
+<p>&lt;!ELEMENT sub2 (name, a?, b?) &gt;
+<br>
+&lt;!--
+<br>
+# id	  - unique identifier in xml file
+<br>
+--&gt;
+<br>
+&lt;!ATTLIST sub2 %common.att;&gt;
+<br>
+<p>&lt;!ELEMENT a EMPTY &gt;
+<br>
+&lt;!ATTLIST a %ref.att;&gt;
+<br>
+<p>&lt;!ELEMENT b EMPTY &gt;
+<br>
+&lt;!ATTLIST b %ref.att;&gt;
+<br>
+<p><p><p>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+<p>&lt;!DOCTYPE roote SYSTEM &quot;b.dtd&quot;&gt;
+<br>
+&lt;roote xmlns=&quot;<a href="http://www.dum.org/file-location">http://www.dum.org/file-location</a>&quot;&gt;
+<br>
+&lt;!-- generic comment --&gt;
+<br>
+&nbsp;&nbsp;&lt;sub1&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;first id=&quot;csci&quot;&gt;1&lt;/first&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;second&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;second name&lt;/name&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;cat/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dog/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/second&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;second&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;other second name&lt;/name&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;cat/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dog/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/second&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;last&gt;o&lt;/last&gt; 
+<br>
+&nbsp;&nbsp;&lt;/sub1&gt;
+<br>
+<p>&nbsp;&nbsp;&lt;sub2 id=&quot;patch&quot; &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Patch&lt;/name&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;csci&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;b href=&quot;nad&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/sub2&gt;
+<br>
+<p>&nbsp;&nbsp;&lt;sub2 id=&quot;nad&quot; &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Nad&lt;/name&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;patch&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;b href=&quot;csci&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/sub2&gt;
+<br>
+<p>&lt;/roote&gt;
+<br>
+<p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>Previous message:</strong> <a href="0457.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>In reply to:</strong> <a href="0457.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<li><strong>Reply:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

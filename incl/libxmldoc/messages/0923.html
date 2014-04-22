@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Wed Oct 11 07:24:58 2000" -->
+<!-- isoreceived="20001011112458" -->
+<!-- sent="Wed, 11 Oct 2000 13:24:53 +0200" -->
+<!-- isosent="20001011112453" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="20001011132453.H28988@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0010061131530.2075-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Oct 11 2000 - 07:24:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0924.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0922.html">Daniel Veillard: "Re: [xml] libxml for CE"</a>
+<li><strong>In reply to:</strong> <a href="0887.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 06, 2000 at 12:20:10PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; On Fri, 6 Oct 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; Please check it out if you're using Windows or XPath, i probably
+</em><br>
+<em>&gt; &gt; won't be able to make a real release before next Wed, and won't 
+</em><br>
+<em>&gt; &gt; answer mail in the meantime. Send patches !
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's what I found wrong and (in most cases) fixed:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  + Several .c files were including &quot;xmlversion.h&quot; rather than
+</em><br>
+<em>&gt;    &lt;libxml/xmlversion.h&gt;.
+</em><br>
+<p>&nbsp;&nbsp;I had alredy fixed this ;-)
+<br>
+<p><em>&gt;  + There is an undefined call to xmlXPathFreeLocationSet() in xpath.c.
+</em><br>
+<em>&gt;    This might be because xpointer.[ch] are not in the tar file, but I
+</em><br>
+<em>&gt;    just #if-0-ed the call out of the source for now.
+</em><br>
+<p>&nbsp;&nbsp;same
+<br>
+<p><em>&gt;  + The Makefile.in was still trying to create libxml, even with the
+</em><br>
+<em>&gt;    include/libxml dir existing.  I changed this so that the Makefile
+</em><br>
+<em>&gt;    looks for include/libxml, and creates &quot;include&quot; as a dir and puts
+</em><br>
+<em>&gt;    the libxml symlink into the include dir if it is missing.
+</em><br>
+<p>&nbsp;&nbsp;Makefile.in is generated, i think I fixed the configure.in and Makefile.am
+<br>
+<p><em>&gt;  + Changed configure.in to create &quot;include&quot; as a directory with the
+</em><br>
+<em>&gt;    &quot;libxml&quot; symlink inside it.  It looks like the code that was supposed
+</em><br>
+<em>&gt;    to create these items inside the build dir (when it differs from the
+</em><br>
+<em>&gt;    src dir) was broken, and I think I fixed it (though I didn't try to
+</em><br>
+<em>&gt;    configure things from an separate build dir).
+</em><br>
+<p>&nbsp;&nbsp;Yeah and &quot;make distchek&quot; was still broken ... Changed this, this is fixed
+<br>
+I think.
+<br>
+<p><em>&gt;  + Removed include/libxml/config.h.in, as it is not needed.
+</em><br>
+<p>&nbsp;&nbsp;done
+<br>
+<p><em>&gt;    defines in xmlversion.h, so I removed them.  This makes the file
+</em><br>
+<em>&gt;    have no @...@ expansions, so I just renamed the *.in version to be
+</em><br>
+<em>&gt;    the .h version and removed it from the configure.in file.
+</em><br>
+<p>&nbsp;done
+<br>
+<p><em>&gt;  + The win32include.h file should not be in the include/libxml dir
+</em><br>
+<em>&gt;    (since it doesn't get installed).  I moved it into the include dir.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;done
+<br>
+<p><em>&gt;  + Added the file win32/Makefile.mingw, which is a simplified Makefile
+</em><br>
+<em>&gt;    that builds the library, a DLL, and the tools using the mingw gcc
+</em><br>
+<em>&gt;    compiler.
+</em><br>
+<p>&nbsp;&nbsp;done
+<br>
+<p><em>&gt;  + I tweaked the win32/README.MSDev to remove all mention of copying
+</em><br>
+<em>&gt;    .h files and commenting out the LIBXML_VERSION* defines, added a
+</em><br>
+<em>&gt;    comment that the diff is out of date now, and mention the build
+</em><br>
+<em>&gt;    instructions for using the &quot;mingw&quot; gcc compiler.
+</em><br>
+<p>&nbsp;&nbsp;done
+<br>
+<p><em>&gt;  + I changed the include/libxml/libxmlversion.h file that was included
+</em><br>
+<em>&gt;    in the tar file so that LIBXML_ICONV_ENABLED is not defined.  I like
+</em><br>
+<em>&gt;    the fact that this file is there, as it means that MSWin developers
+</em><br>
+<em>&gt;    can have an easier file to tweak (and it works without change after my
+</em><br>
+<em>&gt;    fix if you're using the mingw compiler), and it gets replaced by the
+</em><br>
+<em>&gt;    normal configuration process for other folks.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Hum, I probably skipped this one
+<br>
+<p><em>&gt; A patch is appended.  To summarize what to do after the patch:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     # After running &quot;patch -p0 &lt;wayne.patch&quot;
+</em><br>
+<em>&gt;     rm include/libxml/config.h.in
+</em><br>
+<em>&gt;     mv include/libxml/win32config.h.in include/win32config.h
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; TODO:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  + Remove #if-0 from xpath.c and solve build problem.
+</em><br>
+<p>&nbsp;&nbsp;Done
+<br>
+<p><em>&gt;  + Figure out why example/Makefile.in doesn't exist (this is a
+</em><br>
+<em>&gt;    long-standing problem with libxml, but it just seems to cause
+</em><br>
+<em>&gt;    configure to complain).
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Long pending one ... Seems I'm getting acquainted enough with automake
+<br>
+now that I could chase this one successfully ... Still todo
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prerelease%20of%202.2.5">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0924.html">Daniel Veillard: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0922.html">Daniel Veillard: "Re: [xml] libxml for CE"</a>
+<li><strong>In reply to:</strong> <a href="0887.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 11 2000 - 09:43:41 EDT</em>
+</em>
+</small>
+</body>
+</html>

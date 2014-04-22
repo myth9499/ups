@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another buglet in HTML parser</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="Re: [xml] Another buglet in HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another buglet in HTML parser</h1>
+<!-- received="Tue Oct 12 17:49:11 1999" -->
+<!-- isoreceived="19991012214911" -->
+<!-- sent="12 Oct 1999 23:49:03 +0200" -->
+<!-- isosent="19991012214903" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="Re: [xml] Another buglet in HTML parser" -->
+<!-- id="y6y4sfwuu5s.fsf@nero.daimi.au.dk" -->
+<!-- inreplyto="Mon, 11 Oct 1999 18:25:14 -0400&quot;" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Tue Oct 12 1999 - 17:49:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0179.html">Daniel Veillard: "[xml] Re: whitespace addition bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">Daniel.Veillard@w3.org</a>&gt; writes:
+<br>
+<p><em>&gt; &gt; Did you try it on *exactly* the above example? In particular the error
+</em><br>
+<em>&gt; &gt; only surfaces, when there's no whitespace between &lt;/ol&gt; and &lt;/body&gt;.
+</em><br>
+<em>&gt; &gt; I just checked out the W3C cvs version and it still has the bug.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Ok, got it. Strange I was really sure I tested with the same example ...
+</em><br>
+<em>&gt; sorry about that. I also need to change a couple of other piece
+</em><br>
+<em>&gt; otherwise the change triggers problems elsewhere.
+</em><br>
+<p>Huh?  I though just moving the test down below the four cases would
+<br>
+solve the problem; you couldn't have autoclosed anything before
+<br>
+parsing some content anyway, so moving the test wont disturb the first
+<br>
+iteration of the loop, and after the first iteration the loop
+<br>
+basically looks the same as before...  What am I missing?
+<br>
+<p><em>&gt;   I certainly need to add more test cases, as the code progresses
+</em><br>
+<em>&gt; catching those should be done as much as possible in a systematic
+</em><br>
+<em>&gt; way. Any idea ?
+</em><br>
+<p>Erh... not really.  I usually try to write small examples to test the
+<br>
+individual functions as I go along, and I keep those around for
+<br>
+regression testing.  But even so I dont really hope to cover all
+<br>
+combinations, as different parts of my program starts to interact,
+<br>
+cf. the bug that started this thread.  And anyway this is open
+<br>
+source - leave the debugging to the users :-)
+<br>
+<p>regards,
+<br>
+Kristian
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0179.html">Daniel Veillard: "[xml] Re: whitespace addition bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0181.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

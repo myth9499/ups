@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] libxml 2.2.8 encoding.c compilation problem</title>
+<meta name="Author" content="Mark Buckley (mark@sychron.com)">
+<meta name="Subject" content="[xml] libxml 2.2.8 encoding.c compilation problem">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] libxml 2.2.8 encoding.c compilation problem</h1>
+<!-- received="Thu Nov 23 07:42:58 2000" -->
+<!-- isoreceived="20001123124258" -->
+<!-- sent="Thu, 23 Nov 2000 12:41:58 +0000" -->
+<!-- isosent="20001123124158" -->
+<!-- name="Mark Buckley" -->
+<!-- email="mark@sychron.com" -->
+<!-- subject="[xml] libxml 2.2.8 encoding.c compilation problem" -->
+<!-- id="00112312425308.00868@tomatin.sychron.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Mark Buckley (<a href="mailto:mark@sychron.com?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem"><em>mark@sychron.com</em></a>)<br>
+<strong>Date:</strong> Thu Nov 23 2000 - 07:41:58 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>Previous message:</strong> <a href="1222.html">Marc Sanfacon: "RE: [xml] HTMLParser bug..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>Reply:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I've just copied across the libxml2 2.2.8 release, and I'm having trouble with
+<br>
+making the distribution. I'm using RedHat and compiling under gcc version
+<br>
+egcs-2.91.66. I've checked the archives but I haven't found any reference to
+<br>
+the problem that I've discovered:
+<br>
+<p>When I run make, the compiler gives me the following error:
+<br>
+<p>encoding.c: In function `xmlIconvWrapper':
+<br>
+encoding.c:1691: parse error before `else'
+<br>
+encoding.c: At top level:
+<br>
+encoding.c:1695: parse error before `return'
+<br>
+make[2]: *** [encoding.lo] Error 1                                          
+<br>
+<p>The relevant piece of code is copied below, it appears that gcc doesn't like the
+<br>
+last 'else' being outside the #ifdef EINVAL...#endif pair. Moving it inside to
+<br>
+match the others stops the parse error.
+<br>
+<p>#ifdef EILSEQ
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (errno == EILSEQ) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -2;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else
+<br>
+#endif
+<br>
+#ifdef E2BIG
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (errno == E2BIG) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else
+<br>
+#endif
+<br>
+#ifdef EINVAL
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (errno == EINVAL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+#endif
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -3;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;}
+<br>
+&nbsp;return 0;
+<br>
+<p><p>Thanks,
+<br>
+<p>Mark Buckley
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%202.2.8%20encoding.c%20compilation%20problem">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>Previous message:</strong> <a href="1222.html">Marc Sanfacon: "RE: [xml] HTMLParser bug..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<li><strong>Reply:</strong> <a href="1224.html">Daniel Veillard: "Re: [xml] libxml 2.2.8 encoding.c compilation problem"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Nov 23 2000 - 09:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

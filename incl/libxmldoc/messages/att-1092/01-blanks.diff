@@ -1,0 +1,29 @@
+*** HTMLparser.c	2000/10/25 19:26:52	1.81
+--- HTMLparser.c	2000/10/27 22:46:46
+*************** static int areBlanks(htmlParserCtxtPtr c
+*** 1712,1719 ****
+      lastChild = xmlGetLastChild(ctxt->node);
+      if (lastChild == NULL) {
+          if (ctxt->node->content != NULL) return(0);
+!     } else if (xmlNodeIsText(lastChild))
+          return(0);
+      return(1);
+  }
+  
+--- 1712,1726 ----
+      lastChild = xmlGetLastChild(ctxt->node);
+      if (lastChild == NULL) {
+          if (ctxt->node->content != NULL) return(0);
+!     } else if (xmlNodeIsText(lastChild)) {
+          return(0);
++     } else if (xmlStrEqual(lastChild->name, BAD_CAST"b")) {
++         return(0);
++     } else if (xmlStrEqual(lastChild->name, BAD_CAST"bold")) {
++         return(0);
++     } else if (xmlStrEqual(lastChild->name, BAD_CAST"em")) {
++         return(0);
++     }
+      return(1);
+  }
+  
+

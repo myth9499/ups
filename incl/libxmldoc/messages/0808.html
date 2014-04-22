@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: Re[2]: [xml] HTML &amp; XML Parser</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: Re[2]: [xml] HTML &amp; XML Parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: Re[2]: [xml] HTML &amp; XML Parser</h1>
+<!-- received="Sun Sep 24 17:35:43 2000" -->
+<!-- isoreceived="20000924213543" -->
+<!-- sent="Sun, 24 Sep 2000 23:35:38 +0200" -->
+<!-- isosent="20000924213538" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: Re[2]: [xml] HTML &amp; XML Parser" -->
+<!-- id="20000924233538.J22500@w3.org" -->
+<!-- inreplyto="20000924205426.327B975C02@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Sep 24 2000 - 17:35:38 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0807.html">Manuel Guesdon: "Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>In reply to:</strong> <a href="0807.html">Manuel Guesdon: "Re[2]: [xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Sep 24, 2000 at 10:54:26PM +0200, Manuel Guesdon wrote:
+<br>
+<em>&gt;  &gt;| Latest and future versions
+</em><br>
+<em>&gt;  &gt;| of HTML are XML  based, hence new extensions will be made using the
+</em><br>
+<em>&gt;  &gt;| XHTML version and in an XML framework. Forget about auto-closed tags 
+</em><br>
+<em>&gt;  &gt;| and other SGML minimizations nastyness this does not fit into this
+</em><br>
+<em>&gt;  &gt;| framework anymore.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; OK. Good news :-)
+</em><br>
+<p>&nbsp;&nbsp;Well it's the expected Web infrastructure evolution, at least as planned
+<br>
+from W3C, I can assert this because 1) I'm a W3C employee 2) iti's public
+<br>
+knowledge though this information should be more widespread.
+<br>
+<p><em>&gt; My goal was to have a general wrapper around libxml which the minimum
+</em><br>
+<em>&gt; possible differences between handling html or xml (just a flag, for
+</em><br>
+<em>&gt; exemple).
+</em><br>
+<em>&gt; To explain my need, now this wrapper is used in GNUstep for xml parsing
+</em><br>
+<em>&gt; and should be used in GNUstepWeb for HTML parsing.
+</em><br>
+<p>&nbsp;&nbsp;Look at the end of the SAX.c file you will see taht both HTML and XML
+<br>
+default SAx back-end share the same functions. It's just that a number of
+<br>
+XML entities/validity related callbacks are not activated
+<br>
+&nbsp;&nbsp;just diff htmlDefaultSAXHandler and xmlDefaultSAXHandler ... all the HTML
+<br>
+callbacks are shared with the HTML ones. The differences in processing
+<br>
+within those SAX callbacks is defined by the ctxt-&gt;html flag indicating
+<br>
+the kind of document.
+<br>
+<p><em>&gt;  &gt;| &gt; My SAX functions use parser context _private member) ?
+</em><br>
+<em>&gt;  &gt;| 
+</em><br>
+<em>&gt;  &gt;|   I don't understand. _private are fields located in the DOM generated
+</em><br>
+<em>&gt;  &gt;| tree structures. And you say you use SAX ... So I'm lost what are you doing
+</em><br>
+<em>&gt;  &gt;| there, what API do you use exactly ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I use SAX because I want to handle some things (error messages, warning
+</em><br>
+<em>&gt; and Entity Loading) and haven't found a better way. So I create a SAX
+</em><br>
+<em>&gt; handler to put my own functions for these things. Others functions arei
+</em><br>
+<em>&gt; the 'standards' ones (HTML or XML parser functions). 
+</em><br>
+<p>&nbsp;&nbsp;Okay this is a &quot;normal&quot; supported use of libxml !
+<br>
+For the entities loading I would rather suggest using
+<br>
+xmlSetExternalEntityLoader() and not modifying the SAX callback.
+<br>
+<p><em>&gt; My SAX handling functions use _private member of parser context,
+</em><br>
+<em>&gt; so if xml parser context and html parser context are not the same
+</em><br>
+<em>&gt; structures, I'll get into trouble because the structure offset ofi
+</em><br>
+<em>&gt; this member may won't be the same (or I have to write two sets of functions).
+</em><br>
+<p>&nbsp;&nbsp;They are the same structures and I intend to keep them this way
+<br>
+<p><em>&gt; If you tell me that the html and xml parser structures will be the
+</em><br>
+<em>&gt; same for future versions of libxml and if I can call htmlParseDocument
+</em><br>
+<em>&gt; with a parser context created with xmlCreateMemoryParserCtxt(),
+</em><br>
+<em>&gt; I'll be happy :-) 
+</em><br>
+<em>&gt; In this case I just have to put a flag in the wrapper and call
+</em><br>
+<em>&gt; htmlParseDocument() or xmlParseDocument() depending on this flag.
+</em><br>
+<p>&nbsp;&nbsp;1/ I intent to keep them the same
+<br>
+&nbsp;&nbsp;2/ I should add htmlCreateMemoryParserCtxt() because while the HTML
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set of callback is a subset, this may change in the future, that
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I cannot garantee, so i would prefer a separate routine
+<br>
+&nbsp;&nbsp;3/ use ctxt-&gt;html to know which parser is in use.
+<br>
+<p>&nbsp;&nbsp;hope this fullfill your needs
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0807.html">Manuel Guesdon: "Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>In reply to:</strong> <a href="0807.html">Manuel Guesdon: "Re[2]: [xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 24 2000 - 17:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

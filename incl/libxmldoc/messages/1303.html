@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] ipv6 and gnome-xml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] ipv6 and gnome-xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] ipv6 and gnome-xml</h1>
+<!-- received="Wed Jan  3 10:59:50 2001" -->
+<!-- isoreceived="20010103155950" -->
+<!-- sent="Wed, 3 Jan 2001 16:38:55 +0100" -->
+<!-- isosent="20010103153855" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] ipv6 and gnome-xml" -->
+<!-- id="20010103163855.B27571@w3.org" -->
+<!-- inreplyto="3A3B6B0B.55062555@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 03 2001 - 10:38:55 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1302.html">Daniel Veillard: "Re: [xml] Bug in XPath union expressions"</a>
+<li><strong>In reply to:</strong> <a href="1292.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1293.html">winterlion: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Dec 16, 2000 at 01:15:55PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; If you could provide a brief summary of the changes needed to both
+</em><br>
+<em>&gt; &gt; the URI parsing algorithms and possibly the changes needed when dealing
+</em><br>
+<em>&gt; &gt; with the socket interfaces, that would be really useful.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; A little bit of juggling with the appropriate data structures
+</em><br>
+<em>&gt; are needed for the socket interface.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Enabling IPv6 support in the DNS resolver requires a bit of a
+</em><br>
+<em>&gt; hack, and probably doesn't work on Windows at all.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have attached a patch for nanohttp.c (2-2.2.10), that does the
+</em><br>
+<em>&gt; above. The patch is only meant as an example (or a starting point)
+</em><br>
+<em>&gt; of how IPv6 can be added. Define the SUPPORT_IP6 macro if your
+</em><br>
+<em>&gt; machine supports IPv6. I have not tested it, as I don't have IPv6
+</em><br>
+<em>&gt; here, nor do I need it myself -- I just adapted some of my other
+</em><br>
+<em>&gt; code.
+</em><br>
+<p>&nbsp;&nbsp;Though it looks like a bit experimental, I have applied this
+<br>
+patch. As is it is not really useful as Bjorn explained since it's
+<br>
+not connected to autoconf, and nanoftp.c would need the same kind
+<br>
+of work once this has been tested.
+<br>
+<p>&nbsp;&nbsp;However it's applied and will ve in the next release, but I
+<br>
+would appreciate feedback on this.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20ipv6%20and%20gnome-xml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1302.html">Daniel Veillard: "Re: [xml] Bug in XPath union expressions"</a>
+<li><strong>In reply to:</strong> <a href="1292.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1293.html">winterlion: "Re: [xml] ipv6 and gnome-xml"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 03 2001 - 11:43:54 EST</em>
+</em>
+</small>
+</body>
+</html>

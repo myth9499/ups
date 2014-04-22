@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlDocDump( FILE *, xmlDocPtr )</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re: [xml] xmlDocDump( FILE *, xmlDocPtr )">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlDocDump( FILE *, xmlDocPtr )</h1>
+<!-- received="Wed Aug 30 06:29:30 2000" -->
+<!-- isoreceived="20000830102930" -->
+<!-- sent="Wed, 30 Aug 2000 15:27:53 +0200" -->
+<!-- isosent="20000830132753" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re: [xml] xmlDocDump( FILE *, xmlDocPtr )" -->
+<!-- id="295355641.20000830152753@triplex.de" -->
+<!-- inreplyto="00Aug30.105740bst.119044@worm.brammer.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Wed Aug 30 2000 - 09:27:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0711.html">Daniel Veillard: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0709.html">Stefan Bambach: "Re[4]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0711.html">Daniel Veillard: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hallo Andrew,
+<br>
+<p>Why don't you use xmlSaveFile(), xmlSaveFileEnc(), xmlSaveFileTo() ? I
+<br>
+think you can upload it to an URL too ! I didn't try it, but I can
+<br>
+save it to disc.
+<br>
+<p>Wednesday, August 30, 2000, 11:53:47 AM, you wrote:
+<br>
+<p><p>AL&gt; Hi,
+<br>
+<p>AL&gt; Can somebody explain why xmlDocDump() closes the the file pointer when it
+<br>
+AL&gt; has finished writing?
+<br>
+AL&gt; I thought this could be a simple way of dumping an in-memory XML document
+<br>
+AL&gt; down a network channel to a server.
+<br>
+AL&gt; I've written a small wrapper for this which dup()'s the network file
+<br>
+AL&gt; descriptor and then fdopen()'s the descriptor to give me a file pointer -
+<br>
+AL&gt; this enables me to keep the network channel open.
+<br>
+AL&gt; Any comments?
+<br>
+AL&gt; Can you cc any replies to me as I am not subscribed to the list.
+<br>
+AL&gt; Thanks,
+<br>
+<p>AL&gt; Andy
+<br>
+<p>AL&gt; Andrew Logan
+<br>
+AL&gt; Systems Programmer
+<br>
+AL&gt; Office phone - 0161 952 2424
+<br>
+AL&gt; Email - <a href="mailto:aml@bsl.co.uk?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">aml@bsl.co.uk</a>
+<br>
+<p>AL&gt; BSL Limited
+<br>
+AL&gt; Claverton Court
+<br>
+AL&gt; Claverton Road
+<br>
+AL&gt; Wythenshawe
+<br>
+AL&gt; Manchester
+<br>
+AL&gt; M23 9NE
+<br>
+<p>AL&gt; Website - www.bsl.co.uk
+<br>
+<p>AL&gt; BSL Limited, Registered office - Third Floor Station House,
+<br>
+AL&gt; Stamford New Road,
+<br>
+AL&gt; Altrincham, Cheshire WA14 1EP. Registered no. 569290 (England)
+<br>
+AL&gt; V.A.T. no. G.B. 305 9559 42
+<br>
+<p>AL&gt; This email and any associated file contains confidential information and is
+<br>
+AL&gt; intended solely for the person(s) named. If you
+<br>
+AL&gt; are not the intended recipient, please do not read, print, store, disclose,
+<br>
+AL&gt; re-distribute or act upon any information contained. Instead, please return
+<br>
+AL&gt; to the sender and delete the message and / or files
+<br>
+AL&gt; from your PC.
+<br>
+<p>AL&gt; ----
+<br>
+AL&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">xml@rpmfind.net</a>
+<br>
+AL&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+<br>
+AL&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">majordomo@rpmfind.net</a>
+<br>
+<p><p>Mit freundlichen Grüssen.
+<br>
+Stefan Bambach
+<br>
+<p><pre>
+-- 
+Stefan Bambach
+<p>triplex-agentur fuer neue medien GmbH
+herzog-heinrich-strasse 11-13
+80336 muenchen
+<p>tel: 089-209 138 29
+fax: 089-209 138 10
+<p>mailto:<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">bambach@triplex.de</a>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlDocDump(%20FILE%20*,%20xmlDocPtr%20)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0711.html">Daniel Veillard: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0709.html">Stefan Bambach: "Re[4]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0711.html">Daniel Veillard: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 30 2000 - 09:43:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

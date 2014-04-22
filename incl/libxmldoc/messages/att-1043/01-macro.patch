@@ -1,0 +1,159 @@
+Index: HTMLparser.c
+@@ -139,24 +139,25 @@
+ 
+ #define CURRENT ((int) (*ctxt->input->cur))
+ 
+-#define SKIP_BLANKS htmlSkipBlankChars(ctxt);
++#define SKIP_BLANKS htmlSkipBlankChars(ctxt)
+ 
+ /* Inported from XML */
+ 
+ /* #define CUR (ctxt->token ? ctxt->token : (int) (*ctxt->input->cur)) */
+ #define CUR ((int) (*ctxt->input->cur))
+-#define NEXT xmlNextChar(ctxt);ctxt->nbChars++;
++#define NEXT xmlNextChar(ctxt),ctxt->nbChars++
+ 
+ #define RAW (ctxt->token ? -1 : (*ctxt->input->cur))
+ #define NXT(val) ctxt->input->cur[(val)]
+ #define CUR_PTR ctxt->input->cur
+ 
+ 
+-#define NEXTL(l)							\
++#define NEXTL(l) do {							\
+     if (*(ctxt->input->cur) == '\n') {					\
+ 	ctxt->input->line++; ctxt->input->col = 1;			\
+     } else ctxt->input->col++;						\
+-    ctxt->token = 0; ctxt->input->cur += l; ctxt->nbChars++;
++    ctxt->token = 0; ctxt->input->cur += l; ctxt->nbChars++;		\
++  } while (0)
+     
+ /************
+     \
+@@ -164,12 +165,12 @@
+     if (*ctxt->input->cur == '&') xmlParserHandleReference(ctxt);
+  ************/
+ 
+-#define CUR_CHAR(l) htmlCurrentChar(ctxt, &l);
+-#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l);
++#define CUR_CHAR(l) htmlCurrentChar(ctxt, &l)
++#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l)
+ 
+ #define COPY_BUF(l,b,i,v)						\
+     if (l == 1) b[i++] = (xmlChar) v;					\
+-    else i += xmlCopyChar(l,&b[i],v);
++    else i += xmlCopyChar(l,&b[i],v)
+ 
+ /**
+  * htmlCurrentChar:
+Index: SGMLparser.c
+@@ -142,7 +142,7 @@
+ 
+ #define CURRENT ((int) (*ctxt->input->cur))
+ 
+-#define SKIP_BLANKS sgmlSkipBlankChars(ctxt);
++#define SKIP_BLANKS sgmlSkipBlankChars(ctxt)
+ 
+ #if 0
+ #define CUR ((int) (*ctxt->input->cur))
+@@ -152,18 +152,19 @@
+ 
+ /* #define CUR (ctxt->token ? ctxt->token : (int) (*ctxt->input->cur)) */
+ #define CUR ((int) (*ctxt->input->cur))
+-#define NEXT xmlNextChar(ctxt);ctxt->nbChars++;
++#define NEXT xmlNextChar(ctxt),ctxt->nbChars++
+ 
+ #define RAW (ctxt->token ? -1 : (*ctxt->input->cur))
+ #define NXT(val) ctxt->input->cur[(val)]
+ #define CUR_PTR ctxt->input->cur
+ 
+ 
+-#define NEXTL(l)							\
++#define NEXTL(l) do {							\
+     if (*(ctxt->input->cur) == '\n') {					\
+ 	ctxt->input->line++; ctxt->input->col = 1;			\
+     } else ctxt->input->col++;						\
+-    ctxt->token = 0; ctxt->input->cur += l; ctxt->nbChars++;
++    ctxt->token = 0; ctxt->input->cur += l; ctxt->nbChars++;		\
++  } while (0)
+     
+ /************
+     \
+@@ -171,12 +172,12 @@
+     if (*ctxt->input->cur == '&') xmlParserHandleReference(ctxt);
+  ************/
+ 
+-#define CUR_CHAR(l) sgmlCurrentChar(ctxt, &l);
+-#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l);
++#define CUR_CHAR(l) sgmlCurrentChar(ctxt, &l)
++#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l)
+ 
+ #define COPY_BUF(l,b,i,v)						\
+     if (l == 1) b[i++] = (xmlChar) v;					\
+-    else i += xmlCopyChar(l,&b[i],v);
++    else i += xmlCopyChar(l,&b[i],v)
+ #endif
+ 
+ /**
+Index: parser.c
+@@ -215,41 +215,48 @@
+ #define NXT(val) ctxt->input->cur[(val)]
+ #define CUR_PTR ctxt->input->cur
+ 
+-#define SKIP(val) ctxt->nbChars += (val),ctxt->input->cur += (val);	\
++#define SKIP(val) do {							\
++    ctxt->nbChars += (val),ctxt->input->cur += (val);			\
+     if (*ctxt->input->cur == '%') xmlParserHandlePEReference(ctxt);	\
+     /* DEPR if (*ctxt->input->cur == '&') xmlParserHandleReference(ctxt); */\
+     if ((*ctxt->input->cur == 0) &&					\
+         (xmlParserInputGrow(ctxt->input, INPUT_CHUNK) <= 0))		\
+-	    xmlPopInput(ctxt)
++	    xmlPopInput(ctxt);						\
++  } while (0)
+ 
+-#define SHRINK  xmlParserInputShrink(ctxt->input);			\
++#define SHRINK do {							\
++    xmlParserInputShrink(ctxt->input);					\
+     if ((*ctxt->input->cur == 0) &&					\
+         (xmlParserInputGrow(ctxt->input, INPUT_CHUNK) <= 0))		\
+-	    xmlPopInput(ctxt)
++	    xmlPopInput(ctxt);						\
++  } while (0)
+ 
+-#define GROW  xmlParserInputGrow(ctxt->input, INPUT_CHUNK);		\
++#define GROW do {							\
++    xmlParserInputGrow(ctxt->input, INPUT_CHUNK);			\
+     if ((*ctxt->input->cur == 0) &&					\
+         (xmlParserInputGrow(ctxt->input, INPUT_CHUNK) <= 0))		\
+-	    xmlPopInput(ctxt)
++	    xmlPopInput(ctxt);						\
++  } while (0)
+ 
+-#define SKIP_BLANKS xmlSkipBlankChars(ctxt);
++#define SKIP_BLANKS xmlSkipBlankChars(ctxt)
+ 
+-#define NEXT xmlNextChar(ctxt);
++#define NEXT xmlNextChar(ctxt)
+ 
+-#define NEXTL(l)							\
++#define NEXTL(l) do {							\
+     if (*(ctxt->input->cur) == '\n') {					\
+ 	ctxt->input->line++; ctxt->input->col = 1;			\
+     } else ctxt->input->col++;						\
+     ctxt->token = 0; ctxt->input->cur += l;				\
+     if (*ctxt->input->cur == '%') xmlParserHandlePEReference(ctxt);	\
+-    /* DEPR if (*ctxt->input->cur == '&') xmlParserHandleReference(ctxt); */
++    /* DEPR if (*ctxt->input->cur == '&') xmlParserHandleReference(ctxt); */\
++  } while (0)
+ 
+-#define CUR_CHAR(l) xmlCurrentChar(ctxt, &l);
+-#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l);
++#define CUR_CHAR(l) xmlCurrentChar(ctxt, &l)
++#define CUR_SCHAR(s, l) xmlStringCurrentChar(ctxt, s, &l)
+ 
+ #define COPY_BUF(l,b,i,v)						\
+     if (l == 1) b[i++] = (xmlChar) v;					\
+-    else i += xmlCopyChar(l,&b[i],v);
++    else i += xmlCopyChar(l,&b[i],v)
+ 
+ /**
+  * xmlSkipBlankChars:

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Saving without tree</title>
+<meta name="Author" content="Adrian Feiguin (feiguin@magnet.fsu.edu)">
+<meta name="Subject" content="Re: [xml] Saving without tree">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Saving without tree</h1>
+<!-- received="Fri May 26 16:10:44 2000" -->
+<!-- isoreceived="20000526201044" -->
+<!-- sent="Fri, 26 May 2000 16:08:48 -0400 (EDT)" -->
+<!-- isosent="20000526200848" -->
+<!-- name="Adrian Feiguin" -->
+<!-- email="feiguin@magnet.fsu.edu" -->
+<!-- subject="Re: [xml] Saving without tree" -->
+<!-- id="Pine.GSO.4.05.10005261556510.21516-100000@fangio.magnet.fsu.edu" -->
+<!-- inreplyto="200005261946.PAA13882@hydrogen" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Adrian Feiguin (<a href="mailto:feiguin@magnet.fsu.edu?subject=Re:%20[xml]%20Saving%20without%20tree"><em>feiguin@magnet.fsu.edu</em></a>)<br>
+<strong>Date:</strong> Fri May 26 2000 - 16:08:48 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0490.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 26 May 2000 <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20Saving%20without%20tree">mdf@angoss.com</a> wrote:
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; &gt; &gt; 1) Is there a better way? [to generate XML documents than masses of
+</em><br>
+<em>&gt; &gt; &gt;    fprintfs]
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Without some of the convenient syntax of C++ this will become really
+</em><br>
+<em>&gt; disgusting really fast, and prone to irritating bugs that are tedious
+</em><br>
+<em>&gt; to fix.  But thats just my opinion;  you might like wading through a
+</em><br>
+<em>&gt; sea of incomprehensible printfs, trying to make safe changes to the
+</em><br>
+<em>&gt; generator...
+</em><br>
+<em>&gt;
+</em><br>
+<p>It's kind of annoying, and yes, you can make a lot of mistakes in the
+<br>
+process, but I dealt with it generating my export context with functions
+<br>
+like
+<br>
+export_line
+<br>
+export_symbol
+<br>
+export_text, etc
+<br>
+&nbsp;
+<br>
+<em>&gt; &gt;   I don't know any better way if you don't have an XML tree built in memory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; How about extending libXML to be a generator as well as a parser?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Failing that, allowing one to use the streams libXML reads from in an
+</em><br>
+<em>&gt; output mode would be nice [thus one gets compression 'for free'].
+</em><br>
+<p>I have a suggestion. What about, instead of building the whole tree,
+<br>
+adding the possibility of exporting subtrees? One can step on a node,
+<br>
+build a subtree, and export it. One can take account of the indentation
+<br>
+using a &quot;depth&quot; counter. This could be useful in situations like a
+<br>
+spreadsheet (Gnumeric). You can build a cell subtree, and save in a file.
+<br>
+This can be easily implemented as a kind of xmlNewChild without parent
+<br>
+tree, and a function like xmlSaveChild.
+<br>
+What do you think?
+<br>
+Regards,
+<br>
+&lt;ADRIAN&gt;
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Saving%20without%20tree">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0489.html">David Doolin: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>In reply to:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0490.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

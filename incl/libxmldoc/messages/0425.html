@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] ValidityError &amp; ValidityWarning</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] ValidityError &amp; ValidityWarning">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] ValidityError &amp; ValidityWarning</h1>
+<!-- received="Sat Mar 18 06:10:26 2000" -->
+<!-- isoreceived="20000318111026" -->
+<!-- sent="Sat, 18 Mar 2000 12:10:20 +0100" -->
+<!-- isosent="20000318111020" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] ValidityError &amp; ValidityWarning" -->
+<!-- id="20000318121020.A14301@w3.org" -->
+<!-- inreplyto="38D28050.37B175BA@vovida.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20ValidityError%20&amp;%20ValidityWarning"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Mar 18 2000 - 06:10:20 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0426.html">Daniel Veillard: "Re: [xml] ValidityError &amp; ValidityWarning"</a>
+<li><strong>Previous message:</strong> <a href="0424.html">Kenny Hom: "[xml] ValidityError &amp; ValidityWarning"</a>
+<li><strong>In reply to:</strong> <a href="0424.html">Kenny Hom: "[xml] ValidityError &amp; ValidityWarning"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0426.html">Daniel Veillard: "Re: [xml] ValidityError &amp; ValidityWarning"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Mar 17, 2000 at 10:58:24AM -0800, Kenny Hom wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a way to override xmlParserValidityError and
+</em><br>
+<em>&gt; xmlParserValidityWarning as the default functions without using SAX? 
+</em><br>
+<em>&gt; When validating XML against a DTD, I want to capture the errors and
+</em><br>
+<em>&gt; warning messages in my own log rather than have them sent to standard
+</em><br>
+<em>&gt; output.  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I know there was a similar question asked awhile back regarding
+</em><br>
+<em>&gt; xmlParserError and xmlParserWarning, but I think there may be a
+</em><br>
+<em>&gt; different answer to my question.
+</em><br>
+<p>&nbsp;&nbsp;Well it's a rather similar answer excexpt that the validity callbacks
+<br>
+are not part of the SAX callback but associated to teh parser context
+<br>
+itself.
+<br>
+<p>Similar code is available in tester.c, here is what you're looking for:
+<br>
+<p>---------------------------
+<br>
+xmlParserCtxtPtr ctxt;
+<br>
+xmlSAXHandler silent, *old;
+<br>
+<p>/* create a parsing context */
+<br>
+ctxt = xmlCreateFileParserCtxt(filename);
+<br>
+<p>/* override the validation callbacks */
+<br>
+ctxt-&gt;vctxt.warning = myValidityWarning;
+<br>
+ctxt-&gt;vctxt.error = myValidityError;
+<br>
+<p>xmlParseDocument(ctxt);
+<br>
+<p>ret = ctxt-&gt;wellFormed;
+<br>
+doc = ctxt-&gt;myDoc;
+<br>
+xmlFreeParserCtxt(ctxt);
+<br>
+<p>/* if the document wasn't well-formed, drop the whole output */
+<br>
+if (!ret) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlFreeDoc(doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;doc = NULL;
+<br>
+}
+<br>
+---------------------------
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20ValidityError%20&amp;%20ValidityWarning">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20ValidityError%20&amp;%20ValidityWarning">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20ValidityError%20&amp;%20ValidityWarning">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0426.html">Daniel Veillard: "Re: [xml] ValidityError &amp; ValidityWarning"</a>
+<li><strong>Previous message:</strong> <a href="0424.html">Kenny Hom: "[xml] ValidityError &amp; ValidityWarning"</a>
+<li><strong>In reply to:</strong> <a href="0424.html">Kenny Hom: "[xml] ValidityError &amp; ValidityWarning"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0426.html">Daniel Veillard: "Re: [xml] ValidityError &amp; ValidityWarning"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:08 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] help with embedded DTD</title>
+<meta name="Author" content="Fred_Smith@computrition.com (Fred_Smith@computrition.com)">
+<meta name="Subject" content="Re: [xml] help with embedded DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] help with embedded DTD</h1>
+<!-- received="Tue Jan 23 16:48:14 2001" -->
+<!-- isoreceived="20010123214814" -->
+<!-- sent="Tue, 23 Jan 2001 16:43:27 -0500" -->
+<!-- isosent="20010123214327" -->
+<!-- name="Fred_Smith@computrition.com" -->
+<!-- email="Fred_Smith@computrition.com" -->
+<!-- subject="Re: [xml] help with embedded DTD" -->
+<!-- id="852569DD.0076E338.00@cinote.computrition.com" -->
+<!-- inreplyto="[xml] help with embedded DTD" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:Fred_Smith@computrition.com?subject=Re:%20[xml]%20help%20with%20embedded%20DTD"><em>Fred_Smith@computrition.com</em></a><br>
+<strong>Date:</strong> Tue Jan 23 2001 - 16:43:27 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks! My comments are below, indented, since this silly mailer doesn't
+<br>
+quote things like any decent mailer should....
+<br>
+<p><p><p><p><p>Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">Daniel.Veillard@imag.fr</a>&gt; on 01/23/2001 01:57:37 PM
+<br>
+<p>Please respond to <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">xml@rpmfind.net</a>
+<br>
+<p>To:   <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">xml@rpmfind.net</a>
+<br>
+cc:    (bcc: Fred Smith/Computrition)
+<br>
+Subject:  Re: [xml] help with embedded DTD
+<br>
+<p><p><p><p><p>On Tue, Jan 23, 2001 at 01:16:21PM -0500, <a href="mailto:Fred_Smith@computrition.com?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">Fred_Smith@computrition.com</a>
+<br>
+wrote:
+<br>
+[snip]
+<br>
+<p><em>&gt;      doc = xmlNewDoc(&quot;1.0&quot;);
+</em><br>
+<em>&gt;      dtd = xmlParseDTD (NULL, &quot;CI7.dtd&quot;);
+</em><br>
+the xmlDtdPtr structure is defined in tree.h
+<br>
+add the following there:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dtd-&gt;ExternalID != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree((xmlChar *) dtd-&gt;ExternalID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;ExternalID = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dtd-&gt;SystemID != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree((xmlChar *) dtd-&gt;SystemID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;SystemID = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes, this almost works, thanks! If I use xmlFree() as shown I get a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segmentation violation. If I replace that with a call to free() I
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;don't. Weird. I'll look into it a little to see if I can see what's
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;going on. But using free() (or skipping the free entirely) gives me
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the desired output.
+<br>
+you should also test that xmlNewDoc and xmlParseDTD didn't
+<br>
+returned NULL,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes, thanks... that is just a quickie testbed so it's lacking in
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;robustness,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;but thanks for the reminder.
+<br>
+<p><p><p><p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 18:43:40 EST</em>
+</em>
+</small>
+</body>
+</html>

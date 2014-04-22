@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Bug#2022: libxml throws away attribute names</title>
+<meta name="Author" content="Stephane Conversy (Stephane.Conversy@lri.fr)">
+<meta name="Subject" content="Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces</h1>
+<!-- received="Mon Aug 30 07:52:03 1999" -->
+<!-- isoreceived="19990830115203" -->
+<!-- sent="Mon, 30 Aug 1999 13:51:10 +0200" -->
+<!-- isosent="19990830115110" -->
+<!-- name="Stephane Conversy" -->
+<!-- email="Stephane.Conversy@lri.fr" -->
+<!-- subject="Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces" -->
+<!-- id="37CA702D.3EAB59F1@lri.fr" -->
+<!-- inreplyto="19990830073503.B1390@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stephane Conversy (<a href="mailto:Stephane.Conversy@lri.fr?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces"><em>Stephane.Conversy@lri.fr</em></a>)<br>
+<strong>Date:</strong> Mon Aug 30 1999 - 07:51:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Previous message:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>In reply to:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt; On Mon, Aug 30, 1999 at 11:16:02AM +0200, Stephane Conversy wrote:
+</em><br>
+<em>&gt; &gt; compiling the lib on sgi gives the warnings I quoted at the end of the mail
+</em><br>
+<em>&gt; &gt; (just to mention them).
+</em><br>
+<em>&gt; &gt; A problem: when compiling something that uses libxml with a c++ compiler, I
+</em><br>
+<em>&gt; &gt; get these errors:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Ok, thanks,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  I applied the suggested changes and modified the point raising warnings,
+</em><br>
+<em>&gt; one of them was an actual bug !
+</em><br>
+<p>maybe you should try compiling with -Wall to catch possible bugs.
+<br>
+<p>I have some warnings left, essentialy 'enumerated type mixed with another type',
+<br>
+<p>a simple cast may be enough. Not really useful, but cleaner when compiled...
+<br>
+However it may prevent ease of bug tracking if a bug ever comes from this...
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;stef
+<br>
+<p><p>WARNINGS:
+<br>
+cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.1\&quot; -g -c  -DPIC SAX.c
+<br>
+-o .libs/SAX.lo
+<br>
+cc-1185 cc: WARNING File = SAX.c, Line = 346
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name, type, def, defaultValue, tree);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = SAX.c, Line = 346
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name, type, def, defaultValue, tree);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = SAX.c, Line = 378
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name, type, content);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.1\&quot; -g -c  -DPIC
+<br>
+HTMLparser.c -o .libs/HTMLparser.lo
+<br>
+cc-1552 cc: WARNING File = HTMLparser.c, Line = 2222
+<br>
+&nbsp;&nbsp;The variable &quot;node_info&quot; is set but never used.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserNodeInfo node_info;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.1\&quot; -g -c  -DPIC
+<br>
+valid.c -o .libs/valid.lo
+<br>
+cc-1185 cc: WARNING File = valid.c, Line = 397
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;type = type;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p><p><p><p><pre>
+--
+Stéphane Conversy
+<a href="http://www-ihm.lri.fr/~conversy/">http://www-ihm.lri.fr/~conversy/</a>
+mailto:<a href="mailto:conversy@lri.fr?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">conversy@lri.fr</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Previous message:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>In reply to:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0117.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

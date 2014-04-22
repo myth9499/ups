@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Loss of whitespace</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Loss of whitespace">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Loss of whitespace</h1>
+<!-- received="Wed Mar  1 22:15:36 2000" -->
+<!-- isoreceived="20000302031536" -->
+<!-- sent="Thu, 2 Mar 2000 04:15:30 +0100" -->
+<!-- isosent="20000302031530" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Loss of whitespace" -->
+<!-- id="20000302041530.F2869@w3.org" -->
+<!-- inreplyto="20000301212408.D32683@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Mar 01 2000 - 22:15:30 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0401.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0400.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0404.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Mar 01, 2000 at 09:24:08PM +0100, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, Mar 01, 2000 at 01:40:39PM -0600, Paul DuBois wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I first reported this on the PHP4 mailing list, but after some more
+</em><br>
+<em>&gt; &gt; poking around, what I'm observing seems to be happening in the libxml
+</em><br>
+<em>&gt; &gt; library that PHP4 uses.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Here's a sample document:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; &lt;?xml version='1.0'?&gt;
+</em><br>
+<em>&gt; &gt; &lt;root&gt;
+</em><br>
+<em>&gt; &gt; a&lt;x&gt; &lt;/x&gt;b&lt;x&gt; &lt;/x&gt;c
+</em><br>
+<em>&gt; &gt; &lt;/root&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; If I run this through &quot;tester&quot;, I get:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; &lt;root&gt;
+</em><br>
+<em>&gt; &gt; a&lt;x/&gt;b&lt;x/&gt;c
+</em><br>
+<em>&gt; &gt; &lt;/root&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Note that the whitespace which forms the contents of the &lt;x&gt; elements
+</em><br>
+<em>&gt; &gt; has been discarded.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; How do I defeat this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   With an upgrade, I need to fix this ASAP. I guess it's worth releasing
+</em><br>
+<em>&gt; an 1.8.7 lib just for this &lt;grin/&gt;
+</em><br>
+<p>&nbsp;&nbsp;This proves to be incredibly hard to fix !!!
+<br>
+If I fix it, basically the tree produced by a document like
+<br>
+&lt;root&gt;
+<br>
+&lt;x&gt; &lt;/x&gt;
+<br>
+&lt;/root&gt;
+<br>
+would be:
+<br>
+<p>doc
+<br>
+&nbsp;|
+<br>
+&nbsp;-&gt; root
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;text(\n) -&gt; x -&gt; text(\n)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; text( )
+<br>
+<p>instead of 
+<br>
+<p>doc
+<br>
+&nbsp;|
+<br>
+&nbsp;-&gt; root
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; x 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; text( )
+<br>
+<p>which is what you expect.
+<br>
+and currently libxml generates
+<br>
+<p>doc
+<br>
+&nbsp;|
+<br>
+&nbsp;-&gt; root
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; x 
+<br>
+<p>There is no clean way to know whether such a white space is significant
+<br>
+a priori, and I'm afraid that in the current for it would break most of the
+<br>
+apps around using libxml.
+<br>
+<p>Without a DTD telling me what is the content type of the element root
+<br>
+I cannot assume it's just (x)* and not (CDATA | x), hence wether
+<br>
+I can safely assume that this can be ignored
+<br>
+<p>Check the related section at:
+<br>
+&nbsp;<a href="http://xml.com/axml/target.html#sec-white-space">http://xml.com/axml/target.html#sec-white-space</a>
+<br>
+<p>and especially the couple of comments put by Tim Bray under the (T)
+<br>
+links.
+<br>
+No single heuristic will work. And I'm using such an heuristic in libxml
+<br>
+and changing it will probably kill a lot of applications using libxml,
+<br>
+I tried with gnumeric it didn't liked :-(. PHP might break seriously too
+<br>
+<p>The only ways I can think about this is the following:
+<br>
+&nbsp;1/ provide a flag in the parser context to change the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;behaviour to pass all white spaces (if we are not validating)
+<br>
+&nbsp;2/ switch the parser to pass all white spaces to SAX,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;but in the DOM generation callback, remove all text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nodes containing only empty spaces
+<br>
+<p>&nbsp;1/ allow to preserve compatibility with all the existing set of
+<br>
+libxml applications and allow a &quot;purist&quot; mode if needed 
+<br>
+&nbsp;2/ is more pure but will break most SAX based libxml apps
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;like libglade I'm afraid, and creating nodes to remove them later
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sounds unclean ...
+<br>
+<p>&nbsp;&nbsp;Conclusion, I'm puzzled, it's a really hard issue, and I'm afraid
+<br>
+of breaking a number of apps. On the other hand I *really* want to
+<br>
+be as conformant as possible. I delayed libxml-1.8.7 until I find 
+<br>
+a decent solution.
+<br>
+<p>&nbsp;&nbsp;Feedback on this issue from libxml users would really be appreciated,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0401.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>In reply to:</strong> <a href="0400.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0404.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0405.html">acassin@cs.mu.OZ.AU: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:06 EDT</em>
+</em>
+</small>
+</body>
+</html>

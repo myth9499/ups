@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re[3]: Welcome to xml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re[3]: Welcome to xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re[3]: Welcome to xml</h1>
+<!-- received="Sun Sep 10 10:02:56 2000" -->
+<!-- isoreceived="20000910140256" -->
+<!-- sent="Sun, 10 Sep 2000 16:02:51 +0200" -->
+<!-- isosent="20000910140251" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re[3]: Welcome to xml" -->
+<!-- id="20000910160251.K15962@w3.org" -->
+<!-- inreplyto="20000910132114.2ACEC75C0B@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re[3]:%20Welcome%20to%20xml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Sep 10 2000 - 10:02:51 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0751.html">Manuel Guesdon: "[xml] Re[3]: Welcome to xml"</a>
+<li><strong>In reply to:</strong> <a href="0751.html">Manuel Guesdon: "[xml] Re[3]: Welcome to xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Sep 10, 2000 at 03:21:14PM +0200, Manuel Guesdon wrote:
+<br>
+[Please sub scribe to the list, i hate having to manually approv e bounces]
+<br>
+<em>&gt; On Sat, 9 Sep 2000 19:25:56 +0200 Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  &gt;| On Sat, Sep 09, 2000 at 05:25:41PM +0200, Manuel Guesdon wrote:
+</em><br>
+<em>&gt;  &gt;| &gt; 
+</em><br>
+<em>&gt;  &gt;| &gt; So, is this userData is really a &quot;user data&quot; I can use as I want or is it a private variable I shouldn't change ? Or is there a problem in the code ?
+</em><br>
+<em>&gt;  &gt;| 
+</em><br>
+<em>&gt;  &gt;|   This field is an &quot;user data&quot; for the SAX interface. If you use your
+</em><br>
+<em>&gt;  &gt;| own set of SAX callbacks, then you can initialize to whatever you want.
+</em><br>
+<em>&gt;  &gt;| On the other hand libxml uses it when building a DOM tree so in that
+</em><br>
+<em>&gt;  &gt;| case you should not change any value put there libxml would definitly
+</em><br>
+<em>&gt;  &gt;| break if you do (the DOM tree building routines operate on top of the
+</em><br>
+<em>&gt;  &gt;| SAX interface and are just the predefined default SAX handlers).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thank you Daniel.
+</em><br>
+<em>&gt; Could it be possible to have a userData useable for libxml users (and may be renaming userData to something like saxUserData so things will be easier to understand) ?
+</em><br>
+<p>&nbsp;&nbsp;Renaming, no .. I did rename stuff upon users request between 1.x and
+<br>
+2.x and the result had been major pain since.
+<br>
+<p><em>&gt; I'd like to have a useable userData to know the application context of the DOM tree building.
+</em><br>
+<p>&nbsp;&nbsp;Added, there is now a _private field added in the CVS bases.
+<br>
+Libxml won't touch it, you're responsible for setting it up and cleaning
+<br>
+it if needed.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re[3]:%20Welcome%20to%20xml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re[3]:%20Welcome%20to%20xml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re[3]:%20Welcome%20to%20xml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0751.html">Manuel Guesdon: "[xml] Re[3]: Welcome to xml"</a>
+<li><strong>In reply to:</strong> <a href="0751.html">Manuel Guesdon: "[xml] Re[3]: Welcome to xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 10 2000 - 10:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

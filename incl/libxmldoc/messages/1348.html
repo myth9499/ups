@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc</h1>
+<!-- received="Tue Jan 16 12:24:35 2001" -->
+<!-- isoreceived="20010116172435" -->
+<!-- sent="Tue, 16 Jan 2001 18:24:19 +0100" -->
+<!-- isosent="20010116172419" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc" -->
+<!-- id="20010116182419.K2041@imag.fr" -->
+<!-- inreplyto="3A647A78.CC402EBB@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Tue Jan 16 2001 - 12:24:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1347.html">Gary Pennington: "[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>In reply to:</strong> <a href="1347.html">Gary Pennington: "[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Gary,
+<br>
+<p>&nbsp;sure, right that's a bug, the functions were not in sync with
+<br>
+their comment, your patch is right and has been applied,
+<br>
+<p>&nbsp;&nbsp;thanks a lot,
+<br>
+<p>Daniel
+<br>
+<p>On Tue, Jan 16, 2001 at 04:44:40PM +0000, Gary Pennington wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using libxml2-2.2.11 and I've encountered what I think is a bug in
+</em><br>
+<em>&gt; the two functions named.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In xmlDocDump, if an output buffer can't be created then -1 is returned
+</em><br>
+<em>&gt; as per the documentation. However for both xmlSaveFile and
+</em><br>
+<em>&gt; xmlSaveFileEnc, the return is 0 for the same condition. I think that
+</em><br>
+<em>&gt; this should be changed so that it is -1 in all these cases if an output
+</em><br>
+<em>&gt; buffer cannot be created.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I suppose that a return of 0 is kind of correct (since 0 bytes were
+</em><br>
+<em>&gt; written) but it seems a little misleading to me since there has been an
+</em><br>
+<em>&gt; error which isn't reported.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I encountered the problem when trying to save a file to a location in
+</em><br>
+<em>&gt; which I didn't have permission to create files, so I think that
+</em><br>
+<em>&gt; somewhere inside the guts of the IO mechanism an attempt to open a file
+</em><br>
+<em>&gt; was rejected with EACCESS.
+</em><br>
+[...]
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; This is a trivial bug, but it annoyed me for a few minutes so I think
+</em><br>
+<em>&gt; that the behaviour should be made consistent between these three
+</em><br>
+<em>&gt; functions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Gary
+</em><br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20tree.c%20:%20xmlSaveFile,%20xmlSaveFileEnc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1347.html">Gary Pennington: "[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<li><strong>In reply to:</strong> <a href="1347.html">Gary Pennington: "[xml] Bug in tree.c : xmlSaveFile, xmlSaveFileEnc"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 16 2001 - 12:44:10 EST</em>
+</em>
+</small>
+</body>
+</html>

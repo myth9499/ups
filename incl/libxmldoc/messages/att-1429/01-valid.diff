@@ -1,0 +1,38 @@
+diff -p -r1.48 valid.c
+*** valid.c	2001/01/04 14:06:39	1.48
+--- valid.c	2001/02/07 15:32:27
+*************** xmlValidateDtd(xmlValidCtxtPtr ctxt, xml
+*** 3706,3711 ****
+--- 3706,3719 ----
+  	doc->extSubset = oldExt;
+  	return(ret);
+      }
++     if (doc->ids != NULL) {
++           xmlFreeIDTable(doc->ids);
++           doc->ids = NULL;
++     }
++     if (doc->refs != NULL) {
++           xmlFreeRefTable(doc->refs);
++           doc->refs = NULL;
++     }
+      root = xmlDocGetRootElement(doc);
+      ret = xmlValidateElement(ctxt, doc, root);
+      ret &= xmlValidateDocumentFinal(ctxt, doc);
+*************** xmlValidateDocument(xmlValidCtxtPtr ctxt
+*** 3825,3830 ****
+--- 3833,3846 ----
+  	}
+      }
+  
++     if (doc->ids != NULL) {
++           xmlFreeIDTable(doc->ids);
++           doc->ids = NULL;
++     }
++     if (doc->refs != NULL) {
++           xmlFreeRefTable(doc->refs);
++           doc->refs = NULL;
++     }
+      ret = xmlValidateDtdFinal(ctxt, doc);
+      if (!xmlValidateRoot(ctxt, doc)) return(0);
+  
+

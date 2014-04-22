@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]</h1>
+<!-- received="Wed Sep 22 06:07:17 1999" -->
+<!-- isoreceived="19990922100717" -->
+<!-- sent="Wed, 22 Sep 1999 06:06:57 -0400" -->
+<!-- isosent="19990922100657" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]" -->
+<!-- id="19990922060657.P20945@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.9909211543420.26656-100000@lacrosse.corp.redhat.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Sep 22 1999 - 06:06:57 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0132.html">Andrea LUCIANO: "[xml] libxml version"</a>
+<li><strong>Previous message:</strong> <a href="0130.html">Daniel Veillard: "Re: [xml] XML Parser for OpenVMS"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Sep 21, 1999 at 03:45:43PM -0400, Elliot Lee wrote:
+<br>
+<em>&gt; Contrary to assurances, it's not binary compatible with libxml 1.4.0.
+</em><br>
+<em>&gt; A libglade built against 1.4.0 is crashing when run with 1.6.2.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Oh well,
+</em><br>
+<p>James libglade is using direct access to the xml parsing context
+<br>
+(since I didn't provide wrappers there is no blame here :-) and
+<br>
+that's not something I was expecting I would need to keep as-if
+<br>
+for the binary compatibility. Well SAX need it, so I have changed
+<br>
+back my structures to be 1.4 compliant, since 1.5 and 1.6 have never
+<br>
+been shipped from gnome.org I guess it's the best.
+<br>
+<p>I have generated libxml-1.7, tested it against the CVS libglade
+<br>
+compiled while the libxml and libxml-devel were 1.4, and 
+<br>
+test-libglade example.glade 
+<br>
+worked again, so I expect the problem to be fixed.
+<br>
+I also checked the old gnorpm and gnumeric, but since they don't
+<br>
+use the SAX interface but the DOM tree they really should not break.
+<br>
+<p>libxml-1.7 is a HUGE improvement over 1.4 which was flawed in
+<br>
+many respects, and I would really like to get an upgrade for 
+<br>
+any new Gnome distrib.
+<br>
+Major updates includes:
+<br>
+<p>&nbsp;&nbsp;- removed memory leaks
+<br>
+&nbsp;&nbsp;- DTD validation
+<br>
+&nbsp;&nbsp;- Remote entities fetching (if turned on)
+<br>
+<p>&nbsp;&nbsp;Let me know if you have any problem with this version, it is
+<br>
+currently only at <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a> , I will upload it
+<br>
+to the Gnome FTP if I don't get alarms within 24 hours,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0132.html">Andrea LUCIANO: "[xml] libxml version"</a>
+<li><strong>Previous message:</strong> <a href="0130.html">Daniel Veillard: "Re: [xml] XML Parser for OpenVMS"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0133.html">James Henstridge: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

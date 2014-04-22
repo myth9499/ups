@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Link errors in pc-cgwin build.</title>
+<meta name="Author" content="Tom Maxwell (maxwell@cbl.umces.edu)">
+<meta name="Subject" content="[xml] Link errors in pc-cgwin build.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Link errors in pc-cgwin build.</h1>
+<!-- received="Mon Feb 19 12:39:51 2001" -->
+<!-- isoreceived="20010219173951" -->
+<!-- sent="Mon, 19 Feb 2001 12:27:34 -0500" -->
+<!-- isosent="20010219172734" -->
+<!-- name="Tom Maxwell" -->
+<!-- email="maxwell@cbl.umces.edu" -->
+<!-- subject="[xml] Link errors in pc-cgwin build." -->
+<!-- id="3A915786.C9A8306E@cbl.umces.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tom Maxwell (<a href="mailto:maxwell@cbl.umces.edu?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build."><em>maxwell@cbl.umces.edu</em></a>)<br>
+<strong>Date:</strong> Mon Feb 19 2001 - 12:27:34 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1468.html">ross.alexander@uk.neceur.com: "Re: [xml] Legitimate xpath expressions in XSLT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;I am attempting to build libxml2-2.3.1 under Win98 in a cgwin bash
+<br>
+shell.  I executed:
+<br>
+<p>./configure --with-iconv=no --with-gnu-ld=yes  --enable-shared=no
+<br>
+make
+<br>
+<p>At the link stage I get a lot of &quot;undefined references&quot; (shown below). 
+<br>
+These errors occurred for either choice of the --with-gnu-ld and
+<br>
+--enable-shared options.  Any suggestions?
+<br>
+<p>.
+<br>
+.
+<br>
+.
+<br>
+gcc -DHAVE_CONFIG_H -I. -I. -I. -I./include -I./include -g -O2 -c
+<br>
+nanoftp.c -o nanoftp.o
+<br>
+echo timestamp &gt; nanoftp.lo
+<br>
+/bin/sh ./libtool --mode=link gcc  -g -O2  -o libxml2.la -rpath
+<br>
+/usr/local/lib -version-info 5:1:3 SAX.lo entities.lo encoding.lo
+<br>
+error.lo parserInternals.lo parser.lo tree.lo hash.lo xmlIO.lo
+<br>
+xmlmemory.lo uri.lo valid.lo xlink.lo HTMLparser.lo HTMLtree.lo
+<br>
+debugXML.lo xpath.lo xpointer.lo xinclude.lo nanohttp.lo nanoftp.lo -lz 
+<br>
+libtool: link: warning: undefined symbols not allowed in i586-pc-cygwin
+<br>
+shared libraries
+<br>
+mkdir .libs
+<br>
+ar cru .libs/libxml2.a  SAX.o entities.o encoding.o error.o
+<br>
+parserInternals.o parser.o tree.o hash.o xmlIO.o xmlmemory.o uri.o
+<br>
+valid.o xlink.o HTMLparser.o HTMLtree.o debugXML.o xpath.o xpointer.o
+<br>
+xinclude.o nanohttp.o nanoftp.o 
+<br>
+ranlib .libs/libxml2.a
+<br>
+creating libxml2.la
+<br>
+(cd .libs &amp;&amp; rm -f libxml2.la &amp;&amp; ln -s ../libxml2.la libxml2.la)
+<br>
+gcc -DHAVE_CONFIG_H -I. -I. -I. -I./include -I./include       -g -O2 -c
+<br>
+xmllint.c
+<br>
+/bin/sh ./libtool --mode=link gcc  -g -O2  -o xmllint  xmllint.o
+<br>
+-lreadline -lhistory -lncurses ./libxml2.la -lz  
+<br>
+gcc -g -O2 -o xmllint xmllint.o -lreadline -lhistory -lncurses
+<br>
+./.libs/libxml2.a -lz -lz
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x59): undefined reference to
+<br>
+`_imp__xmlMalloc'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x71): undefined reference to
+<br>
+`_imp__xmlGenericError'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x7e): undefined reference to
+<br>
+`_imp__xmlGenericErrorContext'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x17e): undefined reference to
+<br>
+`_imp__xmlFree'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x195): undefined reference to
+<br>
+`_imp__xmlFree'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x1b2): undefined reference to
+<br>
+`_imp__xmlFree'
+<br>
+./.libs/libxml2.a(tree.o)(.text+0x231): undefined reference to
+<br>
+`_imp__xmlMalloc'
+<br>
+.
+<br>
+.
+<br>
+.
+<br>
+<p><pre>
+-- 
+Thomas P Maxwell, Ph.D.          Spatial Systems Research
+University of Maryland Institute for Ecological Economics
+voice: 410-326-7388                     FAX: 410-326-7354
+URL:                <a href="http://iee.umces.edu/Tom/Maxwell.html">http://iee.umces.edu/Tom/Maxwell.html</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1468.html">ross.alexander@uk.neceur.com: "Re: [xml] Legitimate xpath expressions in XSLT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 19 2001 - 12:43:50 EST</em>
+</em>
+</small>
+</body>
+</html>

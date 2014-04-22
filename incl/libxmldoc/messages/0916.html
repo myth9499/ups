@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace problem with external DTD validation</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Whitespace problem with external DTD validation">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace problem with external DTD validation</h1>
+<!-- received="Tue Oct 10 18:14:06 2000" -->
+<!-- isoreceived="20001010221406" -->
+<!-- sent="Wed, 11 Oct 2000 00:14:00 +0200" -->
+<!-- isosent="20001010221400" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Whitespace problem with external DTD validation" -->
+<!-- id="20001011001400.W23005@w3.org" -->
+<!-- inreplyto="20001010145029.A24829@atari" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 10 2000 - 18:14:00 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0917.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0915.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>In reply to:</strong> <a href="0915.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0911.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 10, 2000 at 02:50:29PM -0700, Bill Kendrick wrote:
+<br>
+<em>&gt; Well, the XML documents do not have DTDs embeded in them (they will be
+</em><br>
+<em>&gt; coming over a network connection from a Point of Sale client device).
+</em><br>
+<p>&nbsp;&nbsp;Okay then this methods will not work unless the incoming XML
+<br>
+point with a DOCTYPE to the DTD it uses.
+<br>
+<p><em>&gt; I tried what you suggested (&quot;xmlDoValidityCheckingDefaultValue = 1;&quot;
+</em><br>
+<em>&gt; before my call to xmlParseFile()&quot;), and now I get errors during
+</em><br>
+<em>&gt; the loading, AND still getting the same error about whitespace!!! &lt;:^(
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   test-with-whitespace.xml:3: validity error: Validation failed: no DTD found !
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;yeah ... that says it all ... 
+<br>
+<p><em>&gt; The example code I'm writing is less than 250 lines long, and the XML and
+</em><br>
+<em>&gt; DTD files are 14 lines long, total..  May I email them all to you so you can
+</em><br>
+<em>&gt; see exactly what I'm trying to do and you can point out my errors? :)
+</em><br>
+<p>&nbsp;&nbsp;I this case this won't help the problem ain't with the data
+<br>
+<p><em>&gt; &gt;  Serious: the code doing the validity checking in valid.c should attempt to
+</em><br>
+<em>&gt; &gt;           detect those unsignificant white spaces in the tree and avoid
+</em><br>
+<em>&gt; &gt; 	  generating validity errors for them
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Are there plans to implement this?  The project must be up and running
+</em><br>
+<em>&gt; by October 27th. :)
+</em><br>
+<p>&nbsp;&nbsp;Send me some RAM so my compiles are faster :-)
+<br>
+<p>&nbsp;Quick v2:
+<br>
+&nbsp;&nbsp;Add a DOCTYPE to the received XML. If needed set-up you own external
+<br>
+entity loader to fetch the DTD.
+<br>
+<p>&nbsp;Serious:
+<br>
+&nbsp;&nbsp;This should not be too hard to implement, I'm just busy with 2.2.5 and
+<br>
+XPointer wich I would like to both get quickly out. Will add to TODO
+<br>
+<p>&nbsp;&nbsp;
+<br>
+Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0917.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0915.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>In reply to:</strong> <a href="0915.html">Bill Kendrick: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0911.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 10 2000 - 18:43:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

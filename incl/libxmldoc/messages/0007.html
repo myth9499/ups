@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Question about xmlSetProp</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Question about xmlSetProp">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Question about xmlSetProp</h1>
+<!-- received="Sun Feb 14 12:52:03 1999" -->
+<!-- isoreceived="19990214175203" -->
+<!-- sent="Sun, 14 Feb 1999 12:51:55 -0500" -->
+<!-- isosent="19990214175155" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Question about xmlSetProp" -->
+<!-- id="19990214125155.A28131@w3.org" -->
+<!-- inreplyto="199902141728.SAA08950@c125.ryd.student.liu.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Feb 14 1999 - 12:51:55 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Reply:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Alexander,
+<br>
+<p><em>&gt; I've recently discovered a bug in my program (Dia) that uses gnome-xml.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; To fix this i need some information about the usage of the function
+</em><br>
+<em>&gt; xmlSetProp(). Is the string i pass to this function supposed to be
+</em><br>
+<em>&gt; limited in any way (like the xml-spec says) or is it escaped by
+</em><br>
+<em>&gt; gnome-xml?
+</em><br>
+<p>&nbsp;&nbsp;It is escaped automatically when the parsing succeeds.
+<br>
+I guess I need a bit more explanation, I will use the examples you gave:
+<br>
+<p><em>&gt; The reason i ask is because it acts a bit strange.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Given:
+</em><br>
+<em>&gt;     xmlSetProp(doc-&gt;root, &quot;prop1&quot;, &quot;gno&lt;me is great&quot;);
+</em><br>
+<em>&gt; It sets (when writing to a file):
+</em><br>
+<em>&gt; &lt;EXAMPLE prop1=&quot;gno&amp;lt;me is great&quot; prop2=&quot;&amp;linux; too&quot; emptyprop=&quot;&quot;&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; That is, the '&lt;' is escaped to &amp;lt;
+</em><br>
+<p>&nbsp;&nbsp;Yes, the point here is that while it should have been escaped, it didn't
+<br>
+lead to any parsing error actually, so the correct value has been generated
+<br>
+internally and the proper value is then genreated on save, i.e. escaped.
+<br>
+<p><em>&gt; On the other hand, given:
+</em><br>
+<em>&gt;    xmlSetProp(doc-&gt;root, &quot;prop1&quot;, &quot;gno&amp;me is great&quot;);
+</em><br>
+<em>&gt; It exports 
+</em><br>
+<em>&gt; &lt;EXAMPLE prop1=&quot;gno&quot; prop2=&quot;&amp;linux; too&quot; emptyprop=&quot;&quot;&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; That is, the '&amp;' is not escaped (to &amp;amp; or soo i would guess, i'm no
+</em><br>
+<em>&gt; xml wizard).
+</em><br>
+<p>&nbsp;&nbsp;Here there had been a parsing error. The &quot;gno&amp;me is great&quot; string is
+<br>
+interpreted as &quot;gno&quot; then the beginning of the parsing of an entity reference
+<br>
+(letter &amp;) and the name of the entity is not closed properly (it expects
+<br>
+the letter ';') at the end. At that step the only thing left is
+<br>
+&quot;gno&quot; and that's what it outputs.
+<br>
+<p><em>&gt; Soo, what kind of behaviour can i expect from xmlSetProp()?
+</em><br>
+<p>&nbsp;&nbsp;Basically you should provide escaped values for '&lt;' and '&amp;'
+<br>
+Also you don't have the right to use both ' and &quot; in the same attribute
+<br>
+value.
+<br>
+<p>&nbsp;&nbsp;If this is really a problem, I can provide an alternate routine
+<br>
+doing the escape for you (something like xmlSetRawProp).
+<br>
+<p>&nbsp;&nbsp;You must also know that pedantic XML processors can remove extra
+<br>
+spaces between words in an attribute value. For example
+<br>
+&nbsp;&lt;elem prop1=&quot;a       b         c&quot;/&gt;
+<br>
+can be saved as 
+<br>
+&nbsp;&lt;elem prop1=&quot;a b c&quot;/&gt;
+<br>
+<p>&nbsp;Even if libxml don't do it ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">Daniel.Veillard@w3.org</a> | W3C  INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, Kaffe,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Amaya.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0006.html">Alexander Larsson: "[xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Reply:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

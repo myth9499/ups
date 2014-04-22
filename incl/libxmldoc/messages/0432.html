@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] DTDs, Namespaces, and Plugin Modules</title>
+<meta name="Author" content="Arturo Tena (arturo@directmail.org)">
+<meta name="Subject" content="Re: [xml] DTDs, Namespaces, and Plugin Modules">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] DTDs, Namespaces, and Plugin Modules</h1>
+<!-- received="Fri Mar 24 14:11:02 2000" -->
+<!-- isoreceived="20000324191102" -->
+<!-- sent="Fri, 24 Mar 2000 13:10:27 -0600" -->
+<!-- isosent="20000324191027" -->
+<!-- name="Arturo Tena" -->
+<!-- email="arturo@directmail.org" -->
+<!-- subject="Re: [xml] DTDs, Namespaces, and Plugin Modules" -->
+<!-- id="38DBBDA3.6CA489@directmail.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0003231947040.18601-100000@godspeed.lusis.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Arturo Tena (<a href="mailto:arturo@directmail.org?subject=Re:%20[xml]%20DTDs,%20Namespaces,%20and%20Plugin%20Modules"><em>arturo@directmail.org</em></a>)<br>
+<strong>Date:</strong> Fri Mar 24 2000 - 14:10:27 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Previous message:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>In reply to:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Reply:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello!
+<br>
+<p>Ari Johnson wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am writing a program and intend to use XML for its internal
+</em><br>
+<em>&gt; configuration settings and its database.  I would like to use a DTD and
+</em><br>
+<em>&gt; Namespaces, but there is a problem:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The database consists of objects of varying types (all based off the
+</em><br>
+<em>&gt; same C++ base class), which have to store various numerical and textual
+</em><br>
+<em>&gt; bits of information about themselves in the XML file.  Plugin modules are
+</em><br>
+<em>&gt; able to add their own sub-classes to this hierarchy, as well as their
+</em><br>
+<em>&gt; entire own sections of the file (there will be one tree for configuration
+</em><br>
+<em>&gt; options, one for the database of objects, and others as required, all
+</em><br>
+<em>&gt; below the root node of the XML document).  This makes writing a DTD very
+</em><br>
+<em>&gt; difficult, as the types of elements that can occur under both the room and
+</em><br>
+<em>&gt; the database trees can vary depending on which plugin modules are
+</em><br>
+<em>&gt; installed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a good way to go about this, or am I better off going without a
+</em><br>
+<em>&gt; DTD?  Also, how might namespaces benefit me, and where can I find
+</em><br>
+<em>&gt; more/better documentation on them?
+</em><br>
+<p>I guess you can express your objects using XSchema. Unfortunately, there are just a few
+<br>
+Working Drafts, none Recomendation.
+<br>
+<p><a href="http://www.w3.org/XML/Activity.html#schema-wg">http://www.w3.org/XML/Activity.html#schema-wg</a>
+<br>
+<p><pre>
+-- 
+Arturo Tena
+<a href="mailto:arturo@directmail.org?subject=Re:%20[xml]%20DTDs,%20Namespaces,%20and%20Plugin%20Modules">arturo@directmail.org</a>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20DTDs,%20Namespaces,%20and%20Plugin%20Modules">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20DTDs,%20Namespaces,%20and%20Plugin%20Modules">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Previous message:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>In reply to:</strong> <a href="0431.html">Ari Johnson: "[xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<li><strong>Reply:</strong> <a href="0433.html">Daniel Veillard: "Re: [xml] DTDs, Namespaces, and Plugin Modules"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:09 EDT</em>
+</em>
+</small>
+</body>
+</html>

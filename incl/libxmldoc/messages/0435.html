@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: [gdome] gdome2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: [gdome] gdome2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: [gdome] gdome2</h1>
+<!-- received="Wed Mar 29 07:55:06 2000" -->
+<!-- isoreceived="20000329125506" -->
+<!-- sent="Wed, 29 Mar 2000 14:53:43 +0200" -->
+<!-- isosent="20000329125343" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: [gdome] gdome2" -->
+<!-- id="20000329145343.K20462@w3.org" -->
+<!-- inreplyto="878zz1di40.fsf@mathieu.rezel.enst.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20[gdome]%20gdome2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Mar 29 2000 - 07:53:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<li><strong>Previous message:</strong> <a href="0434.html">William Kunkel: "[xml] Conflict between namespaces and external DTD declaration"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<li><strong>Maybe reply:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Mar 29, 2000 at 03:24:31PM +0200, Mathieu Lacage wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; hi all,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Ok, raph is going to kill me. We met at GUADEC and
+</em><br>
+<em>&gt; discussed some gdome stuff with a few other ppl.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The idea is that I am going to:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	- remove autogen
+</em><br>
+<em>&gt; 	- clean code, remove duplicated code
+</em><br>
+<em>&gt; 	- move to libxml2
+</em><br>
+<em>&gt; 	- implement Node and Attribute interfaces
+</em><br>
+<em>&gt; 	- cleanup
+</em><br>
+<em>&gt; 	- implement the rest of the Core 1 spec.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I will do a lot of this during my 2 week vacations 
+</em><br>
+<em>&gt; starting now. I will commit everything to GNOME's
+</em><br>
+<em>&gt; CVS repository into a new cvs module: gdome2.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I would like to hear raph's ideas about the folowing.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; libxml2 still uses the *_EVIL_*
+</em><br>
+<em>&gt; #include &lt;tree.h&gt;
+</em><br>
+<em>&gt; and not
+</em><br>
+<em>&gt; #include &lt;gnome-xml/tree.h&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel told me that he would probably switch from libxml2.so.xx
+</em><br>
+<em>&gt; to libxml.so.xx when libxml2 has stabilized.
+</em><br>
+<p>&nbsp;&nbsp;I'm unsure about this, this still need more thinking. For example
+<br>
+redhat still ships a libxml0 compatibility lib.
+<br>
+<p><em>&gt; I don't know about the last point but the I don't like the 1st 
+</em><br>
+<em>&gt; one.
+</em><br>
+<em>&gt; I think I don't understand why DV_ wants to keep the 1st one. 
+</em><br>
+<em>&gt; He tried to explain me but I cannot think like him.
+</em><br>
+<em>&gt; What he said was something like &quot;source compatible breakage&quot;.
+</em><br>
+<em>&gt; I don't understand how a one-line change in all applications
+</em><br>
+<em>&gt; is bad.
+</em><br>
+<p>&nbsp;&nbsp;Would it be a one and forever line change i would not mind.
+<br>
+If it is N changes for every files for every major release then 
+<br>
+this sucks and I'm not gonna accept this.
+<br>
+<p>Suppose that with gnome 2.0 all apps have to change
+<br>
+<p>#include &lt;gnome/xxx.h&gt;
+<br>
+to
+<br>
+#include &lt;gnome2/xxx.h&gt;
+<br>
+<p>then I'm pretty sure I would not be the only one to complain :-)
+<br>
+<p>The &quot;gnome-xml&quot; isn't a good prefix, libxml would.
+<br>
+Should it be libxml or libxml2 ?
+<br>
+would this have to be incremented to libxml3 in one year (and so on ...) ?
+<br>
+<p>That's what I'm currently struggling with and in the absence of a good
+<br>
+answer, the status quo will be maintained.
+<br>
+<p>This is now the major issue left w.r.t. libxml-2.0.0 final release.
+<br>
+<p>Daniel
+<br>
+<p><p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20[gdome]%20gdome2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20[gdome]%20gdome2">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20[gdome]%20gdome2">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<li><strong>Previous message:</strong> <a href="0434.html">William Kunkel: "[xml] Conflict between namespaces and external DTD declaration"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<li><strong>Maybe reply:</strong> <a href="0436.html">Havoc Pennington: "Re: [xml] Re: [gdome] gdome2"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:09 EDT</em>
+</em>
+</small>
+</body>
+</html>

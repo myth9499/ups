@@ -1,0 +1,491 @@
+Index: HTMLparser.c
+@@ -12,7 +12,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #ifdef LIBXML_HTML_ENABLED
+ 
+ #include <stdio.h>
+Index: HTMLtree.c
+@@ -13,7 +13,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #ifdef LIBXML_HTML_ENABLED
+ 
+ #include <stdio.h>
+Index: Makefile.in
+@@ -688,100 +688,100 @@
+ 	  fi; \
+ 	done
+ 	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
+-HTMLparser.lo HTMLparser.o : HTMLparser.c config.h xmlversion.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/tree.h \
+-	libxml/HTMLparser.h libxml/parser.h libxml/valid.h \
+-	libxml/xmlIO.h libxml/encoding.h libxml/entities.h \
+-	libxml/parserInternals.h xml-error.h
+-HTMLtree.lo HTMLtree.o : HTMLtree.c config.h xmlversion.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/HTMLparser.h \
+-	libxml/parser.h libxml/tree.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h libxml/HTMLtree.h
+-SAX.lo SAX.o : SAX.c config.h libxml/xmlmemory.h libxml/xmlversion.h \
+-	libxml/tree.h libxml/parser.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h libxml/parserInternals.h \
+-	libxml/xml-error.h libxml/debugXML.h libxml/xpath.h \
+-	libxml/SAX.h libxml/xlink.h libxml/uri.h libxml/HTMLtree.h \
+-	libxml/HTMLparser.h
+-debugXML.lo debugXML.o : debugXML.c config.h xmlversion.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/tree.h \
+-	libxml/parser.h libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/debugXML.h libxml/xpath.h \
+-	libxml/HTMLtree.h libxml/HTMLparser.h
+-encoding.lo encoding.o : encoding.c config.h libxml/xmlversion.h \
+-	libxml/encoding.h libxml/tree.h libxml/xmlmemory.h \
+-	libxml/HTMLparser.h libxml/parser.h libxml/valid.h \
+-	libxml/xmlIO.h libxml/entities.h
+-entities.lo entities.o : entities.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/entities.h libxml/tree.h \
+-	libxml/parser.h libxml/valid.h libxml/xmlIO.h libxml/encoding.h
+-error.lo error.o : error.c config.h libxml/parser.h libxml/tree.h \
+-	libxml/xmlversion.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h
+-nanoftp.lo nanoftp.o : nanoftp.c config.h xmlversion.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/nanoftp.h
+-nanohttp.lo nanohttp.o : nanohttp.c config.h xmlversion.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/parser.h \
+-	libxml/tree.h libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/nanohttp.h
+-parser.lo parser.o : parser.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/tree.h libxml/parser.h \
+-	libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/parserInternals.h libxml/uri.h \
+-	xml-error.h libxml/xpath.h
++HTMLparser.lo HTMLparser.o : HTMLparser.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/HTMLparser.h $(xmlincdir)/parser.h $(xmlincdir)/valid.h \
++	$(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h $(xmlincdir)/entities.h \
++	$(xmlincdir)/parserInternals.h $(xmlincdir)/xml-error.h
++HTMLtree.lo HTMLtree.o : HTMLtree.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/HTMLparser.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/tree.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h $(xmlincdir)/HTMLtree.h
++SAX.lo SAX.o : SAX.c config.h $(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/parser.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h \
++	$(xmlincdir)/xml-error.h $(xmlincdir)/debugXML.h $(xmlincdir)/xpath.h \
++	$(xmlincdir)/SAX.h $(xmlincdir)/xlink.h $(xmlincdir)/uri.h $(xmlincdir)/HTMLtree.h \
++	$(xmlincdir)/HTMLparser.h
++debugXML.lo debugXML.o : debugXML.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/debugXML.h $(xmlincdir)/xpath.h \
++	$(xmlincdir)/HTMLtree.h $(xmlincdir)/HTMLparser.h
++encoding.lo encoding.o : encoding.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/tree.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/HTMLparser.h $(xmlincdir)/parser.h $(xmlincdir)/valid.h \
++	$(xmlincdir)/xmlIO.h $(xmlincdir)/entities.h
++entities.lo entities.o : entities.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/entities.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h
++error.lo error.o : error.c config.h $(xmlincdir)/parser.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h
++nanoftp.lo nanoftp.o : nanoftp.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/nanoftp.h
++nanohttp.lo nanohttp.o : nanohttp.c config.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/nanohttp.h
++parser.lo parser.o : parser.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h $(xmlincdir)/uri.h \
++	$(xmlincdir)/xml-error.h $(xmlincdir)/xpath.h
+ parserInternals.lo parserInternals.o : parserInternals.c config.h \
+-	libxml/xmlmemory.h libxml/xmlversion.h libxml/tree.h \
+-	libxml/parser.h libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/parserInternals.h libxml/uri.h \
+-	xml-error.h
+-testHTML.o: testHTML.c config.h xmlversion.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/HTMLparser.h libxml/parser.h \
+-	libxml/tree.h libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/HTMLtree.h libxml/debugXML.h \
+-	libxml/xpath.h
+-testSAX.o: testSAX.c config.h libxml/xml-error.h libxml/parser.h \
+-	libxml/tree.h libxml/xmlversion.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h libxml/parserInternals.h \
+-	libxml/debugXML.h libxml/xpath.h libxml/xmlmemory.h
+-testURI.o: testURI.c config.h libxml/xmlversion.h libxml/xmlmemory.h \
+-	libxml/uri.h libxml/tree.h
+-testXPath.o: testXPath.c config.h xmlversion.h libxml/xpath.h \
+-	libxml/tree.h libxml/xmlversion.h libxml/parser.h \
+-	libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/debugXML.h libxml/xmlmemory.h \
+-	libxml/parserInternals.h
++	$(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h $(xmlincdir)/uri.h \
++	$(xmlincdir)/xml-error.h
++testHTML.o: testHTML.c config.h $(xmlincdir)/xmlversion.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/HTMLparser.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/HTMLtree.h $(xmlincdir)/debugXML.h \
++	$(xmlincdir)/xpath.h
++testSAX.o: testSAX.c config.h $(xmlincdir)/xml-error.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/xmlversion.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h \
++	$(xmlincdir)/debugXML.h $(xmlincdir)/xpath.h $(xmlincdir)/xmlmemory.h
++testURI.o: testURI.c config.h $(xmlincdir)/xmlversion.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/uri.h $(xmlincdir)/tree.h
++testXPath.o: testXPath.c config.h $(xmlincdir)/xmlversion.h $(xmlincdir)/xpath.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/xmlversion.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/debugXML.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/parserInternals.h
+ tester.o: tester.c config.h xmlmemory.h parser.h tree.h valid.h xmlIO.h \
+ 	encoding.h entities.h parserInternals.h HTMLparser.h HTMLtree.h \
+ 	xpath.h debugXML.h
+-tree.lo tree.o : tree.c config.h libxml/xmlmemory.h libxml/xmlversion.h \
+-	libxml/tree.h libxml/parser.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h
+-uri.lo uri.o : uri.c config.h libxml/xmlmemory.h libxml/xmlversion.h \
+-	libxml/uri.h libxml/tree.h
+-valid.lo valid.o : valid.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/valid.h libxml/tree.h \
+-	libxml/parser.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/parserInternals.h
+-xlink.lo xlink.o : xlink.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/tree.h libxml/parser.h \
+-	libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/xlink.h
+-xmlIO.lo xmlIO.o : xmlIO.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/parser.h libxml/tree.h \
+-	libxml/valid.h libxml/xmlIO.h libxml/encoding.h \
+-	libxml/entities.h libxml/parserInternals.h libxml/nanohttp.h \
+-	libxml/nanoftp.h
+-xmllint.o: xmllint.c config.h libxml/xmlmemory.h libxml/xmlversion.h \
+-	libxml/parser.h libxml/tree.h libxml/valid.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h libxml/parserInternals.h \
+-	libxml/HTMLparser.h libxml/HTMLtree.h libxml/xpath.h \
+-	libxml/debugXML.h
+-xmlmemory.lo xmlmemory.o : xmlmemory.c config.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h
+-xpath.lo xpath.o : xpath.c config.h xmlversion.h libxml/xmlmemory.h \
+-	libxml/xmlversion.h libxml/tree.h libxml/valid.h libxml/xpath.h \
+-	libxml/parserInternals.h libxml/parser.h libxml/xmlIO.h \
+-	libxml/encoding.h libxml/entities.h
++tree.lo tree.o : tree.c config.h $(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/tree.h $(xmlincdir)/parser.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h
++uri.lo uri.o : uri.c config.h $(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/uri.h $(xmlincdir)/tree.h
++valid.lo valid.o : valid.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/valid.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h
++xlink.lo xlink.o : xlink.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h $(xmlincdir)/parser.h \
++	$(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/xlink.h
++xmlIO.lo xmlIO.o : xmlIO.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/parser.h $(xmlincdir)/tree.h \
++	$(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h $(xmlincdir)/encoding.h \
++	$(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h $(xmlincdir)/nanohttp.h \
++	$(xmlincdir)/nanoftp.h
++xmllint.o: xmllint.c config.h $(xmlincdir)/xmlmemory.h $(xmlincdir)/xmlversion.h \
++	$(xmlincdir)/parser.h $(xmlincdir)/tree.h $(xmlincdir)/valid.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h $(xmlincdir)/parserInternals.h \
++	$(xmlincdir)/HTMLparser.h $(xmlincdir)/HTMLtree.h $(xmlincdir)/xpath.h \
++	$(xmlincdir)/debugXML.h
++xmlmemory.lo xmlmemory.o : xmlmemory.c config.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h
++xpath.lo xpath.o : xpath.c config.h $(xmlincdir)/xmlversion.h $(xmlincdir)/xmlmemory.h \
++	$(xmlincdir)/xmlversion.h $(xmlincdir)/tree.h $(xmlincdir)/valid.h $(xmlincdir)/xpath.h \
++	$(xmlincdir)/parserInternals.h $(xmlincdir)/parser.h $(xmlincdir)/xmlIO.h \
++	$(xmlincdir)/encoding.h $(xmlincdir)/entities.h
+ 
+ info-am:
+ info: info-recursive
+@@ -897,13 +897,13 @@
+ 
+ check-local: tests
+ 
+-$(srcdir)/libxml:
+-	-$(RM) $(srcdir)/libxml
+-	ln -s $(srcdir)/. $(srcdir)/libxml
++$(srcdir)/include/libxml:
++	if test ! -d $(srcdir)/include ; then mkdir $(srcdir)/include ; fi
++	(cd $(srcdir)/include ; $(RM) -f libxml; ln -s .. libxml)
+ 
+-install-data: $(srcdir)/libxml
++install-data: $(srcdir)/include/libxml
+ 
+-$(libxml_la_SOURCES): $(srcdir)/libxml
++$(libxml_la_SOURCES): $(srcdir)/include/libxml
+ 
+ testall : tests SVGtests SAXtests
+ 
+Index: configure.in
+@@ -299,18 +299,18 @@
+ dnl
+ if test ! -d $srcdir/include/libxml
+ then
+-    rm -f $srcdir/include
++    rm -rf $srcdir/include
+     rm -f $srcdir/libxml
+-    (cd $srcdir ; ln -s . include)
+-    (cd $srcdir ; ln -s . libxml)
++    mkdir $srcdir/include
++    (cd $srcdir/include ; ln -s .. libxml)
+ fi
+ if test ! -e include/libxml
+ then
+-    rm -f include
++    rm -rf include
+     rm -f libxml
+-    (ln -s $srcdir/include include)
+-    (ln -s $srcdir/include/libxml libxml)
++    mkdir include
++    (cd include ; ln -s .. libxml)
+ fi
+ 
+-AC_OUTPUT(libxml.spec Makefile doc/Makefile example/Makefile include/libxml/xmlversion.h xml-config include/libxml/win32config.h libxml-2.0.pc)
++AC_OUTPUT(libxml.spec Makefile doc/Makefile example/Makefile include/libxml/xmlversion.h xml-config libxml-2.0.pc)
+ 
+Index: debugXML.c
+@@ -13,7 +13,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #ifdef LIBXML_DEBUG_ENABLED
+ 
+ #include <stdio.h>
+Index: include/libxml/xmlversion.h
+@@ -80,7 +80,7 @@
+ /*
+  * Whether iconv support is available
+  */
+-#if 1
++#if 0
+ #define LIBXML_ICONV_ENABLED
+ #else
+ #define LIBXML_ICONV_DISABLED
+Index: nanoftp.c
+@@ -21,7 +21,7 @@
+ #endif
+ #endif /* STANDALONE */
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ 
+ #ifdef LIBXML_FTP_ENABLED
+ #include <stdio.h>
+Index: nanohttp.c
+@@ -21,7 +21,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ 
+ #ifdef LIBXML_HTTP_ENABLED
+ #include <stdio.h>
+Index: testHTML.c
+@@ -12,7 +12,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #ifdef LIBXML_HTML_ENABLED
+ 
+ #include <stdio.h>
+Index: testXPath.c
+@@ -12,7 +12,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #if defined(LIBXML_XPATH_ENABLED) && defined(LIBXML_DEBUG_ENABLED)
+ 
+ #include <stdio.h>
+Index: win32/Makefile.mingw
+@@ -0,0 +1,95 @@
++# This Makefile will allow you to build the static library, a DLL, the
++# DLL-import library, and the test executables using the "mingw" gcc
++# compiler environment.  This Makefile is based on Alfred Reibenschuh's
++# version for 2.1.1, and was modified by Wayne Davison.
++
++# Set "PREFIX" to the root of the mingw installed files.
++
++PREFIX = /mingw
++
++CC=gcc
++CFLAGS=-O -Iinclude -I$(PREFIX)/include -D_WINSOCKAPI_ -fnative-struct
++LDFLAGS=-L. -L$(PREFIX)/lib
++LIBS=-lwsock32 -lz
++
++AR=ar rc
++DLLTOOL=dlltool
++DLLWRAP=dllwrap
++
++LIBSRCS=HTMLparser.c	\
++	HTMLtree.c	\
++	SAX.c		\
++	debugXML.c	\
++	encoding.c	\
++	entities.c	\
++	error.c		\
++	nanoftp.c	\
++	nanohttp.c	\
++	parser.c	\
++	parserInternals.c	\
++	tree.c		\
++	valid.c		\
++	xlink.c		\
++	xmlIO.c		\
++	xmlmemory.c	\
++	xpath.c		\
++	uri.c
++
++LIBOBJS=$(LIBSRCS:.c=.o)
++
++OBJS=$(LIBOBJS)
++
++LIBBASE=xml
++LIB=lib$(LIBBASE).a
++DLL=$(LIB:.a=.dll)
++
++OBJ1=testHTML.o
++OBJ2=testSAX.o
++OBJ3=testURI.o
++EXE1=$(OBJ1:.o=.exe)
++EXE2=$(OBJ2:.o=.exe)
++EXE3=$(OBJ3:.o=.exe)
++
++IMPBASE=$(LIBBASE)_dll
++IMP=lib$(IMPBASE).a
++
++DEF=$(DLL:.dll=.def)
++
++all: $(LIB) $(DLL) $(DEF) $(IMP) $(EXE1) $(EXE2) $(EXE3)
++
++dll: $(DLL)
++
++lib: $(LIB)
++
++$(DLL): $(LIB) $(DEF) $(IMP)
++	$(DLLWRAP) --def $(DEF) --dllname $@ --output-lib $@ $(LIB) $(LDFLAGS) $(LIBS) -mwindows
++
++$(LIB): $(LIBOBJS)
++	$(AR) $@ $^
++
++$(DEF): $(LIBOBJS)
++	$(DLLTOOL) --kill-at --export-all -D $(DLL) --output-def $@ $^
++
++$(IMP): $(DEF)
++	$(DLLTOOL) -d $< -l $@ -D $(DLL)
++
++$(EXE1): $(OBJ1) $(LIBOBJS) $(DLL)
++	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
++	strip $@.exe
++
++$(EXE2): $(OBJ2) $(LIBOBJS) $(DLL)
++	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
++	strip $@.exe
++
++$(EXE3): $(OBJ3) $(LIBOBJS) $(LIB)
++	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS) -l$(LIBBASE) $(LIBS)
++	strip $@.exe
++
++.c.o:
++	$(CC) $(CFLAGS) -c $< -o $@	
++
++clean:
++	rm *.o *.a *.dll *.def
++
++test: all
++	./$(EXE1)	-c $(OBJS) | xxd | head -3
+Index: win32/README.MSDev
+@@ -1,41 +1,30 @@
+-The configuration stuff (i.e. what should be enabled/disabled) is in xmlversion.h
+-I only tested it compiled fine with the current settings 
++If you're creating libxml2 with the "mingw" compiler, just copy the
++Makefile.mingw to the root directory as "Makefile", edit the PREFIX
++value, and run "make".
++
++If you're using MSVC, here are some instructions for how you can
++proceed:
++
++The configuration stuff (i.e. what should be enabled/disabled) is in
++xmlversion.h I only tested it compiled fine with the current settings
+ (that is nearly everything disabled, I didn't need many features)
+ 
+ ----------------------------
+ 
+-How did I get everything in place so the MSDev project works from the original archive?
++How did I get everything in place so the MSDev project works from the
++original archive?
+ 
+ from the cygwin prompt (http://sources.redhat.com/cygwin) :
+ $ ./configure --disable-corba --without-ftp --without-http --without-html --wit
+ hout-xpath --without-iconv --without-debug
+ 
+-created a libxml directory and copied the following headers in:
+-HTMLparser.h       entities.h         tree.h             xmlIO.h
+-HTMLtree.h         nanoftp.h          uri.h              xmlmemory.h
+-SAX.h              nanohttp.h         valid.h            xmlversion.h
+-debugXML.h         parser.h           xlink.h            xpath.h
+-encoding.h         parserInternals.h  xml-error.h
+-
+-modified win32config.h to comment out 
+-#define LIBXML_VERSION 20204
+-#define LIBXML_VERSION_STRING "2.2.4"
+-(is already in xmlversion.h)
+-
+ built the project file for the static library
+ 
+ ----------------------------
+ 
+ diff after doing the changes and cleaning up the generated stuff:
+ 
+-Only in libxml2-2.2.4: MSDev
+-Common subdirectories: libxml2-2.2.4/SAXresult and libxml2-2.2.4-reference/SAXresult
+-Common subdirectories: libxml2-2.2.4/doc and libxml2-2.2.4-reference/doc
+-Common subdirectories: libxml2-2.2.4/example and libxml2-2.2.4-reference/example
+-Only in libxml2-2.2.4: libxml
+-Common subdirectories: libxml2-2.2.4/result and libxml2-2.2.4-reference/result
+-Common subdirectories: libxml2-2.2.4/test and libxml2-2.2.4-reference/test
+-Only in libxml2-2.2.4: win32config.h
++[Note: this is out of date]
+ diff libxml2-2.2.4/xmlversion.h libxml2-2.2.4-reference/xmlversion.h
+ 38c38
+ < #if 0
+Index: xpath.c
+@@ -19,7 +19,7 @@
+ #include "config.h"
+ #endif
+ 
+-#include "xmlversion.h"
++#include <libxml/xmlversion.h>
+ #ifdef LIBXML_XPATH_ENABLED
+ 
+ #include <stdio.h>
+@@ -778,8 +778,10 @@
+ 	if (obj->nodesetval != NULL)
+ 	    xmlXPathFreeNodeSet(obj->nodesetval);
+     } else if (obj->type == XPATH_LOCATIONSET) {
++#if 0
+ 	if (obj->user != NULL)
+ 	    xmlXPathFreeLocationSet(obj->user);
++#endif
+     } else if (obj->type == XPATH_STRING) {
+ 	if (obj->stringval != NULL)
+ 	    xmlFree(obj->stringval);

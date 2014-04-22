@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XPath Node Selection Using ...[@attr=&quot;value&quo</title>
+<meta name="Author" content="Tim Ruddick (truddick@eng.us.uu.net)">
+<meta name="Subject" content="[xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]</h1>
+<!-- received="Tue Apr 25 16:08:48 2000" -->
+<!-- isoreceived="20000425200848" -->
+<!-- sent="Tue, 25 Apr 2000 16:08:33 -0400 (EDT)" -->
+<!-- isosent="20000425200833" -->
+<!-- name="Tim Ruddick" -->
+<!-- email="truddick@eng.us.uu.net" -->
+<!-- subject="[xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]" -->
+<!-- id="Pine.BSI.4.05Lt.10004251548180.11994-100000@perrier.eng.us.uu.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tim Ruddick (<a href="mailto:truddick@eng.us.uu.net?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]"><em>truddick@eng.us.uu.net</em></a>)<br>
+<strong>Date:</strong> Tue Apr 25 2000 - 16:08:33 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<li><strong>Previous message:</strong> <a href="0467.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<li><strong>Reply:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have an XML document containing text similar to the following snippet:
+<br>
+<p>&nbsp;&nbsp;&lt;config&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tables&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;table&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;page-size&gt;8192&lt;/page-size&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/table&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;index num=&quot;1&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;page-size&gt;512&lt;/page-size&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/index&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;index num=&quot;2&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;page-size&gt;1024&lt;/page-size&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/index&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tables&gt;
+<br>
+&nbsp;&nbsp;&lt;/config&gt;
+<br>
+<p>I'm using libxml v2.0 and I'd like to be able to select one or the other
+<br>
+of those &quot;index&quot; nodes using an XPath expression like
+<br>
+<p>&nbsp;&nbsp;/config/tables/index[@num=&quot;1&quot;]
+<br>
+<p>or
+<br>
+<p>&nbsp;&nbsp;/config/tables/index[@num=&quot;2&quot;]
+<br>
+<p>Unfortunately, when I try this, I get the following message on stderr when
+<br>
+I call xmlXPathEval:
+<br>
+<p>&nbsp;&nbsp;xmlXPathEval: 2 object left on the stack
+<br>
+<p>Running textXPath, I get the following
+<br>
+<p>&nbsp;&nbsp;% testXPath -i dano-config.xml '/config/tables/index[@num=&quot;1&quot;]'
+<br>
+&nbsp;&nbsp;xmlXPathEval: 2 object left on the stack
+<br>
+&nbsp;&nbsp;Object is a Node Set :
+<br>
+&nbsp;&nbsp;Set contains 1 nodes:
+<br>
+&nbsp;&nbsp;1    ATTRIBUTE num
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=1
+<br>
+<p>Doing the same for the &quot;table&quot; node, I get something closer to what I
+<br>
+expect, namely:
+<br>
+<p>&nbsp;&nbsp;% testXPath -i dano-config.xml '/config/tables/table'         
+<br>
+&nbsp;&nbsp;Object is a Node Set :
+<br>
+&nbsp;&nbsp;Set contains 1 nodes:
+<br>
+&nbsp;&nbsp;1    ELEMENT table
+<br>
+<p>I notice that there is a message regarding a problem similar to this on
+<br>
+February 3 (&quot;[xml] XPath Questions&quot;).  I'm curious to know whether this is
+<br>
+still a recognized problem, or if I'm doing something wrong.
+<br>
+<p>Thanks!
+<br>
+Tim.
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Node%20Selection%20Using%20...[@attr=&quot;value&quot;]">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<li><strong>Previous message:</strong> <a href="0467.html">Daniel Veillard: "Re: [xml] Handling of parser errors"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<li><strong>Reply:</strong> <a href="0469.html">Daniel Veillard: "Re: [xml] XPath Node Selection Using ...[@attr=&quot;value&quot;]"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

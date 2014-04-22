@@ -1,0 +1,18 @@
+Index: tree.c
+===================================================================
+RCS file: /sources/public/XML/tree.c,v
+retrieving revision 1.134
+diff -p -r1.134 tree.c
+*** tree.c	2000/10/25 19:26:53	1.134
+--- tree.c	2000/10/29 17:35:01
+*************** xmlSearchNsByHref(xmlDocPtr doc, xmlNode
+*** 3569,3574 ****
+--- 3569,3575 ----
+  	                    goto shadowed;
+  		        tst = tst->next;
+  		    }
++ 		    check = check->parent;
+  		}
+  		return(cur);
+  	    }
+

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Glitch with external entity files; patch enclosed</title>
+<meta name="Author" content="Kenneth Pronovici (pronovic@skyjammer.com)">
+<meta name="Subject" content="Re: [xml] Glitch with external entity files; patch enclosed">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Glitch with external entity files; patch enclosed</h1>
+<!-- received="Wed Nov  8 17:51:02 2000" -->
+<!-- isoreceived="20001108225102" -->
+<!-- sent="Wed, 8 Nov 2000 16:50:48 -0600 (CST)" -->
+<!-- isosent="20001108225048" -->
+<!-- name="Kenneth Pronovici" -->
+<!-- email="pronovic@skyjammer.com" -->
+<!-- subject="Re: [xml] Glitch with external entity files; patch enclosed" -->
+<!-- id="Pine.LNX.3.96.1001108163855.16307V-100000@skyjammer.com" -->
+<!-- inreplyto="20001108233514.D27831@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kenneth Pronovici (<a href="mailto:pronovic@skyjammer.com?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed"><em>pronovic@skyjammer.com</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 17:50:48 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Previous message:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Reply:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;   I think this is completely bogus and the reason of your problem.
+</em><br>
+<em>&gt; You just assume that in all and any URI-Reference computation leading
+</em><br>
+<em>&gt; to an external fetching this sequence should be added. You don't have
+</em><br>
+<em>&gt; the right to do this.
+</em><br>
+<p>First, I'm open to suggestions on a better way to do this...  Maybe
+<br>
+I've misunderstood the point of the entity loader?
+<br>
+<p>I don't have a corporate DTD server, but I use XML on multiple machines.  
+<br>
+I'm generating XML on machine A, which has its copies of a DTD in 
+<br>
+/dvl/fds/dtd.  I'm using TIBCO to send messages from machine A to a process 
+<br>
+on machine B, which has its own copies of the DTDs in a (possibly different)
+<br>
+directory.  The idea is that each document references a DTD, and then each 
+<br>
+individual program knows where to find that file.  Am I mis-using my entity 
+<br>
+loaders?
+<br>
+<p><em>&gt;   However I must admit (I discovered it today) that the entity loader
+</em><br>
+<em>&gt; is called and the URI location of the resource effectively used has
+</em><br>
+<em>&gt; been changed, then this must me made available back to the parser. I
+</em><br>
+<em>&gt; think it is through the filename field of the returned 
+</em><br>
+<em>&gt; xmlParserInputPtr but I must double check that it's done the right way
+</em><br>
+<em>&gt; (especially if it uses HTTP and a redirection).
+</em><br>
+<p>I'm also confused on this.  Regardless, the issue still is that the entity 
+<br>
+loader is being called twice for the same entity.  I don't see how there is
+<br>
+any way I could implement an entity loader and make this work under
+<br>
+those circumstances... if it's already been called once, and libxml
+<br>
+saves the result, and then calls it again with that saved result, 
+<br>
+how could my external entity loader ever be right, even disregarding
+<br>
+whether you think I should be using it the way I am?
+<br>
+<p>KEN
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Previous message:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Reply:</strong> <a href="1158.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 18:43:30 EST</em>
+</em>
+</small>
+</body>
+</html>

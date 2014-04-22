@@ -1,0 +1,19 @@
+diff -p -r1.5 parserInternals.c
+*** parserInternals.c	2000/10/09 12:27:32	1.5
+--- parserInternals.c	2000/10/15 20:23:28
+*************** xmlParserInputShrink(xmlParserInputPtr i
+*** 1025,1030 ****
+--- 1025,1036 ----
+      CHECK_BUFFER(in);
+  
+      used = in->cur - in->buf->buffer->content;
++     /*
++      * Do not shrink on large buffers whose only a tiny fraction
++      * was consumned
++      */
++     if (in->buf->buffer->use > used + 2 * INPUT_CHUNK)
++ 	return;
+      if (used > INPUT_CHUNK) {
+  	ret = xmlBufferShrink(in->buf->buffer, used - LINE_LEN);
+  	if (ret > 0) {
+

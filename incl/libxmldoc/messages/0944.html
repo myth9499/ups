@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Memory lacks using XMLLIB under MPE OS</title>
+<meta name="Author" content="Grasso Massimiliano (Massimiliano.Grasso@elsag.it)">
+<meta name="Subject" content="RE: [xml] Memory lacks using XMLLIB under MPE OS">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Memory lacks using XMLLIB under MPE OS</h1>
+<!-- received="Fri Oct 13 06:26:50 2000" -->
+<!-- isoreceived="20001013102650" -->
+<!-- sent="Fri, 13 Oct 2000 12:26:10 +0200" -->
+<!-- isosent="20001013102610" -->
+<!-- name="Grasso Massimiliano" -->
+<!-- email="Massimiliano.Grasso@elsag.it" -->
+<!-- subject="RE: [xml] Memory lacks using XMLLIB under MPE OS" -->
+<!-- id="747D2ED67A22D41181240090273F51E26ED64A@gspsvr.gsp.elsag.it" -->
+<!-- inreplyto="[xml] Memory lacks using XMLLIB under MPE OS" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Grasso Massimiliano (<a href="mailto:Massimiliano.Grasso@elsag.it?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS"><em>Massimiliano.Grasso@elsag.it</em></a>)<br>
+<strong>Date:</strong> Fri Oct 13 2000 - 06:26:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0943.html">Wayne Davison: "[xml] win32config.h.in"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0935.html">Grasso Massimiliano: "[xml] Memory lacks using XMLLIB under MPE OS"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+thanks for your suggestions. Now we're trying to use the library memory
+<br>
+debug, but we have an error using xmlMemoryDump:
+<br>
+---------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MEMORY ALLOCATED : 788, MAX was 32751
+<br>
+BLOCK  NUMBER   SIZE  TYPE
+<br>
+0         342      2 malloc()  in PARSER1.LIBXMLC.SERINO(2641) &quot;&amp;&quot;
+<br>
+1         341      4 malloc()  in PARSER1.LIBXMLC.SERINO(2641) &quot;amp&quot;
+<br>
+2         340     60 malloc()  in ENTITIES.LIBXMLC.SERINO(119) pointer to
+<br>
+#341 a
+<br>
+t index 8
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;......
+<br>
+12        330      2 malloc()  in PARSER1.LIBXMLC.SERINO(2641) &quot;&lt;&quot;
+<br>
+13        329      3 malloc()  in PARSER1.LIBXMLC.SERINO(2641) &quot;lt&quot;
+<br>
+14        328     60 malloc()  in ENTITIES.LIBXMLC.SERINO(119) pointer to
+<br>
+#329 a
+<br>
+t index 8
+<br>
+15        327    128 malloc()  in ENTITIES.LIBXMLC.SERINO(1036) pointer to
+<br>
+#328 
+<br>
+at index 0
+<br>
+**** Data memory protection trap (TRAPS 68).
+<br>
+<p>So, at the same time, we're going to get in some other way the map of all
+<br>
+pointers that are allocated, reallocated and free; doing that we hope to
+<br>
+understand where the problem is. At the moment seems that:
+<br>
+- some pointers are not deallocated 
+<br>
+- the library try to deallocate pointers never allocated
+<br>
+<p>I'm sorry but at the moment I can't send you the patch, for two reasons: 
+<br>
+- the library was not modified to be portable also in MPE; with our changes
+<br>
+the library works only under mpe... (not too smart, I know)
+<br>
+- our changes are not fully tested; in other words i'm not sure that the
+<br>
+only problem is the one of memory.
+<br>
+Below I write something about the problems that you find if you try to
+<br>
+compile and use XMLLIB under MPE:
+<br>
+- filename max 8 char
+<br>
+- filename without extension (so you must put all the header file in a
+<br>
+directory, the source file in another directory, then define 'file
+<br>
+equations' to get matching the files and their logical names in the sources)
+<br>
+- you have only one level of directory
+<br>
+- the maximum length of a line inside a file that you want to compile is 80
+<br>
+char
+<br>
+- you must write the system routine 'getcwd()', that don't exist under MPE
+<br>
+<p>I'll send you news about the patches and the solution of my problem as soon
+<br>
+as I can.
+<br>
+<p>Massimiliano
+<br>
+<p>-----Original Message-----
+<br>
+From: Daniel Veillard [mailto:<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">Daniel.Veillard@w3.org</a>]
+<br>
+Sent: giovedì 12 ottobre 2000 10.42
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">xml@rpmfind.net</a>
+<br>
+Cc: Bovone Stefano
+<br>
+Subject: Re: [xml] Memory lacks using XMLLIB under MPE OS
+<br>
+<p><p><p>&nbsp;&nbsp;Hi Grasso,
+<br>
+<p>On Thu, Oct 12, 2000 at 10:23:22AM +0200, Grasso Massimiliano wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; We're trying to use the XML library under the OS MPE 5.5 of  HP 3K
+</em><br>
+<em>&gt; calculators. To compile the sources we had to write some system routines
+</em><br>
+(),
+<br>
+<em>&gt; non existent under MPE.  
+</em><br>
+<p>&nbsp;&nbsp;Hum, send the patches, If I need to define an level of abstraction
+<br>
+from the OS this may help (like getting WIN CE patches).
+<br>
+<p><em>&gt; In our applicaton we have a loop and for each iteration we perform a
+</em><br>
+parsing
+<br>
+<em>&gt; and a validation of a very simple XML syntax.  In lines below there is a
+</em><br>
+<em>&gt; little sample of the source that we have written:
+</em><br>
+<em>&gt; 
+</em><br>
+[...]
+<br>
+&nbsp;&nbsp;The code seems to indicate that your don't modify the doc tree with
+<br>
+memory allocated outside libxml so the debugging approach given below
+<br>
+seems doable.
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; When we checked the memory allocated for the process we discovered that it
+</em><br>
+<em>&gt; was increasing at each iteration. Perhaps our problem is in the use of
+</em><br>
+<em>&gt; deallocation routines? Do someone use in the same way the library under
+</em><br>
+<em>&gt; other OS without problems? In the latest case probably the problem could
+</em><br>
+be
+<br>
+<em>&gt; either in our porting or in the OS itself.
+</em><br>
+<em>&gt; Thank a lot for help, sorry for English...
+</em><br>
+<p>&nbsp;&nbsp;Hum, the best is to enable libxml memory debug, and call xmlMemoryDump();
+<br>
+before exit (like I do in xmllint.c) . If the memory debug is turned on,
+<br>
+all memory blocks allocated by libxml and not freed by libxml will be 
+<br>
+saved in a .memdump file. This may help  a lot finding where the problem
+<br>
+lies. All my regression checks are done with this enabled and check that
+<br>
+there is 0 memory left allocated at the end of the execution, but depending
+<br>
+on the combination of calls I may have forgot something.
+<br>
+&nbsp;&nbsp;To enable the memory tracing, enable DEBUG_MEMORY_LOCATION in xmlversion.h
+<br>
+and compile xmlmemory.c in, the simplest is to configure with
+<br>
+--with-mem-debug
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0943.html">Wayne Davison: "[xml] win32config.h.in"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0935.html">Grasso Massimiliano: "[xml] Memory lacks using XMLLIB under MPE OS"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 13 2000 - 09:43:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

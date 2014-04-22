@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-1.8.5 is released</title>
+<meta name="Author" content="he@physics.usyd.edu.au (he@physics.usyd.edu.au)">
+<meta name="Subject" content="Re: [xml] libxml-1.8.5 is released">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-1.8.5 is released</h1>
+<!-- received="Mon Jan 24 04:19:04 2000" -->
+<!-- isoreceived="20000124091904" -->
+<!-- sent="Mon, 24 Jan 2000 11:15:14 +1100 (EST)" -->
+<!-- isosent="20000124001514" -->
+<!-- name="he@physics.usyd.edu.au" -->
+<!-- email="he@physics.usyd.edu.au" -->
+<!-- subject="Re: [xml] libxml-1.8.5 is released" -->
+<!-- id="200001240015.LAA14161@simulton.physics.usyd.edu.au" -->
+<!-- inreplyto="20000121143652.B27463@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:he@physics.usyd.edu.au?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released"><em>he@physics.usyd.edu.au</em></a><br>
+<strong>Date:</strong> Sun Jan 23 2000 - 19:15:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>Previous message:</strong> <a href="0294.html">Havoc Pennington: "[xml] attribute value processing"</a>
+<li><strong>In reply to:</strong> <a href="0293.html">Daniel Veillard: "[xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>Reply:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+hi,
+<br>
+<p>Two problems:
+<br>
+<p>You have the following XML code:
+<br>
+&lt;A B=&quot;linux is cool&quot;&gt;
+<br>
+Gnome is cool too.
+<br>
+&lt;/A&gt;
+<br>
+<p>1. Which sections of the above code do you treat as  text nodes?  It
+<br>
+&nbsp;&nbsp;seems that libxml treats both &quot;linux is cool&quot; and &quot;Gnome is cool too.&quot;
+<br>
+as text nodes.  Hence, according to XMLPath, &quot;linux is cool&quot; should be a
+<br>
+child of A since it is a text node? Or should &quot;linux is cool&quot; be
+<br>
+regarded part of the attribute, B?
+<br>
+<p>2. Should /child::A/attribute::B/parent::A give back the node A?  I
+<br>
+&nbsp;&nbsp;&nbsp;tried testXPath and it returns an empty Node Set.
+<br>
+<p>Hao
+<br>
+<p><p>On 21 Jan, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;   This is mostly a bugfix release for 1.8.4:
+</em><br>
+<em>&gt;    - fixed a hideous bug in xmlGetProp pointed by <a href="mailto:Rune.Djurhuus@fast.no?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">Rune.Djurhuus@fast.no</a> 
+</em><br>
+<em>&gt;    - Jody Goldberg &lt;<a href="mailto:jgoldberg@home.com?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">jgoldberg@home.com</a>&gt; provided another patch
+</em><br>
+<em>&gt;      trying to solve the zlib checks problems 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; it's available from the Gnome FTP site and rpmfind:
+</em><br>
+<em>&gt;   <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<p><pre>
+-- 
+<p>----------------------------------------------------
+Department of Theoretical Physics  Tel:61-2-93515770
+School of Physics	A28	   Mob:0410-512027
+The University of Sydney  	   Fax:61-2-93517726
+NSW 2006	       email: <a href="mailto:he@physics.usyd.edu.au?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">he@physics.usyd.edu.au</a>
+Australia   www: <a href="http://www.physics.usyd.edu.au/~he/">http://www.physics.usyd.edu.au/~he/</a>
+____________________________________________________
+  .~.
+  /V\          L   I   N   U   X
+ // \\      &gt;The choice of freedom.&lt;
+/(   )\	       www.gamelinux.com	
+ ^^-^^      &gt;The choice of linux games&lt;
+____________________________________________________
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.5%20is%20released">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>Previous message:</strong> <a href="0294.html">Havoc Pennington: "[xml] attribute value processing"</a>
+<li><strong>In reply to:</strong> <a href="0293.html">Daniel Veillard: "[xml] libxml-1.8.5 is released"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<li><strong>Reply:</strong> <a href="0296.html">Daniel Veillard: "Re: [xml] libxml-1.8.5 is released"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:58 EDT</em>
+</em>
+</small>
+</body>
+</html>

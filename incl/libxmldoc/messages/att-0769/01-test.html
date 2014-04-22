@@ -1,0 +1,8 @@
+<HTML><HEAD>
+<TITLE>test</TITLE>
+</HEAD><BODY>
+This HREF value is OK: 
+<A HREF="#IA-‘">‘</A>,
+but after the previous high-bit character (that was outside of a tag),
+we've now been converted into UTF8, and the following HREF value is not OK:
+<A HREF="#IA-‘">‘</A>

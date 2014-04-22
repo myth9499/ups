@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Undefined references: gjobread.c won't compile</title>
+<meta name="Author" content="Dan Turchin (dan@aeroprise.com)">
+<meta name="Subject" content="[xml] Undefined references: gjobread.c won't compile">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Undefined references: gjobread.c won't compile</h1>
+<!-- received="Thu Jan  4 12:44:36 2001" -->
+<!-- isoreceived="20010104174436" -->
+<!-- sent="Thu, 4 Jan 2001 09:34:00 -0800" -->
+<!-- isosent="20010104173400" -->
+<!-- name="Dan Turchin" -->
+<!-- email="dan@aeroprise.com" -->
+<!-- subject="[xml] Undefined references: gjobread.c won't compile" -->
+<!-- id="01C07631.77FB3200.dan@aeroprise.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Dan Turchin (<a href="mailto:dan@aeroprise.com?subject=Re:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile"><em>dan@aeroprise.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 04 2001 - 12:34:00 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>Previous message:</strong> <a href="1320.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>Reply:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I untarred the package, ran configure and did a make - all without 
+<br>
+problems.  When I try to compile the sample file, though, I'm told that the 
+<br>
+functions in the header files can't be found.  I think I'm missing 
+<br>
+something simple...
+<br>
+<p>Here's my gcc command (using a -l flag to find the correct header files):
+<br>
+<p># gcc -I/usr/local/libxml2-2.10/libxml -g -Wall gjobread.c -o gjobread
+<br>
+<p>and here's the output:
+<br>
+<p>/tmp/ccubsU6P.o: In function `parsePerson':
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:63: undefined reference to 
+<br>
+`xmlNodeListGetString'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:65: undefined reference to 
+<br>
+`xmlNodeListGetString'
+<br>
+/tmp/ccubsU6P.o: In function `parseJob':
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:122: undefined reference to 
+<br>
+`xmlGetProp'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:128: undefined reference to 
+<br>
+`xmlNodeListGetString'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:130: undefined reference to 
+<br>
+`xmlNodeListGetString'
+<br>
+/tmp/ccubsU6P.o: In function `parseGjobFile':
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:176: undefined reference to 
+<br>
+`xmlParseFile'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:183: undefined reference to 
+<br>
+`xmlDocGetRootElement'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:186: undefined reference to 
+<br>
+`xmlFreeDoc'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:189: undefined reference to 
+<br>
+`xmlSearchNsByHref'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:193: undefined reference to 
+<br>
+`xmlFreeDoc'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:198: undefined reference to 
+<br>
+`xmlFreeDoc'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:208: undefined reference to 
+<br>
+`xmlFreeDoc'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:218: undefined reference to 
+<br>
+`xmlIsBlankNode'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:228: undefined reference to 
+<br>
+`xmlDocDump'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:230: undefined reference to 
+<br>
+`xmlFreeDoc'
+<br>
+/tmp/ccubsU6P.o: In function `main':
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:265: undefined reference to 
+<br>
+`xmlCheckVersion'
+<br>
+/usr/local/libxml2-2.10/example/gjobread.c:266: undefined reference to 
+<br>
+`xmlKeepBlanksDefault'
+<br>
+collect2: ld returned 1 exit status
+<br>
+<p><p>The package is in /usr/local/libxml2-2.10 and the header files are in 
+<br>
+/usr/local/libxml2-2.10/libxml.
+<br>
+<p>Any ideas?
+<br>
+Thanks,
+<br>
+<p>-dan
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Undefined%20references:%20gjobread.c%20won't%20compile">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>Previous message:</strong> <a href="1320.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<li><strong>Reply:</strong> <a href="1322.html">Alfred Reibenschuh: "RE: [xml] Undefined references: gjobread.c won't compile"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 04 2001 - 13:43:36 EST</em>
+</em>
+</small>
+</body>
+</html>

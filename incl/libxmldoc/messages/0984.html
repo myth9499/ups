@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] minor libxml2-2.2.5 glitches</title>
+<meta name="Author" content="Antonio Alvarado (aalvarado@sema.com.ve)">
+<meta name="Subject" content="RE: [xml] minor libxml2-2.2.5 glitches">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] minor libxml2-2.2.5 glitches</h1>
+<!-- received="Mon Oct 16 11:27:48 2000" -->
+<!-- isoreceived="20001016152748" -->
+<!-- sent="Mon, 16 Oct 2000 12:00:06 -0400" -->
+<!-- isosent="20001016160006" -->
+<!-- name="Antonio Alvarado" -->
+<!-- email="aalvarado@sema.com.ve" -->
+<!-- subject="RE: [xml] minor libxml2-2.2.5 glitches" -->
+<!-- id="41157D026B64D311A78600D0090553565DA823@SVR_SEMA" -->
+<!-- inreplyto="[xml] minor libxml2-2.2.5 glitches" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Antonio Alvarado (<a href="mailto:aalvarado@sema.com.ve?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches"><em>aalvarado@sema.com.ve</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 12:00:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0983.html">Daniel Veillard: "Re: [xml] Still validating while using SAX Interface?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I also have problems with SOCKLEN_T using msdev.  But editing that file
+<br>
+(win32config.h) the building process could be succefully!
+<br>
+<p><em>&gt; -----Mensaje original-----
+</em><br>
+<em>&gt; De:	Wayne Davison [SMTP:<a href="mailto:wayned@users.sourceforge.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">wayned@users.sourceforge.net</a>]
+</em><br>
+<em>&gt; Enviado el:	Lunes 16 de Octubre de 2000 12:31 AM
+</em><br>
+<em>&gt; Para:	libxml
+</em><br>
+<em>&gt; Asunto:	[xml] minor libxml2-2.2.5 glitches
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I grabbed the libxml2-2.2.5 tar file from the gnome ftp server, and I
+</em><br>
+<em>&gt; encountered a problem building it using the MinGW build environment:  I
+</em><br>
+<em>&gt; had to edit include/win32config.h to add this line:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define SOCKLEN_T size_t
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm not sure if other Win32 build environments have this problem or not.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; One other thing I noticed:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; There's an extra copy of config.h and acconfig.h in the include/libxml
+</em><br>
+<em>&gt; dir, so I removed them both just to be sure that they weren't causing any
+</em><br>
+<em>&gt; problems.  You might want to change the tar-building rules to avoid
+</em><br>
+<em>&gt; putting these files in there.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ..wayne..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">majordomo@rpmfind.net</a>
+</em><br>
+<p>begin 600 winmail.dat
+<br>
+M&gt;)\^(@D0`0:0&quot;``$```````!``$``0&gt;0!@`(````Y`0```````#H``$(@`&lt;`
+<br>
+M&amp;````$E032Y-:6-R;W-O9G0@36%I;&quot;Y.;W1E`#$(`06``P`.````T`&lt;*`!``
+<br>
+M#`````8``0`$`0$@@`,`#@```-`'&quot;@`0``P````'``$`!0$!&quot;8`!`&quot;$````W
+<br>
+M-S&lt;S-C)&quot;,#0U03-$-#$Q0D,V.#`P,3`U044P,T%%-P#X!@$$@`$`)P```%)%
+<br>
+M.B!;&gt;&amp;UL72!M:6YO&lt;B!L:6)X;6PR+3(N,BXU(&amp;=L:71C:&amp;5S`*X,`0V`!``&quot;
+<br>
+M`````@`&quot;``$#D`8`?`@``&quot;H````+``(``0````,`+@``````0``Y`&quot;`-,B&gt;*
+<br>
+M-\`!'@!P``$````C````6WAM;%T@;6EN;W(@;&amp;EB&gt;&amp;UL,BTR+C(N-2!G;&amp;ET
+<br>
+M8VAE&lt;P```@%Q``$````;`````&lt;`W,5?/OI8Z7:%.$=2GZ`#0&quot;0535@`4&lt;`OP
+<br>
+M`!X`,4`!````&quot;@```$%!3%9!4D%$3P````,`&amp;D``````'@`P0`$````*````
+<br>
+M04%,5D%2041/`````P`90``````&quot;`0D0`0```!X$```:!```-P8``$Q:1G6[
+<br>
+MJB8O`P`*`')C&lt;&amp;&lt;Q,C7R,@#[,S8!Z`*D`^,&quot;``1C:`K`&lt;V5T,&quot;`/!Q,&quot;@P!0
+<br>
+M$$9P&lt;G$R;Q%)#E`#U1%5?0J`&quot;,@@]CL);PXP-15O&quot;F`&quot;@`J!DG8(D'=K&quot;X!D
+<br>
+M-`Q@-F,`4`L#8P!!&quot;V!N9Q@S,#@3@0O$($D@$0=`&lt;V\@$-!V92!E$I!O`F!E
+<br>
+M;00@`_!T`F@&amp;`$]#2TQ%3K!?5&quot;!U`)`9P&quot;`;T($!`'8N(&quot;!&quot;=05`KPF`'!`=
+<br>
+M$AP@805`9@,011M0*`/P;C,R!:!N81[@9RYH*1Z!&amp;U!BWG4#$!X@'2$;&lt;6,'
+<br>
+MD`0@W06@=2&quot;@(&amp;`;4',8T&quot;$PXF8AH&amp;QY(0JB&quot;H0*A'D+,&amp;QI#S$940%`&amp;W%T
+<br>
+MA060=!'4,38@+26&quot;XDT)\'-A:AM0!;`?T/\+@`=`)8,BQB24)&amp;$+$R268&amp;DM
+<br>
+M,30T`4`CX#$&lt;.#`!0`S0*2-B($0493H,@V(1,%=A&gt;3IN&amp;U!$&amp;S`$``(@(%M`
+<br>
+M4TU44#IW*S)DYD`&lt;\`20&lt;RX:\`AP(D&amp;1!;!G92XK4'1=(L5)*E!%;A@P860;
+<br>
+M`&amp;7R;&quot;J73'4K4`0@)5$!`.0@3R30=6(6T#!R`=!#*;`P0#(Z,S$10$TU+C=0
+<br>
+M&quot;L!A*I&lt;CX&amp;)XMFT)4&quot;Y&amp;02(0`C!O*I=Z6S/!71U`&quot;X`%L3.4,H@M,BXVL#4@
+<br>
+M9R/@_G00P`&gt;0)R\H.B/F#E`9HOT:`#`3@1.&quot;#`$BV1JP&quot;&lt;#_`:`AX&quot;'`(#(V
+<br>
+M/`&amp;0!&lt;`&gt;XSL#4B`C9S7P!X`&gt;T'1PYR(`!)`;0'(L&amp;L`8D!J@OR+$&quot;?`A@0(P
+<br>
+M!)`\,6$;9B\@:!P0'.4@,DT+@$=7;R!D'@`NT0-@;@&gt;``C`Z_QVP0`40T#Q!
+<br>
+M+R$&gt;(4)00(#[&quot;D`!`&quot;\?2T5R+P`\0@0`[S.!*U`JD&quot;+9(P$!2#$&lt;2;$`D'IE
+<br>
+M7R3@.QHG/D#_-?`%0&quot;(0,0$&amp;D&quot;9`(#$%P/97'U)#CW0$(!LC1]-!5NL%L4NQ
+<br>
+M+B+*3RM13'1'T;\=(1JP2[$-X`F`2&amp;M43)&amp;,92&lt;$(`.197AT,N#Y(7%P&gt;29`
+<br>
+M3%!&amp;US_&quot;`-#_1M&lt;+@&quot;`C1@8SFAX@/Y$:\7\:L!;0!&amp;`;0#Q#0;%,&lt;2#^:ASP
+<br>
+M!4!%@2'C,0$&gt;DR`Q)510=T#A;B&lt;%0&amp;-ANQST`'!Y(L0;=AVA60A@^37!9V@%
+<br>
+M0&quot;Q@`C!%&lt;A#!KQG`3I).D0K`+2!W&lt;B&amp;@XP&gt;11V)V;VD+,5R#'&gt;#_'D4'D#WQ
+<br>
+M'O$$(%8D%M!/Z_PN+BQC8^`BRB;H)=`$$#YA7M$^%R/@6;$SP4!R]'!M26%D
+<br>
+M+&gt;(BQ`&lt;0$,`^:5BR'K%$H%W@/Q`Z+ZXO,\$:\`&amp;`+BVA+P&gt;!&gt;68&quot;&lt;R\BQ$6!
+<br>
+M,``B$&amp;*O!/(AX$2@!9!H&amp;P`B:[GQ9R(B('P=0`MP`R!N`5YJ!;`O$`1@9V\*
+<br>
+M%($``7!@```+``&quot;`&quot;&quot;`&amp;``````#`````````1@`````#A0````````,`!8`(
+<br>
+M(`8``````,````````!&amp;`````!&quot;%`````````P`!@`@@!@``````P```````
+<br>
+M`$8`````4H4``+&lt;-```#``.`&quot;&quot;`&amp;``````#`````````1@`````!A0``````
+<br>
+M`!X``H`((`8``````,````````!&amp;`````%2%```!````!````#@N,``+``2`
+<br>
+M&quot;&quot;`&amp;``````#`````````1@`````.A0````````,`!H`((`8``````,``````
+<br>
+M``!&amp;`````!&amp;%`````````P`'@`@@!@``````P````````$8`````&amp;(4`````
+<br>
+M```&gt;``B`&quot;&quot;`&amp;``````#`````````1@`````VA0```0````$`````````'@`)
+<br>
+M@`@@!@``````P````````$8`````-X4```$````!`````````!X`&quot;H`((`8`
+<br>
+M`````,````````!&amp;`````#B%```!`````0`````````#`/$_&quot;@0```,`_3_D
+<br>
+M!````P`F```````#`#8```````,`@!#_____`@%'``$````T````8SU54SMA
+<br>
+M/2`[&lt;#U396UA($=R;W5P.VP]4U927U-%34$M,#`Q,#$V,38P,#`V6BTR,3$U
+<br>
+M`!X`.$`!````&quot;@```$%!3%9!4D%$3P```!X`.4`!````&quot;@```$%!3%9!4D%$
+<br>
+M3P```$``!S#`JQ8GBC?``4``&quot;#&quot;`&gt;J\GBC?``1X`/0`!````!0```%)%.B``
+<br>
+M````'@`=#@$````C````6WAM;%T@;6EN;W(@;&amp;EB&gt;&amp;UL,BTR+C(N-2!G;&amp;ET
+<br>
+M8VAE&lt;P``'@`U$`$````R````/#0Q,34W1#`R-D(V-$0S,3%!-S@V,#!$,#`Y
+<br>
+M,#4U,S4V-41!.#(S0%-64E]314U!/@````L`*0``````&quot;P`C```````#``80
+<br>
+M^Z+%I0,`!Q!2`P```P`0$``````#`!$0`````!X`&quot;!`!````90```$E!3%-/
+<br>
+M2$%615!23T),14U35TE42%-/0TM,14Y455-)3D=-4T1%5D)55$5$251)3D=4
+<br>
+M2$%41DE,12A724XS,D-/3D9)1T@I5$A%0E5)3$1)3D=04D]#15-30T]53$1&quot;
+<br>
+M15-50T,``````@%_``$````R````/#0Q,34W1#`R-D(V-$0S,3%!-S@V,#!$
+<br>
+<em>&gt;,#`Y,#4U,S4V-41!.#(S0%-64E]314U!/@```._Z
+</em><br>
+`
+<br>
+end
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20minor%20libxml2-2.2.5%20glitches">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0983.html">Daniel Veillard: "Re: [xml] Still validating while using SAX Interface?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0979.html">Wayne Davison: "[xml] minor libxml2-2.2.5 glitches"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 11:43:32 EDT</em>
+</em>
+</small>
+</body>
+</html>

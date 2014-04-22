@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Memory leaks in libxml 1.7.2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Memory leaks in libxml 1.7.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Memory leaks in libxml 1.7.2</h1>
+<!-- received="Thu Nov 25 05:31:56 1999" -->
+<!-- isoreceived="19991125103156" -->
+<!-- sent="Thu, 25 Nov 1999 05:31:54 -0500" -->
+<!-- isosent="19991125103154" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Memory leaks in libxml 1.7.2" -->
+<!-- id="19991125053154.G1005@w3.org" -->
+<!-- inreplyto="19991124074517.H8009@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Nov 25 1999 - 05:31:54 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0224.html">Daniel Veillard: "Re: [xml] libxml looses namespace info"</a>
+<li><strong>Previous message:</strong> <a href="0222.html">Joerg Wittenberger: "Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<li><strong>In reply to:</strong> <a href="0217.html">Daniel Veillard: "Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 24, 1999 at 07:45:17AM -0500, Daniel Veillard wrote:
+<br>
+<em>&gt; On Wed, Nov 24, 1999 at 01:15:15PM +0100, Andrea LUCIANO wrote:
+</em><br>
+<em>&gt; &gt; There are memory leaks in libxml 1.7.2 (in encoding.c allocating space for handler, line 391 420). 
+</em><br>
+<em>&gt; &gt; Are they fixed in later versions?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Well this is well known, and basically this memory is allocated
+</em><br>
+<em>&gt; when initializing the global encoding infrastructure for the parser.
+</em><br>
+<em>&gt; This sums up as 241 bytes, so I negelected it for the moment, 
+</em><br>
+<em>&gt; the proper way to do it would be to provide a cleanup fonction
+</em><br>
+<em>&gt; to be called at the end of the usage of the XML library.
+</em><br>
+<em>&gt;   I will try to implement it but applications will have to explicitely
+</em><br>
+<em>&gt; call it at the end of processing ,
+</em><br>
+<p>&nbsp;&nbsp;Ok, I have added a new function call to the parser API:
+<br>
+&nbsp;&nbsp;&nbsp;void        xmlCleanupParser                (void);
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://rpmfind.net/veillard/XML/gnome-xml-parser.html#XMLCLEANUPPARSER">http://rpmfind.net/veillard/XML/gnome-xml-parser.html#XMLCLEANUPPARSER</a>
+<br>
+<p>its goal is to free the extra memory that was allocated for parsing
+<br>
+processing (independantly of the documents memory). Call it once
+<br>
+you know you won't do anymore parsing in your application. For the moment
+<br>
+it just calls xmlCleanupCharEncodingHandlers() which will free
+<br>
+the encoding handler stucture registered at startup.
+<br>
+<p>&nbsp;It's commited in the CVS bases.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Memory%20leaks%20in%20libxml%201.7.2">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0224.html">Daniel Veillard: "Re: [xml] libxml looses namespace info"</a>
+<li><strong>Previous message:</strong> <a href="0222.html">Joerg Wittenberger: "Re: Réf. : Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<li><strong>In reply to:</strong> <a href="0217.html">Daniel Veillard: "Re: [xml] Memory leaks in libxml 1.7.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

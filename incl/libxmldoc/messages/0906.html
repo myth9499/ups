@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace problem with external DTD validation</title>
+<meta name="Author" content="Bill Kendrick (William.Kendrick@wcom.com)">
+<meta name="Subject" content="Re: [xml] Whitespace problem with external DTD validation">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace problem with external DTD validation</h1>
+<!-- received="Mon Oct  9 19:52:35 2000" -->
+<!-- isoreceived="20001009235235" -->
+<!-- sent="Mon, 9 Oct 2000 16:47:08 -0700" -->
+<!-- isosent="20001009234708" -->
+<!-- name="Bill Kendrick" -->
+<!-- email="William.Kendrick@wcom.com" -->
+<!-- subject="Re: [xml] Whitespace problem with external DTD validation" -->
+<!-- id="20001009164708.A21651@atari" -->
+<!-- inreplyto="39E2563B.B5F24B5A@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Kendrick (<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation"><em>William.Kendrick@wcom.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 09 2000 - 19:47:08 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0905.html">Bill Kendrick: "[xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, 09 Oct 2000 16:35:23 Joe McAlerney wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Actually, this is the way it is supposed to work according to W3c XML
+</em><br>
+<em>&gt; 1.0 spec.  See <a href="http://www.w3.org/TR/REC-xml#sec-white-space">http://www.w3.org/TR/REC-xml#sec-white-space</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; My guess is that if whitespace is significant in your documents, then
+</em><br>
+<em>&gt; you need to state so in your DTD.
+</em><br>
+<p>They aren't significant...  We were assuming they would be ingored
+<br>
+by the validator.  Realize I'm talking about the whitespace BETWEEN
+<br>
+tags, not within tags.
+<br>
+<p>In other words, the difference between:
+<br>
+<p>&nbsp;&nbsp;&lt;tag1&gt;foo&lt;/tag1&gt;
+<br>
+&nbsp;&nbsp;&lt;tag2&gt;bar&lt;/tag2&gt;
+<br>
+<p>and:
+<br>
+<p>&nbsp;&nbsp;&lt;tag1&gt;foo&lt;/tag1&gt;&lt;tag2&gt;bar&lt;/tag2&gt;
+<br>
+<p><p>The validator accepts the latter (no whitespace between tags),
+<br>
+but complains about the former (whitespace between tags).
+<br>
+<p><p>I have an example XML document (Shakespear's &quot;The Tragedy of
+<br>
+Antony and Cleopatra&quot;) which has a DTD at the top.
+<br>
+<p>I've moved the DTD into it's own file (cleo.dtd) and tried
+<br>
+running the XML through libxml's validator using that
+<br>
+external DTD and it just barfs...
+<br>
+<p>&nbsp;&nbsp;Element PLAY content doesn't follow the Dtd
+<br>
+&nbsp;&nbsp;Expecting (TITLE , PERSONAE , SCNDESCR , PLAYSUBT , INDUCT? , PROLOGUE? ,
+<br>
+&nbsp;&nbsp;ACT+ , EPILOGUE?), got (CDATA TITLE CDATA PERSONAE CDATA SCNDESCR CDATA
+<br>
+&nbsp;&nbsp;PLAYSUBT CDATA ACT CDATA ACT CDATA ACT CDATA ACT CDATA ACT CDATA)
+<br>
+&nbsp;&nbsp;...
+<br>
+<p><p>I assume if I were to write something that had libxml parse the
+<br>
+original XML document (which has the DTD internally at the top),
+<br>
+that it wouldn't complain.
+<br>
+<p>Having a 9044 line Shakespearean play all on one line seems kind of lame. ;)
+<br>
+<p><p><p><em>&gt; I have never had to do this, so I
+</em><br>
+<em>&gt; can't offer any advise on how to do so.  I'm sure the spec will help you
+</em><br>
+<em>&gt; out.  Here are some relevant threads that may help you out too:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; <a href="http://www.xmlsoft.org/messages/0830.html">http://www.xmlsoft.org/messages/0830.html</a>
+</em><br>
+<p>This one has to do with saving XML. ;)
+<br>
+<p><p><em>&gt; <a href="http://www.xmlsoft.org/messages/0716.html">http://www.xmlsoft.org/messages/0716.html</a>
+</em><br>
+<p>... as does this one.
+<br>
+<p><p><p>At this point (I just started working with XML and DTD's last
+<br>
+Friday ;) ), I don't know much, but I ASSUME either the problem
+<br>
+is a bug, or there's some &quot;ignore whitespace between tags&quot; flag
+<br>
+to set somewhere, or something...
+<br>
+<p><p>Thanks, though...
+<br>
+<p>-bill!
+<br>
+<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">William.Kendrick@wcom.com</a>
+<br>
+ext 6218
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0905.html">Bill Kendrick: "[xml] Whitespace problem with external DTD validation"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 09 2000 - 20:43:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: I18N Issues.</title>
+<meta name="Author" content="Y. Cheng (ycheng@phi.sinica.edu.tw)">
+<meta name="Subject" content="Re: [xml] Re: I18N Issues.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: I18N Issues.</h1>
+<!-- received="Tue Feb  8 20:09:17 2000" -->
+<!-- isoreceived="20000209010917" -->
+<!-- sent="Wed, 9 Feb 2000 09:09:10 +0800" -->
+<!-- isosent="20000209010910" -->
+<!-- name="Y. Cheng" -->
+<!-- email="ycheng@phi.sinica.edu.tw" -->
+<!-- subject="Re: [xml] Re: I18N Issues." -->
+<!-- id="20000209090910.A28552@phi.sinica.edu.tw" -->
+<!-- inreplyto="20000208170223.N24054@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Y. Cheng (<a href="mailto:ycheng@phi.sinica.edu.tw?subject=Re:%20[xml]%20Re:%20I18N%20Issues."><em>ycheng@phi.sinica.edu.tw</em></a>)<br>
+<strong>Date:</strong> Tue Feb 08 2000 - 20:09:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Reply:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Feb 08, 2000 at 05:02:23PM +0100, Daniel Veillard wrote:
+<br>
+<em>&gt; On Tue, Feb 08, 2000 at 09:11:13PM +0800, Y. Cheng wrote:
+</em><br>
+<em>&gt; &gt; On Tue, Feb 08, 2000 at 09:39:08AM +0100, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; &gt; &gt; 	With this, as the encoding change from XML_CHAR_ENCODING_NONE to
+</em><br>
+<em>&gt; &gt; &gt; &gt; some spectific encoding (well, say EUC-JP), we needs a function to
+</em><br>
+<em>&gt; &gt; &gt; &gt; transform the existing buffer from origional data to read utf8.
+</em><br>
+<em>&gt; &gt; &gt; &gt; (maybe xmlSwitchEncoding of call by xmlSwitchEncoding). But this
+</em><br>
+<em>&gt; &gt; &gt; &gt; transformation only accept transformation from XML_CHAR_ENCODING_NONE
+</em><br>
+<em>&gt; &gt; &gt; &gt; to some other encoding. Once the transformation is done, no more
+</em><br>
+<em>&gt; &gt; &gt; &gt; transformation is necessay (there is no method to switch encoding
+</em><br>
+<em>&gt; &gt; &gt; &gt; in the middle of XML document, right ?) so all other mechanism will
+</em><br>
+<em>&gt; &gt; &gt; &gt; work.
+</em><br>
+<em>&gt; &gt; &gt;    yep something like that is needed.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Do you think we should change from
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; isolat1ToUTF8(xxx *out, int outlen, xxx *in, int  inlen)
+</em><br>
+<em>&gt; &gt; 	to
+</em><br>
+<em>&gt; &gt; isolat1ToUTF8(xxx *out, int outlen, xxx *in, int *inlen)
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; which the output of inlen is how many bytes left on in.
+</em><br>
+<em>&gt;  isolat1ToUTF8 (and this class of functions) returns the number of byte
+</em><br>
+<em>&gt; written, or -1 by lack of space. So there is already an error condition
+</em><br>
+<em>&gt; but I agree that the upper layer pushing a buffer which doesn't end-up
+</em><br>
+<em>&gt; on a character boundary should not be considered an error. 
+</em><br>
+<p><em>&gt;  For compatibility with other similar apis, I would rather have *inlen
+</em><br>
+<em>&gt; return the actual number of byte read. In that case we could also not
+</em><br>
+&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<br>
+<em>&gt; generate an error if outlen is too small either. it's better to unify the
+</em><br>
+<em>&gt; two &quot;error&quot; case handling.
+</em><br>
+<p>Agree.
+<br>
+<p><em>&gt; &gt; &gt; &gt; 	And the last thing, the encoding transformation function in
+</em><br>
+<em>&gt; &gt; &gt; &gt; encoding.c (say UTF8ToUTF16) can't handle if not enough byte is
+</em><br>
+<em>&gt; &gt; &gt; &gt; given (say one the first byte of a three-bytes character is read in)
+</em><br>
+<em>&gt; &gt; &gt; &gt; For a thread-safe library, I suggest we add a return value to let
+</em><br>
+<em>&gt; &gt; &gt; &gt; UTF8toUTF16 say that some byte are not processed and store these
+</em><br>
+<em>&gt; &gt; &gt; &gt; byte in a new field on &quot;struct _xmlParserInput&quot;.
+</em><br>
+<em>&gt; &gt; &gt;   I'm not entierely convinced it's the place where this should be
+</em><br>
+<em>&gt; &gt; &gt; stored. I would rather add it to the input buffer. After all at one
+</em><br>
+<em>&gt; &gt; &gt; time multiple entities may be opened and we may have residual bytes
+</em><br>
+<em>&gt; &gt; &gt; from each of them.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; You mean &quot;struct _xmlParserInputBuffer&quot; ?
+</em><br>
+<em>&gt; &gt; If yes, I can't agree anymore and sorry not to notice this.
+</em><br>
+<em>&gt;   I assume I should read &quot;I can't agree more&quot;, right ?
+</em><br>
+<p>Yes.
+<br>
+<p><em>&gt; &gt; I think it' will be more moduler in this way.
+</em><br>
+<em>&gt; &gt; But with this, we need a function to say that 
+</em><br>
+<em>&gt; &gt; there are some bytes left (which can't be transformed
+</em><br>
+<em>&gt; &gt; into one single utf8) but we have got EOF already.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I plan to use iconv to convert many encoding to utf8.
+</em><br>
+<em>&gt; &gt; As I know, there are two implemention of stand-alone libiconv
+</em><br>
+<em>&gt; &gt; (glibc also has one, but if you don't want glibc).
+</em><br>
+<em>&gt;   yes but it has to be optionnal. Libxml is fairly standalone right
+</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^
+<br>
+<em>&gt; now, and I would rather keep it that way, at least for the major encodings
+</em><br>
+<em>&gt; required by the spec (ISO-Latin-x, UTF-8 and UTF-16 at least).
+</em><br>
+<p>Agree.
+<br>
+<p><em>&gt;   I am converting the parser code a lot there days, if you could focuse on
+</em><br>
+<em>&gt; encoding.c for a couple of days that would be easier.
+</em><br>
+<p>Okay, I will do that.
+<br>
+<p>ycheng
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0348.html">Lutz Behnke: "[xml] Using the encoders"</a>
+<li><strong>Previous message:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Reply:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Get a property for read-only purpose</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Get a property for read-only purpose">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Get a property for read-only purpose</h1>
+<!-- received="Thu Jul 13 09:37:09 2000" -->
+<!-- isoreceived="20000713133709" -->
+<!-- sent="Thu, 13 Jul 2000 15:33:24 +0200" -->
+<!-- isosent="20000713133324" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Get a property for read-only purpose" -->
+<!-- id="20000713153324.O16781@w3.org" -->
+<!-- inreplyto="8525691B.00495401.00@D51MTA03.pok.ibm.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Get%20a%20property%20for%20read-only%20purpose"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Jul 13 2000 - 09:33:24 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0595.html">Jordan Henderson: "RE: [xml] Get a property for read-only purpose"</a>
+<li><strong>Previous message:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<li><strong>In reply to:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0598.html">Peter Jacobi: "Re: [xml] Get a property for read-only purpose"</a>
+<li><strong>Reply:</strong> <a href="0598.html">Peter Jacobi: "Re: [xml] Get a property for read-only purpose"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jul 13, 2000 at 09:21:10AM -0400, <a href="mailto:rcx195@us.ibm.com?subject=Re:%20[xml]%20Get%20a%20property%20for%20read-only%20purpose">rcx195@us.ibm.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks Daniel for adding the xmlHasProp function.   It is helpful.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now there are two functions that can be used:
+</em><br>
+<em>&gt; 1. xmlGetProp for geting the value of a property.   Caller must release the
+</em><br>
+<em>&gt; memory.
+</em><br>
+<em>&gt; 2. xmlHasProp for checking whether a node contains a property.   This
+</em><br>
+<em>&gt; function does not allocate memory, but caller can not
+</em><br>
+<em>&gt;     know the value of the property by calling the function.
+</em><br>
+<p>&nbsp;&nbsp;yep,
+<br>
+<p><em>&gt; Is it possible that the value of a property is returned without allocating
+</em><br>
+<em>&gt; memory for it?   This could be useful if the caller only wants to read the
+</em><br>
+<em>&gt; value and does not want new memory to be allocated for storing the value of
+</em><br>
+<em>&gt; the property.
+</em><br>
+<p>&nbsp;&nbsp;no, for the simple reason that a property value may be built using
+<br>
+entities references, which need to be kept in the DOM to be able to
+<br>
+save them back. This mean that there is no garantee that the string returned
+<br>
+by xmlGetProp() ever existed in memory before being given back to the 
+<br>
+caller. 
+<br>
+&nbsp;&nbsp;I agree that in most case this string exists (content of the text
+<br>
+node child of the attribute node), but since this won't work 100% of the
+<br>
+time this seems had to change the API if it may fail. There is also
+<br>
+the problem that this string may change or be deallocated due to changes
+<br>
+in the document structure, and returning a pointer without copy exposes
+<br>
+the chances of crashing the client code due to an invalid reference.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Get%20a%20property%20for%20read-only%20purpose">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Get%20a%20property%20for%20read-only%20purpose">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Get%20a%20property%20for%20read-only%20purpose">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0595.html">Jordan Henderson: "RE: [xml] Get a property for read-only purpose"</a>
+<li><strong>Previous message:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<li><strong>In reply to:</strong> <a href="0593.html">rcx195@us.ibm.com: "[xml] Get a property for read-only purpose"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0598.html">Peter Jacobi: "Re: [xml] Get a property for read-only purpose"</a>
+<li><strong>Reply:</strong> <a href="0598.html">Peter Jacobi: "Re: [xml] Get a property for read-only purpose"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

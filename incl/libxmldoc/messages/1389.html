@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] libxml-2.2.12 amd libxslt-0.0.1 are out</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="[xml] libxml-2.2.12 amd libxslt-0.0.1 are out">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] libxml-2.2.12 amd libxslt-0.0.1 are out</h1>
+<!-- received="Thu Jan 25 15:13:01 2001" -->
+<!-- isoreceived="20010125201301" -->
+<!-- sent="Thu, 25 Jan 2001 21:12:52 +0100" -->
+<!-- isosent="20010125201252" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="[xml] libxml-2.2.12 amd libxslt-0.0.1 are out" -->
+<!-- id="20010125211252.Z6651@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20libxml-2.2.12%20amd%20libxslt-0.0.1%20are%20out"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Thu Jan 25 2001 - 15:12:52 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1388.html">Daniel Veillard: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;All this available at:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a>
+<br>
+&nbsp;&nbsp;and
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;in the stable tree of gnome.org for libxml2
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and unstable tree for libxslt
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;Well basically libxml-2.2.12 is a nearly normal realease, I
+<br>
+integrated a number of bugfixes, pacthed quite a few things, and
+<br>
+now honnestly now the XPath implementation seems decent, at least
+<br>
+good enought to run some non-trivial XSLT on top of it. Some of
+<br>
+the main chnages in the version were actually infrastructure changes
+<br>
+needed for the XSLT implementation. It should not break applications
+<br>
+based on libxml2 previous versions.
+<br>
+<p>&nbsp;&nbsp;On the other hand libxslt-0.0.1 is an Alpha release. I tried to
+<br>
+cover a reasonable number of features from the XSLT-1.0 spec but it's
+<br>
+clearly not feature complete. Check the FEATURES file to get a
+<br>
+precise idea. The embedded xmlproc test program show allow
+<br>
+to run non-trivial transformations anyway.
+<br>
+<p>&nbsp;&nbsp;The big parts missing are:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Imports
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Includes
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Key support
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Extensions
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Embedding Stylesheets
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:namespace-alias
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:attribute-set
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:element
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:copy
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:copy-of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:number/xsl:decimal-format
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:choose/xsl:when/xsl:otherwise
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- xsl:message
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- document() is incomplete
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- key and predicates in patterns
+<br>
+<p>&nbsp;&nbsp;A quick grep on FEATURES indicates 79 YES and 68 NO.
+<br>
+I hope to reach feature completion in 2-3 weeks. Bjorn Reese provided
+<br>
+formatting functions so I expect formatting to be in quite soon.
+<br>
+<p>&nbsp;&nbsp;What really need work is testing and documentation, I will work
+<br>
+on the later but if you already have XSLT examples and use cases,
+<br>
+well I would appreciate reports. Please provide the input files and
+<br>
+stylesheet and the expected result. Portability report welcome too,
+<br>
+I expect to handle it basically the same way as libxml (sub dir for
+<br>
+&quot;foreign&quot; OSes).
+<br>
+<p>&nbsp;It is probable that libxml and libxslt will have different releases
+<br>
+schedule in the future. I expect to ship a new XSLT version approximately
+<br>
+every weeks in the next month, so stay tuned.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20libxml-2.2.12%20amd%20libxslt-0.0.1%20are%20out">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.2.12%20amd%20libxslt-0.0.1%20are%20out">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.2.12%20amd%20libxslt-0.0.1%20are%20out">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1388.html">Daniel Veillard: "Re: [xml] Patch for libxml2's xmlIO.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 25 2001 - 16:43:53 EST</em>
+</em>
+</small>
+</body>
+</html>

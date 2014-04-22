@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Don't read XML from directories.</title>
+<meta name="Author" content="Igor Zlatkovic (igorz@dialup.nacamar.de)">
+<meta name="Subject" content="Re: [xml] Don't read XML from directories.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Don't read XML from directories.</h1>
+<!-- received="Tue Jan 23 09:07:01 2001" -->
+<!-- isoreceived="20010123140701" -->
+<!-- sent="Tue, 23 Jan 2001 15:08:51 +0100" -->
+<!-- isosent="20010123140851" -->
+<!-- name="Igor Zlatkovic" -->
+<!-- email="igorz@dialup.nacamar.de" -->
+<!-- subject="Re: [xml] Don't read XML from directories." -->
+<!-- id="001501c08546$03752e30$0b01a8c0@home.loc" -->
+<!-- inreplyto="20010123004446.A1067@azul.dhis.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Igor Zlatkovic (<a href="mailto:igorz@dialup.nacamar.de?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories."><em>igorz@dialup.nacamar.de</em></a>)<br>
+<strong>Date:</strong> Tue Jan 23 2001 - 09:08:51 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1369.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there.
+<br>
+<p>I have a different opinion on that and would like to express it herewith.
+<br>
+<p>No offense meant, Alejandro, but I think checking if you read from a
+<br>
+directory or not is your responsibility. Libraries like libxml (and libxml2)
+<br>
+should not go any deeper into the matter of checking if a passed parameter
+<br>
+is sane or not.
+<br>
+<p>Consider that libxml2 is based on other libraries (libc, for example). I am
+<br>
+writing libraries atop of libxml and yet other persons over here write
+<br>
+libraries atop of mine. One program or another shall be based on the
+<br>
+highest-level library and shall sooner or later make a call which would
+<br>
+partly execute down in libxml2. If now every library along the way would
+<br>
+check the sanity of the parameter, each and every parameter would be checked
+<br>
+three times, four times, five times, depends on how deep from the surface
+<br>
+the call implementation is.
+<br>
+<p>Further, consider strlen function from libc, for example. What happens if
+<br>
+you pass it NULL? It trashes your program, it does not return an error. A
+<br>
+crash is far louder an alarm, signaling a grave error in the program and
+<br>
+urging correction.
+<br>
+<p>I am simply against the library acting as a shield before programmer's own
+<br>
+mistakes. What would be next? Patching strlen routine in glibc so it checks
+<br>
+for NULL argument before parsing the string and, if it is NULL, sends an
+<br>
+email to strlenwatch@localhost, sets the appropriate errno and returns -1?
+<br>
+Correctness and sanity of parameters any program passes to any library
+<br>
+function must be enforced by the program itself. No library can ever know
+<br>
+better what the program is about to do.
+<br>
+<p>Now, if you really need to have it, putting some kind of assert in libxml2
+<br>
+which fires when a parameter is unsane would be a far better solution in my
+<br>
+eyes. Such an assert would state clearly what sort of parameters the library
+<br>
+expects, would have a good alarming effect if things go wrong and would be
+<br>
+optimised out by the compiler when making a productive release.
+<br>
+<p>Igor
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1369.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1367.html">Peter Jacobi: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1365.html">Alejandro Forero Cuervo: "[xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 10:44:07 EST</em>
+</em>
+</small>
+</body>
+</html>

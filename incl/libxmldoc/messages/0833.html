@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Indent - please help</title>
+<meta name="Author" content="Nilo S. Mismetti (nilo@newpos.com)">
+<meta name="Subject" content="Re: [xml] Indent - please help">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Indent - please help</h1>
+<!-- received="Thu Sep 28 08:05:47 2000" -->
+<!-- isoreceived="20000928120547" -->
+<!-- sent="Thu, 28 Sep 2000 09:04:50 -0300" -->
+<!-- isosent="20000928120450" -->
+<!-- name="Nilo S. Mismetti" -->
+<!-- email="nilo@newpos.com" -->
+<!-- subject="Re: [xml] Indent - please help" -->
+<!-- id="001701c02944$50930060$0901020a@48650" -->
+<!-- inreplyto="20000928005112.F18301@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Nilo S. Mismetti (<a href="mailto:nilo@newpos.com?subject=Re:%20[xml]%20Indent%20-%20please%20help"><em>nilo@newpos.com</em></a>)<br>
+<strong>Date:</strong> Thu Sep 28 2000 - 08:04:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<li><strong>Previous message:</strong> <a href="0832.html">Ernesto Giralt: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0831.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<li><strong>Reply:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+(by adding text nodes containing the formatting).
+<br>
+<p>How can I do this?
+<br>
+<p>Nilo
+<br>
+<p>----- Original Message ----- 
+<br>
+From: &quot;Daniel Veillard&quot; &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indent%20-%20please%20help">Daniel.Veillard@w3.org</a>&gt;
+<br>
+To: &lt;<a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">xml@rpmfind.net</a>&gt;
+<br>
+Sent: Quarta-feira, 27 de Setembro de 2000 19:51
+<br>
+Subject: Re: [xml] Indent - please help
+<br>
+<p><p><em>&gt; 
+</em><br>
+<em>&gt; On Wed, Sep 27, 2000 at 06:17:24PM -0300, Nilo S. Mismetti wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I'm using LibXML to parse several documents and works fine.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Now I'm trying to add a new node and works, except that when I save the
+</em><br>
+<em>&gt; &gt; result my additions appears on a single line:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; &lt;PosDB&gt;&lt;UserID&gt;&lt;User01&gt;3,1,86&lt;/User01&gt;&lt;/UserID&gt;&lt;/PosDB&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   How is that a problem ;-) ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; To add new nodes &lt;UserID&gt; and &lt;User01&gt; I'm using:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  if((curSection=xmlNewChild(BaseSection,NULL,lpAppName,NULL)) == NULL)
+</em><br>
+<em>&gt; &gt; return(0);
+</em><br>
+<em>&gt; &gt;  if((curKey=xmlNewTextChild(curSection,NULL,lpKeyName,Valor)) == NULL)
+</em><br>
+<em>&gt; &gt; return(0);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; lpAppName == &quot;UserID&quot;
+</em><br>
+<em>&gt; &gt; lpKeyName == &quot;User01&quot;
+</em><br>
+<em>&gt; &gt; Valor == &quot;3,1,86&quot;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; To write the XML file I'm using:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  xmlIndentTreeOutput=TRUE;
+</em><br>
+<em>&gt; &gt;  xmlSetDocCompressMode(doc,CompressLevel);
+</em><br>
+<em>&gt; &gt;  return((xmlSaveFile(FileName,doc) == -1) ? TRUE : FALSE);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; A little help will be VERY useful.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   All blanks are significant in XML. Hence they are not dropped
+</em><br>
+<em>&gt; at import and not added automatically. You can disable this by using
+</em><br>
+<em>&gt; xmlKeepBlanksDefault(0); but think seriously about it first. The
+</em><br>
+<em>&gt; right solution might be to actually insert the blanks instead
+</em><br>
+<em>&gt; (by adding text nodes containing the formatting).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indent%20-%20please%20help">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<li><strong>Previous message:</strong> <a href="0832.html">Ernesto Giralt: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0831.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<li><strong>Reply:</strong> <a href="0834.html">Daniel Veillard: "Re: [xml] Indent - please help"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Sep 28 2000 - 09:43:33 EDT</em>
+</em>
+</small>
+</body>
+</html>

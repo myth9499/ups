@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Lower speed with greater xmlParseChunk() chunks?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Lower speed with greater xmlParseChunk() chunks?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Lower speed with greater xmlParseChunk() chunks?</h1>
+<!-- received="Sun Oct 15 15:35:07 2000" -->
+<!-- isoreceived="20001015193507" -->
+<!-- sent="Sun, 15 Oct 2000 21:35:04 +0200" -->
+<!-- isosent="20001015193504" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Lower speed with greater xmlParseChunk() chunks?" -->
+<!-- id="20001015213504.L6250@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0010151203450.1015-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 15:35:04 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0969.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>Previous message:</strong> <a href="0967.html">rolf@pointsman.de: "[xml] Still validating while using SAX Interface?"</a>
+<li><strong>In reply to:</strong> <a href="0966.html">Wayne Davison: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 15, 2000 at 12:14:42PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Sun, 15 Oct 2000 <a href="mailto:rolf@pointsman.de?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">rolf@pointsman.de</a> wrote:
+</em><br>
+<em>&gt; &gt; Playing around I found one very strange behavior. Parsing speed slows
+</em><br>
+<em>&gt; &gt; (dramatically) down, if the chunks of data are big.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I noticed something similar, but I never tried to quantify it.  I believe
+</em><br>
+<em>&gt; that the problem is that the code likes to keep shifting the buffer as it
+</em><br>
+<em>&gt; parses it.  A while back I removed one such &quot;SHRINK&quot; call (only when the
+</em><br>
+<em>&gt; data was being pushed), but I seem to recall that it didn't eliminate the
+</em><br>
+<em>&gt; shifting.  I decided to deal with this by just calling the push function
+</em><br>
+<em>&gt; in a loop with a guaranteed small chunk size and then forgot to bring up
+</em><br>
+<em>&gt; the subject.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;yeah that sounds like something similar ... I should modify
+<br>
+the SHRINK macro to activate the shift only if there isn't much data
+<br>
+left in the buffer. This may lead to a serious improvement ...
+<br>
+yes I think I should try this before 2.2.5 release because it sounds
+<br>
+harmless and a possible serious improvement !
+<br>
+<p><em>&gt; Another problem with the code is that it copies all the data that you push
+</em><br>
+<em>&gt; into an input buffer, and then translates all that data into another UTF8
+</em><br>
+<em>&gt; buffer, so you can end up consuming another 2x the size of your push
+</em><br>
+<em>&gt; buffer in memory.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;yes, I could restrain it at that level too ...
+<br>
+<p><em>&gt; I've thought that the push routine should be modified to only put a small
+</em><br>
+<em>&gt; chunk of memory at a time into the input buffer, effectively moving my
+</em><br>
+<em>&gt; buffer-dividing loop into the xml internals.
+</em><br>
+<p>&nbsp;&nbsp;yeah adding a small loop in xmlParseChunk() is another option too
+<br>
+a blocking factor of 4k sounds a good default a priori ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Lower%20speed%20with%20greater%20xmlParseChunk()%20chunks?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0969.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>Previous message:</strong> <a href="0967.html">rolf@pointsman.de: "[xml] Still validating while using SAX Interface?"</a>
+<li><strong>In reply to:</strong> <a href="0966.html">Wayne Davison: "Re: [xml] Lower speed with greater xmlParseChunk() chunks?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 15:43:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

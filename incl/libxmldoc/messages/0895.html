@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Fri Oct  6 19:02:16 2000" -->
+<!-- isoreceived="20001006230216" -->
+<!-- sent="Fri, 06 Oct 2000 17:58:35 -0500" -->
+<!-- isosent="20001006225835" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="39DE591B.5090409@qeradiant.com" -->
+<!-- inreplyto="Pine.LNX.4.21.0010061522440.6506-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Fri Oct 06 2000 - 18:58:35 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0894.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0894.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+ah
+<br>
+so, no correlation with the -mno_cygwin option when compiling something 
+<br>
+with cygwin?
+<br>
+<p>TTimo
+<br>
+<p>Wayne Davison wrote:
+<br>
+<p><em>&gt; On Fri, 6 Oct 2000, Timothee Besset wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;&gt; One question though: what's the purpose of the Makefile.mygwin? The 
+</em><br>
+<em>&gt;&gt; configure script works fine with cygwin already?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; That's &quot;mingw&quot;, not &quot;mygwin&quot;.  See <a href="http://www.mingw.org/">http://www.mingw.org/</a> for full details,
+</em><br>
+<em>&gt; but in a nutshell:  it's how you can use the gnu tools to compile Win32
+</em><br>
+<em>&gt; applications without all the posix-layer stuff that Cygwin provides.  This
+</em><br>
+<em>&gt; means that we can't depend on being able to run the configure script
+</em><br>
+<em>&gt; (since there's no guarantee that /bin/sh even exists), and the Makefile
+</em><br>
+<em>&gt; actually creates a DLL (which the existing Makefile does not attempt).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Also, mingw appears to be better licensed than Cygwin, so you can use it
+</em><br>
+<em>&gt; to create a DLL that doesn't transmogrify your software's license into the
+</em><br>
+<em>&gt; GPL.  For instance, if someone were to use Cygwin to release a libxml.dll,
+</em><br>
+<em>&gt; you would have to distribute a cygwin*.dll to use it, and that would
+</em><br>
+<em>&gt; encumber the libxml library with the GPL's restrictions (not the LGPL that
+</em><br>
+<em>&gt; it currently uses).  I believe at that point it would be impossible to use
+</em><br>
+<em>&gt; such a libxml.dll with any non-GPLed code (BSD, Artistic, or whatever)
+</em><br>
+<em>&gt; without it too becoming GPLed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So, Makefile.mingw sets up the mingw build environment to create a
+</em><br>
+<em>&gt; regular, (LGPLed) Win32 DLL of libxml -- one that should be able to be
+</em><br>
+<em>&gt; used by normal Win32 applications.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ...wayne..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0894.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0894.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 06 2000 - 19:43:21 EDT</em>
+</em>
+</small>
+</body>
+</html>

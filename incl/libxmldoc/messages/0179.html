@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: whitespace addition bug</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: whitespace addition bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: whitespace addition bug</h1>
+<!-- received="Tue Oct 12 03:06:22 1999" -->
+<!-- isoreceived="19991012070622" -->
+<!-- sent="Mon, 11 Oct 1999 17:10:57 +0200" -->
+<!-- isosent="19991011151057" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: whitespace addition bug" -->
+<!-- id="19991011171057.A28790@w3.org" -->
+<!-- inreplyto="199910072042.PAA10691@risacher" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20whitespace%20addition%20bug"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 11 1999 - 11:10:57 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Oct 07, 1999 at 03:42:17PM -0500, Daniel R Risacher wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi again.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm reading an xml file with xmlParseFile(filename) 
+</em><br>
+<em>&gt; that I later save with xmlSaveFile(filename, dbs-&gt;doc) 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This particular xml file contains this snippet:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     &lt;NAME&gt;Sheryl Anne Elizabeth &lt;s&gt;Ott&lt;/s&gt;&lt;/NAME&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But after I save it, it comes out as:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     &lt;NAME&gt;Sheryl Anne Elizabeth 
+</em><br>
+<em>&gt;       &lt;s&gt;Ott&lt;/s&gt;
+</em><br>
+<em>&gt;     &lt;/NAME&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; And hey, that's pretty reasonable.  But if I load the new file and
+</em><br>
+<em>&gt; save it again, it comes out as:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     &lt;NAME&gt;Sheryl Anne Elizabeth 
+</em><br>
+<em>&gt;       
+</em><br>
+<em>&gt;       &lt;s&gt;Ott&lt;/s&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;         &lt;/NAME&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; And the next time through, I get:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     &lt;NAME&gt;Sheryl Anne Elizabeth 
+</em><br>
+<em>&gt;       
+</em><br>
+<em>&gt;       
+</em><br>
+<em>&gt;       &lt;s&gt;Ott&lt;/s&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;             &lt;/NAME&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Et cetera.
+</em><br>
+<em>&gt; This is probably not the optimal behavior.
+</em><br>
+<p>&nbsp;&nbsp;Ok, this was a lonnnnng-standing bug in the XML saving code
+<br>
+in the presence of mixed-content elements.
+<br>
+I did fix it, and commited both in Gnome and W3C CVS bases.  
+<br>
+<p>&nbsp;&nbsp;&nbsp;thanks for reporting it,
+<br>
+<p>Daniel   
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20whitespace%20addition%20bug">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20whitespace%20addition%20bug">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20whitespace%20addition%20bug">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0180.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

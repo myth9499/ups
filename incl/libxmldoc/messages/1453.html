@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Strange error depending on buffer size</title>
+<meta name="Author" content="Manuel Guesdon (ml@oxymium.net)">
+<meta name="Subject" content="[xml] Strange error depending on buffer size">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Strange error depending on buffer size</h1>
+<!-- received="Tue Feb 13 18:04:19 2001" -->
+<!-- isoreceived="20010213230419" -->
+<!-- sent="Tue, 13 Feb 2001 23:52:18 +0100 (CET)" -->
+<!-- isosent="20010213225218" -->
+<!-- name="Manuel Guesdon" -->
+<!-- email="ml@oxymium.net" -->
+<!-- subject="[xml] Strange error depending on buffer size" -->
+<!-- id="20010213225218.8C16D7623F@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Manuel Guesdon (<a href="mailto:ml@oxymium.net?subject=Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size"><em>ml@oxymium.net</em></a>)<br>
+<strong>Date:</strong> Tue Feb 13 2001 - 17:52:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1452.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello,
+<br>
+<p>I've made a program to parse the attached file. It call xmlParseChunk with the entire content of the file.
+<br>
+It works but if I add a character anywhere in this file, it fail
+<br>
+<p>For exemple the end of the file is
+<br>
+<p>&lt;ric name=&quot;LL52492ZZZ&quot;&gt;
+<br>
+&lt;fid id=&quot;ZZZZZZZ&quot;&gt;&lt;![CDATA[AAAAAAGEN ELECTR]]&gt;&lt;/fid&gt;
+<br>
+&lt;fid id=&quot;SSSSSSSS&quot;&gt;QQQ&lt;/fid&gt;
+<br>
+&lt;fid id=&quot;OOOO&quot;&gt;-XX&lt;/fid&gt;
+<br>
+&lt;/ric&gt;
+<br>
+&lt;ric name=&quot;F&quot;&gt;
+<br>
+&lt;fid id=&quot;SSSSSSSS&quot;&gt;QQQ&lt;/fid&gt;
+<br>
+&lt;/ric&gt;
+<br>
+<p>This works.
+<br>
+<p>If  I add a X on the &quot;OOOO&quot; line, it fail
+<br>
+<p>&lt;ric name=&quot;LL52492ZZZ&quot;&gt;
+<br>
+&lt;fid id=&quot;ZZZZZZZ&quot;&gt;&lt;![CDATA[AAAAAAGEN ELECTR]]&gt;&lt;/fid&gt;
+<br>
+&lt;fid id=&quot;SSSSSSSS&quot;&gt;QQQ&lt;/fid&gt;
+<br>
+&lt;fid id=&quot;OOOO&quot;&gt;X-XX&lt;/fid&gt;
+<br>
+&lt;/ric&gt;
+<br>
+&lt;ric name=&quot;F&quot;&gt;
+<br>
+&lt;fid id=&quot;SSSSSSSS&quot;&gt;QQQ&lt;/fid&gt;
+<br>
+&lt;/ric&gt;
+<br>
+<p>I can add any character anywhere with the same result. Even a black line produce the same result.
+<br>
+<p>I get a &quot;PP: lookup '&gt;' failed&quot;
+<br>
+and after, when calling xmlParseChunk whith null buffer to finish, I get 
+<br>
+&quot;xmlParserInput: base mismatch problem
+<br>
+buffer 81247c0 : content 811ae20, base = 8126e00, cur 5, use 2020, size 8100&quot;
+<br>
+(I've added &quot;base = &quot; output).
+<br>
+<p>Another element: if I split the buffer in 2 parts (lengh/2 for the first part and the end for the second), it works.
+<br>
+<p>My programme works well on many files of size greater or lesser than this one but it seems to fail on files with
+<br>
+particular size like this one. As far as I can see, if I parse other files before or don't, it always append on this file.
+<br>
+<p>Any help is welcome !
+<br>
+<p>Manuel
+<br>
+<pre>
+--
+______________________________________________________________________
+Manuel Guesdon - OXYMIUM &lt;<a href="mailto:mguesdon@oxymium.net?subject=Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size">mguesdon@oxymium.net</a>&gt;
+14 rue Jean-Baptiste Clement  -  93200 Saint-Denis  -  France
+Tel: +33 1 4940 0999  -  Fax: +33 1 4940 0998
+<p><p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1452.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Feb 13 2001 - 18:43:35 EST</em>
+</em>
+</small>
+</body>
+</html>

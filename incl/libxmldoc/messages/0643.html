@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] A truncation bug and some testHTML.c enhancements</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] A truncation bug and some testHTML.c enhancements">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] A truncation bug and some testHTML.c enhancements</h1>
+<!-- received="Sun Aug 13 07:36:28 2000" -->
+<!-- isoreceived="20000813113628" -->
+<!-- sent="Sun, 13 Aug 2000 10:33:22 -0400" -->
+<!-- isosent="20000813143322" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] A truncation bug and some testHTML.c enhancements" -->
+<!-- id="20000813103322.A21621@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0008122326180.28380-400000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Aug 13 2000 - 10:33:22 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0642.html">Wayne Davison: "[xml] A truncation bug and some testHTML.c enhancements"</a>
+<li><strong>In reply to:</strong> <a href="0642.html">Wayne Davison: "[xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Aug 13, 2000 at 12:41:40AM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; There's a bug in the HTML parser when we're using the push interface
+</em><br>
+<em>&gt; and we encounter a meta tag that changes the charset.  After the code
+</em><br>
+<em>&gt; shrinks the input buffer to remove all the already-parsed characters,
+</em><br>
+<em>&gt; it then calls xmlCharEncFirstLine(), which only converts 45 characters
+</em><br>
+<em>&gt; or less from the new raw buffer.  Any characters in the raw buffer
+</em><br>
+<em>&gt; after this are never parsed.  Depending on the buffer size, this can
+</em><br>
+<em>&gt; truncate the entire HTML file in the middle of the HEAD section.
+</em><br>
+[...]
+<br>
+<em>&gt; All changes are based on the CVS source I just grabbed from gnome.org.
+</em><br>
+<p>&nbsp;&nbsp;Quick question: before or after the 2.2.2 release (i.e. yesterday
+<br>
+afternoon) ? Because I think I fixed this bug (but in the W3C CVS)
+<br>
+a few days ago and it got copied oved in the gnome CVS only yesterday
+<br>
+afternoon.
+<br>
+&nbsp;&nbsp;BTW I did also added SAX/push testing to testHTML.c and added those to 
+<br>
+make test yesterday.
+<br>
+<p>Content-Description: My 1-line change to parser.c
+<br>
+<em>&gt; Index: parser.c
+</em><br>
+<em>&gt; ===================================================================
+</em><br>
+<em>&gt; RCS file: /cvs/gnome/gnome-xml/parser.c,v
+</em><br>
+<em>&gt; retrieving revision 1.81
+</em><br>
+<em>&gt; diff -u -r1.81 parser.c
+</em><br>
+<em>&gt; --- parser.c	2000/07/21 20:32:03	1.81
+</em><br>
+<em>&gt; +++ parser.c	2000/08/13 07:16:07
+</em><br>
+<em>&gt; @@ -2543,7 +2543,7 @@
+</em><br>
+<em>&gt;  		     * parsed with the autodetected encoding
+</em><br>
+<em>&gt;  		     * into the parser reading buffer.
+</em><br>
+<em>&gt;  		     */
+</em><br>
+<em>&gt; -		    nbchars = xmlCharEncFirstLine(ctxt-&gt;input-&gt;buf-&gt;encoder,
+</em><br>
+<em>&gt; +		    nbchars = xmlCharEncInFunc(ctxt-&gt;input-&gt;buf-&gt;encoder,
+</em><br>
+<em>&gt;  		                                  ctxt-&gt;input-&gt;buf-&gt;buffer,
+</em><br>
+<em>&gt;  					          ctxt-&gt;input-&gt;buf-&gt;raw);
+</em><br>
+<p>&nbsp;&nbsp;I'm afraid it is not completely clean.
+<br>
+<p><em>&gt;  		    if (nbchars &lt; 0) {
+</em><br>
+<p>Content-Description: My improvements for testHTML.c
+<br>
+<em>&gt; Index: testHTML.c
+</em><br>
+<em>&gt; ===================================================================
+</em><br>
+<em>&gt; RCS file: /cvs/gnome/gnome-xml/testHTML.c,v
+</em><br>
+<em>&gt; retrieving revision 1.12
+</em><br>
+<em>&gt; diff -u -r1.12 testHTML.c
+</em><br>
+<em>&gt; --- testHTML.c	2000/07/14 14:49:22	1.12
+</em><br>
+<em>&gt; +++ testHTML.c	2000/08/13 07:15:35
+</em><br>
+<em>&gt; @@ -49,6 +49,7 @@
+</em><br>
+<em>&gt;  static int repeat = 0;
+</em><br>
+<em>&gt;  static int noout = 0;
+</em><br>
+<em>&gt;  static int push = 0;
+</em><br>
+<em>&gt; +static int bigpush = 0;
+</em><br>
+[...]
+<br>
+<em>&gt; +	printf(&quot;\t--bigpush : like --push, but use a big buffer\n&quot;);
+</em><br>
+<p>&nbsp;&nbsp;Ok maybe bigpush should be the default and adding --smallpush
+<br>
+is the right option.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20A%20truncation%20bug%20and%20some%20testHTML.c%20enhancements">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0642.html">Wayne Davison: "[xml] A truncation bug and some testHTML.c enhancements"</a>
+<li><strong>In reply to:</strong> <a href="0642.html">Wayne Davison: "[xml] A truncation bug and some testHTML.c enhancements"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Aug 13 2000 - 09:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

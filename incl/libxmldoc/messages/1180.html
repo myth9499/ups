@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Release of libxml-2.2.8</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] Release of libxml-2.2.8">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Release of libxml-2.2.8</h1>
+<!-- received="Mon Nov 13 14:16:57 2000" -->
+<!-- isoreceived="20001113191657" -->
+<!-- sent="Mon, 13 Nov 2000 13:16:32 -0600" -->
+<!-- isosent="20001113191632" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] Release of libxml-2.2.8" -->
+<!-- id="3A103E0F.2010808@qeradiant.com" -->
+<!-- inreplyto="20001113194618.A32708@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 14:16:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>Previous message:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<li><strong>In reply to:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I checked it real quick on win32 / MSVC. Seems HTTP and FTP support are 
+<br>
+broken (looks like we are not including the right headers or something:)
+<br>
+e:\loki\libxml2\nanoftp.c(1275) : error C2065: 'SOCKLEN_T' : undeclared 
+<br>
+identifier
+<br>
+didn't look further into it, I use raw xml only (I disable every option 
+<br>
+in xmlversion.h).
+<br>
+<p>It compiles fine but I get a lot of
+<br>
+e:\loki\libxml2\error.c(46) : warning C4273: 'xmlGenericError' : 
+<br>
+inconsistent dll linkage.  dllexport assumed.
+<br>
+<p>TTimo
+<br>
+<p>Daniel Veillard wrote:
+<br>
+<p><em>&gt;   Okay I released a new version 2.2.8:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Where:
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt;   <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a> and on GNOME FTP server(s).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What's new:
+</em><br>
+<em>&gt;     - First version of XInclude support 
+</em><br>
+<em>&gt;     - Patch in conditional section handling 
+</em><br>
+<em>&gt;     - updated MS compiler project 
+</em><br>
+<em>&gt;     - fixed some XPath problems 
+</em><br>
+<em>&gt;     - added an URI escaping function 
+</em><br>
+<em>&gt;     - some other bug fixes 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   I think I integrated all the patches that were sent, and tried
+</em><br>
+<em>&gt; to fix all reported problems. The new thing is Xinclude which will
+</em><br>
+<em>&gt; probably need some small fixes to be added to Windows projects files.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Again thanks to everybody who contributed,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>Previous message:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<li><strong>In reply to:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 14:45:02 EST</em>
+</em>
+</small>
+</body>
+</html>

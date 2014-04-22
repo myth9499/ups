@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Some words about libxslt</title>
+<meta name="Author" content="Tom . (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Some words about libxslt">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Some words about libxslt</h1>
+<!-- received="Mon Mar  5 12:26:55 2001" -->
+<!-- isoreceived="20010305172655" -->
+<!-- sent="Mon, 5 Mar 2001 18:26:57 +0100" -->
+<!-- isosent="20010305172657" -->
+<!-- name="Tom ." -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Some words about libxslt" -->
+<!-- id="20010305182657.A648@debian" -->
+<!-- inreplyto="20010305102412.C28590@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tom . (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Some%20words%20about%20libxslt"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Mon Mar 05 2001 - 12:26:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Le 05/03/01 16:24:12, Daniel Veillard a écrit :
+<br>
+<em>&gt; &gt; Well, it hasn't yet passed the stage of ideas and drafts. I'll first
+</em><br>
+<em>&gt; &gt; write a paper explaining its goals etc. I think of proposing it on the
+</em><br>
+<em>&gt; &gt; <a href="mailto:www-xpath-comments@w3.org?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">www-xpath-comments@w3.org</a> mailing list for discussion and improvements.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Hum, no. <a href="mailto:www-xpath-comments@w3.org?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">www-xpath-comments@w3.org</a> is dedicated to comment on the
+</em><br>
+<em>&gt; specification itself, not about how to write an interpreter for this
+</em><br>
+<em>&gt; language. Other channels like xsl-dev and xml-dev mailing-lists are
+</em><br>
+<em>&gt; far more relevant.
+</em><br>
+<p>Thanks, I just had a really rapid look at the XPath Rec while writing this
+<br>
+message and just saw a reference to www-xpath-comments. I didn't take
+<br>
+enough time to go farther in investigations...
+<br>
+However, I am proposing a parser API, not a parser or an interpreter, not
+<br>
+even (for the moment) a &quot;compiled&quot; representation of expressions. Such an
+<br>
+API should still allows one to evaluate an expression at parsing. This API
+<br>
+is intended as a SAX or SAC for expressions sharing equivalent syntaxes:
+<br>
+XPath, XPointer and XSLT patterns; very low-level.
+<br>
+It isn't either designed for libxml and my goal isn't to have it replace
+<br>
+the actual libxml's XPath implementation, just a proposal for another mean
+<br>
+of solving some problems...
+<br>
+<p><em>&gt; Compiling XPath expressions can be an useful optimization but:
+</em><br>
+<em>&gt;    - currently it doesn't seems the bottleneck
+</em><br>
+<em>&gt;    - your example ain't the best one. Conformance may be, proper
+</em><br>
+<em>&gt;      evaluation of 'and' and 'or' expressions would be simpler
+</em><br>
+<em>&gt;      with a precompiled form
+</em><br>
+<p>I know. This isn't for now what I'm talking about. I was just dealing with
+<br>
+separation between parsing and evaluation, and some simple generic parsing
+<br>
+API. If you want to discuss on evaluation, I also have some ideas ;o)
+<br>
+<p><em>&gt; &gt; A second goal is to provide a single parser for every XPath-like
+</em><br>
+<em>&gt; &gt; expression : XPointer XPtrExpr's, XSLT Pattern's, etc. and their
+</em><br>
+<em>&gt; &gt; future evolution.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   No, XSLT patterns *have to* be interpreted differently.
+</em><br>
+<p>Interpreted differently on each &quot;pass&quot;, sure, but parsed once, and that's
+<br>
+what you're doing in libxslt with a &quot;compilation&quot; phase.
+<br>
+XPath's Expr, Xpointer's XPtrExpr and XSLT's Pattern share almost the same
+<br>
+syntax. My view is: why then writing a parser/scanner/lexer for each of
+<br>
+them? with many duplicated code? Why not sharing a single parser and &quot;plug&quot;
+<br>
+different sets of callbacks to handle tokens differently?
+<br>
+<p><em>&gt; &gt; &gt;   yes and it seems quite simpler.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Sure, and I know you're a KISS follower ;o) , but quite more time
+</em><br>
+<em>&gt; &gt; consuming...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   and running *NOW*, I'm a believer in running code too ...
+</em><br>
+<p>And you're right.
+<br>
+I just gave my opinion on the way I'd have solve the problem...
+<br>
+<p>Tom.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1523.html">Daniel Veillard: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Mar 05 2001 - 12:43:31 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Auto-close in HTML parser.</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="[xml] Auto-close in HTML parser.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Auto-close in HTML parser.</h1>
+<!-- received="Mon Oct 23 10:58:04 2000" -->
+<!-- isoreceived="20001023145804" -->
+<!-- sent="Mon, 23 Oct 2000 10:57:54 -0400" -->
+<!-- isosent="20001023145754" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="[xml] Auto-close in HTML parser." -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0B1905E@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser."><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 10:57:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>Previous message:</strong> <a href="1037.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] [Re:]newbie question about encoding"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>Maybe reply:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have the following HTML file:
+<br>
+<p>&lt;head&gt;
+<br>
+&lt;title&gt;MyBug&lt;/title&gt;
+<br>
+&lt;/head&gt;
+<br>
+<p>&lt;body&gt;
+<br>
+<p>&lt;FORM name=frmForm1 ACTION=&quot;SearchResults.asp&quot; METHOD=POST&gt;
+<br>
+&lt;TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 ID=frmTable&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;TR VALIGN=TOP&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;/td&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;TD class=&quot;BodyText&quot; colspan=2 style=&quot;PADDING-RIGHT:0&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operating System
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/TD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;TD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;SELECT NAME=frmOS class=&quot;BodyText&quot; style=&quot;width:250px;&quot;&gt;&lt;OPTION
+<br>
+VALUE=&quot;98&quot; Selected&gt;Windows 98 &amp;nbsp; &lt;OPTION VALUE=&quot;95&quot; &gt;Windows 95 &amp;nbsp;
+<br>
+&lt;OPTION VALUE=&quot;NT&quot; &gt;Windows NT &amp;nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/SELECT&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/TD&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/TR&gt;
+<br>
+&lt;/table&gt;
+<br>
+&lt;/BODY&gt;
+<br>
+&lt;/HTML&gt;
+<br>
+<p>when ran through libxml, the nodes look like this:
+<br>
+<p>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;
+<br>
+&quot;<a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>&quot;&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;&lt;title&gt;MyBug&lt;/title&gt;&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;form name=&quot;frmForm1&quot; action=&quot;SearchResults.asp&quot; method=&quot;POST&quot;&gt;&lt;table
+<br>
+border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; id=&quot;frmTable&quot;&gt;&lt;tr valign=&quot;TOP&quot;&gt;
+<br>
+&lt;td&gt;
+<br>
+&lt;td class=&quot;BodyText&quot; colspan=&quot;2&quot; style=&quot;PADDING-RIGHT:0&quot;&gt;
+<br>
+Operating System         &lt;/td&gt;
+<br>
+&lt;td&gt;&lt;select name=&quot;frmOS&quot; class=&quot;BodyText&quot; style=&quot;width:250px;&quot;&gt;&lt;option
+<br>
+value=&quot;98&quot; selected&gt;Windows 98 &amp;nbsp; &lt;option value=&quot;95&quot;&gt;Windows 95 &amp;nbsp;
+<br>
+&lt;option value=&quot;NT&quot;&gt;Windows NT &amp;nbsp;             &lt;/option&gt;
+<br>
+&lt;/option&gt;
+<br>
+&lt;/option&gt;&lt;/select&gt;&lt;/td&gt;
+<br>
+&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+<p><p>As you can see, the /option is given only when the /select is found.  I
+<br>
+would have like to get the /option when the other &lt;option&gt; was found.
+<br>
+<p>I fixed the problem by adding:
+<br>
+<p><p><p><p>---------------------------------------------------------------------
+<br>
+&nbsp;&quot;Better the pride that resides, in a citizen of the world.
+<br>
+&nbsp;&nbsp;Than the pride that divides, when a colorful rag is 
+<br>
+&nbsp;&nbsp;unfurled.&quot;  Neil Peart
+<br>
+---------------------------------------------------------------------
+<br>
+Marc Sanfacon, Software developer	Copernic.com 
+<br>
+e-mail: <a href="mailto:sanm@copernic.com?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser.">sanm@copernic.com</a>		R&amp;D Group
+<br>
+Tel   : (418) 527-0528 ext 1212	
+<br>
+<p><p><p><hr noshade>
+<ul>
+<li>application/ms-tnef attachment: <a href="att-1038/01-part">stored</a>
+</ul>
+<!-- attachment="01-part" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Auto-close%20in%20HTML%20parser.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>Previous message:</strong> <a href="1037.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] [Re:]newbie question about encoding"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<li><strong>Maybe reply:</strong> <a href="1039.html">Marc Sanfacon: "[xml] Auto-close in HTML parser."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 11:43:44 EDT</em>
+</em>
+</small>
+</body>
+</html>

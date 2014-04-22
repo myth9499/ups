@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] References to external documents</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] References to external documents">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] References to external documents</h1>
+<!-- received="Sat Mar 20 03:25:29 1999" -->
+<!-- isoreceived="19990320082529" -->
+<!-- sent="Sat, 20 Mar 1999 03:25:26 -0500" -->
+<!-- isosent="19990320082526" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] References to external documents" -->
+<!-- id="19990320032526.B14604@w3.org" -->
+<!-- inreplyto="Pine.BSF.4.02A.9903191338500.12726-100000@zirx.pair.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20References%20to%20external%20documents"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Mar 20 1999 - 03:25:26 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0020.html">Daniel Veillard: "Re: libxml memory issues"</a>
+<li><strong>Previous message:</strong> <a href="0018.html">Havoc Pennington: "[xml] References to external documents"</a>
+<li><strong>In reply to:</strong> <a href="0018.html">Havoc Pennington: "[xml] References to external documents"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Havoc,
+<br>
+<p><em>&gt; This isn't strictly a libxml issue but hopefully it's of interest.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; For Guppi, I want the user to be able to load and save several kinds of
+</em><br>
+<em>&gt; thing - data sets (basically lists of numbers), plots (colors and sizes
+</em><br>
+<em>&gt; and so on of the plot), and the entire session (where the windows are,
+</em><br>
+<em>&gt; which datasets and plots are loaded).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So to avoid lots of copies of data, I would like to be able to save
+</em><br>
+<em>&gt; &quot;pointers&quot; to other files. These pointers could represent a URL, or
+</em><br>
+<em>&gt; perhaps even a persistent Bonobo object such as Gnumeric. The important
+</em><br>
+<em>&gt; thing is the ability to add new kinds of pointer.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Then people can do things like &quot;publish&quot; a data set on the web, perhaps
+</em><br>
+<em>&gt; one which changes daily, and distribute a plot file which displays the
+</em><br>
+<em>&gt; data set in a certain way. More commonly, you would just have a single
+</em><br>
+<em>&gt; data set file on a local disk and several plots referring to it.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm wondering if there's a standards-based way to do this, or if I should
+</em><br>
+<em>&gt; just make up my own little tag. In particular I've been looking at the
+</em><br>
+<em>&gt; XLink spec: <a href="http://www.w3.org/TR/WD-xlink">http://www.w3.org/TR/WD-xlink</a>
+</em><br>
+<em>&gt; Is that perhaps appropriate or is it intended more for interactive
+</em><br>
+<em>&gt; browsing applications?
+</em><br>
+<p>&nbsp;&nbsp;Just FYI, I'm working on XLink at W3C right now. I'm also in the
+<br>
+process of adding XPointer support to libxml, so I definitely think this
+<br>
+should be investigated. However I'm not sure I understand completely all
+<br>
+the requirements of your linking mechanism, so I'm somewhat not able to give
+<br>
+a definite answer on wether XLink fullfills your needs
+<br>
+<em>&gt; Any nice suggestions?
+</em><br>
+<p>&nbsp;&nbsp;I will try to look more at this onmce the local linux expo is finished,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20References%20to%20external%20documents">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20References%20to%20external%20documents">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20References%20to%20external%20documents">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0020.html">Daniel Veillard: "Re: libxml memory issues"</a>
+<li><strong>Previous message:</strong> <a href="0018.html">Havoc Pennington: "[xml] References to external documents"</a>
+<li><strong>In reply to:</strong> <a href="0018.html">Havoc Pennington: "[xml] References to external documents"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

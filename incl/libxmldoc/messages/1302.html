@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in XPath union expressions</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug in XPath union expressions">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in XPath union expressions</h1>
+<!-- received="Wed Jan  3 10:31:42 2001" -->
+<!-- isoreceived="20010103153142" -->
+<!-- sent="Wed, 3 Jan 2001 16:23:09 +0100" -->
+<!-- isosent="20010103152309" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug in XPath union expressions" -->
+<!-- id="20010103162309.A27571@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1001218150316.8980A-100000@artax.karlin.mff.cuni.cz" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20XPath%20union%20expressions"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 03 2001 - 10:23:09 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1301.html">Daniel Veillard: "Re: [xml] Re-using an xmlDtd"</a>
+<li><strong>In reply to:</strong> <a href="1297.html">Martin Vidner: "[xml] Bug in XPath union expressions"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 18, 2000 at 03:20:19PM +0100, Martin Vidner wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I found the following bug: XPath union expressions are not handled
+</em><br>
+<em>&gt; correctly. It is apparent from the following test run:
+</em><br>
+[...]
+<br>
+<em>&gt; On the other hand, the expression '//chapter|//p' displays the correct
+</em><br>
+<em>&gt; result but also leaves 1 object on the stack. 
+</em><br>
+<p>&nbsp;&nbsp;Okay I fixed both problems, thanks for the report
+<br>
+<p><em>&gt; When trying to locate the error, I also found that relative expressions
+</em><br>
+<em>&gt; cannot be tested using testXPath:
+</em><br>
+<em>&gt; [martin@pooh gnome-xml]$ ./testXPath './/chapter|.//p'
+</em><br>
+<em>&gt; Error xpath.c:2518: Invalid type
+</em><br>
+<em>&gt; .//chapter|.//p
+</em><br>
+<em>&gt;    ^
+</em><br>
+<em>&gt; xmlXPathEval: evaluation failed
+</em><br>
+<em>&gt; Object is empty (NULL)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The following simple patch provides a context node for relative
+</em><br>
+<em>&gt; expressions: (I am not sure whether a context node should always exist)
+</em><br>
+<em>&gt; ====
+</em><br>
+<em>&gt; --- testXPath.c~	Mon Nov  6 17:43:11 2000
+</em><br>
+<em>&gt; +++ testXPath.c	Mon Dec 18 14:48:38 2000
+</em><br>
+<em>&gt; @@ -98,6 +98,7 @@
+</em><br>
+<em>&gt;      } else {
+</em><br>
+<em>&gt;  #endif
+</em><br>
+<em>&gt;  	ctxt = xmlXPathNewContext(document);
+</em><br>
+<em>&gt; +        ctxt-&gt;node = document-&gt;children;
+</em><br>
+<p>&nbsp;&nbsp;This should actually be 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;node = xmlDocGetRootElement(document);
+<br>
+<p><em>&gt;  	if (expr)
+</em><br>
+<em>&gt;  	    res = xmlXPathEvalExpression(BAD_CAST str, ctxt);
+</em><br>
+<em>&gt;  	else
+</em><br>
+<em>&gt; ====
+</em><br>
+<p>&nbsp;&nbsp;I commited this too, I'm not sure it's really useful, since
+<br>
+trying to handle relative expression out of context seems a bit absurd
+<br>
+<p>&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20Bug%20in%20XPath%20union%20expressions">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20XPath%20union%20expressions">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20XPath%20union%20expressions">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1301.html">Daniel Veillard: "Re: [xml] Re-using an xmlDtd"</a>
+<li><strong>In reply to:</strong> <a href="1297.html">Martin Vidner: "[xml] Bug in XPath union expressions"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 03 2001 - 10:43:38 EST</em>
+</em>
+</small>
+</body>
+</html>

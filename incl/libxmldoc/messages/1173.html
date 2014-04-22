@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: Apparent XPath bug in libxml 2.2.7</title>
+<meta name="Author" content="David Moore (dmoore@its.caltech.edu)">
+<meta name="Subject" content="[xml] Re: Apparent XPath bug in libxml 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: Apparent XPath bug in libxml 2.2.7</h1>
+<!-- received="Mon Nov 13 03:08:54 2000" -->
+<!-- isoreceived="20001113080854" -->
+<!-- sent="Sun, 12 Nov 2000 18:17:02 -0800 (PST)" -->
+<!-- isosent="20001113021702" -->
+<!-- name="David Moore" -->
+<!-- email="dmoore@its.caltech.edu" -->
+<!-- subject="[xml] Re: Apparent XPath bug in libxml 2.2.7" -->
+<!-- id="Pine.GSO.4.21.0011121748440.23561-100000@inky" -->
+<!-- inreplyto="Pine.GSO.4.21.0011102042290.17679-100000@blinky" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Moore (<a href="mailto:dmoore@its.caltech.edu?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7"><em>dmoore@its.caltech.edu</em></a>)<br>
+<strong>Date:</strong> Sun Nov 12 2000 - 21:17:02 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1172.html">Daniel Veillard: "Re: [xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1164.html">David Moore: "[xml] Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The other day I sent a message regarding a bug in libxml's 2.2.7 xpath
+<br>
+support in regards to evaluating relative paths.
+<br>
+<p>I think I've found the source of the bug.  In 2.2.6, the following code
+<br>
+appeared in xmlXPathEval() just before xmlXPathEvalExpr() gets called:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (ctx-&gt;node != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init = xmlXPathNewNodeSet(ctx-&gt;node);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuePush(ctxt, init);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>In the case of relative paths, the user specifies a value for ctx-&gt;node
+<br>
+and thus it is not null.  Without doing the above (as it is in 2.2.7 and
+<br>
+the current CVS), the CHECK_TYPE(XPATH_NODESET) assertion in
+<br>
+xmlXPathNodeCollectAndTest() will fail later on.  I'm not sure if the
+<br>
+correct solution is simply to put back the above code, or replace the
+<br>
+functionality elsewhere, but I'm including a patch to just put back the
+<br>
+above code.
+<br>
+<p>I hope this is helpful (relative path evaluation is very important to my
+<br>
+application).
+<br>
+<p>Thanks.
+<br>
+<p>Regards,
+<br>
+<p>David
+<br>
+<p>------------------------------------------------------
+<br>
+&nbsp;&nbsp;David Moore       California Institute of Technology
+<br>
+&nbsp;&lt;<a href="mailto:dcm@acm.org?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">dcm@acm.org</a>&gt;     <a href="http://www.ugcs.caltech.edu/~dmoore">http://www.ugcs.caltech.edu/~dmoore</a>
+<br>
+------------------------------------------------------
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re:%20Apparent%20XPath%20bug%20in%20libxml%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<li><strong>Previous message:</strong> <a href="1172.html">Daniel Veillard: "Re: [xml] Conditional Sections and the X3D DTD"</a>
+<li><strong>In reply to:</strong> <a href="1164.html">David Moore: "[xml] Apparent XPath bug in libxml 2.2.7"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1174.html">David Moore: "[xml] Re: Apparent XPath bug in libxml 2.2.7"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 03:43:57 EST</em>
+</em>
+</small>
+</body>
+</html>

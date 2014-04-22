@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-1.8.7 build on AIX 4.2</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml-1.8.7 build on AIX 4.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-1.8.7 build on AIX 4.2</h1>
+<!-- received="Tue Apr 11 06:16:54 2000" -->
+<!-- isoreceived="20000411101654" -->
+<!-- sent="Tue, 11 Apr 2000 12:16:40 +0200" -->
+<!-- isosent="20000411101640" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml-1.8.7 build on AIX 4.2" -->
+<!-- id="20000411121640.E2140@w3.org" -->
+<!-- inreplyto="38F23364.3F086297@fmr.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Apr 11 2000 - 06:16:40 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0453.html">Rosman, Bernard: "RE: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>Previous message:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>In reply to:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0453.html">Rosman, Bernard: "RE: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Apr 10, 2000 at 04:02:44PM -0400, Bernie Rosman wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; FYI:
+</em><br>
+<em>&gt; By creating an exports file and invoking it in libtool instead of using
+</em><br>
+<em>&gt; -b:expall in libtool, libxml-1.8.7 built ok and programs using it built
+</em><br>
+<em>&gt; ok without duplicate symbols. This version handles whitespace data well,
+</em><br>
+<em>&gt; but still does not handle xml with a comment right after xml processing
+</em><br>
+<em>&gt; instruction.
+</em><br>
+<p>&nbsp;&nbsp;Well I still don't understand what's happening, so I rebuilt the
+<br>
+parser from a pristine libxml-1.8.7.tar.gz distribution. I can't 
+<br>
+reproduce the problem:
+<br>
+<p>~/tmp/libxml-1.8.7 -&gt; cat tst.xml
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!-- comment --&gt;
+<br>
+&lt;root /&gt;
+<br>
+~/tmp/libxml-1.8.7 -&gt; ./tester tst.xml 
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!-- comment --&gt;
+<br>
+&lt;root/&gt;
+<br>
+~/tmp/libxml-1.8.7 -&gt;
+<br>
+<p>&nbsp;&nbsp;So I'm really confused. What is the output of a similar test in
+<br>
+your environment ? What is the exact test exhibiting the problem ?
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml-1.8.7%20build%20on%20AIX%204.2">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0453.html">Rosman, Bernard: "RE: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>Previous message:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<li><strong>In reply to:</strong> <a href="0451.html">Bernie Rosman: "[xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0453.html">Rosman, Bernard: "RE: [xml] libxml-1.8.7 build on AIX 4.2"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

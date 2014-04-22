@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?</h1>
+<!-- received="Fri Nov  3 05:50:54 2000" -->
+<!-- isoreceived="20001103105054" -->
+<!-- sent="Fri, 3 Nov 2000 11:50:45 +0100" -->
+<!-- isosent="20001103105045" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?" -->
+<!-- id="726667547.20001103115045@triplex.de" -->
+<!-- inreplyto="20001026163845.L24266@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Fri Nov 03 2000 - 05:50:45 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Previous message:</strong> <a href="1131.html">Adam Clarke: "[xml] parsing XML streams"</a>
+<li><strong>In reply to:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Reply:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Reply:</strong> <a href="1134.html">TOM: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel and others,
+<br>
+<p><p><p>Thursday, October 26, 2000, 3:38:45 PM, you wrote:
+<br>
+<p><p>DV&gt; On Thu, Oct 26, 2000 at 04:31:52PM +0200, Stefan Bambach wrote:
+<br>
+<em>&gt;&gt; Is there any functionallity in this way:
+</em><br>
+<em>&gt;&gt;   xmlXPathNewContext(xmlNodePtr node); ??????????
+</em><br>
+<p>DV&gt;   you can still do
+<br>
+DV&gt;     ctxt =  xmlXPathNewContext(doc);
+<br>
+DV&gt;     ctxt-&gt;node = the_node_you_want_to-start_from;
+<br>
+<p>DV&gt; Daniel
+<br>
+<p>I tried it. But it doesn't work. You know that I'm writing an object
+<br>
+oriented Python XML Wrapper. So what I really want to do is an
+<br>
+relative xpath expression this way:
+<br>
+<p>tag.xpath('p')    # REALIZE: ONLY 'p', NO '/p' OR SOMETHING LIKE THIS
+<br>
+<p>Detailed information:
+<br>
+=====================
+<br>
+taking your example from testXPath.c:
+<br>
+&lt;?xml version=\&quot;1.0\&quot;?&gt;
+<br>
+&lt;EXAMPLE prop1=\&quot;gnome is great\&quot; prop2=\&quot;&amp;amp; linux too\&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;head&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;Welcome to Gnome&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&lt;/head&gt;
+<br>
+&nbsp;&nbsp;&lt;chapter&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;The Linux adventure&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;bla bla bla ...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;image href=\&quot;linus.gif\&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&lt;/chapter&gt;
+<br>
+&nbsp;&nbsp;&lt;chapter&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;Chapter 2&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;this is chapter 2 ...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&lt;/chapter&gt;
+<br>
+&nbsp;&nbsp;&lt;chapter&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;Chapter 3&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;this is chapter 3 ...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&lt;/chapter&gt;
+<br>
+&nbsp;&nbsp;&lt;chapter&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;Chapter 4&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;this is chapter 4 ...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&lt;/chapter&gt;
+<br>
+&nbsp;&nbsp;&lt;chapter&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;title&gt;Chapter 5&lt;/title&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;p&gt;this is chapter 5 ...&lt;/p&gt;
+<br>
+&nbsp;&nbsp;&lt;/chapter&gt;
+<br>
+&lt;/EXAMPLE&gt;
+<br>
+<p>Python Source Code:
+<br>
+1.) doc = open('test.xml')               # loads xml document
+<br>
+2.) chapters = doc.xpath('//chapter')    # gets list of 5 chapter nodes
+<br>
+3.) for chapter in chapters:             # iterate over chapters list
+<br>
+4.)     p_tags = chapter.xpath('p')      # gets p nodes for each chapter
+<br>
+5.)     for p in p_tags:                 # iterate over p_tags list
+<br>
+6.)         print p.values()             # print p-value
+<br>
+<p>executing this code should result in:
+<br>
+this is chapter 2 ...
+<br>
+this is chapter 3 ...
+<br>
+this is chapter 4 ...
+<br>
+this is chapter 5 ...
+<br>
+<p><p>Problem:
+<br>
+========
+<br>
+You see that the 2nd xpath expression is only 'p', no '/p' or something
+<br>
+like this. I got some kind of error message from libxml:
+<br>
+<p>CHECK_TYPE(XPATH_NODESET); throws error because ctxt-&gt;value is NULL;
+<br>
+see next lines for details:
+<br>
+----------------
+<br>
+Error xpath.c:2461: Invalid type
+<br>
+p
+<br>
+&nbsp;^
+<br>
+xmlXPathEval: evaluation failed
+<br>
+Object is empty (NULL)
+<br>
+----------------
+<br>
+<p>I got the same error message with &quot;./testXPath p&quot; !
+<br>
+<p>It seems that libxml generally throws an error if you have such
+<br>
+relative expressions as your xpath. You have the same problem, if you
+<br>
+want to use XSLT for the output of 'test.xml':
+<br>
+<p>&lt;xsl:template match=&quot;chapter&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>&lt;xsl:template match=&quot;p&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;.&quot;/&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+<p>Workaround:
+<br>
+===========
+<br>
+ctxt =  xmlXPathNewContext((xmlDocPtr) node);
+<br>
+<p>With this, it works, but it does a 'changeroot' of course.
+<br>
+- Now '/' matches to given node of xmlXPathNewContext and '/p' matches
+<br>
+&nbsp;&nbsp;to my needed p-tag.
+<br>
+- The xpath expressions root element is now my node element. You can
+<br>
+&nbsp;&nbsp;not match the really root element of the document.
+<br>
+- You cannot match TAGS above my new root element.
+<br>
+- The syntax of the relative xpath expression is NOT compatible with
+<br>
+&nbsp;&nbsp;XSLT. So it works for me, but I what to release my pyxml module and
+<br>
+&nbsp;&nbsp;it should be as compatible as possible with XSLT path expressions
+<br>
+&nbsp;&nbsp;before I release it :-)
+<br>
+<p>Summary / Questions:
+<br>
+====================
+<br>
+Giving node ptr to xmlXPathNewContext does his job too, except for the
+<br>
+wrong xpath expression I have to give to xmlXPathEval ('/p') :-( This
+<br>
+way the xmlXPathRoot will be called, the context-&gt;node ptr will be
+<br>
+set, the expression throws NO error and I get my wanted node ptrs
+<br>
+back (problems see workaround).
+<br>
+<p>Your xmlXPathRoot(ctxt) does the job. It copies the doc Ptr to node
+<br>
+Ptr. So if I specify the node by myself in your way (see on top of
+<br>
+this mail) it should work for this, but it seems that a bug in libxml
+<br>
+forbit that kind of needed xpath expression ('p') in parsing
+<br>
+expression.
+<br>
+<p>Is there a chance that my 'p' expression will be accepted, such as
+<br>
+XSLT match expression do ?
+<br>
+<p>Is there another way solving this problem ?
+<br>
+<p>Is such xpath expression ('p') generally forbidden in XPath standard ?
+<br>
+<p>Is it defined in XPath standard or is there perhaps another standard
+<br>
+that does this ?
+<br>
+<p><p><p>thx. ciao.
+<br>
+Stefan Bambach
+<br>
+<p><pre>
+-- 
+Stefan Bambach
+<p>triplex-agentur fuer neue medien GmbH
+herzog-heinrich-strasse 11-13
+80336 muenchen
+<p>tel: 089-209 138 29
+fax: 089-209 138 10
+<p>mailto:<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">bambach@triplex.de</a>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re[2]:%20[xml]%20XPath%20Lack%20in%20libxml2-2.2.7%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Previous message:</strong> <a href="1131.html">Adam Clarke: "[xml] parsing XML streams"</a>
+<li><strong>In reply to:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Reply:</strong> <a href="1133.html">Daniel Veillard: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<li><strong>Reply:</strong> <a href="1134.html">TOM: "Re: Re[2]: [xml] XPath Lack in libxml2-2.2.7 ?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 03 2000 - 09:44:24 EST</em>
+</em>
+</small>
+</body>
+</html>

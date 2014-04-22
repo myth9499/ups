@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Don't read XML from directories.</title>
+<meta name="Author" content="Alejandro Forero Cuervo (bachue@bachue.com)">
+<meta name="Subject" content="Re: [xml] Don't read XML from directories.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Don't read XML from directories.</h1>
+<!-- received="Tue Jan 23 10:29:04 2001" -->
+<!-- isoreceived="20010123152904" -->
+<!-- sent="Tue, 23 Jan 2001 10:18:58 -0500" -->
+<!-- isosent="20010123151858" -->
+<!-- name="Alejandro Forero Cuervo" -->
+<!-- email="bachue@bachue.com" -->
+<!-- subject="Re: [xml] Don't read XML from directories." -->
+<!-- id="20010123101858.A917@azul.dhis.org" -->
+<!-- inreplyto="20010123105406.A25086@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alejandro Forero Cuervo (<a href="mailto:bachue@bachue.com?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories."><em>bachue@bachue.com</em></a>)<br>
+<strong>Date:</strong> Tue Jan 23 2001 - 10:18:58 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1369.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1366.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1368.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;I have no problem adding this check (patch welcome !), my only
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;concern is about portability of the check (on Windows for
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;example). Is S_ISDIR() part of the Posix definition (I think so)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and does it work on Windows ?
+<br>
+<p>Well, I noticed that the code in those sections always goes like:
+<br>
+<p>#ifdef WIN3
+<br>
+&nbsp;&nbsp;_open
+<br>
+#else
+<br>
+&nbsp;&nbsp;open
+<br>
+#endif
+<br>
+<p>I was initially considering adding the stat checks in the Unix portion
+<br>
+(I don't know anything about Windows).
+<br>
+<p>However, I think the correct approach would be to have the configure
+<br>
+script look for stat and S_ISDIR and only use them if they are found.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;IMHO the IS_DIR macro is not posix, but the constant IF_DIR is.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;So, if undefined, S_IFDIR can be defined.
+<br>
+<p>Well, according to the manuals distributed with Debian, S_ISDIR is a
+<br>
+POSIX macro.
+<br>
+<p>The suggestion for S_IFDIR is good, though.  I'll make the configure
+<br>
+script check for them and use whatever is available (or nothing) and
+<br>
+send two patches (one for libxml and another for libxml2) whenever I
+<br>
+get time (probably tomorrow).
+<br>
+<p>By the way, the configure scripts gets to run on Windows systems,
+<br>
+right?  Or what do you use there?
+<br>
+<p>Thanks.
+<br>
+<p>Alejo.
+<br>
+<a href="http://bachue.com/alejo">http://bachue.com/alejo</a>
+<br>
+<p><pre>
+--
+The mere formulation of a problem is far more essential than its solution.
+      -- Albert Einstein.
+<p>$0='!/sfldbi!yjoV0msfQ!sfiupob!utvK'x44;print map{(&quot;\e[7m \e[0m&quot;,chr ord
+(chop$0)-1)[$_].(&quot;\n&quot;)[++$i%77]}split//,unpack'B*',pack'H*',($F='F'x19).
+&quot;F0F3E0607879CC1E0F0F339F3FF399C666733333CCF87F99E6133999999E67CFFCCF3&quot;.
+&quot;219CC1CCC033E7E660198CCE4E66798303873CCE60F3387$F&quot;#Don't you love Perl?
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1369.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1366.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1368.html">Igor Zlatkovic: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 10:44:07 EST</em>
+</em>
+</small>
+</body>
+</html>

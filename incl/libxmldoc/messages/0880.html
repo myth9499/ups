@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Targetting Win32</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] Targetting Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Targetting Win32</h1>
+<!-- received="Wed Oct  4 09:47:38 2000" -->
+<!-- isoreceived="20001004134738" -->
+<!-- sent="Wed, 04 Oct 2000 09:47:32 -0400" -->
+<!-- isosent="20001004134732" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] Targetting Win32" -->
+<!-- id="200010041347.JAA12813@vixen.cs.utk.edu" -->
+<!-- inreplyto="[xml] Targetting Win32" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Targetting%20Win32"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Wed Oct 04 2000 - 09:47:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0879.html">David Doolin: "Re: [xml] MSDev project files for libxml2-2.2.4"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0876.html">Peter Jacobi: "[xml] Targetting Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20001004104211.A14778@w3.org?subject=Re:%20[xml]%20Targetting%20Win32">20001004104211.A14778@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;On Wed, Oct 04, 2000 at 10:23:05AM +0200, Peter Jacobi wrote:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Dear All,
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; As more support for the MSVC compiler is added, I just wanted to 
+</em><br>
+<em>&gt;&gt; remind the porters, not to usurp the WIN32 #ifdefs for specific MSVC 
+</em><br>
+<em>&gt;&gt; stuff.
+</em><br>
+<p>Right.  No need for this.
+<br>
+<p><em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; There are still users of other compilers out there and I hope we can 
+</em><br>
+<em>&gt;&gt; peacefully co-exist.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Do you have something specific in mind ?
+</em><br>
+<p><p>I do.
+<br>
+<p><p><em>&gt;
+</em><br>
+<em>&gt;  I don't plan to accept compiler specific #ifdef/#endif for the C code.
+</em><br>
+<em>&gt;I'm okay to have some limited to the include files though.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;     The rule of the game for the Windows port is to get everything
+</em><br>
+<em>&gt;     within the WIN32 sections, and if there is any compiler tweaks
+</em><br>
+<em>&gt;     needed to limit them to win32config.h
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Considering the Makefiles again if there is one such file which can
+</em><br>
+<em>&gt;content 80% of the Windows users, I will include it in the distribution.
+</em><br>
+<em>&gt;If one need to maintain 3 or 4 I would prefer to keep them as external
+</em><br>
+<em>&gt;contributions to avoid bitrot.
+</em><br>
+<p>All of this stuff dumped into an `offical' win32 subdirectory
+<br>
+puts the burden on the win32 users of those tools, while allowing
+<br>
+Daniel to enforce whatever constraints he wants on patches.
+<br>
+<p><p><p><em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;-- 
+</em><br>
+<em>&gt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Targetting%20Win32">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt;Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt;Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt; <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Targetting%20Win32">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Targetting%20Win32">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Targetting%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Targetting%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0879.html">David Doolin: "Re: [xml] MSDev project files for libxml2-2.2.4"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0876.html">Peter Jacobi: "[xml] Targetting Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 04 2000 - 10:44:57 EDT</em>
+</em>
+</small>
+</body>
+</html>

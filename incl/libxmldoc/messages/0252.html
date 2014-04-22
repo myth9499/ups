@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] How to avoid character entities</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] How to avoid character entities">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] How to avoid character entities</h1>
+<!-- received="Mon Dec 13 08:54:54 1999" -->
+<!-- isoreceived="19991213135454" -->
+<!-- sent="Mon, 13 Dec 1999 08:54:52 -0500" -->
+<!-- isosent="19991213135452" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] How to avoid character entities" -->
+<!-- id="19991213085451.K3657@w3.org" -->
+<!-- inreplyto="cayaazdml0.fsf@u35.num.math.uni-goettingen.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20How%20to%20avoid%20character%20entities"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Dec 13 1999 - 08:54:52 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<li><strong>Previous message:</strong> <a href="0251.html">Michael Fischer v. Mollard: "[xml] How to avoid character entities"</a>
+<li><strong>In reply to:</strong> <a href="0251.html">Michael Fischer v. Mollard: "[xml] How to avoid character entities"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<li><strong>Reply:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 13, 1999 at 01:58:19PM +0100, Michael Fischer v. Mollard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Just a short question: I parse an iso latin1 encoded xml file, and all
+</em><br>
+<em>&gt; special characters like 'ü' are replaced by a CharRefEntity &amp;uxxx; . How
+</em><br>
+<em>&gt; do I avoid this conversion?
+</em><br>
+<p>&nbsp;&nbsp;Hum, hard problem. I18N is clearly the weakest point of libxml, I'm
+<br>
+not a specialist and help in this area would be more than welcome.
+<br>
+Currently since I don't handle cleanly encodings, the output method
+<br>
+revert to a safe but annoying way to save non-ascii data, i.e. use
+<br>
+CharRefEntities.
+<br>
+<p>&nbsp;&nbsp;Going a bit deeper in the analysis:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlNodeDump calls xmlEncodeEntitiesReentrant to prepare the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node content output stream
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlEncodeEntitiesReentrant currently output CharRefs to anything
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outside the [0x20 - 0x80] range.
+<br>
+<p>My take is that
+<br>
+<p>&nbsp;&nbsp;You should declare an encoding in the xml declaration section, i.e.
+<br>
+start your documents with:
+<br>
+&lt;?xml version='1.0' encoding='ISO-8859-1'?&gt;
+<br>
+<p>And depending on the encoding of your document the xmlEncodeEntitiesReentrant
+<br>
+should check how to encode those out of range data.
+<br>
+<p>There is a function in encoding.c called xmlParseCharEncoding()
+<br>
+which should be used to detect it and then take appropriate action
+<br>
+but it is not called currently.
+<br>
+There is also basic encoding/decoding functions to/from UTF8 for
+<br>
+ISO-Latin-1 and UTF-16 in encoding.c.
+<br>
+<p>There is then 2 possibilities:
+<br>
+&nbsp;&nbsp;- keep the internal encoding ISO-Latin-1, or whatever encoding the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;initial entity was using. This is difficult if we need to handle
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;chars encoded on more than one byte (xmlChar is currently defined
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;as unsigned char) since in that case the parser might have trouble
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dealing with the input (but would work fine for ISO-Latin class of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;encodings).
+<br>
+&nbsp;&nbsp;- convert the entity on-the fly to UTF-8 used internally, this is 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;what the encoder field in xmlParserInputBuffer is supposed to do,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;then when data is pushed in the input buffer it's first converted
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to UTF-8 before parsing.
+<br>
+<p>&nbsp;Both methods have advantages/drawbacks, the second one must clearly be
+<br>
+supported to get any &quot;XML conformant&quot; label, we must be able to parse
+<br>
+UTF-16 at some point.
+<br>
+&nbsp;So there is some framework for I18N scattered around the code, but 
+<br>
+it's not yet plugged and tested. I'm afraid until this area is cleaned
+<br>
+up, avoiding CharRef encoding in the output would be an ugly hack.
+<br>
+<p>&nbsp;&nbsp;Clearly this is an area where I need help and feedback,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20How%20to%20avoid%20character%20entities">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20How%20to%20avoid%20character%20entities">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20How%20to%20avoid%20character%20entities">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<li><strong>Previous message:</strong> <a href="0251.html">Michael Fischer v. Mollard: "[xml] How to avoid character entities"</a>
+<li><strong>In reply to:</strong> <a href="0251.html">Michael Fischer v. Mollard: "[xml] How to avoid character entities"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<li><strong>Reply:</strong> <a href="0253.html">Owen Cliffe: "[xml] W3c XML page"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:54 EDT</em>
+</em>
+</small>
+</body>
+</html>

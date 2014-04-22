@@ -1,0 +1,360 @@
+#include "ups.h"
+
+void destory_var_hash(void);
+void serv(int sig);
+
+void delservpid(void)
+{
+	printf("开始删除共享内存数据[%ld]\n",getpid());
+	pid_t ret = 0;
+	int shmid = 0,i=0,semid = 0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		printf("get serv shm id error\n");
+		return ;
+	}
+	printf("shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		printf("shmat sreg error\n");
+		return ;
+	}
+	/** 信号量控制 **/
+	if((semid = get_sem())<=0)
+	{
+		printf("get sem id error\n");
+		shmdt(sreg);
+		return ;
+	}else
+	{
+		if(sem_p(semid)!=0)
+		{
+			printf("sem_p error");
+			shmdt(sreg);
+			return ;
+		}else
+		{
+			for(i=0;i<MAXSERVREG;i++)
+			{
+				printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+				if((sreg+i)->servpid==getpid())
+				{
+					(sreg+i)->servpid='0';
+					ret = 0;
+					break;
+				}
+
+			}
+		}
+	}
+	shmdt(sreg);
+	sem_v(semid);
+	return ;
+}
+int updatestat(void)
+{
+	pid_t ret = 0;
+	int shmid = 0,i=0,semid = 0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		printf("get serv shm id error\n");
+		return -1;
+	}
+	printf("shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		printf("shmat sreg error\n");
+		return -1;
+	}
+	/** 信号量控制 
+	if((semid = get_sem())<=0)
+	{
+		printf("get sem id error\n");
+		shmdt(sreg);
+		return -1;
+	}else
+	{
+		if(sem_p(semid)!=0)
+		{
+			printf("sem_p error");
+			shmdt(sreg);
+			return -1;
+		}else
+		{
+			printf("获取信号量成功\n");
+	**/
+			for(i=0;i<MAXSERVREG;i++)
+			{
+				printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+				if((sreg+i)->servpid==getpid())
+				{
+					(sreg+i)->stat[0]='N';
+					ret = 0;
+					break;
+				}
+
+			}
+		//}
+	//}
+	shmdt(sreg);
+	//sem_v(semid);
+	printf("解除信号量成功\n");
+	return ret;
+}
+
+
+int insert_servreg(void )
+{
+	int shmid = 0,i=0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		printf("get serv shm id error\n");
+		return -1;
+	}
+	printf("shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		printf("shmat sreg error\n");
+		return -1;
+	}
+	for(i=0;i<MAXSERVREG;i++)
+	{
+		printf("i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		if((sreg+i)->servpid==0)
+		{
+			(sreg+i)->servpid = getpid();
+			(sreg+i)->stat[0]='N';
+			shmdt(sreg);
+			return 0;
+		}else if((kill((sreg+i)->servpid,SIGUSR2)==-1)&&(errno == ESRCH))
+		{
+			(sreg+i)->servpid = getpid();
+			(sreg+i)->stat[0]='N';
+			shmdt(sreg);
+			return 0;
+		}
+	}
+	shmdt(sreg);
+	return -1;
+}
+
+
+int iret = 0;
+int msgidi=0,msgido=0;
+key_t key;
+_msgbuf *mbuf=NULL;
+_tran *tranbuf = NULL;
+
+
+int main(int argc,char *argv[])
+{
+	atexit(destory_var_hash);
+	atexit(delservpid);
+
+	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
+	if(mbuf == (void *)-1)
+	{
+		perror("malloc msgbuf error");
+		return -1;
+	}
+
+	tranbuf = (_tran *)malloc(sizeof(_tran));
+	if(tranbuf == (void *)-1)
+	{
+		perror("malloc msgbuf error");
+		return -1;
+	}
+
+	iret = init_var_hash();
+	if(iret != 0)
+	{
+		printf("init var hash error\n");
+		free(tranbuf);
+		free(mbuf);
+		return -1;
+	}
+
+	if(getmsgid("测试渠道",&msgidi,&msgido)!=0)
+	{
+		printf("get msgid error\n");
+		return -1;
+	}
+
+	/** 注册serv **/
+	if(insert_servreg()==0)
+	{
+		printf("注册服务成功\n");
+	}else
+	{
+		printf("注册服务失败\n");
+		return -1;
+	}
+	
+	/** 堵塞到信号 **/
+	signal(SIGUSR2,serv);
+	while (1)
+	{
+		pause();
+	}
+	free(tranbuf);
+	free(mbuf);
+	return 0;
+}
+void serv(int sig)
+{
+	printf("获取信号!!!\n");
+	int semid ;
+	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),0,IPC_NOWAIT);
+	if(iret > 0)
+	{
+		/** 先返回 0000表示成功 暂时不要尝试一下  
+		  strncpy(mbuf->tranbuf,"0000",strlen("0000"));
+		  strncpy(mbuf->tranbuf+4,"ok",strlen("ok"));
+		  iret  = msgsnd(msgidi,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+		  if(iret <0 )
+		  {
+		  printf("返回原发起渠道错\n");
+		  continue;
+		  }
+		 **/
+		innerid = mbuf->innerid ; 
+		printf("全局跟踪号为:[%ld]\n",innerid);
+		if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
+		{
+			printf("innerid[%ld]\tinbuf[%s]\n",mbuf->innerid,tranbuf->intran);
+			strcpy(tranbuf->outtran,tranbuf->intran);
+			iret = shm_hash_update(mbuf->innerid,NULL,tranbuf->outtran);
+			if(iret == -1)
+			{
+				printf("return error\n");
+				//return -1;
+			}
+			if(unpack("测试渠道",tranbuf->intran)==-1)
+			{
+				printf("unpack the chnl msg buff error\n");
+				//return -1;
+			}
+			testvar();
+			if(serv_flow(tranbuf->intran)!=0)
+			{
+				printf("serv_flow error\n");
+				//continue;
+			}else
+			{
+				printf("serv_flow ok\n");
+				//continue;
+			}
+			iret = msgsnd(msgidi,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+			if(iret == -1)
+			{
+				printf("msg respos error[%s]\n",strerror(errno));
+				//return -1;
+			}
+			printf("msg respos ok\n");
+		}
+	}else if(errno  == ENOMSG)
+	{
+		//return -1;
+		printf("无消息\n");
+		//return;
+		//continue;
+	}else if(errno  !=ENOMSG )
+	{
+		printf("msg recv error[%s]\n",strerror(errno));
+		sleep (1);
+		//return;
+	//	continue;
+		//	return -1;
+	}else
+	{
+		printf("other error\n");
+		//return ;
+	}
+	/**修改状态为空闲 **/
+	if((semid = get_sem())<=0)
+	{
+		printf("get sem id error\n");
+		return ;
+	}else
+	{
+		if(sem_p(semid)!=0)
+		{
+			printf("sem_p error");
+			return ;
+		}else
+		{
+			updatestat();
+		}
+	}
+	sem_v(semid);
+	return ;
+	//printf("msg recv ok[%ld][%s]\n",mbuf->innerid,mbuf->tranbuf);
+}
+int testvar(void)
+{
+	char value[1024];
+	memset(value,0,sizeof(value));
+	get_var_value("V_CHANNEL",1024,1,value);
+	printf("var value is [%s]\n",value);
+	get_var_value("V_TRAN",1024,1,value);
+	printf("var value is [%s]\n",value);
+	get_var_value("V_BUFF",1024,1,value);
+	printf("var value is [%s]\n",value);
+	return 0;
+}
+int serv_flow(char *tranbuf)
+{
+	key_t	key;
+	int shmid,i=0;
+	_flow *flow=NULL;
+	char *tmpbuf = NULL;
+	_flow *tmpshmdt=NULL;
+	size_t shmsize;
+	/** init commmsg **/
+	shmsize=MAXFLOW*sizeof(_flow);
+	if((shmid=getshmid(8,shmsize))==-1)
+	{
+		printf("get shm error\n");
+		return -1;
+	}
+	if(tranbuf==NULL)
+	{
+		printf("the flow error\n");
+		return -1;
+	}
+	printf("start serv flow tranbuf[%s] \n",tranbuf);
+	flow = (_flow *)shmat(shmid,NULL,0);
+	if(flow == NULL)
+	{
+		printf("flow shmat error\n");
+		return -1;
+	}
+	tmpshmdt = flow;
+	while(strcmp(flow->flowname,"END"))
+	{
+		printf("flow flowname[%s]\n",flow->flowname);
+		if(!strcmp(flow->flowname,"测试流程")&&flow->flowso[0]!= ' ' )
+		{
+			printf("开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",flow->flowname,
+					flow->flowso,flow->flowfunc,flow->funcpar1);
+			if(do_so(flow->flowso,flow->flowfunc,flow->funcpar1,NULL,NULL)==0)
+			{
+				printf("流程处理成功\n");
+			}else
+			{
+				printf("流程处理失败\n");
+			}
+			flow++;
+			continue;
+		}
+		flow++;
+	}
+	shmdt(tmpshmdt);
+	return 0;
+}

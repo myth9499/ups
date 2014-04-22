@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] entity substitution</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] entity substitution">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] entity substitution</h1>
+<!-- received="Fri Sep 22 17:35:54 2000" -->
+<!-- isoreceived="20000922213554" -->
+<!-- sent="Fri, 22 Sep 2000 23:35:51 +0200" -->
+<!-- isosent="20000922213551" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] entity substitution" -->
+<!-- id="20000922233551.C1913@w3.org" -->
+<!-- inreplyto="39CBCDAE.3D4A1F98@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20substitution"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 17:35:51 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt; &gt;    In your case, the problem comes from doc being NULL when calling the
+</em><br>
+<em>&gt; &gt; entity resolution routine. This bug was fixed in the last month, so what
+</em><br>
+<em>&gt; &gt; version are you using ???
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 2.2.2, so that might explain it.  I apologize, I might have missed the
+</em><br>
+<em>&gt; discussion about this.  I'll upgrade and give it another shot.
+</em><br>
+<p>&nbsp;&nbsp;I don't think it was dicussed in the ML. But I'm pretty sure I
+<br>
+fixed this. 
+<br>
+&nbsp;&nbsp;The problem was the following:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- you were adding an argument to a node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- this node had not (yet ?) been connected to a document
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- when adding an attribute, the string has to be parsed to 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;possibly split it into text nodes and entity references node
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- there was an entity reference, but the document pointer was
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NULL.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- the fix is that the entity lookup should not have crashed due
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to this, it should just lookup the predefined entity references.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- however if that attribute value had referenced a locally defined
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entity then since the node has not been connected, it's not possible
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to find the document and hence the list of declared entities.
+<br>
+&nbsp;&nbsp;So it's better anyway to connect first the node to the document before
+<br>
+adding attributes or content to it.
+<br>
+&nbsp;&nbsp;If the node was connected to the document then it's another bug and
+<br>
+try to give me the sequence of call you made since the creation of the
+<br>
+element.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20substitution">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<li><strong>In reply to:</strong> <a href="0798.html">Joe McAlerney: "Re: [xml] entity substitution"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 17:43:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

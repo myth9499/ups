@@ -1,0 +1,666 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Callbacks for xmlIO</title>
+<meta name="Author" content="Peter Jacobi (pj@walter-graphtek.com)">
+<meta name="Subject" content="[xml] Callbacks for xmlIO">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Callbacks for xmlIO</h1>
+<!-- received="Thu Mar  2 04:37:17 2000" -->
+<!-- isoreceived="20000302093717" -->
+<!-- sent="Thu, 2 Mar 2000 10:32:43 +0100" -->
+<!-- isosent="20000302093243" -->
+<!-- name="Peter Jacobi" -->
+<!-- email="pj@walter-graphtek.com" -->
+<!-- subject="[xml] Callbacks for xmlIO" -->
+<!-- id="1260133239-265163873@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Peter Jacobi (<a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20Callbacks%20for%20xmlIO"><em>pj@walter-graphtek.com</em></a>)<br>
+<strong>Date:</strong> Thu Mar 02 2000 - 04:32:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0408.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Reply:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Reply:</strong> <a href="0415.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Dear All,
+<br>
+<p>I would like to change the different 'input methods' in xmlIO.c to a 
+<br>
+callback based scheme. This would decrease compile-time and 
+<br>
+link-time dependancies and would allow to add new input methods 
+<br>
+without changing xmlIO.c.
+<br>
+<p>The diffs for a basic implementations are attached.
+<br>
+<p>For each 'input method' for callbacks must be defined: A single 
+<br>
+void* in xmlParserInputBuffer will hold the context, replacing
+<br>
+file, gzfile, fd, httpIO and ftpIO.
+<br>
+<p>typedef int (*xmlInputMatchCallback) (char const *filename);
+<br>
+typedef void * (*xmlInputOpenCallback) (char const *filename);
+<br>
+typedef int (*xmlInputReadCallback) (void * context, char * buffer, 
+<br>
+int len);
+<br>
+typedef void (*xmlInputCloseCallback) (void * context);
+<br>
+<p>xmlInputMatchCallback will look whether the 'filename' indicates a 
+<br>
+source processed by this input method.
+<br>
+<p>xmlInputOpenCallback will initialize the context.
+<br>
+<p>xmlInputReadCallback will look read the data.
+<br>
+<p>xmlInputMatchCallback will cleanup the context.
+<br>
+<p>Regards,
+<br>
+Peter Jacobi
+<br>
+<p><p><p><p><p>
+53 a 54,102
+<br>
+<em>&gt; /* input from file descriptor */
+</em><br>
+<em>&gt; int fdMatch (char const *filename) {
+</em><br>
+<em>&gt;     return strstr (filename, &quot;:&quot;) == 0;
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; void * fdOpen (char const *filename) {
+</em><br>
+<em>&gt;     int fd = -1;
+</em><br>
+<em>&gt; #ifdef WIN32
+</em><br>
+<em>&gt;     fd = _open (filename, O_RDONLY | _O_BINARY);
+</em><br>
+<em>&gt; #else
+</em><br>
+<em>&gt;     fd = open (filename, O_RDONLY);
+</em><br>
+<em>&gt; #endif
+</em><br>
+<em>&gt;     return (void *) fd;
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; int fdRead (void * context, char * buffer, int len) {
+</em><br>
+<em>&gt;     int fd = (int) context;
+</em><br>
+<em>&gt;     return  read (fd, &amp;buffer[0], len);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; void fdClose (void * context) {
+</em><br>
+<em>&gt;     int fd = (int) context;
+</em><br>
+<em>&gt;     close (fd);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; xmlInputCallback fdInputCallback = {fdMatch, fdOpen, fdRead, fdClose};
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /* input from file descriptor */
+</em><br>
+<em>&gt; int fileMatch (char const *filename) {
+</em><br>
+<em>&gt;     return strstr (filename, &quot;:&quot;) == 0;
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; void * fileOpen (char const *filename) {
+</em><br>
+<em>&gt;     FILE *file = fopen (filename, &quot;r&quot;);
+</em><br>
+<em>&gt;     return file;
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; int fileRead (void * context, char * buffer, int len) {
+</em><br>
+<em>&gt;     FILE *file = context;
+</em><br>
+<em>&gt;     return fread(&amp;buffer[0], 1, len, file);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; void fileClose (void * context) {
+</em><br>
+<em>&gt;     FILE *file = context;
+</em><br>
+<em>&gt;     fclose (file);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; xmlInputCallback fileInputCallback = {fileMatch, fileOpen, fdRead, fileClose};
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /* default input method table */
+</em><br>
+<em>&gt; xmlInputCallback defaultInputCallbackTable [] = {
+</em><br>
+<em>&gt;     {fdMatch, fdOpen, fdRead, fdClose},
+</em><br>
+<em>&gt;     {fileMatch, fileOpen, fdRead, fileClose},
+</em><br>
+<em>&gt;     {0, 0, 0, 0}
+</em><br>
+<em>&gt; };
+</em><br>
+<em>&gt; xmlInputCallback *xmlInputCallbackTable = defaultInputCallbackTable;
+</em><br>
+<em>&gt;                                        
+</em><br>
+79,81 c 128,131
+<br>
+&lt;     ret-&gt;fd = -1;
+<br>
+&lt;     ret-&gt;httpIO = NULL;
+<br>
+&lt;     ret-&gt;ftpIO = NULL;
+<br>
+<em>&gt;     
+</em><br>
+<em>&gt;     ret-&gt;context = 0;
+</em><br>
+<em>&gt;     ret-&gt;readcallback = 0;
+</em><br>
+<em>&gt;     ret-&gt;closecallback = 0;
+</em><br>
+96,107 c 146,152
+<br>
+&lt;       in-&gt;buffer = NULL;
+<br>
+&lt;     }
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;     if (in-&gt;gzfile != NULL)
+<br>
+&lt;         gzclose(in-&gt;gzfile);
+<br>
+&lt; #endif
+<br>
+&lt;     if (in-&gt;httpIO != NULL)
+<br>
+&lt;         xmlNanoHTTPClose(in-&gt;httpIO);
+<br>
+&lt;     if (in-&gt;ftpIO != NULL)
+<br>
+&lt;         xmlNanoFTPClose(in-&gt;ftpIO);
+<br>
+&lt;     if (in-&gt;fd &gt;= 0)
+<br>
+&lt;         close(in-&gt;fd);
+<br>
+<em>&gt;     in-&gt;buffer = NULL;
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt;     
+</em><br>
+<em>&gt;     if (in-&gt;closecallback != 0) {
+</em><br>
+<em>&gt;         (*in-&gt;closecallback) (in-&gt;context);
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt; 
+</em><br>
+128,208 c 173,190
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;     gzFile input = 0;
+<br>
+&lt; #else
+<br>
+&lt;     int input = -1;
+<br>
+&lt; #endif
+<br>
+&lt;     void *httpIO = NULL;
+<br>
+&lt;     void *ftpIO = NULL;
+<br>
+&lt; 
+<br>
+&lt;     if (filename == NULL) return(NULL);
+<br>
+&lt; 
+<br>
+&lt;     if (!strncmp(filename, &quot;http://&quot;, 7)) {
+<br>
+&lt;         httpIO = xmlNanoHTTPOpen(filename, NULL);
+<br>
+&lt;         if (httpIO == NULL) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;             fprintf (stderr, &quot;Cannot read URL %s\n&quot;, filename);
+<br>
+&lt;             perror (&quot;xmlNanoHTTPOpen failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;             return(NULL);
+<br>
+&lt;       }
+<br>
+&lt;     } else if (!strncmp(filename, &quot;ftp://&quot;, 6)) {
+<br>
+&lt;         ftpIO = xmlNanoFTPOpen(filename);
+<br>
+&lt;         if (ftpIO == NULL) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;             fprintf (stderr, &quot;Cannot read URL %s\n&quot;, filename);
+<br>
+&lt;             perror (&quot;xmlNanoFTPOpen failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;             return(NULL);
+<br>
+&lt;       }
+<br>
+&lt;     } else if (!strcmp(filename, &quot;-&quot;)) {
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;         input = gzdopen (fileno(stdin), &quot;r&quot;);
+<br>
+&lt;         if (input == NULL) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;             fprintf (stderr, &quot;Cannot read from stdin\n&quot;);
+<br>
+&lt;             perror (&quot;gzdopen failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;             return(NULL);
+<br>
+&lt;       }
+<br>
+&lt; #else
+<br>
+&lt; #ifdef WIN32
+<br>
+&lt;         input = -1;
+<br>
+&lt; #else
+<br>
+&lt;         input = fileno(stdin);
+<br>
+&lt; #endif
+<br>
+&lt;         if (input &lt; 0) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;             fprintf (stderr, &quot;Cannot read from stdin\n&quot;);
+<br>
+&lt;             perror (&quot;open failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;           return(NULL);
+<br>
+&lt;       }
+<br>
+&lt; #endif
+<br>
+&lt;     } else {
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;       input = gzopen (filename, &quot;r&quot;);
+<br>
+&lt;       if (input == NULL) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;           fprintf (stderr, &quot;Cannot read file %s :\n&quot;, filename);
+<br>
+&lt;           perror (&quot;gzopen failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;           return(NULL);
+<br>
+&lt;       }
+<br>
+&lt; #else
+<br>
+&lt; #ifdef WIN32
+<br>
+&lt;       input = _open (filename, O_RDONLY | _O_BINARY);
+<br>
+&lt; #else
+<br>
+&lt;       input = open (filename, O_RDONLY);
+<br>
+&lt; #endif
+<br>
+&lt;       if (input &lt; 0) {
+<br>
+&lt; #ifdef VERBOSE_FAILURE
+<br>
+&lt;           fprintf (stderr, &quot;Cannot read file %s :\n&quot;, filename);
+<br>
+&lt;           perror (&quot;open failed&quot;);
+<br>
+&lt; #endif
+<br>
+&lt;           return(NULL);
+<br>
+&lt;       }
+<br>
+&lt; #endif
+<br>
+&lt;     }
+<br>
+&lt; 
+<br>
+&lt;     /*
+<br>
+&lt;      * Allocate the Input buffer front-end.
+<br>
+&lt;      */
+<br>
+<em>&gt;     
+</em><br>
+<em>&gt;     xmlInputCallback *input = xmlInputCallbackTable;
+</em><br>
+<em>&gt;     void *context = 0;
+</em><br>
+<em>&gt;     while (
+</em><br>
+<em>&gt;         input != 0 &amp;&amp;
+</em><br>
+<em>&gt;         !(*input-&gt;matchcallback) (filename)
+</em><br>
+<em>&gt;     ) {
+</em><br>
+<em>&gt;         ++input;
+</em><br>
+<em>&gt;     }    
+</em><br>
+<em>&gt;     if (input-&gt;matchcallback == 0) {
+</em><br>
+<em>&gt;         perror (&quot;no matching input method&quot;);
+</em><br>
+<em>&gt;         return 0;
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt;     context = (*input-&gt;opencallback) (filename);
+</em><br>
+<em>&gt;     if (context == 0) {
+</em><br>
+<em>&gt;         perror (&quot;open failed&quot;);
+</em><br>
+<em>&gt;         return 0;
+</em><br>
+<em>&gt;     }
+</em><br>
+211,219 c 193,197
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;         ret-&gt;gzfile = input;
+<br>
+&lt; #else
+<br>
+&lt;         ret-&gt;fd = input;
+<br>
+&lt; #endif
+<br>
+&lt;         ret-&gt;httpIO = httpIO;
+<br>
+&lt;         ret-&gt;ftpIO = ftpIO;
+<br>
+&lt;     }
+<br>
+&lt; 
+<br>
+<em>&gt;         ret-&gt;context = context;
+</em><br>
+<em>&gt;         ret-&gt;readcallback = input-&gt;readcallback;
+</em><br>
+<em>&gt;         ret-&gt;closecallback = input-&gt;closecallback;
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt;     
+</em><br>
+240,241 c 218,222
+<br>
+&lt;     if (ret != NULL)
+<br>
+&lt;         ret-&gt;file = file;
+<br>
+<em>&gt;     if (ret != NULL) {
+</em><br>
+<em>&gt;         ret-&gt;context = file;
+</em><br>
+<em>&gt;         ret-&gt;readcallback = fileInputCallback.readcallback;
+</em><br>
+<em>&gt;         ret-&gt;closecallback = fileInputCallback.closecallback;
+</em><br>
+<em>&gt;     }    
+</em><br>
+263,264 c 244,249
+<br>
+&lt;     if (ret != NULL)
+<br>
+&lt;         ret-&gt;fd = fd;
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if (ret != NULL) {
+</em><br>
+<em>&gt;         ret-&gt;context = (void*) fd;
+</em><br>
+<em>&gt;         ret-&gt;readcallback = fdInputCallback.readcallback;
+</em><br>
+<em>&gt;         ret-&gt;closecallback = fdInputCallback.closecallback;
+</em><br>
+<em>&gt;     }    
+</em><br>
+363,376 c 348,352
+<br>
+&lt;       return(-1);
+<br>
+&lt;     }
+<br>
+&lt;     if (in-&gt;httpIO != NULL) {
+<br>
+&lt;         res = xmlNanoHTTPRead(in-&gt;httpIO, &amp;buffer[0], len);
+<br>
+&lt;     } else if (in-&gt;ftpIO != NULL) {
+<br>
+&lt;         res = xmlNanoFTPRead(in-&gt;ftpIO, &amp;buffer[0], len);
+<br>
+&lt;     } else if (in-&gt;file != NULL) {
+<br>
+&lt;       res = fread(&amp;buffer[0], 1, len, in-&gt;file);
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;     } else if (in-&gt;gzfile != NULL) {
+<br>
+&lt;       res = gzread(input, &amp;buffer[0], len);
+<br>
+&lt; #endif
+<br>
+&lt;     } else if (in-&gt;fd &gt;= 0) {
+<br>
+&lt;       res = read(in-&gt;fd, &amp;buffer[0], len);
+<br>
+<em>&gt;     return(-1);
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt;     
+</em><br>
+<em>&gt;     if (in-&gt;readcallback != 0) {
+</em><br>
+<em>&gt;         res = (*in-&gt;readcallback) (in-&gt;context, &amp;buffer[0], len);
+</em><br>
+448,453 c 426,429
+<br>
+&lt;     if ((in-&gt;httpIO != NULL) || (in-&gt;ftpIO != NULL) || (in-&gt;file != NULL) ||
+<br>
+&lt; #ifdef HAVE_ZLIB_H
+<br>
+&lt;         (in-&gt;gzfile != NULL) ||
+<br>
+&lt; #endif
+<br>
+&lt;         (in-&gt;fd &gt;= 0))
+<br>
+&lt;       return(xmlParserInputBufferGrow(in, len));
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if (in-&gt;readcallback != 0)
+</em><br>
+<em>&gt;     
+</em><br>
+<em>&gt;     return(xmlParserInputBufferGrow(in, len));
+</em><br>
+<p><p><p>
+20 a 21,37
+<br>
+<em>&gt; typedef int (*xmlInputMatchCallback) (char const *filename);
+</em><br>
+<em>&gt; typedef void * (*xmlInputOpenCallback) (char const *filename);
+</em><br>
+<em>&gt; typedef int (*xmlInputReadCallback) (void * context, char * buffer, int len);
+</em><br>
+<em>&gt; typedef void (*xmlInputCloseCallback) (void * context);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; typedef struct _xmlInputCallback {
+</em><br>
+<em>&gt;     xmlInputMatchCallback matchcallback;
+</em><br>
+<em>&gt;     xmlInputOpenCallback opencallback;
+</em><br>
+<em>&gt;     xmlInputReadCallback readcallback;
+</em><br>
+<em>&gt;     xmlInputCloseCallback closecallback;
+</em><br>
+<em>&gt; } xmlInputCallback;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; extern xmlInputCallback fileInputCallback;
+</em><br>
+<em>&gt; extern xmlInputCallback fdInputCallback;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; extern xmlInputCallback *xmlInputCallbackTable;
+</em><br>
+<em>&gt; 
+</em><br>
+25,29 c 42,45
+<br>
+&lt;     FILE          *file;    /* Input on file handler */
+<br>
+&lt;     void*        gzfile;    /* Input on a compressed stream */
+<br>
+&lt;     int              fd;    /* Input on a file descriptor */
+<br>
+&lt;     void        *httpIO;    /* Input from an HTTP stream */
+<br>
+&lt;     void         *ftpIO;    /* Input from an FTP stream */
+<br>
+<em>&gt;     
+</em><br>
+<em>&gt;     void*                  context;
+</em><br>
+<em>&gt;     xmlInputReadCallback   readcallback;
+</em><br>
+<em>&gt;     xmlInputCloseCallback  closecallback;
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Callbacks%20for%20xmlIO">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Callbacks%20for%20xmlIO">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0408.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Previous message:</strong> <a href="0406.html">Peter Jacobi: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Reply:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Reply:</strong> <a href="0415.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:07 EDT</em>
+</em>
+</small>
+</body>
+</html>

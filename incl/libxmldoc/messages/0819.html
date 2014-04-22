@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Warnings on LibXML</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] Warnings on LibXML">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Warnings on LibXML</h1>
+<!-- received="Mon Sep 25 12:23:18 2000" -->
+<!-- isoreceived="20000925162318" -->
+<!-- sent="Mon, 25 Sep 2000 12:23:05 -0400" -->
+<!-- isosent="20000925162305" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] Warnings on LibXML" -->
+<!-- id="200009251623.MAA00418@duncan.cs.utk.edu" -->
+<!-- inreplyto="[xml] Warnings on LibXML" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Warnings%20on%20LibXML"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Mon Sep 25 2000 - 12:23:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0818.html">Marc Sanfacon: "RE: [xml] xmlHasProp case sensitive ?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0816.html">Nilo S. Mismetti: "[xml] Warnings on LibXML"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20000925161536.D9442@w3.org?subject=Re:%20[xml]%20Warnings%20on%20LibXML">20000925161536.D9442@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;On Mon, Sep 25, 2000 at 10:39:05AM -0300, Nilo S. Mismetti wrote:
+</em><br>
+<em>&gt;&gt; Daniel,
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; We use LibXML under (sorry) MS VC 6.0 and we need to fix some constructs
+</em><br>
+<em>&gt;&gt; that cause this compiler to issue warnings. Those fixes are cosmetic but..
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Attached are the patches.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Okay, I think they are not relative to 2.2.3, I have tried to integrate
+</em><br>
+<em>&gt;them anyway. Also providing contextual patches makes my life easier.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt; BTW: What compiler is used to develop libxml? This compiler does not
+</em><br>
+<em>&gt;&gt; generate those warnings?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;I usually stick to:
+</em><br>
+<em>&gt;  gcc -Wall -pedantic -O2 -g
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Gnu C compile with all warnings enabled.
+</em><br>
+<p><p>gcc does not appear to warn on unsigned/signed comparisons.
+<br>
+<p>Supposedly, sun cc catches as well.  I have no opinion on whether these
+<br>
+should be considered as &quot;real warnings&quot;, and I am almost ready
+<br>
+to #pragma them away for my own purposes.
+<br>
+<p>Dave D
+<br>
+<p>of &gt;
+<br>
+<em>&gt;&gt; *HTMLparser.c
+</em><br>
+<em>&gt;&gt; 1254c1254
+</em><br>
+<em>&gt;&gt; &lt;         if (html40EntitiesTable[i].value == c) {
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;         if ((unsigned int)html40EntitiesTable[i].value == c) {
+</em><br>
+<em>&gt;&gt; 1260c1260
+</em><br>
+<em>&gt;&gt; &lt;         if (html40EntitiesTable[i].value &gt; c)
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;         if ((unsigned int)html40EntitiesTable[i].value &gt; c)
+</em><br>
+<em>&gt;&gt; 2673c2673
+</em><br>
+<em>&gt;&gt; &lt;             atts = (const xmlChar **) xmlRealloc(atts, maxatts * sizeof(xm
+</em><br>
+<em>&gt;lChar *));
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;             atts = (const xmlChar **) xmlRealloc((void *) atts, maxatts * 
+</em><br>
+<em>&gt;sizeof(xmlChar *));
+</em><br>
+<em>&gt;&gt; *parser.c
+</em><br>
+<em>&gt;&gt; 7876c7876
+</em><br>
+<em>&gt;&gt; &lt;             atts = (const xmlChar **) xmlRealloc(atts,
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;             atts = (const xmlChar **) xmlRealloc((void *) atts,
+</em><br>
+<em>&gt;&gt; 7929c7929
+</em><br>
+<em>&gt;&gt; &lt;     xmlFree(atts);
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     xmlFree((void *) atts);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Okay ... I don't really understand why MSC is unhappy there, but this
+</em><br>
+<em>&gt;should not be a problem.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt; *tree.c
+</em><br>
+<em>&gt;&gt; 3946c3946
+</em><br>
+<em>&gt;&gt; &lt;     if (len &gt; buf-&gt;use) return(-1);
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     if (len &gt; (int)(buf-&gt;use)) return(-1);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I rather changed the signature to 
+</em><br>
+<em>&gt; xmlBufferShrink(xmlBufferPtr buf, unsigned int len)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;&gt; 3969c3969
+</em><br>
+<em>&gt;&gt; &lt;     if (len &lt;= buf-&gt;use) return(0);
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     if (len &lt;= (int) (buf-&gt;use)) return(0);
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Same here
+</em><br>
+<em>&gt;  xmlBufferGrow(xmlBufferPtr buf, unsigned int len)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt; 4057c4057
+</em><br>
+<em>&gt;&gt; &lt;     if(size &lt; buf-&gt;size)
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     if(size &lt; (int) buf-&gt;size)
+</em><br>
+<em>&gt;&gt; 4120c4120
+</em><br>
+<em>&gt;&gt; &lt;     if(needSize &gt; buf-&gt;size){
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     if(needSize &gt; (int) buf-&gt;size){
+</em><br>
+<em>&gt;&gt; 4165c4165
+</em><br>
+<em>&gt;&gt; &lt;     if(needSize &gt; buf-&gt;size){
+</em><br>
+<em>&gt;&gt; ---
+</em><br>
+<em>&gt;&gt; &gt;     if(needSize &gt; (int) buf-&gt;size){
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Okay I have tried to clean them up too, by by changing 
+</em><br>
+<em>&gt;stuff to unsigned int where required.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;    thanks for the patch,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;-- 
+</em><br>
+<em>&gt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Warnings%20on%20LibXML">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt;Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt;Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt; <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Warnings%20on%20LibXML">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Warnings%20on%20LibXML">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Warnings%20on%20LibXML">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Warnings%20on%20LibXML">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0818.html">Marc Sanfacon: "RE: [xml] xmlHasProp case sensitive ?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0816.html">Nilo S. Mismetti: "[xml] Warnings on LibXML"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 25 2000 - 12:44:17 EDT</em>
+</em>
+</small>
+</body>
+</html>

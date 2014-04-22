@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating a DTD from a plain text buffer?</title>
+<meta name="Author" content="Harry Blundell (harry@halcyoninc.com)">
+<meta name="Subject" content="Re: [xml] Creating a DTD from a plain text buffer?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating a DTD from a plain text buffer?</h1>
+<!-- received="Mon Oct 30 11:27:25 2000" -->
+<!-- isoreceived="20001030162725" -->
+<!-- sent="Mon, 30 Oct 2000 11:26:48 -0500 (EST)" -->
+<!-- isosent="20001030162648" -->
+<!-- name="Harry Blundell" -->
+<!-- email="harry@halcyoninc.com" -->
+<!-- subject="Re: [xml] Creating a DTD from a plain text buffer?" -->
+<!-- id="Pine.GSO.4.05.10010301118340.16262-100000@columbia" -->
+<!-- inreplyto="Pine.GSO.4.05.10010300915120.16262-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Harry Blundell (<a href="mailto:harry@halcyoninc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?"><em>harry@halcyoninc.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 11:26:48 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Okay, I've found the reason that I wasn't getting the &lt;!DOCTYPE ... &gt;
+<br>
+written to the file when I called xmlSaveFile - as well as setting
+<br>
+docPtr-&gt;intSubset = dtdPtr, I also needed to set
+<br>
+<p>&nbsp;&nbsp;docPtr-&gt;children = (xmlNodePtr) dtdPtr;
+<br>
+&nbsp;&nbsp;docPtr-&gt;last = (xmlNodePtr) dtdPtr;
+<br>
+<p>so that the DTD is a child of the document.
+<br>
+<p>I haven't looked into why I'm getting the Bus Error, but I've found a new
+<br>
+problem (at least it is for me):
+<br>
+<p>Daniel, in the new xmlIOParseDTD you provided, you call
+<br>
+<p>&nbsp;&nbsp;xmlNewDtd(ctxt-&gt;myDoc, BAD_CAST &quot;none&quot;, BAD_CAST &quot;none&quot;, BAD_CAST
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;none&quot;);
+<br>
+<p>What's the purpose of the &quot;none&quot; for the ExternalID and SystemID?
+<br>
+When I attach the DTD to a document as an internal subset, and call
+<br>
+xmlValidateDocument on it, it fails because it can't resolve the external
+<br>
+entity &quot;none&quot;.  Similarly, when I call xmlSaveFile, I get the line
+<br>
+<p>&nbsp;&nbsp;&lt;!DOCTYPE result PUBLIC &quot;none&quot; &quot;none&quot; [
+<br>
+<p>I can work around it by setting 
+<br>
+<p>&nbsp;&nbsp;dtdPtr-&gt;ExternalID = NULL;
+<br>
+&nbsp;&nbsp;dtdPtr-&gt;SystemID = NULL;
+<br>
+<p>after the call to xmlIOParseDTD, but is the &quot;none&quot; necessary for another
+<br>
+purpose?
+<br>
+<p>Thanks,
+<br>
+<p>Harry
+<br>
+----------------------------------------------------------------------
+<br>
+Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+<br>
+2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+<br>
+PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">harry@HalcyonInc.com</a>
+<br>
+<p><p>On Mon, 30 Oct 2000, Harry Blundell wrote:
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; Thanks for the quick response!
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have tried it and have two problems so far.  One I think is yours,
+</em><br>
+<em>&gt; and one is mine.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Yours (error handling not shown):
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   char *dtdBuffer = ...;
+</em><br>
+<em>&gt;   xmlParserInputBufferPtr dtdInputBufferPtr;
+</em><br>
+<em>&gt;   xmlDtdPtr dtdPtr;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   dtdInputBufferPtr = xmlParserInputBufferCreateMem(dtdBuffer,
+</em><br>
+<em>&gt;                         strlen(dtdBuffer), XML_CHAR_ENCODING_UTF8);
+</em><br>
+<em>&gt;   dtdPtr = xmlIOParseDTD(NULL, dtdInputBufferPtr,
+</em><br>
+<em>&gt;                          XML_CHAR_ENCODING_UTF8);
+</em><br>
+<em>&gt;   xmlFreeParserInputBuffer(dtdInputBufferPtr); 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The call to xmlFreeParserInputBuffer caused a Bus Error, and the
+</em><br>
+<em>&gt; following stack trace:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; program terminated by signal BUS (Bus Error)
+</em><br>
+<em>&gt; Current function is xmlBufferFree
+</em><br>
+<em>&gt;  4223       if (buf-&gt;content != NULL) {
+</em><br>
+<em>&gt; (dbx) where
+</em><br>
+<em>&gt; =&gt;[1] xmlBufferFree(buf = 0xbebebebe), line 4223 in &quot;tree.c&quot;
+</em><br>
+<em>&gt;   [2] xmlFreeParserInputBuffer(in = 0xd50b8), line 806 in &quot;xmlIO.c&quot;
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I haven't looked into this further yet, because of my problem:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If I comment out the call to xmlFreeParserInputBuffer, and continue on,
+</em><br>
+<em>&gt; when I eventually call xmlSaveFile, I don't get a &lt;!DOCTYPE ... &gt; written
+</em><br>
+<em>&gt; to the file.  However, I also don't get a &lt;!DOCTYPE ... &gt; written when I
+</em><br>
+<em>&gt; replace the above stuff by a call to xmlParseDTD, and previous posts
+</em><br>
+<em>&gt; suggest that it should work.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's what I do after the above:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; char *tagname = ...;
+</em><br>
+<em>&gt; char *filename = ...;
+</em><br>
+<em>&gt; xmlDocPtr docPtr;
+</em><br>
+<em>&gt; xmlNodePtr rootPtr;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; dtdPtr-&gt;name = xmlStrdup((xmlChar *) tagname); 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; docPtr = xmlNewDoc((xmlChar *) &quot;1.0&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; docPtr-&gt;intSubset = dtdPtr;
+</em><br>
+<em>&gt; dtdPtr-&gt;parent = docPtr;
+</em><br>
+<em>&gt; dtdPtr-&gt;doc = docPtr;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; rootPtr = xmlNewDocNode(docPtr, NULL, (xmlChar *) tagname, NULL)
+</em><br>
+<em>&gt; xmlDocSetRootElement(docPtr, rootPtr);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlSaveFile(filename, docPtr)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Any suggestions would be welcome.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Harry
+</em><br>
+<em>&gt; ----------------------------------------------------------------------
+</em><br>
+<em>&gt; Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+</em><br>
+<em>&gt; 2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+</em><br>
+<em>&gt; PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">harry@HalcyonInc.com</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Sun, 29 Oct 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; On Sun, Oct 29, 2000 at 03:15:15PM -0500, Harry Blundell wrote:
+</em><br>
+<em>&gt; &gt; &gt; 
+</em><br>
+<em>&gt; &gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt; &gt; 
+</em><br>
+<em>&gt; &gt; &gt; The only way that I could find to create a DTD as an internal subset was
+</em><br>
+<em>&gt; &gt; &gt; to call xmlParseDTD to read it from a file or URL (I haven't tried it
+</em><br>
+<em>&gt; &gt; &gt; yet, but I've seen some discussion on it, so I assume it works), and then
+</em><br>
+<em>&gt; &gt; &gt; attach the resulting node tree to my XML DOM.
+</em><br>
+<em>&gt; &gt; &gt; 
+</em><br>
+<em>&gt; &gt; &gt; Is it possible (and convenient ;-) to have the DTD in a plain text buffer
+</em><br>
+<em>&gt; &gt; &gt; and parse that?
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   Try the following patch, it provides:
+</em><br>
+<em>&gt; &gt;     xmlDtdPtr       xmlIOParseDTD           (xmlSAXHandlerPtr sax, 
+</em><br>
+<em>&gt; &gt;                                              xmlParserInputBufferPtr input,
+</em><br>
+<em>&gt; &gt; 					     xmlCharEncoding enc);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  you can generate an xmlParserInputBufferPtr from memory using
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;     xmlParserInputBufferPtr
+</em><br>
+<em>&gt; &gt;         xmlParserInputBufferCreateMem           (const char *mem, int size,
+</em><br>
+<em>&gt; &gt; 						 xmlCharEncoding enc);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; exported from xmlIO.h .
+</em><br>
+<em>&gt; &gt;  Warning I didn't tested the routine, tell me if this works :-)
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; -- 
+</em><br>
+<em>&gt; &gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+</em><br>
+<em>&gt; &gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; &gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+</em><br>
+<em>&gt; &gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Previous message:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 11:43:42 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,88 @@
+Index: HTMLparser.c
+===================================================================
+RCS file: /sources/public/XML/HTMLparser.c,v
+retrieving revision 1.59
+diff -p -r1.59 HTMLparser.c
+*** HTMLparser.c	2000/08/17 13:48:54	1.59
+--- HTMLparser.c	2000/08/22 21:22:10
+*************** htmlParseChunk(htmlParserCtxtPtr ctxt, c
+*** 4220,4227 ****
+  
+  	if ((terminate) || (ctxt->input->buf->buffer->use > 80))
+  	    htmlParseTryOrFinish(ctxt, terminate);
+!     } else if (ctxt->instate != XML_PARSER_EOF)
+          htmlParseTryOrFinish(ctxt, terminate);
+      if (terminate) {
+  	if ((ctxt->instate != XML_PARSER_EOF) &&
+  	    (ctxt->instate != XML_PARSER_EPILOG) &&
+--- 4220,4229 ----
+  
+  	if ((terminate) || (ctxt->input->buf->buffer->use > 80))
+  	    htmlParseTryOrFinish(ctxt, terminate);
+!     } else if (ctxt->instate != XML_PARSER_EOF) {
+! 	xmlParserInputBufferPush(ctxt->input->buf, 0, "");
+          htmlParseTryOrFinish(ctxt, terminate);
++     }
+      if (terminate) {
+  	if ((ctxt->instate != XML_PARSER_EOF) &&
+  	    (ctxt->instate != XML_PARSER_EPILOG) &&
+Index: parser.c
+===================================================================
+RCS file: /sources/public/XML/parser.c,v
+retrieving revision 1.218
+diff -p -r1.218 parser.c
+*** parser.c	2000/08/07 13:43:51	1.218
+--- parser.c	2000/08/22 21:22:13
+*************** xmlParserInputRead(xmlParserInputPtr in,
+*** 443,448 ****
+--- 443,449 ----
+      if (in->base == NULL) return(-1);
+      if (in->cur == NULL) return(-1);
+      if (in->buf->buffer == NULL) return(-1);
++     if (in->buf->readcallback == NULL) return(-1);
+  
+      CHECK_BUFFER(in);
+  
+*************** xmlSwitchToEncoding(xmlParserCtxtPtr ctx
+*** 2833,2847 ****
+  		    ctxt->input->buf->raw = ctxt->input->buf->buffer;
+  		    ctxt->input->buf->buffer = xmlBufferCreate();
+  
+! 		    /*
+! 		     * convert just enough to get
+! 		     * '<?xml version="1.0" encoding="xxx"?>'
+! 		     * parsed with the autodetected encoding
+! 		     * into the parser reading buffer.
+! 		     */
+! 		    nbchars = xmlCharEncFirstLine(ctxt->input->buf->encoder,
+! 		                                  ctxt->input->buf->buffer,
+! 					          ctxt->input->buf->raw);
+  		    if (nbchars < 0) {
+  			fprintf(stderr, "xmlSwitchToEncoding: encoder error\n");
+  			return(-1);
+--- 2842,2865 ----
+  		    ctxt->input->buf->raw = ctxt->input->buf->buffer;
+  		    ctxt->input->buf->buffer = xmlBufferCreate();
+  
+! 		    if (ctxt->html) {
+! 			/*
+! 			 * converst as much as possbile of the buffer
+! 			 */
+! 			nbchars = xmlCharEncInFunc(ctxt->input->buf->encoder,
+! 				                   ctxt->input->buf->buffer,
+! 						   ctxt->input->buf->raw);
+! 		    } else {
+! 			/*
+! 			 * convert just enough to get
+! 			 * '<?xml version="1.0" encoding="xxx"?>'
+! 			 * parsed with the autodetected encoding
+! 			 * into the parser reading buffer.
+! 			 */
+! 			nbchars = xmlCharEncFirstLine(ctxt->input->buf->encoder,
+! 						      ctxt->input->buf->buffer,
+! 						      ctxt->input->buf->raw);
+! 		    }
+  		    if (nbchars < 0) {
+  			fprintf(stderr, "xmlSwitchToEncoding: encoder error\n");
+  			return(-1);
+

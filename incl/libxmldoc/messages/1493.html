@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="Craig Wright (spiral@cs.unm.edu)">
+<meta name="Subject" content="Re: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] encoding, SAX callbacks</h1>
+<!-- received="Fri Feb 23 16:05:54 2001" -->
+<!-- isoreceived="20010223210554" -->
+<!-- sent="Fri, 23 Feb 2001 13:16:57 -0700" -->
+<!-- isosent="20010223201657" -->
+<!-- name="Craig Wright" -->
+<!-- email="spiral@cs.unm.edu" -->
+<!-- subject="Re: [xml] encoding, SAX callbacks" -->
+<!-- id="E14WOe9-000234-00@bigjim.cs.unm.edu" -->
+<!-- inreplyto="0102AE2D3200D4118AE20050DACDB02E363418@congress.vhcorp.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Craig Wright (<a href="mailto:spiral@cs.unm.edu?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks"><em>spiral@cs.unm.edu</em></a>)<br>
+<strong>Date:</strong> Fri Feb 23 2001 - 15:16:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1492.html">Daniel Veillard: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>    &gt;X-Authentication-Warning: rpmfind.net: majordomo set sender to <a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml-request@rufus.w3.org</a> using -f
+</em><br>
+<em>    &gt;From: James McCann &lt;<a href="mailto:james@votehere.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">james@votehere.net</a>&gt;
+</em><br>
+<em>    &gt;Cc: Andrew Berg &lt;<a href="mailto:andrewb@votehere.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">andrewb@votehere.net</a>&gt;
+</em><br>
+<em>    &gt;Date: Fri, 23 Feb 2001 11:31:29 -0800
+</em><br>
+<em>    &gt;Content-Type: text/plain;
+</em><br>
+<em>    &gt;	charset=&quot;iso-8859-1&quot;
+</em><br>
+<em>    &gt;Sender: <a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml-request@rufus.w3.org</a>
+</em><br>
+<em>    &gt;Precedence: list
+</em><br>
+<em>    &gt;Reply-To: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+</em><br>
+<em>    &gt;X-loop: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+</em><br>
+<em>    &gt;X-mailing-list: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+</em><br>
+<em>    &gt;Resent-from: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+</em><br>
+<em>    &gt;Resent-Bcc:
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;&gt;
+</em><br>
+<em>    &gt;&gt;IMHO, getting the characters in the SAX callbacks in the encoding of the 
+</em><br>
+<em>    &gt;&gt;document is the worst of all choices. Now the application has to know 
+</em><br>
+<em>    &gt;&gt;about myriads of encodings, instead of the parser.
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;I don't understand this thinking.  I am working on a large project w/ 
+</em><br>
+<em>    &gt;other people, and our apps use ISO-8859-1.  We want to understand and
+</em><br>
+<em>    &gt;use precisely one encoding, ISO-8859-1.  This is the encoding used in
+</em><br>
+<em>    &gt;our XML documents.  We do not want to handle UTF8 or any other encoding.
+</em><br>
+<em>    &gt;libxml's lack of flexibility in this regard means that we have to add
+</em><br>
+<em>    &gt;code (which I of course simply copied from libxml) to convert from
+</em><br>
+<em>    &gt;an encoding which we have no desire to use to our desired encoding.  One 
+</em><br>
+<em>    &gt;of the features of libxml which initially attracted me was its ability
+</em><br>
+<em>    &gt;to handle multiple encodings.  Now I find that I must use my preferred
+</em><br>
+<em>    &gt;encoding, and in addition translate the encoding used internally by 
+</em><br>
+<em>    &gt;libxml.  
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;&gt;There would be some value in the possibility to specify the desired 
+</em><br>
+<em>    &gt;&gt;encoding for the callbacks, if you have a UTF16 or 8859-x centric 
+</em><br>
+<em>    &gt;&gt;application. But this can easily implemented on top of the existing SAX 
+</em><br>
+<em>    &gt;&gt;callback.
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;I agree that there is &quot;value in the possibility to specify the desired 
+</em><br>
+<em>    &gt;encoding for the callbacks&quot; but I would drop the qualification.  I also
+</em><br>
+<em>    &gt;agree that it can easily be implemented, and I propose to do this w/in the
+</em><br>
+<em>    &gt;library.  libxml already does UTF8 -&gt; various other encodings and vice
+</em><br>
+<em>    &gt;versa, so why burden applications w/ the need to write additional code?
+</em><br>
+<em>    &gt;I have no problem with using UTF8 as the default encoding for the SAX 
+</em><br>
+<em>    &gt;callbacks as long as a mechanism exists to determine the encoding used
+</em><br>
+<em>    &gt;in the callbacks.  I realize there will be memory use and performance 
+</em><br>
+<em>    &gt;drawbacks, but if a user requests a certain encoding, and the appropriate
+</em><br>
+<em>    &gt;transcoders exist, that encoding should be used in the callbacks.  
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;&gt;In fact I assume some users already have done so and can share their 
+</em><br>
+<em>    &gt;&gt;code?!
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;The appropriate means for sharing code is through a library.  Having 
+</em><br>
+<em>    &gt;someone email some code, or copying and pasting code from the library 
+</em><br>
+<em>    &gt;into a project is not.  libxml already knows how to translate from one 
+</em><br>
+<em>    &gt;encoding to another, what I am suggesting is to make this ability 
+</em><br>
+<em>    &gt;available to the user, who should not be forced to use or deal with UTF8. 
+</em><br>
+<em>    &gt;There is already a flexible means for transcoding in the library, why 
+</em><br>
+<em>    &gt;not extend the API to permit this in SAX callbacks?  It would not break 
+</em><br>
+<em>    &gt;existing code, and would benefit projects like mine which do not use 
+</em><br>
+<em>    &gt;UTF8 (which I suspect is a large group of applications).
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;What I propose is something along these lines:
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;  pCtxt = xmlCreatePushParserCtxt(&amp;SAXHandler, NULL, &quot;&quot;, 0, 0);
+</em><br>
+<em>    &gt;  xmlSetSAXCallbacksEncoding(pCtxt, &quot;ISO-8859-1&quot;);
+</em><br>
+<em>    &gt;
+</em><br>
+<em>    &gt;Now my application only ever needs to understand ISO-8859-1.
+</em><br>
+<em>    &gt;
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Instead of bloating libxml why not create a little library that 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;specifically does translations?  
+<br>
+<p><pre>
+-- 
+Craig
+<p><p>------------------------------------------------------------------------------
+| Craig W. Wright                 |  &quot;The hard and brittle will surely fall; |
+| <a href="mailto:spiral@cs.unm.edu?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">spiral@cs.unm.edu</a>               |   the soft and supple will overcome.&quot;    | 
+| <a href="http://www.cs.unm.edu/~spiral/">http://www.cs.unm.edu/~spiral/</a>  |                -Lao Tzu                  |
+------------------------------------------------------------------------------
+<p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1492.html">Daniel Veillard: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1491.html">James McCann: "RE: [xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 23 2001 - 16:44:45 EST</em>
+</em>
+</small>
+</body>
+</html>

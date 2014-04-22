@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] clean use of HAVE_SNPRINTF</title>
+<meta name="Author" content="Lutz Behnke (behnke@trustcenter.de)">
+<meta name="Subject" content="[xml] clean use of HAVE_SNPRINTF">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] clean use of HAVE_SNPRINTF</h1>
+<!-- received="Thu Feb 10 09:28:54 2000" -->
+<!-- isoreceived="20000210142854" -->
+<!-- sent="Thu, 10 Feb 2000 15:24:54 +0100" -->
+<!-- isosent="20000210142454" -->
+<!-- name="Lutz Behnke" -->
+<!-- email="behnke@trustcenter.de" -->
+<!-- subject="[xml] clean use of HAVE_SNPRINTF" -->
+<!-- id="38A2CA36.C416ABB5@trustcenter.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Lutz Behnke (<a href="mailto:behnke@trustcenter.de?subject=Re:%20[xml]%20clean%20use%20of%20HAVE_SNPRINTF"><em>behnke@trustcenter.de</em></a>)<br>
+<strong>Date:</strong> Thu Feb 10 2000 - 09:24:54 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Previous message:</strong> <a href="0353.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0359.html">acassin@cs.mu.OZ.AU: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0360.html">acassin@cs.mu.OZ.AU: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi there,
+<br>
+<p>libxml-1.8.6 fails to link properly to the example prgs, and will generaly fail
+<br>
+to link on Solaris 2.5.1, since this backwater OS does not support 'snprintf'
+<br>
+as the glorious glibcs does B-)
+<br>
+<p>I have included a small patch to add the missing code mainly to nanohttp.c
+<br>
+<p>I have looked into the archive wether somebody allready submitted this, but
+<br>
+could not find any mention. But since I also failed to make the connection from
+<br>
+i18n to encode B-) I might be in repetition on this as well.
+<br>
+<p>mfg lutz
+<br>
+<p><pre>
+-- 
+Lutz Behnke, TC TrustCenter GmbH
+Sonninstrasse 24-28, D-20097 Hamburg, Germany
+Tel:040/80 80 26-0  Fax:040/80 80 26-1 26   <a href="http://www.trustcenter.de">http://www.trustcenter.de</a>
+-----BEGIN GEEK CODE BLOCK-----
+ Version: 3.1  
+GCS/IT d- s+:+ a C++ ULS+++$ P+++ L+++ E+++ W++ !N o? k? !w@++ !O
+!M !V PS+ PE Y+ PGP t+ 5+ X R+ tv+ b+++ DI+++ D G++ e++ h* r y+  
+------END GEEK CODE BLOCK------
+</pre>
+<p>
+diff -Naur libxml-1.8.6/nanoftp.c libxml-1.8.6_clean_snprintf/nanoftp.c
+--- libxml-1.8.6/nanoftp.c	Mon Jan 31 13:46:07 2000
++++ libxml-1.8.6_clean_snprintf/nanoftp.c	Thu Feb 10 14:34:00 2000
+@@ -648,10 +648,17 @@
+     int len;
+     int res;
+ 
++#ifdef HAVE_SNPRINTF
+     if (ctxt-&gt;user == NULL)
+ 	len = snprintf(buf, sizeof(buf), &quot;USER anonymous\r\n&quot;);
+     else
+ 	len = snprintf(buf, sizeof(buf), &quot;USER %s\r\n&quot;, ctxt-&gt;user);
++#else
++    if (ctxt-&gt;user == NULL)
++	len = sprintf(buf, &quot;USER anonymous\r\n&quot;);
++    else
++	len = sprintf(buf, &quot;USER %s\r\n&quot;, ctxt-&gt;user);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+@@ -671,10 +678,17 @@
+     int len;
+     int res;
+ 
++#ifdef HAVE_SNPRINTF
+     if (ctxt-&gt;passwd == NULL)
+ 	len = snprintf(buf, sizeof(buf), &quot;PASS libxml@%s\r\n&quot;, hostname);
+     else
+ 	len = snprintf(buf, sizeof(buf), &quot;PASS %s\r\n&quot;, ctxt-&gt;passwd);
++#else
++    if (ctxt-&gt;passwd == NULL)
++	len = sprintf(buf, &quot;PASS libxml@%s\r\n&quot;, hostname);
++    else
++	len = sprintf(buf, &quot;PASS %s\r\n&quot;, ctxt-&gt;passwd);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+@@ -700,7 +714,11 @@
+     int len;
+     int res;
+ 
++#ifdef HAVE_SNPRINTF
+     len = snprintf(buf, sizeof(buf), &quot;QUIT\r\n&quot;);
++#else
++    len = sprintf(buf, &quot;QUIT\r\n&quot;);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+@@ -820,7 +838,11 @@
+ 	    /*
+ 	     * We need proxy auth
+ 	     */
+-	    len = snprintf(buf, sizeof(buf), &quot;USER %s\r\n&quot;, proxyUser);
++#ifdef HAVE_SNPRINTF
++ 	    len = snprintf(buf, sizeof(buf), &quot;USER %s\r\n&quot;, proxyUser);
++#else
++ 	    len = sprintf(buf, &quot;USER %s\r\n&quot;, proxyUser);
++#endif
+ #ifdef DEBUG_FTP
+ 	    printf(buf);
+ #endif
+@@ -836,11 +858,19 @@
+ 		    if (proxyPasswd == NULL)
+ 			break;
+ 		case 3:
++#ifdef HAVE_SNPRINTF
+ 		    if (proxyPasswd != NULL)
+ 			len = snprintf(buf, sizeof(buf), &quot;PASS %s\r\n&quot;, proxyPasswd);
+ 		    else
+ 			len = snprintf(buf, sizeof(buf), &quot;PASS libxml@%s\r\n&quot;,
+ 			               hostname);
++#else
++		    if (proxyPasswd != NULL)
++			len = sprintf(buf, &quot;PASS %s\r\n&quot;, proxyPasswd);
++		    else
++			len = sprintf(buf, &quot;PASS libxml@%s\r\n&quot;,
++			               hostname);
++#endif
+ #ifdef DEBUG_FTP
+ 		    printf(buf);
+ #endif
+@@ -878,7 +908,11 @@
+ 		/* we will try in seqence */
+ 	    case 1:
+ 		/* Using SITE command */
++#ifdef HAVE_SNPRINTF
+ 		len = snprintf(buf, sizeof(buf), &quot;SITE %s\r\n&quot;, ctxt-&gt;hostname);
++#else
++		len = sprintf(buf, &quot;SITE %s\r\n&quot;, ctxt-&gt;hostname);
++#endif
+ #ifdef DEBUG_FTP
+ 		printf(buf);
+ #endif
+@@ -901,12 +935,21 @@
+ 		}
+ 	    case 2:
+ 		/* USER user@host command */
++#ifdef HAVE_SNPRINTF
+ 		if (ctxt-&gt;user == NULL)
+ 		    len = snprintf(buf, sizeof(buf), &quot;USER anonymous@%s\r\n&quot;,
+ 			           ctxt-&gt;hostname);
+ 		else
+ 		    len = snprintf(buf, sizeof(buf), &quot;USER %s@%s\r\n&quot;,
+ 			           ctxt-&gt;user, ctxt-&gt;hostname);
++#else
++		if (ctxt-&gt;user == NULL)
++		    len = sprintf(buf, &quot;USER anonymous@%s\r\n&quot;,
++			           ctxt-&gt;hostname);
++		else
++		    len = sprintf(buf, &quot;USER %s@%s\r\n&quot;,
++			           ctxt-&gt;user, ctxt-&gt;hostname);
++#endif
+ #ifdef DEBUG_FTP
+ 		printf(buf);
+ #endif
+@@ -922,10 +965,17 @@
+ 		    proxyType = 2;
+ 		    return(0);
+ 		}    
++#ifdef HAVE_SNPRINTF
+ 		if (ctxt-&gt;passwd == NULL)
+ 		    len = snprintf(buf, sizeof(buf), &quot;PASS libxml@%s\r\n&quot;, hostname);
+ 		else
+ 		    len = snprintf(buf, sizeof(buf), &quot;PASS %s\r\n&quot;, ctxt-&gt;passwd);
++#else
++		if (ctxt-&gt;passwd == NULL)
++		    len = sprintf(buf, &quot;PASS libxml@%s\r\n&quot;, hostname);
++		else
++		    len = sprintf(buf, &quot;PASS %s\r\n&quot;, ctxt-&gt;passwd);
++#endif
+ #ifdef DEBUG_FTP
+ 		printf(buf);
+ #endif
+@@ -1061,7 +1111,11 @@
+      *     250
+      *     500, 501, 502, 421, 530, 550
+      */
++#ifdef HAVE_SNPRINTF
+     len = snprintf(buf, sizeof(buf), &quot;CWD %s\r\n&quot;, directory);
++#else
++    len = sprintf(buf, &quot;CWD %s\r\n&quot;, directory);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+@@ -1108,7 +1162,11 @@
+     dataAddr.sin_family = AF_INET;
+ 
+     if (ctxt-&gt;passive) {
++#ifdef HAVE_SNPRINTF
+ 	len = snprintf(buf, sizeof(buf), &quot;PASV\r\n&quot;);
++#else
++	len = sprintf(buf, &quot;PASV\r\n&quot;);
++#endif
+ #ifdef DEBUG_FTP
+ 	printf(buf);
+ #endif
+@@ -1164,9 +1222,15 @@
+ 	}
+ 	adp = (unsigned char *) &amp;dataAddr.sin_addr;
+ 	portp = (unsigned char *) &amp;dataAddr.sin_port;
++#ifdef HAVE_SNPRINTF
+ 	len = snprintf(buf, sizeof(buf), &quot;PORT %d,%d,%d,%d,%d,%d\r\n&quot;,
+ 	               adp[0] &amp; 0xff, adp[1] &amp; 0xff, adp[2] &amp; 0xff, adp[3] &amp; 0xff,
+ 		       portp[0] &amp; 0xff, portp[1] &amp; 0xff);
++#else
++	len = sprintf(buf, &quot;PORT %d,%d,%d,%d,%d,%d\r\n&quot;,
++	               adp[0] &amp; 0xff, adp[1] &amp; 0xff, adp[2] &amp; 0xff, adp[3] &amp; 0xff,
++		       portp[0] &amp; 0xff, portp[1] &amp; 0xff);
++#endif
+         buf[sizeof(buf) - 1] = 0;
+ #ifdef DEBUG_FTP
+ 	printf(buf);
+@@ -1363,14 +1427,22 @@
+         if (xmlNanoFTPCwd(ctxt, ctxt-&gt;path) &lt; 1)
+ 	    return(-1);
+ 	ctxt-&gt;dataFd = xmlNanoFTPGetConnection(ctxt);
++#ifdef HAVE_SNPRINTF
+ 	len = snprintf(buf, sizeof(buf), &quot;LIST -L\r\n&quot;);
++#else
++	len = sprintf(buf, &quot;LIST -L\r\n&quot;);
++#endif
+     } else {
+ 	if (filename[0] != '/') {
+ 	    if (xmlNanoFTPCwd(ctxt, ctxt-&gt;path) &lt; 1)
+ 		return(-1);
+ 	}
+ 	ctxt-&gt;dataFd = xmlNanoFTPGetConnection(ctxt);
++#ifdef HAVE_SNPRINTF
+ 	len = snprintf(buf, sizeof(buf), &quot;LIST -L %s\r\n&quot;, filename);
++#else
++	len = sprintf(buf, &quot;LIST -L %s\r\n&quot;, filename);
++#endif
+     }
+ #ifdef DEBUG_FTP
+     printf(buf);
+@@ -1462,7 +1534,11 @@
+ 	return(-1);
+     ctxt-&gt;dataFd = xmlNanoFTPGetConnection(ctxt);
+ 
++#ifdef HAVE_SNPRINTF
+     len = snprintf(buf, sizeof(buf), &quot;TYPE I\r\n&quot;);
++#else
++    len = sprintf(buf, &quot;TYPE I\r\n&quot;);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+@@ -1476,10 +1552,17 @@
+ 	close(ctxt-&gt;dataFd); ctxt-&gt;dataFd = -1;
+ 	return(-res);
+     }
++#ifdef HAVE_SNPRINTF
+     if (filename == NULL)
+ 	len = snprintf(buf, sizeof(buf), &quot;RETR %s\r\n&quot;, ctxt-&gt;path);
+     else
+ 	len = snprintf(buf, sizeof(buf), &quot;RETR %s\r\n&quot;, filename);
++#else
++    if (filename == NULL)
++	len = sprintf(buf, &quot;RETR %s\r\n&quot;, ctxt-&gt;path);
++    else
++	len = sprintf(buf, &quot;RETR %s\r\n&quot;, filename);
++#endif
+ #ifdef DEBUG_FTP
+     printf(buf);
+ #endif
+diff -Naur libxml-1.8.6/nanohttp.c libxml-1.8.6_clean_snprintf/nanohttp.c
+--- libxml-1.8.6/nanohttp.c	Mon Jan 31 09:38:16 2000
++++ libxml-1.8.6_clean_snprintf/nanohttp.c	Thu Feb 10 14:22:40 2000
+@@ -752,7 +752,7 @@
+     }
+     ctxt-&gt;fd = ret;
+     if (proxy) {
+-#ifdef have_snprintf
++#ifdef HAVE_SNPRINTF
+ 	if (ctxt-&gt;port != 80)
+ 	    snprintf(buf, sizeof(buf),
+ 		     &quot;GET <a href="http://%s:%d%s">http://%s:%d%s</a> HTTP/1.0\r\nHost: %s\r\n\r\n&quot;,
+<p><p><hr noshade>
+<ul>
+<li>application/x-pkcs7-signature attachment: <a href="att-0354/02-smime.p7s">S/MIME Cryptographic Signature</a>
+</ul>
+<!-- attachment="02-smime.p7s" -->
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20clean%20use%20of%20HAVE_SNPRINTF">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20clean%20use%20of%20HAVE_SNPRINTF">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Previous message:</strong> <a href="0353.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0355.html">Daniel Veillard: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0359.html">acassin@cs.mu.OZ.AU: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Reply:</strong> <a href="0360.html">acassin@cs.mu.OZ.AU: "Re: [xml] clean use of HAVE_SNPRINTF"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:02 EDT</em>
+</em>
+</small>
+</body>
+</html>

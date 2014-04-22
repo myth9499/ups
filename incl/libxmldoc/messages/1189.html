@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Character Encoding?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Character Encoding?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Character Encoding?</h1>
+<!-- received="Wed Nov 15 03:38:29 2000" -->
+<!-- isoreceived="20001115083829" -->
+<!-- sent="Wed, 15 Nov 2000 09:38:22 +0100" -->
+<!-- isosent="20001115083822" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Character Encoding?" -->
+<!-- id="20001115093822.A3254@w3.org" -->
+<!-- inreplyto="48256998.002BC0D2.00@cnshans1.acersoftech.com.cn" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Character%20Encoding?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 15 2000 - 03:38:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1190.html">Don Pellegrino: "[xml] Find a Node by Name?"</a>
+<li><strong>Previous message:</strong> <a href="1188.html">JohnnyXia@acersoftech.com.cn: "[xml] Character Encoding?"</a>
+<li><strong>In reply to:</strong> <a href="1188.html">JohnnyXia@acersoftech.com.cn: "[xml] Character Encoding?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 15, 2000 at 03:59:31PM +0800, <a href="mailto:JohnnyXia@acersoftech.com.cn?subject=Re:%20[xml]%20Character%20Encoding?">JohnnyXia@acersoftech.com.cn</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi all,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am new this mail list, and I have just downloaded the library and read
+</em><br>
+<em>&gt; some documents
+</em><br>
+<em>&gt; and codes of it.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Due to my mothertone is Chinese, I care very much about if the lib supports
+</em><br>
+<em>&gt; gb encoding.
+</em><br>
+<em>&gt; I peruse the file encoding.c and encoding.h . It seems that gb is currently
+</em><br>
+<em>&gt; not supported.
+</em><br>
+<em>&gt; BTW, the source codes I owns is 2.1.1 version.
+</em><br>
+<p>&nbsp;&nbsp;Hi Johny,
+<br>
+<p>&nbsp;first it would be good if you could upgrade to 2.2.8 or something recent.
+<br>
+&nbsp;second libxml doesn't handle complex encoding directly but uses the
+<br>
+iconv library for this. Iconv is installed by default on recent linux
+<br>
+installations and will compile on other platforms.
+<br>
+&nbsp;&nbsp;<a href="http://clisp.cons.org/~haible/packages-libiconv.html">http://clisp.cons.org/~haible/packages-libiconv.html</a>
+<br>
+&nbsp;&nbsp;<a href="ftp://ftp.ilog.fr/pub/Users/haible/gnu/">ftp://ftp.ilog.fr/pub/Users/haible/gnu/</a>
+<br>
+<p>&nbsp;third it seems iconv actually support the following encodings:
+<br>
+&nbsp;&nbsp;&nbsp;GB, GB2312, GB_1988-80
+<br>
+<p>&nbsp;There is an on-line doc (and also in the recent distributions) about
+<br>
+libxml encoding support:
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+<br>
+<p>&nbsp;&nbsp;&nbsp;I hope this helps,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Character%20Encoding?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Character%20Encoding?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Character%20Encoding?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1190.html">Don Pellegrino: "[xml] Find a Node by Name?"</a>
+<li><strong>Previous message:</strong> <a href="1188.html">JohnnyXia@acersoftech.com.cn: "[xml] Character Encoding?"</a>
+<li><strong>In reply to:</strong> <a href="1188.html">JohnnyXia@acersoftech.com.cn: "[xml] Character Encoding?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 15 2000 - 03:47:11 EST</em>
+</em>
+</small>
+</body>
+</html>

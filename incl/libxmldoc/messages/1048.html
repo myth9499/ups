@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Dumping bogus tags in the HTML parser</title>
+<meta name="Author" content="Wayne Davison (wayned@users.sourceforge.net)">
+<meta name="Subject" content="[xml] Dumping bogus tags in the HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Dumping bogus tags in the HTML parser</h1>
+<!-- received="Mon Oct 23 17:45:07 2000" -->
+<!-- isoreceived="20001023214507" -->
+<!-- sent="Mon, 23 Oct 2000 14:44:57 -0700 (PDT)" -->
+<!-- isosent="20001023214457" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@users.sourceforge.net" -->
+<!-- subject="[xml] Dumping bogus tags in the HTML parser" -->
+<!-- id="Pine.LNX.4.21.0010231433380.22234-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20Dumping%20bogus%20tags%20in%20the%20HTML%20parser"><em>wayned@users.sourceforge.net</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 17:44:57 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1047.html">TOM: "RE: [xml] XSLT again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The attached patch implements how I believe the HTML parser should
+<br>
+work (which is also how current web browsers work):  If a bogus tag is
+<br>
+encountered, the bogus tag is ignored.  The current code outputs bogus
+<br>
+tags (in a partial form) as literal text.
+<br>
+<p>For instance, take this file:
+<br>
+<p>----------------------------------------------------------------------
+<br>
+&lt;HTML&gt;&lt;HEAD&gt;
+<br>
+&lt;TITLE&gt;test&lt;/TITLE&gt;
+<br>
+&lt;/HEAD&gt;&lt;BODY&gt;
+<br>
+&lt;! ---------- this is a common illegal comment --------&gt;
+<br>
+Believe it or not, tags like this are included in the
+<br>
+<a href="http://my.excite.com/togo/">http://my.excite.com/togo/</a> content:
+<br>
+&lt;!A HREF=/news/r/001022/21/business-manufacturing-honeywell-dc&gt;
+<br>
+I saw something like this in the current HTML test data:
+<br>
+&lt;IMG SRC=&quot;foo_bar.gif&quot; Bogus?.?&gt;
+<br>
+----------------------------------------------------------------------
+<br>
+<p>The current code complains several times about the last error (the bogus
+<br>
+attribute) and includes tag characters in the literal text:
+<br>
+<p>----------------------------------------------------------------------
+<br>
+test.html:4: error: htmlParseStartTag: invalid element name
+<br>
+&lt;! ---------- this is a common illegal comment --------&gt;
+<br>
+&nbsp;^
+<br>
+test.html:7: error: htmlParseStartTag: invalid element name
+<br>
+&lt;!A HREF=/news/r/001022/21/business-manufacturing-honeywell-dc&gt;
+<br>
+&nbsp;^
+<br>
+test.html:9: error: error parsing attribute name
+<br>
+&lt;IMG SRC=&quot;foo_bar.gif&quot; Bogus?.?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.html:9: error: htmlParseStartTag: problem parsing attributes
+<br>
+&lt;IMG SRC=&quot;foo_bar.gif&quot; Bogus?.?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+test.html:9: error: Couldn't find end of Start Tag img
+<br>
+&lt;IMG SRC=&quot;foo_bar.gif&quot; Bogus?.?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;<a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>&quot;&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;&lt;title&gt;test&lt;/title&gt;&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;p&gt;! ---------- this is a common illegal comment --------&amp;gt;
+<br>
+Believe it or not, tags like this are included in the
+<br>
+<a href="http://my.excite.com/togo/">http://my.excite.com/togo/</a> content:
+<br>
+!A HREF=/news/r/001022/21/business-manufacturing-honeywell-dc&amp;gt;
+<br>
+I saw something like this in the current HTML test data:
+<br>
+&lt;img SRC=&quot;foo_bar.gif&quot; Bogus&gt;?.?&amp;gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+----------------------------------------------------------------------
+<br>
+<p>After applying my patch, the code complains more succinctly, and simply
+<br>
+eliminates the bogus tags:
+<br>
+<p>----------------------------------------------------------------------
+<br>
+test.html:4: error: htmlParseStartTag: invalid element name
+<br>
+&lt;! ---------- this is a common illegal comment --------&gt;
+<br>
+&nbsp;^
+<br>
+test.html:7: error: htmlParseStartTag: invalid element name
+<br>
+&lt;!A HREF=/news/r/001022/21/business-manufacturing-honeywell-dc&gt;
+<br>
+&nbsp;^
+<br>
+test.html:9: error: error parsing attribute name
+<br>
+&lt;IMG SRC=&quot;foo_bar.gif&quot; Bogus?.?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;<a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>&quot;&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;&lt;title&gt;test&lt;/title&gt;&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;p&gt;
+<br>
+Believe it or not, tags like this are included in the
+<br>
+<a href="http://my.excite.com/togo/">http://my.excite.com/togo/</a> content:
+<br>
+<p>I saw something like this in the current HTML test data:
+<br>
+&lt;img src=&quot;foo_bar.gif&quot; bogus&gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+----------------------------------------------------------------------
+<br>
+<p>My patch is attached to this email.
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-1048/01-dump.patch">Dump bogus tags/attributes</a>
+</ul>
+<!-- attachment="01-dump.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Dumping%20bogus%20tags%20in%20the%20HTML%20parser">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Dumping%20bogus%20tags%20in%20the%20HTML%20parser">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1047.html">TOM: "RE: [xml] XSLT again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 18:43:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

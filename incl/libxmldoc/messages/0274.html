@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Processing Instructions</title>
+<meta name="Author" content="Mathias Hasselmann (Mathias.Hasselmann@gmx.de)">
+<meta name="Subject" content="Re: [xml] Processing Instructions">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Processing Instructions</h1>
+<!-- received="Wed Dec 22 08:53:13 1999" -->
+<!-- isoreceived="19991222135313" -->
+<!-- sent="Wed, 22 Dec 1999 14:53:49 +0100" -->
+<!-- isosent="19991222135349" -->
+<!-- name="Mathias Hasselmann" -->
+<!-- email="Mathias.Hasselmann@gmx.de" -->
+<!-- subject="Re: [xml] Processing Instructions" -->
+<!-- id="3860D7ED.B93A56DA@gmx.de" -->
+<!-- inreplyto="19991222063136.F3165@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Mathias Hasselmann (<a href="mailto:Mathias.Hasselmann@gmx.de?subject=Re:%20[xml]%20Processing%20Instructions"><em>Mathias.Hasselmann@gmx.de</em></a>)<br>
+<strong>Date:</strong> Wed Dec 22 1999 - 08:53:49 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0275.html">Mathias Hasselmann: "[xml] Bug-Report: xmlNewNode"</a>
+<li><strong>Previous message:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>In reply to:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0278.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>Reply:</strong> <a href="0278.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; That's a problem for XSLT parsers: XML document with embedded
+</em><br>
+<em>&gt; &gt; stylesheets have
+</em><br>
+<em>&gt; &gt; to start with:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Hum strange, I wasn't actually able to reproduce the problem:
+</em><br>
+<em>&gt; ~/XML -&gt; cat pi3.xml
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;doc/&gt;
+</em><br>
+<em>&gt; ~/XML -&gt; ./tester pi3.xml
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;doc/&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   But I commited a fix checking for a list of predefined PI starting
+</em><br>
+<em>&gt; with &quot;xml&quot;, and verified it only genmerates a warning and don't break
+</em><br>
+<em>&gt; further processing:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ~/XML -&gt; cat pi4.xml
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;?xml-unknown type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;doc/&gt;
+</em><br>
+<em>&gt; ~/XML -&gt; ./tester pi4.xml
+</em><br>
+<em>&gt; pi4.xml:2: warning: xmlParsePItarget: invalid name prefix 'xml'
+</em><br>
+<em>&gt; &lt;?xml-unknown type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt;              ^
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;?xml-unknown type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;doc/&gt;
+</em><br>
+<em>&gt; ~/XML -&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   It's commited in the CVS bases
+</em><br>
+<p>The problem occurs if you take the example for embedded stylesheets
+<br>
+from REC-xslt-19991116 (chapter 2.7):
+<br>
+<p>»»» cut »»»
+<br>
+<p>&lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+<br>
+&lt;!DOCTYPE doc SYSTEM &quot;doc.dtd&quot;&gt;
+<br>
+&lt;doc&gt;
+<br>
+&lt;head&gt;
+<br>
+&lt;xsl:stylesheet id=&quot;style1&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version=&quot;1.0&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:xsl=&quot;<a href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</a>&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:fo=&quot;<a href="http://www.w3.org/1999/XSL/Format">http://www.w3.org/1999/XSL/Format</a>&quot;&gt;
+<br>
+&lt;xsl:import href=&quot;doc.xsl&quot;/&gt;
+<br>
+&lt;xsl:template match=&quot;id('foo')&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;fo:block font-weight=&quot;bold&quot;&gt;&lt;xsl:apply-templates/&gt;&lt;/fo:block&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+&lt;xsl:template match=&quot;xsl:stylesheet&quot;&gt;
+<br>
+&nbsp;&nbsp;&lt;!-- ignore --&gt;
+<br>
+&lt;/xsl:template&gt;
+<br>
+&lt;/xsl:stylesheet&gt;
+<br>
+&lt;/head&gt;
+<br>
+&lt;body&gt;
+<br>
+&lt;para id=&quot;foo&quot;&gt;
+<br>
+...
+<br>
+&lt;/para&gt;
+<br>
+&lt;/body&gt;
+<br>
+&lt;/doc&gt;
+<br>
+<p>««« cut «««
+<br>
+<p>This not nice, but well formed. 
+<br>
+James Clark says (in REC-xslt-19991116) something like &quot;This is XML&quot;.
+<br>
+<p>So let's ask REC-xml-19980210 about it:
+<br>
+<p>»»» cut »»»
+<br>
+<p>2.8 Prolog and Document Type Declaration
+<br>
+<p>XML documents may, and should, begin with an XML declaration which
+<br>
+specifies the version of XML being used. For example, the following
+<br>
+is a complete XML document, well-formed but not valid:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;greeting&gt;Hello, world!&lt;/greeting&gt;
+<br>
+<p>and so is this: 
+<br>
+<p>&lt;greeting&gt;Hello, world!&lt;/greeting&gt;
+<br>
+<p>...
+<br>
+<p>Prolog
+<br>
+<p>[22] prolog  ::= XMLDecl? Misc* (doctypedecl Misc*)?
+<br>
+[23] XMLDecl ::= '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?&gt;
+<br>
+<p>...
+<br>
+<p>««« cut «««
+<br>
+<p>You see this 'ugly' question mark behind »XMLDecl«?
+<br>
+<p>So this means: 
+<br>
+&nbsp;&nbsp;* If you read &lt;?xml version=&quot;1.0&quot;?&gt; in the prolog that's
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fine, because you known to parse a document meant to be 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;compilant to version 1.0 of XML.
+<br>
+<p>&nbsp;&nbsp;* If you read &lt;?xml version=&quot;somewhat else&quot;?&gt; you  have 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to enable the &quot;somewhat else&quot; parsing mode and if you
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;do not know it, you can:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;refuse the document
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;or
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inform the user, that you assume that this document 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is compatible to XML version 1.0...
+<br>
+<p>&nbsp;&nbsp;* If you never read the xml processing instruction you
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;are in a similar situation as above. But this time
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;you have to use the assumtion, that the document 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;could be compilant to version 1.0...
+<br>
+<p>Ciao,
+<br>
+Mathias
+<br>
+<pre>
+-- 
+WWW: <a href="http://www.arco.de/~mhasselm/">http://www.arco.de/~mhasselm/</a> <a href="http://www.dominanz-haus.de/">http://www.dominanz-haus.de/</a>
+PGP-Fingerprint: 4D15 89ED 7299 6428 FEE6  C66F 5D40 6504 55E5 72F3
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Processing%20Instructions">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Processing%20Instructions">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0275.html">Mathias Hasselmann: "[xml] Bug-Report: xmlNewNode"</a>
+<li><strong>Previous message:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>In reply to:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0278.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>Reply:</strong> <a href="0278.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:56 EDT</em>
+</em>
+</small>
+</body>
+</html>

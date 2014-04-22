@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in parser (HTML)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug in parser (HTML)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in parser (HTML)</h1>
+<!-- received="Fri Oct 27 17:09:58 2000" -->
+<!-- isoreceived="20001027210958" -->
+<!-- sent="Fri, 27 Oct 2000 23:09:54 +0200" -->
+<!-- isosent="20001027210954" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug in parser (HTML)" -->
+<!-- id="20001027230954.B29045@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0010271201180.7673-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Oct 27 2000 - 17:09:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Oct 27, 2000 at 12:02:31PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Fri, 27 Oct 2000, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt;   the heuristic concludes it's an ignorable white space.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think that the root of the problem is that &lt;B&gt; didn't trigger an implied
+</em><br>
+<em>&gt; &lt;P&gt; tag.  If it had added the missing &lt;P&gt; tag, the space would not have
+</em><br>
+<em>&gt; been considered to be ignorable.
+</em><br>
+<p>&nbsp;&nbsp;Of course that's the first thing I tried :-)
+<br>
+<p>~/XML -&gt; cat tst.html 
+<br>
+&lt;html&gt;&lt;body&gt;
+<br>
+&lt;p&gt;&lt;b&gt;bbbbbbbbbb&lt;/b&gt; &lt;b&gt;ccccccccccccccc&lt;/b&gt;
+<br>
+&lt;/body&gt;&lt;/html&gt;
+<br>
+~/XML -&gt; ./testHTML  tst.html 
+<br>
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;<a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>&quot;&gt;
+<br>
+&lt;html&gt;&lt;body&gt;&lt;p&gt;
+<br>
+&lt;b&gt;bbbbbbbbbb&lt;/b&gt;
+<br>
+&lt;b&gt;ccccccccccccccc&lt;/b&gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+<br>
+~/XML -&gt;
+<br>
+<p>the interesting point is that Wayne is right in the sense that
+<br>
+this generate a character() SAX callback instead of 
+<br>
+ignorableWhitespace() ...
+<br>
+<p>SAX.startElement(b)
+<br>
+Start of element b, was p
+<br>
+SAX.characters(bbbbbbbbbb, 10)
+<br>
+Close of b stack: 4 elements
+<br>
+0 : html
+<br>
+1 : body
+<br>
+2 : p
+<br>
+3 : b
+<br>
+SAX.endElement(b)
+<br>
+End of tag b: popping out b
+<br>
+SAX.characters( , 1)
+<br>
+<p>One can consider libxml broken there but I really do think
+<br>
+<p>&lt;html&gt;&lt;body&gt;
+<br>
+&lt;p&gt;&lt;a href=&quot;xxx&quot;&gt;bbbbbbbbbb&lt;/a&gt; &lt;a href=&quot;yyy&quot;&gt;ccccccccccccccc&lt;/a&gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+<br>
+<p>is equivalent to 
+<br>
+<p>&lt;html&gt;&lt;body&gt;&lt;p&gt;
+<br>
+&lt;a href=&quot;xxx&quot;&gt;bbbbbbbbbb&lt;/a&gt;
+<br>
+&lt;a href=&quot;yyy&quot;&gt;ccccccccccccccc&lt;/a&gt;
+<br>
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+<br>
+<p>But that ain't true for &lt;b&gt;. And my understanding is this is due to
+<br>
+&lt;b&gt; being actually text node at a semantic level. It's just an
+<br>
+artifact of adding the style on structure.
+<br>
+So I'm inclined to fix only &lt;b&gt; &lt;em&gt; &lt;strong&gt; and the likes (did I
+<br>
+forgot one ?). But if someone want to fix this more strongly I will
+<br>
+take the patch :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1089.html">Wayne Davison: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 27 2000 - 17:43:29 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Igor Zlatkovic (igor@stud.fh-frankfurt.de)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Fri Feb  2 09:59:05 2001" -->
+<!-- isoreceived="20010202145905" -->
+<!-- sent="Fri, 2 Feb 2001 13:28:09 +0100" -->
+<!-- isosent="20010202122809" -->
+<!-- name="Igor Zlatkovic" -->
+<!-- email="igor@stud.fh-frankfurt.de" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="001801c08d13$9a4dd120$0b01a8c0@home.loc" -->
+<!-- inreplyto="3A79B3F6.52E5D9C2@cddb.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Igor Zlatkovic (<a href="mailto:igor@stud.fh-frankfurt.de?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>igor@stud.fh-frankfurt.de</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 07:28:09 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>Previous message:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<li><strong>In reply to:</strong> <a href="1400.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>Reply:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello.
+<br>
+<p>Conversions under other libraries, such as Microsoft NLS implementation
+<br>
+found in Win32 is about the same. A conversion between any two encoding
+<br>
+standards requires you to go through wide charracters. For example, there is
+<br>
+no direct conversion between UTF-8 and SHIFT-JIS, you have to convert UTF-8
+<br>
+to wide char, then convert the resulting wide char to SHIFT-JIS. This is not
+<br>
+the downside of ICU, it is the common case everywhere. It can never be
+<br>
+different, for writing conversions from any to any encoding would be a
+<br>
+nightmare in its own right.
+<br>
+<p>I haven't tried ICU seriously yet. I shall do that before I make any further
+<br>
+statements about it.
+<br>
+<p>Igor
+<br>
+<p><p>----- Original Message -----
+<br>
+From: &quot;Dave Madole&quot; &lt;<a href="mailto:dmadole@cddb.com?subject=Re:%20[xml]%20Encoding%20and%20Win32">dmadole@cddb.com</a>&gt;
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt; I use the ICU (International Components for Unicode) libraries from IBM
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; <a href="http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; to encode element content.  One must convert the element content from
+</em><br>
+utf-8
+<br>
+<em>&gt; to  utf-16(native byte order) then convert from utf-16 to whatever
+</em><br>
+<em>&gt; character encoding (sjis, big-5) one wants, then base64 encode the
+</em><br>
+<em>&gt; content.  This works and satisfies the w3c requirement that the XML itself
+</em><br>
+<em>&gt; must be utf-8 or utf-16.  I found that ICU more completely addressed my
+</em><br>
+<em>&gt; needs than iconv.  The only downside is that you must convert whatever
+</em><br>
+your
+<br>
+<em>&gt; source encoding is to native byte order utf-16 before converting it to
+</em><br>
+your
+<br>
+<em>&gt; destination encoding.  The API seems to be modeled on iconv and is very
+</em><br>
+<em>&gt; easy to use.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; This obviates messing with libxml, although it becomes a bit of a memory
+</em><br>
+<em>&gt; management nightmare.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Dave
+</em><br>
+<em>&gt;
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>Previous message:</strong> <a href="1406.html">Anders Karlsson: "Re: [xml] Using libxml"</a>
+<li><strong>In reply to:</strong> <a href="1400.html">Dave Madole: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<li><strong>Reply:</strong> <a href="1408.html">Daniel Veillard: "Re: [xml] Encoding and Win32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 10:51:20 EST</em>
+</em>
+</small>
+</body>
+</html>

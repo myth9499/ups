@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] 2.2.5 installation glitch on SunOS 5.6</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] 2.2.5 installation glitch on SunOS 5.6">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] 2.2.5 installation glitch on SunOS 5.6</h1>
+<!-- received="Mon Oct 16 16:07:30 2000" -->
+<!-- isoreceived="20001016200730" -->
+<!-- sent="Mon, 16 Oct 2000 22:07:25 +0200" -->
+<!-- isosent="20001016200725" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] 2.2.5 installation glitch on SunOS 5.6" -->
+<!-- id="20001016220725.U20166@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1001016143909.16380A-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 16:07:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0988.html">Kenneth Pronovici: "[xml] CDATA sections and validation"</a>
+<li><strong>Previous message:</strong> <a href="0986.html">Kenneth Pronovici: "[xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<li><strong>In reply to:</strong> <a href="0986.html">Kenneth Pronovici: "[xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 16, 2000 at 02:56:02PM -0500, Kenneth Pronovici wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've found and &quot;fixed&quot; a minor installation glitch for libxml 2.2.5 under
+</em><br>
+<em>&gt; SunOS 5.6.  It appears that there are two versions of the test utility
+</em><br>
+<em>&gt; under SunOS, and one of them is broken.  The /usr/bin/test version of
+</em><br>
+<em>&gt; the utility recognizes the -e option, but the /bin/test version does
+</em><br>
+<em>&gt; not.  It will be pot-luck which one any given user has in their path 
+</em><br>
+<em>&gt; first - and if the broken version is found, the configure script will
+</em><br>
+<em>&gt; fail.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What I did to make this work was to change the configure script to use
+</em><br>
+<em>&gt; -r rather than -e (the change is just the difference between &quot;exists&quot; 
+</em><br>
+<em>&gt; and &quot;exists and is readable&quot;).  Hopefully, this will be portable to 
+</em><br>
+<em>&gt; other systems with a broken test utility as well...as long as Daniel
+</em><br>
+<em>&gt; thinks it's safe.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Below my signature is a patch for configure.in.  I think I've provided
+</em><br>
+<em>&gt; the right kind of context diff, but let me know if there are problems 
+</em><br>
+<em>&gt; with it (it worked for me when I tested it).
+</em><br>
+<p>&nbsp;&nbsp;We actually went with Albert Chin-A-Young &lt;<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">china@thewrittenword.com</a>&gt;
+<br>
+through a long series of attemps to find a portable solution to this
+<br>
+problem ... And ended up with the enclosed patch (admitedly a bit more
+<br>
+complex).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-0987/01-conf.patch">conf.patch</a>
+</ul>
+<!-- attachment="01-conf.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0988.html">Kenneth Pronovici: "[xml] CDATA sections and validation"</a>
+<li><strong>Previous message:</strong> <a href="0986.html">Kenneth Pronovici: "[xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<li><strong>In reply to:</strong> <a href="0986.html">Kenneth Pronovici: "[xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 16:43:34 EDT</em>
+</em>
+</small>
+</body>
+</html>

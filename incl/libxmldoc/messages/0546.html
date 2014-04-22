@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] New release of libxml-1.8.8 and libxml2-2.1.0</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] New release of libxml-1.8.8 and libxml2-2.1.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] New release of libxml-1.8.8 and libxml2-2.1.0</h1>
+<!-- received="Thu Jun 29 08:05:13 2000" -->
+<!-- isoreceived="20000629120513" -->
+<!-- sent="Thu, 29 Jun 2000 14:02:06 +0200" -->
+<!-- isosent="20000629120206" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] New release of libxml-1.8.8 and libxml2-2.1.0" -->
+<!-- id="20000629140206.F32196@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20New%20release%20of%20libxml-1.8.8%20and%20libxml2-2.1.0"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Jun 29 2000 - 08:02:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0547.html">David Doolin: "Re: [xml] Win32: New release of libxml-1.8.8 and libxml2-2.1.0"</a>
+<li><strong>Previous message:</strong> <a href="0545.html">Joe McAlerney: "[xml] building and validating"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;&nbsp;Ok i have (finally!) released a new version:
+<br>
+&nbsp;&nbsp;Downloads:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/libxml/">ftp://rpmfind.net/pub/libxml/</a>
+<br>
+<p>&nbsp;&nbsp;home page: 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<br>
+<p>&nbsp;&nbsp;1.8.8 is mostly a comodity package for upgrading to libxml2 accoding to
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new instructions at <a href="http://xmlsoft.org/upgrade.html">http://xmlsoft.org/upgrade.html</a>.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It also fixes a nasty problem about &amp;#38; charref parsing
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is intended to be binary compatible with 1.8.7, unless you're
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concerned about this you really should upgrade to 2.1.0 instead
+<br>
+<p>&nbsp;&nbsp;2.1.0 also ease the upgrade from libxml v1 to the recent version. it
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;also contains numerous fixes and enhancements:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- added xmlStopParser() to stop parsing (mostly untested)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- improved a lot parsing speed when there is large CDATA blocs 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- includes XPath patches provided by Picdar Technology 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- tried to fix as much as possible DtD validation and namespace
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;related problems 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- output to a given encoding has been added/tested 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- lot of various fixes
+<br>
+<p>&nbsp;&nbsp;I cannot guarantee that all patches and bug reports have been
+<br>
+integrated in this release, for example I didn't yet packaged the man
+<br>
+pages, but I have tried. If something is still missing, please report
+<br>
+it,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20New%20release%20of%20libxml-1.8.8%20and%20libxml2-2.1.0">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20New%20release%20of%20libxml-1.8.8%20and%20libxml2-2.1.0">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20New%20release%20of%20libxml-1.8.8%20and%20libxml2-2.1.0">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0547.html">David Doolin: "Re: [xml] Win32: New release of libxml-1.8.8 and libxml2-2.1.0"</a>
+<li><strong>Previous message:</strong> <a href="0545.html">Joe McAlerney: "[xml] building and validating"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

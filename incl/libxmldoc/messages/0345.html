@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: I18N Issues.</title>
+<meta name="Author" content="Y. Cheng (ycheng@phi.sinica.edu.tw)">
+<meta name="Subject" content="Re: [xml] Re: I18N Issues.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: I18N Issues.</h1>
+<!-- received="Tue Feb  8 08:11:21 2000" -->
+<!-- isoreceived="20000208131121" -->
+<!-- sent="Tue, 8 Feb 2000 21:11:13 +0800" -->
+<!-- isosent="20000208131113" -->
+<!-- name="Y. Cheng" -->
+<!-- email="ycheng@phi.sinica.edu.tw" -->
+<!-- subject="Re: [xml] Re: I18N Issues." -->
+<!-- id="20000208211113.A28021@phi.sinica.edu.tw" -->
+<!-- inreplyto="20000208093908.H24054@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Y. Cheng (<a href="mailto:ycheng@phi.sinica.edu.tw?subject=Re:%20[xml]%20Re:%20I18N%20Issues."><em>ycheng@phi.sinica.edu.tw</em></a>)<br>
+<strong>Date:</strong> Tue Feb 08 2000 - 08:11:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<li><strong>In reply to:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Reply:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Feb 08, 2000 at 09:39:08AM +0100, Daniel Veillard wrote:
+<br>
+[deleted] 
+<br>
+<em>&gt; On Tue, Feb 08, 2000 at 01:41:11PM +0800, Y. Cheng wrote:
+</em><br>
+[deleted]
+<br>
+<em>&gt; &gt; because utf8 is multi-byte encoding set (have 1-byte, 2-bytes and 3-bytes
+</em><br>
+<em>&gt; &gt; character) so one xmlChar one byte will be enough. (well, I don't know
+</em><br>
+<em>&gt; &gt; the history of libxml)
+</em><br>
+<em>&gt;   I have been working on this this week-end, I already propagated
+</em><br>
+<em>&gt; some changes to the W3C CVs base (<a href="http://dev.w3.org">http://dev.w3.org</a> , module XML)
+</em><br>
+<em>&gt; The UNICODE stuff is already being dropped. But I need to change
+</em><br>
+<em>&gt; the parser to use the extended macro even in case of UTF-8 encoding.
+</em><br>
+<p>I read some of your modification to parser.c, expecially NEXT.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maybe you will do something of rollback. (read my idea below)
+<br>
+<p><em>&gt; &gt; 	Then,
+</em><br>
+<em>&gt; &gt; ------ encoding.c:268 (xmlDetectCharEncoding) ------
+</em><br>
+<em>&gt; &gt;     if ((in[0] == 0x3C) &amp;&amp; (in[1] == 0x3F) &amp;&amp; 
+</em><br>
+<em>&gt; &gt;         (in[2] == 0x78) &amp;&amp; (in[3] == 0x6D))
+</em><br>
+<em>&gt; &gt;         return(XML_CHAR_ENCODING_UTF8);
+</em><br>
+<em>&gt; &gt;                ^^^^^^^^^^^^^^^^^^^^^^
+</em><br>
+<em>&gt; &gt;     return(XML_CHAR_ENCODING_NONE);
+</em><br>
+<em>&gt; &gt; ----------------------------------------------------
+</em><br>
+<em>&gt; &gt; I think it should return XML_CHAR_ENCODING_NONE. Becaure there are many
+</em><br>
+<em>&gt; &gt; encoding that compatable with utf8 in the range of ascii. Take zh_TW.Big5
+</em><br>
+<em>&gt; &gt; as example, if the first bit of a char is 0, then it's a one byte character,
+</em><br>
+<em>&gt; &gt; eler (the first bit of a char is 1) it's the first bye of two byte
+</em><br>
+<em>&gt; &gt; chinese character.
+</em><br>
+<em>&gt;   I disagree, by the specification, if there is no encoding defined, then
+</em><br>
+<em>&gt; we are using either UTF-8 or UTF-16 (the latter being detected by reading the 
+</em><br>
+<em>&gt; 4 first bytes). After that if there is an encoding defined it will be time
+</em><br>
+<em>&gt; to switch on to this one. Look at the new version of parser.c in the database,
+</em><br>
+<em>&gt; especially the new function xmlNextChar(). If no encoding is defined it will
+</em><br>
+<em>&gt; raise an error if 
+</em><br>
+<p>Agree.
+<br>
+<p><em>&gt; &gt; Latter tne encoding=&quot;xxx&quot; will do real job (of changing encoding into
+</em><br>
+<em>&gt; &gt; the real encoding).
+</em><br>
+<em>&gt;   If needed, which for ISO-LATIN-X is not the case. 
+</em><br>
+<p>Yes, encoding=&quot;xxx&quot; is optional to xml.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(This is what you want to express ?)
+<br>
+<p><em>&gt; &gt; 	With this, as the encoding change from XML_CHAR_ENCODING_NONE to
+</em><br>
+<em>&gt; &gt; some spectific encoding (well, say EUC-JP), we needs a function to
+</em><br>
+<em>&gt; &gt; transform the existing buffer from origional data to read utf8.
+</em><br>
+<em>&gt; &gt; (maybe xmlSwitchEncoding of call by xmlSwitchEncoding). But this
+</em><br>
+<em>&gt; &gt; transformation only accept transformation from XML_CHAR_ENCODING_NONE
+</em><br>
+<em>&gt; &gt; to some other encoding. Once the transformation is done, no more
+</em><br>
+<em>&gt; &gt; transformation is necessay (there is no method to switch encoding
+</em><br>
+<em>&gt; &gt; in the middle of XML document, right ?) so all other mechanism will
+</em><br>
+<em>&gt; &gt; work.
+</em><br>
+<em>&gt;    yep something like that is needed.
+</em><br>
+<p>Do you think we should change from
+<br>
+<p>isolat1ToUTF8(xxx *out, int outlen, xxx *in, int  inlen)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to
+<br>
+isolat1ToUTF8(xxx *out, int outlen, xxx *in, int *inlen)
+<br>
+<p>which the output of inlen is how many bytes left on in.
+<br>
+<p><em>&gt; &gt; 	And the last thing, the encoding transformation function in
+</em><br>
+<em>&gt; &gt; encoding.c (say UTF8ToUTF16) can't handle if not enough byte is
+</em><br>
+<em>&gt; &gt; given (say one the first byte of a three-bytes character is read in)
+</em><br>
+<em>&gt; &gt; For a thread-safe library, I suggest we add a return value to let
+</em><br>
+<em>&gt; &gt; UTF8toUTF16 say that some byte are not processed and store these
+</em><br>
+<em>&gt; &gt; byte in a new field on &quot;struct _xmlParserInput&quot;.
+</em><br>
+<em>&gt;   I'm not entierely convinced it's the place where this should be
+</em><br>
+<em>&gt; stored. I would rather add it to the input buffer. After all at one
+</em><br>
+<em>&gt; time multiple entities may be opened and we may have residual bytes
+</em><br>
+<em>&gt; from each of them.
+</em><br>
+<p>You mean &quot;struct _xmlParserInputBuffer&quot; ?
+<br>
+If yes, I can't agree anymore and sorry not to notice this.
+<br>
+&nbsp;
+<br>
+I think it' will be more moduler in this way.
+<br>
+But with this, we need a function to say that 
+<br>
+there are some bytes left (which can't be transformed
+<br>
+into one single utf8) but we have got EOF already.
+<br>
+<p>I plan to use iconv to convert many encoding to utf8.
+<br>
+As I know, there are two implemention of stand-alone libiconv
+<br>
+(glibc also has one, but if you don't want glibc).
+<br>
+<p>[deleted]
+<br>
+<em>&gt; export CVSROOT=:pserver:<a href="mailto:anonymous@dev.w3.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">anonymous@dev.w3.org</a>:/sources/public
+</em><br>
+[deleted]
+<br>
+<p>I got it.
+<br>
+<p>If you think the direction is right, I will start coding.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Modify encoding.c first.)
+<br>
+<p>Yuan-Chen Cheng
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0344.html">Daniel Veillard: "Re: [xml] Re: embedded libxml"</a>
+<li><strong>In reply to:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Reply:</strong> <a href="0346.html">Daniel Veillard: "Re: [xml] Re: I18N Issues."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is ho</title>
+<meta name="Author" content="James Henstridge (james@daa.com.au)">
+<meta name="Subject" content="[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]</h1>
+<!-- received="Wed Sep 22 08:05:29 1999" -->
+<!-- isoreceived="19990922120529" -->
+<!-- sent="Wed, 22 Sep 1999 20:19:01 +0800 (WST)" -->
+<!-- isosent="19990922121901" -->
+<!-- name="James Henstridge" -->
+<!-- email="james@daa.com.au" -->
+<!-- subject="[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]" -->
+<!-- id="Pine.LNX.3.96.990922201011.4020G-100000@quoll.daa.com.au" -->
+<!-- inreplyto="19990922060657.P20945@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> James Henstridge (<a href="mailto:james@daa.com.au?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]"><em>james@daa.com.au</em></a>)<br>
+<strong>Date:</strong> Wed Sep 22 1999 - 08:19:01 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Previous message:</strong> <a href="0132.html">Andrea LUCIANO: "[xml] libxml version"</a>
+<li><strong>In reply to:</strong> <a href="0131.html">Daniel Veillard: "[xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I wish I didn't have to rely on the xmlParserCtxt structure.  It is just
+<br>
+that the SAX parser entry points in libxml are not usable for most SAX
+<br>
+parsers other than the DOM tree generator because they give no way of
+<br>
+setting the userData pointer that is passed to each SAX callback.  As it
+<br>
+stands, you would need to use global variables to hold parser state
+<br>
+information, which is not always desirable.
+<br>
+<p>The problem code in libglade is concentrated in the my_xmlSAXParseFile and
+<br>
+my_xmlSAXParseMemory function in glade/glade-sax.c.  These two functions
+<br>
+give sane entry points to the libxml parser for custom SAX parsers.  If
+<br>
+you added routines with similar functionality to libxml, I can remove the
+<br>
+problem code from libglade.
+<br>
+<p>Please consider doing this, as the SAX interface is very useful for
+<br>
+writing fast parsers where the DOM tree is not required.
+<br>
+<p>James.
+<br>
+<p><pre>
+--
+Email: <a href="mailto:james@daa.com.au?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">james@daa.com.au</a>
+WWW:   <a href="http://www.daa.com.au/~james/">http://www.daa.com.au/~james/</a>
+<p><p>On Wed, 22 Sep 1999, Daniel Veillard wrote:
+<p>&gt; On Tue, Sep 21, 1999 at 03:45:43PM -0400, Elliot Lee wrote:
+&gt; &gt; Contrary to assurances, it's not binary compatible with libxml 1.4.0.
+&gt; &gt; A libglade built against 1.4.0 is crashing when run with 1.6.2.
+&gt; &gt; 
+&gt; &gt; Oh well,
+&gt; 
+&gt; James libglade is using direct access to the xml parsing context
+&gt; (since I didn't provide wrappers there is no blame here :-) and
+&gt; that's not something I was expecting I would need to keep as-if
+&gt; for the binary compatibility. Well SAX need it, so I have changed
+&gt; back my structures to be 1.4 compliant, since 1.5 and 1.6 have never
+&gt; been shipped from gnome.org I guess it's the best.
+&gt; 
+&gt; I have generated libxml-1.7, tested it against the CVS libglade
+&gt; compiled while the libxml and libxml-devel were 1.4, and 
+&gt; test-libglade example.glade 
+&gt; worked again, so I expect the problem to be fixed.
+&gt; I also checked the old gnorpm and gnumeric, but since they don't
+&gt; use the SAX interface but the DOM tree they really should not break.
+&gt; 
+&gt; libxml-1.7 is a HUGE improvement over 1.4 which was flawed in
+&gt; many respects, and I would really like to get an upgrade for 
+&gt; any new Gnome distrib.
+&gt; Major updates includes:
+&gt; 
+&gt;   - removed memory leaks
+&gt;   - DTD validation
+&gt;   - Remote entities fetching (if turned on)
+&gt; 
+&gt;   Let me know if you have any problem with this version, it is
+&gt; currently only at <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a> , I will upload it
+&gt; to the Gnome FTP if I don't get alarms within 24 hours,
+&gt; 
+&gt; Daniel
+&gt; 
+&gt; -- 
+&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+&gt; <a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+&gt; 
+<p>----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml-1.7.0%20is%20out,%20[Was%20Re:%20libxml%201.6.2%20is%20hosed]">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Previous message:</strong> <a href="0132.html">Andrea LUCIANO: "[xml] libxml version"</a>
+<li><strong>In reply to:</strong> <a href="0131.html">Daniel Veillard: "[xml] libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<li><strong>Reply:</strong> <a href="0134.html">Daniel Veillard: "[xml] Re: libxml-1.7.0 is out, [Was Re: libxml 1.6.2 is hosed]"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

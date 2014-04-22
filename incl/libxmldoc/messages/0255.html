@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml linking using rpms</title>
+<meta name="Author" content="Steve Webster (swebster@rayva.org)">
+<meta name="Subject" content="Re: [xml] libxml linking using rpms">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml linking using rpms</h1>
+<!-- received="Fri Dec 17 17:12:12 1999" -->
+<!-- isoreceived="19991217221212" -->
+<!-- sent="Fri, 17 Dec 1999 17:09:28 -0500" -->
+<!-- isosent="19991217220928" -->
+<!-- name="Steve Webster" -->
+<!-- email="swebster@rayva.org" -->
+<!-- subject="Re: [xml] libxml linking using rpms" -->
+<!-- id="385AB498.D902600E@rayva.org" -->
+<!-- inreplyto="19991211184514.B23680@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Steve Webster (<a href="mailto:swebster@rayva.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms"><em>swebster@rayva.org</em></a>)<br>
+<strong>Date:</strong> Fri Dec 17 1999 - 17:09:28 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Previous message:</strong> <a href="0254.html">Daniel Veillard: "Re: [xml] W3c XML page"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Reply:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+<p>I have upgraded to libxml 1.8, and I have the following recommendations:
+<br>
+<p>1) Enclose your HTMLparser.h declarations with the usual c++/c defines.
+<br>
+This omission was the source of my problems, since I'm writing c++ code.
+<br>
+<p>#ifdef __cplusplus
+<br>
+#define extern &quot;C&quot; {
+<br>
+#endif
+<br>
+<p>...
+<br>
+<p><p>#ifdef __cplusplus
+<br>
+}
+<br>
+#endif
+<br>
+<p>2) Change your variable name, &quot;namespace,&quot; to something like &quot;nspace&quot; at
+<br>
+SAX.h:96 and tree.h:468 since &quot;namespace&quot; is reserved in c++.
+<br>
+<p>These two changes allowed me to build my c++ applications successfully.
+<br>
+<p>HTH,
+<br>
+Steve
+<br>
+<p>Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Sat, Dec 11, 1999 at 10:57:17AM -0500, Steve Webster wrote:
+</em><br>
+<em>&gt; &gt; Thanks for your rapid response. The rpms I'm using came from the url you
+</em><br>
+<em>&gt; &gt; mention, <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a>. Here's my output, as you
+</em><br>
+<em>&gt; &gt; requested, which looks identical to your sample. Consquently, my issue
+</em><br>
+<em>&gt; &gt; looks be related to my environment, beyond libxml.If you think
+</em><br>
+<em>&gt; &gt; differently, please let me know.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Strange, I double checked and was able to link the HTML tester example
+</em><br>
+<em>&gt; with the 1.7.4 shared library without problem (running Ok too !).
+</em><br>
+<em>&gt; Make sure that there is no libxml libs wandering around say in /usr/local/lib
+</em><br>
+<em>&gt; or in another critical path, make sure that /sbin/ldconfig -v reports
+</em><br>
+<em>&gt; libxml only in /usr/lib and with the correct versions,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Previous message:</strong> <a href="0254.html">Daniel Veillard: "Re: [xml] W3c XML page"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<li><strong>Reply:</strong> <a href="0256.html">Daniel Veillard: "Re: [xml] libxml linking using rpms"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:55 EDT</em>
+</em>
+</small>
+</body>
+</html>

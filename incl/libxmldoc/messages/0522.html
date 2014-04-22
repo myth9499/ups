@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Install part of the libxml?</title>
+<meta name="Author" content="rcx195@us.ibm.com (rcx195@us.ibm.com)">
+<meta name="Subject" content="Re: [xml] Install part of the libxml?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Install part of the libxml?</h1>
+<!-- received="Wed Jun 21 09:11:12 2000" -->
+<!-- isoreceived="20000621131112" -->
+<!-- sent="Wed, 21 Jun 2000 09:06:54 -0400" -->
+<!-- isosent="20000621130654" -->
+<!-- name="rcx195@us.ibm.com" -->
+<!-- email="rcx195@us.ibm.com" -->
+<!-- subject="Re: [xml] Install part of the libxml?" -->
+<!-- id="85256905.00480BF1.00@D51MTA03.pok.ibm.com" -->
+<!-- inreplyto="[xml] Install part of the libxml?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:rcx195@us.ibm.com?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?"><em>rcx195@us.ibm.com</em></a><br>
+<strong>Date:</strong> Wed Jun 21 2000 - 09:06:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0523.html">rcx195@us.ibm.com: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Previous message:</strong> <a href="0521.html">Daniel Veillard: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0519.html">rcx195@us.ibm.com: "[xml] Install part of the libxml?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0523.html">rcx195@us.ibm.com: "Re: [xml] Install part of the libxml?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank you very much for your quick reply.    I also have the following
+<br>
+questions:
+<br>
+1. I used to use rpm to install the libxml package.   If I do not want to
+<br>
+install FTP, HTTP, etc, can I use rpm?    Do
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;I have to compile your source code myself?   If I have to compile the
+<br>
+code, could you give me some instruction about
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;how to compile it?
+<br>
+2. Do you know how big the library will be after removing the parts that
+<br>
+you mentioned in your email?
+<br>
+<p>Thanks
+<br>
+<p>Jing
+<br>
+<p>Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">Daniel.Veillard@w3.org</a>&gt;@rufus.w3.org on 06/21/2000
+<br>
+06:09:07 AM
+<br>
+<p>Please respond to <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@rpmfind.net</a>
+<br>
+<p>Sent by:  <a href="mailto:xml-request@rufus.w3.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml-request@rufus.w3.org</a>
+<br>
+<p><p>To:   <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@rpmfind.net</a>
+<br>
+cc:   <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@xmlsoft.org</a>
+<br>
+Subject:  Re: [xml] Install part of the libxml?
+<br>
+<p><p><p><p>On Tue, Jun 20, 2000 at 04:59:29PM -0400, <a href="mailto:rcx195@us.ibm.com?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">rcx195@us.ibm.com</a> wrote:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt; I am trying to build a WML browser based on libxml.    However, the
+</em><br>
+<em>&gt; library(2.0.0) is too big for me since I am going to run it in a wearable
+</em><br>
+<em>&gt; device.
+</em><br>
+<em>&gt;   Is there any way that  I can choose to install part of the libxml?
+</em><br>
+For
+<br>
+<em>&gt; example, I do not need SAX support.
+</em><br>
+<p>&nbsp;&nbsp;SAX is really core to libxml, you can't remove it.
+<br>
+&nbsp;&nbsp;./configure --help shows the parts which can be removed at compile time:
+<br>
+&nbsp;&nbsp;--with-buffers          Use buffers for node content (off)
+<br>
+&nbsp;&nbsp;--with-ftp              Add the FTP support (on)
+<br>
+&nbsp;&nbsp;--with-http             Add the HTTP support (on)
+<br>
+&nbsp;&nbsp;--with-html             Add the HTML support (on)
+<br>
+&nbsp;&nbsp;--with-xpath            Add the XPATH support (on)
+<br>
+&nbsp;&nbsp;--with-iconv            Add the ICONV support (on)
+<br>
+&nbsp;&nbsp;--with-debug            Add the debugging module (on)
+<br>
+&nbsp;&nbsp;--with-mem-debug        Add the memory debugging module (off)
+<br>
+<p>&nbsp;&nbsp;So basically you can get rid of:
+<br>
+&nbsp;&nbsp;- FTP HTTP HTML XPATH and the debugging module
+<br>
+&nbsp;&nbsp;I suggest you keep iconv support if found on your machine, espacially
+<br>
+with respect to recent abuse in (non) XML encoding support in WAP related
+<br>
+software and pages.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+--
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">majordomo@xmlsoft.org</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Install%20part%20of%20the%20libxml?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0523.html">rcx195@us.ibm.com: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Previous message:</strong> <a href="0521.html">Daniel Veillard: "Re: [xml] Install part of the libxml?"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0519.html">rcx195@us.ibm.com: "[xml] Install part of the libxml?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0523.html">rcx195@us.ibm.com: "Re: [xml] Install part of the libxml?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] + broke??</title>
+<meta name="Author" content="Bill Kendrick (William.Kendrick@wcom.com)">
+<meta name="Subject" content="Re: [xml] + broke??">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] + broke??</h1>
+<!-- received="Fri Oct 20 14:05:12 2000" -->
+<!-- isoreceived="20001020180512" -->
+<!-- sent="Fri, 20 Oct 2000 10:59:02 -0700" -->
+<!-- isosent="20001020175902" -->
+<!-- name="Bill Kendrick" -->
+<!-- email="William.Kendrick@wcom.com" -->
+<!-- subject="Re: [xml] + broke??" -->
+<!-- id="20001020105902.B20775@atari" -->
+<!-- inreplyto="20001020144653.J16308@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Kendrick (<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20%2B%20broke??"><em>William.Kendrick@wcom.com</em></a>)<br>
+<strong>Date:</strong> Fri Oct 20 2000 - 13:59:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1018.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<li><strong>In reply to:</strong> <a href="1009.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 20 Oct 2000 05:46:53 Daniel Veillard sent:
+<br>
+<em>&gt; *** valid.c	2000/10/11 15:16:38	1.74
+</em><br>
+<em>&gt; --- valid.c	2000/10/20 12:37:44
+</em><br>
+<em>&gt; *************** xmlValidateElementTypeElement(xmlValidCt
+</em><br>
+<em>&gt; *** 3505,3513 ****
+</em><br>
+<em>&gt;   		*child = cur;
+</em><br>
+<em>&gt;   	        return(0);
+</em><br>
+<em>&gt;   	    }
+</em><br>
+<em>&gt;   	    do {
+</em><br>
+<em>&gt; ! 		cur = *child;
+</em><br>
+<em>&gt;   		ret = xmlValidateElementTypeExpr(ctxt, child, cont);
+</em><br>
+<em>&gt;   	    } while (ret == 1);
+</em><br>
+<em>&gt;   	    if (ret == -1) return(-1);
+</em><br>
+<em>&gt;   	    *child = cur;
+</em><br>
+<em>&gt; --- 3505,3523 ----
+</em><br>
+<em>&gt;   		*child = cur;
+</em><br>
+<em>&gt;   	        return(0);
+</em><br>
+<em>&gt;   	    }
+</em><br>
+<em>&gt; + 	    if (ret == -1) return(-1);
+</em><br>
+<em>&gt; + 	    cur = *child;
+</em><br>
+<em>&gt;   	    do {
+</em><br>
+<em>&gt; ! 		if (*child == NULL)
+</em><br>
+<em>&gt; ! 		    break; /* while */
+</em><br>
+<em>&gt; ! 		if (((*child)-&gt;type == XML_TEXT_NODE) &amp;&amp;
+</em><br>
+<em>&gt; ! 		    (xmlIsBlankNode(*child))) {
+</em><br>
+<em>&gt; ! 		    *child = (*child)-&gt;next;
+</em><br>
+<em>&gt; ! 		    continue;
+</em><br>
+<em>&gt; ! 		}
+</em><br>
+<em>&gt;   		ret = xmlValidateElementTypeExpr(ctxt, child, cont);
+</em><br>
+<em>&gt; + 		if (ret == 1)
+</em><br>
+<em>&gt; + 		    cur = *child;
+</em><br>
+<em>&gt;   	    } while (ret == 1);
+</em><br>
+<em>&gt;   	    if (ret == -1) return(-1);
+</em><br>
+<em>&gt;   	    *child = cur;
+</em><br>
+<em>&gt; *************** child_ok:
+</em><br>
+<em>&gt; *** 3812,3817 ****
+</em><br>
+<em>&gt; --- 3822,3832 ----
+</em><br>
+<em>&gt;   	    child = elem-&gt;children;
+</em><br>
+<em>&gt;   	    cont = elemDecl-&gt;content;
+</em><br>
+<em>&gt;   	    ret = xmlValidateElementTypeElement(ctxt, &amp;child, cont);
+</em><br>
+<em>&gt; + 	    while ((child != NULL) &amp;&amp; (child-&gt;type == XML_TEXT_NODE) &amp;&amp;
+</em><br>
+<em>&gt; + 		(xmlIsBlankNode(child))) {
+</em><br>
+<em>&gt; + 		child = child-&gt;next;
+</em><br>
+<em>&gt; + 		continue;
+</em><br>
+<em>&gt; + 	    }
+</em><br>
+<em>&gt;   	    if ((ret == 0) || (child != NULL)) {
+</em><br>
+<em>&gt;   	        char expr[1000];
+</em><br>
+<em>&gt;   	        char list[2000];
+</em><br>
+<p>Well, it at least fixed the validation of the cleo.xml file! :)
+<br>
+(With and without specifically mentioning &quot;cleo.dtd&quot; at the top
+<br>
+of &quot;cleo.xml&quot;)
+<br>
+<p>Thanks!
+<br>
+<p>-bill!
+<br>
+<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20%2B%20broke??">William.Kendrick@wcom.com</a>
+<br>
+ext 6218
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1018.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<li><strong>In reply to:</strong> <a href="1009.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 20 2000 - 14:43:33 EDT</em>
+</em>
+</small>
+</body>
+</html>

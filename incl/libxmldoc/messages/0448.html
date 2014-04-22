@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Proposed release of libxml-2.0.0</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Proposed release of libxml-2.0.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Proposed release of libxml-2.0.0</h1>
+<!-- received="Fri Apr  7 13:49:50 2000" -->
+<!-- isoreceived="20000407174950" -->
+<!-- sent="Fri, 7 Apr 2000 19:49:42 +0200" -->
+<!-- isosent="20000407174942" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Proposed release of libxml-2.0.0" -->
+<!-- id="20000407194942.J20400@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Proposed%20release%20of%20libxml-2.0.0"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Apr 07 2000 - 13:49:42 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0449.html">Nadine Peyrouze: "[xml] Parsing file without storing comments"</a>
+<li><strong>Previous message:</strong> <a href="0447.html">Bernie Rosman: "[xml] libxml-1.8.7 issues"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;I have uploaded (and commited to CVS) a candidate libxml-2.0.0
+<br>
+release. I have put tar and RPMs at:
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/libxml/test/">ftp://rpmfind.net/pub/libxml/test/</a>
+<br>
+<p>&nbsp;&nbsp;The main changes done after the first beta release are:
+<br>
+&nbsp;&nbsp;&nbsp;- added a complete URI processing module uri.[ch] doing the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;analysis and processing described by RFC 2396
+<br>
+&nbsp;&nbsp;&nbsp;- allowed to force libxml to use a new set of allocation routines
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use xmlMemSetup() to override the default one before calling
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libxml
+<br>
+&nbsp;&nbsp;&nbsp;- added compile-time customization of libxml : extra features
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FTP/HTTP/HTML/XPath and debug module can be removed at configure time
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this is rather for people doing embedded stuff than general public
+<br>
+&nbsp;&nbsp;&nbsp;- moved to an absolute adressing of includes :
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;libxml/xxx.h&gt; I hope it won't break too much stuff
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and will be manageable in the future...
+<br>
+&nbsp;&nbsp;&nbsp;- the old tester tool is now called xmllint and is installed
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by default with the libxml2 package
+<br>
+&nbsp;&nbsp;&nbsp;- There is now a version number availble for the C preprocessor
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;named LIBXML_VERSION and currently at 20000
+<br>
+&nbsp;&nbsp;&nbsp;- the I/O module and structure have been cleaned up, the function
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlRegisterInputCallbacks() allows to extend or overload the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default input mechanism compiled in
+<br>
+<p>&nbsp;This represent a serious number of (significant) changes, and 
+<br>
+I would like feedback before releasing it for more public audience.
+<br>
+<p>&nbsp;I expect to make this version the first public libxml2 release
+<br>
+next week unless I need to fix stuff.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Proposed%20release%20of%20libxml-2.0.0">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Proposed%20release%20of%20libxml-2.0.0">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Proposed%20release%20of%20libxml-2.0.0">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0449.html">Nadine Peyrouze: "[xml] Parsing file without storing comments"</a>
+<li><strong>Previous message:</strong> <a href="0447.html">Bernie Rosman: "[xml] libxml-1.8.7 issues"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,152 @@
+Index: testHTML.c
+===================================================================
+RCS file: /cvs/gnome/gnome-xml/testHTML.c,v
+retrieving revision 1.12
+diff -u -r1.12 testHTML.c
+--- testHTML.c	2000/07/14 14:49:22	1.12
++++ testHTML.c	2000/08/13 07:15:35
+@@ -49,6 +49,7 @@
+ static int repeat = 0;
+ static int noout = 0;
+ static int push = 0;
++static int bigpush = 0;
+ static char *encoding = NULL;
+ 
+ xmlSAXHandler emptySAXHandlerStruct = {
+@@ -567,7 +568,7 @@
+  ************************************************************************/
+ 
+ void parseSAXFile(char *filename) {
+-    htmlDocPtr doc;
++    htmlDocPtr doc = NULL;
+     /*
+      * Empty callbacks for checking
+      */
+@@ -581,7 +582,32 @@
+ 	/*
+ 	 * Debug callback
+ 	 */
+-	doc = htmlSAXParseFile(filename, NULL, debugSAXHandler, NULL);
++	if (push) {
++	    FILE *f;
++
++	    f = fopen(filename, "r");
++	    if (f != NULL) {
++		int res, size = 3;
++		char chars[1024];
++		htmlParserCtxtPtr ctxt;
++
++		if (bigpush)
++		    size = sizeof chars;
++		res = fread(chars, 1, 4, f);
++		if (res > 0) {
++		    ctxt = htmlCreatePushParserCtxt(debugSAXHandler, NULL,
++						    chars, res, filename, 0);
++		    while ((res = fread(chars, 1, size, f)) > 0) {
++			htmlParseChunk(ctxt, chars, res, 0);
++		    }
++		    htmlParseChunk(ctxt, chars, 0, 1);
++		    doc = ctxt->myDoc;
++		    htmlFreeParserCtxt(ctxt);
++		}
++	    }
++	} else {	
++	    doc = htmlSAXParseFile(filename, NULL, debugSAXHandler, NULL);
++	}
+ 	if (doc != NULL) {
+ 	    fprintf(stdout, "htmlSAXParseFile returned non-NULL\n");
+ 	    xmlFreeDoc(doc);
+@@ -604,8 +630,8 @@
+ 	    char chars[1024];
+ 	    htmlParserCtxtPtr ctxt;
+ 
+-	    if (repeat)
+-		size = 1024;
++	    if (bigpush)
++		size = sizeof chars;
+ 	    res = fread(chars, 1, 4, f);
+ 	    if (res > 0) {
+ 		ctxt = htmlCreatePushParserCtxt(NULL, NULL,
+@@ -665,34 +691,32 @@
+     int files = 0;
+ 
+     for (i = 1; i < argc ; i++) {
++	if (argv[i][0] == '-') {
++	    char *opt = argv[i] + 1;
++	    if (*opt == '-')
++		opt++;
+ #ifdef LIBXML_DEBUG_ENABLED
+-	if ((!strcmp(argv[i], "-debug")) || (!strcmp(argv[i], "--debug")))
+-	    debug++;
+-	else
++	    if (!strcmp(opt, "debug"))
++		debug++;
++	    else
+ #endif
+-	    if ((!strcmp(argv[i], "-copy")) || (!strcmp(argv[i], "--copy")))
+-	    copy++;
+-	else if ((!strcmp(argv[i], "-push")) || (!strcmp(argv[i], "--push")))
+-	    push++;
+-	else if ((!strcmp(argv[i], "-sax")) || (!strcmp(argv[i], "--sax")))
+-	    sax++;
+-	else if ((!strcmp(argv[i], "-noout")) || (!strcmp(argv[i], "--noout")))
+-	    noout++;
+-	else if ((!strcmp(argv[i], "-repeat")) ||
+-	         (!strcmp(argv[i], "--repeat")))
+-	    repeat++;
+-	else if ((!strcmp(argv[i], "-encode")) ||
+-	         (!strcmp(argv[i], "--encode"))) {
+-	    i++;
+-	    encoding = argv[i];
+-        }
++		if (!strcmp(opt, "copy"))
++		copy++;
++	    else if (!strcmp(opt, "push"))
++		push++;
++	    else if (!strcmp(opt, "bigpush"))
++		push++, bigpush++;
++	    else if (!strcmp(opt, "sax"))
++		sax++;
++	    else if (!strcmp(opt, "noout"))
++		noout++;
++	    else if (!strcmp(opt, "repeat"))
++		repeat++;
++	    else if (!strcmp(opt, "encode"))
++		encoding = argv[++i];
++	}
+     }
+     for (i = 1; i < argc ; i++) {
+-	if ((!strcmp(argv[i], "-encode")) ||
+-	         (!strcmp(argv[i], "--encode"))) {
+-	    i++;
+-	    continue;
+-        }
+ 	if (argv[i][0] != '-') {
+ 	    if (repeat) {
+ 		for (count = 0;count < 100 * repeat;count++) {
+@@ -708,10 +732,16 @@
+ 		    parseAndPrintFile(argv[i]);
+ 	    }
+ 	    files ++;
++	} else {
++	    char *opt = argv[i] + 1;
++	    if (*opt == '-')
++		opt++;
++	    if (!strcmp(opt, "encode"))
++		i++;
+ 	}
+     }
+     if (files == 0) {
+-	printf("Usage : %s [--debug] [--copy] [--copy] HTMLfiles ...\n",
++	printf("Usage : %s [--debug] [--copy] [--...] HTMLfiles ...\n",
+ 	       argv[0]);
+ 	printf("\tParse the HTML files and output the result of the parsing\n");
+ #ifdef LIBXML_DEBUG_ENABLED
+@@ -722,6 +752,7 @@
+ 	printf("\t--repeat : parse the file 100 times, for timing\n");
+ 	printf("\t--noout : do not print the result\n");
+ 	printf("\t--push : use the push mode parser\n");
++	printf("\t--bigpush : like --push, but use a big buffer\n");
+ 	printf("\t--encode encoding : output in the given encoding\n");
+     }
+     xmlCleanupParser();

@@ -1,0 +1,19 @@
+CC=gcc
+CFLAGS=`xml-config --cflags`
+LDFLAGS=`xml-config --libs`
+
+all: gjobread
+
+clean:
+	@(rm -f gjobread gjobread.o)
+
+gjobread.o : gjobread.c
+	$(CC) $(CFLAGS) -c gjobread.c
+
+gjobread: gjobread.o
+	$(CC) -o gjobread gjobread.o $(LDFLAGS)
+
+test: gjobread
+	./gjobread gjobs.xml
+
+

@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Behavior of the parser</title>
+<meta name="Author" content="Marc Billaud (marcbill@wanadoo.fr)">
+<meta name="Subject" content="[xml] Behavior of the parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Behavior of the parser</h1>
+<!-- received="Mon Sep  4 15:53:43 2000" -->
+<!-- isoreceived="20000904195343" -->
+<!-- sent="Mon, 04 Sep 2000 21:30:36 +0200" -->
+<!-- isosent="20000904193036" -->
+<!-- name="Marc Billaud" -->
+<!-- email="marcbill@wanadoo.fr" -->
+<!-- subject="[xml] Behavior of the parser" -->
+<!-- id="39B3F85C.8407B1CA@wanadoo.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Billaud (<a href="mailto:marcbill@wanadoo.fr?subject=Re:%20[xml]%20Behavior%20of%20the%20parser"><em>marcbill@wanadoo.fr</em></a>)<br>
+<strong>Date:</strong> Mon Sep 04 2000 - 15:30:36 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0725.html">Daniel Veillard: "Re: [xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello everybody
+<br>
+<p>I want to ask you information about a behavior, I ve noticed on the
+<br>
+parser after having used it on the example of libxml &quot;gjobs.xml&quot;. I ve
+<br>
+modified the code of the example &quot;gjobread.c&quot; in order to see how it
+<br>
+works and also to add &quot;gtk function&quot;. At the moment I have removed all
+<br>
+the &quot;gtk functions&quot; because I don't master well the &quot;libxml&quot;. So to
+<br>
+begin to parse I just use:
+<br>
+<p>&nbsp;21        doc = xmlParseFile(filename);
+<br>
+22        if(doc == NULL){
+<br>
+23          printf(&quot;ParseFile NULL&quot;);
+<br>
+24      	    return NULL; 
+<br>
+25        }
+<br>
+<p>37        cur = xmlDocGetRootElement(doc);
+<br>
+38        ns = xmlSearchNsByHref(doc, cur,
+<br>
+&quot;<a href="http://www.gnome.org/some-location">http://www.gnome.org/some-location</a>&quot;);
+<br>
+39
+<br>
+I put a breakpoint with the gdb debugger on line 38 and I ve noticed
+<br>
+something strange when I verify values of &quot;doc and cur variables&quot;. Here
+<br>
+the results:
+<br>
+<p>(gdb) print *cur
+<br>
+$8 = {_private = 0x0, type = XML_ELEMENT_NODE, name = 0x8059d40
+<br>
+&quot;Helping&quot;, 
+<br>
+&nbsp;&nbsp;children = 0x8059c40, last = 0x805b628, parent = 0x8059bc0, next =
+<br>
+0x0, prev = 0x0, 
+<br>
+&nbsp;&nbsp;doc = 0x8059bc0, ns = 0x8059d70, content = 0x0, properties = 0x0,
+<br>
+nsDef = 0x8059d70}
+<br>
+(gdb) print *cur-&gt;children
+<br>
+$9 = {_private = 0x0, type = XML_TEXT_NODE, name = 0x8059c78 &quot;text&quot;,
+<br>
+children = 0x0, 
+<br>
+&nbsp;&nbsp;last = 0x0, parent = 0x8059d08, next = 0x8059cc8, prev = 0x0, doc =
+<br>
+0x8059bc0, ns = 0x0, 
+<br>
+&nbsp;&nbsp;content = 0x8059c88 &quot;\n  &quot;, properties = 0x0, nsDef = 0x0}
+<br>
+(gdb) print *cur-&gt;children-next
+<br>
+No symbol &quot;next&quot; in current context.
+<br>
+(gdb) print *cur-&gt;children-&gt;next
+<br>
+$10 = {_private = 0x0, type = XML_ELEMENT_NODE, name = 0x8059d50 &quot;Jobs&quot;, 
+<br>
+&nbsp;&nbsp;children = 0x8059dc0, last = 0x805b5e0, parent = 0x8059d08, next =
+<br>
+0x805b628, 
+<br>
+&nbsp;&nbsp;prev = 0x8059c40, doc = 0x8059bc0, ns = 0x8059d70, content = 0x0,
+<br>
+properties = 0x0, 
+<br>
+&nbsp;&nbsp;nsDef = 0x0}
+<br>
+(gdb) print *cur-&gt;children-&gt;next-&gt;children
+<br>
+$11 = {_private = 0x0, type = XML_TEXT_NODE, name = 0x8059d60 &quot;text&quot;,
+<br>
+children = 0x0, 
+<br>
+&nbsp;&nbsp;last = 0x0, parent = 0x8059cc8, next = 0x8059e18, prev = 0x0, doc =
+<br>
+0x8059bc0, ns = 0x0, 
+<br>
+&nbsp;&nbsp;content = 0x8059ca8 &quot;\n\n    &quot;, properties = 0x0, nsDef = 0x0}
+<br>
+(gdb) print *cur-&gt;children-&gt;next-&gt;children-&gt;next
+<br>
+$12 = {_private = 0x0, type = XML_ELEMENT_NODE, name = 0x8059e50 &quot;Job&quot;, 
+<br>
+&nbsp;&nbsp;children = 0x8059e60, last = 0x805b5a8, parent = 0x8059cc8, next =
+<br>
+0x805b5e0, 
+<br>
+&nbsp;&nbsp;prev = 0x8059dc0, doc = 0x8059bc0, ns = 0x8059d70, content = 0x0,
+<br>
+properties = 0x0, 
+<br>
+&nbsp;&nbsp;nsDef = 0x0}
+<br>
+(gdb) print *cur-&gt;children-&gt;next-&gt;children-&gt;next-&gt;children
+<br>
+$13 = {_private = 0x0, type = XML_TEXT_NODE, name = 0x8059df8 &quot;text&quot;,
+<br>
+children = 0x0, 
+<br>
+&nbsp;&nbsp;last = 0x0, parent = 0x8059e18, next = 0x8059f78, prev = 0x0, doc =
+<br>
+0x8059bc0, ns = 0x0, 
+<br>
+&nbsp;&nbsp;content = 0x8059e08 &quot;\n      &quot;, properties = 0x0, nsDef = 0x0}
+<br>
+<p>Between a parent node and child node I got a node called &quot;text&quot;. This
+<br>
+node called &quot;text&quot; can make pbs when you have to parse an imput XML file
+<br>
+in which you don't know the name of the different nodes (eg: an XML
+<br>
+editor).
+<br>
+<p>Is this a normal behavior? or do I forget something in my code to
+<br>
+prevent this node text to appear?
+<br>
+<p>Thanks for your ideas about this pb.
+<br>
+Bye
+<br>
+Marc
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Behavior%20of%20the%20parser">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Behavior%20of%20the%20parser">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0725.html">Daniel Veillard: "Re: [xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 04 2000 - 16:44:00 EDT</em>
+</em>
+</small>
+</body>
+</html>

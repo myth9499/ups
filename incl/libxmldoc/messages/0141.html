@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: R: [xml] xmlDocDumpMemory</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: R: [xml] xmlDocDumpMemory">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: R: [xml] xmlDocDumpMemory</h1>
+<!-- received="Thu Sep 23 11:33:55 1999" -->
+<!-- isoreceived="19990923153355" -->
+<!-- sent="Thu, 23 Sep 1999 11:33:52 -0400" -->
+<!-- isosent="19990923153352" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: R: [xml] xmlDocDumpMemory" -->
+<!-- id="19990923113352.I4719@w3.org" -->
+<!-- inreplyto="003201bf05d5$3db5f0d0$1000000a@icteam.it" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Sep 23 1999 - 11:33:52 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0142.html">Daniel Veillard: "[xml] libxml-1.7.1 is out"</a>
+<li><strong>Previous message:</strong> <a href="0140.html">patrickb@crt.com: "RE: [xml] xmlDocDumpMemory"</a>
+<li><strong>In reply to:</strong> <a href="0139.html">Andrea LUCIANO: "R: [xml] xmlDocDumpMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0140.html">patrickb@crt.com: "RE: [xml] xmlDocDumpMemory"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Sep 23, 1999 at 05:05:54PM +0200, Andrea LUCIANO wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----- Original Message -----
+</em><br>
+<em>&gt; From: Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory">Daniel.Veillard@w3.org</a>&gt;
+</em><br>
+<em>&gt; To: &lt;<a href="mailto:xml@rufus.w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>&gt;
+</em><br>
+<em>&gt; Sent: Thursday, September 23, 1999 2:00 PM
+</em><br>
+<em>&gt; Subject: Re: [xml] xmlDocDumpMemory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; On Thu, Sep 23, 1999 at 01:01:37PM +0200, Andrea LUCIANO wrote:
+</em><br>
+<em>&gt; &gt; &gt; Does xmlDocDumpMemory return a zero terminated string?
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;  yes, it should :-)
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; It doesn't (in release 1.2 at least). I had to put a '\0' character at
+</em><br>
+<em>&gt; mem[size].
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; We have successfully compiled libxml under NT, without problems (we changed
+</em><br>
+<em>&gt; the type CHAR in XML_CHAR because it was already used by Visual C++).
+</em><br>
+<em>&gt; In my opinion libxml is an excellent library, portable and easy to use. The
+</em><br>
+<em>&gt; DCOM component shipped with IE5 is really harder to employ and absolutly not
+</em><br>
+<em>&gt; portable.
+</em><br>
+<em>&gt; Actually I implemented an OO interface to libxml in C++ without great
+</em><br>
+<em>&gt; effort.
+</em><br>
+<p>&nbsp;&nbsp;Andrea, thanks for the feedback.
+<br>
+<p>Could you Please try out 1.7.0, I made quite a lot of change in there
+<br>
+and getting feedback on portability is really important. Especially
+<br>
+new stuff like XPath implementation (requires access to infinite and
+<br>
+NaN floats detection) and the nanohttp (which does some socket
+<br>
+manipulations) are likely to requires a few tweaks to work on Windows
+<br>
+or non-POSIX platforms.
+<br>
+&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/veillard/libxml-1.7.0.tar.gz">ftp://rpmfind.net/pub/veillard/libxml-1.7.0.tar.gz</a>
+<br>
+(maybe I will have to provide a zip at some point :-\ )
+<br>
+<p>I'm really worried about the CHAR problem, because now all APIs
+<br>
+have been defined with CHAR, however, if this is a registered type 
+<br>
+on Windows, I'm ready to change this to XML_CHAR (or something else
+<br>
+like xmlCHAR or xmlChar) and provide the compatibility on non-Windows
+<br>
+platforms by the way of a #define CHAR XML_CHAR . This is such a large
+<br>
+change that if required I would like to make rather sooner than later.
+<br>
+<p>&nbsp;&nbsp;what do people think ?
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20R:%20[xml]%20xmlDocDumpMemory">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0142.html">Daniel Veillard: "[xml] libxml-1.7.1 is out"</a>
+<li><strong>Previous message:</strong> <a href="0140.html">patrickb@crt.com: "RE: [xml] xmlDocDumpMemory"</a>
+<li><strong>In reply to:</strong> <a href="0139.html">Andrea LUCIANO: "R: [xml] xmlDocDumpMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0140.html">patrickb@crt.com: "RE: [xml] xmlDocDumpMemory"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

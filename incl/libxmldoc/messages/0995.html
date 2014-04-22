@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prefix values inconsistent in sources</title>
+<meta name="Author" content="Dave Madole (dmadole@cddb.com)">
+<meta name="Subject" content="Re: [xml] prefix values inconsistent in sources">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prefix values inconsistent in sources</h1>
+<!-- received="Tue Oct 17 19:47:58 2000" -->
+<!-- isoreceived="20001017234758" -->
+<!-- sent="Tue, 17 Oct 2000 16:46:54 -0700" -->
+<!-- isosent="20001017234654" -->
+<!-- name="Dave Madole" -->
+<!-- email="dmadole@cddb.com" -->
+<!-- subject="Re: [xml] prefix values inconsistent in sources" -->
+<!-- id="39ECE4EE.7A44FC62@cddb.com" -->
+<!-- inreplyto="20001018005823.H6503@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Dave Madole (<a href="mailto:dmadole@cddb.com?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources"><em>dmadole@cddb.com</em></a>)<br>
+<strong>Date:</strong> Tue Oct 17 2000 - 19:46:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>Previous message:</strong> <a href="0994.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>In reply to:</strong> <a href="0994.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>Reply:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hmmmm.  I just tar -x'ed libxml2-2.2.5.tar.gz
+<br>
+<p>(from <a href="ftp://ftp.gnome.org/pub/GNOME/stable/sources/libxml/">ftp://ftp.gnome.org/pub/GNOME/stable/sources/libxml/</a> )
+<br>
+<p>&nbsp;&nbsp;libxml2-2.2.5.tar.gz                                1090 Kb    Sun Oct 15 16:47:00 2000 Unix Tape
+<br>
+Archive
+<br>
+<p>(before typing ./config)
+<br>
+<p>[root@toots libxml2-2.2.5]# grep prefix * | grep -v &quot;\.c&quot;
+<br>
+...
+<br>
+configure:ac_default_prefix=/usr/local
+<br>
+...
+<br>
+etc.
+<br>
+<p>...and after typing  ./config (no arguments) and here is what I get (edited).
+<br>
+<p>[root@toots libxml2-2.2.5]# grep prefix * | grep -v &quot;\.c&quot;
+<br>
+<p>Makefile:prefix = /usr/local
+<br>
+...
+<br>
+configure:ac_default_prefix=/usr/local
+<br>
+configure:exec_prefix=NONE
+<br>
+configure:prefix=NONE
+<br>
+...
+<br>
+config.status:s%@exec_prefix@%${prefix}%g
+<br>
+config.status:s%@prefix@%/usr/local%g
+<br>
+...
+<br>
+libxml-2.0.pc:prefix=/usr/local
+<br>
+libxml-2.0.pc:exec_prefix=${prefix}
+<br>
+libxml-2.0.pc:libdir=${exec_prefix}/lib
+<br>
+libxml-2.0.pc:includedir=${prefix}/include
+<br>
+libxml-2.0.pc.in:prefix=@prefix@
+<br>
+libxml-2.0.pc.in:exec_prefix=@exec_prefix@
+<br>
+<p>etc.
+<br>
+<p>?????
+<br>
+<p>Thank you,
+<br>
+<p>Dave
+<br>
+<p><p>Daniel  wrote:
+<br>
+<p><em>&gt; On Tue, Oct 17, 2000 at 03:36:14PM -0700, Dave Madole wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; It seems that the default prefix (install base directory) in for
+</em><br>
+<em>&gt; &gt; libxml2-2.2.5 is /usr/local
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Huh ???
+</em><br>
+<em>&gt;   no it's /usr
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ~ -&gt; rpm -qlp ~ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm
+</em><br>
+<em>&gt; /usr/bin/xmllint
+</em><br>
+<em>&gt; /usr/doc/libxml2-2.2.5
+</em><br>
+<em>&gt; /usr/doc/libxml2-2.2.5/AUTHORS
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; /usr/doc/libxml2-2.2.5/TODO
+</em><br>
+<em>&gt; /usr/lib/libxml.so.2
+</em><br>
+<em>&gt; /usr/lib/libxml.so.2.2.5
+</em><br>
+<em>&gt; /usr/man/man1/xml-config.1
+</em><br>
+<em>&gt; /usr/man/man1/xmllint.1
+</em><br>
+<em>&gt; /usr/man/man4/libxml.4
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; but for libxml2-devel-2.2.5-1 is /usr.   I can't figure out how to use
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   yep
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ~ -&gt; rpm -qlp ~ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm
+</em><br>
+<em>&gt; /usr/bin/xml-config
+</em><br>
+<em>&gt; /usr/include/libxml
+</em><br>
+<em>&gt; /usr/include/libxml/HTMLparser.h
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; /usr/include/libxml/xpointer.h
+</em><br>
+<em>&gt; /usr/lib/libxml.a
+</em><br>
+<em>&gt; /usr/lib/libxml.la
+</em><br>
+<em>&gt; /usr/lib/libxml.so
+</em><br>
+<em>&gt; /usr/lib/xmlConf.sh
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; rpm (or cpio) to extract the devel package in /usr/local.  (I've tried
+</em><br>
+<em>&gt; &gt; passing a --prefix argument, editing the rpm2cpio output, etc.).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   The packages are built for /usr this is a common policy when
+</em><br>
+<em>&gt; shipping RPMs I'm not gonna break, rebuild locally from the tar otherwise
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ~ -&gt; ls -l ~ftp/pub/libxml/libxml2-2.2.5.tar.gz
+</em><br>
+<em>&gt; -rw-r--r--    1 veillard www       1116690 Oct 15 16:45 /serveur/ftp/pub/libxml/libxml2-2.2.5.tar.gz
+</em><br>
+<em>&gt; ~ -&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; Could the devel package be put on the ftp site in a tarball?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   no, the -devel is generated as the same time as the normal package in
+</em><br>
+<em>&gt; a single pass
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt; I realize this is more of a linux admin question (I'm more familiar with
+</em><br>
+<em>&gt; &gt; Solaris) than an xml question, and may be slightly out of band, but any
+</em><br>
+<em>&gt; &gt; help would be appreciated.  Also it may be easier if they both defaulted
+</em><br>
+<em>&gt; &gt; to the same prefix value.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   they are, make sure you get them from
+</em><br>
+<em>&gt; <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a> or <a href="ftp://rpmfind.net/pub/libxml">ftp://rpmfind.net/pub/libxml</a> (same machine)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; they should be signed with my GPG key available on my home page at rpmfind
+</em><br>
+<em>&gt; ~ -&gt; rpm --checksig ~ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm
+</em><br>
+<em>&gt; /serveur/ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm: md5 gpg OK
+</em><br>
+<em>&gt; ~ -&gt; rpm --checksig ~ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm
+</em><br>
+<em>&gt; /serveur/ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm: md5 gpg OK
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml gnome XML toolkit
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>Previous message:</strong> <a href="0994.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>In reply to:</strong> <a href="0994.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<li><strong>Reply:</strong> <a href="0996.html">Daniel Veillard: "Re: [xml] prefix values inconsistent in sources"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 17 2000 - 20:43:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

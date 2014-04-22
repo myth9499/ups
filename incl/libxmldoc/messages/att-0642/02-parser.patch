@@ -1,0 +1,16 @@
+Index: parser.c
+===================================================================
+RCS file: /cvs/gnome/gnome-xml/parser.c,v
+retrieving revision 1.81
+diff -u -r1.81 parser.c
+--- parser.c	2000/07/21 20:32:03	1.81
++++ parser.c	2000/08/13 07:16:07
+@@ -2543,7 +2543,7 @@
+ 		     * parsed with the autodetected encoding
+ 		     * into the parser reading buffer.
+ 		     */
+-		    nbchars = xmlCharEncFirstLine(ctxt->input->buf->encoder,
++		    nbchars = xmlCharEncInFunc(ctxt->input->buf->encoder,
+ 		                                  ctxt->input->buf->buffer,
+ 					          ctxt->input->buf->raw);
+ 		    if (nbchars < 0) {

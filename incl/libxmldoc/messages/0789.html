@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Why the strncasecmp() avoidance?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Why the strncasecmp() avoidance?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Why the strncasecmp() avoidance?</h1>
+<!-- received="Fri Sep 22 02:31:06 2000" -->
+<!-- isoreceived="20000922063106" -->
+<!-- sent="Fri, 22 Sep 2000 08:31:01 +0200" -->
+<!-- isosent="20000922063101" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Why the strncasecmp() avoidance?" -->
+<!-- id="20000922083101.E7896@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0009211430480.4157-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 02:31:01 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0788.html">Wayne Davison: "[xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0788.html">Wayne Davison: "[xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Sep 21, 2000 at 03:02:48PM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; This is along the same line as the recent comment about xmlHasProp() being
+</em><br>
+<em>&gt; case-sensitive.
+</em><br>
+<p>&nbsp;&nbsp;Hi Wayne,
+<br>
+<p>&nbsp;yes sorry, I'm behind on e-mail, having travelled/had meeting most of the
+<br>
+week. I will try to resynch this week-end.
+<br>
+<p><em>&gt; For some time now I've noticed that the HTML/HTTP-parsing
+</em><br>
+<em>&gt; code often only allows certain configurations of upper/lower-case in
+</em><br>
+<em>&gt; various tags and headers.  For instance, the nano-HTTP code does not match
+</em><br>
+<em>&gt; the &quot;Content-type:&quot; header that comes back from Netscape-Enterprise/3.6
+</em><br>
+<em>&gt; SP2 because it only allows 2 variations to match (&quot;Content-Type:&quot; and
+</em><br>
+<em>&gt; &quot;content-type:&quot;, not counting the ones without the dash in the middle).
+</em><br>
+<em>&gt; Something similar happens in all the tag-matching code (such as only
+</em><br>
+<em>&gt; looking for &quot;HTTP-EQUIV&quot;, &quot;Http-Equiv&quot;, and &quot;http-equiv&quot; on META tags).
+</em><br>
+<p>&nbsp;&nbsp;Right, agreed. This is far from the Right Way ...
+<br>
+<p><em>&gt; Thus my question is, why doesn't the code use strncasecmp() for this kind
+</em><br>
+<em>&gt; of thing?  I know that older machines may not have an implementation of
+</em><br>
+<em>&gt; this routine, and that it may not handle non-ASCII charsets, but these are
+</em><br>
+<em>&gt; soluble problems (i.e. I have an implementation of strncasecmp() that can
+</em><br>
+<em>&gt; be included in libxml, and we only need to use it to compare ASCII strings).
+</em><br>
+<p>&nbsp;&nbsp;yes that's the reason. The linux man page says 
+<br>
+&nbsp;&nbsp;CONFORMING TO
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BSD 4.3
+<br>
+<p>only. This mean lot of target may not have it, and the reason why I didn't
+<br>
+used it.
+<br>
+<p><em>&gt; So, shall I jump in and change a bunch of code to use strncasecmp()?  Or
+</em><br>
+<em>&gt; shall I hard-wire the code to use an internal xmlStrncasecmp() routine in
+</em><br>
+<em>&gt; all instances?  (Which would alleviate concerns about some versions of
+</em><br>
+<em>&gt; strncasecmp() out there not working properly.)  Or is there some other
+</em><br>
+<em>&gt; solution to this problem?
+</em><br>
+<p>&nbsp;&nbsp;I see no problem if you provide xmlStrncasecmp(), yes go ahead !
+<br>
+<p><em>&gt; In the meantime, the appended patch makes the nano-HTTP parser understand
+</em><br>
+<em>&gt; the Content-type header.
+</em><br>
+<p>&nbsp;I would prefer an xmlStrcasecmp patch if you have time.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Why%20the%20strncasecmp()%20avoidance?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0788.html">Wayne Davison: "[xml] Why the strncasecmp() avoidance?"</a>
+<li><strong>In reply to:</strong> <a href="0788.html">Wayne Davison: "[xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 02:44:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] HTML &amp; XML Parser</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] HTML &amp; XML Parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] HTML &amp; XML Parser</h1>
+<!-- received="Sun Sep 24 15:53:20 2000" -->
+<!-- isoreceived="20000924195320" -->
+<!-- sent="Sun, 24 Sep 2000 21:53:16 +0200" -->
+<!-- isosent="20000924195316" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] HTML &amp; XML Parser" -->
+<!-- id="20000924215315.I22500@w3.org" -->
+<!-- inreplyto="200009210740.DAA21493@rpmfind.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20HTML%20&amp;%20XML%20Parser"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Sep 24 2000 - 15:53:16 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0805.html">Daniel Veillard: "Re: [xml] XPath normalize-string"</a>
+<li><strong>In reply to:</strong> <a href="0787.html">Manuel Guesdon: "[xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Sep 21, 2000 at 03:40:24AM -0400, Manuel Guesdon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'd like to parse HTML file with xml parser so people can change
+</em><br>
+<em>&gt; DTDs (adding tags,...) without having to re-compile libxml.
+</em><br>
+<em>&gt; The main problem is &quot;Auto Closed&quot; tag.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Have you looked at the HTML parser in libxml ? did you noticed
+<br>
+it produces a similar tree as say an equivalent XHTML document would have
+<br>
+produced when parsed with the XML parser ? The HTmL parser of course handle
+<br>
+autoclosed (and auto-opened in some mesure) tags.
+<br>
+<p>&nbsp;&nbsp;&nbsp;The only change should be doc-&gt;type == XML_HTML_DOCUMENT_NODE instead
+<br>
+of XML_DOCUMENT_NODE.
+<br>
+<p>&nbsp;&nbsp;&nbsp;If you plan is to make extensions to the SGML DtDs and have libxml
+<br>
+HTML parser support those, you're just wrong. Latest and future versions
+<br>
+of HTML are XML  based, hence new extensions will be made using the
+<br>
+XHTML version and in an XML framework. Forget about auto-closed tags 
+<br>
+and other SGML minimizations nastyness this does not fit into this
+<br>
+framework anymore.
+<br>
+&nbsp;&nbsp;&nbsp;If the HTML parser found htmL tags it doesn't know it will complain
+<br>
+but it will generate a DOM tree which will be XML ready.
+<br>
+<p><em>&gt; So I'd like to know some things:
+</em><br>
+<em>&gt;   Can I safetely mix html and xml parser functions (i.e. construct
+</em><br>
+<em>&gt; a context with xmlCreateMemoryParserCtxt() and parse the doc with
+</em><br>
+<em>&gt; htmlParseDocument.
+</em><br>
+<p>&nbsp;&nbsp;Can you tell me what you're aiming at this way ? I don't understand
+<br>
+your approach. If it's an HTML document use the HTML parser, otherwise
+<br>
+use the XML parser.
+<br>
+<p><em>&gt; My SAX functions use parser context _private member) ?
+</em><br>
+<p>&nbsp;&nbsp;I don't understand. _private are fields located in the DOM generated
+<br>
+tree structures. And you say you use SAX ... So I'm lost what are you doing
+<br>
+there, what API do you use exactly ?
+<br>
+<p><em>&gt; It works with version 2.2.3 but will it works with next versions ?
+</em><br>
+<p>&nbsp;&nbsp;_private will stay here forever, unless someone specifically compile
+<br>
+without them, this space is available by default.
+<br>
+<p><em>&gt;   Another solution would be use xml parser only but how can I manage
+</em><br>
+<em>&gt; auto close tags ?
+</em><br>
+<p>&nbsp;&nbsp;Do not try to use the XML parser for not well formed XML document it 
+<br>
+simply *won't work* !
+<br>
+<p><em>&gt; BTW, I've noticed few things in last version:
+</em><br>
+<em>&gt;   - there's no htmlCreateMemoryParserCtxt() public function
+</em><br>
+<p>&nbsp;&nbsp;Right this is missing, should not be hard to add.
+<br>
+<p><em>&gt;   - Definitions of SAX handlers like
+</em><br>
+<em>&gt;   xmlSAXHandler sgmlDefaultSAXHandler =  {
+</em><br>
+<em>&gt;         internalSubset,
+</em><br>
+<em>&gt;         NULL,
+</em><br>
+<em>&gt;         ...
+</em><br>
+<em>&gt;     doesn't define externalSubset.
+</em><br>
+<p>&nbsp;&nbsp;This code is not released publicly and may never be. I don't intend
+<br>
+to add a generic SGML parser it was mostly to work with Docbook SGML
+<br>
+import.
+<br>
+<p><em>&gt;   - html parser seems to not call xmlLoadExternalEntity
+</em><br>
+<p>&nbsp;&nbsp;Yes because there is no external entities ! I don't validate SGML
+<br>
+but you can use the XHTML XML Dtd to postvalidate an HTML DOM tree
+<br>
+generated by the HTML parser.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20HTML%20&amp;%20XML%20Parser">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20HTML%20&amp;%20XML%20Parser">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20HTML%20&amp;%20XML%20Parser">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0805.html">Daniel Veillard: "Re: [xml] XPath normalize-string"</a>
+<li><strong>In reply to:</strong> <a href="0787.html">Manuel Guesdon: "[xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 24 2000 - 16:43:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

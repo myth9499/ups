@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Conditional Sections and the X3D DTD</title>
+<meta name="Author" content="Jonathan P Springer (jonathan.springer2@gte.net)">
+<meta name="Subject" content="[xml] Conditional Sections and the X3D DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Conditional Sections and the X3D DTD</h1>
+<!-- received="Sun Nov 12 12:01:50 2000" -->
+<!-- isoreceived="20001112170150" -->
+<!-- sent="Sun, 12 Nov 2000 12:01:40 -0500" -->
+<!-- isosent="20001112170140" -->
+<!-- name="Jonathan P Springer" -->
+<!-- email="jonathan.springer2@gte.net" -->
+<!-- subject="[xml] Conditional Sections and the X3D DTD" -->
+<!-- id="20001112120140.A14477@buffy" -->
+<!-- inreplyto="20001111083757.B25364@buffy" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Jonathan P Springer (<a href="mailto:jonathan.springer2@gte.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD"><em>jonathan.springer2@gte.net</em></a>)<br>
+<strong>Date:</strong> Sun Nov 12 2000 - 12:01:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1167.html">Daniel Veillard: "Re: [xml] minor regression glitch in 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I've been fiddling with using libxml to parse Web3D X3D files.  I'd had no
+<br>
+problems parsing them until I turned on validation, at which point all heck
+<br>
+broke
+<br>
+loose, primarily around conditional sections.
+<br>
+<p>Basically, the X3D DTD (see <a href="http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd">http://www.web3d.org/TaskGroups/x3d/translation/x3d-compromise.dtd</a>)
+<br>
+uses several parsed entities to define which sections of the X3D
+<br>
+specification
+<br>
+should be included and which should be excluded.  The idea is that the
+<br>
+DOCTYPE
+<br>
+in the X3D file can be used to switch on and off certain features in the
+<br>
+specification.
+<br>
+<p>OK, so once Daniel put in the Conditional Section coding (was that version
+<br>
+2.2.3?), I thought I'd be home free.  Think again...
+<br>
+<p>Running my test file (see <a href="http://members.theglobe.com/springjp/try2.txt">http://members.theglobe.com/springjp/try2.txt</a> )
+<br>
+yielded the following warning:
+<br>
+<p>--&gt;  warning: PEReference: %ChildrenNodes; not found
+<br>
+--&gt;  &lt;!ENTITY % SceneNodes       	&quot; ( %ChildrenNodes; |
+<br>
+%WildcardNodes;
+<br>
+)*, ROUTE* &quot;
+<br>
+<p>I did a little investigation in the DTD file and found out that what was
+<br>
+happening was this:
+<br>
+<p>--&gt;  &lt;!ENTITY % CoreProfile  	&quot;IGNORE&quot;&gt;
+<br>
+...
+<br>
+--&gt;  &lt;![%CoreProfile;[
+<br>
+--&gt;    &lt;!ENTITY % ChildrenNodes    	&quot; %BehaviorLeafNodes; |
+<br>
+%BindableNodes; | %GroupingNodes; | %SceneLeafNodes; &quot; &gt;
+<br>
+--&gt;    &lt;!ENTITY % SceneNodes       	&quot; ( %ChildrenNodes; |
+<br>
+%WildcardNodes; )*, ROUTE* &quot; &gt;
+<br>
+--&gt;  ]]&gt;
+<br>
+<p>A bit of nosing around in parser.c found that although the results of
+<br>
+parsing
+<br>
+weren't being applied for the IGNOREd section, the Parsed Entities (in this
+<br>
+case
+<br>
+ChildrenNodes) were still being passed through the parser.
+<br>
+<p>Next stop, the Gospel according to XML 1.0 Second Edition.  The grammar
+<br>
+spec
+<br>
+for an IGNOREd section is:
+<br>
+<p>--&gt;  [61] conditionalSect ::= includeSect | ignoreSect 
+<br>
+--&gt;  [62] includeSect ::= '&lt;![' S? 'INCLUDE' S? '[' extSubsetDecl ']]&gt;' 
+<br>
+--&gt;  [63] ignoreSect ::= '&lt;![' S? 'IGNORE' S? '[' ignoreSectContents* ']]&gt;'
+<br>
+--&gt;  [64] ignoreSectContents ::= Ignore ('&lt;![' ignoreSectContents ']]&gt;'
+<br>
+Ignore)*
+<br>
+--&gt;  [65] Ignore ::= Char* - (Char* ('&lt;![' | ']]&gt;') Char*)
+<br>
+<p>Or, in English, take anything that comes in the section, so long as the
+<br>
+'&lt;!['s
+<br>
+and ']]&gt;'s balance.
+<br>
+<p>If you've had the spare time to stick with me through this, I've attached
+<br>
+my
+<br>
+recommended patches (as of v2.2.4) below.  In essence, I've added a state
+<br>
+for
+<br>
+IGNORE sections and changed the code in xmlParseConditionalSections to
+<br>
+count
+<br>
+opens
+<br>
+and closes.  I hope that will be enough; additional testing or alternative
+<br>
+approaches would be welcome.
+<br>
+<p>I also welcome other input or recommendations.
+<br>
+<p>Regards,
+<br>
+-jonathan springer
+<br>
+<p><pre>
+----
+<p>diff -cr old-libxml2-2.2.4/parser.c libxml2-2.2.4/parser.c
+*** old-libxml2-2.2.4/parser.c	Sun Oct  1 16:29:52 2000
+--- libxml2-2.2.4/parser.c	Sun Nov  5 09:50:26 2000
+***************
+*** 647,652 ****
+--- 647,655 ----
+  	     */
+  	    if ((ctxt-&gt;external == 0) &amp;&amp; (ctxt-&gt;inputNr == 1))
+  		return;
++             break;
++         case XML_PARSER_IGNORE:
++             return;
+      }
+  
+      NEXT;
+***************
+*** 4469,4474 ****
+--- 4472,4479 ----
+      } else if ((RAW == 'I') &amp;&amp; (NXT(1) == 'G') &amp;&amp; (NXT(2) == 'N') &amp;&amp;
+              (NXT(3) == 'O') &amp;&amp; (NXT(4) == 'R') &amp;&amp; (NXT(5) == 'E')) {
+  	int state;
++ 	int instate;
++ 	int depth = 0;
+  
+  	SKIP(6);
+  	SKIP_BLANKS;
+***************
+*** 4494,4533 ****
+  	 * But disable SAX event generating DTD building in the meantime
+  	 */
+  	state = ctxt-&gt;disableSAX;
+  	ctxt-&gt;disableSAX = 1;
+! 	while ((RAW != 0) &amp;&amp; ((RAW != ']') || (NXT(1) != ']') ||
+! 	       (NXT(2) != '&gt;'))) {
+! 	    const xmlChar *check = CUR_PTR;
+! 	    int cons = ctxt-&gt;input-&gt;consumed;
+! 	    int tok = ctxt-&gt;token;
+! 
+! 	    if ((RAW == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp; (NXT(2) == '[')) {
+! 		xmlParseConditionalSections(ctxt);
+! 	    } else if (IS_BLANK(CUR)) {
+! 		NEXT;
+! 	    } else if (RAW == '%') {
+! 		xmlParsePEReference(ctxt);
+! 	    } else
+! 		xmlParseMarkupDecl(ctxt);
+! 
+! 	    /*
+! 	     * Pop-up of finished entities.
+! 	     */
+! 	    while ((RAW == 0) &amp;&amp; (ctxt-&gt;inputNr &gt; 1))
+! 		xmlPopInput(ctxt);
+  
+! 	    if ((CUR_PTR == check) &amp;&amp; (cons == ctxt-&gt;input-&gt;consumed) &amp;&amp;
+! 		(tok == ctxt-&gt;token)) {
+! 		ctxt-&gt;errNo = XML_ERR_EXT_SUBSET_NOT_FINISHED;
+! 		if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+! 		    ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+! 			&quot;Content error in the external subset\n&quot;);
+! 		ctxt-&gt;wellFormed = 0;
+! 		ctxt-&gt;disableSAX = 1;
+! 		break;
+! 	    }
+  	}
+  	ctxt-&gt;disableSAX = state;
+  	if (xmlParserDebugEntities) {
+  	    if ((ctxt-&gt;input != NULL) &amp;&amp; (ctxt-&gt;input-&gt;filename))
+  		fprintf(stderr, &quot;%s(%d): &quot;, ctxt-&gt;input-&gt;filename,
+--- 4499,4525 ----
+  	 * But disable SAX event generating DTD building in the meantime
+  	 */
+  	state = ctxt-&gt;disableSAX;
++ 	instate = ctxt-&gt;instate;
+  	ctxt-&gt;disableSAX = 1;
+! 	ctxt-&gt;instate = XML_PARSER_IGNORE;
+  
+! 	while (depth &gt;= 0) {
+! 	  if ((RAW == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp; (NXT(2) == '[')) {
+! 	    depth++;
+! 	    SKIP(3);
+! 	    continue;
+! 	  }
+! 	  if ((RAW == ']') &amp;&amp; (NXT(1) == ']') &amp;&amp; (NXT(2) == '&gt;')) {
+! 	    if (--depth &gt;= 0) SKIP(3);
+! 	    continue;
+! 	  }
+! 	  NEXT;
+! 	  continue;
+  	}
++ 
+  	ctxt-&gt;disableSAX = state;
++ 	ctxt-&gt;instate = instate;
++ 
+  	if (xmlParserDebugEntities) {
+  	    if ((ctxt-&gt;input != NULL) &amp;&amp; (ctxt-&gt;input-&gt;filename))
+  		fprintf(stderr, &quot;%s(%d): &quot;, ctxt-&gt;input-&gt;filename,
+***************
+*** 7314,7319 ****
+--- 7306,7313 ----
+  	    fprintf(stderr, &quot;PP: try EPILOG\n&quot;);break;
+  	case XML_PARSER_PI:
+  	    fprintf(stderr, &quot;PP: try PI\n&quot;);break;
++         case XML_PARSER_IGNORE:
++             fprintf(stderr, &quot;PP: try IGNORE\n&quot;);break;
+      }
+  #endif
+  
+***************
+*** 8009,8014 ****
+--- 8003,8015 ----
+  		fprintf(stderr, &quot;PP: entering START_TAG\n&quot;);
+  #endif
+  		break;
++             case XML_PARSER_IGNORE:
++                 fprintf(stderr, &quot;PP: internal error, state == IGNORE&quot;);
++ 	        ctxt-&gt;instate = XML_PARSER_DTD;
++ #ifdef DEBUG_PUSH
++ 	        fprintf(stderr, &quot;PP: entering DTD\n&quot;);
++ #endif
++ 	        break;
+  	}
+      }
+  done:    
+diff -cr old-libxml2-2.2.4/parser.h libxml2-2.2.4/parser.h
+*** old-libxml2-2.2.4/parser.h	Sun Oct  1 16:29:52 2000
+--- libxml2-2.2.4/parser.h	Sun Oct 22 11:21:22 2000
+***************
+*** 99,105 ****
+      XML_PARSER_ENTITY_VALUE,	/* within an entity value in a decl
+*/
+      XML_PARSER_ATTRIBUTE_VALUE,	/* within an attribute value */
+      XML_PARSER_SYSTEM_LITERAL,	/* within a SYSTEM value */
+!     XML_PARSER_EPILOG 		/* the Misc* after the last end tag
+*/
+  } xmlParserInputState;
+  
+  /**
+--- 99,106 ----
+      XML_PARSER_ENTITY_VALUE,	/* within an entity value in a decl
+*/
+      XML_PARSER_ATTRIBUTE_VALUE,	/* within an attribute value */
+      XML_PARSER_SYSTEM_LITERAL,	/* within a SYSTEM value */
+!     XML_PARSER_EPILOG,		/* the Misc* after the last end tag
+*/
+!     XML_PARSER_IGNORE           /* within an IGNORED section */
+  } xmlParserInputState;
+  
+  /**
+diff -cr old-libxml2-2.2.4/parserInternals.c
+libxml2-2.2.4/parserInternals.c
+*** old-libxml2-2.2.4/parserInternals.c	Tue Sep 19 08:25:59 2000
+--- libxml2-2.2.4/parserInternals.c	Sun Oct 22 17:43:18 2000
+***************
+*** 3156,3161 ****
+--- 3156,3163 ----
+  	    case XML_PARSER_ATTRIBUTE_VALUE:
+  		/* ctxt-&gt;token = xmlParseCharRef(ctxt); */
+  		return;
++             case XML_PARSER_IGNORE:
++ 	        return;
+  	}
+  	return;
+      }
+***************
+*** 3227,3232 ****
+--- 3229,3236 ----
+  		       &quot;Entity references are forbiden in DTDs!\n&quot;);
+  	    ctxt-&gt;wellFormed = 0;
+  	    ctxt-&gt;disableSAX = 1;
++ 	    return;
++         case XML_PARSER_IGNORE:
+  	    return;
+      }
+  
+<p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Conditional%20Sections%20and%20the%20X3D%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1167.html">Daniel Veillard: "Re: [xml] minor regression glitch in 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Nov 12 2000 - 12:44:07 EST</em>
+</em>
+</small>
+</body>
+</html>

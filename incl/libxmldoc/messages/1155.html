@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Glitch with external entity files; patch enclosed</title>
+<meta name="Author" content="Kenneth Pronovici (pronovic@skyjammer.com)">
+<meta name="Subject" content="[xml] Glitch with external entity files; patch enclosed">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Glitch with external entity files; patch enclosed</h1>
+<!-- received="Wed Nov  8 17:11:43 2000" -->
+<!-- isoreceived="20001108221143" -->
+<!-- sent="Wed, 8 Nov 2000 16:11:29 -0600 (CST)" -->
+<!-- isosent="20001108221129" -->
+<!-- name="Kenneth Pronovici" -->
+<!-- email="pronovic@skyjammer.com" -->
+<!-- subject="[xml] Glitch with external entity files; patch enclosed" -->
+<!-- id="Pine.LNX.3.96.1001108154625.16307T-200000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kenneth Pronovici (<a href="mailto:pronovic@skyjammer.com?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed"><em>pronovic@skyjammer.com</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 17:11:29 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Previous message:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Reply:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+We have been seeing problems with external entity files included in DTDs,
+<br>
+in our case when using an external entity loader.  We're using 2.2.7.
+<br>
+<p>Since all of my DTDs are stored in &quot;/dvl/fds/dtd&quot;, my external entity loader 
+<br>
+takes the URL it's passed and tacks &quot;/dvl/fds/dtd&quot; on the front, so libxml 
+<br>
+can find the DTD.  Everything works fine as long as all of the definitions 
+<br>
+are in a single file.  However, as soon as I want to reference external files, 
+<br>
+things break.  
+<br>
+<p>Suppose in my /dvl/fds/dtd directory we have a DTD file &quot;complex.dtd&quot; 
+<br>
+which looks like this:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ENTITY % header SYSTEM &quot;complex.ent&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;%header;
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT content (#PCDATA) &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT test_doc (%msg_hdr;, content) &gt;
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+and a corresponding entities file &quot;complex.ent&quot; which looks like this:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ENTITY % msg_hdr &quot;msg_hdr &quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT head (#PCDATA) &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT %msg_hdr; (head) &gt;
+<br>
+<p>and we're trying to validate an XML document based on complex.dtd.  In this
+<br>
+case, libxml uses resolves the two files as:
+<br>
+<p>&nbsp;&nbsp;&nbsp;/dvl/fds/dtd/complex.dtd
+<br>
+&nbsp;&nbsp;&nbsp;/dvl/fds/dtd//dvl/fds/dtd/complex.ent
+<br>
+<p>because of an extraneous call to xmlLoadExternalEntity() inside of 
+<br>
+xmlNewEntityInputStream().  In this case, xmlGetEntityFromTable() has
+<br>
+already been used to retrieve
+<br>
+<p>&nbsp;&nbsp;&nbsp;/dvl/fds/dtd/complex.ent 
+<br>
+<p>for the msg_hdr tag, and there is no need to call xmlLoadExternalEntity().
+<br>
+<p>I patched parserInternals.c by replacing the call to xmlLoadExternalEntity()
+<br>
+with a call to xmlNewInputFromFile().  This solves my immediate problem
+<br>
+and does not seem to break any regression tests, at least on my platform.
+<br>
+The patch is enclosed.  If you'd rather fix it a different way, let me
+<br>
+know and I'll test your change as soon as I can.
+<br>
+<p>Let me know if you need any other information from me.
+<br>
+<p>KEN
+<br>
+<p><pre>
+--
+Kenneth J. Pronovici &lt;<a href="mailto:pronovic@ieee.org?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">pronovic@ieee.org</a>&gt;
+Alliance of Computer Professionals, Inc. (<a href="http://www.acpros.com/">http://www.acpros.com/</a>)
+Personal Homepage: <a href="http://www.skyjammer.com/~pronovic/">http://www.skyjammer.com/~pronovic/</a>
+&quot;Hell hath no fury like the weather when I'm camping...&quot; 
+<p></pre>
+<p>
+*** parserInternals.c.orig	Wed Nov  8 15:07:12 2000
+--- parserInternals.c	Wed Nov  8 15:35:41 2000
+***************
+*** 1936,1943 ****
+                  break;
+              case XML_EXTERNAL_GENERAL_PARSED_ENTITY:
+              case XML_EXTERNAL_PARAMETER_ENTITY:
+! 		return(xmlLoadExternalEntity((char *) entity-&gt;URI,
+! 		       (char *) entity-&gt;ExternalID, ctxt));
+              case XML_INTERNAL_GENERAL_ENTITY:
+  		if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+  		    ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+--- 1936,1942 ----
+                  break;
+              case XML_EXTERNAL_GENERAL_PARSED_ENTITY:
+              case XML_EXTERNAL_PARAMETER_ENTITY:
+!                 return(xmlNewInputFromFile(ctxt, entity-&gt;URI));
+              case XML_INTERNAL_GENERAL_ENTITY:
+  		if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+  		    ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Previous message:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>Reply:</strong> <a href="1156.html">Daniel Veillard: "Re: [xml] Glitch with external entity files; patch enclosed"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 17:44:24 EST</em>
+</em>
+</small>
+</body>
+</html>

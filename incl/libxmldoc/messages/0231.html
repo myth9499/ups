@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Using xmlBuffer for nodes content patch</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Using xmlBuffer for nodes content patch">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Using xmlBuffer for nodes content patch</h1>
+<!-- received="Wed Dec  1 05:53:49 1999" -->
+<!-- isoreceived="19991201105349" -->
+<!-- sent="Wed, 1 Dec 1999 05:52:45 -0500" -->
+<!-- isosent="19991201105245" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Using xmlBuffer for nodes content patch" -->
+<!-- id="19991201055245.A7766@w3.org" -->
+<!-- inreplyto="38354129.5CEA7F93@bellatlantic.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Using%20xmlBuffer%20for%20nodes%20content%20patch"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Dec 01 1999 - 05:52:45 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0232.html">David Helder: "[xml] escaping and unescaping"</a>
+<li><strong>Previous message:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Nov 19, 1999 at 07:23:05AM -0500, Carl Nygard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using the DOM tree interface for creating and parsing xml files.  I
+</em><br>
+<em>&gt; have binary data, which I pass through base64 encoding, and slap into
+</em><br>
+<em>&gt; the xml.  The result of which, I've found that the libxml is terribly
+</em><br>
+<em>&gt; slow when parsing a node with gobs of text.  The cause of this is the
+</em><br>
+<em>&gt; xmlStrcat/ncat functions, which always call xmlStrlen.  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I patched the libxml to use the xmlBuffer structure as the node-&gt;content
+</em><br>
+<em>&gt; instead of a plain xmlChar*.  This made the performance at least an
+</em><br>
+<em>&gt; order of magnitude faster (I don't have timing results, but it went from
+</em><br>
+<em>&gt; ~8min to ~10sec), mostly because the xmlBuffer keeps track of the string
+</em><br>
+<em>&gt; length.  I also changed the heuristic for reallocation, removing the
+</em><br>
+<em>&gt; (len+10) in favor of a simple 'if buffer not big enough, double it till
+</em><br>
+<em>&gt; it is' method.  This also cuts reallocations down (but makes the space
+</em><br>
+<em>&gt; usage go up).  I could understand if you took this back out to save
+</em><br>
+<em>&gt; space, but the profiling showed that the memcpy from constant
+</em><br>
+<em>&gt; reallocation was a big drain on performance.
+</em><br>
+<p>&nbsp;&nbsp;Carl,
+<br>
+<p>&nbsp;I have integrated your patches, they are commited to the CVS bases.
+<br>
+However since your patch:
+<br>
+&nbsp;&nbsp;- breaks binary compatibility (which we need to maintain for Gnome)
+<br>
+&nbsp;&nbsp;- increase the memory requirements needed to maintain DOM trees
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(which can rightly be accused to be already hight).
+<br>
+I made it a compilation option. Use the --with-buffers flag of configure
+<br>
+to enable it, the C code is differenciated by the XML_USE_BUFFER_CONTENT
+<br>
+preprocessor define.
+<br>
+&nbsp;&nbsp;As a result, there is quite a few improvement to xmlBuffer added to
+<br>
+the libxml library, even if compiled without buffers.
+<br>
+<p>&nbsp;thanks for your patch, I did some modification to avoid some troubles
+<br>
+when running &quot;make testall&quot; (non-trivial memory troubles).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Using%20xmlBuffer%20for%20nodes%20content%20patch">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Using%20xmlBuffer%20for%20nodes%20content%20patch">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Using%20xmlBuffer%20for%20nodes%20content%20patch">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0232.html">David Helder: "[xml] escaping and unescaping"</a>
+<li><strong>Previous message:</strong> <a href="0230.html">Daniel Veillard: "Re: Re[2]: [xml] non-quoted attributes invalid?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

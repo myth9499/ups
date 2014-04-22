@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] + broke??</title>
+<meta name="Author" content="Bill Kendrick (William.Kendrick@wcom.com)">
+<meta name="Subject" content="Re: [xml] + broke??">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] + broke??</h1>
+<!-- received="Fri Oct 20 14:02:27 2000" -->
+<!-- isoreceived="20001020180227" -->
+<!-- sent="Fri, 20 Oct 2000 10:56:12 -0700" -->
+<!-- isosent="20001020175612" -->
+<!-- name="Bill Kendrick" -->
+<!-- email="William.Kendrick@wcom.com" -->
+<!-- subject="Re: [xml] + broke??" -->
+<!-- id="20001020105612.A20775@atari" -->
+<!-- inreplyto="20001020144653.J16308@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Kendrick (<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20%2B%20broke??"><em>William.Kendrick@wcom.com</em></a>)<br>
+<strong>Date:</strong> Fri Oct 20 2000 - 13:56:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1019.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<li><strong>Previous message:</strong> <a href="1017.html">Tony Lam: "[xml] Patch for xmlNanoHTTPSend"</a>
+<li><strong>In reply to:</strong> <a href="1009.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1019.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 20 Oct 2000 05:46:53 Daniel Veillard wrote:
+<br>
+<em>&gt; On Thu, Oct 19, 2000 at 11:45:45PM +0200, Daniel Veillard wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; On Thu, Oct 19, 2000 at 01:54:39PM -0700, Bill Kendrick wrote:
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; Daniel, should I e-mail you the XML and DTD files? :)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Actually I like this example a LOT ! Can I include it in the
+</em><br>
+<em>&gt; libxml testsuite ?
+</em><br>
+<p>Mike, Daniel is talking about the Cleopatra play that comes with
+<br>
+Oracle's XML stuff.  Know what the distribution rights are on that?
+<br>
+(ie, did Oracle just swipe it from somewhere and include it?)
+<br>
+<p><p><em>&gt;   Okay I had a look, first when referencing the DTd directly from
+</em><br>
+<em>&gt; the doctype and asking for validation, no error is raised:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ------------------ cleo.xml
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!DOCTYPE PLAY PUBLIC &quot;xxx&quot; &quot;cleo.dtd&quot;&gt;
+</em><br>
+<em>&gt; &lt;PLAY&gt;
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; ------------------
+</em><br>
+<em>&gt; ~/XML -&gt; ./xmllint --noout --valid cleo.xml 
+</em><br>
+<em>&gt; ~/XML -&gt; 
+</em><br>
+<em>&gt; ------------------
+</em><br>
+<p>Ok. Lemme try it with my own XML validation tester app.
+<br>
+Hrm... Same errors:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Element PGROUP content doesn't follow the Dtd
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Expecting (PERSONA+ , GRPDESCR), got (PERSONA PERSONA PERSONA GRPDESCR )
+<br>
+<p><p><em>&gt;   If removing the DTD reference and asking for a-posteriori validation
+</em><br>
+<em>&gt; then the bug is triggered:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ------------------
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot;?&gt;
+</em><br>
+<em>&gt; &lt;PLAY&gt;
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; ------------------
+</em><br>
+<em>&gt; ~/XML -&gt; ./xmllint --noout --dtdvalid cleo.dtd cleo.xml 
+</em><br>
+<em>&gt; Element PGROUP content doesn't follow the Dtd
+</em><br>
+<em>&gt; Expecting (PERSONA+ , GRPDESCR), got (PERSONA PERSONA PERSONA GRPDESCR )
+</em><br>
+<em>&gt; Element PGROUP content doesn't follow the Dtd
+</em><br>
+<em>&gt; [...]
+</em><br>
+<em>&gt; ------------------
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   I found 2 problems, the enclosed patch fixes them !
+</em><br>
+<p>Thanks.  I'll apply the patch and test again and let you know.
+<br>
+<p><p>-bill!
+<br>
+<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20%2B%20broke??">William.Kendrick@wcom.com</a>
+<br>
+ext 6218
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20%2B%20broke??">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1019.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<li><strong>Previous message:</strong> <a href="1017.html">Tony Lam: "[xml] Patch for xmlNanoHTTPSend"</a>
+<li><strong>In reply to:</strong> <a href="1009.html">Daniel Veillard: "Re: [xml] + broke??"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1019.html">Bill Kendrick: "Re: [xml] + broke??"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 20 2000 - 14:43:33 EDT</em>
+</em>
+</small>
+</body>
+</html>

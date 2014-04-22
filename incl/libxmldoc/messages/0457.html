@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Entities in dtd</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Entities in dtd">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Entities in dtd</h1>
+<!-- received="Thu Apr 13 03:38:08 2000" -->
+<!-- isoreceived="20000413073808" -->
+<!-- sent="Thu, 13 Apr 2000 09:37:50 +0200" -->
+<!-- isosent="20000413073750" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Entities in dtd" -->
+<!-- id="20000413093750.B17589@w3.org" -->
+<!-- inreplyto="38F548E9.7094DD19@HiWAAY.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Entities%20in%20dtd"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Apr 13 2000 - 03:37:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<li><strong>Previous message:</strong> <a href="0456.html">Charlie & Barbara Bozeman: "[xml] Entities in dtd"</a>
+<li><strong>In reply to:</strong> <a href="0456.html">Charlie & Barbara Bozeman: "[xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<li><strong>Reply:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Apr 12, 2000 at 11:11:21PM -0500, Charlie &amp; Barbara Bozeman wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have an application which parses an xml file, modifies the in-memory
+</em><br>
+<em>&gt; document, copies the document (using xmlCopyDoc), then validates the
+</em><br>
+<em>&gt; copy. I get error messages like the following:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ado.dtd:39: error: SAX.entityDecl(ado-content.mix) called while not in
+</em><br>
+<em>&gt; subset
+</em><br>
+<em>&gt;        '(name, daddr?, eaddr?, (g-ref | f-ref | field)+ )'
+</em><br>
+<em>&gt;                                                          ^
+</em><br>
+[...]
+<br>
+<em>&gt; ado.dtd:105: error: PEReference: %common-idreq.att; not found
+</em><br>
+<em>&gt;         ea              	NMTOKEN         #IMPLIED' &gt;
+</em><br>
+<em>&gt;                                                   ^
+</em><br>
+[...]
+<br>
+<em>&gt; ado.dtd:208: error: Extra content at the end of the document
+</em><br>
+<em>&gt; &lt;!ELEMENT ado %ado-content.mix; &gt;
+</em><br>
+<em>&gt;                                 ^
+</em><br>
+<em>&gt; Could not load the external subset &quot;ado.dtd&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I can reproduce these errors by typing:
+</em><br>
+<em>&gt; xmllint --postvalid --copy --noout test.xml
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; on my xml document. My dtd uses entities, is there some call I need to
+</em><br>
+<em>&gt; be making after the document is copied?
+</em><br>
+<p>&nbsp;&nbsp;Seems a weakness of the xmlCopyDoc implementation. I added a lot
+<br>
+of informations to the tree content since I checked it for the last
+<br>
+time. At least some entities handling informations don't seems to be
+<br>
+processed correctly (and I'm afraid some of the DTD element and attribute
+<br>
+lookup tables need to be rebuilt).
+<br>
+&nbsp;&nbsp;Could you send me an exemple of:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- the code
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- the dtd/xml
+<br>
+&nbsp;so it's faster for me to get those fixed.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Entities%20in%20dtd">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Entities%20in%20dtd">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<li><strong>Previous message:</strong> <a href="0456.html">Charlie & Barbara Bozeman: "[xml] Entities in dtd"</a>
+<li><strong>In reply to:</strong> <a href="0456.html">Charlie & Barbara Bozeman: "[xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<li><strong>Reply:</strong> <a href="0458.html">Charlie & Barbara Bozeman: "Re: [xml] Entities in dtd"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:10 EDT</em>
+</em>
+</small>
+</body>
+</html>

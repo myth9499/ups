@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] May I have line breaks in a property?</title>
+<meta name="Author" content="ming lu (lu542@home.com)">
+<meta name="Subject" content="Re: [xml] May I have line breaks in a property?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] May I have line breaks in a property?</h1>
+<!-- received="Sat Feb 10 21:44:52 2001" -->
+<!-- isoreceived="20010211024452" -->
+<!-- sent="Sat, 10 Feb 2001 18:44:36 -0800" -->
+<!-- isosent="20010211024436" -->
+<!-- name="ming lu" -->
+<!-- email="lu542@home.com" -->
+<!-- subject="Re: [xml] May I have line breaks in a property?" -->
+<!-- id="000501c093d4$9432a230$0fcf7318@cr556392a" -->
+<!-- inreplyto="20010210224512.E826@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> ming lu (<a href="mailto:lu542@home.com?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?"><em>lu542@home.com</em></a>)<br>
+<strong>Date:</strong> Sat Feb 10 2001 - 21:44:36 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1447.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<li><strong>In reply to:</strong> <a href="1447.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank you very much for your reply. But after I changed it to element. I
+<br>
+found the string I got from
+<br>
+xmlNodeListGetString changed 0D0A (return for dos) to 0A0A. Anyway to get
+<br>
+0D0A instead? Thank you again for your help!
+<br>
+<p><em>&gt;   Hum, that's an interesting point.
+</em><br>
+<em>&gt; Basically XML parser have to do attribute normalization, and this include
+</em><br>
+<em>&gt; replacing newlines by blanks.
+</em><br>
+<em>&gt;    <a href="http://www.w3.org/TR/REC-xml#AVNormalize">http://www.w3.org/TR/REC-xml#AVNormalize</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   However when passed as numeric character reference in the serialization
+</em><br>
+<em>&gt; (like &amp;#xA; ) then the normalization doesn't apply, but currently libxml
+</em><br>
+<em>&gt; doesn't check for extra spaces or newlines in attribute content when
+</em><br>
+<em>&gt; saving, i.e. it doesn't escape them as character reference and then at
+</em><br>
+next
+<br>
+<em>&gt; parsing they would disapear anyway :-\, it's in the TODO but I never
+</em><br>
+<em>&gt; took the time of handling this.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   A rule of thumbs is that if you have to encode multiline contents,
+</em><br>
+<em>&gt; use an element and not an attribute, it fits really better in the
+</em><br>
+<em>&gt; XML framework.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt;
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20May%20I%20have%20line%20breaks%20in%20a%20property?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1447.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<li><strong>In reply to:</strong> <a href="1447.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Feb 10 2001 - 22:43:38 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] encoding in htmlParseDoc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] encoding in htmlParseDoc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] encoding in htmlParseDoc</h1>
+<!-- received="Fri Dec 15 07:34:01 2000" -->
+<!-- isoreceived="20001215123401" -->
+<!-- sent="Fri, 15 Dec 2000 13:33:55 +0100" -->
+<!-- isosent="20001215123355" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] encoding in htmlParseDoc" -->
+<!-- id="20001215133355.F2964@w3.org" -->
+<!-- inreplyto="20001215143128.A1333@pc4.spectrum.local" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Dec 15 2000 - 07:33:55 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Previous message:</strong> <a href="1285.html">Tenihin Andrey: "[xml] encoding in htmlParseDoc"</a>
+<li><strong>In reply to:</strong> <a href="1285.html">Tenihin Andrey: "[xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Reply:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Dec 15, 2000 at 02:31:28PM +0300, Tenihin Andrey wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; htmlParseDoc has parameter encoding which is not used.
+</em><br>
+<em>&gt; Function htmlCreateDocParserCtxt ignore it.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I did not find this feature in TODO.
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; Is it planning to implement?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I need this parameter when parsing koi8-r context.
+</em><br>
+<em>&gt; If document have &quot;Content-Type&quot; inside it is OK.
+</em><br>
+<em>&gt; But russian http servers usially provide at least
+</em><br>
+<em>&gt; several encoding for same documents. The convertation
+</em><br>
+<em>&gt; is doing by http server.
+</em><br>
+<p><p>&nbsp;&nbsp;Hum, right, this need to be fixed, and should not be too
+<br>
+complex (since the same kind of processing is done in a similar
+<br>
+way for the XML parser).
+<br>
+&nbsp;&nbsp;i added it to the TODO list, I may have some time left during
+<br>
+Chrismas to work on libxml,
+<br>
+&nbsp;&nbsp;Apologies for the overall lack of responsiveness this is due to
+<br>
+a temporary burst of work, I will have far more time to work
+<br>
+on libxml in a few weeks.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Previous message:</strong> <a href="1285.html">Tenihin Andrey: "[xml] encoding in htmlParseDoc"</a>
+<li><strong>In reply to:</strong> <a href="1285.html">Tenihin Andrey: "[xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Reply:</strong> <a href="1287.html">Tenihin Andrey: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Dec 15 2000 - 09:43:38 EST</em>
+</em>
+</small>
+</body>
+</html>

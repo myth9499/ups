@@ -1,0 +1,598 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Serious probs with xmlNormalizeURIPath() (plus new v</title>
+<meta name="Author" content="Paul D. Smith (pausmith@nortelnetworks.com)">
+<meta name="Subject" content="[xml] Serious probs with xmlNormalizeURIPath() (plus new version)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Serious probs with xmlNormalizeURIPath() (plus new version)</h1>
+<!-- received="Thu Jan 25 18:32:41 2001" -->
+<!-- isoreceived="20010125233241" -->
+<!-- sent="Thu, 25 Jan 2001 18:31:48 -0500" -->
+<!-- isosent="20010125233148" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="pausmith@nortelnetworks.com" -->
+<!-- subject="[xml] Serious probs with xmlNormalizeURIPath() (plus new version)" -->
+<!-- id="14960.46948.348678.259774@lemming.engeast.baynetworks.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Paul D. Smith (<a href="mailto:pausmith@nortelnetworks.com?subject=Re:%20[xml]%20Serious%20probs%20with%20xmlNormalizeURIPath()%20(plus%20new%20version)"><em>pausmith@nortelnetworks.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 25 2001 - 18:31:48 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1389.html">Daniel Veillard: "[xml] libxml-2.2.12 amd libxslt-0.0.1 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Unless I'm missing something very basic, the uri.c:xmlNormalizeURIPath()
+<br>
+function in libxml is very broken.  This is of the latest in CVS as of
+<br>
+about 10 mins ago (after 2.2.12 was announced).
+<br>
+<p>I noticed this when I has a relative path in an XInclude and although
+<br>
+the relative path was correct, libxml kept insisting that the file
+<br>
+didn't exist (printing a different path than the one I gave it).
+<br>
+Tracing through I discovered this function has a number of problems.
+<br>
+<p>Here is a tiny test program I wrote to test different behaviors of the
+<br>
+function against the RFC 2396 spec:
+<br>
+<p>-------------------------------------------------------------------------------
+<br>
+#include &lt;stdio.h&gt;
+<br>
+<p>int xmlNormalizeURIPath(char *);
+<br>
+<p>const char *tests[] =
+<br>
+{
+<br>
+&nbsp;&nbsp;/* Test xxx/.. removal */
+<br>
+&nbsp;&nbsp;&quot;/foo/../bar&quot;,
+<br>
+&nbsp;&nbsp;&quot;foo/../bar&quot;,
+<br>
+&nbsp;&nbsp;&quot;./foo/../bar&quot;,
+<br>
+&nbsp;&nbsp;&quot;foo/./../bar&quot;,
+<br>
+&nbsp;&nbsp;&quot;foo/bar/.././../baz&quot;,
+<br>
+&nbsp;&nbsp;&quot;foo/..&quot;,
+<br>
+&nbsp;&nbsp;&quot;foo/bar/..&quot;,
+<br>
+&nbsp;&nbsp;/* Test ./ removal */
+<br>
+&nbsp;&nbsp;&quot;./foo&quot;,
+<br>
+&nbsp;&nbsp;&quot;././foo&quot;,
+<br>
+&nbsp;&nbsp;&quot;.././foo./&quot;,
+<br>
+&nbsp;&nbsp;&quot;.././foo/.&quot;,
+<br>
+&nbsp;&nbsp;/* Test some OK things */
+<br>
+&nbsp;&nbsp;&quot;/foo&quot;,
+<br>
+&nbsp;&nbsp;&quot;../foo&quot;,
+<br>
+&nbsp;&nbsp;&quot;../../foo&quot;,
+<br>
+&nbsp;&nbsp;&quot;../../../foo&quot;,
+<br>
+&nbsp;&nbsp;NULL
+<br>
+};
+<br>
+<p><p>int
+<br>
+main(int argc, char *argv[])
+<br>
+{
+<br>
+&nbsp;&nbsp;char buf[1024];
+<br>
+&nbsp;&nbsp;const char **tpp;
+<br>
+<p>&nbsp;&nbsp;for (tpp=tests; *tpp; ++tpp) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;strcpy(buf, *tpp);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (xmlNormalizeURIPath(buf))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;Error normalizing `%s'!\n&quot;, *tpp);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;`%s' =&gt; `%s'\n&quot;, *tpp, buf);
+<br>
+&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;return 0;
+<br>
+}
+<br>
+-------------------------------------------------------------------------------
+<br>
+<p>Linking this with libxml built from CVS, I get this output.  Based on my
+<br>
+reading of RFC 2396, here is how I see the results:
+<br>
+<p>&nbsp;&nbsp;`/foo/../bar' =&gt; `/bar'               # ok
+<br>
+&nbsp;&nbsp;`foo/../bar' =&gt; `foo/../bar'          # wrong
+<br>
+&nbsp;&nbsp;`./foo/../bar' =&gt; `./bar'             # wrong
+<br>
+&nbsp;&nbsp;`foo/./../bar' =&gt; `foo/../bar'        # wrong
+<br>
+&nbsp;&nbsp;`foo/bar/.././../baz' =&gt; `/baz'       # wrong
+<br>
+&nbsp;&nbsp;`foo/..' =&gt; `foo/..'                  # wrong
+<br>
+&nbsp;&nbsp;`foo/bar/..' =&gt; `foo/../baz'          # way wrong!  whoa!  buffer overrun?
+<br>
+&nbsp;&nbsp;`./foo' =&gt; `./foo'                    # wrong
+<br>
+&nbsp;&nbsp;`././foo' =&gt; `./foo'                  # wrong
+<br>
+&nbsp;&nbsp;`.././foo./' =&gt; `../foo././'          # whoa again!  buffer overrun?
+<br>
+&nbsp;&nbsp;`.././foo/.' =&gt; `../foo/'             # ok ... ? (see below)
+<br>
+&nbsp;&nbsp;`/foo' =&gt; `/foo'                      # ok
+<br>
+&nbsp;&nbsp;`../foo' =&gt; `../foo'                  # ok
+<br>
+&nbsp;&nbsp;`../../foo' =&gt; `../../foo'            # ok
+<br>
+&nbsp;&nbsp;`../../../foo' =&gt; `../foo'            # wrong
+<br>
+<p>I rewrote this function; I include the new version below in its entirety
+<br>
+rather than a patch since the function is very different (and it's all I
+<br>
+changed).  There are lots of comments there.  With the version below, I
+<br>
+get this output which I think is correct in all cases:
+<br>
+<p>&nbsp;&nbsp;`/foo/../bar' =&gt; `/bar'
+<br>
+&nbsp;&nbsp;`foo/../bar' =&gt; `bar'
+<br>
+&nbsp;&nbsp;`./foo/../bar' =&gt; `bar'
+<br>
+&nbsp;&nbsp;`foo/./../bar' =&gt; `bar'
+<br>
+&nbsp;&nbsp;`foo/bar/.././../baz' =&gt; `baz'
+<br>
+&nbsp;&nbsp;`foo/..' =&gt; `'
+<br>
+&nbsp;&nbsp;`foo/bar/..' =&gt; `foo/'
+<br>
+&nbsp;&nbsp;`./foo' =&gt; `foo'
+<br>
+&nbsp;&nbsp;`././foo' =&gt; `foo'
+<br>
+&nbsp;&nbsp;`.././foo./' =&gt; `../foo./'
+<br>
+&nbsp;&nbsp;`.././foo/.' =&gt; `../foo/'
+<br>
+&nbsp;&nbsp;`/foo' =&gt; `/foo'
+<br>
+&nbsp;&nbsp;`../foo' =&gt; `../foo'
+<br>
+&nbsp;&nbsp;`../../foo' =&gt; `../../foo'
+<br>
+&nbsp;&nbsp;`../../../foo' =&gt; `../../../foo'
+<br>
+<p>I've obeyed the spec as best I could, but there are two areas where the
+<br>
+results seem contrary to what I'd expect:
+<br>
+<p>&nbsp;&nbsp;foo/bar/..        expands to &quot;foo&quot;, or &quot;foo/&quot;?
+<br>
+&nbsp;&nbsp;foo/.             expands to &quot;foo&quot;, or &quot;foo/&quot;?
+<br>
+<p>The spec seems to imply that you keep the trailing &quot;/&quot;, so that's what
+<br>
+the code does, although my instinct would tell me to remove it.  I guess
+<br>
+it depends on the definition of &quot;complete path segment&quot; as used by this
+<br>
+algorithm.
+<br>
+<p>I also tried to make sure it would handle situations with multiple
+<br>
+adjacent &quot;/&quot; (like &quot;foo/////bar&quot;) although I didn't actually test this.
+<br>
+I don't know if you can have multiple slashes or not by the time you get
+<br>
+to this algorithm, but this algorithm definitely doesn't really address
+<br>
+what to do with multiple slashes.
+<br>
+<p>Anyway, here it is.  It fixed my problem; hopefully it'll help others.
+<br>
+<p><p>-------------------------------------------------------------------------------
+<br>
+/**
+<br>
+&nbsp;* xmlNormalizeURIPath:
+<br>
+&nbsp;* @path:  pointer to the path string
+<br>
+&nbsp;*
+<br>
+&nbsp;* Applies the 5 normalization steps to a path string--that is, RFC 2396
+<br>
+&nbsp;* Section 5.2, steps 6.c through 6.g.
+<br>
+&nbsp;*
+<br>
+&nbsp;* Normalization occurs directly on the string, no new allocation is done
+<br>
+&nbsp;*
+<br>
+&nbsp;* Returns 0 or an error code
+<br>
+&nbsp;*/
+<br>
+int
+<br>
+xmlNormalizeURIPath(char *path) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;char *cur, *out;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (path == NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(-1);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/* Skip all initial &quot;/&quot; chars.  We want to get to the beginning of the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* first non-empty segment.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = path;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;while (cur[0] == '/')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (cur[0] == '\0')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(0);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/* Keep everything we've seen so far.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;out = cur;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Analyze each segment in sequence for cases (c) and (d).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;while (cur[0] != '\0') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* c) All occurrences of &quot;./&quot;, where &quot;.&quot; is a complete path segment,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    are removed from the buffer string.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((cur[0] == '.') &amp;&amp; (cur[1] == '/')) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur += 2;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* d) If the buffer string ends with &quot;.&quot; as a complete path segment,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    that &quot;.&quot; is removed.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((cur[0] == '.') &amp;&amp; (cur[1] == '\0'))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Otherwise keep the segment.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur[0] != '/') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur[0] == '\0')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto done_cd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(out++)[0] = (cur++)[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(out++)[0] = (cur++)[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;done_cd:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;out[0] = '\0';
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/* Reset to the beginning of the first segment for the next sequence.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = path;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;while (cur[0] == '/')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (cur[0] == '\0')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(0);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Analyze each segment in sequence for cases (e) and (f).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* e) All occurrences of &quot;&lt;segment&gt;/../&quot;, where &lt;segment&gt; is a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    complete path segment not equal to &quot;..&quot;, are removed from the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    buffer string.  Removal of these path segments is performed
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    iteratively, removing the leftmost matching pattern on each
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    iteration, until no matching pattern remains.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* f) If the buffer string ends with &quot;&lt;segment&gt;/..&quot;, where &lt;segment&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    is a complete path segment not equal to &quot;..&quot;, that
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    &quot;&lt;segment&gt;/..&quot; is removed.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* To satisfy the &quot;iterative&quot; clause in (e), we need to collapse the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* string every time we find something that needs to be removed.  Thus,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* we don't need to keep two pointers into the string: we only need a
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* &quot;current position&quot; pointer.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;while (1) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *segp;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* At the beginning of each iteration of this loop, &quot;cur&quot; points to
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* the first character of the segment we want to examine.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Find the end of the current segment.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segp = cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((segp[0] != '/') &amp;&amp; (segp[0] != '\0'))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++segp;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If this is the last segment, we're done (we need at least two
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* segments to meet the criteria for the (e) and (f) cases).
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (segp[0] == '\0')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If the first segment is &quot;..&quot;, or if the next segment _isn't_ &quot;..&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* keep this segment and try the next one.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++segp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((cur[0] == '.') &amp;&amp; (cur[1] == '.') &amp;&amp; (segp == cur+3))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| ((segp[0] != '.') || (segp[1] != '.')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| ((segp[2] != '/') &amp;&amp; (segp[2] != '\0')))) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = segp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If we get here, remove this segment and the next one and back up
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* to the previous segment (if there is one), to implement the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* &quot;iteratively&quot; clause.  It's pretty much impossible to back up
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* while maintaining two pointers into the buffer, so just compact
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* the whole buffer now.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If this is the end of the buffer, we're done.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (segp[2] == '\0') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur[0] = '\0';
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcpy(cur, segp + 3);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If there are no previous segments, then keep going from here.  */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segp = cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((segp &gt; path) &amp;&amp; ((--segp)[0] == '/'))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (segp == path)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* &quot;segp&quot; is pointing to the end of a previous segment; find it's
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* start.  We need to back up to the previous segment and start
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* over with that to handle things like &quot;foo/bar/../..&quot;.  If we
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* don't do this, then on the first pass we'll remove the &quot;bar/..&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* but be pointing at the second &quot;..&quot; so we won't realize we can also
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* remove the &quot;foo/..&quot;.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = segp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((cur &gt; path) &amp;&amp; (cur[-1] != '/'))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;out[0] = '\0';
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* g) If the resulting buffer string still begins with one or more
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    complete path segments of &quot;..&quot;, then the reference is
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    considered to be in error. Implementations may handle this
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    error by retaining these components in the resolved path (i.e.,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    treating them as part of the final URI), by removing them from
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    the resolved path (i.e., discarding relative levels above the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*    root), or by avoiding traversal of the reference.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* We discard them from the final path.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (path[0] == '/') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = path;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((cur[1] == '.') &amp;&amp; (cur[2] == '.')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; ((cur[3] == '/') || (cur[3] == '\0')))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur += 3;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur != path) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out = path;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (cur[0] != '\0')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(out++)[0] = (cur++)[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out[0] = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;return(0);
+<br>
+}
+<br>
+-------------------------------------------------------------------------------
+<br>
+<p><pre>
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith &lt;<a href="mailto:psmith@baynetworks.com?subject=Re:%20[xml]%20Serious%20probs%20with%20xmlNormalizeURIPath()%20(plus%20new%20version)">psmith@baynetworks.com</a>&gt;    HASMAT--HA Software Methods &amp; Tools
+ &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Serious%20probs%20with%20xmlNormalizeURIPath()%20(plus%20new%20version)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Serious%20probs%20with%20xmlNormalizeURIPath()%20(plus%20new%20version)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1389.html">Daniel Veillard: "[xml] libxml-2.2.12 amd libxslt-0.0.1 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 25 2001 - 18:44:04 EST</em>
+</em>
+</small>
+</body>
+</html>

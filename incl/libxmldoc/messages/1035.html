@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] newbie question about encoding</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] newbie question about encoding">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] newbie question about encoding</h1>
+<!-- received="Mon Oct 23 05:18:27 2000" -->
+<!-- isoreceived="20001023091827" -->
+<!-- sent="Mon, 23 Oct 2000 11:18:23 +0200" -->
+<!-- isosent="20001023091823" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] newbie question about encoding" -->
+<!-- id="20001023111823.D13575@w3.org" -->
+<!-- inreplyto="C220IRW2C43A*@MHS" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20newbie%20question%20about%20encoding"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 05:18:23 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1034.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] newbie question about encoding"</a>
+<li><strong>In reply to:</strong> <a href="1034.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] newbie question about encoding"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 23, 2000 at 08:53:44AM +0000, <a href="mailto:Ext.ZXSPRCR2A015@tls.mms.fr?subject=Re:%20[xml]%20newbie%20question%20about%20encoding">Ext.ZXSPRCR2A015@tls.mms.fr</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;   I try to create an XML document from scratch,
+</em><br>
+<em>&gt; with ISO-8859-1 character (french accents).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doc = xmlNewDoc((xmlChar*)&quot;1.0&quot;);
+</em><br>
+<em>&gt; doc-&gt;charset = XML_CHAR_ENCODING_UTF8;
+</em><br>
+<em>&gt; doc-&gt;encoding = xmlStrDup((xmlChar*)&quot;ISO-8859-1&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   When I add a node, I use :
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; node = xmlNewDocText(node, xmlEncodeEntitiesReentrant(doc,
+</em><br>
+<em>&gt;                                          (xmlChar*)&quot;Iréné&quot;));
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Everything OK to create doc, but I can't find a way to
+</em><br>
+<em>&gt; dump document (always &quot;output conversion failed&quot; message).
+</em><br>
+<p>&nbsp;&nbsp;Well libxml expect it's internal content to be encoded in UTF8.
+<br>
+The string passed to xmlEncodeEntitiesReentrant should first be 
+<br>
+converted to UTF8. You can use isolat1ToUTF8() for this (it's public
+<br>
+in the encoding.c module but it seems I forgot to add it to the
+<br>
+encoding.h module, will do).
+<br>
+<p><em>&gt;   How to change conversion function to ISO Lantin 1 ?
+</em><br>
+<p>&nbsp;&nbsp;I tried to detail how and why libxml handle internationalization
+<br>
+issues:
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20newbie%20question%20about%20encoding">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20newbie%20question%20about%20encoding">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20newbie%20question%20about%20encoding">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1034.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] newbie question about encoding"</a>
+<li><strong>In reply to:</strong> <a href="1034.html">Ext.ZXSPRCR2A015@tls.mms.fr: "[xml] newbie question about encoding"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 05:43:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

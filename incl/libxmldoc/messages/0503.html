@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Need help in compiling to HP-UX</title>
+<meta name="Author" content="Juan José Rodríguez (jrodrisa@gobierno.jalisco.gob.mx)">
+<meta name="Subject" content="Re: [xml] Need help in compiling to HP-UX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Need help in compiling to HP-UX</h1>
+<!-- received="Fri Jun  2 18:44:50 2000" -->
+<!-- isoreceived="20000602224450" -->
+<!-- sent="Fri, 2 Jun 2000 17:45:02 -0500" -->
+<!-- isosent="20000602224502" -->
+<!-- name="Juan José Rodríguez" -->
+<!-- email="jrodrisa@gobierno.jalisco.gob.mx" -->
+<!-- subject="Re: [xml] Need help in compiling to HP-UX" -->
+<!-- id="002701bfcce4$335a9f10$d702040a@XENA" -->
+<!-- inreplyto="CAF8776F77293262862568F200752EE6.00752F37862568F2@gobierno.jalisco.gob.mx" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Juan José Rodríguez (<a href="mailto:jrodrisa@gobierno.jalisco.gob.mx?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX"><em>jrodrisa@gobierno.jalisco.gob.mx</em></a>)<br>
+<strong>Date:</strong> Fri Jun 02 2000 - 18:45:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0504.html">Gupta, Sanjay: "RE: [xml] Need help in compiling to HP-UX"</a>
+<li><strong>Previous message:</strong> <a href="0502.html">Gupta, Sanjay: "[xml] Need help in compiling to HP-UX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0504.html">Gupta, Sanjay: "RE: [xml] Need help in compiling to HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Probably you only have the C compiler to build the kernel and libxml
+<br>
+needs and ANSI compiler.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;I have compiled the libxml2-2.0.0 with the GNU compiler (2.95.2) in the
+<br>
+HP-UX 10.20.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;And I think the HP C ANSI compiler can make this but I didn't try. :)
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;In my box the ANSI compiler gives this information:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cc -V test.c
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpp: HP92453-01 A.10.32.03 HP C Preprocessor
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ccom: HP92453-01 G.10.32.05 HP C Compiler
+<br>
+<p>Greetings,
+<br>
+Juan José Rodríguez
+<br>
+<a href="mailto:jrodrisa@gobierno.jalisco.gob.mx?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">jrodrisa@gobierno.jalisco.gob.mx</a>
+<br>
+<p><p>----- Original Message -----
+<br>
+From: &quot;Gupta, Sanjay&quot; &lt;<a href="mailto:sgupta@nuera.com?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">sgupta@nuera.com</a>&gt;
+<br>
+To: &lt;<a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">xml@xmlsoft.org</a>&gt;
+<br>
+Sent: Friday, June 02, 2000 4:19 PM
+<br>
+Subject: [xml] Need help in compiling to HP-UX
+<br>
+<p><p><em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Also I tried code and binary from  <a href="http://hpux.cae.wisc.edu/">http://hpux.cae.wisc.edu/</a> and also
+</em><br>
+<em>&gt; libxml2-2.0.0 from <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>, but same kind of compiler errors.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Which are as follows:
+</em><br>
+<em>&gt; (Bundled) cc: warning 480: The -A option is available only with the C/ANSI
+</em><br>
+<em>&gt; C
+</em><br>
+<em>&gt; product; ignored.
+</em><br>
+<em>&gt; (Bundled) cc: &quot;libxml/xmlmemory.h&quot; line 40: warning 5: &quot;const&quot; will become
+</em><br>
+<em>&gt; a
+</em><br>
+<em>&gt; keyword.
+</em><br>
+<em>&gt; (Bundled) cc: &quot;libxml/xmlmemory.h&quot; line 40: error 1000: Unexpected symbol&quot;
+</em><br>
+<em>&gt; &quot;char&quot;.
+</em><br>
+<em>&gt; (Bundled) cc: error 2017: Can not recover from earlier errors,
+</em><br>
+terminating.
+<br>
+<em>&gt;
+</em><br>
+<em>&gt; -Sanjay
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">majordomo@xmlsoft.org</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Need%20help%20in%20compiling%20to%20HP-UX">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0504.html">Gupta, Sanjay: "RE: [xml] Need help in compiling to HP-UX"</a>
+<li><strong>Previous message:</strong> <a href="0502.html">Gupta, Sanjay: "[xml] Need help in compiling to HP-UX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0504.html">Gupta, Sanjay: "RE: [xml] Need help in compiling to HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

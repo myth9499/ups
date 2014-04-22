@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Action of realloc</title>
+<meta name="Author" content="Leo Davidson (leo@ox.compsoc.net)">
+<meta name="Subject" content="RE: [xml] Action of realloc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Action of realloc</h1>
+<!-- received="Wed Dec  6 06:44:57 2000" -->
+<!-- isoreceived="20001206114457" -->
+<!-- sent="Wed, 6 Dec 2000 11:45:10 -0000" -->
+<!-- isosent="20001206114510" -->
+<!-- name="Leo Davidson" -->
+<!-- email="leo@ox.compsoc.net" -->
+<!-- subject="RE: [xml] Action of realloc" -->
+<!-- id="001801c05f79$fda78670$8140dec2@n" -->
+<!-- inreplyto="3A2D4E34.45B11113@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Leo Davidson (<a href="mailto:leo@ox.compsoc.net?subject=RE:%20[xml]%20Action%20of%20realloc"><em>leo@ox.compsoc.net</em></a>)<br>
+<strong>Date:</strong> Wed Dec 06 2000 - 06:45:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1267.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>Previous message:</strong> <a href="1265.html">Rob van der Leek: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1261.html">Bjorn Reese: "Re: [xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1272.html">Daniel Veillard: "Re: [xml] Action of realloc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+My docs say realloc leaves the original memory block alone when it fails,
+<br>
+but returns NULL. (Perhaps this is what you meant anyway; if so, sorry.)
+<br>
+<p>&quot;realloc returns a void pointer to the reallocated (and possibly moved)
+<br>
+memory block. The return value is NULL if the size is zero and the buffer
+<br>
+argument is not NULL, or if there is not enough available memory to expand
+<br>
+the block to the given size. In the first case, the original block is freed.
+<br>
+In the second, the original block is unchanged.&quot;
+<br>
+<p>(Not the clearest way it could be explained, of course.)
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Action%20of%20realloc">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Action%20of%20realloc">xml-request@rufus.w3.org</a>]On
+</em><br>
+<em>&gt; Behalf Of Bjorn Reese
+</em><br>
+<em>&gt; Sent: Tuesday, December 05 2000 20:21
+</em><br>
+<em>&gt; To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Subject: Re: [xml] Action of realloc
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; <a href="mailto:JohnnyXia@acersoftech.com.cn?subject=RE:%20[xml]%20Action%20of%20realloc">JohnnyXia@acersoftech.com.cn</a> wrote:
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; &gt;      pOld = realloc( pOld, newsize );
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; You are right. If realloc() fails, then the old memory block is
+</em><br>
+<em>&gt; lost. This behaviour is not restricted to individual platforms,
+</em><br>
+<em>&gt; but a general ANSI/ISO stdlib behaviour.
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Action%20of%20realloc">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Action%20of%20realloc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1267.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>Previous message:</strong> <a href="1265.html">Rob van der Leek: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1261.html">Bjorn Reese: "Re: [xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1272.html">Daniel Veillard: "Re: [xml] Action of realloc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Dec 06 2000 - 09:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

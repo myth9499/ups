@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] encoding, SAX callbacks</h1>
+<!-- received="Thu Feb 22 17:24:33 2001" -->
+<!-- isoreceived="20010222222433" -->
+<!-- sent="Thu, 22 Feb 2001 23:24:22 +0100" -->
+<!-- isosent="20010222222422" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] encoding, SAX callbacks" -->
+<!-- id="20010222232422.F12255@imag.fr" -->
+<!-- inreplyto="0102AE2D3200D4118AE20050DACDB02E36340E@congress.vhcorp.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Thu Feb 22 2001 - 17:24:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Feb 22, 2001 at 02:05:43PM -0800, James McCann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am using the SAX interface, and have indicated the encoding of the
+</em><br>
+<em>&gt; xml document, and the encoding member of the context is set correctly,
+</em><br>
+<em>&gt; but the SAX callbacks get text in the UTF-8 representation.  It seems to me
+</em><br>
+<em>&gt; that this behavior is wrong; if the user has correctly indicated an
+</em><br>
+<em>&gt; encoding, 
+</em><br>
+<em>&gt; the library should use that encoding when calling the callbacks.  Are there 
+</em><br>
+<em>&gt; any plans to fix this?  
+</em><br>
+<p>&nbsp;&nbsp;No, the internal representation is UTF8. The encoding conversion in
+<br>
+done before the data is passed to the parser. I don't think it's
+<br>
+a bug, but a feature :-)
+<br>
+<p><em>&gt; If there are no objections I will submit patches to fix this when I get 
+</em><br>
+<em>&gt; time (for now I have written some functions that do the transcoding
+</em><br>
+<em>&gt; and then call my callbacks, but I don't think this is a good solution).
+</em><br>
+<em>&gt; I realize that SAX is something of an ad-hoc thing so there may not be
+</em><br>
+<em>&gt; standards to adhere to (are there standards?  I couldn't find any) but
+</em><br>
+<em>&gt; the current behavior does not seem correct to me.
+</em><br>
+<p>&nbsp;&nbsp;This is the intended behavior. And I'm afraid you would have
+<br>
+serious troubles trying to change libxml use only the original
+<br>
+encoding. Please check 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+<br>
+<p>&nbsp;for more explanation on those issues.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<li><strong>In reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Feb 22 2001 - 18:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

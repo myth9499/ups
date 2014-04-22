@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Bug in parser (HTML)</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] Bug in parser (HTML)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Bug in parser (HTML)</h1>
+<!-- received="Mon Oct 30 08:58:11 2000" -->
+<!-- isoreceived="20001030135811" -->
+<!-- sent="Mon, 30 Oct 2000 08:57:41 -0500" -->
+<!-- isosent="20001030135741" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] Bug in parser (HTML)" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0B192A5@EXCHANGE" -->
+<!-- inreplyto="[xml] Bug in parser (HTML)" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 08:57:41 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Previous message:</strong> <a href="1110.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank you.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: October 30, 2000 08:52 AM
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] Bug in parser (HTML)
+<br>
+<p><p><p>On Mon, Oct 30, 2000 at 08:31:45AM -0500, Marc Sanfacon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi Daniel,
+</em><br>
+<em>&gt; 	I applied the patch this morning and using 'testHTML', I still have
+</em><br>
+<em>&gt; the same problem.  Here is the output:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; SAX.setDocumentLocator()
+</em><br>
+<em>&gt; SAX.startDocument()
+</em><br>
+<em>&gt; SAX.startElement(html)
+</em><br>
+<em>&gt; SAX.startElement(body)
+</em><br>
+<em>&gt; SAX.ignorableWhitespace(
+</em><br>
+<em>&gt; , 2)
+</em><br>
+<em>&gt; SAX.startElement(b)
+</em><br>
+<em>&gt; SAX.characters(bbbbbbbbbb, 10)
+</em><br>
+<em>&gt; SAX.endElement(b)
+</em><br>
+<em>&gt; SAX.ignorableWhitespace( , 1)
+</em><br>
+<em>&gt; SAX.startElement(b)
+</em><br>
+<em>&gt; SAX.characters(ccccccccccccccc, 15)
+</em><br>
+<em>&gt; SAX.endElement(b)
+</em><br>
+<em>&gt; SAX.ignorableWhitespace(
+</em><br>
+<em>&gt; , 2)
+</em><br>
+<em>&gt; SAX.endElement(body)
+</em><br>
+<em>&gt; SAX.endElement(html)
+</em><br>
+<em>&gt; SAX.ignorableWhitespace(
+</em><br>
+<em>&gt; , 2)
+</em><br>
+<em>&gt; SAX.endDocument()
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I will try to pinpoint the problem today.
+</em><br>
+<em>&gt; Thank you,
+</em><br>
+<p>&nbsp;&nbsp;SAX has no sibling context informations...
+<br>
+If you use the DOM build those informations are available, 
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1112.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Previous message:</strong> <a href="1110.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1087.html">Marc Sanfacon: "[xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 09:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

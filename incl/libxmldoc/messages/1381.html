@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] SCRIPT patch for HTMLtree.c</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="[xml] SCRIPT patch for HTMLtree.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] SCRIPT patch for HTMLtree.c</h1>
+<!-- received="Wed Jan 24 13:22:04 2001" -->
+<!-- isoreceived="20010124182204" -->
+<!-- sent="Wed, 24 Jan 2001 18:22:40 +0000" -->
+<!-- isosent="20010124182240" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="[xml] SCRIPT patch for HTMLtree.c" -->
+<!-- id="3A6F1D70.996CE316@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20SCRIPT%20patch%20for%20HTMLtree.c"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Wed Jan 24 2001 - 13:22:40 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1380.html">winterlion: "[xml] on this silly debate..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have attached a patch against version 2-2.2.11 of HTMLtree.c.
+<br>
+<p>The patch removes erroneous empty tags inside the SCRIPT element, for example
+<br>
+the 2nd and 4th line in:
+<br>
+<p>&nbsp;&nbsp;&lt;script language=&quot;javascript&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function mystuff();
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/script&gt;
+<br>
+<p>(I also &quot;beautified&quot; the code a bit, by using switch instead of multiple if
+<br>
+&nbsp;statements)
+<br>
+<p>
+*** libxml2-2.2.11/HTMLtree.c	Fri Jan  5 07:39:25 2001
+<br>
+--- libxml2-2.2.11-breese/HTMLtree.c	Wed Jan 24 19:11:55 2001
+<br>
+***************
+<br>
+*** 458,464 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlDocContentDump(buf, (xmlDocPtr) cur);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!     if (cur-&gt;type == HTML_TEXT_NODE) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;content != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlChar *buffer;
+<br>
+&nbsp;&nbsp;
+<br>
+--- 458,465 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlDocContentDump(buf, (xmlDocPtr) cur);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+!     switch (cur-&gt;type) {
+<br>
+!     case HTML_TEXT_NODE:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;content != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlChar *buffer;
+<br>
+&nbsp;&nbsp;
+<br>
+***************
+<br>
+*** 474,481 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+!     }
+<br>
+!     if (cur-&gt;type == HTML_COMMENT_NODE) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;content != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;&lt;!--&quot;);
+<br>
+&nbsp;&nbsp;#ifndef XML_USE_BUFFER_CONTENT
+<br>
+--- 475,482 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+! 
+<br>
+!     case HTML_COMMENT_NODE:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;content != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;&lt;!--&quot;);
+<br>
+&nbsp;&nbsp;#ifndef XML_USE_BUFFER_CONTENT
+<br>
+***************
+<br>
+*** 486,497 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;--&gt;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+!     }
+<br>
+!     if (cur-&gt;type == HTML_ENTITY_REF_NODE) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;&amp;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteCHAR(buf, cur-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+--- 487,506 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;--&gt;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+! 
+<br>
+!     case HTML_PRESERVE_NODE:
+<br>
+! 	if (cur-&gt;content)
+<br>
+! 	    xmlBufferWriteCHAR(buf, cur-&gt;content);
+<br>
+! 	return;
+<br>
+! 
+<br>
+!     case HTML_ENTITY_REF_NODE:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;&amp;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteCHAR(buf, cur-&gt;name);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
++ 
+<br>
++     default:
+<br>
++ 	break;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20SCRIPT%20patch%20for%20HTMLtree.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20SCRIPT%20patch%20for%20HTMLtree.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1380.html">winterlion: "[xml] on this silly debate..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 24 2001 - 14:45:12 EST</em>
+</em>
+</small>
+</body>
+</html>

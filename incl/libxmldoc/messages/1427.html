@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Validating a previously validated and then modified</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="[xml] Validating a previously validated and then modified document">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Validating a previously validated and then modified document</h1>
+<!-- received="Wed Feb  7 09:54:01 2001" -->
+<!-- isoreceived="20010207145401" -->
+<!-- sent="Wed, 07 Feb 2001 14:49:50 +0000" -->
+<!-- isosent="20010207144950" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="[xml] Validating a previously validated and then modified document" -->
+<!-- id="3A81608E.41F867B0@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 07 2001 - 09:49:50 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="1426.html">Bjorn Reese: "Re: [xml] XML Data Typing with libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<li><strong>Reply:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I have a document with an associated DTD. I validate it. I then
+<br>
+programmatically make changes to the document, including adding new
+<br>
+elements, updating attributes, etc...
+<br>
+<p>Now, before I write the document to disk I want to re-validate the
+<br>
+document to ensure that it is still valid and no errors have been
+<br>
+introduced. How to do this in libxml?
+<br>
+<p>I tried calling xmlValidateDocument, however it complained that IDs were
+<br>
+already defined which means, I guess, that the data structures are still
+<br>
+there from the previous validation and thus causing problems for the
+<br>
+re-validation.
+<br>
+<p>I did a quick hack to set ids and refs to NULL in the document when
+<br>
+calling xmlValidateDocument and this did the trick for me at the cost of
+<br>
+a memory leak.
+<br>
+<p>I think the real answer is to find the core validation function(s) and
+<br>
+do an xmlFreeIDTable and an xmlFreeRefTable whenever validation is
+<br>
+called if the table pointers aren't null.
+<br>
+<p>My patch is :-
+<br>
+<p>(Sorry, patch is against version libxml2-2.2.11, I haven't got around to
+<br>
+compiling up 12 yet but I don't think there are any changes between 11
+<br>
+and 12 in valid.c)
+<br>
+<p>*** ../ORIG/libxml2-2.2.11/valid.c      Fri Jan  5 06:39:29 2001
+<br>
+--- valid.c     Wed Feb  7 14:46:29 2001
+<br>
+***************
+<br>
+*** 3497,3502 ****
+<br>
+--- 3497,3510 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr root;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (doc == NULL) return(0);
+<br>
+<p>+     if (doc-&gt;ids != NULL) {
+<br>
++           xmlFreeIDTable(doc-&gt;ids);
+<br>
++           doc-&gt;ids = NULL;
+<br>
++     }
+<br>
++     if (doc-&gt;refs != NULL) {
+<br>
++           xmlFreeRefTable(doc-&gt;refs);
+<br>
++           doc-&gt;refs = NULL;
+<br>
++     }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root = xmlDocGetRootElement(doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((root == NULL) || (root-&gt;name == NULL)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERROR(ctxt-&gt;userData, &quot;Not valid: no root element\n&quot;);
+<br>
+<p>I'm not certain that this patch is catching all areas where it's
+<br>
+required, so it needs some scrutiny. It's working fine for me in the
+<br>
+scenario I descrbed above. I decided to put the check in xmlValidateRoot
+<br>
+since I was pretty sure that this would be called whenever an entire
+<br>
+document was validated, however it may be the wrong place for this
+<br>
+check.
+<br>
+<p>Yours,
+<br>
+<p>Gary
+<br>
+<p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Validating%20a%20previously%20validated%20and%20then%20modified%20document">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1428.html">Philipp Kursawe: "[xml] Entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="1426.html">Bjorn Reese: "Re: [xml] XML Data Typing with libxml"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<li><strong>Reply:</strong> <a href="1429.html">Daniel Veillard: "Re: [xml] Validating a previously validated and then modified document"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 07 2001 - 10:44:08 EST</em>
+</em>
+</small>
+</body>
+</html>

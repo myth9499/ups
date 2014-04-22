@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Welcome to xml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: Welcome to xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Welcome to xml</h1>
+<!-- received="Sat Sep  9 13:26:04 2000" -->
+<!-- isoreceived="20000909172604" -->
+<!-- sent="Sat, 9 Sep 2000 19:25:56 +0200" -->
+<!-- isosent="20000909172556" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: Welcome to xml" -->
+<!-- id="20000909192556.B15962@w3.org" -->
+<!-- inreplyto="20000909152541.71307761F7@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Welcome%20to%20xml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Sep 09 2000 - 13:25:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0749.html">Manuel Guesdon: "[xml] Re: Welcome to xml"</a>
+<li><strong>In reply to:</strong> <a href="0749.html">Manuel Guesdon: "[xml] Re: Welcome to xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Sep 09, 2000 at 05:25:41PM +0200, Manuel Guesdon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have a question on xmlParserCtxt.userData. I wanted to use it as a &quot;user data&quot; (a value I can use to specify anything I want) but this doesn't seems to be the purpose of this variable.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The documentation/headers describe it as &quot;the document being built&quot;
+</em><br>
+<em>&gt;     void            *userData;        /* the document being built */
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; but xmlInitParserCtxt(xmlParserCtxtPtr ctxt) initialize it like this:
+</em><br>
+<em>&gt; 	    ctxt-&gt;userData = ctxt;
+</em><br>
+<em>&gt; (BTW, ctxt-&gt;vctxt.userData is also initalized to ctxt)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In parser.c, theres's a call to startDocument handler with this userData
+</em><br>
+<em>&gt; 	        ctxt-&gt;sax-&gt;startDocument(ctxt-&gt;userData);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and startDocument assume this ctxt-&gt;userData is a xmlParserCtxt:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; startDocument(void *ctx)
+</em><br>
+<em>&gt; {
+</em><br>
+<em>&gt;     xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So, is this userData is really a &quot;user data&quot; I can use as I want or is it a private variable I shouldn't change ? Or is there a problem in the code ?
+</em><br>
+<p>&nbsp;&nbsp;This field is an &quot;user data&quot; for the SAX interface. If you use your
+<br>
+own set of SAX callbacks, then you can initialize to whatever you want.
+<br>
+On the other hand libxml uses it when building a DOM tree so in that
+<br>
+case you should not change any value put there libxml would definitly
+<br>
+break if you do (the DOM tree building routines operate on top of the
+<br>
+SAX interface and are just the predefined default SAX handlers).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Welcome%20to%20xml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re:%20Welcome%20to%20xml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re:%20Welcome%20to%20xml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0749.html">Manuel Guesdon: "[xml] Re: Welcome to xml"</a>
+<li><strong>In reply to:</strong> <a href="0749.html">Manuel Guesdon: "[xml] Re: Welcome to xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Sep 09 2000 - 13:43:58 EDT</em>
+</em>
+</small>
+</body>
+</html>

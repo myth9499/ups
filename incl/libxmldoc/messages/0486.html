@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] SAX, compression, etc</title>
+<meta name="Author" content="mdf@angoss.com (mdf@angoss.com)">
+<meta name="Subject" content="Re: [xml] SAX, compression, etc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] SAX, compression, etc</h1>
+<!-- received="Fri May 26 15:34:17 2000" -->
+<!-- isoreceived="20000526193417" -->
+<!-- sent="Fri, 26 May 2000 19:31:17 +0000" -->
+<!-- isosent="20000526193117" -->
+<!-- name="mdf@angoss.com" -->
+<!-- email="mdf@angoss.com" -->
+<!-- subject="Re: [xml] SAX, compression, etc" -->
+<!-- id="200005261931.PAA13838@hydrogen" -->
+<!-- inreplyto="[xml] SAX, compression, etc" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:mdf@angoss.com?subject=Re:%20[xml]%20SAX,%20compression,%20etc"><em>mdf@angoss.com</em></a><br>
+<strong>Date:</strong> Fri May 26 2000 - 15:31:17 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0485.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Reply:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt; &gt; 2) How do I do to parse special characters like '&lt;' '&gt;' in a string when
+</em><br>
+<em>&gt; &gt; I read a content using characterSAXfunc?. I understand that they are
+</em><br>
+<em>&gt; &gt; represented by expressions like 'lt' and 'gt' (just viewing gnumeric
+</em><br>
+<em>&gt; &gt; files). Where can I read more to understand how to handle this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   You don't need to handle them, the parser will, you will get &lt; and &gt;
+</em><br>
+<em>&gt; characters through the characters() SAX callback
+</em><br>
+<p>... which seems to be true for the case of element content.  If, however,
+<br>
+you have a document which has entities inside attributes, you will get
+<br>
+the 'escaped' version of the string unless you call a 'special' function.
+<br>
+<p>Example:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a b=&quot;&amp;amp;whee&quot;/&gt;
+<br>
+<p>with the SAX parser, the attribute is returned
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&amp;amp;whee&quot;
+<br>
+<p>which is rather inconvenient.  The fix for this problem is to
+<br>
+insert a call:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlSubstituteEntitiesDefault(true);
+<br>
+<p>just before the call to &quot;xmlSAXUserParseFile&quot; or similar.  Then
+<br>
+you get what you really want:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&amp;whee&quot;
+<br>
+<p>If I may also interject an editorial comment:  I think a better fix for
+<br>
+this is to tweak libXML to always dereference the standard entity
+<br>
+references.  Indeed, I was rather surprised to see this as an option:  who
+<br>
+on Earth but an XML parser/generator would need (or want) to know about
+<br>
+the crazy entity reference schemes in XML?
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0487.html">mdf@angoss.com: "Re: [xml] Saving without tree"</a>
+<li><strong>Previous message:</strong> <a href="0485.html">Daniel Veillard: "Re: [xml] Saving without tree"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Reply:</strong> <a href="0491.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

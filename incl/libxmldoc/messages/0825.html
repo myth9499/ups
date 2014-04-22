@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlParseDTD breaks now</title>
+<meta name="Author" content="Joe McAlerney (joey@silicondefense.com)">
+<meta name="Subject" content="Re: [xml] xmlParseDTD breaks now">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlParseDTD breaks now</h1>
+<!-- received="Tue Sep 26 17:46:57 2000" -->
+<!-- isoreceived="20000926214657" -->
+<!-- sent="Tue, 26 Sep 2000 14:46:32 -0700" -->
+<!-- isosent="20000926214632" -->
+<!-- name="Joe McAlerney" -->
+<!-- email="joey@silicondefense.com" -->
+<!-- subject="Re: [xml] xmlParseDTD breaks now" -->
+<!-- id="39D11938.76F1FE7F@silicondefense.com" -->
+<!-- inreplyto="20000926233211.F1953@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Joe McAlerney (<a href="mailto:joey@silicondefense.com?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now"><em>joey@silicondefense.com</em></a>)<br>
+<strong>Date:</strong> Tue Sep 26 2000 - 17:46:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0826.html">Wayne Davison: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>Previous message:</strong> <a href="0824.html">Daniel Veillard: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0824.html">Daniel Veillard: "Re: [xml] xmlParseDTD breaks now"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0826.html">Wayne Davison: "Re: [xml] xmlParseDTD breaks now"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Tue, Sep 26, 2000 at 01:49:42PM -0700, Joe McAlerney wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hello,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; After upgrading from 2.2.2 to 2.2.3, I found that my DOM application was
+</em><br>
+<em>&gt; &gt; halting when it called xmlParseDTD.
+</em><br>
+<em>&gt; &gt; Here is the way I call it:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; dtd = xmlParseDTD(&quot;example.dtd&quot;,&quot;example.dtd&quot;);
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Please bare with me as I drag you through my thinking/debugging process.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; The specific place it halts, is buried down in resolveEntity() in the
+</em><br>
+<em>&gt; &gt; file SAX.c.  xmlParseDTD calls xmlSAXParseDTD, which initializes a new
+</em><br>
+<em>&gt; &gt; xmlParserCtxt, and passes it's userdata ptr into resolveEntity, along
+</em><br>
+<em>&gt; &gt; with my ExternalID and SystemID.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; The new version of resolveEntity() attempts to extract a base value from
+</em><br>
+<em>&gt; &gt; the newly initialized xmlParserCtxt value, but can't because there is
+</em><br>
+<em>&gt; &gt; nothing to extract. As a result, a NULL value is passed into
+</em><br>
+<em>&gt; &gt; xmlBuildURI, and a NULL value is returned.  Unfortunately, that value is
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    Hum right I understand, this is a serious problem.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    At that point the following should be called
+</em><br>
+<em>&gt;      xmlBuildURI(&quot;example.dtd&quot;, NULL);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;      right ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlBuildURI() starts with:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if ((URI == NULL) &amp;&amp; (base == NULL))
+</em><br>
+<em>&gt;         return(NULL);
+</em><br>
+<em>&gt;     if (URI == NULL)
+</em><br>
+<em>&gt;             return((xmlChar *) xmlMemStrdup((const char *) base));
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; a simple fix is to add:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     if (base == NULL)
+</em><br>
+<em>&gt;         return((xmlChar *) xmlMemStrdup((const char *) URI);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Could you check taht this solves the problem (i.e. that it was correctly
+</em><br>
+<em>&gt; analyzed)? thanks.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But I dislike the fact that the URI (and the base in the previous case)
+</em><br>
+<em>&gt; are not parsed to check that their content is a valid URI ...
+</em><br>
+<em>&gt; I will try to add this test ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<p>Yes, that worked (with the addition of one more parentheses before the
+<br>
+semicolon).
+<br>
+<p>-Joe M.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0826.html">Wayne Davison: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>Previous message:</strong> <a href="0824.html">Daniel Veillard: "Re: [xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0824.html">Daniel Veillard: "Re: [xml] xmlParseDTD breaks now"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0826.html">Wayne Davison: "Re: [xml] xmlParseDTD breaks now"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Sep 26 2000 - 18:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

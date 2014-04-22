@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] SAX and user_data trouble</title>
+<meta name="Author" content="Fabrizio Ammollo (f.ammollo@reitek.com)">
+<meta name="Subject" content="[xml] SAX and user_data trouble">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] SAX and user_data trouble</h1>
+<!-- received="Wed Feb 21 05:40:28 2001" -->
+<!-- isoreceived="20010221104028" -->
+<!-- sent="Wed, 21 Feb 2001 11:39:22 +0100" -->
+<!-- isosent="20010221103922" -->
+<!-- name="Fabrizio Ammollo" -->
+<!-- email="f.ammollo@reitek.com" -->
+<!-- subject="[xml] SAX and user_data trouble" -->
+<!-- id="01022111392202.17873@f-ammollo" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Fabrizio Ammollo (<a href="mailto:f.ammollo@reitek.com?subject=Re:%20[xml]%20SAX%20and%20user_data%20trouble"><em>f.ammollo@reitek.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 21 2001 - 05:39:22 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1472.html">Tomas V.V.Cox: "[xml] [BUG] xmllint core dump"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>It's my first post to the list, and I'll be quite original :-) in asking a 
+<br>
+question about one problem I'm having with libxml2 (2.3.1).
+<br>
+<p>A few months ago I developed a simple process which takes an XML file from an 
+<br>
+HTTP server using libghttp and then it parses it using the SAX API; BUT, I 
+<br>
+did this using the expat library.
+<br>
+Some days ago I was considering about using libxml2 for doing the same thing, 
+<br>
+because both of its much greater functionaly, but before all its validation 
+<br>
+capabilities. So between yesterday and today I have made the &quot;porting&quot;.
+<br>
+<p>At last, things work as they did using expat, but I had lots of troubles 
+<br>
+because of the way the callbacks are treated by libxml2; I explain this.
+<br>
+In my program I already did one parsing, without specifying any callback, to 
+<br>
+determine the well-formedness of the data, and then I set my handlers (for 
+<br>
+startElement, endElement and characters) and redid the parsing to exctract 
+<br>
+the data I need. So I did the same, first doing this:
+<br>
+<p>if (xmlSAXUserParseMemory(&amp;xmlDefaultSAXHandler, (void *) NULL, 
+<br>
+response_body, response_len))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(errdesc, &quot;xmlSAXUserParseMemory() error\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+and then I did this:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;saxfuncs.startElement = StartElement;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;saxfuncs.endElement = EndElement;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;saxfuncs.characters = charElement;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (xmlSAXUserParseMemory(&amp;saxfuncs, &amp;userdata, response_body, 
+<br>
+response_len))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(errdesc, &quot;xmlSAXUserParseMemory() error\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+...
+<br>
+<p>But on the first run the program always dumped core, and gdb showed me that 
+<br>
+it always died into libxml2's internal startDocument callback: it takes a 
+<br>
+void *ctx, which is cast to a xmlParserCtxtPtr, but the xmlParseDocument 
+<br>
+calls it passing in place of this argument the user_data argument passed to 
+<br>
+the xmlSAXUserParseMemory, which does not represent the parser context, but 
+<br>
+user-defined data ! So, there is the dereferencing of a NULL pointer and the 
+<br>
+program terminates..
+<br>
+I was able to work-around this problem because I first do the first parsing 
+<br>
+by having all SAX handlers set to NULL and then setting my wanted handlers 
+<br>
+before the second parsing.  
+<br>
+<p>My question is, there is something wrong in the way the xmlParseDocument 
+<br>
+calls the startDocument callback, or am I missing something about the right 
+<br>
+usage of the APIs ? 
+<br>
+I think that the problem only arises by using the internally defined 
+<br>
+startDocument function, an externally defined callback function would 
+<br>
+correctly receive the originally passed user_data.
+<br>
+<p>Another question: the getLineNumber and getColumnNumber functions need a 
+<br>
+pointer to the parser context, so the only way to report them if the 
+<br>
+xmlSAXUserParseMemory fails is to use in place of it a wrapper of the 
+<br>
+xmlSAXParseMemory and return from it the values returned by the two 
+<br>
+functions, right ? 
+<br>
+<p>I do not have yet explored the &quot;world&quot; of validation, I'll ask explainations 
+<br>
+about it if I have problems.
+<br>
+<p><p>TIA !
+<br>
+<p><pre>
+-- 
+Bye,
+Fabrizio Ammollo.
+<p>&quot;Is this foreplay?&quot;
+   &quot;No, this is Nuke Strike.  Foreplay has lousy graphics.  Beat me again.&quot;
+-- Duckert, in &quot;Bad Rubber,&quot; Albedo #0 (comics)
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20SAX%20and%20user_data%20trouble">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20SAX%20and%20user_data%20trouble">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1472.html">Tomas V.V.Cox: "[xml] [BUG] xmllint core dump"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 21 2001 - 06:43:46 EST</em>
+</em>
+</small>
+</body>
+</html>

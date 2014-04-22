@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Whitespace problem with external DTD validation</title>
+<meta name="Author" content="Bill Kendrick (William.Kendrick@wcom.com)">
+<meta name="Subject" content="[xml] Whitespace problem with external DTD validation">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Whitespace problem with external DTD validation</h1>
+<!-- received="Mon Oct  9 19:07:03 2000" -->
+<!-- isoreceived="20001009230703" -->
+<!-- sent="Mon, 9 Oct 2000 16:01:34 -0700" -->
+<!-- isosent="20001009230134" -->
+<!-- name="Bill Kendrick" -->
+<!-- email="William.Kendrick@wcom.com" -->
+<!-- subject="[xml] Whitespace problem with external DTD validation" -->
+<!-- id="20001009160134.A19592@atari" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bill Kendrick (<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation"><em>William.Kendrick@wcom.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 09 2000 - 19:01:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0904.html">Bjorn Reese: "[xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I'm trying to use libxml to simply validate XML documents
+<br>
+based on an external DTD.
+<br>
+<p>(The program is a server written in C... it loads the
+<br>
+necessary DTD into memory, then sits and listens to a socket
+<br>
+for XML documents to come in.  When they do, it checks them
+<br>
+and passes them off to another server if they are valid.)
+<br>
+<p><p>Pretty simple!  HOWEVER, there seems to be an issue with
+<br>
+libxml and whitespace...
+<br>
+<p><p>Say I have the following simply DTD:
+<br>
+<p>--------------------------
+<br>
+&lt;!ELEMENT List (Item)+&gt;
+<br>
+&lt;!ELEMENT Item (#PCDATA)&gt;
+<br>
+--------------------------
+<br>
+<p>I've written a program that reads in a DTD:
+<br>
+<p>&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;dtd = xmlParseDTD(NULL, &quot;test.dtd&quot;);
+<br>
+&nbsp;&nbsp;...
+<br>
+<p>reads in an XML document:
+<br>
+<p>&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;doc = xmlParseFile(&quot;test.xml&quot;);
+<br>
+&nbsp;&nbsp;...
+<br>
+<p>and then reports whether the XML is valid,
+<br>
+when compared to the DTD:
+<br>
+<p>&nbsp;&nbsp;...
+<br>
+&nbsp;&nbsp;/* (set up xmlValidCtxt for error reporting when validating) */
+<br>
+&nbsp;&nbsp;vctxt.userData = stderr;
+<br>
+&nbsp;&nbsp;vctxt.error = (xmlValidityErrorFunc) fprintf;
+<br>
+&nbsp;&nbsp;vctxt.warning = (xmlValidityWarningFunc) fprintf;
+<br>
+<p>&nbsp;&nbsp;xmlDoValidityCheckingDefaultValue = 1;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;if (xmlValidateDtd(&amp;vctxt, doc, dtd))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;HORRAY!  VALID!\n&quot;);
+<br>
+&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;OOPS!  INVALID!\n&quot;);
+<br>
+&nbsp;&nbsp;...
+<br>
+<p><p>When the XML document (&quot;test.xml&quot;) looks like this,
+<br>
+I get the &quot;HORRAY! VALID!&quot; message:
+<br>
+<p>-------------------------------------------------------------------------
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE List&gt;
+<br>
+&lt;List&gt;&lt;Item&gt;Chocolate&lt;/Item&gt;&lt;Item&gt;Music&lt;/Item&gt;&lt;Item&gt;Surfing&lt;/Item&gt;&lt;/List&gt;
+<br>
+-------------------------------------------------------------------------
+<br>
+<p>But when I do something (that I consider quite reasonable! :) ) and
+<br>
+place some newlines and perhaps indentation in the XML document, I get
+<br>
+errors (see below):
+<br>
+<p>-------------------------------------------------------------------------
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE List&gt;
+<br>
+&lt;List&gt;
+<br>
+&nbsp;&nbsp;&lt;Item&gt;Chocolate&lt;/Item&gt;
+<br>
+&nbsp;&nbsp;&lt;Item&gt;Music&lt;/Item&gt;
+<br>
+&nbsp;&nbsp;&lt;Item&gt;Surfing&lt;/Item&gt;
+<br>
+&lt;/List&gt;
+<br>
+-------------------------------------------------------------------------
+<br>
+<p>Here's what xmlValidateDtd() reports (to stderr via the vctxt I gave it):
+<br>
+<p>---------------------------------------------------------------
+<br>
+Element List content doesn't follow the Dtd
+<br>
+Expecting (Item)+, got (CDATA Item CDATA Item CDATA Item CDATA)
+<br>
+---------------------------------------------------------------
+<br>
+<p>I even tried the lame solution of sticking &quot;CDATA&quot;'s in the DTD to
+<br>
+work around this, but the DTD parser doesn't like them. :)
+<br>
+<p><p>I assume this is a bug.  Will there be a new version available
+<br>
+soon?  If not, can someone recommend a simple XML validator
+<br>
+that supports use of external DTD's?  (We need to get this working
+<br>
+VERY SOON!)
+<br>
+<p><p>-bill!
+<br>
+<a href="mailto:William.Kendrick@wcom.com?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">William.Kendrick@wcom.com</a>
+<br>
+ext 6218
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20problem%20with%20external%20DTD%20validation">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0904.html">Bjorn Reese: "[xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 09 2000 - 19:43:17 EDT</em>
+</em>
+</small>
+</body>
+</html>

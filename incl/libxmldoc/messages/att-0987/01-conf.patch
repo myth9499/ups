@@ -1,0 +1,40 @@
+--- configure.in.orig	Mon Oct 16 11:33:39 2000
++++ configure.in	Mon Oct 16 13:44:53 2000
+@@ -337,6 +330,8 @@
+ dnl
+ dnl create the libxml and include links needed to get dependencies right
+ dnl
++AC_PATH_PROG(TEST, test, test)
++
+ if test ! -d $srcdir/include/libxml
+ then
+     if test ! -d $srcdir/include
+@@ -347,11 +342,11 @@
+     rm -f $srcdir/libxml
+     (cd $srcdir/include ; ln -s .. libxml)
+ fi
+-if test ! -e $srcdir/libxml
++if $TEST ! -L $srcdir/libxml
+ then
+     (cd $srcdir ; ln -s include/libxml libxml)
+ fi
+-if test ! -e include/libxml
++if $TEST ! -L include/libxml
+ then
+     if test ! -d include
+     then
+@@ -360,11 +355,10 @@
+     fi
+     (cd include ; ln -s ../libxml libxml)
+ fi
+-if test ! -e libxml
++if $TEST ! -L libxml
+ then
+     rm -rf libxml
+     ln -s $srcdir/include/libxml libxml
+ fi
+ 
+-AC_OUTPUT(libxml.spec Makefile include/Makefile doc/Makefile example/Makefile libxml/xmlversion.h xml-config libxml-2.0.pc)
+-
++AC_OUTPUT(libxml.spec Makefile include/Makefile doc/Makefile example/Makefile libxml/xmlversion.h xml-config libxml-2.0.pc)
+

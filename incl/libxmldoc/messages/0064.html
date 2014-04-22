@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: FW: [xml] Bug in parser.c</title>
+<meta name="Author" content="Perik, Mike (mikep@crt.com)">
+<meta name="Subject" content="FW: [xml] Bug in parser.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>FW: [xml] Bug in parser.c</h1>
+<!-- received="Tue Jun  8 15:05:05 1999" -->
+<!-- isoreceived="19990608190505" -->
+<!-- sent="Tue, 8 Jun 1999 14:04:26 -0500 " -->
+<!-- isosent="19990608190426" -->
+<!-- name="Perik, Mike" -->
+<!-- email="mikep@crt.com" -->
+<!-- subject="FW: [xml] Bug in parser.c" -->
+<!-- id="F931488C3634D11180D700A02461E245014D7E51@chitmd03.nt.il.nbgfn.com" -->
+<!-- inreplyto="[xml] Bug in parser.c" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Perik, Mike (<a href="mailto:mikep@crt.com?subject=FW:%20[xml]%20Bug%20in%20parser.c"><em>mikep@crt.com</em></a>)<br>
+<strong>Date:</strong> Tue Jun 08 1999 - 15:04:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<li><strong>Previous message:</strong> <a href="0063.html">Steve Ratcliffe: "[xml] Memory leak in tree.c"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0031.html">Perik, Mike: "[xml] Bug in parser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0066.html">Daniel Veillard: "Re: FW: [xml] Bug in parser.c"</a>
+<li><strong>Reply:</strong> <a href="0066.html">Daniel Veillard: "Re: FW: [xml] Bug in parser.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From:	Perik, Mike [SMTP:<a href="mailto:mikep@crt.com?subject=FW:%20[xml]%20Bug%20in%20parser.c">mikep@crt.com</a>]
+</em><br>
+<em>&gt; Sent:	Thursday, May 13, 1999 3:14 PM
+</em><br>
+<em>&gt; To:	'<a href="mailto:xml@rufus.w3.org?subject=FW:%20[xml]%20Bug%20in%20parser.c">xml@rufus.w3.org</a>'
+</em><br>
+<em>&gt; Subject:	[xml] Bug in parser.c
+</em><br>
+<em>&gt; 
+</em><br>
+[Perik, Mike]  This was applied to xml-1.0.0.   I checked xml-1.1.0 and it
+<br>
+doesn't look like the fix was applied.
+<br>
+<p><em>&gt;  
+</em><br>
+<em>&gt; A co-worker of mine found what looks like a bug in parser.c. 
+</em><br>
+<em>&gt; The problem is that 100 bytes are added to the buf.st_size and then a
+</em><br>
+<em>&gt; read()
+</em><br>
+<em>&gt; is done. but the buf.st_size is used to null terminate the buffer.  Say
+</em><br>
+<em>&gt; the
+</em><br>
+<em>&gt; stat returns a buf.st_size = 100.  Another hundred is added so now
+</em><br>
+<em>&gt; buf.st_size == 200.
+</em><br>
+<em>&gt; The read is done and only 120 bytes are read but the null is put at
+</em><br>
+<em>&gt; buffer[200]. Who knows what's between 120 and 200.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've attached a diff.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Mike &lt;&lt;parser.diff&gt;&gt;  &lt;&lt;parser.diff&gt;&gt; 
+</em><br>
+<p><hr noshade>
+<ul>
+<li>application/octet-stream attachment: <a href="att-0064/01-parser.diff">parser.diff</a>
+</ul>
+<!-- attachment="01-parser.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=FW:%20[xml]%20Bug%20in%20parser.c">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=FW:%20[xml]%20Bug%20in%20parser.c">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<li><strong>Previous message:</strong> <a href="0063.html">Steve Ratcliffe: "[xml] Memory leak in tree.c"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0031.html">Perik, Mike: "[xml] Bug in parser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0066.html">Daniel Veillard: "Re: FW: [xml] Bug in parser.c"</a>
+<li><strong>Reply:</strong> <a href="0066.html">Daniel Veillard: "Re: FW: [xml] Bug in parser.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

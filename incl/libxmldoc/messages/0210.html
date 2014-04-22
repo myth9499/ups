@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XMI: XML Metadata Interchange format</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] XMI: XML Metadata Interchange format">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XMI: XML Metadata Interchange format</h1>
+<!-- received="Fri Nov 12 18:38:44 1999" -->
+<!-- isoreceived="19991112233844" -->
+<!-- sent="Fri, 12 Nov 1999 17:55:43 -0500" -->
+<!-- isosent="19991112225543" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] XMI: XML Metadata Interchange format" -->
+<!-- id="19991112175543.C16259@w3.org" -->
+<!-- inreplyto="38C6EC02C9F2D1119B4F00A0C9B416F704019C01@HQEX01" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XMI:%20XML%20Metadata%20Interchange%20format"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Nov 12 1999 - 17:55:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0211.html">art123@pacsun.com: "[xml] laser printer toner advertising"</a>
+<li><strong>Previous message:</strong> <a href="0209.html">COFFMAN Steven: "[xml] XMI: XML Metadata Interchange format"</a>
+<li><strong>In reply to:</strong> <a href="0209.html">COFFMAN Steven: "[xml] XMI: XML Metadata Interchange format"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[Cc'ing Dia author, Daniel]
+<br>
+<p><p>&nbsp;&nbsp;Hi Steven,
+<br>
+<p>COFFMAN Steven &lt;<a href="mailto:SCoffman@CBSINC.com?subject=Re:%20[xml]%20XMI:%20XML%20Metadata%20Interchange%20format">SCoffman@CBSINC.com</a>&gt; wrote:
+<br>
+<em>&gt; This will be somewhat roundabout, but it is pertinent so bear with me.
+</em><br>
+<em>&gt; 	
+</em><br>
+<em>&gt; See, I use UML (object modelling language) a lot for big projects, and I
+</em><br>
+<em>&gt; like to use dia to draw them. I also like to use GUI-builders like glade.
+</em><br>
+<em>&gt; Between the two of them, vast chunks of my programming are really already
+</em><br>
+<em>&gt; done, and it's tedious to type the same code in. In an effort to bridge
+</em><br>
+<em>&gt; these two, I found out about XMI: the XML Metadata Interchange format, which
+</em><br>
+<em>&gt; is basically a format for saving and transmitting UML diagrams using XML. I
+</em><br>
+<em>&gt; would like to add XMI to libXML, and I wanted to test the waters before I
+</em><br>
+<em>&gt; started hacking. What do you think?
+</em><br>
+<p>&nbsp;&nbsp;I'm not fully aware of UML and XMI. I understand that the OMG (?) provided
+<br>
+an XML serialization format for UML. Assuming it is XML, then I would expect
+<br>
+it to be based on a standard DTD, and possibly extra type constraints
+<br>
+added to the XML content. 
+<br>
+&nbsp;&nbsp;In that case this really mean that the XMI support can be designed as a 
+<br>
+library based on top of libxml. I would then suggest to keep the source
+<br>
+base somewhat separate but check that you use as much as possible stable
+<br>
+APIs for libxml entry point to minimize the potentiality of conflicts
+<br>
+as libxml evolves. the point is that libxml already has a tendency to grow
+<br>
+a bit too much as I add features. So I encourage your effort, but I'm
+<br>
+not 100% sure it really make sense to add XMI directly (unless I didn't
+<br>
+really understood what XMI was intended for).
+<br>
+&nbsp;&nbsp;It could be a good idea to check with Dia author too, integrating such
+<br>
+a library directly or at least reusing it in DIA would certainly make
+<br>
+sense too since well is targetted specifically at UML.
+<br>
+<p>&nbsp;&nbsp;&nbsp;Sounds reasonable ?
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XMI:%20XML%20Metadata%20Interchange%20format">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20XMI:%20XML%20Metadata%20Interchange%20format">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20XMI:%20XML%20Metadata%20Interchange%20format">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0211.html">art123@pacsun.com: "[xml] laser printer toner advertising"</a>
+<li><strong>Previous message:</strong> <a href="0209.html">COFFMAN Steven: "[xml] XMI: XML Metadata Interchange format"</a>
+<li><strong>In reply to:</strong> <a href="0209.html">COFFMAN Steven: "[xml] XMI: XML Metadata Interchange format"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

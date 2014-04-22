@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Indentation ?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Indentation ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Indentation ?</h1>
+<!-- received="Mon Sep 11 13:01:13 2000" -->
+<!-- isoreceived="20000911170113" -->
+<!-- sent="Mon, 11 Sep 2000 19:01:07 +0200" -->
+<!-- isosent="20000911170107" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Indentation ?" -->
+<!-- id="20000911190106.E25405@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1000911110305.19960H-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indentation%20?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Sep 11 2000 - 13:01:07 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>Previous message:</strong> <a href="0753.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>In reply to:</strong> <a href="0753.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>Reply:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Sep 11, 2000 at 11:07:36AM -0500, Kenneth Pronovici wrote:
+<br>
+<em>&gt; With indenting turned on, I get this in my document:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;program&gt;
+</em><br>
+<em>&gt; &lt;!--Program configuration section.--&gt;
+</em><br>
+<em>&gt;     &lt;statistics_enabled&gt;N&lt;/statistics_enabled&gt;
+</em><br>
+<em>&gt;     &lt;statistics_filepath&gt;stats.txt&lt;/statistics_filepath&gt;
+</em><br>
+<em>&gt;     &lt;working_directory&gt;/dvl/fds/tmp&lt;/working_directory&gt;
+</em><br>
+<em>&gt;     &lt;dtd_path&gt;/dvl/fds/dtd&lt;/dtd_path&gt;
+</em><br>
+<em>&gt;     &lt;generate_cooked&gt;Y&lt;/generate_cooked&gt;
+</em><br>
+<em>&gt;   &lt;/program&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In other words, the comments don't seem to follow the indentation
+</em><br>
+<em>&gt; rules.  I know comments aren't &quot;significant&quot;, but I expected that
+</em><br>
+<em>&gt; comments belonging to the parent node would be at the same level
+</em><br>
+<em>&gt; as the rest of the elements belonging to the parent node.
+</em><br>
+<p>&nbsp;&nbsp;yes this is again a tradeoff. Without full knowledge of the 
+<br>
+significance of the blanks (and in that case if they are removed)
+<br>
+it is not possible to know where the comment was expected to be placed
+<br>
+(some people may not want ot have them indented for example). Here
+<br>
+is a case where libxml makes a choice by lack of iformations. I hope
+<br>
+it's not too annoying.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indentation%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indentation%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Indentation%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>Previous message:</strong> <a href="0753.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>In reply to:</strong> <a href="0753.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<li><strong>Reply:</strong> <a href="0755.html">Kenneth Pronovici: "Re: [xml] Indentation ?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 11 2000 - 13:43:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

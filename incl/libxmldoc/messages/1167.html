@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] minor regression glitch in 2.2.7</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] minor regression glitch in 2.2.7">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] minor regression glitch in 2.2.7</h1>
+<!-- received="Sat Nov 11 14:51:31 2000" -->
+<!-- isoreceived="20001111195131" -->
+<!-- sent="Sat, 11 Nov 2000 20:51:26 +0100" -->
+<!-- isosent="20001111195126" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] minor regression glitch in 2.2.7" -->
+<!-- id="973975445.0035@hypermail.dummy" -->
+<!-- inreplyto="200011111816.KAA22137@thesalmons.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20minor%20regression%20glitch%20in%202.2.7"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Nov 11 2000 - 14:51:26 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1166.html">Daniel Veillard: "Re: [xml] minor regression glitch in 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1165.html">John Salmon: "[xml] minor regression glitch in 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sat, Nov 11, 2000 at 10:16:53AM -0800, John Salmon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I just built libxml2.2.7 on a RedHat6.2 linux box.  I get the following when
+</em><br>
+<em>&gt; I run 'make check' in the build directory:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt; ##
+</em><br>
+<em>&gt; ## XML regression tests
+</em><br>
+<em>&gt; ##
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt; Testing ent2
+</em><br>
+<em>&gt; warning: failed to load external entity &quot;title.xml&quot;
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt; ##
+</em><br>
+<em>&gt; ## XML entity subst regression tests
+</em><br>
+<em>&gt; ##
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt; Testing ent2
+</em><br>
+<em>&gt; 8a9,10
+</em><br>
+<em>&gt; &gt; &lt;title&gt;my title&lt;/title&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If I run xmllint in the test/ directory the output looks fine.  I think
+</em><br>
+<em>&gt; it's a problem with locating the resource named in the &lt;!ENTITY title
+</em><br>
+<em>&gt; ... &gt;, but since I'm completely new to to libxml I'm not sure if it's
+</em><br>
+<em>&gt; a code bug (i.e., is the relative URL being searched correctly?)
+</em><br>
+<em>&gt; or just a makefile bug (should cd into test before running xmllint).
+</em><br>
+<p>&nbsp;&nbsp;no, it's &quot;normal&quot;, I should fix the way this test is processed to
+<br>
+avoid the diff, but this reflects a normal behaviour.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20minor%20regression%20glitch%20in%202.2.7">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20minor%20regression%20glitch%20in%202.2.7">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20minor%20regression%20glitch%20in%202.2.7">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1166.html">Daniel Veillard: "Re: [xml] minor regression glitch in 2.2.7"</a>
+<li><strong>In reply to:</strong> <a href="1165.html">John Salmon: "[xml] minor regression glitch in 2.2.7"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Nov 11 2000 - 15:44:06 EST</em>
+</em>
+</small>
+</body>
+</html>

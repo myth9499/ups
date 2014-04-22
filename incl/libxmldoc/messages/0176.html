@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another buglet in HTML parser</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Another buglet in HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another buglet in HTML parser</h1>
+<!-- received="Mon Oct 11 04:20:07 1999" -->
+<!-- isoreceived="19991011082007" -->
+<!-- sent="Mon, 11 Oct 1999 10:19:59 +0200" -->
+<!-- isosent="19991011081959" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Another buglet in HTML parser" -->
+<!-- id="19991011101959.B8784@w3.org" -->
+<!-- inreplyto="y6yln9ax1tl.fsf@decius.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 11 1999 - 04:19:59 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0175.html">Kristian Hogsberg Kristensen: "[xml] Another buglet in HTML parser"</a>
+<li><strong>In reply to:</strong> <a href="0175.html">Kristian Hogsberg Kristensen: "[xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Kristian,
+<br>
+<p><em>&gt; Here's some more feedback on the HTML parser: when parsing the
+</em><br>
+<em>&gt; following
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     &lt;html&gt;
+</em><br>
+<em>&gt;     
+</em><br>
+<em>&gt;     &lt;body&gt;
+</em><br>
+<em>&gt;     &lt;ol&gt;
+</em><br>
+<em>&gt;     &lt;li&gt; hello
+</em><br>
+<em>&gt;     &lt;/ol&gt;&lt;/body&gt;
+</em><br>
+<em>&gt;     
+</em><br>
+<em>&gt;     &lt;/html&gt;
+</em><br>
+<p>&nbsp;&nbsp;Hum, strange, I'm unable to reproduce this problem.
+<br>
+<p><em>&gt; I get &quot;htmlParseEndTag: unexpected close for tag OL &lt;/ol&gt;&lt;/body&gt;&quot;.
+</em><br>
+<em>&gt; I've traced it to htmlParseContent: the test for wether current
+</em><br>
+<em>&gt; element has been autoclosed (line 2184: if (currentNode != ctxt-&gt;name)
+</em><br>
+<em>&gt; ...) should be moved to after the four cases dealing with the element
+</em><br>
+<em>&gt; content.
+</em><br>
+<p>&nbsp;&nbsp;IMHO, the current code is right, the test for the end of this
+<br>
+element parsing is (rightly)  done after the element content has
+<br>
+been parsed when one reenter the loop. This should not change anything.
+<br>
+<p><em>&gt; In the example above, parsing the li element autocloses the ol
+</em><br>
+<p>&nbsp;&nbsp;Huh ? It should not ... Did you change something which makes LI
+<br>
+autoclose OL, if yes that's an error, and this explains why the parser
+<br>
+later on complains about an OL not being open ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0175.html">Kristian Hogsberg Kristensen: "[xml] Another buglet in HTML parser"</a>
+<li><strong>In reply to:</strong> <a href="0175.html">Kristian Hogsberg Kristensen: "[xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0177.html">Kristian Hogsberg Kristensen: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

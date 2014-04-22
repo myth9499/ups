@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Uncompressed save doesn't work</title>
+<meta name="Author" content="Ben Hochstedler (benh@eeyore.moneng.mei.com)">
+<meta name="Subject" content="[xml] Uncompressed save doesn't work">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Uncompressed save doesn't work</h1>
+<!-- received="Fri May 28 17:01:58 1999" -->
+<!-- isoreceived="19990528210158" -->
+<!-- sent="Fri, 28 May 1999 16:01:53 -0500" -->
+<!-- isosent="19990528210153" -->
+<!-- name="Ben Hochstedler" -->
+<!-- email="benh@eeyore.moneng.mei.com" -->
+<!-- subject="[xml] Uncompressed save doesn't work" -->
+<!-- id="374F0441.3FCA1BD7@eeyore.moneng.mei.com" -->
+<!-- inreplyto="199905240950.LAA29262@samantha.lysator.liu.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Ben Hochstedler (<a href="mailto:benh@eeyore.moneng.mei.com?subject=Re:%20[xml]%20Uncompressed%20save%20doesn't%20work"><em>benh@eeyore.moneng.mei.com</em></a>)<br>
+<strong>Date:</strong> Fri May 28 1999 - 17:01:53 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<li><strong>Previous message:</strong> <a href="0033.html">Daniel Veillard: "Re: [xml] Getting node name"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<li><strong>Reply:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Using the code in the Gnome CVS repository, and compiled on Solaris.
+<br>
+<p>After saving a dia diagram uncompressed, it cannot be loaded:
+<br>
+<p>sysdata-seq1.dia:947: error: xmlParsePItarget: invalid name prefix 'xml'
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+sysdata-seq1.dia:947: error: xmlParsePI : no target name
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+sysdata-seq1.dia:947: error: Extra content at the end of the document
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+<p>It looks like the whole file is saved twice.  After removing all
+<br>
+of the content starting at the second occurance of &lt;?xml version=&quot;1.0&quot;?&gt;,
+<br>
+the diagram can then load.
+<br>
+<p>I looked at tree.c and found that xmlDocContentDump(buf, cur);
+<br>
+is being called twice.  Attached is a patch.  I tested it for both
+<br>
+uncompressed and compressed modes.
+<br>
+<p>I am using the code in the Gnome CVS repository.
+<br>
+<p>-Ben
+<br>
+<p><p>Ben Hochstedler     <a href="http://www.mei.com">http://www.mei.com</a>  GE Marquette Medical Systems
+<br>
+<a href="mailto:benh@eeyore.moneng.mei.com?subject=Re:%20[xml]%20Uncompressed%20save%20doesn't%20work">benh@eeyore.moneng.mei.com</a>    Phone: 414-362-3317  Fax: 414-362-3389
+<br>
+<p>
+*** tree.c	1999/04/21 20:11:52	1.27
+<br>
+--- tree.c	1999/05/28 20:56:24
+<br>
+***************
+<br>
+*** 2776,2786 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (output == NULL) return(-1);
+<br>
+&nbsp;&nbsp;#ifdef HAVE_ZLIB_H
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+- #endif
+<br>
+&nbsp;&nbsp;
+<br>
+-     xmlDocContentDump(buf, cur);
+<br>
+- 
+<br>
+- #ifdef HAVE_ZLIB_H
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (zoutput != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = gzwrite(zoutput, buf-&gt;content, sizeof(CHAR) * buf-&gt;use);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gzclose(zoutput);
+<br>
+--- 2776,2782 ----
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Uncompressed%20save%20doesn't%20work">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Uncompressed%20save%20doesn't%20work">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<li><strong>Previous message:</strong> <a href="0033.html">Daniel Veillard: "Re: [xml] Getting node name"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<li><strong>Reply:</strong> <a href="0035.html">Daniel Veillard: "Re: [xml] Uncompressed save doesn't work"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:27 EDT</em>
+</em>
+</small>
+</body>
+</html>

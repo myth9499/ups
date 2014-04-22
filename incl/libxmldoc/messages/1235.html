@@ -1,0 +1,621 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Minor parser optimizations</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="[xml] Minor parser optimizations">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Minor parser optimizations</h1>
+<!-- received="Mon Nov 27 10:57:18 2000" -->
+<!-- isoreceived="20001127155718" -->
+<!-- sent="Mon, 27 Nov 2000 15:57:50 +0000" -->
+<!-- isosent="20001127155750" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="[xml] Minor parser optimizations" -->
+<!-- id="3A22847E.68CBB8B0@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20Minor%20parser%20optimizations"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Mon Nov 27 2000 - 10:57:50 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have attached a patch with minor code optimizations for the parser,
+<br>
+that I did while looking at the parsing process with Quantify (I
+<br>
+started with Purify, but it didn't report any errors, so I decided
+<br>
+to look at performance instead). I only looked at the XML parser part.
+<br>
+<p>The changes to parser.c is really only a single change -- the rest is
+<br>
+indentation.
+<br>
+<p>The changes to parserInternals.c are all done to handle the normal
+<br>
+flow for ASCII characters better (which is what most XML documents
+<br>
+mainly consists of). I tried various combinations and the ones in
+<br>
+the attachment performed best. Even the stange modification in
+<br>
+xmlIsIdeographic improves performance (because no ASCII character
+<br>
+matches the given ranges, it will try all ranges, so I prevented
+<br>
+this).
+<br>
+<p>The patch is against 2-2.2.10.
+<br>
+<p>
+diff -c libxml2-2.2.10/parser.c libxml2-2.2.10-breese/parser.c
+<br>
+*** libxml2-2.2.10/parser.c	Sat Nov 25 11:39:37 2000
+<br>
+--- libxml2-2.2.10-breese/parser.c	Mon Nov 27 16:42:27 2000
+<br>
+***************
+<br>
+*** 2092,2166 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf[len++] = *current++;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;token = 0;
+<br>
+! 	} else if ((c == '&amp;') &amp;&amp; (NXT(1) == '#')) {
+<br>
+! 	    int val = xmlParseCharRef(ctxt);
+<br>
+! 	    if (val == '&amp;') {
+<br>
+! 		/*
+<br>
+! 		 * The reparsing will be done in xmlStringGetNodeList()
+<br>
+! 		 * called by the attribute() function in SAX.c
+<br>
+! 		 */
+<br>
+! 		static xmlChar buffer[6] = &quot;&amp;#38;&quot;;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		if (len &gt; buf_size - 10) {
+<br>
+! 		    growBuffer(buf);
+<br>
+! 		}
+<br>
+! 		current = &amp;buffer[0];
+<br>
+! 		while (*current != 0) { /* non input consuming */
+<br>
+! 		    buf[len++] = *current++;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+! 		len += xmlCopyChar(0, &amp;buf[len], val);
+<br>
+! 	    }
+<br>
+! 	} else if (c == '&amp;') {
+<br>
+! 	    ent = xmlParseEntityRef(ctxt);
+<br>
+! 	    if ((ent != NULL) &amp;&amp; 
+<br>
+! 		(ctxt-&gt;replaceEntities != 0)) {
+<br>
+! 		xmlChar *rep;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		if (ent-&gt;etype != XML_INTERNAL_PREDEFINED_ENTITY) {
+<br>
+! 		    rep = xmlStringDecodeEntities(ctxt, ent-&gt;content,
+<br>
+! 					      XML_SUBSTITUTE_REF, 0, 0, 0);
+<br>
+! 		    if (rep != NULL) {
+<br>
+! 			current = rep;
+<br>
+! 			while (*current != 0) { /* non input consuming */
+<br>
+! 			    buf[len++] = *current++;
+<br>
+! 			    if (len &gt; buf_size - 10) {
+<br>
+! 				growBuffer(buf);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+! 			xmlFree(rep);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+! 		} else {
+<br>
+! 		    if (ent-&gt;content != NULL)
+<br>
+! 			buf[len++] = ent-&gt;content[0];
+<br>
+! 		}
+<br>
+! 	    } else if (ent != NULL) {
+<br>
+! 		int i = xmlStrlen(ent-&gt;name);
+<br>
+! 		const xmlChar *cur = ent-&gt;name;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		/*
+<br>
+! 		 * This may look absurd but is needed to detect
+<br>
+! 		 * entities problems
+<br>
+! 		 */
+<br>
+! 		if ((ent-&gt;etype != XML_INTERNAL_PREDEFINED_ENTITY) &amp;&amp;
+<br>
+! 		    (ent-&gt;content != NULL)) {
+<br>
+! 		    xmlChar *rep;
+<br>
+! 		    rep = xmlStringDecodeEntities(ctxt, ent-&gt;content,
+<br>
+! 					      XML_SUBSTITUTE_REF, 0, 0, 0);
+<br>
+! 		    if (rep != NULL)
+<br>
+! 			xmlFree(rep);
+<br>
+! 		}
+<br>
+&nbsp;&nbsp;
+<br>
+! 		/*
+<br>
+! 		 * Just output the reference
+<br>
+! 		 */
+<br>
+! 		buf[len++] = '&amp;';
+<br>
+! 		if (len &gt; buf_size - i - 10) {
+<br>
+! 		    growBuffer(buf);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+- 		for (;i &gt; 0;i--)
+<br>
+- 		    buf[len++] = *cur++;
+<br>
+- 		buf[len++] = ';';
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((c == 0x20) || (c == 0xD) || (c == 0xA) || (c == 0x9)) {
+<br>
+--- 2092,2168 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf[len++] = *current++;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;token = 0;
+<br>
+! 	} else if (c == '&amp;') {
+<br>
+! 	    if (NXT(1) == '#') {
+<br>
+! 		int val = xmlParseCharRef(ctxt);
+<br>
+! 		if (val == '&amp;') {
+<br>
+! 		    /*
+<br>
+! 		     * The reparsing will be done in xmlStringGetNodeList()
+<br>
+! 		     * called by the attribute() function in SAX.c
+<br>
+! 		     */
+<br>
+! 		    static xmlChar buffer[6] = &quot;&amp;#38;&quot;;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		    if (len &gt; buf_size - 10) {
+<br>
+! 			growBuffer(buf);
+<br>
+! 		    }
+<br>
+! 		    current = &amp;buffer[0];
+<br>
+! 		    while (*current != 0) { /* non input consuming */
+<br>
+! 			buf[len++] = *current++;
+<br>
+! 		    }
+<br>
+! 		} else {
+<br>
+! 		    len += xmlCopyChar(0, &amp;buf[len], val);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+! 		ent = xmlParseEntityRef(ctxt);
+<br>
+! 		if ((ent != NULL) &amp;&amp; 
+<br>
+! 		    (ctxt-&gt;replaceEntities != 0)) {
+<br>
+! 		    xmlChar *rep;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		    if (ent-&gt;etype != XML_INTERNAL_PREDEFINED_ENTITY) {
+<br>
+! 			rep = xmlStringDecodeEntities(ctxt, ent-&gt;content,
+<br>
+! 						      XML_SUBSTITUTE_REF, 0, 0, 0);
+<br>
+! 			if (rep != NULL) {
+<br>
+! 			    current = rep;
+<br>
+! 			    while (*current != 0) { /* non input consuming */
+<br>
+! 				buf[len++] = *current++;
+<br>
+! 				if (len &gt; buf_size - 10) {
+<br>
+! 				    growBuffer(buf);
+<br>
+! 				}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
++ 			    xmlFree(rep);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+! 		    } else {
+<br>
+! 			if (ent-&gt;content != NULL)
+<br>
+! 			    buf[len++] = ent-&gt;content[0];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+! 		} else if (ent != NULL) {
+<br>
+! 		    int i = xmlStrlen(ent-&gt;name);
+<br>
+! 		    const xmlChar *cur = ent-&gt;name;
+<br>
+&nbsp;&nbsp;
+<br>
+! 		    /*
+<br>
+! 		     * This may look absurd but is needed to detect
+<br>
+! 		     * entities problems
+<br>
+! 		     */
+<br>
+! 		    if ((ent-&gt;etype != XML_INTERNAL_PREDEFINED_ENTITY) &amp;&amp;
+<br>
+! 			(ent-&gt;content != NULL)) {
+<br>
+! 			xmlChar *rep;
+<br>
+! 			rep = xmlStringDecodeEntities(ctxt, ent-&gt;content,
+<br>
+! 						      XML_SUBSTITUTE_REF, 0, 0, 0);
+<br>
+! 			if (rep != NULL)
+<br>
+! 			    xmlFree(rep);
+<br>
+! 		    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 		    /*
+<br>
+! 		     * Just output the reference
+<br>
+! 		     */
+<br>
+! 		    buf[len++] = '&amp;';
+<br>
+! 		    if (len &gt; buf_size - i - 10) {
+<br>
+! 			growBuffer(buf);
+<br>
+! 		    }
+<br>
+! 		    for (;i &gt; 0;i--)
+<br>
+! 			buf[len++] = *cur++;
+<br>
+! 		    buf[len++] = ';';
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((c == 0x20) || (c == 0xD) || (c == 0xA) || (c == 0x9)) {
+<br>
+diff -c libxml2-2.2.10/parserInternals.c libxml2-2.2.10-breese/parserInternals.c
+<br>
+*** libxml2-2.2.10/parserInternals.c	Mon Nov 13 12:44:00 2000
+<br>
+--- libxml2-2.2.10-breese/parserInternals.c	Mon Nov 27 16:35:57 2000
+<br>
+***************
+<br>
+*** 428,442 ****
+<br>
+&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;* Returns 0 if not, non-zero otherwise
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsBaseChar(int c) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(
+<br>
+!       (((c) &gt;= 0x0041) &amp;&amp; ((c) &lt;= 0x005A)) ||
+<br>
+!       (((c) &gt;= 0x0061) &amp;&amp; ((c) &lt;= 0x007A)) ||
+<br>
+!       (((c) &gt;= 0x00C0) &amp;&amp; ((c) &lt;= 0x00D6)) ||
+<br>
+!       (((c) &gt;= 0x00D8) &amp;&amp; ((c) &lt;= 0x00F6)) ||
+<br>
+!       (((c) &gt;= 0x00F8) &amp;&amp; ((c) &lt;= 0x00FF)) ||
+<br>
+!      (((c) &gt;= 0x100) &amp;&amp; (	/* accelerator */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0100) &amp;&amp; ((c) &lt;= 0x0131)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0134) &amp;&amp; ((c) &lt;= 0x013E)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0141) &amp;&amp; ((c) &lt;= 0x0148)) ||
+<br>
+--- 428,457 ----
+<br>
+&nbsp;&nbsp;&nbsp;*
+<br>
+&nbsp;&nbsp;&nbsp;* Returns 0 if not, non-zero otherwise
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
++ static int xmlBaseArray[] = {
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0000 - 0x000F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0010 - 0x001F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0020 - 0x002F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0030 - 0x003F */
+<br>
++   0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x0040 - 0x004F */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, /* 0x0050 - 0x005F */
+<br>
++   0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x0060 - 0x006F */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, /* 0x0070 - 0x007F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0080 - 0x008F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x0090 - 0x009F */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x00A0 - 0x00AF */
+<br>
++   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x00B0 - 0x00BF */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x00C0 - 0x00CF */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x00D0 - 0x00DF */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x00E0 - 0x00EF */
+<br>
++   1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, /* 0x00F0 - 0x00FF */
+<br>
++ };
+<br>
++ 
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsBaseChar(int c) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(
+<br>
+!       (((c) &lt; 0x0100) ? xmlBaseArray[c] :
+<br>
+!       (	/* accelerator */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0100) &amp;&amp; ((c) &lt;= 0x0131)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0134) &amp;&amp; ((c) &lt;= 0x013E)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x0141) &amp;&amp; ((c) &lt;= 0x0148)) ||
+<br>
+***************
+<br>
+*** 794,806 ****
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsExtender(int c) {
+<br>
+!     return(
+<br>
+!      ((c) == 0xb7) || ((c) == 0x2d0) || ((c) == 0x2d1) ||
+<br>
+!      ((c) == 0x387) || ((c) == 0x640) || ((c) == 0xe46) ||
+<br>
+!      ((c) == 0xec6) || ((c) == 0x3005) ||
+<br>
+!      (((c) &gt;= 0x3031) &amp;&amp; ((c) &lt;= 0x3035)) ||
+<br>
+!      (((c) &gt;= 0x309b) &amp;&amp; ((c) &lt;= 0x309e)) ||
+<br>
+!      (((c) &gt;= 0x30fc) &amp;&amp; ((c) &lt;= 0x30fe)));
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+--- 809,824 ----
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsExtender(int c) {
+<br>
+!     switch (c) {
+<br>
+!     case 0x00B7: case 0x02D0: case 0x02D1: case 0x0387:
+<br>
+!     case 0x0640: case 0x0E46: case 0x0EC6: case 0x3005:
+<br>
+!     case 0x3031: case 0x3032: case 0x3033: case 0x3034:
+<br>
+!     case 0x3035: case 0x309D: case 0x309E: case 0x30FC:
+<br>
+!     case 0x30FE:
+<br>
+! 	return 1;
+<br>
+!     default:
+<br>
+! 	return 0;
+<br>
+!     }
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+***************
+<br>
+*** 814,820 ****
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsIdeographic(int c) {
+<br>
+!     return(
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x4e00) &amp;&amp; ((c) &lt;= 0x9fa5)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0xf900) &amp;&amp; ((c) &lt;= 0xfa2d)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x3021) &amp;&amp; ((c) &lt;= 0x3029)) ||
+<br>
+--- 832,838 ----
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;int
+<br>
+&nbsp;&nbsp;xmlIsIdeographic(int c) {
+<br>
+!     return(((c) &lt; 0x0100) ? 0 :
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x4e00) &amp;&amp; ((c) &lt;= 0x9fa5)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0xf900) &amp;&amp; ((c) &lt;= 0xfa2d)) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(((c) &gt;= 0x3021) &amp;&amp; ((c) &lt;= 0x3029)) ||
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Minor%20parser%20optimizations">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Minor%20parser%20optimizations">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1234.html">Charlie Bozeman: "[xml] 2 Problems"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 27 2000 - 11:43:56 EST</em>
+</em>
+</small>
+</body>
+</html>

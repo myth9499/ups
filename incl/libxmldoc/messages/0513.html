@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Embedding DTD into document</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Embedding DTD into document">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Embedding DTD into document</h1>
+<!-- received="Fri Jun 16 04:42:02 2000" -->
+<!-- isoreceived="20000616084202" -->
+<!-- sent="Fri, 16 Jun 2000 10:39:27 +0200" -->
+<!-- isosent="20000616083927" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Embedding DTD into document" -->
+<!-- id="20000616103927.X8287@w3.org" -->
+<!-- inreplyto="39492513.DC249225@sandia.gov" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jun 16 2000 - 04:39:27 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0514.html">Mathias Hasselmann: "[xml] Petition for a Software Patent Free Europe"</a>
+<li><strong>Previous message:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>In reply to:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jun 15, 2000 at 12:48:51PM -0600, Greg Sjaardema wrote:
+<br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; On Thu, Jun 01, 2000 at 01:43:36PM -0600, Greg Sjaardema wrote:
+</em><br>
+<em>&gt; &gt; &gt; I am using XML as the basis for describing the syntax of the commands
+</em><br>
+<em>&gt; &gt; &gt; that a code parser understands.  The syntax for each command or block of
+</em><br>
+<em>&gt; &gt; &gt; commands is described in a single file.  A separate application was
+</em><br>
+<em>&gt; &gt; &gt; written that reads all of the individual files, verifies their
+</em><br>
+<em>&gt; &gt; &gt; structure, verifies correct nesting of commands and that all referenced
+</em><br>
+<em>&gt; &gt; &gt; commands are defined, strips out data and comments, and then writes an
+</em><br>
+<em>&gt; &gt; &gt; XML file containing all of the commands in a single file.  This is all
+</em><br>
+<em>&gt; &gt; &gt; working great, but I would also like to output the DTD at the beginning
+</em><br>
+<em>&gt; &gt; &gt; of this file so there is only a single file to move to different
+</em><br>
+<em>&gt; &gt; &gt; platforms, and other considerations.  I have been unable to find the
+</em><br>
+<em>&gt; &gt; &gt; correct sequence of calls that would let me read in the external DTD and
+</em><br>
+<em>&gt; &gt; &gt; then write it out as an 'internal' DTD in my concatenated XML file.
+</em><br>
+<em>&gt; &gt; &gt;
+</em><br>
+<em>&gt; &gt; &gt; Is this possible, if so, where should I look in the documentation.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   Something like the following:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; {
+</em><br>
+<em>&gt; &gt;   xmlDocPtr  doc = xmlParseFile(...);
+</em><br>
+<em>&gt; &gt;   xmlDtdPtr  dtd = xmlParseDTD(NULL, ...);
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   doc-&gt;InternalSubset = dtd;
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   xmlSaveFile(..., doc);
+</em><br>
+<em>&gt; &gt;   xmlFreeDoc(doc); /* do not free the Dtd twice */
+</em><br>
+<em>&gt; &gt; }
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;   Doc is in:
+</em><br>
+<em>&gt; &gt;     <a href="http://xmlsoft.org/gnome-xml-parser.html">http://xmlsoft.org/gnome-xml-parser.html</a> for xmlParseDTD ()
+</em><br>
+<em>&gt; &gt;                                              and xmlParseFile()
+</em><br>
+<em>&gt; &gt;     <a href="http://xmlsoft.org/gnome-xml-tree.html">http://xmlsoft.org/gnome-xml-tree.html</a> for xmlSaveFile ()
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The above didn't seem to work (with version 1.8.6).  I think I have it
+</em><br>
+<em>&gt; working by doing the following:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlDocPtr doc = xmlNewDoc((xmlChar*)&quot;1.0&quot;);
+</em><br>
+<em>&gt; xmlDtdPtr dtd = xmlParseDTD(NULL, filename_of_dtd);
+</em><br>
+<em>&gt; dtd-&gt;name = xmlStrDup((xmlChar*)&quot;root_name&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; doc-&gt;intSubset = dtd;
+</em><br>
+<em>&gt; doc-&gt;children = (xmlNodePtr)dtd;
+</em><br>
+<em>&gt; dtd-&gt;doc = doc;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlNodePtr root = dtd-&gt;next = xmlNewDocNode(doc, NULL, (xmlChar*)&quot;root_name&quot;,
+</em><br>
+<em>&gt; NULL);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ... Fill in the rest of the nodes off of the root node.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Does this look correct, or am I doing something stupid....
+</em><br>
+<p>&nbsp;&nbsp;This looks correct. I suggest you upgrade to libxml-2.x.x since I fixed
+<br>
+*a lot* of XML problems. Even better use the CVS base version,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Embedding%20DTD%20into%20document">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0514.html">Mathias Hasselmann: "[xml] Petition for a Software Patent Free Europe"</a>
+<li><strong>Previous message:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>In reply to:</strong> <a href="0512.html">Greg Sjaardema: "Re: [xml] Embedding DTD into document"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

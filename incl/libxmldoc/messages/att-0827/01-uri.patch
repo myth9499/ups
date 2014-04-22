@@ -1,0 +1,104 @@
+Index: uri.c
+===================================================================
+RCS file: /sources/public/XML/uri.c,v
+retrieving revision 1.22
+diff -p -r1.22 uri.c
+*** uri.c	2000/09/23 10:20:33	1.22
+--- uri.c	2000/09/26 22:38:13
+*************** xmlNormalizeURIPath(char *path) {
+*** 1372,1387 ****
+  xmlChar *
+  xmlBuildURI(const xmlChar *URI, const xmlChar *base) {
+      xmlChar *val = NULL;
+!     int ret, len, index, cur, out;
+      xmlURIPtr ref = NULL;
+      xmlURIPtr bas = NULL;
+      xmlURIPtr res = NULL;
+  
+-     if ((URI == NULL) && (base == NULL))
+- 	return(NULL);
+-     if (URI == NULL)
+- 	return((xmlChar *) xmlMemStrdup((const char *) base));
+- 
+      /*
+       * 1) The URI reference is parsed into the potential four components and
+       *    fragment identifier, as described in Section 4.3.
+--- 1372,1382 ----
+  xmlChar *
+  xmlBuildURI(const xmlChar *URI, const xmlChar *base) {
+      xmlChar *val = NULL;
+!     int ret, ret2, len, index, cur, out;
+      xmlURIPtr ref = NULL;
+      xmlURIPtr bas = NULL;
+      xmlURIPtr res = NULL;
+  
+      /*
+       * 1) The URI reference is parsed into the potential four components and
+       *    fragment identifier, as described in Section 4.3.
+*************** xmlBuildURI(const xmlChar *URI, const xm
+*** 1390,1409 ****
+       *    as a reference to "." rather than as a synonym for the current
+       *    URI.  Should we do that here?
+       */
+!     ref = xmlCreateURI();
+!     if (ref == NULL)
+! 	goto done;
+!     if (*URI) {
+! 	ret = xmlParseURIReference(ref, (const char *) URI);
+! 	if (ret != 0)
+  	    goto done;
+      }
+!     bas = xmlCreateURI();
+!     if (bas == NULL)
+  	goto done;
+!     ret = xmlParseURIReference(bas, (const char *) base);
+!     if (ret != 0)
+  	goto done;
+  
+      /*
+       * 2) If the path component is empty and the scheme, authority, and
+--- 1385,1427 ----
+       *    as a reference to "." rather than as a synonym for the current
+       *    URI.  Should we do that here?
+       */
+!     if (URI == NULL) 
+! 	ret = -1;
+!     else {
+! 	ref = xmlCreateURI();
+! 	if (ref == NULL)
+! 	    goto done;
+! 	if (*URI)
+! 	    ret = xmlParseURIReference(ref, (const char *) URI);
+! 	else
+! 	    ret = -1;
+!     }
+!     if (base == NULL)
+! 	ret2 = -1;
+!     else {
+! 	bas = xmlCreateURI();
+! 	if (bas == NULL)
+  	    goto done;
++ 	ret2 = xmlParseURIReference(bas, (const char *) base);
+      }
+!     if ((ret != 0) && (ret2 != 0))
+  	goto done;
+!     if (ret != 0) {
+! 	/*
+! 	 * the base fragment must be ignored
+! 	 */
+! 	if (bas->fragment != NULL) {
+! 	    xmlFree(bas->fragment);
+! 	    bas->fragment = NULL;
+! 	}
+! 	val = xmlSaveUri(bas);
+  	goto done;
++     }
++     if (ret2 != 0) {
++ 	val = xmlSaveUri(ref);
++ 	goto done;
++     }
++ 
+  
+      /*
+       * 2) If the path component is empty and the scheme, authority, and
+

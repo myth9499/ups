@@ -1,0 +1,52 @@
+diff -p -r1.83 HTMLparser.c
+*** HTMLparser.c	2000/10/31 13:28:21	1.83
+--- HTMLparser.c	2000/11/17 15:55:20
+*************** htmlParseCharRef(htmlParserCtxtPtr ctxt)
+*** 2593,2600 ****
+  		    ctxt->sax->error(ctxt->userData, 
+  		         "htmlParseCharRef: invalid hexadecimal value\n");
+  		ctxt->wellFormed = 0;
+! 		val = 0;
+! 		break;
+  	    }
+  	    NEXT;
+  	}
+--- 2593,2599 ----
+  		    ctxt->sax->error(ctxt->userData, 
+  		         "htmlParseCharRef: invalid hexadecimal value\n");
+  		ctxt->wellFormed = 0;
+! 		return(0);
+  	    }
+  	    NEXT;
+  	}
+*************** htmlParseCharRef(htmlParserCtxtPtr ctxt)
+*** 2610,2617 ****
+  		    ctxt->sax->error(ctxt->userData, 
+  		         "htmlParseCharRef: invalid decimal value\n");
+  		ctxt->wellFormed = 0;
+! 		val = 0;
+! 		break;
+  	    }
+  	    NEXT;
+  	}
+--- 2609,2615 ----
+  		    ctxt->sax->error(ctxt->userData, 
+  		         "htmlParseCharRef: invalid decimal value\n");
+  		ctxt->wellFormed = 0;
+! 		return(0);
+  	    }
+  	    NEXT;
+  	}
+*************** htmlParseReference(htmlParserCtxtPtr ctx
+*** 3171,3176 ****
+--- 3169,3177 ----
+  	int bits, i = 0;
+  
+  	c = htmlParseCharRef(ctxt);
++ 	if (c == 0)
++ 	    return;
++ 
+          if      (c <    0x80) { out[i++]= c;                bits= -6; }
+          else if (c <   0x800) { out[i++]=((c >>  6) & 0x1F) | 0xC0;  bits=  0; }
+          else if (c < 0x10000) { out[i++]=((c >> 12) & 0x0F) | 0xE0;  bits=  6; }
+

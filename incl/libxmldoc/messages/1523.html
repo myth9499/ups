@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Some words about libxslt</title>
+<meta name="Author" content="Daniel Veillard (veillard@redhat.com)">
+<meta name="Subject" content="Re: [xml] Some words about libxslt">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Some words about libxslt</h1>
+<!-- received="Mon Mar  5 10:24:53 2001" -->
+<!-- isoreceived="20010305152453" -->
+<!-- sent="Mon, 5 Mar 2001 10:24:12 -0500" -->
+<!-- isosent="20010305152412" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="veillard@redhat.com" -->
+<!-- subject="Re: [xml] Some words about libxslt" -->
+<!-- id="20010305102412.C28590@imag.fr" -->
+<!-- inreplyto="20010305153221.C414@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Some%20words%20about%20libxslt"><em>veillard@redhat.com</em></a>)<br>
+<strong>Date:</strong> Mon Mar 05 2001 - 10:24:12 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Mar 05, 2001 at 03:32:21PM +0100, Tom . wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Le 05/03/01 14:48:43, Daniel Veillard a écrit :
+</em><br>
+<em>&gt; &gt; &gt; I'm writing such an API and will keep you informed.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   Humm, open source projects don't work that way ... You can't say
+</em><br>
+<em>&gt; &gt; &quot;hold on I'm writing some code you may look at later&quot;, sorry :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Well, it hasn't yet passed the stage of ideas and drafts. I'll first write
+</em><br>
+<em>&gt; a paper explaining its goals etc. I think of proposing it on the
+</em><br>
+<em>&gt; <a href="mailto:www-xpath-comments@w3.org?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">www-xpath-comments@w3.org</a> mailing list for discussion and improvements.
+</em><br>
+<p>&nbsp;Hum, no. <a href="mailto:www-xpath-comments@w3.org?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">www-xpath-comments@w3.org</a> is dedicated to comment on the
+<br>
+specification itself, not about how to write an interpreter for this
+<br>
+language. Other channels like xsl-dev and xml-dev mailing-lists are
+<br>
+far more relevant.
+<br>
+<p><em>&gt; Then will begin the implementation stage with whoever will want to
+</em><br>
+<em>&gt; participate: for libxml, in Java, etc.
+</em><br>
+<em>&gt; I think this is open-source-oriented, isn't it? ;o)
+</em><br>
+<p>&nbsp;&nbsp;yes maybe,
+<br>
+<p><em>&gt; Its first goal is XPath evaluation improvement.
+</em><br>
+<p>&nbsp;&nbsp;FYI when profiling a number of run of xsltproc the XPath evaluation
+<br>
+functions were not in the top 10 !!! You may waste quite a bit of time
+<br>
+focusing only on this.
+<br>
+<p><em>&gt; One important point is a &quot;compilation&quot; phase, to separate parsing from
+</em><br>
+<em>&gt; evaluation and allow reuse of the expression without parsing it each time.
+</em><br>
+<p>&nbsp;&nbsp;my approach was to compile patterns not the generic XPath calls.
+<br>
+Less complex, minimize change in the xpath module. i may switch to 
+<br>
+a full compilation of XPath expression at some point, but it doesn't seem
+<br>
+urgent so far.
+<br>
+<p><em>&gt; Imagine you have a huge DOM tree and you want to apply an non-well-formed
+</em><br>
+<em>&gt; expression. Without separating parsing from evaluation, you may have done
+</em><br>
+<em>&gt; 90% of the work (expensive for a huge document) to finally abandon it :
+</em><br>
+<em>&gt; there is an error in the expression. It seems to me it's too much work for
+</em><br>
+<em>&gt; nothing in result, and it can be prevented by parsing the expression before
+</em><br>
+<em>&gt; trying to evaluate it.
+</em><br>
+<p>&nbsp;&nbsp;Who cares about optimizing the error cases ?
+<br>
+Compiling XPath expressions can be an useful optimization but:
+<br>
+&nbsp;&nbsp;&nbsp;- currently it doesn't seems the bottleneck
+<br>
+&nbsp;&nbsp;&nbsp;- your example ain't the best one. Conformance may be, proper
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;evaluation of 'and' and 'or' expressions would be simpler
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with a precompiled form
+<br>
+<p><em>&gt; A second goal is to provide a single parser for every XPath-like expression
+</em><br>
+<em>&gt; : XPointer XPtrExpr's, XSLT Pattern's, etc. and their future evolution. I
+</em><br>
+<p>&nbsp;&nbsp;No, XSLT patterns *have to* be interpreted differently. A generic XPath
+<br>
+evaluation for a pattern leads to a node-set. What one need for patter matching
+<br>
+is the different evaluation 'would node x pertain to the node set result ?'.
+<br>
+My take is that current poor performances of a lot of XSLT processors
+<br>
+is that they compute those full XPath expressions ... 
+<br>
+<p><em>&gt; &gt;   yes and it seems quite simpler.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Sure, and I know you're a KISS follower ;o) , but quite more time
+</em><br>
+<em>&gt; consuming...
+</em><br>
+<p>&nbsp;&nbsp;and running *NOW*, I'm a believer in running code too ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Mar 05 2001 - 10:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] parser xml</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re: [xml] parser xml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] parser xml</h1>
+<!-- received="Wed Nov 10 13:10:26 1999" -->
+<!-- isoreceived="19991110181026" -->
+<!-- sent="Wed, 10 Nov 1999 11:56:13 +0100" -->
+<!-- isosent="19991110105613" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re: [xml] parser xml" -->
+<!-- id="2497.991110@triplex.de" -->
+<!-- inreplyto="D769114FD1AAD2119D110000D11A1EDE01FE75F3@grp-nt2.segin.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20parser%20xml"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Wed Nov 10 1999 - 05:56:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0199.html">Kristian Hogsberg Kristensen: "[xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0197.html">Verstraete Nicolas: "[xml] strange error"</a>
+<li><strong>In reply to:</strong> <a href="0193.html">Verstraete Nicolas: "[xml] parser xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Verstraete,
+<br>
+<p>Tuesday, November 09, 1999, 1:29:02 PM, you wrote:
+<br>
+<p>VN&gt; i have the source of the xml parser and i want to use it ! for exemple i
+<br>
+VN&gt; want to test the exemple gjobread.c ! how have i to proceed ?? i don't
+<br>
+VN&gt; understand how to compile all the sources. for example, when i compile the
+<br>
+VN&gt; parser;c file, it says that the config.h file is mising !?
+<br>
+VN&gt; i tried to rename the config.h.in file in config.h, but now, it said for
+<br>
+VN&gt; exemple that LIBXML_VERSION in unknown !? maybe i have to run a shell or
+<br>
+VN&gt; something else, or add a line in order to have a good config.h file !
+<br>
+&nbsp;
+<br>
+VN&gt; could somebody help me !
+<br>
+&nbsp;
+<br>
+VN&gt; thank you !
+<br>
+&nbsp;
+<br>
+VN&gt; nico
+<br>
+<p>This config.h File will be created while configuring the complete
+<br>
+package. I used the source rpm package. try it.
+<br>
+<p>for redhat:
+<br>
+-----------
+<br>
+- rpm -Uvh libxml-1.7.4-SNAP.src.rpm
+<br>
+- it will create /usr/src/redhat/SOURCES/libxml-1.7.4.tar.gz and
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/src/radhat/SPECS/libxml.spec
+<br>
+- cd /usr/src/redhat/SPECS
+<br>
+- rpm -bb libxml.spec
+<br>
+- it will then configure and compile libxml
+<br>
+- it will create a directory in /usr/src/BUILD/libxml-1.7.4
+<br>
+- in this directory are the sources
+<br>
+- it will install the needed libraries
+<br>
+- now you can compile and test some example source codes
+<br>
+<p>ciao. Stefan
+<br>
+<p>-----------------------------------------------------------------------
+<br>
+Stefan Bambach
+<br>
+<p>triplex - agentur für neue medien GmbH
+<br>
+Erhardtstr. 8
+<br>
+80469 München
+<br>
+<p>Tel: +49 89 209138-21
+<br>
+Fax: +49 89 209138-10
+<br>
+mailto:<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20parser%20xml">bambach@triplex.de</a>
+<br>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<br>
+-----------------------------------------------------------------------
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20parser%20xml">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20parser%20xml">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0199.html">Kristian Hogsberg Kristensen: "[xml] Weirdness in XML parser"</a>
+<li><strong>Previous message:</strong> <a href="0197.html">Verstraete Nicolas: "[xml] strange error"</a>
+<li><strong>In reply to:</strong> <a href="0193.html">Verstraete Nicolas: "[xml] parser xml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

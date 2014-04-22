@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Processing Instructions</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Processing Instructions">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Processing Instructions</h1>
+<!-- received="Wed Dec 22 05:04:14 1999" -->
+<!-- isoreceived="19991222100414" -->
+<!-- sent="Wed, 22 Dec 1999 05:04:11 -0500" -->
+<!-- isosent="19991222100411" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Processing Instructions" -->
+<!-- id="19991222050411.E3165@w3.org" -->
+<!-- inreplyto="3860218F.A49AB607@gmx.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Processing%20Instructions"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Dec 22 1999 - 05:04:11 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>Previous message:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<li><strong>In reply to:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Dec 22, 1999 at 01:55:43AM +0100, Mathias Hasselmann wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; libxml currently seems not to recognise processing instructions  
+</em><br>
+<em>&gt; (REC-XML 1.0, 1998-02-10, Chapter 2.6): 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; »»» cut »»»
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Processing Instructions
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; [16] PI       ::= '&lt;?' PITarget (S (Char* - (Char* '?&gt;' Char*)))? '?&gt;'
+</em><br>
+<em>&gt; [17] PITarget ::= Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ««« cut «««
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; That's a problem for XSLT parsers: XML document with embedded
+</em><br>
+<em>&gt; stylesheets have
+</em><br>
+<em>&gt; to start with:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; (This instructs a XSLT-Parser to search for an element of the type
+</em><br>
+<em>&gt;  &lt;xsl:stylesheet&gt; or &lt;xsl:translation&gt; with id=&quot;style1&quot;.)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The current implementation of libxml denies parsing of such documents
+</em><br>
+<em>&gt; with the following error messages:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; »»» cut »»»
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; [mathias@sam examples]$ tester embedded-stylesheet.xml 
+</em><br>
+<em>&gt; embedded-stylesheet.xml:1: error: Blank needed after '&lt;?xml'
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt;      ^
+</em><br>
+<em>&gt; embedded-stylesheet.xml:1: error: Blank needed here
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt;      ^
+</em><br>
+<em>&gt; embedded-stylesheet.xml:1: error: parsing XML declaration: '?&gt;' expected
+</em><br>
+<em>&gt; &lt;?xml-stylesheet type=&quot;text/xml&quot; href=&quot;#style1&quot;?&gt;
+</em><br>
+<em>&gt;      ^
+</em><br>
+<em>&gt; [mathias@sam examples]$ 
+</em><br>
+<p>&nbsp;&nbsp;Right, but the XML spec clearly state taht any PI starting with XML
+<br>
+(upper or lower case) is in the reserved space for W3C specifications.
+<br>
+<p>&nbsp;&nbsp;So I initially blocked those,
+<br>
+<p>&nbsp;&nbsp;My gut feeling is that this should at least cause a warning if the
+<br>
+name is not one of those allowed by some of the W3C specs. I will 
+<br>
+patch this,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Processing%20Instructions">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Processing%20Instructions">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Processing%20Instructions">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<li><strong>Previous message:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<li><strong>In reply to:</strong> <a href="0271.html">Mathias Hasselmann: "[xml] Processing Instructions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0273.html">Daniel Veillard: "Re: [xml] Processing Instructions"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:56 EDT</em>
+</em>
+</small>
+</body>
+</html>

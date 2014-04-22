@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug in parser (HTML)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug in parser (HTML)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug in parser (HTML)</h1>
+<!-- received="Mon Oct 30 11:50:42 2000" -->
+<!-- isoreceived="20001030165042" -->
+<!-- sent="Mon, 30 Oct 2000 17:50:38 +0100" -->
+<!-- isosent="20001030165038" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug in parser (HTML)" -->
+<!-- id="20001030175038.L16260@w3.org" -->
+<!-- inreplyto="20001030203456.B15831@pc4" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 11:50:38 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Previous message:</strong> <a href="1115.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1111.html">Marc Sanfacon: "RE: [xml] Bug in parser (HTML)"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 30, 2000 at 08:34:56PM +0300, Tenihin Andrey wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   SAX has no sibling context informations...
+</em><br>
+<em>&gt; &gt; If you use the DOM build those informations are available, 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; How to make all whitespaces significant while parsing?
+</em><br>
+<p>&nbsp;&nbsp;not possible in HTML on a general basis.
+<br>
+<p><em>&gt; Simple example:
+</em><br>
+<em>&gt; &lt;p&gt; File &lt;b&gt;text&lt;/b&gt; &lt;em&gt;text&lt;/em&gt;&lt;/p&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; gives:
+</em><br>
+<p>&nbsp;&nbsp;Apply the patch I sent in this thread or wait for the next release !
+<br>
+<p>~/XML -&gt; ./testHTML --debug tst.html 
+<br>
+HTML DOCUMENT
+<br>
+URL=tst.html
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(HTML), PUBLIC -//W3C//DTD HTML 4.0 Transitional//EN, SYSTEM <a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>
+<br>
+&nbsp;&nbsp;ELEMENT html
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT body
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT p
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content= File 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT b
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=text
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content= 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT em
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=text
+<br>
+<p>&nbsp;&nbsp;Alternatively use CVS (instructions on the home page).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bug%20in%20parser%20(HTML)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1117.html">Harry Blundell: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>Previous message:</strong> <a href="1115.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1114.html">Tenihin Andrey: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1111.html">Marc Sanfacon: "RE: [xml] Bug in parser (HTML)"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 12:43:34 EST</em>
+</em>
+</small>
+</body>
+</html>

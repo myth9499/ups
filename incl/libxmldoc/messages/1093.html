@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XPath and abbreviated paths</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="[xml] XPath and abbreviated paths">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XPath and abbreviated paths</h1>
+<!-- received="Fri Oct 27 19:48:04 2000" -->
+<!-- isoreceived="20001027234804" -->
+<!-- sent="Sat, 28 Oct 2000 01:46:59 +0200" -->
+<!-- isosent="20001027234659" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="[xml] XPath and abbreviated paths" -->
+<!-- id="20001028014659.B1891@debian" -->
+<!-- inreplyto="20001027231639.A1891@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Fri Oct 27 2000 - 19:46:59 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1094.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1092.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+I tried this:
+<br>
+ptittom:~/libxml/origin$ ./testXPath --expr //title
+<br>
+Error xpath.c:2345: Invalid type
+<br>
+//title
+<br>
+&nbsp;&nbsp;^
+<br>
+Object is empty (NULL)
+<br>
+ptittom:~/libxml/origin$ ./testXPath //title
+<br>
+Object is a Node Set :
+<br>
+Set contains 6 nodes:
+<br>
+1  ELEMENT title
+<br>
+2  ELEMENT title
+<br>
+3  ELEMENT title
+<br>
+4  ELEMENT title
+<br>
+5  ELEMENT title
+<br>
+6  ELEMENT title
+<br>
+<p>The only difference when passing the --expr option is to call
+<br>
+xmlXPathEvalExpression() instead of xmlXPathEval(), and the (nearly)
+<br>
+only
+<br>
+difference between these two functions is to call xmlXPathRoot() (in
+<br>
+xmlXPathEval()) or not (in xmlXPathEvalExpression()).
+<br>
+<p>If we call ./testXPath --expr /EXAMPLE//title, it works, and if we look
+<br>
+at xmlXPathEvalLocationPath(), we see that if the path begins with '//'
+<br>
+xmlXPathRoot() isn't called, but if it begins with a simple '/' it is.
+<br>
+<p>I modified the function to always call xmlXPathRoot() if we havea
+<br>
+single
+<br>
+or double '/' at the beginning of the path and... it works!
+<br>
+<p>There was a problem in xmlXPathEvalRelativeLocationPath() which handled
+<br>
+absolute paths !? I fixed it and xmlXPathEvalPathExpr() which called it
+<br>
+leaving a '/' before some steps (when we had a FilterExpr followed by a
+<br>
+single '/' and a RelativeLocationPath).
+<br>
+<p>Another bug in xmlXPathEvalPathExpr() appears when we evaluate
+<br>
+predicates:
+<br>
+ptittom:~/libxml/origin$ ./testXPath //chapter[image]
+<br>
+Error xpath.c:4299: Invalid expression
+<br>
+//chapter[image]
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+Object is empty (NULL)
+<br>
+The function verify what's the character following a Name, to decide
+<br>
+whether we have a FunctionCall, a NodeType search or a RelativeLocationPath,
+<br>
+but not if we are at the ending square bracket of a Predicate. Fixed.
+<br>
+<p>Yet another with the attribute axis and a NodeTest equal to '*' (@href
+<br>
+and attribute::href work well) :
+<br>
+ptittom:~/libxml/origin$ ./testXPath '//chapter/image/@*'
+<br>
+Object is a Node Set :
+<br>
+Set contains 0 nodes:
+<br>
+ptittom:~/libxml/origin$ ./testXPath '//chapter/image/@href'
+<br>
+Object is a Node Set :
+<br>
+Set contains 1 nodes:
+<br>
+1  ATTRIBUTE href
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=linus.gif
+<br>
+It happens in xmlXPathNodeCollectAndTest() where the attribute and
+<br>
+namespace axes aren't handled.
+<br>
+I don't understand the meaning of the NODE_TEST_NS NodeTest and don't
+<br>
+know how to look for all namespace nodes. Although the attribute::* and @*
+<br>
+bug is fixed.
+<br>
+The tests on cur-&gt;type for the AXIS_ATTRIBUTE &amp;&amp; NODE_TEST_ALL don't
+<br>
+seem required since the traversal functions are supposed to return only
+<br>
+nodes of this type but just in case I keep them...
+<br>
+<p>We still need to fix the function calls when passing the root node (/)
+<br>
+as argument, it still segfaults in some functions (id, name and string at
+<br>
+least).
+<br>
+I think about adding a test in xmlXPathEvalLocationPath() not to call
+<br>
+xmlXPathRelativeLocationPath() if NXT(1) (the character following '/') is a
+<br>
+closing bracket, or return when we're in xmlXPathEvalStep() and can't
+<br>
+find a name (the error happens in xmlXPathEvalNodeSet(): pass a NULL name
+<br>
+and it can't find a Name so it XP_ERROR0(XPATH_EXPR_ERROR))
+<br>
+<p>We also have to fix the function calls when passing as argument a
+<br>
+RelativeLocationPath beginning with a name (e.g. id(myNode) or
+<br>
+/EXAMPLE/chapter[count(title)])
+<br>
+<p>It also seems most functions don't follow the Rec since they fail if the
+<br>
+argument isn't of the expected type instead of converting it.
+<br>
+Not fixed yet.
+<br>
+<p>Tom
+<br>
+<hr noshade>
+<ul>
+<li>application/octet-stream attachment: <a href="att-1093/01-20001028.diff">20001028.diff</a>
+</ul>
+<!-- attachment="01-20001028.diff" -->
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20and%20abbreviated%20paths">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1094.html">TOM: "Re: [xml] Big clean up in XPath"</a>
+<li><strong>Previous message:</strong> <a href="1092.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 27 2000 - 20:43:34 EDT</em>
+</em>
+</small>
+</body>
+</html>

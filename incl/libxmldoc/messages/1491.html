@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="James McCann (james@votehere.net)">
+<meta name="Subject" content="RE: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] encoding, SAX callbacks</h1>
+<!-- received="Fri Feb 23 14:32:12 2001" -->
+<!-- isoreceived="20010223193212" -->
+<!-- sent="Fri, 23 Feb 2001 11:31:29 -0800" -->
+<!-- isosent="20010223193129" -->
+<!-- name="James McCann" -->
+<!-- email="james@votehere.net" -->
+<!-- subject="RE: [xml] encoding, SAX callbacks" -->
+<!-- id="0102AE2D3200D4118AE20050DACDB02E363418@congress.vhcorp.com" -->
+<!-- inreplyto="[xml] encoding, SAX callbacks" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> James McCann (<a href="mailto:james@votehere.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks"><em>james@votehere.net</em></a>)<br>
+<strong>Date:</strong> Fri Feb 23 2001 - 14:31:29 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1490.html">Peter Jacobi: "RE: [xml] encoding, SAX callbacks"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;
+</em><br>
+<em>&gt;IMHO, getting the characters in the SAX callbacks in the encoding of the 
+</em><br>
+<em>&gt;document is the worst of all choices. Now the application has to know 
+</em><br>
+<em>&gt;about myriads of encodings, instead of the parser.
+</em><br>
+<p>I don't understand this thinking.  I am working on a large project w/ 
+<br>
+other people, and our apps use ISO-8859-1.  We want to understand and
+<br>
+use precisely one encoding, ISO-8859-1.  This is the encoding used in
+<br>
+our XML documents.  We do not want to handle UTF8 or any other encoding.
+<br>
+libxml's lack of flexibility in this regard means that we have to add
+<br>
+code (which I of course simply copied from libxml) to convert from
+<br>
+an encoding which we have no desire to use to our desired encoding.  One 
+<br>
+of the features of libxml which initially attracted me was its ability
+<br>
+to handle multiple encodings.  Now I find that I must use my preferred
+<br>
+encoding, and in addition translate the encoding used internally by 
+<br>
+libxml.  
+<br>
+<p><em>&gt;There would be some value in the possibility to specify the desired 
+</em><br>
+<em>&gt;encoding for the callbacks, if you have a UTF16 or 8859-x centric 
+</em><br>
+<em>&gt;application. But this can easily implemented on top of the existing SAX 
+</em><br>
+<em>&gt;callback.
+</em><br>
+<p>I agree that there is &quot;value in the possibility to specify the desired 
+<br>
+encoding for the callbacks&quot; but I would drop the qualification.  I also
+<br>
+agree that it can easily be implemented, and I propose to do this w/in the
+<br>
+library.  libxml already does UTF8 -&gt; various other encodings and vice
+<br>
+versa, so why burden applications w/ the need to write additional code?
+<br>
+I have no problem with using UTF8 as the default encoding for the SAX 
+<br>
+callbacks as long as a mechanism exists to determine the encoding used
+<br>
+in the callbacks.  I realize there will be memory use and performance 
+<br>
+drawbacks, but if a user requests a certain encoding, and the appropriate
+<br>
+transcoders exist, that encoding should be used in the callbacks.  
+<br>
+<p><em>&gt;In fact I assume some users already have done so and can share their 
+</em><br>
+<em>&gt;code?!
+</em><br>
+<p>The appropriate means for sharing code is through a library.  Having 
+<br>
+someone email some code, or copying and pasting code from the library 
+<br>
+into a project is not.  libxml already knows how to translate from one 
+<br>
+encoding to another, what I am suggesting is to make this ability 
+<br>
+available to the user, who should not be forced to use or deal with UTF8. 
+<br>
+There is already a flexible means for transcoding in the library, why 
+<br>
+not extend the API to permit this in SAX callbacks?  It would not break 
+<br>
+existing code, and would benefit projects like mine which do not use 
+<br>
+UTF8 (which I suspect is a large group of applications).
+<br>
+<p>What I propose is something along these lines:
+<br>
+<p>&nbsp;&nbsp;pCtxt = xmlCreatePushParserCtxt(&amp;SAXHandler, NULL, &quot;&quot;, 0, 0);
+<br>
+&nbsp;&nbsp;xmlSetSAXCallbacksEncoding(pCtxt, &quot;ISO-8859-1&quot;);
+<br>
+<p>Now my application only ever needs to understand ISO-8859-1.
+<br>
+<p>James McCann
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1490.html">Peter Jacobi: "RE: [xml] encoding, SAX callbacks"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 23 2001 - 14:44:54 EST</em>
+</em>
+</small>
+</body>
+</html>

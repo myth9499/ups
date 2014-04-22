@@ -1,0 +1,10 @@
+Index: uri.c
+===================================================================
+RCS file: /sources/public/XML/uri.c,v
+retrieving revision 1.25
+diff -r1.25 uri.c
+376c376
+< 	} else {
+---
+> 	} else if (uri->scheme != NULL) {
+

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compilation pbs for the example</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Compilation pbs for the example">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compilation pbs for the example</h1>
+<!-- received="Fri Jun 30 04:17:08 2000" -->
+<!-- isoreceived="20000630081708" -->
+<!-- sent="Fri, 30 Jun 2000 10:13:59 +0200" -->
+<!-- isosent="20000630081359" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Compilation pbs for the example" -->
+<!-- id="20000630101359.G31001@w3.org" -->
+<!-- inreplyto="395C542B.D8169832@wanadoo.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jun 30 2000 - 04:13:59 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0556.html">Marc Billaud: "[xml] Compilation problem on gjobread"</a>
+<li><strong>Previous message:</strong> <a href="0554.html">Marc Billaud: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>In reply to:</strong> <a href="0554.html">Marc Billaud: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Jun 30, 2000 at 10:02:51AM +0200, Marc Billaud wrote:
+<br>
+<em>&gt; I ve installed temporally the libxml2-2.0.0 in the root directory.
+</em><br>
+<em>&gt; After I ve tried to run the gjobread bin on the gjobs.xml file provided.
+</em><br>
+<em>&gt; Then I got a NULL pointer returned by xmlDocGetRootElement.
+</em><br>
+<em>&gt; Here the result of the execution:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; cyrix150:~/xml/libxml2-2.0.0/example # gjobread gjobs.xml
+</em><br>
+<em>&gt; empty document n°1
+</em><br>
+<em>&gt;  134587872
+</em><br>
+<em>&gt;  0
+</em><br>
+<em>&gt;  Segmentation fault (core dumped)
+</em><br>
+<em>&gt; cyrix150:~/xml/libxml2-2.0.0/example #
+</em><br>
+<p>&nbsp;&nbsp;Would you mind upgrading to libxml-2.1.0 . I did test the compilation
+<br>
+and verified that the example was running Okay. It's probably a better
+<br>
+start.
+<br>
+&nbsp;&nbsp;&nbsp;extract the 2.1.0
+<br>
+&nbsp;&nbsp;&nbsp;configure, make, make install
+<br>
+&nbsp;&nbsp;&nbsp;cd example
+<br>
+&nbsp;&nbsp;&nbsp;make
+<br>
+&nbsp;&nbsp;&nbsp;./gjobread gjobs.xml
+<br>
+Should work out of the box, it did test it before release.
+<br>
+In case you have troubles building the makefile there is a
+<br>
+simple one enclosed.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-0555/01-Makefile">Makefile</a>
+</ul>
+<!-- attachment="01-Makefile" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compilation%20pbs%20for%20the%20example">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0556.html">Marc Billaud: "[xml] Compilation problem on gjobread"</a>
+<li><strong>Previous message:</strong> <a href="0554.html">Marc Billaud: "Re: [xml] Compilation pbs for the example"</a>
+<li><strong>In reply to:</strong> <a href="0554.html">Marc Billaud: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

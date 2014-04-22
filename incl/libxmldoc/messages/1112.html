@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating a DTD from a plain text buffer?</title>
+<meta name="Author" content="Harry Blundell (harry@halcyoninc.com)">
+<meta name="Subject" content="Re: [xml] Creating a DTD from a plain text buffer?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating a DTD from a plain text buffer?</h1>
+<!-- received="Mon Oct 30 09:39:12 2000" -->
+<!-- isoreceived="20001030143912" -->
+<!-- sent="Mon, 30 Oct 2000 09:38:35 -0500 (EST)" -->
+<!-- isosent="20001030143835" -->
+<!-- name="Harry Blundell" -->
+<!-- email="harry@halcyoninc.com" -->
+<!-- subject="Re: [xml] Creating a DTD from a plain text buffer?" -->
+<!-- id="Pine.GSO.4.05.10010300915120.16262-100000@columbia" -->
+<!-- inreplyto="20001029221218.H22416@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Harry Blundell (<a href="mailto:harry@halcyoninc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?"><em>harry@halcyoninc.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 09:38:35 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1111.html">Marc Sanfacon: "RE: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1108.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks for the quick response!
+<br>
+<p>I have tried it and have two problems so far.  One I think is yours,
+<br>
+and one is mine.
+<br>
+<p>Yours (error handling not shown):
+<br>
+<p>&nbsp;&nbsp;char *dtdBuffer = ...;
+<br>
+&nbsp;&nbsp;xmlParserInputBufferPtr dtdInputBufferPtr;
+<br>
+&nbsp;&nbsp;xmlDtdPtr dtdPtr;
+<br>
+<p>&nbsp;&nbsp;dtdInputBufferPtr = xmlParserInputBufferCreateMem(dtdBuffer,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strlen(dtdBuffer), XML_CHAR_ENCODING_UTF8);
+<br>
+&nbsp;&nbsp;dtdPtr = xmlIOParseDTD(NULL, dtdInputBufferPtr,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_CHAR_ENCODING_UTF8);
+<br>
+&nbsp;&nbsp;xmlFreeParserInputBuffer(dtdInputBufferPtr); 
+<br>
+<p>The call to xmlFreeParserInputBuffer caused a Bus Error, and the
+<br>
+following stack trace:
+<br>
+<p>program terminated by signal BUS (Bus Error)
+<br>
+Current function is xmlBufferFree
+<br>
+&nbsp;4223       if (buf-&gt;content != NULL) {
+<br>
+(dbx) where
+<br>
+=&gt;[1] xmlBufferFree(buf = 0xbebebebe), line 4223 in &quot;tree.c&quot;
+<br>
+&nbsp;&nbsp;[2] xmlFreeParserInputBuffer(in = 0xd50b8), line 806 in &quot;xmlIO.c&quot;
+<br>
+...
+<br>
+<p>I haven't looked into this further yet, because of my problem:
+<br>
+<p>If I comment out the call to xmlFreeParserInputBuffer, and continue on,
+<br>
+when I eventually call xmlSaveFile, I don't get a &lt;!DOCTYPE ... &gt; written
+<br>
+to the file.  However, I also don't get a &lt;!DOCTYPE ... &gt; written when I
+<br>
+replace the above stuff by a call to xmlParseDTD, and previous posts
+<br>
+suggest that it should work.
+<br>
+<p>Here's what I do after the above:
+<br>
+<p>char *tagname = ...;
+<br>
+char *filename = ...;
+<br>
+xmlDocPtr docPtr;
+<br>
+xmlNodePtr rootPtr;
+<br>
+<p>...
+<br>
+<p>dtdPtr-&gt;name = xmlStrdup((xmlChar *) tagname); 
+<br>
+<p>docPtr = xmlNewDoc((xmlChar *) &quot;1.0&quot;);
+<br>
+<p>docPtr-&gt;intSubset = dtdPtr;
+<br>
+dtdPtr-&gt;parent = docPtr;
+<br>
+dtdPtr-&gt;doc = docPtr;
+<br>
+<p>rootPtr = xmlNewDocNode(docPtr, NULL, (xmlChar *) tagname, NULL)
+<br>
+xmlDocSetRootElement(docPtr, rootPtr);
+<br>
+<p>...
+<br>
+<p>xmlSaveFile(filename, docPtr)
+<br>
+<p>Any suggestions would be welcome.
+<br>
+<p>Thanks,
+<br>
+<p>Harry
+<br>
+----------------------------------------------------------------------
+<br>
+Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+<br>
+2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+<br>
+PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">harry@HalcyonInc.com</a>
+<br>
+<p><p>On Sun, 29 Oct 2000, Daniel Veillard wrote:
+<br>
+<p><em>&gt; On Sun, Oct 29, 2000 at 03:15:15PM -0500, Harry Blundell wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; The only way that I could find to create a DTD as an internal subset was
+</em><br>
+<em>&gt; &gt; to call xmlParseDTD to read it from a file or URL (I haven't tried it
+</em><br>
+<em>&gt; &gt; yet, but I've seen some discussion on it, so I assume it works), and then
+</em><br>
+<em>&gt; &gt; attach the resulting node tree to my XML DOM.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Is it possible (and convenient ;-) to have the DTD in a plain text buffer
+</em><br>
+<em>&gt; &gt; and parse that?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Try the following patch, it provides:
+</em><br>
+<em>&gt;     xmlDtdPtr       xmlIOParseDTD           (xmlSAXHandlerPtr sax, 
+</em><br>
+<em>&gt;                                              xmlParserInputBufferPtr input,
+</em><br>
+<em>&gt; 					     xmlCharEncoding enc);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  you can generate an xmlParserInputBufferPtr from memory using
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     xmlParserInputBufferPtr
+</em><br>
+<em>&gt;         xmlParserInputBufferCreateMem           (const char *mem, int size,
+</em><br>
+<em>&gt; 						 xmlCharEncoding enc);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; exported from xmlIO.h .
+</em><br>
+<em>&gt;  Warning I didn't tested the routine, tell me if this works :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1111.html">Marc Sanfacon: "RE: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1108.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 09:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

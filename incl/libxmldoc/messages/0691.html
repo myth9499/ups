@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] A need for a function</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] A need for a function">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] A need for a function</h1>
+<!-- received="Mon Aug 28 08:41:06 2000" -->
+<!-- isoreceived="20000828124106" -->
+<!-- sent="Mon, 28 Aug 2000 17:39:27 +0200" -->
+<!-- isosent="20000828153927" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] A need for a function" -->
+<!-- id="20000828173927.B21776@w3.org" -->
+<!-- inreplyto="39AA8189.5956C6FA@wapit.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20A%20need%20for%20a%20function"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Aug 28 2000 - 11:39:27 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0690.html">Tuomas Luttinen: "Re: [xml] A need for a function"</a>
+<li><strong>In reply to:</strong> <a href="0690.html">Tuomas Luttinen: "Re: [xml] A need for a function"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Aug 28, 2000 at 06:13:13PM +0300, Tuomas Luttinen wrote:
+<br>
+<em>&gt; No, I didn't ment this. So I try to be more clearer.
+</em><br>
+<p>&nbsp;&nbsp;Just to be sure :
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- make sure you use libxml-2.2.2
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- do read <a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a> until you understand
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it fully *before* reading on this E-mail ... I'm not joking,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I accept to do free support but I don't want to repeat and
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;repeat the same thing again !
+<br>
+<p><em>&gt; The WML ompiler gets the WML document, uses libxml to make up 
+</em><br>
+<em>&gt; a DOM tree out of it and then runs through the tree node by node 
+</em><br>
+<em>&gt; changing tags into one byte binary relevants and putting them 
+</em><br>
+<em>&gt; together with the text contents of those nodes. A little example: 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Input:
+</em><br>
+<em>&gt; &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+</em><br>
+<em>&gt; &lt;!DOCTYPE wml PUBLIC &quot;-//WAPFORUM//DTD WML 1.1//EN&quot;
+</em><br>
+<em>&gt; &quot;<a href="http://www.wapforum.org/DTD/wml_1.1.xml">http://www.wapforum.org/DTD/wml_1.1.xml</a>&quot;&gt;
+</em><br>
+<em>&gt; &lt;wml&gt;
+</em><br>
+<em>&gt; 	&lt;card id=&quot;main&quot; title=&quot;Tervehdys&quot; newcontext=&quot;true&quot;&gt;
+</em><br>
+<em>&gt; 		&lt;p&gt;Hyv‰‰ p‰iv‰‰ maailma!&lt;/p&gt;
+</em><br>
+<em>&gt; 	&lt;/card&gt;
+</em><br>
+<em>&gt; &lt;/wml&gt;
+</em><br>
+<p>&nbsp;&nbsp;Okay, this is a wellformed XML document in ISO-Latin-1
+<br>
+<p>What libxml-2.2 builds in memory is the following:
+<br>
+~/XML -&gt; ./xmllint --noblanks --debug tst.xml
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+encoding=ISO-8859-1
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(wml), PUBLIC -//WAPFORUM//DTD WML 1.1//EN, SYSTEM <a href="http://www.wapforum.org/DTD/wml_1.1.xml">http://www.wapforum.org/DTD/wml_1.1.xml</a>
+<br>
+&nbsp;&nbsp;ELEMENT wml
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT card
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATTRIBUTE id
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=main
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATTRIBUTE title
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=Tervehdys
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATTRIBUTE newcontext
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=true
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT p
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=Hyv#C3#A4#C3#A4 p#C3#A4iv#C3#A4#C3#A4 maailma!
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;the last text node content is the UTF8 encoded string for
+<br>
+&nbsp;&nbsp;&nbsp;&quot;Hyv‰‰ p‰iv‰‰ maailma!&quot;
+<br>
+<p><em>&gt; Output:
+</em><br>
+<em>&gt; \x01\x04j\x00\x7f\xe7U\x03main\x006\x03Tervehdys\x00#\x01`
+</em><br>
+<em>&gt; \x03Hyv\xc3\xa4\xc3\xa4 p\xc3\xa4iv\xc3\xa4\xc3\xa4 maailma!\x00
+</em><br>
+<em>&gt; \x01\x01\x01
+</em><br>
+<p>&nbsp;&nbsp;I have no idea how you managed to get this ... Well I have read
+<br>
+the WAP compression paper when it was just a draft, didn't really
+<br>
+enjoyed it (crappy IMHO), but that's another problem.
+<br>
+&nbsp;&nbsp;I'm sorry but this is definitely not libxml related :-)
+<br>
+<p><em>&gt; Well, now there's a little problem with the output, since the third byte 
+</em><br>
+<em>&gt; ('j' or 0x6a) of the binary is equivalent to XML clause
+</em><br>
+<em>&gt; encoding=&quot;ISO-8859-1&quot; 
+</em><br>
+<em>&gt; but as you can see, those scandinavian characters are still in the UTF-8 
+</em><br>
+<em>&gt; because they are just copied from the tree node. So what I need is to
+</em><br>
+<em>&gt; change 
+</em><br>
+<em>&gt; UTF-8 characters to something else. (Note that I use ISO-8859-1 only as
+</em><br>
+<em>&gt; an 
+</em><br>
+<em>&gt; example here, since my cellular doesn't happen to understand russian,
+</em><br>
+<em>&gt; greek or
+</em><br>
+<em>&gt; arabian...) If that kind of function seems to fall out of libxml's
+</em><br>
+<em>&gt; territory,
+</em><br>
+<em>&gt; well, it's ok for me, but I'd rather use some encoding facilities in the
+</em><br>
+<em>&gt; libxml,
+</em><br>
+<em>&gt; since depending on a yet another library doesn't sound as a good idea. 
+</em><br>
+<p>&nbsp;&nbsp;Seems to me that:
+<br>
+&nbsp;&nbsp;&nbsp;- you have a compression algorithm which handles only ISO-Latin-1
+<br>
+&nbsp;&nbsp;&nbsp;- libxml2 now generates UTF-8 strings in memory
+<br>
+&nbsp;&nbsp;&nbsp;- you need to change your encoder to work on UTF8 input instead
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of ISO-Latin-1
+<br>
+<p>This can be done in 2 ways:
+<br>
+&nbsp;&nbsp;&nbsp;- natively asssuming you have a table based compressor update it
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to handle UTF-8 input instead of ISO-Latin-1
+<br>
+&nbsp;&nbsp;&nbsp;- or just reconvert to ISO-Latin-1 (if possible) using
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UTF8Toisolat1() which is part of libxml2
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;The added benefit is that even if in the input I provide the
+<br>
+&nbsp;same message but say in UTF-16, you won't have to change a 
+<br>
+&nbsp;single line of code libxml will handle it !
+<br>
+<p><em>&gt; Padon me, if this sounds like a stupid question, but I'm not very
+</em><br>
+<em>&gt; familiar 
+</em><br>
+<em>&gt; with the libxml implementation, so far I have mostly just installed it
+</em><br>
+<em>&gt; and 
+</em><br>
+<em>&gt; upgraded it time to time.
+</em><br>
+<p>&nbsp;&nbsp;So please read the documentation I wrote, this is a minimum. I just
+<br>
+spent nearly half an hour dealing with your specific issue, if it's just
+<br>
+because you didn't read the documentation, that very lame, everybody
+<br>
+looses time :-(
+<br>
+<p>&nbsp;&nbsp;RTFM !!!
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+<br>
+<p><em>&gt; &gt;   So you already loaded the document, and everything is in memory.
+</em><br>
+<em>&gt; &gt; Thus the initial document was XML (unless there is a bug in libxml).
+</em><br>
+<em>&gt; &gt; What you want to do is translate this document into something else,
+</em><br>
+<em>&gt; &gt; right ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Or retain the original character set encoding that has been internally 
+</em><br>
+<em>&gt; changed to UTF-8, see above.
+</em><br>
+<p>&nbsp;&nbsp;Then reread the last paragraph of my mail JUST ABOUT THIS:
+<br>
+<p><em>&gt; &gt;     - try to force libxml to store in the native encoding, there
+</em><br>
+<em>&gt; &gt;       is a small paragraph at <a href="http://xmlsoft.org/encoding.html#extend">http://xmlsoft.org/encoding.html#extend</a>
+</em><br>
+<em>&gt; &gt;       about this, but I suggest not to do this, or make sure that
+</em><br>
+<em>&gt; &gt;       you don't violate any of the XML well formedness rules due
+</em><br>
+<em>&gt; &gt;       to this trick (*)
+</em><br>
+<p>&nbsp;&nbsp;but again I suggest you don't do this and handle UTF-8 natively
+<br>
+in your WAP compressor. Do it once and for good.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20A%20need%20for%20a%20function">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20A%20need%20for%20a%20function">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20A%20need%20for%20a%20function">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0690.html">Tuomas Luttinen: "Re: [xml] A need for a function"</a>
+<li><strong>In reply to:</strong> <a href="0690.html">Tuomas Luttinen: "Re: [xml] A need for a function"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Aug 28 2000 - 09:43:23 EDT</em>
+</em>
+</small>
+</body>
+</html>

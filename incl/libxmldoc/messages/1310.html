@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] using large binary chunks / binary XML?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] using large binary chunks / binary XML?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] using large binary chunks / binary XML?</h1>
+<!-- received="Thu Jan  4 05:31:30 2001" -->
+<!-- isoreceived="20010104103130" -->
+<!-- sent="Thu, 4 Jan 2001 11:31:25 +0100" -->
+<!-- isosent="20010104103125" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] using large binary chunks / binary XML?" -->
+<!-- id="20010104113125.E18020@imag.fr" -->
+<!-- inreplyto="1233523855-3346618@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Thu Jan 04 2001 - 05:31:25 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<li><strong>Previous message:</strong> <a href="1309.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>In reply to:</strong> <a href="1309.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jan 04, 2001 at 09:59:47AM +0100, Peter Jacobi wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi Daniel, All,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   I think this is a packaging format problem. I have already suggested a
+</em><br>
+<em>&gt; &gt; format (in other forums), basically it's the following:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   - a ZIP file encapsulating a set of files
+</em><br>
+<em>&gt; &gt;   - the first file is in an XML format and provides metadata
+</em><br>
+<em>&gt; &gt;     (filename, URL, mime type, ...) for the content of the archive
+</em><br>
+<em>&gt; &gt;   - the other elements in the archive can be either XML or binary
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Are you suggesting 'the' ZIP format or do you mean any generic packed
+</em><br>
+<em>&gt; archive format? If the former is the case, what's the rationale for
+</em><br>
+<em>&gt; choosing ZIP over TAR/GZIP?
+</em><br>
+<p>&nbsp;&nbsp;because one can seek in a ZIP archive
+<br>
+&nbsp;&nbsp;because it's basically Jar (Java format) but with an XML metadata header
+<br>
+&nbsp;&nbsp;because tar standard (POSIX IIRC) and GNU implementation are subtly different
+<br>
+<p><em>&gt; And to add another suggestion: The multiple 'forks' (XML, Binary) should
+</em><br>
+<em>&gt; be virtualized in some kind, to a) exploit file systems who can provide
+</em><br>
+<em>&gt; multiple forks per file natively (NTFS) b) use files withing a directory,
+</em><br>
+<em>&gt; c) use MIME multipart, beside the d) the ZIP (or tar/gzip) implementation.
+</em><br>
+<p>&nbsp;&nbsp;I beg to differ, the problem with such an approach is that you loose
+<br>
+the portability of an archive, factor which is driving me to add it. I'm
+<br>
+not interested in this N ways to do packaging, I want one and have it
+<br>
+work everywhere. Packing multiple entities in a single file using ZIP
+<br>
+is a good interchange format, that's why I want to add it.
+<br>
+Standardizing the metadata description is important too.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20using%20large%20binary%20chunks%20/%20binary%20XML?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<li><strong>Previous message:</strong> <a href="1309.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>In reply to:</strong> <a href="1309.html">Peter Jacobi: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1311.html">Luca Padovani: "Re: [xml] using large binary chunks... and also...."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 04 2001 - 05:43:41 EST</em>
+</em>
+</small>
+</body>
+</html>

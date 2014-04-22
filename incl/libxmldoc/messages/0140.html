@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] xmlDocDumpMemory</title>
+<meta name="Author" content="patrickb@crt.com (patrickb@crt.com)">
+<meta name="Subject" content="RE: [xml] xmlDocDumpMemory">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] xmlDocDumpMemory</h1>
+<!-- received="Thu Sep 23 11:07:53 1999" -->
+<!-- isoreceived="19990923150753" -->
+<!-- sent="Thu, 23 Sep 1999 10:07:34 -0500" -->
+<!-- isosent="19990923150734" -->
+<!-- name="patrickb@crt.com" -->
+<!-- email="patrickb@crt.com" -->
+<!-- subject="RE: [xml] xmlDocDumpMemory" -->
+<!-- id="F931488C3634D11180D700A02461E24501E6C0C2@chitmd03.nt.il.nbgfn.com" -->
+<!-- inreplyto="[xml] xmlDocDumpMemory" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:patrickb@crt.com?subject=RE:%20[xml]%20xmlDocDumpMemory"><em>patrickb@crt.com</em></a><br>
+<strong>Date:</strong> Thu Sep 23 1999 - 11:07:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0141.html">Daniel Veillard: "Re: R: [xml] xmlDocDumpMemory"</a>
+<li><strong>Previous message:</strong> <a href="0139.html">Andrea LUCIANO: "R: [xml] xmlDocDumpMemory"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0137.html">Andrea LUCIANO: "[xml] xmlDocDumpMemory"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I have also run into trouble compiling on NT because of the type CHAR. Any
+<br>
+chance that it could be changed to something else (XML_CHAR for example) in
+<br>
+a future release of the library?
+<br>
+<p>Regards,
+<br>
+Patrick
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From:	Andrea LUCIANO [SMTP:<a href="mailto:andrea.luciano@icteam.it?subject=RE:%20[xml]%20xmlDocDumpMemory">andrea.luciano@icteam.it</a>]
+</em><br>
+<em>&gt; Sent:	Thursday, September 23, 1999 10:06 AM
+</em><br>
+<em>&gt; To:	<a href="mailto:xml@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>
+</em><br>
+<em>&gt; Subject:	R: [xml] xmlDocDumpMemory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----- Original Message -----
+</em><br>
+<em>&gt; From: Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">Daniel.Veillard@w3.org</a>&gt;
+</em><br>
+<em>&gt; To: &lt;<a href="mailto:xml@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>&gt;
+</em><br>
+<em>&gt; Sent: Thursday, September 23, 1999 2:00 PM
+</em><br>
+<em>&gt; Subject: Re: [xml] xmlDocDumpMemory
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; On Thu, Sep 23, 1999 at 01:01:37PM +0200, Andrea LUCIANO wrote:
+</em><br>
+<em>&gt; &gt; &gt; Does xmlDocDumpMemory return a zero terminated string?
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;  yes, it should :-)
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; It doesn't (in release 1.2 at least). I had to put a '\0' character at
+</em><br>
+<em>&gt; mem[size].
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; We have successfully compiled libxml under NT, without problems (we
+</em><br>
+<em>&gt; changed
+</em><br>
+<em>&gt; the type CHAR in XML_CHAR because it was already used by Visual C++).
+</em><br>
+<em>&gt; In my opinion libxml is an excellent library, portable and easy to use.
+</em><br>
+<em>&gt; The
+</em><br>
+<em>&gt; DCOM component shipped with IE5 is really harder to employ and absolutly
+</em><br>
+<em>&gt; not
+</em><br>
+<em>&gt; portable.
+</em><br>
+<em>&gt; Actually I implemented an OO interface to libxml in C++ without great
+</em><br>
+<em>&gt; effort.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Thanks to Daniel
+</em><br>
+<em>&gt; Andrea
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">majordomo@rufus.w3.org</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=RE:%20[xml]%20xmlDocDumpMemory">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0141.html">Daniel Veillard: "Re: R: [xml] xmlDocDumpMemory"</a>
+<li><strong>Previous message:</strong> <a href="0139.html">Andrea LUCIANO: "R: [xml] xmlDocDumpMemory"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0137.html">Andrea LUCIANO: "[xml] xmlDocDumpMemory"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

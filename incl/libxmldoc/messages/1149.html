@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlDocDumpMemory and xmlParseMemory</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlDocDumpMemory and xmlParseMemory">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlDocDumpMemory and xmlParseMemory</h1>
+<!-- received="Wed Nov  8 11:31:40 2000" -->
+<!-- isoreceived="20001108163140" -->
+<!-- sent="Wed, 8 Nov 2000 17:31:32 +0100" -->
+<!-- isosent="20001108163132" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlDocDumpMemory and xmlParseMemory" -->
+<!-- id="20001108173132.C14384@w3.org" -->
+<!-- inreplyto="5.0.0.25.2.20001108104856.009dbca0@quad.rebel.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 11:31:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1148.html">Matthew Kellett: "[xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>In reply to:</strong> <a href="1148.html">Matthew Kellett: "[xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 08, 2000 at 11:03:12AM -0500, Matthew Kellett wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've run into an inconsistency between xmlDocDumpMemory and xmlParseMemory 
+</em><br>
+<em>&gt; and I'm wondering if there's another way of doing what I want to do.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I create a tree structure and then save it to memory using 
+</em><br>
+<em>&gt; xmlDocDumpMemory.  I then parse it using xmlParseMemory.  xmlDocDumpMemory 
+</em><br>
+<em>&gt; seems to add carriage returns '\n' for visual formatting.  xmlParseMemory 
+</em><br>
+<em>&gt; interprets these carriage returns as content and create text nodes in the 
+</em><br>
+<em>&gt; new tree with the carriage returns.
+</em><br>
+<p>&nbsp;&nbsp;First,  which version are you using ? If it's 1.x then upgrade to 2.x.
+<br>
+&nbsp;&nbsp;Second, did you used xmlKeepBlanksDefault() in any way in your code ?
+<br>
+<p><em>&gt; I've thought of two workarounds for this.  One is to ignore these text 
+</em><br>
+<em>&gt; nodes in the parsed tree.  Unfortunately, this adds a level of complexity 
+</em><br>
+<em>&gt; to my code.  The other is remove carriage returns from the dumped memory 
+</em><br>
+<em>&gt; block.  Unfortunately,  this could mean removing significant carriage 
+</em><br>
+<em>&gt; returns, like those in text blocks.
+</em><br>
+<p>&nbsp;&nbsp;all blanks are significant. Unless explicitely asked for libxml2
+<br>
+keep all the blanks as text nodes, this is needed for XML compliance.
+<br>
+<p><em>&gt; Is this expected behaviour?  Is there a workaround that won't affect 
+</em><br>
+<p>&nbsp;&nbsp;No, saving should not add the extraneous formatting space. Unless
+<br>
+you used libxml v1 or explicitely asked to ignore blanks nodes by
+<br>
+using xmlKeepBlanksDefault().
+<br>
+<p><em>&gt; significant carriage returns?  Are these the right functions to use for 
+</em><br>
+<em>&gt; doing this or am I missing something?  Any help would be appreciated.
+</em><br>
+<p>&nbsp;&nbsp;More information on you setup is really needed for an informed answer.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1148.html">Matthew Kellett: "[xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>In reply to:</strong> <a href="1148.html">Matthew Kellett: "[xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 11:46:28 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlParseDTD breaks now</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlParseDTD breaks now">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlParseDTD breaks now</h1>
+<!-- received="Tue Sep 26 17:32:19 2000" -->
+<!-- isoreceived="20000926213219" -->
+<!-- sent="Tue, 26 Sep 2000 23:32:11 +0200" -->
+<!-- isosent="20000926213211" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlParseDTD breaks now" -->
+<!-- id="20000926233211.F1953@w3.org" -->
+<!-- inreplyto="39D10BE6.19FF0830@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Sep 26 2000 - 17:32:11 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0823.html">Joe McAlerney: "[xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0823.html">Joe McAlerney: "[xml] xmlParseDTD breaks now"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Sep 26, 2000 at 01:49:42PM -0700, Joe McAlerney wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; After upgrading from 2.2.2 to 2.2.3, I found that my DOM application was
+</em><br>
+<em>&gt; halting when it called xmlParseDTD. 
+</em><br>
+<em>&gt; Here is the way I call it:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; dtd = xmlParseDTD(&quot;example.dtd&quot;,&quot;example.dtd&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Please bare with me as I drag you through my thinking/debugging process.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The specific place it halts, is buried down in resolveEntity() in the
+</em><br>
+<em>&gt; file SAX.c.  xmlParseDTD calls xmlSAXParseDTD, which initializes a new
+</em><br>
+<em>&gt; xmlParserCtxt, and passes it's userdata ptr into resolveEntity, along
+</em><br>
+<em>&gt; with my ExternalID and SystemID.  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The new version of resolveEntity() attempts to extract a base value from
+</em><br>
+<em>&gt; the newly initialized xmlParserCtxt value, but can't because there is
+</em><br>
+<em>&gt; nothing to extract. As a result, a NULL value is passed into
+</em><br>
+<em>&gt; xmlBuildURI, and a NULL value is returned.  Unfortunately, that value is
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Hum right I understand, this is a serious problem.
+<br>
+<p>&nbsp;&nbsp;&nbsp;At that point the following should be called
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBuildURI(&quot;example.dtd&quot;, NULL);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right ?
+<br>
+<p>xmlBuildURI() starts with:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if ((URI == NULL) &amp;&amp; (base == NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (URI == NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return((xmlChar *) xmlMemStrdup((const char *) base));
+<br>
+<p>a simple fix is to add:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if (base == NULL) 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return((xmlChar *) xmlMemStrdup((const char *) URI);
+<br>
+<p>Could you check taht this solves the problem (i.e. that it was correctly
+<br>
+analyzed)? thanks.
+<br>
+<p>But I dislike the fact that the URI (and the base in the previous case)
+<br>
+are not parsed to check that their content is a valid URI ...
+<br>
+I will try to add this test ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlParseDTD%20breaks%20now">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0823.html">Joe McAlerney: "[xml] xmlParseDTD breaks now"</a>
+<li><strong>In reply to:</strong> <a href="0823.html">Joe McAlerney: "[xml] xmlParseDTD breaks now"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Sep 26 2000 - 17:43:32 EDT</em>
+</em>
+</small>
+</body>
+</html>

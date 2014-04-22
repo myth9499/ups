@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] HTMLParser bug...</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] HTMLParser bug...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] HTMLParser bug...</h1>
+<!-- received="Fri Nov 17 15:54:19 2000" -->
+<!-- isoreceived="20001117205419" -->
+<!-- sent="Fri, 17 Nov 2000 15:54:19 -0500" -->
+<!-- isosent="20001117205419" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] HTMLParser bug..." -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0B19A82@EXCHANGE" -->
+<!-- inreplyto="[xml] HTMLParser bug..." -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20HTMLParser%20bug..."><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Fri Nov 17 2000 - 15:54:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1206.html">Daniel Veillard: "Re: [xml] HTMLParser bug..."</a>
+<li><strong>Maybe in reply to:</strong> <a href="1205.html">Marc Sanfacon: "[xml] HTMLParser bug..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Oups, sorry...
+<br>
+<p>Just in case it doesn't work, here is the code:
+<br>
+<p>&lt;center&gt;
+<br>
+&lt;html&gt;&lt;head&gt;&lt;TITLE&gt;Classifieds&lt;/TITLE&gt;
+<br>
+&lt;/head&gt;&lt;body&gt;
+<br>
+&lt;center&gt;
+<br>
+&lt;/center&gt;&lt;a name=rsearch&quot;&gt;&lt;/form&gt;&lt;/BODY&gt;&lt;/HTML&gt;&lt;!-- END PAGE FOOTER
+<br>
+--&gt;&lt;/center&gt;
+<br>
+<p>One of the files contains 5 lines, no CR at the end.  This one is causing
+<br>
+the bug.  The other ones contains 6 lines, with a CR at the end. No bug.
+<br>
+<p><p>On Fri, Nov 17, 2000 at 01:46:53PM -0500, Marc Sanfacon wrote:
+<br>
+<em>&gt; It's me again ! :)
+</em><br>
+<em>&gt; 	I have found a strange bug in the HTMLParser.  I am currently
+</em><br>
+<em>&gt; tracing it.  I enabled DEBUG in HTMLParser.c and it crashes ! Oups.
+</em><br>
+Without
+<br>
+<em>&gt; DEBUG it simply gives the wrong result (a tag body  is not closed).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I have attached 2 files, one is the bug and the other does not
+</em><br>
+<em>&gt; causes it.  The only difference between the 2 files is that one ends with
+</em><br>
+a
+<br>
+<em>&gt; \n (the one that works) and the other one does not.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	Again this is a simplified html page from the wonderful Internet !
+</em><br>
+<em>&gt; :)
+</em><br>
+<p>&nbsp;&nbsp;Looks like an MS binary proprietary format attachment to me
+<br>
+is that what you tried to parse ? ;-)
+<br>
+zipped or uuencoded I may have a chance to extract it ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20HTMLParser%20bug...">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20HTMLParser%20bug...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20HTMLParser%20bug...">majordomo@rpmfind.net</a>
+<p><p>begin 600 BUGEndLine.txt
+M/&amp;-E;G1E&lt;CX*/&amp;AT;6P^/&amp;AE860^/%1)5$Q%/D-L87-S:69I961S/&quot;]4251,
+M13X*/&quot;]H96%D/CQB;V1Y/@H\8V5N=&amp;5R/@H\+V-E;G1E&lt;CX\82!N86UE/7)S
+M96%R8V@B/CPO9F]R;3X\+T)/1%D^/&quot;](5$U,/CPA+2T@14Y$(%!!1T4@1D]/
+05$52(&quot;TM/CPO8V5N=&amp;5R/@==
+`
+end
+<p>begin 600 No-BUGEndLine.txt
+M/&amp;-E;G1E&lt;CX*/&amp;AT;6P^/&amp;AE860^/%1)5$Q%/D-L87-S:69I961S/&quot;]4251,
+M13X*/&quot;]H96%D/CQB;V1Y/@H\8V5N=&amp;5R/@H\+V-E;G1E&lt;CX\82!N86UE/7)S
+M96%R8V@B/CPO9F]R;3X\+T)/1%D^/&quot;](5$U,/CPA+2T@14Y$(%!!1T4@1D]/
+25$52(&quot;TM/CPO8V5N=&amp;5R/@T*
+`
+end
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20HTMLParser%20bug...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20HTMLParser%20bug...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1206.html">Daniel Veillard: "Re: [xml] HTMLParser bug..."</a>
+<li><strong>Maybe in reply to:</strong> <a href="1205.html">Marc Sanfacon: "[xml] HTMLParser bug..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 17 2000 - 16:44:36 EST</em>
+</em>
+</small>
+</body>
+</html>

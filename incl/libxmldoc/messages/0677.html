@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug #21194</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug #21194">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug #21194</h1>
+<!-- received="Wed Aug 23 16:04:25 2000" -->
+<!-- isoreceived="20000823200425" -->
+<!-- sent="Thu, 24 Aug 2000 01:01:33 +0200" -->
+<!-- isosent="20000823230133" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug #21194" -->
+<!-- id="20000824010133.B12694@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1000823085909.2987K-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20#21194"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Aug 23 2000 - 19:01:33 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0676.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>In reply to:</strong> <a href="0674.html">Kenneth Pronovici: "Re: [xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Aug 23, 2000 at 09:06:28AM -0500, Kenneth Pronovici wrote:
+<br>
+<em>&gt; &gt;   Sure if the codde is okay it may be included in the next one.
+</em><br>
+<em>&gt; &gt; One just need to worry about the fact that extenal subsets must follow
+</em><br>
+<em>&gt; &gt; the given constraints:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I doubt I have taken all of that into account properly, but I can fix it
+</em><br>
+<em>&gt; if you let me know what needs to be done.  I'll let you look at the patches
+</em><br>
+<em>&gt; and decide whether they're appropriate or just a quick hack that doesn't
+</em><br>
+<em>&gt; fit with the way you want to organize things.  If what I've written doesn't
+</em><br>
+<em>&gt; match what you want to see, I'll rewrite it so it does.
+</em><br>
+<p>&nbsp;&nbsp;Okay, I have looked at what your code does. This should not be needed
+<br>
+in practice, or rather handled in a different way. I explain:
+<br>
+<p>&nbsp;&nbsp;libxml already output such DOCTYPE informations, example:
+<br>
+<p>~/XML -&gt; cat test/wml.xml
+<br>
+&lt;?xml version=&quot;1.0&quot; ?&gt;
+<br>
+&lt;!DOCTYPE wml PUBLIC &quot;-//WAPFORUM//DTD WML 1.1//EN&quot; &quot;<a href="http://www.wapforum.org/DTD/wml_1.1.xml">http://www.wapforum.org/DTD/wml_1.1.xml</a>&quot;&gt;
+<br>
+&lt;wml&gt;
+<br>
+&nbsp;&nbsp;&lt;card id=&quot;card1&quot; title=&quot;Rubriques 75008&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;rubmenu.asp?CP=75008&amp;#38;RB=01&quot;&gt;Cin&amp;#233;ma&lt;/a&gt;&lt;br/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+<br>
+<p>&lt;/card&gt;
+<br>
+&lt;/wml&gt;
+<br>
+~/XML -&gt; ./xmllint test/wml.xml
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE wml PUBLIC &quot;-//WAPFORUM//DTD WML 1.1//EN&quot; &quot;<a href="http://www.wapforum.org/DTD/wml_1.1.xml">http://www.wapforum.org/DTD/wml_1.1.xml</a>&quot;&gt;
+<br>
+&lt;wml&gt;
+<br>
+&nbsp;&nbsp;&lt;card id=&quot;card1&quot; title=&quot;Rubriques 75008&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;rubmenu.asp?CP=75008&amp;#38;RB=01&quot;&gt;Cin&amp;#xE9;ma&lt;/a&gt;&lt;br/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+<br>
+<p>&lt;/card&gt;
+<br>
+&lt;/wml&gt;
+<br>
+<p>&nbsp;&nbsp;So when parsing a document with DOCTYPE informations, the existing
+<br>
+routines dump those correctly i.e. the problem is not with the saving
+<br>
+functions but your document structure.
+<br>
+&nbsp;&nbsp;I assume you actually build a document in memory, but parse the DtD
+<br>
+from the disk, and validate against it. The problem lies in the way
+<br>
+you prune the DtD in the document tree, just adding it as doc-&gt;extSubset
+<br>
+is not sufficient you should insert it as a node in the document child
+<br>
+list (before the root element but possibly after PIs or comments).
+<br>
+&nbsp;&nbsp;The following is the beginning of the dump of the wml document
+<br>
+as built in memory by the parser:
+<br>
+<p>~/XML -&gt; ./xmllint --debug test/wml.xml
+<br>
+DOCUMENT
+<br>
+version=1.0
+<br>
+standalone=true
+<br>
+&nbsp;&nbsp;DTD(wml), PUBLIC -//WAPFORUM//DTD WML 1.1//EN, SYSTEM <a href="http://www.wapforum.org/DTD/wml_1.1.xml">http://www.wapforum.org/DTD/wml_1.1.xml</a>
+<br>
+&nbsp;&nbsp;ELEMENT wml
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content=   
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT card
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<br>
+<p>Notice the DTD element, that's what missing when you build your
+<br>
+document, just create it and it should work without change to libxml.
+<br>
+Just call:
+<br>
+<p>&nbsp;xmlDtdPtr       xmlCreateIntSubset     (xmlDocPtr doc,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *name,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *ExternalID,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *SystemID);
+<br>
+<p>&nbsp;and it will create the missing node.
+<br>
+&nbsp;Should be simpler for you and for me :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20#21194">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0676.html">Daniel Veillard: "Re: [xml] Valid URI ?"</a>
+<li><strong>In reply to:</strong> <a href="0674.html">Kenneth Pronovici: "Re: [xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 23 2000 - 16:43:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

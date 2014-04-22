@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: I18N Issues.</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: I18N Issues.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: I18N Issues.</h1>
+<!-- received="Thu Feb 10 06:24:12 2000" -->
+<!-- isoreceived="20000210112412" -->
+<!-- sent="Thu, 10 Feb 2000 12:23:43 +0100" -->
+<!-- isosent="20000210112343" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: I18N Issues." -->
+<!-- id="20000210122343.A4296@w3.org" -->
+<!-- inreplyto="20000210100707.A30488@phi.sinica.edu.tw" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Feb 10 2000 - 06:23:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0354.html">Lutz Behnke: "[xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Previous message:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Feb 10, 2000 at 10:07:07AM +0800, Y. Cheng wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Wed, Feb 09, 2000 at 09:09:10AM +0800, Y. Cheng wrote:
+</em><br>
+<em>&gt; &gt; &gt; &gt; isolat1ToUTF8(xxx *out, int outlen, xxx *in, int  inlen)
+</em><br>
+<em>&gt; &gt; &gt; &gt; 	to
+</em><br>
+<em>&gt; &gt; &gt; &gt; isolat1ToUTF8(xxx *out, int outlen, xxx *in, int *inlen)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; One question here:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	Should we generate &amp;#___; or &amp;x___; in UTF8Toisolat1 ?
+</em><br>
+<em>&gt; 	(as this utf8 character have no corrspond isolat1)
+</em><br>
+<p>&nbsp;&nbsp;Well I guess &amp;#__; and &amp;#x__; strictly equivalent. That's a general
+<br>
+problem of parsing/editing/saving when there is multiple representations.
+<br>
+In that case we don't have enough information to select &quot;the best&quot; so
+<br>
+it's really equivalent. I woult opt for &amp;#x__; since it allows more easily
+<br>
+to see in what range the char is. On the other hand this form may take a bit
+<br>
+more bytes in average.
+<br>
+<p><em>&gt; 	Should we handle &amp;#___; or &amp;x___; on isolat1ToUTF8 ?
+</em><br>
+<p>&nbsp;&nbsp;I would say no. In that case I would generate ENTITY refs nodes
+<br>
+with the corresponding name in the parser output. The good point is
+<br>
+that the saved document will then use the same char ref encoding as
+<br>
+the input.
+<br>
+<p>&nbsp;&nbsp;One thing to note about isolat1ToUTF8 and UTF8Toisolat1 is that
+<br>
+I expect to handle ISO Latin 1 (and other ISO Latin) natively, so
+<br>
+those inport/export functions will only be used when a charset encoding
+<br>
+conversion is explicitely asked for. Those interfaces are not yet
+<br>
+availble.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20I18N%20Issues.">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0354.html">Lutz Behnke: "[xml] clean use of HAVE_SNPRINTF"</a>
+<li><strong>Previous message:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0352.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:02 EDT</em>
+</em>
+</small>
+</body>
+</html>

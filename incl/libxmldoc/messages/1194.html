@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Question about libxml...</title>
+<meta name="Author" content="Wayne Davison (wayned@users.sourceforge.net)">
+<meta name="Subject" content="Re: [xml] Question about libxml...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Question about libxml...</h1>
+<!-- received="Wed Nov 15 16:32:07 2000" -->
+<!-- isoreceived="20001115213207" -->
+<!-- sent="Wed, 15 Nov 2000 13:17:30 -0800 (PST)" -->
+<!-- isosent="20001115211730" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@users.sourceforge.net" -->
+<!-- subject="Re: [xml] Question about libxml..." -->
+<!-- id="Pine.LNX.4.21.0011151255460.19580-200000@phong.blorf.net" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B1999F@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20Question%20about%20libxml..."><em>wayned@users.sourceforge.net</em></a>)<br>
+<strong>Date:</strong> Wed Nov 15 2000 - 16:17:30 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<li><strong>Previous message:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<li><strong>In reply to:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, 15 Nov 2000, Marc Sanfacon wrote:
+<br>
+<em>&gt; I think there should be only 1 html and 1 head tag with the proper ending
+</em><br>
+<em>&gt; tag.
+</em><br>
+<p>It might be possible in the internal DOM representation to merge multiple
+<br>
+HTML/HEAD/BODY sections together.  The SAX parser wouldn't be able to
+<br>
+reorder its events, though.
+<br>
+<p>Interestingly, I had just seen a similar problem to your example where
+<br>
+someone had actually inserted some tags that must go in the body, prior to
+<br>
+the official &lt;HTML&gt; start (before the HEAD section and everything).  I
+<br>
+think that the way to fix this for the SAX handler is to close the current
+<br>
+(perhaps implied) tags and start new ones.  My suggested fix is attached to
+<br>
+this email.
+<br>
+<p>After my patch, your HTML example would end up looking like this:
+<br>
+<p>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+<br>
+&lt;html&gt;&lt;head&gt;&lt;script language=&quot;JavaScript&quot;&gt;
+<br>
+&lt;!--
+<br>
+var cobrand_directory = &quot;&quot;;
+<br>
+//--&gt;
+<br>
+&lt;/script&gt;&lt;/head&gt;&lt;/html&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;&lt;title&gt;Title&lt;/title&gt;&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;p&gt;
+<br>
+This is a test
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+<p>While it would be fairly easy in this example to merge the two head
+<br>
+sections together, in the bogus web page I saw the parser was already
+<br>
+inside an implied BODY section and needed to revert to a HEAD section.
+<br>
+Something like this:
+<br>
+<p>&lt;p&gt;this is a test!
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;
+<br>
+&lt;title&gt;hi&lt;/title&gt;
+<br>
+&lt;/head&gt;
+<br>
+&lt;body&gt;
+<br>
+Wow!
+<br>
+<p>After my patch, the SAX elements open and close the HTML+BODY elements
+<br>
+around the misplaced paragraph:
+<br>
+<p>SAX.setDocumentLocator()
+<br>
+SAX.startDocument()
+<br>
+SAX.startElement(html)
+<br>
+SAX.startElement(body)
+<br>
+SAX.startElement(p)
+<br>
+SAX.characters(this is a test!
+<br>
+, 16)
+<br>
+SAX.endElement(p)
+<br>
+SAX.endElement(body)
+<br>
+SAX.endElement(html)
+<br>
+SAX.startElement(html)
+<br>
+SAX.ignorableWhitespace(
+<br>
+, 1)
+<br>
+SAX.startElement(head)
+<br>
+SAX.ignorableWhitespace(
+<br>
+, 1)
+<br>
+SAX.startElement(title)
+<br>
+SAX.characters(hi, 2)
+<br>
+SAX.endElement(title)
+<br>
+SAX.ignorableWhitespace(
+<br>
+, 1)
+<br>
+SAX.endElement(head)
+<br>
+SAX.ignorableWhitespace(
+<br>
+, 1)
+<br>
+SAX.startElement(body)
+<br>
+SAX.startElement(p)
+<br>
+SAX.characters(
+<br>
+Wow!
+<br>
+, 6)
+<br>
+SAX.endElement(p)
+<br>
+SAX.endElement(body)
+<br>
+SAX.endElement(html)
+<br>
+SAX.endDocument()
+<br>
+<p>However, strangely, the DOM version still seems to put the second HTML
+<br>
+section inside the first:
+<br>
+<p>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;<a href="http://www.w3.org/TR/REC-html40/loose.dtd">http://www.w3.org/TR/REC-html40/loose.dtd</a>&quot;&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;body&gt;&lt;p&gt;this is a test!
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;html&gt;
+<br>
+&lt;head&gt;&lt;title&gt;hi&lt;/title&gt;&lt;/head&gt;
+<br>
+&lt;body&gt;&lt;p&gt;
+<br>
+Wow!
+<br>
+&lt;/p&gt;&lt;/body&gt;
+<br>
+&lt;/html&gt;
+<br>
+&lt;/html&gt;
+<br>
+<p>I haven't tried to figure out why that is yet.
+<br>
+<p>Additionally, my patch removes &quot;hr&quot; from the list of elements that
+<br>
+&quot;form&quot; closes.  Since HR doesn't have a close element, I don't see why
+<br>
+that was there.
+<br>
+<p>..wayne..
+<br>
+<p><hr noshade>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-1194/01-autoclose.patch">Close current HTML to start a new one</a>
+</ul>
+<!-- attachment="01-autoclose.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Question%20about%20libxml...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Question%20about%20libxml...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<li><strong>Previous message:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<li><strong>In reply to:</strong> <a href="1193.html">Marc Sanfacon: "[xml] Question about libxml..."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1195.html">Bjorn Reese: "Re: [xml] Question about libxml..."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 15 2000 - 16:45:09 EST</em>
+</em>
+</small>
+</body>
+</html>

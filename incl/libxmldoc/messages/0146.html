@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: libxml release 1.7.2 (bug?)</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: libxml release 1.7.2 (bug?)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: libxml release 1.7.2 (bug?)</h1>
+<!-- received="Wed Sep 29 04:21:34 1999" -->
+<!-- isoreceived="19990929082134" -->
+<!-- sent="Wed, 29 Sep 1999 04:21:24 -0400" -->
+<!-- isosent="19990929082124" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: libxml release 1.7.2 (bug?)" -->
+<!-- id="19990929042124.B20268@w3.org" -->
+<!-- inreplyto="004e01bf09ce$643a2b70$1000000a@icteam.it" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20libxml%20release%201.7.2%20(bug?)"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Sep 29 1999 - 04:21:24 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0147.html">Andrea LUCIANO: "[xml] HP-UX 11 libxml"</a>
+<li><strong>Previous message:</strong> <a href="0145.html">Andrea LUCIANO: "[xml] libxml release 1.7.2 (bug?)"</a>
+<li><strong>In reply to:</strong> <a href="0145.html">Andrea LUCIANO: "[xml] libxml release 1.7.2 (bug?)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<li><strong>Reply:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Sep 28, 1999 at 06:27:35PM +0200, Andrea LUCIANO wrote:
+<br>
+<em>&gt; Compiling the following lines, and running the executable results in a core dump:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     int  size=0;
+</em><br>
+<em>&gt;     unsigned char *buffer=NULL;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     xmlDocDumpMemory(doc,&amp;buffer,&amp;size);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     fprintf(stderr,&quot;%s\n&quot;,buffer);
+</em><br>
+<em>&gt;     free(buffer);                        // &lt;----- a core dump!!!
+</em><br>
+<em>&gt;     fprintf(stderr,&quot;xxxxxxx\n&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In libxml version 1.2 the same lines were OK. The problem arises calling the free on &quot;buffer&quot;.
+</em><br>
+<p>&nbsp;&nbsp;Well, I cut and pasted your example in the &quot;tester.c&quot; program
+<br>
+and I didn't see the same problem happening. Use 1.7.1 or the version
+<br>
+in CVS, I applied a single line patch disabling memory debugging
+<br>
+<p>Daniel
+<br>
+<p>*** xmlmemory.h	1999/09/22 09:46:24	1.2
+<br>
+--- xmlmemory.h	1999/09/27 08:17:48	1.3
+<br>
+***************
+<br>
+*** 8,14 ****
+<br>
+&nbsp;&nbsp;#ifndef _DEBUG_MEMORY_ALLOC_
+<br>
+&nbsp;&nbsp;#define _DEBUG_MEMORY_ALLOC_
+<br>
+&nbsp;&nbsp;
+<br>
+! /* #define NO_DEBUG_MEMORY */
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#ifdef NO_DEBUG_MEMORY
+<br>
+&nbsp;&nbsp;#ifdef HAVE_MALLOC_H
+<br>
+--- 8,14 ----
+<br>
+&nbsp;&nbsp;#ifndef _DEBUG_MEMORY_ALLOC_
+<br>
+&nbsp;&nbsp;#define _DEBUG_MEMORY_ALLOC_
+<br>
+&nbsp;&nbsp;
+<br>
+! #define NO_DEBUG_MEMORY
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;#ifdef NO_DEBUG_MEMORY
+<br>
+&nbsp;&nbsp;#ifdef HAVE_MALLOC_H
+<br>
+<p><p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20libxml%20release%201.7.2%20(bug?)">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml%20release%201.7.2%20(bug?)">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20libxml%20release%201.7.2%20(bug?)">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0147.html">Andrea LUCIANO: "[xml] HP-UX 11 libxml"</a>
+<li><strong>Previous message:</strong> <a href="0145.html">Andrea LUCIANO: "[xml] libxml release 1.7.2 (bug?)"</a>
+<li><strong>In reply to:</strong> <a href="0145.html">Andrea LUCIANO: "[xml] libxml release 1.7.2 (bug?)"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<li><strong>Reply:</strong> <a href="0148.html">Andrea LUCIANO: "[xml] R: libxml release 1.7.2 (bug?)"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] CDATA sections and validation</title>
+<meta name="Author" content="Kenneth Pronovici (pronovic@skyjammer.com)">
+<meta name="Subject" content="[xml] CDATA sections and validation">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] CDATA sections and validation</h1>
+<!-- received="Mon, 16 Oct 2000 15:22:30 -0500 (CDT)" -->
+<!-- isoreceived="20001016202230" -->
+<!-- sent="Mon, 16 Oct 2000 15:22:30 -0500 (CDT)" -->
+<!-- isosent="20001016202230" -->
+<!-- name="Kenneth Pronovici" -->
+<!-- email="pronovic@skyjammer.com" -->
+<!-- subject="[xml] CDATA sections and validation" -->
+<!-- id="Pine.LNX.3.96.1001016150837.16380E-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kenneth Pronovici (<a href="mailto:pronovic@skyjammer.com?subject=Re:%20[xml]%20CDATA%20sections%20and%20validation"><em>pronovic@skyjammer.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 16:22:30 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0987.html">Daniel Veillard: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I think that this issue is probably related to a thread from earlier
+<br>
+in the month entitled &quot;Whitespace problem with external DTD validation&quot;.
+<br>
+From what I read in the mailing list archives, I had expected it to be 
+<br>
+fixed in the 2.2.5 release, but I'm still having problems.
+<br>
+<p>Suppose I am trying to build a very simple document using libxml.  The
+<br>
+DTD for this document looks like:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;!ELEMENT document (doc_pcdata, doc_cdata) &gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT doc_pcdata (#PCDATA)&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ELEMENT doc_cdata (CDATA)&gt;
+<br>
+<p>I have used the following code to build what I think is a valid document:
+<br>
+<p>&nbsp;&nbsp;&nbsp;doc = xmlNewDoc((xmlChar *)&quot;1.0&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;xmlCreateIntSubset(doc, (xmlChar *)&quot;document&quot;, NULL, (xmlChar *)&quot;ken.dtd&quot;);
+<br>
+<p>&nbsp;&nbsp;&nbsp;doc-&gt;children-&gt;next = xmlNewDocNode(doc, NULL, (xmlChar *)&quot;document&quot;, NULL);
+<br>
+&nbsp;&nbsp;&nbsp;pcdata_node = xmlNewChild(doc-&gt;children-&gt;next, NULL, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xmlChar *)&quot;doc_pcdata&quot;, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xmlChar *)&quot;one&quot;);
+<br>
+<p>&nbsp;&nbsp;&nbsp;cdata_node = xmlNewChild(doc-&gt;children-&gt;next, NULL, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xmlChar *)&quot;doc_cdata&quot;, NULL);
+<br>
+&nbsp;&nbsp;&nbsp;data_node = xmlNewCDataBlock(doc, (xmlChar *)&quot;two&quot;, strlen(&quot;two&quot;));
+<br>
+&nbsp;&nbsp;&nbsp;xmlAddChild(cdata_node, data_node);
+<br>
+<p>&nbsp;&nbsp;&nbsp;xmlDocDumpMemory(doc, &amp;xml_buf, &amp;xml_size);
+<br>
+<p>This is the string I get in xml_buf after calling xmlDocDumpMemory:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!DOCTYPE document SYSTEM &quot;ken.dtd&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;document&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;doc_pcdata&gt;one&lt;/doc_pcdata&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;doc_cdata&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;![CDATA[two]]&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/doc_cdata&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;/document&gt;
+<br>
+<p>However, xmllint does not agree that this document is valid:
+<br>
+<p>&nbsp;&nbsp;&nbsp;fntest2&gt; xmllint ken.xml --postvalid --noblanks --debug
+<br>
+&nbsp;&nbsp;&nbsp;DOCUMENT
+<br>
+&nbsp;&nbsp;&nbsp;version=1.0
+<br>
+&nbsp;&nbsp;&nbsp;URL=ken.xml
+<br>
+&nbsp;&nbsp;&nbsp;standalone=true
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DTD(document), SYSTEM ken.dtd
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT document
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT doc_pcdata
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=one
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT doc_cdata
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA_SECTION
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content=two
+<br>
+&nbsp;&nbsp;&nbsp;Element doc_cdata content doesn't follow the Dtd
+<br>
+&nbsp;&nbsp;&nbsp;Expecting (CDATA), got (CDATA)
+<br>
+&nbsp;&nbsp;&nbsp;Document ken.xml does not validate
+<br>
+&nbsp;&nbsp;&nbsp;
+<br>
+Using --valid rather than --postvalid gives similar results.
+<br>
+This sounds like the whitespace issue discussed under the other
+<br>
+thread, but I'm not positive.  Is there something else I'm missing?
+<br>
+Let me know what other information I can provide...
+<br>
+<p>Thanks...
+<br>
+<p>KEN
+<br>
+<p><pre>
+--
+Kenneth J. Pronovici &lt;<a href="mailto:pronovic@ieee.org?subject=Re:%20[xml]%20CDATA%20sections%20and%20validation">pronovic@ieee.org</a>&gt;
+Alliance of Computer Professionals, Inc. (<a href="http://www.acpros.com/">http://www.acpros.com/</a>)
+Personal Homepage: <a href="http://www.skyjammer.com/~pronovic/">http://www.skyjammer.com/~pronovic/</a>
+&quot;Hell hath no fury like the weather when I'm camping...&quot; 
+<p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20CDATA%20sections%20and%20validation">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20CDATA%20sections%20and%20validation">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0987.html">Daniel Veillard: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 16:43:34 EDT</em>
+</em>
+</small>
+</body>
+</html>

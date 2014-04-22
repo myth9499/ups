@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] validating and xmlExternalEntityLoader's argumen</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] validating and xmlExternalEntityLoader's arguments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] validating and xmlExternalEntityLoader's arguments</h1>
+<!-- received="Thu Jan  4 10:44:23 2001" -->
+<!-- isoreceived="20010104154423" -->
+<!-- sent="Thu, 4 Jan 2001 16:35:21 +0100" -->
+<!-- isosent="20010104153521" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] validating and xmlExternalEntityLoader's arguments" -->
+<!-- id="20010104163521.A1715@w3.org" -->
+<!-- inreplyto="20001204191425.M9127@bailey.dscga.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Jan 04 2001 - 10:35:21 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1316.html">Daniel Veillard: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>Previous message:</strong> <a href="1314.html">Timothee Besset: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>In reply to:</strong> <a href="1259.html">Michael Mealling: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 04, 2000 at 07:14:25PM -0500, Michael Mealling wrote:
+<br>
+<em>&gt; That's cool. I got all of this figured out but now I think
+</em><br>
+<em>&gt; there might be a bug or else a problem in the reading of the XML spec.
+</em><br>
+<em>&gt; I have a DTD that has this in it:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    &lt;!ELEMENT results (status? |
+</em><br>
+<em>&gt;                       ( service+,
+</em><br>
+<em>&gt;                         ( status  | resourcedescriptor | referral )*
+</em><br>
+<em>&gt;                    )*
+</em><br>
+<em>&gt;                   )&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and when I give it this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;!DOCTYPE cnrp PUBLIC &quot;-//IETF//DTD CNRP 1.0//EN&quot; &quot;<a href="http://www.ietf.org/cnrp.dtd">http://www.ietf.org/cnrp.dtd</a>&quot;&gt;
+</em><br>
+<em>&gt; &lt;cnrp&gt;
+</em><br>
+<em>&gt;     &lt;results&gt;
+</em><br>
+<em>&gt;         &lt;service id=&quot;service1&quot; ttl=&quot;10000&quot;&gt;
+</em><br>
+<em>&gt;             &lt;serviceuri&gt;<a href="http://cnrp.networksolutions.com</serviceuri">http://cnrp.networksolutions.com</serviceuri</a>&gt;
+</em><br>
+<em>&gt;         &lt;/service&gt;
+</em><br>
+<em>&gt;         &lt;resourcedescriptor&gt;
+</em><br>
+<em>&gt;             &lt;commonname&gt;BAILEY BEAR&lt;/commonname&gt;
+</em><br>
+<em>&gt;             &lt;id&gt;8000112&lt;/id&gt;
+</em><br>
+<em>&gt;             &lt;resourceuri&gt;<a href="http://bailey.dscga.com/</resourceuri">http://bailey.dscga.com/</resourceuri</a>&gt;
+</em><br>
+<em>&gt;             &lt;serviceref ref=&quot;service1&quot;/&gt;
+</em><br>
+<em>&gt;             &lt;description&gt;Michael and Kathy&amp;apos;s Golden Retriever&lt;/description&gt;
+</em><br>
+<em>&gt;         &lt;/resourcedescriptor&gt;
+</em><br>
+<em>&gt;     &lt;/results&gt;
+</em><br>
+<em>&gt; &lt;/cnrp&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; the parser barfs these errors:
+</em><br>
+<em>&gt; Element results content doesn't follow the Dtd
+</em><br>
+<em>&gt; Expecting (status? | (service+ , (status | resourcedescriptor | referral)*)*), 
+</em><br>
+<em>&gt; got (service resourcedescriptor )
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Based on other parsers and my reading of the XML spec, that DTD
+</em><br>
+<em>&gt; should allow that xml. Any clues as to why libxml tags that as an error?
+</em><br>
+<p>&nbsp;&nbsp;Well i had a look at this.
+<br>
+The problem is more complex than a simple libxml bug, the problem
+<br>
+is that the content model of your DTD is not deterministic.
+<br>
+<p>&nbsp;&nbsp;basically it's of the form 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(a? | b)
+<br>
+<p>The content model of this element doesn't match the a term but due to
+<br>
+the ? the first term of the or expression matches, and the b expression isn't
+<br>
+examined, a simple tree descent is not sufficient to remove the ambiguity
+<br>
+My feeling is that your DtD is slightly broken w.r.t. the XML spec,
+<br>
+check the appendix on deterministic content models:
+<br>
+&nbsp;&nbsp;<a href="http://www.w3.org/TR/REC-xml#determinism">http://www.w3.org/TR/REC-xml#determinism</a>
+<br>
+<p>I don't have an absolute fix right now for this, I need to examine the
+<br>
+issue further, one trick would be to swap the two values of the top or
+<br>
+expression of the result element DtD description in the meantime.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1316.html">Daniel Veillard: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>Previous message:</strong> <a href="1314.html">Timothee Besset: "Re: [xml] using large binary chunks / binary XML?"</a>
+<li><strong>In reply to:</strong> <a href="1259.html">Michael Mealling: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 04 2001 - 11:43:34 EST</em>
+</em>
+</small>
+</body>
+</html>

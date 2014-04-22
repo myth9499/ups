@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Still validating while using SAX Interface?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Still validating while using SAX Interface?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Still validating while using SAX Interface?</h1>
+<!-- received="Mon Oct 16 09:58:19 2000" -->
+<!-- isoreceived="20001016135819" -->
+<!-- sent="Mon, 16 Oct 2000 15:58:09 +0200" -->
+<!-- isosent="20001016135809" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Still validating while using SAX Interface?" -->
+<!-- id="20001016155809.M20166@w3.org" -->
+<!-- inreplyto="200010152239.AAA20801@pointsman.pointsman.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 09:58:09 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0982.html">Daniel Veillard: "Re: [xml] Tree in libxml vs. gdome"</a>
+<li><strong>In reply to:</strong> <a href="0977.html">rolf@pointsman.de: "Re: [xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 16, 2000 at 12:39:09AM +0200, <a href="mailto:rolf@pointsman.de?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">rolf@pointsman.de</a> wrote:
+<br>
+<em>&gt; Don't get me wrong. DOM is an easy to use way to represent XML data in
+</em><br>
+<em>&gt; memory, but have his limitations. I have to handle XML files up to
+</em><br>
+<em>&gt; 100 MByte and more (XML Productcatalogs). It isn't an option for me to
+</em><br>
+<em>&gt; donate 1 GByte of memory just to be able to read the data (libxml DOM
+</em><br>
+<em>&gt; trees are big...).
+</em><br>
+<p>&nbsp;&nbsp;Don't get me wrong, I understand your problem ...
+<br>
+<p><em>&gt; It's true, a validating SAX parser may need some variable memory, not
+</em><br>
+<em>&gt; only to store entities but of course to store the hole structure
+</em><br>
+<em>&gt; information out of the DTD. But that's typically much smaller memory
+</em><br>
+<em>&gt; requirements than that for an hole DOM tree.
+</em><br>
+<p>&nbsp;&nbsp;Right,
+<br>
+<p><em>&gt; Please could you be a bit more elaborated about what informations
+</em><br>
+<em>&gt; stored in the DOM tree are needed for validation? 
+</em><br>
+<p>&nbsp;&nbsp;Okay on the top of my head:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- for each node in context (i.e. whose endElement() has not finished)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one need to keep the list of children types (text/blanks/element names)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- keep the list of IDs declarations or references
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- attribute checks can be done directly from the startElement() callback
+<br>
+This model doesn't take into account entities, adding entities support means
+<br>
+data their data model in memory too.
+<br>
+<p>Of course there is also the DTD related informations, but I assume
+<br>
+using DOM to keep that fixed size portion should not be a problem.
+<br>
+And given the complexity of DTD parsing I assume you don't want to
+<br>
+rewrite it !
+<br>
+<p><em>&gt; valid.c). I had to realize, that it isn't a task of only one or two
+</em><br>
+<em>&gt; hours, to understand all the internal bells and whistles. Therefor I
+</em><br>
+<em>&gt; decided to ask the &quot;gurus&quot;, if it's worth a more serious attempt.
+</em><br>
+<p>Not two hours. I think implementing a SAX layer doing DTD checking
+<br>
+based on a DTD DOM and the flow of event would take me about 2 full
+<br>
+days. The problem is that:
+<br>
+&nbsp;&nbsp;&nbsp;1/ It would duplicate existing code
+<br>
+&nbsp;&nbsp;&nbsp;2/ Making it fully XML-1.0 compliant may take more time (especially
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entities support).
+<br>
+&nbsp;&nbsp;&nbsp;3/ through the existing valid.c code could be reused changing it's
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code to accept both structures seems uneasy.
+<br>
+<p>A cheaper approach which might be worth looking at is do just change
+<br>
+the endElement() existing SAX.c callback and remove the node content
+<br>
+after the validation last step. Okay strustures would be constructed
+<br>
+and destroyed on the fly leading to excessive processing but it would
+<br>
+basically do the same as a pure SAX callback approach. It might look
+<br>
+gross at a first glance but actually it's not that different from
+<br>
+rebuilding minimal informations.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Still%20validating%20while%20using%20SAX%20Interface?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0982.html">Daniel Veillard: "Re: [xml] Tree in libxml vs. gdome"</a>
+<li><strong>In reply to:</strong> <a href="0977.html">rolf@pointsman.de: "Re: [xml] Still validating while using SAX Interface?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 10:43:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Fri Oct  6 16:03:31 2000" -->
+<!-- isoreceived="20001006200331" -->
+<!-- sent="Fri, 06 Oct 2000 15:03:57 -0500" -->
+<!-- isosent="20001006200357" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="39DE302D.9040608@qeradiant.com" -->
+<!-- inreplyto="Pine.LNX.4.21.0010061225290.2075-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Fri Oct 06 2000 - 16:03:57 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0889.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+This gets complicated .. can you upload the resulting archive somewhere?
+<br>
+<p>TTimo
+<br>
+<p>Wayne Davison wrote:
+<br>
+<p><em>&gt; On Fri, 6 Oct 2000, Wayne Davison wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;&gt;  + The LIBXML_VERSION defines in win32include.h.in are duplicates of
+</em><br>
+<em>&gt;&gt;    defines in xmlversion.h, so I removed them.  This makes the file
+</em><br>
+<em>&gt;&gt;    have no @...@ expansions, so I just renamed the *.in version to be
+</em><br>
+<em>&gt;&gt;    the .h version and removed it from the configure.in file.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This change was missing from my patch.  Also, my Makefile.mingw was
+</em><br>
+<em>&gt; missing one tweak (that made the strip commands work right).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's a patch that should be applied after you applied my last patch, and
+</em><br>
+<em>&gt; after you moved the include/libxml/win32configure.h.in file to its new
+</em><br>
+<em>&gt; location -- include/win32configure.h.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ...wayne..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ------------------------------------------------------------------------
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Index: include/win32config.h
+</em><br>
+<em>&gt; @@ -4,10 +4,6 @@
+</em><br>
+<em>&gt;  #define HAVE_TIME_H
+</em><br>
+<em>&gt;  #define HAVE_FCNTL_H
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; -#define LIBXML_VERSION @LIBXML_VERSION_NUMBER@
+</em><br>
+<em>&gt; -#define LIBXML_VERSION_STRING &quot;@LIBXML_VERSION@&quot;
+</em><br>
+<em>&gt; -
+</em><br>
+<em>&gt; -
+</em><br>
+<em>&gt;  #include &lt;io.h&gt;
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  #ifdef INCLUDE_WINSOCK
+</em><br>
+<em>&gt; Index: win32/Makefile.mingw
+</em><br>
+<em>&gt; @@ -75,15 +75,15 @@
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  $(EXE1): $(OBJ1) $(LIBOBJS) $(DLL)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  	$(CC) $(CFLAGS) $&lt; -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -	strip $@.exe
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; +	strip $@
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  $(EXE2): $(OBJ2) $(LIBOBJS) $(DLL)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  	$(CC) $(CFLAGS) $&lt; -o $@ $(LDFLAGS) -l$(IMPBASE) $(LIBS)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -	strip $@.exe
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; +	strip $@
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  $(EXE3): $(OBJ3) $(LIBOBJS) $(LIB)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  	$(CC) $(CFLAGS) $&lt; -o $@ $(LDFLAGS) -l$(LIBBASE) $(LIBS)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -	strip $@.exe
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; +	strip $@
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  .c.o:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  	$(CC) $(CFLAGS) -c $&lt; -o $@	
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; oops.patch
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Content-Description:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; More changes to prerelease 2.2.5
+</em><br>
+<em>&gt; Content-Type:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; TEXT/PLAIN
+</em><br>
+<em>&gt; Content-Encoding:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; BASE64
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0889.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0888.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 06 2000 - 16:43:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

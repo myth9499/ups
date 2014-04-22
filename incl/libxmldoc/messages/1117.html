@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating a DTD from a plain text buffer?</title>
+<meta name="Author" content="Harry Blundell (harry@halcyoninc.com)">
+<meta name="Subject" content="Re: [xml] Creating a DTD from a plain text buffer?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating a DTD from a plain text buffer?</h1>
+<!-- received="Mon Oct 30 12:18:42 2000" -->
+<!-- isoreceived="20001030171842" -->
+<!-- sent="Mon, 30 Oct 2000 12:17:59 -0500 (EST)" -->
+<!-- isosent="20001030171759" -->
+<!-- name="Harry Blundell" -->
+<!-- email="harry@halcyoninc.com" -->
+<!-- subject="Re: [xml] Creating a DTD from a plain text buffer?" -->
+<!-- id="Pine.GSO.4.05.10010301208490.16262-100000@columbia" -->
+<!-- inreplyto="20001030174522.K16260@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Harry Blundell (<a href="mailto:harry@halcyoninc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?"><em>harry@halcyoninc.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 30 2000 - 12:17:59 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1116.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1115.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel,
+<br>
+<p>I hope you will include xmlIOParseDTD - now that I know I can safely set
+<br>
+ExternalID and SystemID to NULL after I call it, I am very close to being
+<br>
+able to do what I want (I just have to figure out why I can't free the
+<br>
+xmlParserInputBuffer).  I've even been able to validate the document
+<br>
+after attaching the DTD, with xmlValidateDocument.
+<br>
+<p>Let me know your final decision - when I figure out why I can't free the
+<br>
+xmlParserInputBuffer, I'll let you know.  Thanks for your help,
+<br>
+<p>Harry
+<br>
+----------------------------------------------------------------------
+<br>
+Harry Blundell       Halcyon Inc.       URL: <a href="http://www.HalcyonInc.com">http://www.HalcyonInc.com</a>
+<br>
+2300 Yonge St., Suite 1801, Box 2419, Toronto ON  M4P 1E4, Canada.
+<br>
+PHONE: 416-932-4631   FAX: 416-932-4711    EMAIL: <a href="mailto:harry@HalcyonInc.com?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">harry@HalcyonInc.com</a>
+<br>
+<p><p>On Mon, 30 Oct 2000, Daniel Veillard wrote:
+<br>
+<p><em>&gt;   Well simply that a memory buffer has:
+</em><br>
+<em>&gt;     - no ExternalID
+</em><br>
+<em>&gt;     - no SystemID
+</em><br>
+<em>&gt;  and you asked me to be able to use it without refering to a file.
+</em><br>
+<em>&gt; So it simply can't have those !
+</em><br>
+<em>&gt;  Now if you want to have them loadable dynamically save them to a file
+</em><br>
+<em>&gt; and use the existing interface. Of course xmlValidateDocument fails
+</em><br>
+<em>&gt; because you attach this DTd to the document like if it was part of
+</em><br>
+<em>&gt; it while it's not. To validate a document against a xmlDtdPtr use
+</em><br>
+<em>&gt; xmlValidateDtd() not xmlValidateDocument().
+</em><br>
+<em>&gt;   At that point I'm very tempted to simply not include xmlIOParseDTD()
+</em><br>
+<em>&gt; and ask you to save your DTd to a file. Seems to raise more problems
+</em><br>
+<em>&gt; than to fix any.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1116.html">Daniel Veillard: "Re: [xml] Bug in parser (HTML)"</a>
+<li><strong>In reply to:</strong> <a href="1115.html">Daniel Veillard: "Re: [xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 30 2000 - 12:43:34 EST</em>
+</em>
+</small>
+</body>
+</html>

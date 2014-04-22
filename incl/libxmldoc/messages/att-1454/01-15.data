@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<sresults mode="UUUUU" name=".*" curr="" exch="XXX">
+<next><![CDATA[  ]]></next>
+<ric name="LL23806ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADAX PWP]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52033ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADEXIA CWA]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52034ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADEXIA CWB]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52035ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADEXIA CWC]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52405ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADEXIA CWD]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52406ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAADEXIA CWE]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52407ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAEQUANT CWG]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52408ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAEQUANT CWH]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52409ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAFCE TELECO]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52410ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAFCE TELECO]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52411ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAFCE TELECO]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-</fid>
+<fid id="BBB">-</fid>
+</ric>
+<ric name="LL52492ZZZ">
+<fid id="ZZZZZZZ"><![CDATA[AAAAAAGEN ELECTR]]></fid>
+<fid id="SSSSSSSS">QQQ</fid>
+<fid id="OOOO">-XX</fid>
+</ric>
+<ric name="F">
+<fid id="SSSSSSSS">QQQ</fid>
+</ric>
+
+
+</sresults>

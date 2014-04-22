@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] HPUX nanohttp problem</title>
+<meta name="Author" content="mikelima (mikelima@tiscalinet.it)">
+<meta name="Subject" content="[xml] HPUX nanohttp problem">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] HPUX nanohttp problem</h1>
+<!-- received="Mon Oct  9 08:16:19 2000" -->
+<!-- isoreceived="20001009121619" -->
+<!-- sent="Mon, 9 Oct 2000 07:45:02 -0400" -->
+<!-- isosent="20001009114502" -->
+<!-- name="mikelima" -->
+<!-- email="mikelima@tiscalinet.it" -->
+<!-- subject="[xml] HPUX nanohttp problem" -->
+<!-- id="39e1af733a27613b@laguna.tiscalinet.it" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> mikelima (<a href="mailto:mikelima@tiscalinet.it?subject=Re:%20[xml]%20HPUX%20nanohttp%20problem"><em>mikelima@tiscalinet.it</em></a>)<br>
+<strong>Date:</strong> Mon Oct 09 2000 - 07:45:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0902.html">Daniel Veillard: "[xml] Post prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0900.html">Bjorn Reese: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0903.html">Bjorn Reese: "Re: [xml] HPUX nanohttp problem"</a>
+<li><strong>Maybe reply:</strong> <a href="0903.html">Bjorn Reese: "Re: [xml] HPUX nanohttp problem"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello everybody, the nanohttp subsystem is not functional as it is under 
+<br>
+hpux 11.
+<br>
+I managed to obtain a working library by applying the changed listed in the 
+<br>
+included diff output.
+<br>
+<p>The necessary change is the one at line 379;
+<br>
+HPUX defined EWOULDBLOCK; however apparently it does not use it in this case;
+<br>
+It returns instead EAGAIN. I don't know if this change can break other
+<br>
+platforms; I tested it (briefly) on hpux and linux. 
+<br>
+The change at line 649 is needed to avoid a compiler warning.
+<br>
+The rest of the changes are just due to me unable to resist to 'fix'
+<br>
+inconsistent formatting and spelling error...
+<br>
+Hope this helps.
+<br>
+<p><p>-----------------------------
+<br>
+379a380
+<br>
+<em>&gt; 
+</em><br>
+423c424
+<br>
+&lt;       if ((ctxt-&gt;last == -1) &amp;&amp; (errno != EWOULDBLOCK) &amp;&amp; (errno != EAGAIN)) {
+<br>
+<pre>
+---
+&gt;       if ((ctxt-&gt;last == -1) &amp;&amp; (errno != EWOULDBLOCK)) {
+427,428c428,429
+&lt;       tv.tv_sec = 10;
+&lt;       tv.tv_usec = 0;
+---
+&gt;       tv.tv_sec=10;
+&gt;       tv.tv_usec=0;
+432,433c433,434
+&lt;       if (select(ctxt-&gt;fd + 1, &amp;rfd, NULL, NULL, &amp;tv) &lt; 1) 
+&lt;           return(0);
+---
+&gt;       if(select(ctxt-&gt;fd+1, &amp;rfd, NULL, NULL, &amp;tv)&lt;1)
+&gt;               return(0);
+452c453
+&lt;     char *bp = buf;
+---
+&gt;     char *bp=buf;
+454,455c455,456
+&lt;     while (bp - buf &lt; 4095) {
+&lt;       if (ctxt-&gt;inrptr == ctxt-&gt;inptr) {
+---
+&gt;     while(bp - buf &lt; 4095) {
+&gt;       if(ctxt-&gt;inrptr == ctxt-&gt;inptr) {
+465c466
+&lt;       if (*bp == '\n') {
+---
+&gt;       if(*bp == '\n') {
+469c470
+&lt;       if (*bp != '\r')
+---
+&gt;       if(*bp != '\r')
+649c650
+&lt;       int len;
+---
+&gt;       unsigned int len;
+841c842
+&lt;       printf(&quot;Too many redirects, aborting ...\n&quot;);
+---
+&gt;       printf(&quot;Too many redirrects, aborting ...\n&quot;);
+------------------------
+<p>--
+TiscaliNet, libero accesso ad Internet.
+<a href="http://www.tiscalinet.it">http://www.tiscalinet.it</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20HPUX%20nanohttp%20problem">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20HPUX%20nanohttp%20problem">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0902.html">Daniel Veillard: "[xml] Post prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0900.html">Bjorn Reese: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0903.html">Bjorn Reese: "Re: [xml] HPUX nanohttp problem"</a>
+<li><strong>Maybe reply:</strong> <a href="0903.html">Bjorn Reese: "Re: [xml] HPUX nanohttp problem"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 09 2000 - 09:43:20 EDT</em>
+</em>
+</small>
+</body>
+</html>

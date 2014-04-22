@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] entity substitution</title>
+<meta name="Author" content="Joe McAlerney (joey@silicondefense.com)">
+<meta name="Subject" content="[xml] entity substitution">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] entity substitution</h1>
+<!-- received="Fri Sep 22 16:56:20 2000" -->
+<!-- isoreceived="20000922205620" -->
+<!-- sent="Fri, 22 Sep 2000 13:56:21 -0700" -->
+<!-- isosent="20000922205621" -->
+<!-- name="Joe McAlerney" -->
+<!-- email="joey@silicondefense.com" -->
+<!-- subject="[xml] entity substitution" -->
+<!-- id="39CBC775.F6ABCA4E@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Joe McAlerney (<a href="mailto:joey@silicondefense.com?subject=Re:%20[xml]%20entity%20substitution"><em>joey@silicondefense.com</em></a>)<br>
+<strong>Date:</strong> Fri Sep 22 2000 - 16:56:21 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="0795.html">Daniel Veillard: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<li><strong>Reply:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello,
+<br>
+<p>I am having trouble getting the behavior I want.  My application is
+<br>
+escaping the 5 default characters with the appropriate entity
+<br>
+references.  When I call xmlNodeSetContent I get a segmentation fault.
+<br>
+<p>Here is relevant gdb backtrace information.  Note the entity reference
+<br>
+in the content value of the xmlNodeSetContent call.
+<br>
+<p>Program received signal SIGSEGV, Segmentation fault.
+<br>
+0x40045b6f in xmlGetDocEntity (doc=0x0, name=0x83afaa0 &quot;amp&quot;) at
+<br>
+entities.c:549
+<br>
+549	    if ((doc-&gt;intSubset != NULL) &amp;&amp; (doc-&gt;intSubset-&gt;entities !=
+<br>
+NULL)) {
+<br>
+(gdb) bg
+<br>
+Undefined command: &quot;bg&quot;.  Try &quot;help&quot;.
+<br>
+(gdb) bt
+<br>
+#0  0x40045b6f in xmlGetDocEntity (doc=0x0, name=0x83afaa0 &quot;amp&quot;)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at entities.c:549
+<br>
+#1  0x4006a6b5 in xmlStringGetNodeList (doc=0x0, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value=0x83af7e0 &quot;GET /../../blah....&amp;amp;cats_and_dogs
+<br>
+HTTP/1.0..Connection: Keep-Alive..User-Agent: Mozilla/4.7 [en] (X11; U;
+<br>
+Linux 2.2.12-20 i686)..Host: 10.0.0.7..Accept: image/gif,
+<br>
+image/x-xbitmap, image/jpeg, ima&quot;...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at tree.c:723
+<br>
+#2  0x4006c843 in xmlNodeSetContent (cur=0x83af958, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content=0x83af7e0 &quot;GET /../../blah....&amp;amp;cats_and_dogs
+<br>
+HTTP/1.0..Connection: Keep-Alive..User-Agent: Mozilla/4.7 [en] (X11; U;
+<br>
+Linux 2.2.12-20 i686)..Host: 10.0.0.7..Accept: image/gif,
+<br>
+image/x-xbitmap, image/jpeg, ima&quot;...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at tree.c:2894
+<br>
+<p>I have not changed the value for substituting entities, so it's is still
+<br>
+0.  I have explicitly called xmlSubstituteEntitiesDefault(0) as a test,
+<br>
+but nothing changed.  Additionally, I have not specified entities of any
+<br>
+kind.  Why is xmlGetDocEntity being called if we are not supposed to be
+<br>
+substituting entities?
+<br>
+<p>I'm sure the problem exists in my understanding of libxml's entity
+<br>
+substitution behavior, rather than the library itself.  If anyone can
+<br>
+enlighten me, it would be most appreciated.
+<br>
+<p>Thank you,
+<br>
+<p>-Joe M.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20entity%20substitution">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<li><strong>Previous message:</strong> <a href="0795.html">Daniel Veillard: "Re: [xml] Why the strncasecmp() avoidance?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<li><strong>Reply:</strong> <a href="0797.html">Daniel Veillard: "Re: [xml] entity substitution"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Sep 22 2000 - 17:43:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,351 @@
+#include "ups.h"
+
+char chnl_name[20];
+char	syncflag[2];
+int iret = 0;
+int msgidi=0,msgido=0;
+_msgbuf *mbuf=NULL;
+_tran *tranbuf=NULL;
+long i=1L;
+
+int getservpid(void)
+{
+	printf("begin search normal serverpid\n");
+	pid_t ret = 0;
+	int shmid = 0,i=0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		printf("get serv shm id error\n");
+		return -1;
+	}
+	printf("shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		printf("shmat sreg error\n");
+		return -1;
+	}
+	/** 信号量控制 **/
+	for(i=0;i<MAXSERVREG;i++)
+	{
+		printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name))
+		{
+			sem_wait(&((sreg+i)->sem1));
+			(sreg+i)->stat[0]='L';
+			ret = (sreg+i)->servpid ;
+			sem_post(&((sreg+i)->sem1));
+			break;
+		}
+	}
+	shmdt(sreg);
+	return ret;
+}
+/** 主进程注册信号，当子进程退出时进行后续处理
+ * 防止僵尸进程
+ **/
+void child_exit(int signal)
+{
+	pid_t   pid;
+	int     stat;
+	while((pid = waitpid(-1,&stat,WNOHANG))>0)
+	{
+		printf("child %d ternimated exit stat[%d]\n",pid,stat);
+	}
+	return ;
+}
+/** 注册进程timeout函数，暂定超时60秒 
+ * 防止交易堵死 
+ * */
+void timeout(int signal)
+{
+	printf("交易超时结束\n");
+	msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
+	return ;
+}
+/** 注册程序退出函数 
+ * 释放申请的资源等信息 **/
+void do_exit(void)
+{
+	free(tranbuf);
+	free(mbuf);
+}
+int  chnlprocess(int clifd );
+int main(int argc,char *argv[])
+{
+	atexit(do_exit);
+	struct sockaddr_in serv_addr;
+	struct sockaddr_in cli_addr;
+	int sin_size = 0;
+	pid_t pid;
+	int sockfd,clifd;
+
+
+	memset(chnl_name,0,sizeof(chnl_name));
+	memset(syncflag,0,sizeof(syncflag));
+
+	/** 修改为从命令行读取 **/
+	strcpy(chnl_name,"测试渠道");
+	syncflag[0]='S';
+
+	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
+	if(mbuf == (void *)-1)
+	{
+		perror("malloc msgbuf error");
+		return -1;
+	}
+
+	tranbuf = (_tran *)malloc(sizeof(_tran));
+	if(tranbuf == (void *)-1)
+	{
+		perror("malloc msgbuf error");
+		free(mbuf);
+		return -1;
+	}
+
+	if(getmsgid(chnl_name,&msgidi,&msgido)==-1)
+	{
+		printf("get msgid error\n");
+		free(tranbuf);
+		free(mbuf);
+		return -1;
+	}
+
+	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
+	signal(SIGPIPE,SIG_IGN);
+	signal(SIGCHLD,child_exit);
+	signal(35,child_exit);
+#ifdef WIN32
+	sigset_t signal_mask;
+	sigemptyset (&signal_mask);
+	sigaddset (&signal_mask, SIGPIPE);
+	int rc = pthread_sigmask (SIG_BLOCK, &signal_mask, NULL);
+	if (rc != 0) {
+		printf("block sigpipe error/n");
+	} 
+#endif  
+	if((sockfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		perror("创建服务器套接字失败");
+		return -1;
+	}
+	printf("创建服务器套接字成功\n");
+	bzero(&serv_addr,sizeof(struct sockaddr_in));
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_port = htons(10000);
+	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if(bind(sockfd,(struct sockaddr *)(&serv_addr),sizeof(struct sockaddr))==-1)
+	{
+		perror("bind 失败");
+		return -1;
+	}
+	if(listen(sockfd,10000)==-1)
+	{
+		perror("listen 失败");
+		return -1;
+	}
+	while(1)
+	{
+		sin_size = sizeof(struct sockaddr_in);
+		if((clifd = accept(sockfd,(struct sockaddr *)(&cli_addr),&sin_size))<0)
+		{
+			/** 防止由于子进程产生信号导致主进程退出 **/
+			if(errno == EINTR)
+			{
+				continue;
+			}else
+			{
+				perror("accept 失败");
+				sleep (1);
+			}
+		}
+		/** 创建子进程用来处理交易 **/
+		pid = fork();
+		if(pid == 0)
+		{
+			close(sockfd);
+			if(chnlprocess(clifd)==0)
+			{
+				printf("渠道处理成功\n");
+			}else
+			{
+				printf("渠道处理失败\n");
+			}
+			/** 防止SIGCHLD信号丢失**/
+			kill(getppid(),35);
+			exit(0);
+		}
+		close(clifd);
+	}
+	free(tranbuf);
+	free(mbuf);
+	return 0;
+}
+int chnlprocess(int clifd)
+{
+	int ipid = 0;
+	char rcvbuf[4096];
+	char tranid[5];
+	char tranvalue[4096];
+	char errmsg[1024];
+	char rtmsg [1024];
+
+	memset(errmsg,0,sizeof(errmsg));
+	memset(rtmsg,0,sizeof(rtmsg));
+	memset(rcvbuf,0,sizeof(rcvbuf));
+
+	/** 注册超时信号 **/
+	signal(SIGALRM,timeout);
+	alarm(20);
+	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
+	{
+		perror("read error");
+		strcpy(errmsg,"read clifd error");
+		if(send(clifd,errmsg,strlen(errmsg),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		return  -1;
+	}
+	printf("rcvbuf is [%s]\n",rcvbuf);
+	memset(mbuf,0,sizeof(mbuf));
+
+	/**填充消息队列数据 **/
+	/** 利用随机数产生唯一的交易跟踪号 **/
+	srand((unsigned)time(NULL));
+	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	//sprintf(mbuf->tranbuf,"%20s|%10s|%10d",chnl_name,"IXO101",strlen(rcvbuf));
+	//
+	strcpy(mbuf->tranbuf.chnlname,chnl_name);
+	strcpy(mbuf->tranbuf.trancode,"IXO101");
+	mbuf->tranbuf.buffsize = strlen(rcvbuf);
+
+	i++;
+	if(shm_hash_insert(mbuf->innerid,rcvbuf,NULL)==-1)
+	{
+		printf("insert hash shm error\n");
+		if(send(clifd,"error",strlen("error"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		return -1;
+	}
+	printf("insert hash shm ok[%ld] size[%d]\n",mbuf->innerid,sizeof(mbuf->tranbuf));
+	iret = msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+	if(iret == -1)
+	{
+		printf("msg send error[%s]\n",strerror(errno));
+		if(send(clifd,"error",strlen("error"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		delete_shm_hash(mbuf->innerid);
+		return -1;
+	}
+	printf("msg send ok begin search normal pid[%ld]\n",mbuf->innerid);
+	/** 发送信号到核心服务 **/
+	if((ipid = getservpid())<=0)
+	{
+		printf("无可用serv\n");
+		/** 删除消息队列信息，防止堵塞 **/
+		delete_shm_hash(mbuf->innerid);
+		msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
+		if(send(clifd,"error",strlen("error"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		return -1;
+	}
+	printf("pid is [%ld]\n",ipid);
+	if(kill(ipid,SIGUSR2)==0)
+	{
+		printf("发送控制信号到核心服务成功\n");
+	}else
+	{
+		printf("发送控制信号到核心服务失败\n");
+		if(send(clifd,"error",strlen("error"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		/**还需要删除消息队列信息，防止堵塞 **/
+		msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
+		delete_shm_hash(mbuf->innerid);
+		return -1;
+	}
+	/** 取消回应看看效果 
+	iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
+	if(iret < 0)
+	{
+		printf("msg recv error[%s]\n",strerror(errno));
+		if(send(clifd,"error",strlen("error"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		delete_shm_hash(mbuf->innerid);
+		return -1;
+	}else if(memcmp(mbuf->tranbuf,"0000",4))
+	{
+		printf("主机接收处理出错\n");
+		if(send(clifd,"交易处理失败",strlen("交易处理失败"),0)==-1)
+		{
+			perror("write error");
+			printf("!!!!error clifd is [%d]\n",clifd);
+		}
+		delete_shm_hash(mbuf->innerid);
+	}else
+	{
+		printf("主机已开始接收处理\n");
+		**/
+		iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
+		if(iret < 0)
+		{
+			printf("交易处理失败\n");
+			if(send(clifd,"交易处理失败",strlen("交易处理失败"),0)==-1)
+			{
+				perror("write error");
+				printf("!!!!error clifd is [%d]\n",clifd);
+			}
+			delete_shm_hash(mbuf->innerid);
+			msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+			return -1;
+		}else
+		{
+			printf("渠道名称[%20s]交易码[%10s]返回数据长度[%10ld]\n",mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
+			if(get_shm_hash(mbuf->innerid,tranbuf)!=-1)
+			{
+				printf("innerid[%ld]\toutbuf[%s]\n",mbuf->innerid,tranbuf->outtran);
+				if(write(clifd,tranbuf->outtran,strlen(tranbuf->outtran))==-1)
+				{
+					perror("write error");
+					printf("error clifd is [%d]\n",clifd);
+			msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+					return -1;
+				}
+				memset(tranbuf,0,sizeof(_tran));
+				delete_shm_hash(mbuf->innerid);
+				printf("return ok\n");
+				close(clifd);
+			msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+				return  0;
+			}else
+			{
+				if(send(clifd,"error",strlen("error"),0)==-1)
+				{
+					perror("write error");
+					printf("!!!!error clifd is [%d]\n",clifd);
+				}
+				delete_shm_hash(mbuf->innerid);
+			msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+				return  -1;
+			}
+		}
+	//}
+}

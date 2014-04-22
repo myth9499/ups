@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] validating and xmlExternalEntityLoader's arguments</title>
+<meta name="Author" content="Michael Mealling (michael@bailey.dscga.com)">
+<meta name="Subject" content="[xml] validating and xmlExternalEntityLoader's arguments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] validating and xmlExternalEntityLoader's arguments</h1>
+<!-- received="Mon Dec  4 08:15:48 2000" -->
+<!-- isoreceived="20001204131548" -->
+<!-- sent="Sun, 3 Dec 2000 18:20:06 -0500" -->
+<!-- isosent="20001203232006" -->
+<!-- name="Michael Mealling" -->
+<!-- email="michael@bailey.dscga.com" -->
+<!-- subject="[xml] validating and xmlExternalEntityLoader's arguments" -->
+<!-- id="20001203182006.H6081@bailey.dscga.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Michael Mealling (<a href="mailto:michael@bailey.dscga.com?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments"><em>michael@bailey.dscga.com</em></a>)<br>
+<strong>Date:</strong> Sun Dec 03 2000 - 18:20:06 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>Previous message:</strong> <a href="1248.html">Rafael Peregrino: "Re: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>Reply:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+&nbsp;&nbsp;I'm building a client application that will receive XML back from
+<br>
+several different servers which may decide to put different values in
+<br>
+thier SYSTEM identifier in their DOCTYPE. After poking around
+<br>
+trying to find an example of validatinog as you parsed (i.e. 
+<br>
+xmlDoValidityCheckingDefaultValue = 1) it became obvious that 
+<br>
+default behavior was to access whatever was in the SYSTEM ID regardless
+<br>
+of what the PUBLIC ID was. So I decided to  write an ExternalEntityLoader.
+<br>
+Not finding an example of one I looked at the default one in xmlIO.c.
+<br>
+Its header looks like this:
+<br>
+<p>&nbsp;* xmlDefaultExternalEntityLoader:
+<br>
+&nbsp;* @URL:  the URL for the entity to load
+<br>
+&nbsp;* @ID:  the System ID for the entity to load
+<br>
+&nbsp;* @ctxt:  the context in which the entity is called or NULL
+<br>
+<p>Is this correct? Does the external entity loader not get the PUBLIC 
+<br>
+identifier? If so, how do I know what entity I'm being asked to resolve
+<br>
+if I don't trust the SYSTEM ID?
+<br>
+<p>-MM
+<br>
+<p><pre>
+-- 
+--------------------------------------------------------------------------------
+Michael Mealling	|      Vote Libertarian!       | www.rwhois.net/michael
+Sr. Research Engineer   |   www.ga.lp.org/gwinnett     | ICQ#:         14198821
+Network Solutions	|          www.lp.org          |  <a href="mailto:michaelm@netsol.com?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">michaelm@netsol.com</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20validating%20and%20xmlExternalEntityLoader's%20arguments">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>Previous message:</strong> <a href="1248.html">Rafael Peregrino: "Re: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<li><strong>Reply:</strong> <a href="1250.html">Daniel Veillard: "Re: [xml] validating and xmlExternalEntityLoader's arguments"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 09:44:03 EST</em>
+</em>
+</small>
+</body>
+</html>

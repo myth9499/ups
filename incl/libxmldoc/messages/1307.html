@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] trying to do partial parsing</title>
+<meta name="Author" content="James LewisMoss (jimdres@mindspring.com)">
+<meta name="Subject" content="[xml] trying to do partial parsing">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] trying to do partial parsing</h1>
+<!-- received="Wed Jan  3 22:59:57 2001" -->
+<!-- isoreceived="20010104035957" -->
+<!-- sent="03 Jan 2001 23:01:58 -0500" -->
+<!-- isosent="20010104040158" -->
+<!-- name="James LewisMoss" -->
+<!-- email="jimdres@mindspring.com" -->
+<!-- subject="[xml] trying to do partial parsing" -->
+<!-- id="hhn1d82ceh.fsf@eeyore.lewismoss.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> James LewisMoss (<a href="mailto:jimdres@mindspring.com?subject=Re:%20[xml]%20trying%20to%20do%20partial%20parsing"><em>jimdres@mindspring.com</em></a>)<br>
+<strong>Date:</strong> Wed Jan 03 2001 - 23:01:58 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1306.html">Timothee Besset: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I'm in process of being subscribed to the list, but could you please
+<br>
+reply both to me and to the list?  Thanks.
+<br>
+<p>I'm trying to grab a part of a file and parse it as an xml element.
+<br>
+(I'd kinda like to have SAX like parsing, but when I find a particular
+<br>
+start tag just say &quot;give me a tree from here to the end tag&quot; at
+<br>
+certain points in the file.)
+<br>
+<p>Anyway.  After looking through the source for a long time I've got
+<br>
+this:
+<br>
+<p>#include &lt;gnome-xml/parser.h&gt;
+<br>
+#include &lt;gnome-xml/parserInternals.h&gt;
+<br>
+#include &lt;gnome-xml/tree.h&gt;
+<br>
+#include &lt;gnome-xml/SAX.h&gt;
+<br>
+#include &lt;gnome-xml/xmlIO.h&gt;
+<br>
+<p>#include &lt;sys/types.h&gt;
+<br>
+#include &lt;sys/stat.h&gt;
+<br>
+#include &lt;fcntl.h&gt;
+<br>
+<p>#include &lt;stdio.h&gt;
+<br>
+<p>#include &lt;errno.h&gt;
+<br>
+<p>int
+<br>
+main(int argc, char** argv)
+<br>
+{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;char *filename;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserCtxtPtr ctxt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputBufferPtr buf;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int fd;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlDocPtr doc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;char inputbuf[1000];
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if(argc != 2)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%s file.xml\n&quot;, argv[0]);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(5);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;filename = argv[1];
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;fd = open(filename, O_RDONLY);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Contents of %s are:\n&quot;, filename);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;memset(inputbuf, 0, 1000);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;read(fd, inputbuf, 999);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%s\n\n&quot;, inputbuf);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;close(fd);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xmlDefaultSAXHandlerInit();
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fd = open(filename, O_RDONLY);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if(fd == -1)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Error opening %s: %s\n&quot;, filename, strerror(errno));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 2;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ctxt = xmlNewParserCtxt();
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;sax = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;userData = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;directory = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlParserInputBufferCreateFd(fd, XML_CHAR_ENCODING_NONE);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;input = xmlNewInputStream(ctxt);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (input == NULL) 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFreeParserCtxt(ctxt);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;filename = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;buf = buf;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;base = input-&gt;buf-&gt;buffer-&gt;content;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;cur = input-&gt;buf-&gt;buffer-&gt;content;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;inputPush(ctxt, input);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;instate = XML_PARSER_PROLOG;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParseMisc(ctxt);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;instate = XML_PARSER_CONTENT;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParseElement(ctxt);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;instate = XML_PARSER_EPILOG;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlParseMisc(ctxt);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if(!ctxt-&gt;wellFormed)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Document is not well formed\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Errno is: %d\n&quot;, ctxt-&gt;errNo);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;doc = ctxt-&gt;myDoc;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlDocDump(stdout, doc);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;close(fd);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;doc = xmlParseFile(filename);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Doc is:\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlDocDump(stdout, doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+}
+<br>
+<p>The read of the file works fine, and the xmlParseFile works fine, but
+<br>
+the middle part gives me nothing.
+<br>
+<p>The file I'm testing on is:
+<br>
+<p>&lt;foobar&gt;
+<br>
+&nbsp;&lt;bar/&gt;
+<br>
+&lt;/foobar&gt;
+<br>
+<p>So.  What am I missing?
+<br>
+<p>Thanks
+<br>
+Jim
+<br>
+<p><pre>
+-- 
+@James LewisMoss &lt;<a href="mailto:dres@debian.org?subject=Re:%20[xml]%20trying%20to%20do%20partial%20parsing">dres@debian.org</a>&gt;      |  Blessed Be!
+@    <a href="http://jimdres.home.mindspring.com">http://jimdres.home.mindspring.com</a> |  Linux is kewl!
+@&quot;Argue for your limitations and sure enough, they're yours.&quot; Bach
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20trying%20to%20do%20partial%20parsing">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20trying%20to%20do%20partial%20parsing">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1306.html">Timothee Besset: "Re: [xml] using large binary chunks / binary XML?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 03 2001 - 23:43:32 EST</em>
+</em>
+</small>
+</body>
+</html>

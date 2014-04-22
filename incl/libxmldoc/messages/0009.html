@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Question about xmlSetProp</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Question about xmlSetProp">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Question about xmlSetProp</h1>
+<!-- received="Sun Feb 14 13:05:58 1999" -->
+<!-- isoreceived="19990214180558" -->
+<!-- sent="Sun, 14 Feb 1999 13:05:49 -0500" -->
+<!-- isosent="19990214180549" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Question about xmlSetProp" -->
+<!-- id="19990214130549.A29337@w3.org" -->
+<!-- inreplyto="199902141758.SAA16814@c125.ryd.student.liu.se" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Feb 14 1999 - 13:05:49 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Reply:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt; &gt;   If this is really a problem, I can provide an alternate routine
+</em><br>
+<em>&gt; &gt; doing the escape for you (something like xmlSetRawProp).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Well, i'll just do it myself. But if you created such a function i
+</em><br>
+<em>&gt;  would use it.
+</em><br>
+<p>&nbsp;&nbsp;Just send me your code, I will integrate it !
+<br>
+<p><em>&gt; &gt;   You must also know that pedantic XML processors can remove extra
+</em><br>
+<em>&gt; &gt; spaces between words in an attribute value. For example
+</em><br>
+<em>&gt; &gt;  &lt;elem prop1=&quot;a       b         c&quot;/&gt;
+</em><br>
+<em>&gt; &gt; can be saved as 
+</em><br>
+<em>&gt; &gt;  &lt;elem prop1=&quot;a b c&quot;/&gt;
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  Even if libxml don't do it ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Ok. So attribute values are whitespace ignorant... Is
+</em><br>
+<em>&gt;  multiple whitespace ignored in the content too? 
+</em><br>
+<em>&gt;  (as in &lt;string&gt;a b c&lt;/string&gt; vs &lt;string&gt;a  b  c&lt;/string&gt;)
+</em><br>
+<p>&nbsp;&nbsp;No, element content is not !
+<br>
+However when elements can contain both childs and text, then you may
+<br>
+have troubles with white spaces.
+<br>
+&nbsp;&nbsp;&nbsp;&lt;string&gt;a  b  c&lt;/string&gt; will always be saved as read, but
+<br>
+&nbsp;&nbsp;&nbsp;&lt;string&gt;a  &lt;elem&gt;b&lt;/elem&gt;  c&lt;/string&gt;  may be saved differently.
+<br>
+Being able to distinguish in such elements (mixed content) whether a
+<br>
+white space is significant or not is difficult.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">Daniel.Veillard@w3.org</a> | W3C  INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, Kaffe,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Amaya.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Question%20about%20xmlSetProp">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Previous message:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>In reply to:</strong> <a href="0008.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<li><strong>Reply:</strong> <a href="0010.html">Alexander Larsson: "Re: [xml] Question about xmlSetProp"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

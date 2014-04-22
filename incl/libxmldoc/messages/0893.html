@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Fri Oct  6 17:56:45 2000" -->
+<!-- isoreceived="20001006215645" -->
+<!-- sent="Fri, 06 Oct 2000 16:57:10 -0500" -->
+<!-- isosent="20001006215710" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="39DE4AB6.9010205@qeradiant.com" -->
+<!-- inreplyto="Pine.LNX.4.21.0010061320330.6318-100000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Fri Oct 06 2000 - 17:57:10 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0892.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The project file for MSDev had to be updated with proper include paths, 
+<br>
+attaching the new one.
+<br>
+The README.MSDev I wrote can probably be removed. It only applied to 
+<br>
+transforming 2.2.4 into something that builds with MSDev. Now that it's 
+<br>
+builtin .. the only relevant information is that the config is in 
+<br>
+xmlconfig.h (heh).
+<br>
+One question though: what's the purpose of the Makefile.mygwin? The 
+<br>
+configure script works fine with cygwin already?
+<br>
+<p>TTimo
+<br>
+<p>Wayne Davison wrote:
+<br>
+<p><em>&gt; On Fri, 6 Oct 2000, Timothee Besset wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;&gt; can you upload the resulting archive somewhere?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Sure.  I'll temporarily make my patched version available using some of my
+</em><br>
+<em>&gt; ftp space at sourceforge.net:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     <a href="ftp://rbmake.sourceforge.net/pub/rbmake/wd-libxml2-2.2.5.tar.gz">ftp://rbmake.sourceforge.net/pub/rbmake/wd-libxml2-2.2.5.tar.gz</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ...wayne..
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<p><p><p><p><p>
+# Microsoft Developer Studio Project File - Name=&quot;libxml2&quot; - Package Owner=&lt;4&gt;
+<br>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+<br>
+# ** DO NOT EDIT **
+<br>
+<p># TARGTYPE &quot;Win32 (x86) Static Library&quot; 0x0104
+<br>
+<p>CFG=libxml2 - Win32 Debug
+<br>
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+<br>
+!MESSAGE use the Export Makefile command and run
+<br>
+!MESSAGE 
+<br>
+!MESSAGE NMAKE /f &quot;libxml2.mak&quot;.
+<br>
+!MESSAGE 
+<br>
+!MESSAGE You can specify a configuration when running NMAKE
+<br>
+!MESSAGE by defining the macro CFG on the command line. For example:
+<br>
+!MESSAGE 
+<br>
+!MESSAGE NMAKE /f &quot;libxml2.mak&quot; CFG=&quot;libxml2 - Win32 Debug&quot;
+<br>
+!MESSAGE 
+<br>
+!MESSAGE Possible choices for configuration are:
+<br>
+!MESSAGE 
+<br>
+!MESSAGE &quot;libxml2 - Win32 Release&quot; (based on &quot;Win32 (x86) Static Library&quot;)
+<br>
+!MESSAGE &quot;libxml2 - Win32 Debug&quot; (based on &quot;Win32 (x86) Static Library&quot;)
+<br>
+!MESSAGE 
+<br>
+<p># Begin Project
+<br>
+# PROP AllowPerConfigDependencies 0
+<br>
+# PROP Scc_ProjName &quot;&quot;
+<br>
+# PROP Scc_LocalPath &quot;&quot;
+<br>
+CPP=cl.exe
+<br>
+F90=df.exe
+<br>
+RSC=rc.exe
+<br>
+<p>!IF  &quot;$(CFG)&quot; == &quot;libxml2 - Win32 Release&quot;
+<br>
+<p># PROP BASE Use_MFC 0
+<br>
+# PROP BASE Use_Debug_Libraries 0
+<br>
+# PROP BASE Output_Dir &quot;Release&quot;
+<br>
+# PROP BASE Intermediate_Dir &quot;Release&quot;
+<br>
+# PROP BASE Target_Dir &quot;&quot;
+<br>
+# PROP Use_MFC 0
+<br>
+# PROP Use_Debug_Libraries 0
+<br>
+# PROP Output_Dir &quot;Release&quot;
+<br>
+# PROP Intermediate_Dir &quot;Release&quot;
+<br>
+# PROP Target_Dir &quot;&quot;
+<br>
+# ADD BASE F90 /include:&quot;Release/&quot;
+<br>
+# ADD F90 /include:&quot;Release/&quot;
+<br>
+# ADD BASE CPP /nologo /W3 /GX /O2 /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /c
+<br>
+# ADD CPP /nologo /W3 /GX /O2 /I &quot;..\..\include&quot; /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /c
+<br>
+# ADD BASE RSC /l 0x409 /d &quot;NDEBUG&quot;
+<br>
+# ADD RSC /l 0x409 /d &quot;NDEBUG&quot;
+<br>
+BSC32=bscmake.exe
+<br>
+# ADD BASE BSC32 /nologo
+<br>
+# ADD BSC32 /nologo
+<br>
+LIB32=link.exe -lib
+<br>
+# ADD BASE LIB32 /nologo
+<br>
+# ADD LIB32 /nologo
+<br>
+<p>!ELSEIF  &quot;$(CFG)&quot; == &quot;libxml2 - Win32 Debug&quot;
+<br>
+<p># PROP BASE Use_MFC 0
+<br>
+# PROP BASE Use_Debug_Libraries 1
+<br>
+# PROP BASE Output_Dir &quot;Debug&quot;
+<br>
+# PROP BASE Intermediate_Dir &quot;Debug&quot;
+<br>
+# PROP BASE Target_Dir &quot;&quot;
+<br>
+# PROP Use_MFC 0
+<br>
+# PROP Use_Debug_Libraries 1
+<br>
+# PROP Output_Dir &quot;Debug&quot;
+<br>
+# PROP Intermediate_Dir &quot;Debug&quot;
+<br>
+# PROP Target_Dir &quot;&quot;
+<br>
+# ADD BASE F90 /include:&quot;Debug/&quot;
+<br>
+# ADD F90 /include:&quot;Debug/&quot;
+<br>
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /GZ /c
+<br>
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I &quot;..\..\include&quot; /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /GZ /c
+<br>
+# ADD BASE RSC /l 0x409 /d &quot;_DEBUG&quot;
+<br>
+# ADD RSC /l 0x409 /d &quot;_DEBUG&quot;
+<br>
+BSC32=bscmake.exe
+<br>
+# ADD BASE BSC32 /nologo
+<br>
+# ADD BSC32 /nologo
+<br>
+LIB32=link.exe -lib
+<br>
+# ADD BASE LIB32 /nologo
+<br>
+# ADD LIB32 /nologo
+<br>
+<p>!ENDIF 
+<br>
+<p># Begin Target
+<br>
+<p># Name &quot;libxml2 - Win32 Release&quot;
+<br>
+# Name &quot;libxml2 - Win32 Debug&quot;
+<br>
+# Begin Group &quot;Source Files&quot;
+<br>
+<p># PROP Default_Filter &quot;cpp;c;cxx;rc;def;r;odl;idl;hpj;bat&quot;
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\debugXML.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\encoding.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\entities.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\error.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\HTMLparser.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\HTMLtree.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\nanoftp.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\nanohttp.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\parser.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\parserInternals.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\SAX.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\tree.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\uri.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\valid.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xlink.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xmlIO.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xmlmemory.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xpath.c
+<br>
+# End Source File
+<br>
+# End Group
+<br>
+# Begin Group &quot;Header Files&quot;
+<br>
+<p># PROP Default_Filter &quot;h;hpp;hxx;hm;inl&quot;
+<br>
+# End Group
+<br>
+# End Target
+<br>
+# End Project
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0892.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0891.html">Wayne Davison: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 06 2000 - 18:43:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

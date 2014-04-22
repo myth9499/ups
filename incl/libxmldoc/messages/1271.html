@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Action of realloc</title>
+<meta name="Author" content="Nilo S. Mismetti (nilo@mediaworks.com.br)">
+<meta name="Subject" content="Re: [xml] Action of realloc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Action of realloc</h1>
+<!-- received="Wed Dec  6 08:16:34 2000" -->
+<!-- isoreceived="20001206131634" -->
+<!-- sent="Tue, 5 Dec 2000 21:04:12 -0200" -->
+<!-- isosent="20001205230412" -->
+<!-- name="Nilo S. Mismetti" -->
+<!-- email="nilo@mediaworks.com.br" -->
+<!-- subject="Re: [xml] Action of realloc" -->
+<!-- id="00d001c05f0f$af304be0$25d3cec8@megavia" -->
+<!-- inreplyto="NEBBLDPLCMNNIBKKCGOEMEJJCAAA.david.lofquist@nwa.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Nilo S. Mismetti (<a href="mailto:nilo@mediaworks.com.br?subject=Re:%20[xml]%20Action%20of%20realloc"><em>nilo@mediaworks.com.br</em></a>)<br>
+<strong>Date:</strong> Tue Dec 05 2000 - 18:04:12 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1272.html">Daniel Veillard: "Re: [xml] Action of realloc"</a>
+<li><strong>Previous message:</strong> <a href="1270.html">Daniel Veillard: "Re: [xml] XML license"</a>
+<li><strong>In reply to:</strong> <a href="1263.html">David Lofquist: "RE: [xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1266.html">Leo Davidson: "RE: [xml] Action of realloc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Team,
+<br>
+<p>Let's end the realloc &quot;saga&quot;. P.J. Plauger at
+<br>
+<a href="http://www.dinkumware.com/htm_cl/stdlib.html#realloc">http://www.dinkumware.com/htm_cl/stdlib.html#realloc</a>
+<br>
+<p>says:
+<br>
+<p>void *realloc(void *ptr, size_t size);
+<br>
+<p>The function allocates an object of size size, possibly obtaining initial
+<br>
+stored values from the object whose address is ptr. It returns the address
+<br>
+of the new object if successful; otherwise, it returns a null pointer. You
+<br>
+can safely convert the return value to an object pointer of any type whose
+<br>
+size is not greater than size.
+<br>
+<p>If ptr is not a null pointer, it must be the address of an existing object
+<br>
+that you first allocate by calling calloc, malloc, or realloc. If the
+<br>
+existing object is not larger than the newly allocated object, realloc
+<br>
+copies the entire existing object to the initial part of the allocated
+<br>
+object. (The values stored in the remainder of the object are
+<br>
+indeterminate.) Otherwise, the function copies only the initial part of the
+<br>
+existing object that fits in the allocated object. If realloc succeeds in
+<br>
+allocating a new object, it deallocates the existing object. Otherwise, the
+<br>
+existing object is left unchanged.
+<br>
+<p>If ptr is a null pointer, the function does not store initial values in the
+<br>
+newly created object.
+<br>
+<p>Based on that, on all proper implemented C-library the way to manage a
+<br>
+failure is the way that David Lofquist:
+<br>
+<p><em>&gt; pStatus = realloc(pOld, newsize);
+</em><br>
+<em>&gt; if (pStatus == NULL) {
+</em><br>
+<em>&gt;     free(pOld);
+</em><br>
+<em>&gt;     etc...
+</em><br>
+<em>&gt; }
+</em><br>
+<p>Nilo
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Action%20of%20realloc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1272.html">Daniel Veillard: "Re: [xml] Action of realloc"</a>
+<li><strong>Previous message:</strong> <a href="1270.html">Daniel Veillard: "Re: [xml] XML license"</a>
+<li><strong>In reply to:</strong> <a href="1263.html">David Lofquist: "RE: [xml] Action of realloc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1266.html">Leo Davidson: "RE: [xml] Action of realloc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Dec 06 2000 - 09:43:48 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XML Data Typing with libxml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] XML Data Typing with libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XML Data Typing with libxml</h1>
+<!-- received="Tue Feb  6 04:14:15 2001" -->
+<!-- isoreceived="20010206091415" -->
+<!-- sent="Tue, 6 Feb 2001 10:14:09 +0100" -->
+<!-- isosent="20010206091409" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] XML Data Typing with libxml" -->
+<!-- id="20010206101409.D4641@imag.fr" -->
+<!-- inreplyto="3A7FBC85.FC7CF1AA@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20XML%20Data%20Typing%20with%20libxml"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Tue Feb 06 2001 - 04:14:09 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1422.html">Gary Pennington: "[xml] XML Data Typing with libxml"</a>
+<li><strong>In reply to:</strong> <a href="1422.html">Gary Pennington: "[xml] XML Data Typing with libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Feb 06, 2001 at 08:57:41AM +0000, Gary Pennington wrote:
+<br>
+<em>&gt; I'm using libxml to manipulate XML documents and I need to add some
+</em><br>
+<em>&gt; support for data typing and validation. Fairly simple stuff initially,
+</em><br>
+<em>&gt; e.g. attribute must be numeric, and then some more complex validations,
+</em><br>
+<em>&gt; e.g. attribute must be numeric and a minumum value of A and a maximum
+</em><br>
+<em>&gt; value of B.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; What's the best approach to take with libxml?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Options under consideration include :-
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1. Roll my own scheme with DTDs.
+</em><br>
+<p>&nbsp;&nbsp;bleech, have you looked at cost of DtD support, dead-end, don't
+<br>
+extend on it ...
+<br>
+<p><em>&gt; 2. SOX
+</em><br>
+<p>&nbsp;&nbsp;Didn't looked at it
+<br>
+<p><em>&gt; 3. XML-DATA
+</em><br>
+<p>&nbsp;&nbsp;Didn't looked at it either
+<br>
+<p><em>&gt; 4 XML Schema
+</em><br>
+<p>&nbsp;&nbsp;IMHO the best bet w.r.t. future support in libxml, though I never
+<br>
+got an answer back from 
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/messages/1346.html">http://xmlsoft.org/messages/1346.html</a>
+<br>
+<p>&nbsp;&nbsp;Too bad, I think Schemas will probably be the next piece added
+<br>
+on top of libxml, 
+<br>
+<p><em>&gt; My main criteria for selection are, simplicity and availability.
+</em><br>
+<p>&nbsp;&nbsp;Availbility sounds like 0 in the 3 cases. And I'm far more
+<br>
+enthusiast at implementing something which is a standard than 
+<br>
+a single vendor pushed proposal.
+<br>
+&nbsp;&nbsp;However XML Schemas don't sounds like the most simple piece
+<br>
+availble, one thing to look at also would be TREX proposal from
+<br>
+James Clark, though it seems to target more structure validation
+<br>
+than data typing:
+<br>
+&nbsp;&nbsp;<a href="http://www.thaiopensource.com/trex/">http://www.thaiopensource.com/trex/</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20XML%20Data%20Typing%20with%20libxml">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XML%20Data%20Typing%20with%20libxml">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XML%20Data%20Typing%20with%20libxml">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1422.html">Gary Pennington: "[xml] XML Data Typing with libxml"</a>
+<li><strong>In reply to:</strong> <a href="1422.html">Gary Pennington: "[xml] XML Data Typing with libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Feb 06 2001 - 04:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

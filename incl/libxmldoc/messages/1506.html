@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating elements with &quot;default&quot; value</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD</h1>
+<!-- received="Tue Feb 27 11:25:14 2001" -->
+<!-- isoreceived="20010227162514" -->
+<!-- sent="Tue, 27 Feb 2001 16:20:50 +0000" -->
+<!-- isosent="20010227162050" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD" -->
+<!-- id="3A9BD3E2.C0DAFEEA@uk.sun.com" -->
+<!-- inreplyto="20010226141704.G9128@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Tue Feb 27 2001 - 11:20:50 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Previous message:</strong> <a href="1505.html">Dave Cook: "[xml] How to build libxml on PC-cygwin platform"</a>
+<li><strong>In reply to:</strong> <a href="1503.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Reply:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I've done some more digging around and the problem that I have is that the
+<br>
+various data structures which are required from the DTD structure (e.g.
+<br>
+elements, attributes) are only created when the DTD is parsed. That occurs
+<br>
+when xmlValidateDocument is called, however I want to know what the valid
+<br>
+elements are without validating the document.
+<br>
+<p>A hack which appears to work is to do the following :-
+<br>
+<p>1. Create a new document.
+<br>
+2. Create a new internal subset with appropriate directions to my dtds.
+<br>
+3. Explicitly set -&gt;extSubset of the document to the return of
+<br>
+xmlParseDTD(doc-&gt;intSubset-&gt;ExternalID, doc-&gt;intSubset-&gt;SystemID)
+<br>
+<p>This causes the DTD to be parsed and all values required in the external
+<br>
+subset are created and loaded. After this I can use xmlGetDtdElementDesc (and
+<br>
+related functions) to look up definitions from the DTD.
+<br>
+<p>Should the xmlNewDTD function do this for you? I tried using this first since
+<br>
+it explicitly manipulates the external subset, however it doesn't call
+<br>
+xmlParseDTD  so it's currently useless for my purposes.
+<br>
+<p>Here's a full code snippet in case my rambling is confusing
+<br>
+<p>&nbsp;doc = xmlNewDoc(BAD_CAST &quot;1.0&quot;);
+<br>
+&nbsp;xmlCreateIntSubset(doc, BAD_CAST &quot;host_rm&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BAD_CAST &quot;-//XXX//YYY//EN&quot;,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BAD_CAST &quot;<a href="file:///tmp/rm_all.dtd">file:///tmp/rm_all.dtd</a>&quot;);
+<br>
+&nbsp;doc-&gt;extSubset = xmlParseDTD(doc-&gt;intSubset-&gt;ExternalID,
+<br>
+doc-&gt;intSubset-&gt;SystemID);
+<br>
+<p>Gary
+<br>
+<p><p>Daniel Veillard wrote:
+<br>
+<p><em>&gt; On Mon, Feb 26, 2001 at 11:40:42AM +0000, Gary Pennington wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I have a problem which I'm not sure about how to solve most efficiently
+</em><br>
+<em>&gt; &gt; using libxml, so any ideas/pointers would be appreciated.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I am writing a library which will create xml elements for insertion into
+</em><br>
+<em>&gt; &gt; a document (which is also created at runtime) which will then be
+</em><br>
+<em>&gt; &gt; validated. A lot of my elements carry default or fixed attributes and
+</em><br>
+<em>&gt; &gt; I'd like to make the API for creating these elements as simple as
+</em><br>
+<em>&gt; &gt; possible. Thus, when a user calls a function to create an element, I'd
+</em><br>
+<em>&gt; &gt; like that element to be populated with all the fixed and default
+</em><br>
+<em>&gt; &gt; attribute values (which may be retrieved from the DTD).
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; The problem I have is how to extract all this information from the
+</em><br>
+<em>&gt; &gt; DTD and use it when new elements are created? I've tried to create a doc
+</em><br>
+<em>&gt; &gt; and associate a DTD with the doc (using xmlCreateIntSubset) which works
+</em><br>
+<em>&gt; &gt; fine from a validation point of view. However, any elements that are
+</em><br>
+<em>&gt; &gt; created are not populated with values from the DTD, which defeats the
+</em><br>
+<em>&gt; &gt; purpose of what I'm trying to achieve.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Anybody got any suggestions?
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Gary
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; PS I tried investigating the xmlGetDtdElementDesc function but could
+</em><br>
+<em>&gt; &gt; never get a definition for my elements (only a NULL pointer).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Hum, that's strange because that's what the validation process uses
+</em><br>
+<em>&gt; Basically this is the function you need to call, you will get the
+</em><br>
+<em>&gt; XML Element declaration element associated to the name, then there
+</em><br>
+<em>&gt; is an attribute declaration list that you need to follow to find
+</em><br>
+<em>&gt; all the associated attribute as defined in the DTD, then add the ones
+</em><br>
+<em>&gt; which are defaulted or fixed.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20elements%20with%20&quot;default&quot;%20values%20supplied%20by%20a%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Previous message:</strong> <a href="1505.html">Dave Cook: "[xml] How to build libxml on PC-cygwin platform"</a>
+<li><strong>In reply to:</strong> <a href="1503.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<li><strong>Reply:</strong> <a href="1507.html">Daniel Veillard: "Re: [xml] Creating elements with &quot;default&quot; values supplied by a DTD"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Feb 27 2001 - 12:43:32 EST</em>
+</em>
+</small>
+</body>
+</html>

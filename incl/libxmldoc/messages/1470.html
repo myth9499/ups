@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Link errors in pc-cgwin build.</title>
+<meta name="Author" content="Charlie Bozeman (cbozeman@HiWAAY.net)">
+<meta name="Subject" content="Re: [xml] Link errors in pc-cgwin build.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Link errors in pc-cgwin build.</h1>
+<!-- received="Mon Feb 19 13:48:51 2001" -->
+<!-- isoreceived="20010219184851" -->
+<!-- sent="Mon, 19 Feb 2001 12:48:47 -0600" -->
+<!-- isosent="20010219184847" -->
+<!-- name="Charlie Bozeman" -->
+<!-- email="cbozeman@HiWAAY.net" -->
+<!-- subject="Re: [xml] Link errors in pc-cgwin build." -->
+<!-- id="3A916A8F.E705B280@HiWAAY.net" -->
+<!-- inreplyto="3A915786.C9A8306E@cbl.umces.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Charlie Bozeman (<a href="mailto:cbozeman@HiWAAY.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build."><em>cbozeman@HiWAAY.net</em></a>)<br>
+<strong>Date:</strong> Mon Feb 19 2001 - 13:48:47 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1469.html">Tom Maxwell: "[xml] Link errors in pc-cgwin build."</a>
+<li><strong>In reply to:</strong> <a href="1469.html">Tom Maxwell: "[xml] Link errors in pc-cgwin build."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Tom Maxwell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;  I am attempting to build libxml2-2.3.1 under Win98 in a cgwin bash
+</em><br>
+<em>&gt; shell.  I executed:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ./configure --with-iconv=no --with-gnu-ld=yes  --enable-shared=no
+</em><br>
+try:
+<br>
+./configure --without-iconv --with-gnu-ld --disable-shared
+<br>
+<em>&gt; make
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; At the link stage I get a lot of &quot;undefined references&quot; (shown below).
+</em><br>
+<em>&gt; These errors occurred for either choice of the --with-gnu-ld and
+</em><br>
+<em>&gt; --enable-shared options.  Any suggestions?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; gcc -DHAVE_CONFIG_H -I. -I. -I. -I./include -I./include -g -O2 -c
+</em><br>
+<em>&gt; nanoftp.c -o nanoftp.o
+</em><br>
+<em>&gt; echo timestamp &gt; nanoftp.lo
+</em><br>
+<em>&gt; /bin/sh ./libtool --mode=link gcc  -g -O2  -o libxml2.la -rpath
+</em><br>
+<em>&gt; /usr/local/lib -version-info 5:1:3 SAX.lo entities.lo encoding.lo
+</em><br>
+<em>&gt; error.lo parserInternals.lo parser.lo tree.lo hash.lo xmlIO.lo
+</em><br>
+<em>&gt; xmlmemory.lo uri.lo valid.lo xlink.lo HTMLparser.lo HTMLtree.lo
+</em><br>
+<em>&gt; debugXML.lo xpath.lo xpointer.lo xinclude.lo nanohttp.lo nanoftp.lo -lz
+</em><br>
+<em>&gt; libtool: link: warning: undefined symbols not allowed in i586-pc-cygwin
+</em><br>
+<em>&gt; shared libraries
+</em><br>
+<em>&gt; mkdir .libs
+</em><br>
+<em>&gt; ar cru .libs/libxml2.a  SAX.o entities.o encoding.o error.o
+</em><br>
+<em>&gt; parserInternals.o parser.o tree.o hash.o xmlIO.o xmlmemory.o uri.o
+</em><br>
+<em>&gt; valid.o xlink.o HTMLparser.o HTMLtree.o debugXML.o xpath.o xpointer.o
+</em><br>
+<em>&gt; xinclude.o nanohttp.o nanoftp.o
+</em><br>
+<em>&gt; ranlib .libs/libxml2.a
+</em><br>
+<em>&gt; creating libxml2.la
+</em><br>
+<em>&gt; (cd .libs &amp;&amp; rm -f libxml2.la &amp;&amp; ln -s ../libxml2.la libxml2.la)
+</em><br>
+<em>&gt; gcc -DHAVE_CONFIG_H -I. -I. -I. -I./include -I./include       -g -O2 -c
+</em><br>
+<em>&gt; xmllint.c
+</em><br>
+<em>&gt; /bin/sh ./libtool --mode=link gcc  -g -O2  -o xmllint  xmllint.o
+</em><br>
+<em>&gt; -lreadline -lhistory -lncurses ./libxml2.la -lz
+</em><br>
+<em>&gt; gcc -g -O2 -o xmllint xmllint.o -lreadline -lhistory -lncurses
+</em><br>
+<em>&gt; ./.libs/libxml2.a -lz -lz
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x59): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlMalloc'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x71): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlGenericError'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x7e): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlGenericErrorContext'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x17e): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlFree'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x195): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlFree'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x1b2): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlFree'
+</em><br>
+<em>&gt; ./.libs/libxml2.a(tree.o)(.text+0x231): undefined reference to
+</em><br>
+<em>&gt; `_imp__xmlMalloc'
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; .
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Thomas P Maxwell, Ph.D.          Spatial Systems Research
+</em><br>
+<em>&gt; University of Maryland Institute for Ecological Economics
+</em><br>
+<em>&gt; voice: 410-326-7388                     FAX: 410-326-7354
+</em><br>
+<em>&gt; URL:                <a href="http://iee.umces.edu/Tom/Maxwell.html">http://iee.umces.edu/Tom/Maxwell.html</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Link%20errors%20in%20pc-cgwin%20build.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1469.html">Tom Maxwell: "[xml] Link errors in pc-cgwin build."</a>
+<li><strong>In reply to:</strong> <a href="1469.html">Tom Maxwell: "[xml] Link errors in pc-cgwin build."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 19 2001 - 14:43:53 EST</em>
+</em>
+</small>
+</body>
+</html>

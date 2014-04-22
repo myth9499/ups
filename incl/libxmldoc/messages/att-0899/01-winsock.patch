@@ -1,0 +1,137 @@
+Index: nanohttp.c
+@@ -104,6 +104,20 @@
+ static char *proxy = NULL;	/* the proxy name if any */
+ static int proxyPort;	/* the proxy port if any */
+ 
++#ifdef _WINSOCKAPI_
++
++WSADATA wsaData;
++#define socket_errno WSAGetLastError()
++
++#else
++
++#define socket_errno errno
++#define closesocket(s) close(s)
++#define recv(s,b,l,f) read(s,b,l)
++#define send(s,b,l,f) write(s,b,l)
++
++#endif
++
+ /**
+  * xmlNanoHTTPInit:
+  *
+@@ -118,6 +132,11 @@
+     if (initialized)
+ 	return;
+ 
++#ifdef _WINSOCKAPI_
++    if (WSAStartup(0x0101, &wsaData) != 0)
++	WSACleanup();
++#endif
++
+     if (proxy == NULL) {
+ 	proxyPort = 80;
+ 	env = getenv("no_proxy");
+@@ -149,6 +168,9 @@
+     if (proxy != NULL)
+ 	xmlFree(proxy);
+     initialized = 0;
++#ifdef _WINSOCKAPI_
++    WSACleanup();
++#endif
+     return;
+ }
+ 
+@@ -344,7 +366,7 @@
+     if (ctxt->contentType != NULL) xmlFree(ctxt->contentType);
+     if (ctxt->location != NULL) xmlFree(ctxt->location);
+     ctxt->state = XML_NANO_HTTP_NONE;
+-    if (ctxt->fd >= 0) close(ctxt->fd);
++    if (ctxt->fd >= 0) closesocket(ctxt->fd);
+     ctxt->fd = -1;
+     xmlFree(ctxt);
+ }
+@@ -359,7 +381,7 @@
+ static void
+ xmlNanoHTTPSend(xmlNanoHTTPCtxtPtr ctxt) {
+     if (ctxt->state & XML_NANO_HTTP_WRITE)
+-	ctxt->last = write(ctxt->fd, ctxt->outptr, strlen(ctxt->outptr));
++	ctxt->last = send(ctxt->fd, ctxt->outptr, strlen(ctxt->outptr), 0);
+ }
+ 
+ /**
+@@ -412,7 +434,7 @@
+             ctxt->content = ctxt->in + d_content;
+             ctxt->inrptr = ctxt->in + d_inrptr;
+ 	}
+-	ctxt->last = read(ctxt->fd, ctxt->inptr, XML_NANO_HTTP_CHUNK);
++	ctxt->last = recv(ctxt->fd, ctxt->inptr, XML_NANO_HTTP_CHUNK, 0);
+ 	if (ctxt->last > 0) {
+ 	    ctxt->inptr += ctxt->last;
+ 	    return(ctxt->last);
+@@ -421,7 +443,7 @@
+ 	    return(0);
+ 	}
+ #ifdef EWOULDBLOCK
+-	if ((ctxt->last == -1) && (errno != EWOULDBLOCK)) {
++	if ((ctxt->last == -1) && (socket_errno != EWOULDBLOCK)) {
+ 	    return(0);
+ 	}
+ #endif
+@@ -576,9 +598,6 @@
+     
+ #ifdef _WINSOCKAPI_
+     {
+-	long levents = FD_READ | FD_WRITE | FD_ACCEPT |
+-		       FD_CONNECT | FD_CLOSE ;
+-	int rv = 0 ;
+ 	u_long one = 1;
+ 
+ 	status = ioctlsocket(s, FIONBIO, &one) == SOCKET_ERROR ? -1 : 0;
+@@ -604,7 +623,7 @@
+ #ifdef DEBUG_HTTP
+ 	perror("nonblocking");
+ #endif
+-	close(s);
++	closesocket(s);
+ 	return(-1);
+     }
+ #endif /* !VMS */
+@@ -616,9 +635,9 @@
+     sin.sin_port   = htons(port);
+     
+     if((connect(s, (struct sockaddr *)&sin, sizeof(sin))==-1) &&
+-       (errno != EINPROGRESS)) {
++       (socket_errno != EINPROGRESS) && (socket_errno != EWOULDBLOCK)) {
+ 	perror("connect");
+-	close(s);
++	closesocket(s);
+ 	return(-1);
+     }	
+     
+@@ -632,14 +651,14 @@
+     {
+ 	case 0:
+ 	    /* Time out */
+-	    close(s);
++	    closesocket(s);
+ 	    return(-1);
+ 	case -1:
+ 	    /* Ermm.. ?? */
+ #ifdef DEBUG_HTTP
+ 	    perror("select");
+ #endif
+-	    close(s);
++	    closesocket(s);
+ 	    return(-1);
+     }
+ 
+@@ -655,7 +674,7 @@
+ 	    return (-1);
+ 	}
+ 	if ( status ) {
+-	    close (s);
++	    closesocket(s);
+ 	    errno = status;
+ 	    return (-1);
+ 	}

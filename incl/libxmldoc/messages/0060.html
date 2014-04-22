@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] SAX and userData</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] SAX and userData">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] SAX and userData</h1>
+<!-- received="Fri Jun  4 05:42:13 1999" -->
+<!-- isoreceived="19990604094213" -->
+<!-- sent="Fri, 4 Jun 1999 05:42:05 -0400" -->
+<!-- isosent="19990604094205" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] SAX and userData" -->
+<!-- id="19990604054205.A13824@w3.org" -->
+<!-- inreplyto="y6ybtewlqqv.fsf@gallus.daimi.au.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX%20and%20userData"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jun 04 1999 - 05:42:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<li><strong>Previous message:</strong> <a href="0059.html">Kristian Hogsberg Kristensen: "[xml] SAX and userData"</a>
+<li><strong>In reply to:</strong> <a href="0059.html">Kristian Hogsberg Kristensen: "[xml] SAX and userData"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Kristian,
+<br>
+<p><em>&gt; I've been reading through the sources for gnome-xml the last few days,
+</em><br>
+<em>&gt; and I've got a couple of questions:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When using SAX shouldn't you be able to specify the userData that is
+</em><br>
+<em>&gt; always passed as first argument to the handlers?  As it is,
+</em><br>
+<em>&gt; ctxt-&gt;userData is just cleared when the SAX interface is used, whereas
+</em><br>
+<em>&gt; the default SAX handler uses this to get at the xmlParserCtxt.  If you
+</em><br>
+<em>&gt; were to do anything serious [ie. other than 'printf(&quot;startTag: %s\n&quot;,
+</em><br>
+<em>&gt; ...)'] _a_n_d threadsafe you would need this.  It's a fairly
+</em><br>
+<em>&gt; simple extension, something like
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     xmlSAXParseMemory(xmlSAXHandlerPtr sax, void *userData,
+</em><br>
+<em>&gt;                       char *buffer, int size, int recovery) {
+</em><br>
+<em>&gt;         [...]
+</em><br>
+<em>&gt;         if (sax != NULL) {
+</em><br>
+<em>&gt;             ctxt-&gt;sax = sax;
+</em><br>
+<em>&gt;             ctxt-&gt;userData = userData;
+</em><br>
+<em>&gt;         }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; and similar for the rest of xmlSAXParse*.
+</em><br>
+<p>&nbsp;&nbsp;Yes of course you're right. The point is that modifying the interfaces
+<br>
+would break binary compatibility. I'm in the phase of designing new, more
+<br>
+generic, parser interfaces, and then userData will be added.
+<br>
+&nbsp;&nbsp;I agree that currently it makes using SAX nearly impossible. On the
+<br>
+other hand, I hope to have cleared all other place in the code which
+<br>
+were breaking reentrancy.
+<br>
+<p><em>&gt; Another thing: since this is an XML parser for Gnome, how come it is
+</em><br>
+<em>&gt; kept independent of glib?  (I can see from the ChangeLog that snprintf
+</em><br>
+<em>&gt; was preferred over g_snprintf).  Surely glib would save some lines of
+</em><br>
+<em>&gt; code and if GHash was used instead of xmlElementTable and others maybe
+</em><br>
+<em>&gt; a speedup could be expected?
+</em><br>
+<p>&nbsp;&nbsp;Well, the XML library is used outside of Gnome too. I really want to keep
+<br>
+libxml compilable without Gnome or even glib installed. Now, reusing glib
+<br>
+when it's available would make sense though, but I'm afraid that maintaining
+<br>
+detection code and the dual interfaces would be a pain, and maybe the gain
+<br>
+is not worth it.
+<br>
+<p>&nbsp;&nbsp;&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX%20and%20userData">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20SAX%20and%20userData">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20SAX%20and%20userData">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0061.html">Havoc Pennington: "[xml] streaming output"</a>
+<li><strong>Previous message:</strong> <a href="0059.html">Kristian Hogsberg Kristensen: "[xml] SAX and userData"</a>
+<li><strong>In reply to:</strong> <a href="0059.html">Kristian Hogsberg Kristensen: "[xml] SAX and userData"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

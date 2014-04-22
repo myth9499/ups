@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Progressive parsing</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Progressive parsing">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Progressive parsing</h1>
+<!-- received="Mon Jul 26 11:49:00 1999" -->
+<!-- isoreceived="19990726154900" -->
+<!-- sent="Mon, 26 Jul 1999 11:48:54 -0400" -->
+<!-- isosent="19990726154854" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Progressive parsing" -->
+<!-- id="19990726114854.E14393@w3.org" -->
+<!-- inreplyto="19990723200056.J22818@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Progressive%20parsing"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Jul 26 1999 - 11:48:54 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0087.html">915602@candseek.com: "[xml] JOBOP Project Delivery Manager"</a>
+<li><strong>Previous message:</strong> <a href="0085.html">Daniel Veillard: "[xml] Re: gnome-xml, solaris 2.7"</a>
+<li><strong>In reply to:</strong> <a href="0084.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Jul 23, 1999 at 08:00:56PM -0400, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Hi Michael,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; Does libxml provide any support for progressive parsing, or will it in the
+</em><br>
+<em>&gt; &gt; near future? I believe this issue has arisen before, but I am unsure of
+</em><br>
+<em>&gt; &gt; its current status. What I am looking for is the capability to stream in
+</em><br>
+<em>&gt; &gt; XML from a socket or other &quot;slow&quot; medium, hand each chunk to libxml as
+</em><br>
+<em>&gt; &gt; they come in, and receive SAX callbacks as the data is parsed. Currently
+</em><br>
+<em>&gt; &gt; the entrypoints appear to require an entire document to parse at once, and
+</em><br>
+<em>&gt; &gt; the only C or C++ library I can find with this kind of functionality is
+</em><br>
+<em>&gt; &gt; expat, which is awkward for other reasons. I'm assuming others would also
+</em><br>
+<em>&gt; &gt; desire such a feature, would it be unwise to begin using libxml on the
+</em><br>
+<em>&gt; &gt; assumption of progressive parsing being implemented over the next few
+</em><br>
+<em>&gt; &gt; months?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Yes, that's definitely in my TODO list, but it has been there for some
+</em><br>
+<em>&gt; time now &lt;grin/&gt;
+</em><br>
+<em>&gt;   I cannot promises any hard deadline on libxml coding unfortunately,
+</em><br>
+<em>&gt; but i definitely support it. Switching to progressive parsing need a bit
+</em><br>
+<em>&gt; of rework of the parser internals (to move some state from the call stack to
+</em><br>
+<em>&gt; the parser context), it's definitely in scope and I already worked toward 
+</em><br>
+<em>&gt; this in the past.
+</em><br>
+<p>&nbsp;&nbsp;Ok, I spent some time this w.e. on this issue, and committed a version
+<br>
+of libxml using progressive parsing, it's currently on the W3C cvs base
+<br>
+at
+<br>
+&nbsp;&nbsp;<a href="http://dev.w3.org/cgi-bin/cvsweb/XML/">http://dev.w3.org/cgi-bin/cvsweb/XML/</a>
+<br>
+<p>To get it:
+<br>
+<p>&nbsp;&nbsp;CVSROOT=:pserver:<a href="mailto:anonymous@dev.w3.org?subject=Re:%20[xml]%20Progressive%20parsing">anonymous@dev.w3.org</a>:/sources/public
+<br>
+&nbsp;&nbsp;export CVSROOT
+<br>
+&nbsp;&nbsp;cvs login
+<br>
+&nbsp;&nbsp;passwd: anonymous
+<br>
+&nbsp;&nbsp;cvs -z3 get XML
+<br>
+<p>I will commit it to the gnome CVS as soon as I will have a bit more
+<br>
+of testing on it.
+<br>
+&nbsp;Note that now a piece of text may generate multiple SAX.character()
+<br>
+callbacks, it's inherent to having a progressive parser ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Progressive%20parsing">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Progressive%20parsing">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Progressive%20parsing">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0087.html">915602@candseek.com: "[xml] JOBOP Project Delivery Manager"</a>
+<li><strong>Previous message:</strong> <a href="0085.html">Daniel Veillard: "[xml] Re: gnome-xml, solaris 2.7"</a>
+<li><strong>In reply to:</strong> <a href="0084.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:40 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: update of the XML CVS code</title>
+<meta name="Author" content="Miguel de Icaza (miguel@gnu.org)">
+<meta name="Subject" content="[xml] Re: update of the XML CVS code">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: update of the XML CVS code</h1>
+<!-- received="Tue Jun 22 14:34:14 1999" -->
+<!-- isoreceived="19990622183414" -->
+<!-- sent="Tue, 22 Jun 1999 08:07:43 -0500" -->
+<!-- isosent="19990622130743" -->
+<!-- name="Miguel de Icaza" -->
+<!-- email="miguel@gnu.org" -->
+<!-- subject="[xml] Re: update of the XML CVS code" -->
+<!-- id="199906221307.IAA10131@erandi.nuclecu.unam.mx" -->
+<!-- inreplyto="19990622025417.B6903@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Miguel de Icaza (<a href="mailto:miguel@gnu.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code"><em>miguel@gnu.org</em></a>)<br>
+<strong>Date:</strong> Tue Jun 22 1999 - 09:07:43 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Previous message:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>In reply to:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0076.html">Elliot Lee: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0077.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+<em>&gt;   Released Gnumeric an GnoRPM are linked against libxml.so.0 which
+</em><br>
+<em>&gt; have the old behaviour. The new semantic is present only in libxml.so.1
+</em><br>
+<em>&gt; wich won't be used unless you recompile the application, right ?
+</em><br>
+<p>Yes.  
+<br>
+<p>Now, the big problem we are facing here is that package managers like
+<br>
+RPM are not designed to have you keep multiple versions of the same
+<br>
+library around.  You can not have libxml-0.1 and libxml-0.2 installed
+<br>
+on the system unless you resort to some spec hacking and magic (like
+<br>
+gtk10, gtk rpms).
+<br>
+<p>By making this sort of incompatible changes we are going back to the
+<br>
+very bad situation we had in october last year, where a change in one
+<br>
+library required upgraded everything.  
+<br>
+<p>I want to avoid going that way again.  The chagne is very small
+<br>
+Daniel, and it would give lots of benefit from a deployment of GNOME
+<br>
+point of view.
+<br>
+<p>We have to be serious about being binary compatibility for attracting
+<br>
+developers to GNOME.  If we go back to the we-change-the-api-weekly
+<br>
+mode we are going to loose again.
+<br>
+<p><em>&gt;   I really don't want people to wonder whether their code is reentrant or not
+</em><br>
+<em>&gt; it has to be, the error was in releasing an initial version which was not.
+</em><br>
+<em>&gt; I plead guilty for this one, but would rather avoid having to maintain
+</em><br>
+<em>&gt; both APIs forever, the major revision change in the libxml is the opportunity
+</em><br>
+<em>&gt; to change the API in a sane way IMHO,
+</em><br>
+<p>The cost we will end up paying for this is high Daniel.  
+<br>
+<p>The KDE team is currently in the position we were on October: too many
+<br>
+dependencies on specific library versions which has even stopped them
+<br>
+from releasing KOffice.  Please, do not make GNOME go in this
+<br>
+direction just because you dont want to maintain these four lines of
+<br>
+code:
+<br>
+<p><em>&gt;      CHAR *xmlEncodeEntities_r (xmlDocPtr doc, const CHAR *input)
+</em><br>
+<em>&gt;      {
+</em><br>
+<em>&gt;          return g_strdup (xmlEncodeEntities (doc, input));
+</em><br>
+<em>&gt;      }
+</em><br>
+<p><p>Miguel.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20update%20of%20the%20XML%20CVS%20code">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Previous message:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>In reply to:</strong> <a href="0073.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0075.html">Matt Wilson: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0076.html">Elliot Lee: "[xml] Re: update of the XML CVS code"</a>
+<li><strong>Reply:</strong> <a href="0077.html">Daniel Veillard: "[xml] Re: update of the XML CVS code"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

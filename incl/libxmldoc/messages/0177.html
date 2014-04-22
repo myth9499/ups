@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another buglet in HTML parser</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="Re: [xml] Another buglet in HTML parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another buglet in HTML parser</h1>
+<!-- received="Mon Oct 11 09:00:43 1999" -->
+<!-- isoreceived="19991011130043" -->
+<!-- sent="11 Oct 1999 15:00:38 +0200" -->
+<!-- isosent="19991011130038" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="Re: [xml] Another buglet in HTML parser" -->
+<!-- id="y6ybta6hx1l.fsf@bozeman.daimi.au.dk" -->
+<!-- inreplyto="Mon, 11 Oct 1999 10:19:59 +0200&quot;" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Mon Oct 11 1999 - 09:00:38 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">Daniel.Veillard@w3.org</a>&gt; writes:
+<br>
+<p><em>&gt;   Hi Kristian,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; Here's some more feedback on the HTML parser: when parsing the
+</em><br>
+<em>&gt; &gt; following
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;     &lt;html&gt;
+</em><br>
+<em>&gt; &gt;     
+</em><br>
+<em>&gt; &gt;     &lt;body&gt;
+</em><br>
+<em>&gt; &gt;     &lt;ol&gt;
+</em><br>
+<em>&gt; &gt;     &lt;li&gt; hello
+</em><br>
+<em>&gt; &gt;     &lt;/ol&gt;&lt;/body&gt;
+</em><br>
+<em>&gt; &gt;     
+</em><br>
+<em>&gt; &gt;     &lt;/html&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Hum, strange, I'm unable to reproduce this problem.
+</em><br>
+<p>Did you try it on *exactly* the above example? In particular the error
+<br>
+only surfaces, when there's no whitespace between &lt;/ol&gt; and &lt;/body&gt;.
+<br>
+I just checked out the W3C cvs version and it still has the bug.
+<br>
+<p>[...]
+<br>
+<p><em>&gt;   IMHO, the current code is right, the test for the end of this
+</em><br>
+<em>&gt; element parsing is (rightly)  done after the element content has
+</em><br>
+<em>&gt; been parsed when one reenter the loop. This should not change anything.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; In the example above, parsing the li element autocloses the ol
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Huh ? It should not ... Did you change something which makes LI
+</em><br>
+<em>&gt; autoclose OL, if yes that's an error, and this explains why the parser
+</em><br>
+<em>&gt; later on complains about an OL not being open ...
+</em><br>
+<p>Okay, I probably wasn't very clear there.  What I meant was that, when
+<br>
+seeing the &quot;&lt;&quot; of &lt;li&gt; in htmlParseContent, htmlParseElement is
+<br>
+called.  This reads data up to and including the &quot;&gt;&quot; of &lt;/ol&gt; and when
+<br>
+returning from the call the li and ol elements have been closed, and
+<br>
+htmlParseContent should just return then.  However, the test for
+<br>
+wether current element has been autoclosed is never reached, since the
+<br>
+parser is now looking at &quot;&lt;/&quot; from &lt;/body&gt;, which terminates the loop.
+<br>
+When the loop terminates htmlParseEndTag is called, which tries to
+<br>
+parse &lt;/body&gt; as the closing tag for &lt;ol&gt;
+<br>
+<p>regards,
+<br>
+Kristian
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Another%20buglet%20in%20HTML%20parser">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Previous message:</strong> <a href="0176.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<li><strong>Reply:</strong> <a href="0178.html">Daniel Veillard: "Re: [xml] Another buglet in HTML parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

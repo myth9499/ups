@@ -1,0 +1,2273 @@
+[06:30]  - raph [~raph@raph.dial.idiom.com] has joined #gnome
+[06:30]  - mode/#gnome [+o raph ] by MWeber
+[06:30] <DV> Hi raph
+[06:30] <_vicious_> sop: that's too evil
+[06:30] <raph> hi DV
+[06:30]  - Sopwith [sopwith@mh69.mh.cuc.edu] has quit IRC (Homework is best done without an IRC window.)
+[06:30] <raph> fuck!
+[06:31] <raph> Sopwith is _the_ person I wanted to talk to
+[06:31] <DV> Seems that Eliott doesn't want to be involved in DOM/Corba discussions
+[06:31] <raph> nobody else on the planet understands ORBit
+[06:31] <_vicious_> raph: and sop understands it????
+[06:31] <DV> Well, seems that migues and a couple of others have a clue ...
+[06:31] <raph> vic: I didn't say that
+[06:32] <raph> DV: anyway, I've been reading through the appropriate parts of the CORBA spec
+[06:32] <raph> and I'm coming to an understanding of how to do this
+[06:32] <raph> I think we use the POA implementation in ORBit, which is fairly complete and standards-compliant,
+[06:32] <raph> but implement a totally custom servant
+[06:32] <DV> Tend to agree 
+[06:33] <raph> so we need to instantiate a POA for Gdome objects,
+[06:33] <DV> The point is reference counting
+[06:33] <raph> because the policies will be different than the default
+[06:33] <raph> refcounting?
+[06:33] <DV> I guess that's the hardest part : when to deallocate the XML tree !
+[06:34] <DV> POA: yes 
+[06:34] <DV> custom servant: i'm not sure I really understand
+[06:35] <Slow> heya raph
+[06:35]  - clahey [~clahey@venice.eecs.umich.edu] has joined #gnome
+[06:35] <raph> DV: well, I'm thinking of a real simple "delete" method
+[06:35] <raph> DV: plus, the plugin architecture is going to include a "connect" and a "disconnect" method
+[06:35] <raph> ... once a client has disconnected from the tree, the app can deallocate as needed
+[06:35] <raph> DV: but many things aren't clear to me
+[06:35] <raph> for example, if a client gets a handle to a Text node which is the value of an attribute,
+[06:35] <raph> and then somebody changes the value of that attribute,
+[06:35] <raph> what does the client get from querying the value of that node?
+[06:35] <raph> the old value? the new value? undefined?
+[06:36] <raph> DV: how much CORBA have you studied?
+[06:36] <DV> The new value, since you're sharing the data
+[06:36] <Slow> raph: I still don't quite understand where you are having problems.. ?
+[06:36] <Slow> raph: it would get the new value in my mind.. without a doubt
+[06:37] <raph> Slow: ok
+[06:37] <DV> I did work on Distributed OSes (PhD) and hacked on ILU at some point
+[06:37] <raph> Slow: ok
+[06:37] <Slow> raph: maybe I am missing something ?
+[06:37] <raph> Slow: I can probably come up with a worse example
+[06:38] <DV> raph: basically it's just an RPC system with caching on the client side
+[06:38] <Slow> raph: the secret is to not let the client maintain it's own state
+[06:38] <DV> You only have one instance of the exported data
+[06:38] <Slow> it should always update the node before changing anything
+[06:38] <DV> and it's on the server side ..
+[06:38] <raph> Slow: for example, suppose the client creates a new Text node and sets the child of the Attr to that
+[06:38] <raph> (i.e. inserts the new node, removes the old one)
+[06:38] <raph> now what does a client see when querying the old node?
+[06:39] <raph> DV, Slow, etc: anyway, I'm happy to explain how I think this stuff should be implemented in ORBit, if you want to hear
+[06:39] <Slow> raph: it sees nothing when it queries the old node..
+[06:39] <Slow> it's gone..
+[06:39] <Slow> return NULL or whatever the spec specifies
+[06:40] <raph> Slow: well, I can't figure it out from the spec
+[06:40] <Slow> raph: you just have to realize when you write the client that things can be changed out from under you
+[06:40] <raph> Slow: I think a Java implementation would return the old node
+[06:40] <raph> Slow: and a lot of the DOM design seems to be done with Java semantics in mind
+[06:41] <Slow> raph: that semantic wouldn't make much sense to me..
+[06:41] <raph> Slow: sure it does
+[06:41] <raph> Slow: keep in mind that "remove" isn't the same as "delete"
+[06:41] <DV> Ralph: the DOM version 1 doesn't handle at all concurrent accesses
+[06:41] <raph> that's exactly the semantics you'd expect if you really kept a separate Text node as the child of an Attr
+[06:41] <Slow> aah, remove would be more like 'hide' ?
+[06:41] <raph> DV: I'm not talking about concurrent accesses
+[06:41] <_vicious_> raph: I have a couple of concerns when I was trying to mess with the rdom stuff yesterday in achtung
+[06:41] <clahey> raph: Ah.  You might remove so that you can reparent it elsewhere, for instance?
+[06:42] <raph> clahey: precisely
+[06:42] <raph> vic: fire away
+[06:42] <_vicious_> raph: I think it will be hard to keep data inside dom structure only ...
+[06:42] <_vicious_> raph: 1) some attributes are values and converting them all the time is very costly
+[06:42] <_vicious_> raph: example is time
+[06:43] <raph> very costly?
+[06:43] <_vicious_> raph: another problem that I have is that even a legal document with DTD will not be a well behaved document
+[06:43]  * raph agrees that DOM-based apps _will_ see a slowdown compared with the handrolled case,
+[06:43] <_vicious_> raph: if I'm trying to scan a large structure all the time and have to parse a string every time I want to read the value ... it's bad
+[06:43] <raph> but I think it's manageable
+[06:43] <_vicious_> raph: I think there's a better solution
+[06:43] <raph> vic: write fast string parsing routines
+[06:44] <raph> vic: I'd be happy to consider a better solution :)
+[06:44] <Slow> parsing strings aren't so bad..
+[06:44] <NotZed> its err, slow though
+[06:44] <NotZed> slow :)
+[06:44] <_vicious_> raph: a way to add a "parse" function to certain attributes .. and then one could get data in their correct type ... and the insides would cache the parsed value ... and only change it when the node would be changed
+[06:45] <raph> vic: that could probably be done in the existing framework
+[06:45] <_vicious_> raph: basically one would need to sometimes add 2 function pointers to the attribute nodes
+[06:45] <raph> i.e. cache the parsed values on the app side and use a listener to invalidate the cache
+[06:45] <_vicious_> raph: then one would just attr->get_val
+[06:45] <_vicious_> raph: yes ...
+[06:45] <Slow> raph: ack!
+[06:45] <Slow> you mean in the client ?
+[06:45] <_vicious_> raph: the thing is it's very ugly to have to do all this all the time
+[06:46] <raph> but you know what?
+[06:46] <raph> let's build a really simple DOM-based prototype app and see how it flies before trying to optimize it too much
+[06:46] <raph> premature optimization is the root of much programming evil
+[06:46] <_vicious_> raph: I'm also worried about how simple the code will look
+[06:46] <DV> raph :-)
+[06:47]  * raph thinks that a simple, pure DOM-based app will have adequate performance
+[06:47]  * Slow agrees with raph
+[06:47] <NotZed> with todays computers yes
+[06:47] <NotZed> let alone tommorows
+[06:47] <Slow> and if later, you see it doesn't, then optimize
+[06:47] <_vicious_> raph: another thing is ... say in SMIL regions ... say the remote user adds a new element with a non-existing region ... the DTD has no way of catching this ...
+[06:47]  * DV thinks taht if there is perfs problems, client side caching is the solution in most cases
+[06:47] <clahey> NotZed: Not everyone has recent computers though.  Depending on what you mean my today, of course.
+[06:47] <clahey> s/my/by/
+[06:48] <_vicious_> raph: stuff like that ... that could be handeled in some general way on the library side, to make the application simple
+[06:48]  - zed [zed@slmlb11p49.ozemail.com.au] has joined #gnome
+[06:48] <raph> vic: DTD's are a challenge, definitely
+[06:48] <_vicious_> raph: since the ultimate goal is to make using gdome simpler then handrolled structures
+[06:48] <raph> vic: ideally
+[06:48] <_vicious_> raph: also would it be kosher to keep pointers to nodes inside the tree somewhere?
+[06:48] <raph> so nobody wants to hear my ORBit implementation ideas?
+[06:49] <NotZed> clahey: if they're going to be wanting to work with compilicated document content, the document structure overhead wont be the performance envelope boundary
+[06:49] <DV> Yes but who will be able to understand them ;-)
+[06:49]  - zed [zed@slmlb11p49.ozemail.com.au] has quit IRC (xchat exiting..)
+[06:49] <raph> DV: point taken
+[06:49] <raph> vic: you can store all the node handles you like
+[06:49] <_vicious_> raph: your wisdom may well be wasted upon us :)
+[06:49] <raph> pointers specific to the dom implementation are verboten
+[06:49] <DV> raph writing these things down is the best service you can offer to everybody !
+[06:49] <NotZed> heh
+[06:50] <_vicious_> raph: ok
+[06:50] <clahey> NotZed: Hmm.  I'm not quite sure what you man.  Won't the document structure overhead decrease the performance in any case?
+[06:50]  * raph really needs to talk to Sopwith
+[06:50] <DV> As you did previously (thanks for that BTW !)
+[06:50] <clahey> raph: What are your ideas?
+[06:50] <raph> clahey: ok
+[06:50] <clahey> raph: Unless you'd rather write them down so as to not have to repeat.  :)
+[06:51] <NotZed> clahey: depends on how often the application is looking at the format i guess.
+[06:51] <raph> To initialize a Gdome server, you first create a new POA with create_POA
+[06:51]  - jrb [~jrb@aware-of-vacuity.labs.redhat.com] has quit IRC (bye...)
+[06:52] <raph> and with some policies - mostly NON-RETAIN and USE_DEFAULT_SERVANT
+[06:52] <raph> this means that all invocations on this POA will get dispatched to a single servant
+[06:52] <clahey> raph: Is that the default POA or a custom POA of some sort?
+[06:52] <raph> the default is that each object has its own servant, and the POA maintains some state to map them
+[06:52] <raph> clahey: the default POA
+[06:53] <raph> clahey: it turns out that the default POA has a great deal of flexibility that can be managed by setting policies and so on
+[06:53] <DV> Miguel managed to do 2 Gnumeric releases yesterday :-)
+[06:53] <NotZed> busy lad
+[06:53] <_vicious_> DV: I thought 3 ... 0.19 0.20 and 0.21
+[06:54] <raph> so the servant maintains its own control over "object ID"s
+[06:54] <python> _vicious_: miscalculated...
+[06:54] <_vicious_> oh sorry .. 0.19 was the day before :)
+[06:54] <raph> the namespace of object references can be thought of as /POA1/POA2/ObjID
+[06:54]  - python [~fleck@sokrates.informatik.uni-bonn.de] has quit IRC (y2k bug)
+[06:54] <raph> i.e. an arbitrary tree of POA's followed by a space of ObjID's that are unique within the POA
+[06:55] <raph> my object id's, then, would be a type field followed by the guts of the node handle, eg h1, h2, h3
+[06:55] <raph> so the servant's job is pretty straightforward -
+[06:56] <raph> parse the request (which is mostly the method name as a string - eg "nextSibling")
+[06:56] <clahey> The guts of the node handle?
+[06:56] <raph> then invoke the appropriate method on the vtable of the object
+[06:56] <raph> clahey: actually, the whole node handle
+[06:57] <raph> because the first field also contains a vtable
+[06:57] <Slow> raph: I don't see the necessity.. am I missing something ?
+[06:57] <raph> Slow: probably
+[06:57] <raph> Slow: if you use the default POA, then the server has to create a servant object for each node in the tree
+[06:58] <raph> which has two problems: first, massive overhead
+[06:58] <raph> second, you don't really ever know when you can release those servant objects
+[06:58] <Slow> it does ?
+[06:58] <Slow> why does it have to create a servant object for each node ?
+[06:58] <raph> Slow: because that's the policy of the default POA
+[06:58] <raph> Slow: default POA policy is to maintain a 1:1 relation between objects and servants
+[06:59] <clahey> So instead we don't bother allocating the servant objects in the first place.
+[06:59] <raph> clahey: exactly
+[06:59] <clahey> raph: Is the method usually passed to the POA as a string?
+[06:59] <raph> clahey: yes
+[06:59] <raph> it's passed to the POA and then to the servant as a string
+[06:59]  * Slow tries to keep his brain from falling on the floor
+[06:59] <clahey> raph: We still have to create nodes for the tree data.  When do we know we can deallocate those?
+[07:00] <raph> so ORBit usually generates a "skeleton" for each interface that parses the string and dispatches to the actual method
+[07:00] <Slow> raph: this is because of the way that the CORBA interface was written I take it ?
+[07:00] <raph> look at get_skel_Echo in ORBit/test/echo-skels.c for example
+[07:00] <raph> clahey: that's not defined by the DOM spec
+[07:01] <clahey> raph: Are you currently leaning towards supporting the spec exactly then?
+[07:01] <raph> clahey: as I said, I think we're going to need to layer some machinery on top of the DOM (say, as part of the plugin interface) that lets us delete nodes in the document
+[07:01] <raph> clahey: yes
+[07:01] <raph> clahey: I would say to either support the spec completely or do something totally different
+[07:02] <clahey> raph: But perhaps pulling some ideas from it?
+[07:02] <raph> clahey: oh yes
+[07:02] <raph> clahey: I think a "stateless" DOM interface could have dramatically higher performance
+[07:02] <clahey> raph: Do you mean something that doesn't even live on top of xml?
+[07:02] <raph> clahey: and would also fix vic's problem about app-specific representations
+[07:02] <raph> clahey: I think we can keep xml without any problems
+[07:03] <raph> clahey: some of these ideas are in www.levien.com/gnome/dom-design.html
+[07:03] <raph> but I can outline them here
+[07:03] <raph> the stateless DOM interface is based very simply on navigation from the root
+[07:03] <clahey> raph: We could just use our custom representation and convert the stateless DOM interface calls to calls on our custom representation?
+[07:03] <raph> clahey: you got it
+[07:03] <clahey> raph: We would probably want some way to freeze the tree in a system like that.
+[07:04] <raph> clahey: the provider of a custom representation merely needs to provide methods that present the contents as XML
+[07:04] <clahey> raph: But have it do copy on write in that case, or something like that.
+[07:04] <raph> clahey: uhm
+[07:04] <raph> clahey: the fact is, you need to freeze anyway
+[07:04] <raph> or you will get race conditions, some of which could be quite evil
+[07:04] <NotZed> read/write locks on branches?
+[07:04] <clahey> raph: I suppose that wouldn't be completely stateless, but instead would have a snapshot object.
+[07:05] <clahey> raph: I mean an explicit freeze so that a client could make multiple calls on the same tree.
+[07:05] <raph> clahey: yes, definitely - read/write locks
+[07:05] <raph> of course, r/w locks are not 100% stateless
+[07:05] <NotZed> or transactions
+[07:05] <clahey> raph: Except that tree changes could continue underneath if you make a copy of the data.
+[07:05] <raph> but they are a hell of a lot more lightweight to implement
+[07:05] <raph> clahey: I don't see your point about copying data
+[07:06] <raph> clahey: you really don't want to copy data
+[07:06] <Slow> raph: I don't suppose you would mind taking some time to help me understand the problem ?
+[07:06] <raph> now is as good a time as any
+[07:06] <clahey> raph: The main purpose of a snapshot type interface that I thought of would be to do things like saving.
+[07:06] <Slow> raph: I think an example would be good..
+[07:06] <raph> clahey: aha, I see what you're saying now
+[07:06] <NotZed> clahey: you just do a 'read' lock on the root?
+[07:06] <clahey> raph: But you don't really mind if other apps continue working underneath.
+[07:07] <clahey> NotZed: Sure, but that locks up the interface.
+[07:07] <raph> clahey: you're saying an operation that has the same effect as cloning the entire tree atomically
+[07:07] <raph> but is actually implemented as cow or whatever
+[07:07] <clahey> raph: Exactly.
+[07:07] <NotZed> clahey: but thats going to be faster
+[07:07] <raph> clahey: it might be interesting to consider
+[07:07] <clahey> NotZed: It really depends on how long your operation takes.
+[07:07] <raph> clahey: but you've got to look at the richness of the interface
+[07:08] <NotZed> clahey: or probably, and cheaper, than having to copy everything.  if you wanted to you could always read lock/copy/freelock manually
+[07:08] <clahey> NotZed: If you save a huge document to NFS, you're really going to want to be able to continue editting as it goes.
+[07:08] <raph> the more stuff the app-custom representation has to implement, the harder it's going to be
+[07:08] <clahey> raph: I think it would be possible to do it as an optional thing.
+[07:08]  * Slow doesn't understand why the current idl interface will not work
+[07:08] <NotZed> hmm.
+[07:09] <raph> but otoh, I see that you could fall back to explicit copy if the custom representation didn't support cow
+[07:09] <raph> in any case, the existing DOM has absolutely no support for something like this
+[07:09] <clahey> raph: Or have snapshots implemented as read/write locks.
+[07:09] <clahey> raph: Except of course that then you wouldn't be able to have multiple snapshots in a single thread which could lead to some weird deadlock behavior.
+[07:10] <raph> clahey: hmm
+[07:10] <clahey> raph: Perhaps falling back to an explicit copy would be better.  Not sure.
+[07:10] <raph> clahey: a read lock is slightly different semantically than a copy
+[07:10]  - Tybstar is now known as |
+[07:10] <raph> in any case, I think there are some serious technical advantages to the stateless DOM interface
+[07:10]  - | is now known as Tybstar
+[07:11] <Slow> raph: what do you mean 'stateless' ?
+[07:11] <raph> Slow: ok
+[07:11] <Tybstar> you know, gnome-perl table packing deosn't seem to work
+[07:11] <Tybstar> and it's pissing me off
+[07:11]  * Tybstar rants
+[07:11] <raph> Slow: the stateless DOM interface is where you just say "root's 1st child's 2nd child"
+[07:12] <raph> Slow: it's stateless because if the DOM gets blown away but you start a new one with the same document, you get to the same node
+[07:12] <raph> Slow: the standard DOM is stateful because if you traverse down from the root, you basically get a pointer to the tree - completely meaningless if the tree gets blown away
+[07:12] <Slow> raph: I thought you got a copy of each node..
+[07:13] <Slow> u would with an IDL interface for sure
+[07:13] <Slow> you can't get pointers in corba
+[07:13] <NotZed> a reference?
+[07:13] <raph> Slow: reference, yes
+[07:13] <raph> references are mapped into pointers by the POA
+[07:14] <raph> (that's a slight oversimplification, but will do for this discussion)
+[07:14] <NotZed> you dont actually get the node back, you just get a reference to the node, that you can then do things with, like ask for the child, or the contents
+[07:14] <raph> Slow: so think of representing an array of doubles, for example
+[07:14] <raph> with the standard DOM, you simply can't represent that as an array of doubles
+[07:14] <Slow> so the root of the problem you are saying.. is that if you ask for a Node, say by name
+[07:14] <Slow> your reference to the node is not updated automagically ?
+[07:15] <raph> because you could swap two values, and if you hade node references that were obtained before the swap, they'd refer to the old values
+[07:15] <Slow> yes, I take that for granted..
+[07:15] <clahey> This seems like a failing of CORBA.  Why doesn't corba allow you to get implicit dereferences?
+[07:15] <raph> with a stateless interface, the node reference is effectively the same as "give me the 103rd element of the array":
+[07:15] <NotZed> raph: unless you referenced them indirectly
+[07:16] <raph> clahey: I don't think this is a CORBA issue
+[07:16] <Slow> raph: where in the spec does it say it should be a real reference
+[07:16] <Slow> ?
+[07:16] <raph> Slow: early in Section 1
+[07:16] <NotZed> like with a linked list.  if you have a pointer to a node, and the node position in the list changes, the pointer to that node is still valid.
+[07:16] <raph> right before it goes into the idl for all the interfaces
+[07:17]  * raph agrees with NotZed
+[07:17] <raph> it's just like the difference between a linked list and an array
+[07:17] <raph> the DOM is defined with linked-list semantics,
+[07:17] <Slow> raph: hehe, I didn't understand what you were saying..
+[07:17] <raph> and I'm saying one defined with array semantics might be easier to implement and more efficient
+[07:17] <Slow> and I think it's cause I just assumed it would be a stateless inteface
+[07:17] <Slow> never gave it a second thought actually
+[07:18] <raph> I think the stateless interface could have fewer methods exported across the interface
+[07:18] <NotZed> raph: but if you get a reference to a subtree, thats what you're interested in.  if mroe nodes get inserted you dont care about them
+[07:18] <Slow> raph: where are you thinking this array is kept ?
+[07:19] <raph> for example, traversal can be done by munging the node reference directly
+[07:19] <clahey> NotZed: I think in that case you would just have to get a lock on the tree.
+[07:19] <raph> NotZed: well, that's an interesting point
+[07:19] <raph> NotZed: I think it is slightly easier on clients to deal with linked-list style semantics
+[07:20] <raph> NotZed: but I question that the difference is that real
+[07:20] <raph> NotZed: because if the document is getting changed while a client still holds a reference, the client doesn't even know whether that node is still in the document
+[07:21] <raph> and if you want linked-list style semantics, you add a listener for changes
+[07:21] <NotZed> raph: raise an exception when the reference is accessed?
+[07:21] <Slow> raph: which is why, I say again, a corba client must always check the value of that node before changing it
+[07:21] <Slow> it's really quite simple in my mind
+[07:21] <clahey> raph: What do you think of your earlier ideas of implementing it all using a cache of node ids?
+[07:21] <raph> ...the difference is that the state is kept in the client, not the server
+[07:21] <Slow> and why I fail to understand why there is a problem
+[07:21] <Slow> what's the problem with keeping the state on the server ?
+[07:22] <clahey> Slow: If references are passed as pointers as they would be in a simple system, a deleted node would lead to a segfault.
+[07:22] <raph> clahey: it's valid but I don't think as clean or as efficient
+[07:22] <clahey> raph: And it might have to be more work for the application developer.
+[07:22]  * raph is talking about _removed_, not deleted nodes
+[07:22] <Slow> clahey: indeed, but that's not the way it will happen
+[07:22] <Slow> no, you can delete a node
+[07:22] <Slow> all state is kept on the server
+[07:22] <raph> clahey: right
+[07:23] <Slow> the clients ask to have the server update the state, and get the state
+[07:23] <raph> clahey: with a stateless interface, having custom representations like an array of doubles is a piece of cake
+[07:23] <Slow> they can try to update a deleted node, the server will just ignore them
+[07:23] <raph> you just hang "accessor" methods that printf or scanf the node contents
+[07:23] <clahey> raph: What about the methods that split text nodes, that sort of thing?
+[07:23] <raph> clahey: also a piece of cake - you do an insert
+[07:24] <clahey> raph: I think having a bail out method in this case would be easier for an application developer.  Depending on whether they're willing to use the xml to do all their accesses or not.
+[07:24] <NotZed> whats a removed node compared to a deleted one?
+[07:24] <raph> clahey: those methods could be generic - ie if the client doesn't implement them, they're implemented as snarfing the text, splitting it, deleting the old node, and inserting the two new ones
+[07:24] <clahey> raph: Ah.  Good call.
+[07:24] <raph> NotZed: removed still exists, but is not in the doc tree
+[07:25] <NotZed> raph: does it matter to the client writing to that node if its not in the tree anymore?
+[07:25] <clahey> raph: For a stateless interface, we would need some way to get access to removed nodes.
+[07:25] <clahey> raph: Perhaps have some state in such cases.
+[07:25] <raph> clahey: in a stateless interface, there need be no such thing
+[07:25] <NotZed> hmm, back in a while
+[07:25] <clahey> raph: What about the reparenting example?
+[07:25] <Slow> raph: where exactly in the spec does it say you have a reference to a node ?
+[07:26] <raph> clahey: so you do explicit reparenting
+[07:26]  * Slow must say is getting frustrated
+[07:26] <clahey> raph: Is it possible for a node to exist in multiple places in the tree ever?
+[07:26] <raph> that's the other  major advantage of the stateless interface - you can free stuff as soon as it gets removed
+[07:27] <Slow> raph: right
+[07:27] <DV> raph: I told you you're messing with reference counting problems !
+[07:27]  * raph is searching for Slow's question
+[07:27]  * Slow is searching too, but cannot find it
+[07:28]  - raph is now known as |
+[07:28] <|> For example, if a DOM user gets a NodeList object containing the children of an Element, then
+[07:28] <|> subsequently adds more children to that element (or removes children, or modifies them), those changes are automatically
+[07:28] <|> reflected in the NodeList without further action on the user's part. Likewise changes to a Node in the tree are reflected in all
+[07:28] <|> references to that Node in NodeLists and NamedNodeMaps. 
+[07:28]  - | is now known as raph
+[07:28] <raph> hmm, that's not quite what Slow was asking
+[07:29] <Slow> raph: hrrm.. it just says they'll be updated..
+[07:29] <DV> NodeList are evil ... the coherency problem wnet up and down the DOM working Group list
+[07:29] <Slow> raph: IMNSHO (in this case) if they're going to say that the clients should have references to anything, and they are defining an IDL interface, they are on crack
+[07:29] <DV> There were huges debate about is it "live" object, the answer is yes !
+[07:29] <Slow> that's not the way CORBA works
+[07:29] <raph> Slow: possibly :)
+[07:30] <raph> Slow: tell that to the DOM working group
+[07:30] <Slow> raph: to my way of thinking, I haven't seen anything wrong with the IDL interface the DOM specifies
+[07:30] <raph> I don't think the DOM was originally designed for CORBA binding at all
+[07:31] <raph> Slow: I guess I don't understand what you're saying
+[07:31] <Slow> raph: I haven't read anything that says the clients view of the node or tree will be automagically updated when something changes
+[07:31] <raph> Slow: for example, Nodes have firstChild attributes - the value of that attribute is a reference to another node
+[07:31] <DV> raph: yes originally (people were trying to standardize dynamic HTML), but I guess that now CORba interfaces are as important as other ones
+[07:32] <raph> DV: right
+[07:32] <Slow> raph: the deal in my mind is, you need to refresh that in the client before you go any further
+[07:32] <raph> Slow: I'm not sure we're still talking about the same thing
+[07:32] <Slow> raph: could be..
+[07:32] <raph> Slow: Nodes _don't_ get automagically refreshed
+[07:32] <raph> i.e. if you insert a new node before an existing node,
+[07:32] <quartic> guys
+[07:33] <quartic> have I mentioned that GtkCTree sucks?
+[07:33] <raph> the old reference will still point to the same content,
+[07:33] <raph> but it will point to a new place in the tree
+[07:33] <Slow> you need to update your node..
+[07:33] <raph> that's the "state" I'm talking about
+[07:33] <Slow> you shouldn't even keep a node
+[07:33] <DV> Refreshing is automatic if you don't do any client side cachine, otherwise you will need event mechanism (DOM 2.0 still on the workbench)
+[07:34] <raph> Slow: the state is the position in the tree
+[07:34] <quartic> guys
+[07:34] <quartic> I would just like to point out something
+[07:34] <Slow> raph: here's how I see it, an event is generated from the canvas on a node.. the client can do whatever while it's in it's event 'callback', get nodes, set, walk the tree etc..
+[07:34] <quartic> GtkCTree sucks
+[07:34] <quartic> big time
+[07:34] <Slow> but it shouldn't keep any of that from one event to the next
+[07:34] <DV> quartic: point taken, but why ?
+[07:34] <raph> Slow: right, fine
+[07:34] <Slow> so there is no concerns about state in this example
+[07:35] <raph> Slow: same for plugins - they should be given a node, play with the subtree of that node, and go away
+[07:35] <raph> Slow: what _that's_ saying is that for these cases, the stateful and stateless interfaces are equally useful
+[07:35] <Slow> raph: exactly, and even if they are planning to stay, nothing should be kept
+[07:35] <Slow> raph: yes
+[07:35] <raph> Slow: but the DOM standard requires a stateful implementation
+[07:36] <quartic> DV: this is one reason:
+[07:36] <Slow> raph: and with ORBit, the call to the event in client, will have the server blocking waiting for that call to finish
+[07:36] <Slow> so you actually get locking there too
+[07:36] <quartic> bananoid$ size /cvs/gtk+/gtk/gtkclist.o /cvs/gtk+/gtk/gtkctree.o
+[07:36] <quartic>    text    data     bss     dec     hex filename
+[07:36] <quartic>  103840      84       0  103924   195f4 /cvs/gtk+/gtk/gtkclist.o
+[07:36] <quartic>   71814      36       0   71850   118aa /cvs/gtk+/gtk/gtkctree.o
+[07:36] <quartic> another reason is that it flickers like crazy
+[07:36] <quartic> another reason is that the API sucks
+[07:36] <quartic> another reason is that it sucks memory like crazy
+[07:36] <Slow> (and teh possibility of deadlocks, but that's another story :) )
+[07:36] <quartic> need I go on?
+[07:37] <raph> Slow: hmm, I don't think we should rely on blocking semantics to guarantee correctness
+[07:37] <Slow> quartic: nope, you should just rewrite it :)
+[07:37] <raph> real locking is needed,
+[07:37] <Slow> raph: no, but that's a later topic
+[07:37] <quartic> slow: no time
+[07:37] <raph> and seems to be strangely missing from the DOM level 2 spec
+[07:37] <DV> quartic: rewrite it :-) That's the Gnome way of doing things. It sucks, then redo it !
+[07:37] <quartic> oh, and it is pathetic that you have to freeze/thaw it around operations so that it does not flicker
+[07:37] <raph> but let's step back a second
+[07:37] <Slow> raph: so where does the DOM spec require statefulness ?
+[07:38] <raph> Slow: because it uses references to Nodes
+[07:38] <Slow> example ?
+[07:38] <raph> readonly attribute Node firstChild;
+[07:39]  * DV things that SAX sucks more than DOM and have to code this crap ...
+[07:39] <raph> Slow: the spec is not very forthcoming on what the exact semantics should be
+[07:39] <quartic> so are daniel and raph beating each other with dead marsupials?
+[07:40] <raph> but I think requiring state is the only thing that makes sense
+[07:40] <raph> otherwise you'd find that readonly attributes like tagName would change if you changed the tree structure
+[07:41] <clahey> raph: Writing plugins using DOM would require knowledge of the internals of the application, right?
+[07:41] <raph> clahey: absolutely not, that's the idea
+[07:41] <raph> clahey: it just knows the language of the document representation
+[07:41] <clahey> raph: For instance, even a spell checker might need some knowledge of the internals.
+[07:41] <Slow> raph: I think.. look over the spec and think 'stateless', and it still makes sense to me..
+[07:41] <clahey> raph: Oh, I think that's what I meant.
+[07:42] <Slow> raph: it may be true that you will require a locking mechanism..
+[07:42] <raph> DV: you've had more DOM experience, can you show Slow where he's wrong
+[07:42] <Slow> you just have to remember that it's a stateless interface in the client
+[07:42] <clahey> Slow: The very fact that you get a reference to a node seems to suggest that there's state.
+[07:43] <clahey> Slow: Unless it's explicitly mentioned, you would expect that reference to point to the same data even if there was something inserted.
+[07:43]  * raph agrees with clahey
+[07:43] <clahey> Slow: So it's not that it's explicitly stated that this is a stateful interface.
+[07:44] <clahey> Slow: But the fact that it's not explicitly state that it's a stateless interface is probably good enough.
+[07:44] <clahey> s/state/stated/
+[07:44]  * DV is looking for Slow question 
+[07:44] <raph> DV: I think Slow is proposing that the DOM spec does not rule out a stateless implementation
+[07:44] <clahey> Slow: Another point would be that it was designed for use within web browsers where the only thing changing the structure would be the running javascript.
+[07:44] [mit]  - Tybstar [timg@USR1HTC-41.DialUp.rrv.net] has quit IRC (sleep)
+[07:45]  * DV found "so where does the DOM spec require statefulness ?"
+[07:45] <raph> DV: right
+[07:45] <clahey> Slow: And most dynamic html assumes that a reference to a node won't be changed by an insertion.
+[07:45] <DV> I don't think it's a DOM spec point but rather (unfortunately) and implementation one
+[07:46] <clahey> Slow: Or rather that it will never be changed probably.
+[07:46] <DV> Some of the execution models aspect are not completely defined
+[07:46] <four> whats the first argument of gdk_pixmap_create_from_xpm_d do ?
+[07:47] <raph> DV: uhm, I agree that the DOM spec is underspecified, but allowing Nodes to change out from under your feet as a result of modifying tree structure counts as pretty massive underspecification in my book
+[07:47] <DV> I guess it's mostly because theyr are language dependant :-(
+[07:47] <Slow> clahey: ok, so say it was written with that in mind, from what I see, it is not required
+[07:47] <clahey> DV: DOM is under specified then?
+[07:47] <DV> and from that point of view raph is righ, 
+[07:47] <clahey> Slow: Not by the standard, but by almost all code based on the standard.
+[07:47] <Slow> IMHO, it looks to me like it SHOULD be stateless
+[07:47] <Slow> for exactly the reason raph suggested
+[07:47] <DV> clahey: yes like any spec ...
+[07:47] <Slow> the tree cannot be trusted
+[07:47] <Slow> so you must always validate it's state
+[07:47]  - quartic is now known as q_away
+[07:48] <q_away> good night, everyone
+[07:48] <raph> I guess where I'm coming from is that the most natural Java implementation is stateful in the sense we're talking about,
+[07:48] <raph> and a stateless implementation would be massively incompatible with that
+[07:48] <DV> I think that in "our" use, i.e. from a C language + CORba point of view it shoudl be 
+[07:48] <DV> stateless
+[07:48] <clahey> DV: But doesn't that difference make the standard useless?
+[07:49] <clahey> DV: And in fact detrimental since you expect a different thing than actually exists?
+[07:49] <raph> uhm, I'm pretty uncomfortable with that
+[07:49] <DV> clahey: no because the associated code works in very different contexts
+[07:49] <clahey> DV: Right, but the idea of the standard is that you can think about problems in the same fashion.
+[07:49] <clahey> Also, the main point is that a stateless interface is next to useless without some sort of locking mechanism.
+[07:50] <raph> changing the semantics this heavily invalidates most of the advantages of using the standard
+[07:50] <raph> ...especially the idea that you can share any code and expect it to work
+[07:50] <DV> I agree but it's already terribly hard to come to an API well done for one language
+[07:50]  * raph doesn't care how _hard_ it is - he just wants it done right :)
+[07:51] <DV> Doing one crossing a wide range and for both embedded and client/server impleementation is more tahn a challenge 
+[07:51] <clahey> s/the main point/a primary point/?
+[07:51] <DV> raph : don;t get discouraged, most of the DOM spec is actually weel specified
+[07:52]  * raph is not discouraged
+[07:52] <DV> the main trouble was with NodeList
+[07:52] <Slow> in the context of a single client though, your code will still work
+[07:52] <Slow> well, one nice thing aboug a spec, is that you don't have to redocument your interface :)
+[07:52] <Slow> if if you do change the semantics
+[07:52] <raph> I think we're simply wrong in assuming that a stateless implementation of the DOM can be considered compliant
+[07:52] <clahey> Slow: Except that you do if you change the semantics.
+[07:52] <Slow> s/^if/even
+[07:53] <Slow> clahey: but no where to I see where it says it must be stateful
+[07:53] <raph> Slow: I think it's enough that all existing DOM implementations are stateful
+[07:53] <raph> and that statelessness would break much existing code
+[07:53] <clahey> Slow: It has to be one or the other.  Would you argue that stateless gnome-dom is compliant and netscape and ie aren't?
+[07:53] <DV> raph, I'm not sure why ... I told you, concurency is not taken into account in DOM1
+[07:54] <raph> this is the "sendmail is more authoritative than rfc822" argument, but correct
+[07:54] <raph> DV: it's not just concurrency
+[07:54] <DV> basically single-threaded server and 
+[07:54] <raph> DV: I believe that a stateless implementation would have visible effects from a single-threaded client
+[07:54] <DV> no client-side caching ...
+[07:54] <raph> DV: take this example of the array of doubles
+[07:55] <raph> DV: now, let the client swap the position of two of them using DOM mutation operations
+[07:55] <raph> DV: with a stateless interface, the result of doing root->firstChild->nextSibling (etc) is the same whether you do the traversal before or after the swap
+[07:55] <DV> by changing node content ?
+[07:55] <Slow> clahey: I don't have to argue anything.. just write it and watch others squirm ;-)
+[07:55] <Slow> the STUPID thing, is that they specified an IDL interface..
+[07:55] <raph> but with a stateful interface, they're different
+[07:56] <clahey> Slow: The point is to make it easier for the developer.  Why would I want people to squirm?
+[07:56] <Slow> if they intended a stateful interface.. well, they are crazy
+[07:56] <raph> "result" meaning the actual double
+[07:56] <Slow> well, if you have 2 clients modifying at once, you loose the ability to be stateful
+[07:56] <DV> raph you're example is incomplete how did you update the nodes ?
+[07:57] <raph> DV: by removing the second node and inserting it before the first
+[07:57] <clahey> How do you insert things?
+[07:57] <clahey> Do you usually say "before the current node"?
+[07:57] <raph> clahey: yes
+[07:57] <DV> Then that mean taht the second client is caching the tree structure ...
+[07:57] <clahey> If so, then multiple insertions would clearly be different in a stateful vs. stateless interface.
+[07:57] <DV> he didn't walk through the root ...
+[07:58] <clahey> And that seems like a fairly common operation.
+[07:58] <raph> clahey: right
+[07:58] <DV> then this is normal behaviour ...
+[07:58] <clahey> It's not a multiple client thing at all.  Single client.
+[07:58] <Slow> is it ?
+[07:58] <clahey> The order of insertion is reversed based on whether it's stateless or not.
+[07:58] <Slow> is it so different ?
+[07:58] <clahey> Slow: Sure.
+[07:58] <Slow> you verify the tree, you insert your node
+[07:58] <raph> clahey: excellent example
+[07:58] <DV> raph does this sound correct to you ?
+[07:58] <Slow> find hte spot where you need to insert, insert()
+[07:58] <raph> DV: I think we're dealing with a terminology problem
+[07:59] <clahey> Slow: Let'
+[07:59] <clahey> Slow: Let's say you get the third child of root.
+[07:59] <clahey> Slow: Then you insert before it twice.
+[07:59]  - terral [wlashell@lyrical.cland.net] has quit IRC (EOF From client)
+[07:59] <clahey> Slow: If you use a stateful interface, you get the first item inserted as the new third child, and the second item as the new fourth item since your reference now points to the fourth item.
+[08:00] <raph> DV: my definition of a stateless interface is one in which the server does not need to store any information other than the document contents in order to respond to DOM requests
+[08:00] <clahey> Slow: With stateless, the first item is inserted as the new third child and the second item as the new third child.
+[08:00] <clahey> Slow: And the first item becomes the new fourth item.
+[08:00] <Slow> where's the insert node method ?
+[08:00] <clahey> Slow: I would expect that this is a fairly common operatoin.
+[08:00] <raph> Slow: where is it documented, you're asking?
+[08:00] <clahey> s/oin/ion/
+[08:01] <Slow> raph: just trying to find it in teh spec..
+[08:01] <Slow> oh, found it
+[08:01] <Slow> never mind
+[08:01] <raph> Slow: ok
+[08:01] <DV> raph: stateles server side yes
+[08:01] <Slow> the insert returns the node
+[08:01] <Slow> there would be no difference..
+[08:01] <DV> but the fact is taht your example broke due to clent caching not the fact taht the server is stateless
+[08:02] <Slow> I don't think..
+[08:02] <raph> DV: what?
+[08:02] <Slow> the server must maintain state
+[08:02] <Slow> just htat the client cant
+[08:02] <raph> DV: No
+[08:02] <clahey> DV: The client must cache something.
+[08:02] <clahey> DV: What else would a reference be?
+[08:03] <clahey> Actually, stateless or stateful doesn't have to be a client/server issue.
+[08:03] <DV> it is a client/server issue
+[08:03] <clahey> It's an issue even if you're talking about a single executable.
+[08:03] <raph> clahey: true indeed
+[08:03] <clahey> It's an issue of what sort of references you're keeping.
+[08:03] <raph> clahey: precisely
+[08:04] <clahey> I think that might be a better way to put it than stateful vs. stateless.
+[08:04] <raph> clahey: very likely -
+[08:04] <DV> Ok, let's change to taht definition ...
+[08:04] <raph> clahey: I chose the word "stateless" in analogy to NFS
+[08:04] <Slow> it's an issue as soon as you have 2 seperate (logical or by process) objects making manipulations to the document
+[08:04] <DV> Then the DOm intent is taht "references are 'live'"
+[08:04] <clahey> Slow: You don't need 2 separate objects making manipulations to the document.
+[08:05]  * raph agrees with Slow up to a certain point
+[08:05] <clahey> Slow: Maybe it is.  Not sure.
+[08:05] <Slow> clahey: oh ?
+[08:05] <raph> ...which is that you can build a "stateful" interface on top of a "stateless" one _if_ you are the only mutator of the tree
+[08:05] <clahey> Slow: How is my earlier example 2 separate objects making manipulations ot the document?
+[08:06] <raph> but if two people are mutating the tree concurrently, it can't be done
+[08:06] <Slow> clahey: i didn't say it was.. but as soon as you have 2 places where changes are made to the tree
+[08:06] <Slow> and they don't update each other.. you generate an interface that cannot depend on its state
+[08:06]  - crichton [crichton@hawk-a-015.resnet.purdue.edu] has joined #gnome
+[08:06]  - mode/#gnome [+o crichton ] by XachBot
+[08:07] <raph> But I disagree with Slow in the assumption that the stateful and stateless interfaces are the _same_ in the absence of concurrent mutation
+[08:07] <clahey> So if references are live, then there is a tremendous amount of work that would have to be done to support a IDL with concurrent stuff.
+[08:07] <clahey> s/a/an/
+[08:07] <clahey> s/stuff/access/
+[08:08] <Slow> raph: indeed you may want to make some changes for a stateless interface
+[08:08] <raph> Slow: right
+[08:09] <Slow> but if the DOM is going to do what it's advertised to do, it has to be stateless IMHO
+[08:09] <Slow> even if you had something like netscape
+[08:09] <raph> Slow: ok
+[08:09] <clahey> Would it be possible to implement the DOM as a set of GtkObjects or something similar that communicated over a CORBA IDL that was the current IDL with some additions to do updating?
+[08:09] <Slow> where you only really inted
+[08:09] <raph> let's do a concrete example
+[08:09] <Slow> to have one client modifying something at a time
+[08:09] <Slow> say you have a javascript thing running
+[08:10] <Slow> and it's waiting for an event in some text entry
+[08:10] <raph> you have this document initially: <root><one/><two/></root>
+[08:10] <Slow> and somewhere, another client runs, and removes the entry/node
+[08:10] <clahey> So we have the server send signals on inserts and such and have the client side fix up its references?
+[08:10] <raph> And you do this code: Node = root;
+[08:10] <Slow> if the java thing checks the sate, it'll die
+[08:10] <raph> n = root; I meant
+[08:10] <Slow> clahey: yes
+[08:10] <raph> n = n->firstChild;
+[08:11] <raph> n = n->nextSibling;
+[08:11] <Slow> clahey: the client can only depend on it's info about the document for the time it has it locked
+[08:11] <raph> ok, we all agree that n references <two/> right?
+[08:12] <clahey> And the client library would do reference counting and all that good stuff.
+[08:12] <raph> now, we do root->insertBefore ("<three/>", n)
+[08:12] <clahey> The extended idl would have reference counting and such.
+[08:12] <raph> what is the value of n->tagName now?
+[08:12] <raph> I want everyone to answer
+[08:12] <Slow> clahey: sorry, I didn't mean yes
+[08:13] <Slow> clahey: I think what you are proposing, is not a true IDL interface
+[08:13] <clahey> Slow: There's no locking mechanism though.
+[08:13] <Slow> it's a way to make a client work over IDL, with a supplied library
+[08:13] <Slow> which could work, but is not as cool, and lots more work :)
+[08:13] <clahey> Slow: Well, you could use our custom IDL interface, but it wouldn't be a DOM IDL interface.
+[08:13] <clahey> Slow: But it would be a DOM library interface.
+[08:13] <clahey> raph: Clearly, it depends on whether references are live.
+[08:14] <raph> clahey: I am saying that I believe the DOM spec constrains it to be "two"
+[08:14] <clahey> raph: I believe that the intent, in any case, constrains it to be "two".
+[08:14] <clahey> raph: Should we ask netscape its opinion?
+[08:14] <raph> clahey: I've talked to shaver about this
+[08:14] <DV> Yes there is no locking and no provision for dealing with concurrency ... but nodes are expected to be live !
+[08:14] <Slow> clahey: sure
+[08:15] <raph> DV: what's your opinion on the n->tagName question?
+[08:15] <DV> http://lists.w3.org/Archives/Public/www-dom/
+[08:15]  * DV searching the tagName question
+[08:15] <raph> it's clear enough to me that in NS the answer has to be "two" as well
+[08:16] <raph> we could write some JavaScript to actually test it, but I bet I know what the answer is
+[08:16]  - tile [li@tile.phx.primenet.com] has quit IRC (EOF From client)
+[08:17] <DV> root->insertBefore ("<three/>", n) is wrong ...
+[08:17] <DV> \ root->insertBefore ("<three/>", n) is wrong ...
+[08:17] <DV> you need getFirsChild and then insertBefore
+[08:18] <clahey> raph: I think I agree, but why not try it?  :)
+[08:18] <clahey> raph: Except that I don't know javascript at all.
+[08:18] <raph> http://lists.w3.org/Archives/Public/www-dom/1998OctDec/0139.html is vaguely interesting
+[08:18] <DV> I guess that anyway the answer is "two"
+[08:18] <raph> DV: I don't see where it's wrong
+[08:18] <DV> You can have only one top-level entry ...
+[08:19] <raph> DV: ah
+[08:19] <Slow> hmm.. another thing to think about, how many DOM scipts/programs are there out ther that we are trying to be compatible with ?
+[08:19] <raph> DV: you mean "root" can't be the document itself, but should be the documentElement instead
+[08:19] <raph> Slow: all of them
+[08:19] <DV> Well formedness constraing of XML : documents have one and only one root !
+[08:20] <Slow> and how many are going to be one pass type deals
+[08:20] <raph> Slow: that question speaks to whether we should have our own incompatible interface if it's technically superior
+[08:20] <DV> But I'm pretty sure that independantly of the API issue the anser remains "two"
+[08:20] <clahey> raph: Actually, that email seems to bring up a case where both a stateful and a stateless implementation fail.
+[08:20] <raph> DV: right
+[08:20] <DV> you basically only held a pointer on the lient side ...
+[08:21] <clahey> raph: Rather both a 'live' reference and a non-'live' reference implementation both fail.
+[08:21] <raph> clahey: right
+[08:21] <Slow> raph: well, it's all interpretation of the spec
+[08:21] <Slow> I have basically assumed all along that it was stateless
+[08:22] <Slow> and saw no real problem with it
+[08:22] <raph> clahey: I think one way to think about this is that NodeList is defined to not require _additional_ state beyond the Nodes
+[08:22] <raph> Slow: I think your interpretation was simply wrong
+[08:22] <raph> Slow: so you think an answer of "three" should be allowed?
+[08:23] <DV> _additional_ state : true, but again, NodeLists are evils !
+[08:23] <Slow> raph: sure :)
+[08:23] <raph> DV: so my point is that NodeList mixes the stateful and stateless idioms
+[08:23] <Slow> I dunno
+[08:23] <Slow> I wasn't following it
+[08:23] <DV> Just because dumbs programmers couldn't think in terms of trees navigation but only list ones
+[08:24] <DV> raph: yes and that's a pain, and the only really messy part of DOM
+[08:24] <clahey> I think that the implemenation of nodelists should be a mixture of stateful and statelessness.
+[08:24] <clahey> s/stateful/statefulness/
+[08:25] <DV> I guess taht's the only case where you're required state on the server
+[08:25] <clahey> Actually, right now it is a mix of statefulness and statelessness, but they should be switched.
+[08:25] <DV> and it *royally* sucks !
+[08:25] <raph> DV: no, actually NodeList _doesn't_ require additional state on the server
+[08:26] <raph> DV: I think that's part of the point
+[08:26] <clahey> Right now the list is stateless.
+[08:26] <clahey> But the nodes are stateful.
+[08:26] <clahey> It should possibly be the other way around.
+[08:26] <clahey> Though that would be problematic in this case.
+[08:26] <DV> Well unless you're ready to eat a lot of CPU for those requests or deal with really complex algorithms
+[08:26] <clahey> I don't know if I know what I'm talking about right now.  :)
+[08:26] <Slow> clahey: that makes sense actually
+[08:27] <Slow> if you did list traversal with the idl methods, they can be stateful
+[08:27] <raph> DV: no, in fact, the only reasonable way to implement NodeList is to hang a pointer on the parent and walk down the children to satisfy the "item" request
+[08:27] <Slow> well, if you provided locking
+[08:28] <DV> My vision right now is to try to think in term of a stateless implementation 
+[08:28] <raph> DV: wait a second
+[08:28] <clahey> As far as ease of use, cached nodelists with "live" references to nodes is the one most sensibly envisioned by that email.
+[08:28] <raph> DV: if you agree that the answer is "two", then a stateless implementation is impossible
+[08:28] <DV> ralph : for the child node case, yes ! but there are other contructors building NodeLists and those are a real problem !
+[08:29] <clahey> I have a thought.
+[08:29] <clahey> If we're changing the interface...
+[08:29] <clahey> Why not have nodelists be new trees essentially.
+[08:29] <DV> raph: I don't understand .. I'm pretty sure taht with a stateless impl, you get "two"
+[08:29] <raph> DV: not the way I'm defining it
+[08:30] <clahey> DV: How do you maintain the idea of the node "n"
+[08:30] <clahey> ?
+[08:30] <raph> DV: so we're definitely talking about terminology here
+[08:30] <DV> basically you just sent the pointer back to the client ...
+[08:30] <raph> DV: you're thinking pointers, I'm thinking CORBA
+[08:30] <DV> the pointer is still valid and allow to retrieve "two"
+[08:30] <clahey> DV: Right, but then what happens if you close down the tree and reopen it between CORBA calls?
+[08:31] <DV> If you close down the tree then that means you walk donw the tree again and you get "one" 
+[08:31] <clahey> DV: Imagining closing down the tree and reopening it is probably the easiest way to guarantee that statelessness is maintained.
+[08:31]  * raph agrees with clahey here
+[08:31] <clahey> DV: Right, but you've still got this reference "n".  What does it refer to after the tree is reopened?
+[08:31] <raph> if you can't close it and reopen it, that implies that you're having to keep at least some extra state around
+[08:32] <clahey> DV: If you reach it by recrawling the tree, you get "<three/>
+[08:32] <clahey> "
+[08:32] <clahey> .
+[08:32] <DV> You have removed the medainformation on the client "this things is the 2nd child of the tree" and that was client caching which got outdated when the second client changed the tree
+[08:32] <raph> DV: this has nothing to do with _client_ caching
+[08:32] <clahey> DV: What second client?
+[08:33] <DV> clahey <root><tree/><one/><two/></root>
+[08:33] <raph> it's <root><one/><three/><two/></root>
+[08:33] <clahey> DV: I thought that the tree would read <root><one/><three/><two/></root>.  Insert before makes that the case, no?
+[08:33] <raph> because I inserted "<three/"> before n, which before the insert pointed to <two/>
+[08:34] <Slow> raph: note that stateless also solves your problem with memory, and the COBRA problem
+[08:34] <raph> Slow: absolutely
+[08:34] <clahey> raph: I think having nodelists as stateful beasts might be useful.
+[08:34] <DV> raph I told you your example was wrong and I'm using my updated one
+[08:34] <clahey> raph: If we're allowed to redefine things.
+[08:34] <raph> DV: oh, ok
+[08:34] <DV> getRoot, getFirstChild, insertBefore
+[08:34] <clahey> raph: Have them be like new trees.
+[08:34] [mit]  - _vicious_ [jirka@dt068n90.san.rr.com] has quit IRC (Ping timeout: 180 seconds)
+[08:35] <clahey> raph: And have nodes be able to be contained in multiple trees.
+[08:35] <raph> clahey: hmm
+[08:35] <clahey> raph: But only one tree is the "parent" node for a specific node.
+[08:35] <clahey> raph: And we do reference counting of removals.
+[08:35] <raph> clahey: you're talking about the stateless version, right?
+[08:35] <clahey> raph: So if you get a node list and traverse it using an integer, you get the expected action.
+[08:35] <clahey> raph: Yep.
+[08:35] <DV> multiple tree: I'm strongly against ... you're violating DOM spec spirit !
+[08:36] <DV> Forget about CORBA one moment and think about pointers ...
+[08:36] <clahey> DV: It's not really multiple tree.
+[08:36] <DV> Then I gues you have the spirit ofthe spec ...
+[08:36] <raph> DV: so the details of the example are not as important as the point of whether the _contents_ of what's pointed to by n change when you do tree manipulations on the parents & siblings of n
+[08:36] <clahey> DV: You only allow it in special cases like nodelist.
+[08:37] <clahey> DV: Essentially I meant that nodelists weren't live and that they added to their contained nodes reference count.
+[08:37] <DV> clahey: yes and more precisely mon childlist NodeLists
+[08:37] <clahey> DV: And I was pretty much saying that this was only if we were changing things.
+[08:37]  * raph thinks about pointers, as DV asked
+[08:37] <DV> for child lists getting the parent and walking doewn the list is Ok
+[08:38] <clahey> DV: No, I'm talking about making node lists non-"live" objects.  I'm not sure if I said that.
+[08:38] <clahey> DV: Maybe we would have a live node list as well.  Not sure.
+[08:39] <clahey> DV: Were you going to give an example with pointers in mind?
+[08:39] <DV> Remember taht the DOm came out as MS and NS did put ECMA (javascript) wrappers around their implementation
+[08:39] <DV> to be able to build scrwed rendering mechanism :-(
+[08:39] <raph> DV: I am quite aware of that
+[08:40] <DV> So basically the Javascript object is just a (DCOM) wrapper around the object
+[08:40] <DV> and hence a pointer ...
+[08:40] <raph> DV: there is a strong possibility that trying to adapt a DOM that was built for that environment to the world DOMination application may be inappropriate
+[08:40] <DV> :-)
+[08:40] <clahey> DV: Right.  DOM is a standardization of a pair of implementations.  Good to keep in mind when judging the creators, but not so important when judging whether to use it.
+[08:40] <clahey> DV: Yes?
+[08:41] <DV> I just want to poinpoint the spirit ...
+[08:41] <raph> DV: and pointer structure encode state, therefore a CORBA implementation of pointer semantics needs to be stateful
+[08:41] <DV> If this is not specified (mean written down) then you're free to corrupt the spirit and just keep the API
+[08:41]  * raph is wondering whether there are any substantive technical points we're still debating
+[08:41] <DV> I won't rebel against that :-)
+[08:42]  * DV suggest people code and then check for uglyness 
+[08:42] <raph> DV: if we're going to be incompatible with the DOM, then I think we can do a hell of a lot better job
+[08:42] <raph> DV: simply because the application domains are so different
+[08:42] <raph> DV: we want something that works well over CORBA and is also easy to program in C
+[08:43] <Slow> raph: I do imagine we could do better
+[08:43] <raph> DV: they designed something that works well in the local case and is also easy to program in JavaScript
+[08:43] <DV> raph: don't be purist, the important point is people not learning from scratch a new model 
+[08:43] <clahey> raph: I was just thinking.  Might it be a good idea to have applications do all their access to the data structures through local DOM?
+[08:43] <raph> DV: perhaps
+[08:43] <raph> DV: you do make an important point
+[08:43] <clahey> DV: But if we change the spirit but use the API, they're still going to have to learn a new model.
+[08:44] <DV> They learn fast how to cope with small differences in seldomly used interfaces
+[08:44] <raph> DV: but I think having different semantics may be more confusing than simply different choices of traversal & mutation methods
+[08:44]  * Slow agrees with DV
+[08:44] <clahey> DV: And it's going to be made harder by the similarities.
+[08:44] <Slow> to some extent
+[08:44] <Slow> OTOH, if we make our interface very simple, it should be easy to learn..
+[08:44] <clahey> That's a good point.
+[08:45] <raph> Slow: which is exactly what I'd propose
+[08:45] <Slow> and documentation is also important of course
+[08:45] <DV> I think that the main problem may be differences on NodeList implementation
+[08:45] <clahey> DOM isn't a terribly complicated model.
+[08:45] <Slow> no, it's not
+[08:45] <raph> clahey: agreed
+[08:45] <DV> and this thing is known to stink so people will be aware
+[08:45] <raph> so here's my position
+[08:45] <Slow> so perhaps modifying DOM is a better approach
+[08:46] <raph> we basically have the choice of implementing standards-compliant DOM, doing a nonstandard DOM based on the DOM spec, or rolling our own
+[08:46] <clahey> I wonder if our changes would be good for DOM 2, or will it be completely backwards compatile?
+[08:46] <Slow> if you do as much as possible with methods, and not maintain (m)any local data, it will be a natural stateless interface
+[08:46] <clahey> raph: I think that perhaps using similar interfaces might not be a bad idea.
+[08:46] <raph> doing standards-compliant DOM has clear advantages in the areas of integration, code reuse, and the use of generic tools
+[08:47] <raph> rolling our own is likely to have real performance advantages,
+[08:47] <Slow> raph: OTOH Free Software lends itself to this already.. once we have a number of applications/plugins written our way
+[08:47] <clahey> raph: For the C implementation, the ever present gnome_dom would be enough to remind people of the difference.
+[08:47] <raph> but my guess is that the DOM performance issues will probably be lost in the noise as far as the rest of the app goes
+[08:48] <Slow> I'd actually kinda prefer not to have gnome_ prefix on everything..
+[08:48] <DV> raph: until now I agree with the analysis
+[08:48] <Slow> but that's just me..
+[08:48] <clahey> raph: If we make it completely standards complient, it might be.
+[08:48] <clahey> raph: noticable, I mean.
+[08:48] <raph> clahey: I don't think a 100% compliant DOM is that bad
+[08:48] [mit] >>> sebol requested unknown ctcp d from #linux
+[08:48] <raph> clahey: gdome is designed to allow a 100% compliant CORBA interface
+[08:48] <DV> And if that issue really hurts, I guess it will be time to look for extra APIs
+[08:49] <Slow> if the current DOM is intended to be  stateful, I think it's a crappy crappy spec
+[08:49] <raph> clahey: and my preliminary benchmarks suggest that the time spent traversing, etc., is on the order of a few microseconds a node
+[08:49] <clahey> raph: Sure.
+[08:49] <Slow> well, not completely crappy, I should say, 'in need of more thought' :)
+[08:49] <clahey> raph: I was just thinking that the "live" node problem might make things slower.
+[08:49] <Slow> the basic methods they have laid out are good, it's just the details are screwy
+[08:49] <raph> clahey: it does
+[08:50] <raph> clahey: now the performance of NodeList itself I could care less about
+[08:50] <clahey> raph: So if we make nodes not be "live" then we'll have a 100% compliant dom interface and lots of people complaining because of weird bugs.
+[08:50] <clahey> raph: Maybe.
+[08:50] <raph> we just do a slow but simple implementation of that
+[08:51]  - seeS [csmall@scooter.eye-net.com.au] has joined #gnome
+[08:51]  - mode/#gnome [+o seeS ] by MWeber
+[08:51] <clahey> raph: And then extension methods somehow?
+[08:51] <raph> clahey: I disagree that we can claim compliance if it's stateless
+[08:51] <clahey> raph: Agreed.
+[08:51] <clahey> raph: I was trying to be contrary.  :)
+[08:51] <raph> ok
+[08:51] <DV> guys, I guess you shouldn't fight about NodeLists and concentrate on the clean part of the API
+[08:52] <clahey> raph: And misunderstood what you were stating.
+[08:52] <DV> I would for sure put a very nice warning on all NodeList entry point documentation !
+[08:52] <raph> DV: indeed - "do not use this method please"
+[08:53] <DV> Unless you're ready for hazards :-)
+[08:53] <clahey> Hmm.  Might it be good to just give it its own name, make it stateless (except for nodelists where we do what we think is best) and then let people discover on their own how similar it is?
+[08:53] <Slow> what if we implemented the tree as an array, and made it so the client could 'sync' the tree
+[08:53] <Slow> for local transversal
+[08:53] <raph> clahey: no
+[08:53] <Slow> wrapped in a locking call
+[08:53]  - zed [zed@slmlb11p49.ozemail.com.au] has joined #gnome
+[08:53] <raph> clahey: because the union of a stateless and stateful interface is stateful
+[08:53] <Slow> eg, lock document, fetch local copy of tree, do stuff, unlock
+[08:53] <raph> clahey: so custom representations still have to absorb that cost
+[08:53] <clahey> raph: Is state really the problem, or just the concept of "live" nodes?
+[08:53] <zed> who's responsible for the GNome Ftp ?
+[08:54] <seeS> zed: you mean lightspeed?
+[08:54] <raph> clahey: I'm not sure the exact distinction you're making
+[08:54] <zed> umm
+[08:54] <zed> the files on it :)
+[08:54] <raph> whatever it is that disallows the DOM from being implemented as a flat array of doubles is what the problem is :)
+[08:54] <zed> ftp.gnome.org
+[08:54] <clahey> raph: No, for nodelists, the library would do the work of maintaining state by just making them arrays.
+[08:54] <clahey> raph: Perhaps we could even call them NodeArrays.
+[08:54] <DV> zed: the machine seems fine ...
+[08:55] <seeS> zed: ah, i thought you meant the ftp client
+[08:55] <raph> clahey: NodeLists are quite uninteresting to me
+[08:55] <zed> DV: oh it is, just a problem with 1 file on it
+[08:55] <clahey> raph: Oh, but refcounting and such becomes a problem.
+[08:55]  - LotRzz [~martijn@212.83.75.220] has quit IRC (Ping timeout: 647 seconds)
+[08:55] <Slow> raph: I'm thinking that if we roll our own or make a deviant implementation
+[08:55] <clahey> raph: Fair enough.  We throw them out then?
+[08:55] <raph> clahey: I think I can do a slow implementation of NodeList that doesn't drag down the rest of the impl.'
+[08:55] <Slow> raph: just as a performace improvment..
+[08:55] <DV> zed: I'm logged on the machine, which file, what problem
+[08:56] <clahey> raph: We can fairly implement the current definition of nodelists.  The problem is that it's kinda broken.
+[08:56] <zed> DV: the xchat RPM, there's something wrong with it. When you run the program it locksup hard.. but when you compile the src of the same version, it works perfect
+[08:56]  * Slow thinks maybe the people who wrote the spec have never actually used corba..
+[08:56] <clahey> raph: But that doesn't really matter too much, we can drop nodelists (or maintain them in their current state.)
+[08:56] <raph> Slow: perhaps
+[08:57] <DV> zed: pub/GNOME/gnome-1.0/redhat/i386/xchat-0.9.3-1.i386.rpm
+[08:57] <DV> ?
+[08:57] <Slow> but then there is also the multiple client oversight in the current spec too
+[08:57] <raph> Slow: right, in perspective, if we go to a nonstandard variant of the DOM, the performance improvement better be pretty damn noticeable
+[08:57] <zed> DV: right thats it.. Im the author of xchat, I get reports of the lockup in my email all the time, All i tell them is "compile the src", and then it works
+[08:58] <Slow> raph: I think named nodes is a good idea
+[08:58] <clahey> I think I know my confusion.  A "live" node is somewhat different than a "live" nodelist.  In fact, a "live" nodelist is closer to the idea of a non-"live" node than a "live" one.
+[08:58] <Slow> to identify a node of interest to a client
+[08:58] <Slow> so they don't have to traverse the tree each time, just ask for that node by name
+[08:58] <raph> Slow: urgggh
+[08:58] <clahey> A "live" node requires state.
+[08:58] <clahey> But a "live" node-list doesn't.
+[08:59] <raph> clahey: right
+[08:59] <clahey> And vice-versa for "non-live"
+[08:59] <DV> zed: -rw-r--r--   1 root     root     I can't touch it ... try to send a correct one to Miguel ...
+[08:59] <Slow> raph: I think this idea is different then the current idea of named nodes
+[08:59] <Slow> perhaps 'tagged nodes' would be better
+[08:59] <raph> Slow: like <a name="hi-mom">?
+[09:00] <clahey> Slow: I think that that's pretty commonly used already.
+[09:00] <Slow> aah, ok
+[09:00] <Slow> tho I was thinking the name would be stored in the node's struct
+[09:00] <Slow> but either way would work
+[09:00] <clahey> Slow: Just now, when you do getNodeByName("hi-mom"), it has to look it up each time.
+[09:00] <clahey> If we had a function named getNodeByName that is.
+[09:00] <clahey> I don't know if such a thing exists.
+[09:00] <zed> DV: I didn't create the RPM.. I only release a source tarball.. I'm not sure who created the rpm
+[09:00] <raph> Slow: the HTML-DOM seems to have a namedItem method on HTMLCollection
+[09:00] <Slow> well, you could put it in a tree and do a lookup with that as the key
+[09:01] <Slow> it would be quite fast I'm sure
+[09:01] <Slow> on the server, you could actually keep several index-trees around to speed things up..
+[09:01] <Slow> but that's implementation details
+[09:02] <raph> Slow: that sounds like something you could (a) define as a DOM extension and (b) cache
+[09:02] <Slow> raph: sure
+[09:02] <clahey> raph: Server side cache?
+[09:02] <Slow> where are we now anyway ? :)
+[09:02] <raph> clahey: yep
+[09:02] <Slow> still trying to decide what to do about the spec ?
+[09:02] <raph> Slow: not really
+[09:03] <Slow> oh, what have we decided ?
+[09:03] <raph> Slow: it's pretty clear in my mind what to do
+[09:03] <Slow> ok, what ?
+[09:03] <raph> go with the standard DOM
+[09:03] <raph> Slow: I know it sucks, but do we care?
+[09:03] <Slow> hmm.. I do
+[09:03] <clahey> raph: How does that allow you to implement your data as an array of doubles?
+[09:03] <Slow> I'd rather just keep working on Edox in that case..
+[09:03] <raph> clahey: it simply does not
+[09:03] <zed> DV: should I email Miguel then?
+[09:04] <raph> Slow: hmm
+[09:04] <Slow> raph: how do you propose we get around these state problems ?
+[09:04] <clahey> raph: Well, I thought we earlier decided that it mostly would be possible.
+[09:04] <Slow> (I'm not giving up on this just yet tho :) )
+[09:04] <raph> Slow: I don't think they're very serious problems
+[09:04] <clahey> raph: But that it would be a pain.
+[09:04] <Slow> raph: you want to keep state ?
+[09:04] <raph> Slow: I think it causes a small bit of overhead on the server
+[09:05] <Slow> in the clients..
+[09:05] <clahey> raph: What about repeated insertions and removals?
+[09:05] <raph> basically, it makes streamlined custom representations impossible
+[09:05] <raph> so apps will have to be coded to use the standard DOM representation
+[09:05] <Slow> raph: perhaps an email with our concerns should be sent to the DOM list ?
+[09:05] <raph> Slow: perhaps
+[09:06]  - seeS [csmall@scooter.eye-net.com.au] has quit IRC (seeS has no reason)
+[09:06] <raph> I think that for apps that would use the default DOM representation, the difference is quite minimal
+[09:06] <Slow> raph: you didn't explain your idea of what to do .. are we keeping state in the clients ?
+[09:06] <raph> but if you have a scientific visualization program that stores a huge array of numbers,
+[09:06] <clahey> raph: Won't they leak memory?
+[09:07] <NotZed> wow, still going
+[09:07] <raph> you won't want to store that array in the DOM because you will notice the performance
+[09:07] <clahey> raph: Right, but you still want to provide access to that array from plugins, right?
+[09:07] <raph> clahey: very good question
+[09:08] <clahey> raph: And you want to provide it using the standard interface that all other apps provide.
+[09:08] <raph> clahey: yeah, _if_ you wanted to do that, then a stateless DOMlike interface would make a whole lot of sense
+[09:08] <Slow> in such a case, the application would get change events
+[09:08] <clahey> raph: The goal is to have an easy to use interface to all gnome applications, right?
+[09:08] <raph> incidentally, a listener in the stateless i/f could get a "location changed" event
+[09:09] <raph> clahey: yes
+[09:09] <Slow> The more I think about it, the more I think that it _was_ intended to be a stateless interface
+[09:09] <Slow> why else have change events ?
+[09:09] <raph> Slow: as they say in Japan, burushito
+[09:09] <Slow> hmm.. which means ? :)
+[09:09] <raph> Slow: bullshit
+[09:09] <Slow> hehe :)
+[09:09] <Slow> thought so
+[09:09] <raph> Slow: no way in hell was the JavaScript implementation stateless
+[09:09] <clahey> Slow: I think it's very clear that it was intended as a stateful interface.  I think that it just wasn't thought about.
+[09:10] <Slow> well, hmm..
+[09:10] <raph> you don't even tend to _think_ much about state unless you're talking about a network interface
+[09:10] <clahey> If we did a CORBA implementation of DOM, we'd be creating the first CORBA implementation?
+[09:10] <Slow> you could actually build a stateful interface in a client through corba if you used a locking method
+[09:10] <Slow> and did access through library functions
+[09:10] <raph> like: NFS is stateless, but nobody asks whether the Unix filesystem API is stateful or stateless
+[09:10] <raph> Slow: this is a _very_ interesting point
+[09:11] <raph> Slow: if we rolled our own stateless interface,
+[09:11] <clahey> raph: I didn't know that NFS was stateless.  That sorta sucks.  :)
+[09:11] <clahey> raph: But that wasn't the point.  :)
+[09:11] <raph> you could still gateway to a standard DOM i/f as long as you disallowed concurrent mutation
+[09:11] <raph> ...which you want to provide a mechanism to do anyway
+[09:11] <Slow> NFS basically does the same magic we'd be doing withthe library wrapper
+[09:11] <raph> Slow: precisely
+[09:11] <clahey> raph: I think you could even do it with concurrent mutation.
+[09:12] <Slow> but why the hell did they specify a corba interface.. 
+[09:12] <Slow> it's really quite frustrating to me
+[09:12] <raph> actually, the Unix filesystem api is stateful in the way we're talking about - fd's are very analogous to "node references"
+[09:12] <clahey> raph: You would just have to cache all references on the client side and do fixups when you get notified of changes.
+[09:12] <raph> clahey: I think doing it with concurrent mutation would be a pain in the ass to get right, and nobody would care
+[09:12] <Slow> the one thing being that you're much more likely to have segfaulting plugins ;-)
+[09:13] <Slow> as in the case of that message raph pointed out
+[09:13] <clahey> Slow: Or mem leaking plugins.
+[09:13] <clahey> Slow: Oh, I see.
+[09:13] <Slow> which a stateless, 'everything through corba methods' implementation would pretty much completely avoid
+[09:13] <raph> so rolling our own interface is far from saying "fuck you" to the DOM
+[09:13] <NotZed> NFS 3 isn't stateless.
+09:13] <raph> NotZed: neither is the locking extension to vanilla NFS
+[09:13] <Slow> raph: actually, we could do both..
+[09:13] <clahey> Slow: That's more a flaw in NodeLists, I would think.
+[09:14] <NotZed> raph: *nod*
+[09:14] <Slow> raph: we could create our own interface, and then make a library that wraps it in a DOM compatible way
+[09:14] <raph> Slow: I think so, yes
+[09:14] <Slow> clahey: the whole thing is flawed I think now ;-)
+[09:14] <clahey> raph: If we're providing C interfaces, I think both a DOM interface, and a "custom" interface should be provided.
+[09:14] <raph> clahey: let's watch the complexity here
+[09:15] <raph> clahey: I think Slow's idea has some merit
+[09:15] <Slow> if we just modified the DOM to our needs, and made it stateless..
+[09:15] <clahey> raph: I think that allowing concurrent mutation might be important.
+[09:15] <Slow> making a stateful client wrapper would not be TOO bad
+[09:15] <clahey> raph: How would the interface work?  Just create a write lock when the plugin starts?
+[09:15] <raph> clahey: yes
+[09:16] <clahey> raph: Ick.  :)
+[09:16] <Slow> well, the other thing is, in a way, you don't even need the lock
+[09:16] <clahey> raph: All plugins would freeze the interface then?
+[09:16] <raph> clahey: you could grab the write lock, mutate, release
+[09:16] <Slow> so long as you never keep any state in the client
+[09:16] <raph> clahey: then find your place again from the root
+[09:16] <clahey> raph: Right, but that would require the client know about the custom implementation.
+[09:16] <Slow> of course, this could lead to funky changes, and potentially broken plugins..
+[09:16] <raph> Slow: that depends on exactly what you're trying to do
+[09:17] <raph> clahey: hmm
+[09:17] <clahey> raph: Actually, what might be better is not bothering with a C DOM interface.
+[09:17] <Slow> but the server could ignore any kinda funky requests
+[09:17] <Slow> eg, for nodes that don't exist etc.
+[09:17] <clahey> raph: If you're working in C, you can probably handle locking or cow.
+[09:17] <NotZed> raise exceptions on invalid operations
+[09:17] <raph> clahey: consider that the DOM has no locking defined now at all
+[09:17] <Slow> not: sure, good idea
+[09:18] <raph> uhm
+[09:18] <Slow> in a sense, making a write lock is not going to do too much
+[09:18] <Slow> except if the plugin is traversing nodes, and the tree disappears from under it
+[09:18] <clahey> raph: The important place for a dom layer would be the javascript and perl bindings.
+[09:18] <raph> so the problem with the DOM wrapper over our stateless interface is that it's going to get a lot of event-listening traffic
+[09:18] <NotZed> raph: is dom meant to support concurrent access?
+[09:18] <raph> NotZed: no
+[09:18] <Slow> raph: and the trees will need to be sync'd
+[09:18] <Slow> which is a big operation
+[09:19] <Slow> but that's required in any client stateful impl.
+[09:19] <NotZed> hmm, trying to is going to have to have extensions
+[09:19] <clahey> Concurrent access is mainly important because the application needs to be able to update the interface while plugins are running.
+[09:19] <raph> clahey: update the document, you mean, right?
+[09:19] <clahey> raph: Well, if the plugin has a write lock, that means that the application can't get a read lock, correct
+[09:19] <clahey> ?
+[09:20] <raph> clahey: no
+[09:20] <NotZed> catch ya's.  interesting discussion to bow out on
+[09:20] <raph> clahey: because the application isn't speaking DOM
+[09:20]  * NotZed waves
+[09:20]  - NotZed [~mzucchi@143.216.161.126] has quit IRC (hoooooooome)
+[09:20] <raph> clahey: it's speaking the native interface
+[09:20] <Slow> the server will (I imagine) be single threaded, so there's no real issues with getting half updated data
+[09:20] <clahey> raph: In that case, it's just going to get in weird states, I suppose.
+[09:20] <raph> clahey: not at all
+[09:20] <clahey> raph: I guess it just needs to get an update event and update the interface.
+[09:21] <clahey> raph: That's true.
+[09:21] <raph> clahey: the one writer + listeners model has no problems
+[09:21] <raph> it's the > 1 writers case that's funky
+[09:21] <clahey> raph: But multiple writers is a problem.
+[09:21] <Slow> so long as all modifications are done from event callbacks, there is no real problem
+[09:21] <clahey> raph: For instance, you can currently run the spell checker in go, go in and make custom modifications and then continue using the spell checker.
+[09:21] <raph> Slow: right, you just define everything to hold the write lock for a minimal amount of time
+[09:22] <raph> which is the right way to do it anyway
+[09:22] <clahey> raph: But that wouldn't be possible if the plugin grabbed a write lock the whole time.
+[09:22] <Slow> and is by far the most common approach for GUI applications
+[09:22]  - jpaint [~jpaint@eliot.prognet.com] has joined #gnome
+[09:22]  - mode/#gnome [+o jpaint ] by MWeber
+[09:22] <raph> clahey: so you write plugins to not do that
+[09:22] <clahey> raph: Do you have read locks at all?
+[09:22] <raph> clahey: yes
+[09:22] <raph> clahey: think of a speller
+[09:22] <clahey> raph: Right, but if the main interface is through a DOM emulation layer that write locks at the beginning, you don't have a choice.
+[09:22] <Slow> hmm.. why do you need read locks ?
+[09:22] <jpaint> re
+[09:22] <Slow> heya jay
+[09:23] <raph> Slow: because otherwise you might get an inconsistent view of the doc
+[09:23] <Slow> raph: perhaps a 'freeze document' would be a better way to think
+[09:23] <raph> Slow: the doc says "one two" and it's being mutated to read "two one". Without a readlock, you might see "one one" if you traverse it remotely
+[09:23] <clahey> raph: So, the other implementation of the emulation layer is to read lock at the beginning and then write lock whenever you need to do so.
+[09:23] <raph> Slow: right, with cow semantics
+[09:23] <Slow> raph: no, it'll never happen like that, not on a single node anyway
+[09:24] <clahey> raph: But that leads to deadlock situation, right?
+[09:24] <Slow> the server is not multithreaded
+[09:24] <raph> Slow: <one/><two/>
+[09:24] <Slow> so all node updates are atomic
+[09:24] <clahey> Slow: Without a read lock, it can.
+[09:24] <clahey> Slow: If you read the first child you get one.
+[09:24] <clahey> Slow: Then somebody goes and makes a change.
+[09:24] <Slow> yes, on seperate nodes it's possible
+[09:24] <clahey> Slow: Then you read the second child and it says one also.
+[09:24] <raph> incidentally, the need for readlocks is just as strongly felt in the stateful interface as the stateless
+[09:25] <Slow> raph: hmm.. yes
+[09:25] <clahey> raph: For instance, <one/> </two> becomes </two> </one>, but you read it as just <one/>.
+[09:25] <raph> clahey: basically, because the DOM isn't designed for concurrent updating, in order to have correct semantics, you need to always hold a write lock
+[09:25] <Slow> even 'freeze document' wouldn't be enough really
+[09:25] <Slow> freeze everything except me :)
+[09:25] <raph> clahey: unless you define a locking extension to the DOM, which seems reasonable to me
+[09:26] <clahey> raph: They probably will have to for DOM level 2.
+[09:26] <raph> this is one important point - we _must_ extend the DOM because we need things like locking
+[09:26] <Slow> hmm..
+[09:26] <raph> clahey: it's not in the working draft :(
+[09:26] <Slow> if only you were only allowed to make document mods on events..
+[09:26] <clahey> raph: So we suggest it.  :)
+[09:26] <Slow> all would solved
+[09:26] <raph> clahey: it's a known limitation
+[09:26] <clahey> raph: Why don't they just add it then?
+[09:26] <raph> clahey: it's mentioned in the intro to the level 1 spec
+[09:26] <raph> clahey: uhm, because it's hard?
+[09:27] <clahey> raph: Fair enough.
+[09:27] <Slow> then there would be no worries on the client end, and we could handle the event semantics so there were never two active clients at teh same time
+[09:27] <raph> Slow: there's no concept of "on events" in CORBA
+[09:27] <Slow> raph: sure there is
+[09:27] <Slow> raph: you just have methods implemented in the client
+[09:27] <Slow> that's how edox does it.. works fine, identical semantics to events
+[09:27] <clahey> raph: It's probably more difficult to implement than to specify, but that's not the point.
+[09:28] <Slow> you call a method in the client, and it does stuff, and returns
+[09:28] <raph> Slow: hmm, interesting
+[09:28] <Slow> raph: this is why edox doesn't need locking, because the server actually blocks when making the CORBA call to the client
+[09:28] <raph> Slow: so that's an implicit writelock for the duration of each event
+[09:28] <Slow> raph: exactly
+[09:28] <raph> and you're counting on the fact that the event listener won't do anything asynchronous
+[09:28] <Slow> yep
+[09:29] <raph> interesting idea
+[09:29] <Slow> and in fact, you could complete the interface by doing idle handlers
+[09:29] <clahey> raph: I can't remember anymore how we thought to emulate DOM other than a read lock.  Is that pretty much the only way?
+[09:29] <Slow> that are setup in the server, which invoke corba methods in teh client when the timeout occurs
+[09:29] <raph> Slow: and the server responds to client invocations while it's blocking on the client response to the event?
+[09:29] <Slow> you could also ask the server for an event
+[09:29] <clahey> Oh, I remember.  We can cache all references to objects and fix them up when we get mutation events?
+[09:30] <raph> clahey: right
+[09:30] <Slow> raph: I'm not exactly sure how it works.. it's possible they stay in the incoming socket queue
+[09:30] <Slow> raph: at any rate, I do know they are executed in order..
+[09:30] <raph> clahey: which implies that you listen for mutation events
+[09:30] <clahey> raph: Which isn't too bad, I don't think.
+[09:30] <Slow> raph: that's how I have keypress events in the emacs bindings, and in the text editor plugins for example
+[09:30] <raph> clahey: right
+[09:30] <raph> clahey: considering that you don't take that hit for native plugins
+[09:30] <Slow> and there's nevery any problem with concurrent operations
+[09:31] <clahey> raph: plugins that use the stateless interface, you mean?
+[09:31] <raph> clahey: I think we're willing to take a significant performance hit to get CORBA compatible plugins as long as native stuf flies
+[09:31] <Slow> raph: also, the plugin can specify whether it wants the event to propagate to the next plugin
+[09:31] <raph> #define native stateless :)
+[09:31] <Slow> eg, in the case of vi keybindings being in command mode
+[09:31] <raph> now if we're defining our own interface, we clearly want to get rid of atrocities such as NodeList
+[09:31] <clahey> raph: I wasn't sure if you meant native as in single executable, or native as in our home spun interface.
+[09:31] <Slow> where the text edit plugin shouldn't deal with the events
+[09:31] <raph> clahey: right, the latter
+[09:32] <clahey> raph: And you meant performance hit to get DOM compatible plugins?
+[09:32] <raph> clahey: right, that's what I meant
+[09:32] <raph> it's getting late :)
+[09:32] <Slow> raph: I think that's the way to do it actually..
+[09:32] <Slow> raph: all operations must be done in a callback
+[09:32] <clahey> raph: How much do we want to base it on GnomeObject?
+[09:32] <raph> clahey: I don't know
+[09:32] <Slow> raph: and you can ask to have an event so you can get into a callback
+[09:32] <clahey> Slow: That's silly.  What about the spell checker example?
+[09:32] <raph> clahey: this bears careful thought
+[09:33] <Slow> clahey: you ask for an event
+[09:33] <Slow> it's the same as a lock really
+[09:33] <clahey> Slow: Essentially a timeout event?
+[09:33]  * raph feels that hacking around the need for real read/write locking isn't going to work in the long run
+[09:33] <Slow> except you get a callback when it's your turn to modify
+[09:33] <raph> Slow: I think that's very similar to locking, actually
+[09:33] <Slow> raph: read what I've been saying, I think it's the right solution..
+[09:33] <Slow> raph: it is.. 
+[09:34] <Slow> raph: but better :)
+[09:34] <raph> Slow: what's the difference between "it's your turn to modify" and "your write lock is granted"?
+[09:34] <clahey> Slow: I really don't think it's better.
+[09:34] <clahey> Slow: Maybe.  It's getting late here too.  :)
+[09:34] <Slow> raph: nothing really, except this is a gereral event interface
+[09:34] <clahey> Slow: It's much easier to write code like this:
+[09:34] <Slow> and solves those problems while it goes
+[09:34] <clahey> get_write_lock();
+[09:34] <raph> Slow: I suspect that to get it totally right, you'll implement all of locking semantics
+[09:34] <clahey> do something
+[09:35] <clahey> free_write_lock();
+[09:35] <clahey> Then it is to request an event and then return to your main loop.
+[09:35] <clahey> s/Then/Than/
+[09:35] <raph> so, bottom line here
+[09:35] <raph> defining our own stateless interface has two serious advantages over DOM
+[09:35] <Slow> clahey: that could work too, but will be the same thing underneath ;-)
+[09:35] <raph> 1. simple + efficient custom implementations
+[09:36] <clahey> Slow: Maybe...   :)
+[09:36] <raph> 2. we can delete on removal
+[09:36] <Slow> simple + efficient sounds like my motto ;-)
+[09:36] <clahey> raph: Where 1 is actually dependent on 2?
+[09:36] <raph> ... I think the temptation to write leaky plugins with DOM will be very great
+[09:37] <raph> clahey: well, they're linked, I'm not sure it's a dependency
+[09:37] <clahey> raph: But 2 is definitely important in its own right as you say.
+[09:37] <clahey> The disadvantages are either,
+[09:37] <raph> and we can still get some level of DOM compatibility, although probably with some performance problems
+[09:37] <Slow> raph: if we want to do stateful clients in DOM
+[09:37] <clahey> non compatible
+[09:37] <raph> s/problems/penalty
+[09:37] <clahey> or slow compatibility layer.
+[09:37] <Slow> it'll be a huge overhead.. since the whole tree will have to exist in every client
+[09:37] <Slow> in terms of memory..
+[09:37] <raph> Slow: not the whole tree - just the part that has been accessed
+[09:37] <clahey> Slow: Not the whole tree.  Just a cache of currently referenced nodes.
+[09:38] <Slow> isn't that broken ?
+[09:38] <Slow> if you keep live references..
+[09:38] <raph> Slow: I think it will be ok
+[09:38] <clahey> Slow: You get mutation events.
+[09:38] <Slow> what if the client decides it suddenly wants to traverse the whole tree ?
+[09:38] <raph> Slow: then it has to keep a lot of state
+[09:38]  * Slow looks at his chunk of core lying on the floor
+[09:38] <Slow> almost landed on my foot!
+[09:38] <raph> traversing the entire tree over CORBA is going to be slow before we do it
+[09:39] <Slow> well, better slow then dead no ?
+[09:39] <raph> because you get a latency roundtrip for each node traversal
+[09:39] <clahey> Slow: So don't use the compatibility layer.  Use the custom layer.
+[09:39] <raph> Slow: so I think that the performance implications _in practice_ will be quite reasonable
+[09:39] <raph> it will perform just fine for small things
+[09:39] <Slow> hmm.. isn't it possible to implement a paging system in a C program ?
+[09:39] <raph> and if you wanted to use DOM for big hulking documents, well, at least it still works
+[09:40]  * raph feels that the _performance_ tradeoff is quite reasonable in this case
+[09:40] <Slow> eg, if it tries to access a non existant node, we could catch the signal, and drag in the appopriate nodes
+[09:40] <Slow> big hack tho ;-)
+[09:40] <raph> you're basically trading doing listening in the compatibility layer for storing state in the server
+[09:40] <raph> Slow: naah
+[09:41] <clahey> Slow: That's what virtual memory is for.
+[09:41] <clahey> Slow: Why reimplement virtual memory?
+[09:41] <Slow> hehe :) true
+[09:41] <raph> ok
+[09:41] <raph> so the other thing is the cost of defining our own interface
+[09:41] <Slow> well, if you're going to implement a cache..
+[09:41] <clahey> raph: And documenting it.
+[09:41] <raph> from the point of view of deciding what it should be
+[09:41] <raph> and documenting it
+[09:41] <Slow> mmm.. but we can work from the current spec
+[09:42] <Slow> what's the license on the spec itself ?
+[09:42] <raph> and there "DOM subset" has some advantages
+[09:42] <Slow> can we just modify it ?
+[09:42] <raph> Slow: none
+[09:42] <raph> Slow: yes, but we want to make it clear what we're doing
+[09:42] <clahey> Slow: Oh, modify the document that is the spec?
+[09:42] <Slow> clahey: yeah
+[09:42] <clahey> Slow: But delete all mention of the word DOM except where we say "based on DOM"?
+[09:42] <Slow> clahey: yeah
+[09:42] <raph> I wouldn't do that
+[09:42] <Slow> but it's a good starting point
+[09:43] <raph> I would create our own document that referenced the DOM doc
+[09:43] <Slow> well.. 'this is a modification of the original DOM spec'
+[09:43] <Slow> with warnings etc.
+[09:43] <clahey> Oh, there's also the cost of coming up with an acronym.  :)
+[09:43] <Slow> haha
+[09:43] <Slow> finally some humour eh ? :)
+[09:44] <raph> we still need to decide what we need to throw out, what to modify, etc.
+[09:44] <Slow> should we fire up a mailing list yet ? :)
+[09:44] <raph> this might not be that hard
+[09:44] <clahey> raph: I don't think it will be.
+[09:44] <raph> node traversal we obviously keep
+[09:44] <Slow> I don't think so.. mostly the node interface..
+[09:44] <Slow> needs to be revamped
+[09:44] <raph> most of the mutations we keep, but with changed semantics
+[09:44] <raph> NodeList we ditch
+[09:44] <Slow> yeah
+[09:44] <clahey> raph: I don't think that "DOM - state + locking" isn't too far from what we want.
+[09:44] <raph> clahey: yeah
+[09:45] <Slow> clahey: yep
+[09:45] <clahey> raph: Probably "- nodelist" and possibly "+ cow"?
+[09:45] <raph> clahey: the remove operation changes semantics drastically
+[09:45]  * Slow asks a silly Q, what's cow ?
+[09:45] <raph> clahey: but you get to keep reparenting
+[09:45] <clahey> Slow: Copy on write.
+[09:45] <Slow> aah
+[09:45] <Slow> ok
+[09:45] <clahey> raph: Ah.  We need to add reparenting back in.  Or is that already there?
+[09:46] <raph> clahey: one thing though
+[09:46] <raph> clahey: when you create a "rootless" tree, how do you reference that?
+[09:46] <raph> we might want to have a toplevel namespace
+[09:46] <clahey> raph: Hmm.  How do you create trees in any case?
+[09:46] <Slow> raph: that's unspecified in the spec too
+[09:46] <Slow> oh, one thing I was thinking of..
+[09:46] <clahey> raph: How do you reference trees in any case, I mean.
+[09:46]  - cduffy [cduffy@resnet197-064-s.dhcp.CSUChico.EDU] has joined #gnome
+[09:46] <Slow> is that we probly want to make 2 permutations of this..
+[09:47] <raph> clahey: you do Document::createElement()
+[09:47] <jpaint> has anyone here used Xnest? 
+[09:47] <clahey> raph: So we have the concept of a stateful document?
+[09:47] <Slow> one an implented editing environment, with a plugin interface etc..
+[09:47] <Slow> the other, a way to create applications from scratch..
+[09:47] <raph> clahey: in the DOM gateway, Document::createElement() puts it in the toplevel namespace under a unique new name
+[09:47] <Slow> where creating a 'document' makes a window.. and you can fill it in any way you like..
+[09:47] <raph> clahey: so inserting one of these into the actual document tree is implemented as reparenting
+[09:48] <Slow> that way you could define complete applications in XML
+[09:48] <clahey> raph: Why don't we just create the concept of an xml document that's just a "rootless" tree somewhere?
+[09:48] <raph> and the DOM remove functoin similarly reparents this way
+[09:48] <Slow> raph/clahey: sounds good to me
+[09:48] <Slow> and a special 'createRoot' method ?
+[09:49] <raph> Slow: right, but this is a deviation from DOM
+[09:49] <Slow> this would be part of the plugin interface I guess..
+[09:49] <clahey> Slow: I think that actually already exists in the gnome-xml interface at least.
+[09:49] <Slow> raph: it's unspecified in the spec
+[09:49] <clahey> raph: So, we keep the idea of node references right?
+[09:49] <raph> Slow: to create a root, you create the tree using Documnent::createElement(), then add it as a child of the Document node
+[09:50] <clahey> raph: It's just that a reference is a set of instructions on how to reach the node that you want?
+[09:50] <Slow> The DOM Level 1 does not specify a way of creating a document instance, and hence document creation is an operation specific to an implementation.
+[09:50]  * bratsche returns.
+[09:50] <raph> clahey: right
+[09:50] <Slow> that's the root I was thinking of
+[09:50] <raph> Slow: right - that's basically saying you can't write "new file" as a plugin
+[09:50] <clahey> raph: You have to have a way to operate on multiple files as well though, no?
+[09:50] <Slow> raph: and why not ? :)
+[09:50] <raph> Slow: see, that's more of a plugin interface thing than a DOM thing, if you ask me
+[09:51] <Slow> raph: I agree, but we should implement it
+[09:51] <Slow> as a plugin interface
+[09:51] <clahey> raph: Ah, so it's part of the plugin interface.  That makes sense.
+[09:51] <raph> Slow: because you want to give semantics to the new file... does it pop up a window? does it just be silent? write its contents into a file?
+[09:51] <Slow> raph: think compiler output.. etc.
+[09:51] <raph> right, it makes total sense to define it as part of the plugin interface
+[09:51] <Slow> oh, ok
+[09:51] <clahey> raph: We should have a method for getting the "notDOM" document given a bonobo container object.
+[09:52] <clahey> raph: But that's a bonobo issue, not our issue.
+[09:52] <Slow> you were not arguing against having it..
+[09:52] <raph> no
+[09:52] <Slow> raph: I agreed with you..
+[09:52] <cduffy> Are there any well-synced mirrors of ftp.gnome.org? (Most of the ones in the list seem to be out of date, and ftp.gnome.org is either dang full or not accepting anon connections)...
+[09:52] <raph> seems like we're in reasonable agreement here :)
+[09:52] <Slow> indeed
+[09:52] <Slow> surprising isn't it :)
+[09:52] <clahey> raph: Do you want to write all or some of this up?
+[09:52] <raph> clahey: urggh
+[09:53] <clahey> raph: I' be willing to do some of that work.
+[09:53] <Slow> I guess we are all just agreeing with what makes sense
+[09:53] <raph> I really don't have time _right now_
+[09:53] <raph> clahey: ok
+[09:53] <Slow> clahey: I can also help
+[09:53] <raph> but I do want this to be written up
+[09:53] <Slow> we will need raph's genious tho :)
+[09:53] <clahey> Shall we create a mailing list?
+[09:53] <raph> it may well be that the ideas need maturing before we commit to a specific design
+[09:53] <clahey> raph: Definitely.
+[09:53] <raph> clahey: perhaps
+[09:54] <Slow> clahey: sure.. 
+[09:54] <Slow> what do we call it ?
+[09:54]  * raph 's head is spinning with all the design decisions and so on we've been considering
+[09:54] <clahey> The other option would be to just discuss it among ourselves for a few days and then send it to gnome-hackers?
+[09:54] <raph> domination@gnome.org
+[09:54] <Slow> I can make one at work if you want..
+[09:54] <jpaint> oooohhh, wow, xnest actually works!
+[09:54] <Slow> hehe :)
+[09:54] <clahey> raph: It's too bad that DOMination doesn't quite work anymore.  :(
+[09:54] <clahey> :)
+[09:54] <Slow> hehe
+[09:54] <bratsche> Hey Jay. How's it going?
+[09:54] <Slow> oh well, we can still call it the world domination project
+[09:54]  * two-star 's head is spinning, and he doesn't understand a word any of you have said in the past hour
+[09:54] <clahey> Shall we call it MOD?  Model of Objects of Documents?
+[09:55] <Slow> nothing wrong with that ;-)
+[09:55] <Slow> hmm.. MIN ? :)
+[09:55] <jpaint> hi bratsche, better now that I can work on fvwm without effecting my running window manager.
+[09:55] <clahey> Slow: World Minimization Project?
+[09:55] <raph> y'know, I think "object model" has a technical meaning that we might be moving away from
+[09:55] <Slow> no idea what it stands for but world doMINation works ;-)
+[09:55] <Slow> hahaha
+[09:55] <clahey> Slow: Ah.
+[09:55] <Slow> indeed
+[09:55]  * cduffy doesn't get it either (perhaps he should learn more 'bout CORBA first).
+[09:56] <clahey> raph: Since we're not really using objects anymore?
+[09:56] <Slow> more like.. multiple interface something..
+[09:56] <bratsche> jpaint: Cool. =)
+[09:56] <Slow> multiple client interface document model
+[09:56] <raph> clahey: right, not in the same sense as DOM
+[09:56] <bratsche> jpaint: I have the applet working now finally. I'm connected now using it.
+[09:56] <DV> So you guys did decided to just drop DOM ?
+[09:56] <Slow> but that has a bad acronym
+[09:56] <raph> DV: yeah
+[09:57] <raph> DV: no, that was a flip answer
+[09:57] <bratsche> Really? So what now?
+[09:57] <clahey> DV: Except support it through a compatibility layer.
+[09:57] <jpaint> bratsche: that's cool; I fixed a few bugs in gnome-ppp that I should commit.
+[09:57] <Slow> DV: not completely, just make a few mods to it
+[09:57] <raph> DV: I think we're going to seriously consider this alternative
+[09:57] <clahey> DV: Oh, and also make it the base for the new thing.
+[09:57] <clahey> DV: That's the current train of thought, anyway.
+[09:57]  * cduffy goes back to WINE (which he at least has the background to halfway-understand).
+[09:57]  - cduffy [cduffy@resnet197-064-s.dhcp.CSUChico.EDU] has quit IRC (Floof.)
+[09:58] <bratsche> jpaint: Cool. I'm going to edit the graphics for this applet to make the animation 46x46 instead of 48x48, add the properties dialog, and then I think it should be about ready to send to you.
+[09:58] <clahey> Slow: I think that acronyms need to be argued about by a large group and then decided on by one person.  :)
+[09:58] <raph> it's a distributed application integration interface, but that acronym isn't much good either
+[09:58] <DV> Ok, I'm fighting with SAX currently ...
+[09:58] <Slow> clahey: well, we should come up with some.. I like thinking up names :)
+[09:58] <raph> DV: the two technical advantages of going stateless seem compelling to me
+[09:58] <Slow> DAII
+[09:58] <Slow> pronounced DIE
+[09:58] <Slow> as in DIE DIE DIE!  WOrld domination!!
+[09:58] <clahey> DIM?  Document Interface Model?
+[09:59] <Slow> hehe
+[09:59] <raph> alt.world.domination.daii.daii.daii
+[09:59] <jpaint> with all the window managers out there, you would think there would be at least ONE that didn't suck.
+[09:59] <Slow> hahahaha
+[09:59]  * Slow rofls
+[09:59] <bratsche> Heh.
+[09:59] <bratsche> What was wrong with DOM?
+[09:59] <raph> bratsche: bloat and memory leaks
+[09:59] <Slow> the corba interface makes no sense
+[09:59] <clahey> raph: And the difficulty of doing a custom implementation.
+[10:00] <clahey> s/raph/bratsche/
+[10:00] <raph> clahey: well, I'm counting that as "bloat"
+[10:00] <clahey> raph: Fair enough.
+[10:00] <DV> Just FYI, it's a good idea to standardize on DOM, since a bunch of 
+[10:00]  * bratsche nods and the little bells on his hat go 'jingle jingle'.
+[10:00] <raph> the custom implementation has potential advantages in both speed and performance
+[10:00] <DV> other specs will build on top of it. Shall I say SMIL  ?
+[10:00] <Slow> raph: don't forget the ability to actually work
+[10:00] <raph> actually, the custom implementation has one _very_ significant advantage
+[10:01] <raph> which is integration with existing code
+[10:01] <Slow> In fact, the CORBA interface as specifed is completely broken
+[10:01] <raph> with DOM, we're asking people to change the representation to the DOM
+[10:01] <clahey> raph: Ooooo.  Interesting.
+[10:01] <raph> so I would count this as three advantages
+[10:01] <raph> DV: and SVG
+[10:02] <Slow> raph: I don't quire understand what you are saying there..
+[10:02] <Slow> s/quire/quite
+[10:02] <raph> DV: the fact that SVG is DOM-based is one reason I'm interested in it
+[10:02] <raph> Slow: say I've written bit scientific visualization program
+[10:02] <raph> Slow: that quite naturally stores its arrays as arrays of doubles
+[10:02] <raph> Slow: with DOM, it won't quite work, I have to recode everything to use DOM instead
+[10:02] <jpaint> DV: what are you interested in SMIL for?
+[10:03] <raph> Slow: but with DAII, I just code up my access methods
+[10:03] <clahey> Slow: A more current example might be with go.  I currently use a custom representation, and would just have to code up my really slow access methods.
+[10:03] <raph> Slow: so that DAII plugins are enabled over the existing codebase
+[10:03] <DV> Just taht SMIL is of interest to the Gnome project ...
+[10:03] <Slow> cool..
+[10:03] <clahey> Slow: Or change my xml representation of the data and get faster access methods.
+[10:03] <raph> DV: so it's worth looking into the DOM gateway to see how much of a restriction that it
+[10:03] <Slow> I'm starting to like DAII as an acronym already ;-)
+[10:03] <raph> is, even
+[10:04] <raph> DV: that's one of the things to work through
+[10:04] <clahey> Slow: Actually, I don't think my current xml format makes a great interface to plugins, but I'm not sure what a better way to do it would be.
+[10:04]  - Slow changed the topic of #gnome to: <raph> alt.world.domination.daii.daii.daii
+[10:04] <DV> Just way for nabil to log on and try to chat with him, his nick is usually layaida
+[10:05] <two-star> what did DAII stand for?
+[10:05] <jpaint> DV: I don't see SMIL being much good outside timelined presentations.
+[10:05] <Slow> now, what does netscape use to render stuff ?
+[10:05] <clahey> DV: What would you recommend as an xml format for a word processing application?
+[10:05] <raph> Slow: DOM
+[10:05] <Slow> is it using XML internally ?
+[10:05] <raph> Slow: no, but DOM internally
+[10:05] <Slow> DOM internally ?
+[10:05] <raph> Slow: yes
+[10:06] <DV> clahey: the format from KDE office ...:-)
+[10:06] <Slow> odd
+[10:06] <Slow> I guess that's why it works for htem
+[10:06] <raph> Slow: HTML gets parsed to a DOM representation, and that's what gets rendered
+[10:06] <clahey> DV: I currently have a list of list of paragraphs each of which contains a list of text regions that have different character properties.
+[10:06] <Slow> raph: think it might be a good idea to steal their renderer ?
+[10:06] <clahey> DV: Interesting thought.
+[10:06] <DV> I didn't look at it but it would be a good idea to try to concile what can be concilied
+[10:06] <clahey> DV: Do you mean because you like it, or just because it's there?
+[10:06] <DV> just because it's there
+[10:07] <DV> Otherwise thing like <p style="Insert CSS properties here>....<p> would be a very good idea !
+[10:07] <Slow> it would be nice if we could.. it'd get us a nice professional layout engine real fast..
+[10:07] <Slow> of course in its current state....
+[10:08] <clahey> DV: Would CSS be good for a word procssor?
+[10:08] <DV> Just considering the thickness of CSS v2: I guess yes ...
+[10:08] <DV> I implemented CSS-v1 partially in Amaya, and that's already a lot ...
+[10:08] <clahey> DV: Except that to really gain the benefits of CSS, I would have to implement the whole thing?
+[10:09] <DV> Well IE-5 is still not fully CSS-1 compliant so ...
+[10:09] <DV> I guess nodody will go and blame you if you don't support everythuing right now :-)
+[10:10] <raph> Slow: good q
+[10:10] <raph> Slow: there are of course licensing problems :(
+[10:10] <raph> here's one argument against daii:
+[10:10] <raph> "references" into the tree need to be variable length
+[10:10] <raph> therefore, doing a traversal of the tree may require dynamic allocation
+[10:10] <raph> further, access into the tree is proportional to tree depth,
+[10:10] <raph> but if you ask me, that doesn't matter at all
+[10:10] <raph> trees are gonna be shallow
+[10:10] <raph> on the other hand, references to a remote DOM through corba also may require dynamic allocation
+[10:10] <clahey> DV: But it might be a good place to start?  I'm not sure.
+[10:10] <raph> lag
+[10:10] <raph> well, I'm going to bed soon
+[10:10] <Slow> raph: I don't think traversing the tree will be that hard..
+[10:11] <DV> clahey: yes it's worth it ... you may be able to borrow existing parsers ...
+[10:11] <bratsche> Can any Mozilla things be made into components that could be embeddable into Gnome apps?
+[10:11] <clahey> DV: I think I'll stick with what I've got for now.
+[10:11] <Slow> raph: maybe I should make a wee orbit test doing tonnes of fast calls ?
+[10:11] <raph> Slow: I'm not talking about hard, I'm concerned with performance
+[10:11] <Slow> see how fast it is
+[10:11] <DV> and you're reusing existing people knowledge which helps for domination
+[10:11] <DV> and export to HTML may be considerably simplkified !
+[10:12] <Slow> clahey: hmm.. we wanted to use the gnome canvas to render onto..
+[10:12] <clahey> DV: I'll have to make a change to the representation to make it more efficient for using daii, but that'll make it more efficient anyway.
+[10:12] <clahey> SLow: Hm?
+[10:12] <Slow> for the actuall application that is to use DAII
+[10:12] <clahey> bratsche: I think that they probably will be made into bonobo components.
+[10:12] <clahey> Slow: Why restrict it?
+[10:12] <Slow> err.. the DAII engine
+[10:13] <clahey> Slow: You should be able to use DAII to reference things that use canvas or things that don't.
+[10:13] <bratsche> clahey: That would be really awesome. Do you know who will be organizing that project?
+[10:13] <raph> Slow: otoh, if performance is a bottleneck, a custom representation can fix the local case
+[10:13] <raph> and in the remote case, I'm pretty sure that the differences between daii and dom will be utterly lost in the noise
+[10:13] <raph> s/pretty/quite/
+[10:13] <raph> a corba remote call is 300 microseconds or so - tree traversal and memory allocation are a handful of microseconds
+[10:13] <raph> actually I benchmarked malloc/free as being almost exactly 1 microsecond on this machine
+[10:13] <Slow> raph: ok
+[10:13] <clahey> bratsche: I don't think there is such a project.  I just think that there eventually will be.
+[10:14] <clahey> bratsche, but that's just a guess.  :)
+[10:14] <Slow> clahey: the canvas makes an excellent 'Document' renderrer tho
+[10:14] <clahey> Slow: Sure, but it's not required, right?
+[10:14] <Slow> not for DAII
+[10:14] <bratsche> clahey: Oh, okay.
+[10:14] <clahey> Slow: I plan to switch go over to using canvas at some point as it turns out.
+[10:15] <clahey> Slow: Not yet though, obviously.
+[10:15] <Slow> I'm just saying for the application that we are producing, it should use the canvas
+[10:15] <Slow> for XMl rendering
+[10:15] <Slow> clahey: you are planning to modify go to use DAII ?
+[10:15] <raph> right, my take is that the canvas is an excellent "integration point" for components
+[10:16] <clahey> Slow: I think that all gnome apps should be modified to provide DAII.
+[10:16] <raph> ie daii components know how to render themselves to the canvas, so you can put lots of components together in the same document
+[10:16] <clahey> raph: Should there be levels of "interest" in the system?
+[10:16] <clahey> raph: For example:
+[10:16] <Slow> no, I think they should be modified to _use_ daii with the daii engine we are making
+[10:16]  * raph can also envision a widget interface, but then you lose things like layers and so on
+[10:17] <Slow> you could even create entire applications with DAII
+[10:17] <clahey> raph: In go, a specific plugin either may, or may not be interested in fonts or paragraph formatting.
+[10:17] <Slow> if you defined ways touse all the gtk widgets
+[10:17] <clahey> raph: Should you be able to specify how detailed you want your xml tree to be?
+[10:17] <raph> clahey: that sounds suspiciously like xml namespaces
+[10:18] <raph> Slow: very interesting idea - NS has done something similar called "xul"
+[10:18] <Slow> raph: I am thinking we should make two DAII XML engines, one, the application framework that we're thinking of with the plugin interface and all that
+[10:18] <raph> and it also reminds /me of the Gimp 0.54 plugin interface :)
+[10:18] <clahey> raph: Specify what the different levels of interest in some application specific way?
+[10:18] <Slow> raph: and another, just a document == window where you can create arbitrary windows and applications with it
+[10:18] <raph> clahey: actually, it's xml namespaces + dom access methods that "filter"
+[10:18] <raph> ...which I think are a proposal for the level 2 dom
+[10:18] <clahey> raph: Hm?
+[10:19] <DV> BTW, concerning namespace we may have to extend DOM API a bit to support it
+[10:19] <raph> DV: indeed
+[10:19] <Slow> it'd be quite easy to pull the canvas and XML renderer from the real app and use it to allow application building
+[10:19] <raph> this is something to consider for daii - support namespaces natively?
+[10:19] <DV> it's handled by libxml but I'm not even sure right now that DOM v2 will have namespace extensions
+[10:19] <Slow> raph: it could help with the above example
+[10:19] <clahey> raph: In my specific case, for instance, different levels would have somewhat different tree structures since text nodes with different fonts would merge together.
+[10:20] <raph> Slow: I don't understand your proposal
+[10:20] <Slow> it would be neat to build GUI interfaces with XML :)
+[10:20] <DV> native: yes that will allow document composition ...
+[10:20] <DV> and I guess needed by bonobo model ...
+[10:20] <Slow> raph: well, we create one thing that's our real 'application' an XML renderer with a DAII interface, and a plugin interface..
+[10:20] <clahey> Slow: In any case, we should have a library that just does the communication and that you have to register you're custom functions with.
+[10:20] <Slow> like edox is
+[10:20] <DV> (not sure on this I didn't read enough)
+[10:20] <raph> Slow: hmm
+[10:20] <Slow> raph: and then another, which is just to give a 'canvas' in a window..
+[10:21] <clahey> Slow: I had completely forgotten that the plan was to build a single "application".
+[10:21] <raph> Slow: it's worth thinking about what's needed to build a full app
+[10:21] <clahey> Slow: There should also be one that just does the daii interface and doesn't do any display at all.
+[10:21] <raph> Slow: but it seems to me that a daii library is about what you want
+[10:21] <Slow> and you can build whatever application you like out of it
+[10:21] <raph> if all you want is a canvas display, then only call that function in the library
+[10:21] <raph> if you want undo & plugins & so on, ask for them
+[10:22] <Slow> raph: this basically gives a seperation between what DAII will be, and what the plugin interface will be..
+[10:22] <clahey> raph: And you could get undo & plugins without the canvas part.
+[10:22] <clahey> raph?
+[10:22] <raph> right, there's a daii engine which is basically DOM
+[10:22] <raph> clahey: yes, that would be nice
+[10:22] <Slow> raph: although, it's an interesting idea to give the plugin framework out like that too
+[10:22] <raph> then there is a function that dispatches specific renderers (like for the canvas) based on the node type
+[10:23] <clahey> raph: It's especially important as far as getting legacy applications to be accessible this way.
+[10:23] <raph> then there's a plugin framework, which includes keeping a registry of plugins, invoking them, putting them in menus, etc., in addition to having the plugin access the document through daii
+[10:23] <raph> clahey: right
+[10:23] <clahey> raph: And one of the possible renderers should be a bonobo container.
+[10:23] <Slow> clahey: the thing is, you can put pretty much anything on the canvas
+[10:23] <raph> clahey: right
+[10:24] <raph> clahey: so that could get implemented by doing not much more than making a canvas window a bonobo container and rendering into that
+[10:24] <raph> the plugin interface may also be the right place to define locking, although that may simply belong in the base daii
+[10:24] <clahey> raph: Which you would use for either non canvas apps or for apps that like having a separate address space and thread of execution.
+[10:24] <raph> clahey: precisely
+[10:24] <raph> clahey: the canvas implies sharing address space,
+[10:25] <raph> which is both an advantage (for performance) and a drawback (for stability, etc)
+[10:25]  - layaida [layaida@194.199.20.132] has joined #gnome
+[10:25] <clahey> raph: I'm not sure what you mean about making a canvas window a bonobo container.
+[10:25] <Slow> but the idea is to have an XML renderer no ?
+[10:25] <raph> clahey: I've _considered_ remote canvas items
+[10:26] <Slow> which in my mind, would be tied to the canvas
+[10:26] <clahey> raph: Do you mean having a canvas item that's a bonobo container?  Perhaps a subclass of the widget item?
+[10:26] <raph> clahey: I'm not sure either :)
+[10:26] <raph> clahey: I don't grok bonobo well enough :(
+[10:26] <raph> clahey: I was thinking more of just having the canvas _widget_
+[10:26] <clahey> raph: I think of bonobo as the standardization of what gnomecc and panel do.
+[10:27] <raph> and daii places the rendered items into that widget, and bonobo embeds the widget
+[10:27] <Slow> I just thought we'd have the canvas widget as the base of an XML renderer
+[10:27] <Slow> and everything would use that
+[10:27] <raph> clahey: right, which is widget/window based
+[10:27] <raph> Slow: agreed
+[10:27] <clahey> raph: Which means that the widget item would need to be usable in the aa canvas?
+[10:27] <Slow> either in the same address space or through plugins..
+[10:28] <raph> clahey: no, you'd never have to embed widgets in the canvas if you didn't want to
+[10:28] <clahey> raph: How would you avoid it if you wanted to embed a bonobo object?
+[10:28] <raph> clahey: well, in that case you'd need to embed a widget
+[10:29] <clahey> I suppose we could just require canvas for all fully "gnome" apps, but I'm not sure if we want to do that.
+[10:29] <raph> clahey: btw, it's not an aa canvas issue, it's a canvas issue
+[10:29] <clahey> raph: Can't you embed widgets in the non-aa canvas?
+[10:29] <raph> clahey: you require the canvas if you want the layered imaging model, etc.
+[10:29] <clahey> raph: That's true.
+[10:29] <raph> clahey: you can embed widgets in both, but last I checked there were quite a few known bugs
+[10:29] <Slow> well, no matter what you do you need an XML parser/renderer no ?
+[10:29] <raph> quartic said he was going to fix it
+[10:29] <clahey> Slow: Not really.
+[10:30] <raph> Slow: there's no such thing as an "XML renderer"
+[10:30] <clahey> Slow: You parse the xml a bit, and then you discover that some other app needs to handle it.
+[10:30] <Slow> oh
+[10:30] <clahey> Slow: Then you send that section of the xml to the other app and embed said app.
+[10:30] <raph> Slow: you _do_ want components that render specific XML languages in meaningful ways
+[10:30] <Slow> what's the right way to say it then ?
+[10:30] <Slow> ok
+[10:30] <clahey> Slow: And you can access the embedded xml through daii!
+[10:31] <raph> actually, here's an interesting idea re embedding
+[10:31] <raph> let's say we do an SVG component
+[10:31] <Slow> SVG ?
+[10:31] <raph> think of SVG as being PostScript 2000
+[10:31] <Slow> ok
+[10:31] <raph> it's XML based instead of forth and has a more powerful imaging model
+[10:31] <layaida> that's agood idea (SVG)
+[10:31] <raph> now you can define components that render themselves into SVG
+[10:32] <raph> and export the SVG across a CORBA connection
+[10:32] <clahey> raph: Sorta like DPS?
+[10:32] <raph> so you can render external address space components even in the canvas
+[10:32] <raph> clahey: sorta, but also not sorta
+[10:32] <clahey> raph: You need to be able to do modifications in the embedded window.
+[10:32] <raph> clahey: so? that's what daii is for
+[10:32] <Slow> hmm.. if you created a DAII engine for windows..
+[10:32] <raph> clahey: and that's why svg is different than DPS
+[10:33] <Slow> you could write a plugin to share the contents of an application with windows
+[10:33] <raph> DPS doesn't really do modifications - you just use new DPS cmmands to paint over
+[10:33] <clahey> raph: Right, but the method of modifying things has to be specified by the embedded object.
+[10:33] <Slow> actaully, it would be very easy
+[10:33] <raph> clahey: not really, you just do dom level 2 style ui events
+[10:33] <clahey> raph: So you would have to send all events to the embedded app.
+[10:34] <raph> clahey: aha, whereas bonobo uses X to do the event dispatching
+[10:34] <clahey> raph: Which would then have to rerender to SVG.
+[10:34] <raph> well, there's no way around that
+[10:34] <clahey> raph: As well as the redraw.
+[10:34] <raph> clahey: right
+[10:34] <clahey> raph: I think you could make it work but it would be ridiculously slow.
+[10:34]  - zed [zed@slmlb11p49.ozemail.com.au] has quit IRC (xchat exiting..)
+[10:34] <raph> clahey: I don't think it would be that bad
+[10:34] <clahey> raph: Maybe not ridiculously slow, but too slow.
+[10:34] <raph> clahey: I can easily imagine a plotting component build that way
+[10:35] <raph> clahey: only one way to find out :)
+[10:35] <clahey> raph: Right, but not a word processor.
+[10:35] <raph> clahey: right
+[10:35] <raph> clahey: sometimes you do want to be in the same address space :)
+[10:35] <Slow> you could share word processor content with another DAII with a plugin
+[10:35] <clahey> Slow: But you also need to share window space.
+[10:36] <Slow> huh ?
+[10:36]  - AntG [mrtna@lsajca134-189.dsl.gtei.net] has quit IRC (Ping timeout: 660 seconds)
+[10:36] <clahey> Slow: That's what I'm discussing anyway.
+[10:36]  * raph thinks about gimp plugins, then thinks about shmem
+[10:36] <Slow> you just need to write a plugin that looks at all nodes, and syncs them against the other DAII
+[10:36] <clahey> raph: Ooo.
+[10:36] <raph> clahey: but that's a CORBA issue
+[10:36] <clahey> raph: With a canvas interface for the other side.
+[10:36] <clahey> raph: Right.  It wouldn't work across a network.
+[10:37] <tigert> hi raph
+[10:37] <raph> clahey: otoh, it might make sense to define a daii->daii interface based on shmem
+[10:37] <raph> hi tig
+[10:37] <clahey> raph: I'm not sure what you mean.
+[10:37] <clahey> Slow: Nor am I sure what you're going for.
+[10:37] <clahey> layaida: You've done work with smil?
+[10:37] <raph> clahey: for transferring larger pieces of tree faster than can be done across a typical CORBA connection
+[10:38] <clahey> raph, Slow: I am still listening.  I just wanted to ask that question.
+[10:38] <Slow> well, say we had our generic DAII engine.. you could write a plugin that connects to two instances (on the same machine or over the network), and then syncs two documents contained in them
+[10:38] <clahey> raph: Interesting.
+[10:38] <clahey> Slow: Why?
+[10:38] <raph> clahey: which _might_ make a word processor plugin more realistic
+[10:38] <Slow> so two people could edit the same document..
+[10:38] <clahey> Slow: And how would it sync them?  Some sort of merge?
+[10:38] <clahey> Slow: Oh.  But automated.  That is an interesting idea.
+[10:39] <Slow> juse use the UI events
+[10:39] <clahey> Slow: I actually thought about that alot for go.
+[10:39] <clahey> Slow: No, you don't use the UI events.
+[10:39] <Slow> clahey: you can almost do it with emacs
+[10:39] <clahey> Slow: You do the edits locally.
+[10:39] <Slow> sorry, teh change events
+[10:39] <Slow> node change events
+[10:39] <clahey> Slow: Then you sync them as soon as you can.
+[10:39] <raph> locking is still an issue
+[10:39] <clahey> Slow: For conflicts, you try to merge them.
+[10:39] <Slow> clahey: you can catch node change events
+[10:40] <clahey> Slow: If you can't, you put up a warning at one end or the other and undo the changes.
+[10:40] <raph> "try to merge" is one way to deal with locking issues :)
+[10:40] <Slow> well, one document would have to be concidered the master
+[10:40] <clahey> Slow: Nope.
+[10:40]  * raph really needs to go to bed
+[10:40] <clahey> Slow: You use some sort of timing to make the decision.
+[10:40] <raph> _very_ stimulating discussion, guys
+[10:40] <clahey> Slow: They can be peers.
+[10:40] <Slow> but the likeliness that someone would put a character on the same line at the same instance is difficult
+[10:40] <clahey> raph: Thank you.  You too.
+[10:40] <Slow> err.. unlikely
+[10:40]  - raph [~raph@raph.dial.idiom.com] has quit IRC (good night)
+[10:41] <Slow> ok, have a good night raph :)
+[10:41] <clahey> Slow: Agreed.
+[10:41] <Slow> s/instance/instant
+[10:41] <clahey> Slow: I actually thought about this a lot at one point.
+[10:41] <Slow> yeah, I've thought of it before too
+[10:41] <clahey> Slow: In terms of just go, but much still applies.
+[10:41] <Slow> you can actually do that with emacs
+[10:42] <Slow> but as soon as you go to the mini buffer, the rest stops
+[10:42] <clahey> Slow: The scheme I came up with was to have a temporary document numbering system.
+[10:42] <Slow> yikes ;)
+[10:42] <clahey> Each change is considered a diff between two document numbers.
+[10:42] <Slow> clahey: I am here basically from working on Edox..
+[10:43] <Slow> but Edox uses a proprietery API, so I thought I should use DOM instead..
+[10:43] <clahey> It's sorta like a very temporary versioning system.
+[10:43] <Slow> but it is very similar, except you operate on widgets instead of nodes
+[10:43] <clahey> Whenever you send a change event, you say what version of the document you're coming from.
+[10:44] <Slow> hm.. sounds complex :)
+[10:44] <clahey> If you recieve a message that changes an old document you have to do a "symmetric" merge.
+[10:44] <Slow> yikes
+[10:44]  - two-star [~munizao@ts1-24.pdx.cyberhighway.net] has quit IRC (it has kind of ... wedge ... shapes inside)
+[10:44] <clahey> By symmetric, I mean that both sides must do the same thing.
+[10:45] <clahey> Both sides have to make the decision who keeps the changes, and it must be the same on both sides.
+[10:45] <Slow> clahey: so my goal is really to create an Edox like app that uses DAII instead
+[10:45] <clahey> Actually, I didn't come up with that symmetric thing until just now.
+[10:45] <Slow> clahey: it's actually fairly easy with a DAII/DOM/Edox type interface..
+[10:45] <clahey> The whole idea of the symmetric thing is that you no longer require any negotiation to choose which side gets to make the change.
+[10:46] <clahey> Essentially, the negotiation is done locally, but the same on both sides.
+[10:46] <clahey> I really like that.  That's cute.
+[10:46] <clahey> Oh.  I'm not sure if it works though.
+[10:46] <clahey> Slow: Are you sure that it's easy to do it properly and efficiently?
+[10:46] <Slow> what is ?
+[10:46] <clahey> Slow: This is a really hard problem we're talking about.
+[10:47] <Slow> doing syncronization ?
+[10:47] <clahey> Slow: Yep.
+[10:47] <clahey> Slow: Well.
+[10:47] <Slow> I would say just make one the master..
+[10:47] <clahey> Slow: My goal is to do syncronization, but keep the GUI completely alive.
+[10:47] <Slow> where if there are any simultaneous edits, one becomes the master doc
+[10:47] <clahey> Slow: That would be one solution.  Probably a decent way to do it too.
+[10:48] <Slow> clahey: what are your plans ?
+[10:48] <Slow> you want to add DAII to go ?
+[10:48] <clahey> Slow: In general, or for syncronization?
+[10:48] <clahey> Slow: Oh, that.
+[10:48] <clahey> Slow: Definitely.
+[10:48] <clahey> Slow: I think that all gnome applications, with the possible exception of games, should export a DAII interface.
+[10:48] <Slow> you are not inrterested in helping me build a canvas XML thingy
+[10:49] <clahey> Slow: Not particularly.  Go is going to require a custom canvas item.
+[10:49] <clahey> Slow: I'm almost completely positive of that fact.
+[10:49] <Slow> clahey: but the idea is to create something almost like what netscape is..
+[10:49] <clahey> Slow: Though I used to think that go could never use the canvas, so I might change my mind again.
+[10:49] <Slow> where you can create entire applications, or documents or whatever through a DAII interface
+[10:50] <Slow> clahey: what exactly is go ?
+[10:50] <clahey> Slow: I understand.  I just don't think it's going to be good enough for a full featured word processor.
+[10:50] <Slow> not good enough ?!
+[10:50] <Slow> it's the only way !
+[10:50] <clahey> Slow: I don't think that it'll be possible to create an efficient and full featured word processor through such a system.
+[10:50] <Slow> you'll get more out of the canvas for a word processor then any other gtk widgets
+[10:51] <clahey> Slow: I plan to use canvas, actually.
+[10:51] <clahey> Slow: It's just going to be a custom item.
+[10:51] <Slow> so why not make use of DAII to provide functionality ?
+[10:51] <Slow> custom item ?
+[10:51] <clahey> Slow: I may eventually be proven wrong.  We'll see.
+[10:51] <clahey> Slow: Like gnumeric uses.
+[10:51] <Slow> what does gnumeric use ?
+[10:51] <clahey> Slow: You create your own draw implementation.
+[10:52] <clahey> Slow: That way you don't have an item for every tiny bit of your GUI.
+[10:52] <Slow> aah, ic
+[10:52] <Slow> but that's fine..
+[10:52] <clahey> Slow: It also prevents you from having to create and delete lots and lots of canvas items as you go.
+[10:52] <clahey> Slow: For instance, without a custom item, scrolling would cause lots and lots of text items to be destroyed and created.
+[10:52] <Slow> you just have to make that describable as an XML node
+[10:53] <Slow> scrolling would ?!
+[10:53] <Slow> scrolling just causes them to be repainted
+[10:53] <Slow> actually, I would argue that you need the canvas :)
+[10:53] <clahey> Slow: Except that allocating a canvas item for every word of a huge document would really be bloated.
+[10:53] <Slow> it would..
+[10:54] <Slow> but most times I think you could get around that
+[10:54] <clahey> Slow: So you either need to create them on the fly or just use a custom item.  Guess which.  :)
+[10:54] <Slow> so long as you have a line of text that's the same font, you can use a single item
+[10:55] <clahey> Slow: As far as the xml thing, I'm not sure whether it's more efficient to keep it in the default xml implementation, or to use a custom representation.
+[10:55] <elerium> whoa... I'm a newbie gtk+ programmer, and I just learned about _set_data and _get_data ... I think I'm going to spooge.
+[10:55] <Slow> then you just need to create an algorythm to break up the line based on the characteristics of it
+[10:55] <Slow> spooge ?
+[10:55] <elerium> spooge = orgasm
+[10:55] <Slow> clahey: the beauty of DAII, is that you can use plugins more easily
+[10:55] <clahey> Slow: Secondly, I'm really a fan of separate address spaces and threads of execution.
+[10:55] <Slow> clahey: you could use any plugin with go if you did that
+[10:56] <clahey> Slow: You don't get my point.  I don't need to have my stuff represented as XML to offer a DAII interface.
+[10:56] <Slow> clahey: which is exactly what a DAII interface provides
+[10:56] <clahey> Slow: That was the whole point about custom representations.
+[10:56] <Slow> oh, that way..
+[10:56] <Slow> ic what you're saying
+[10:56] <Slow> but we have to implement a way to render the xml nodes..
+[10:56] <Slow> why not just do it ince ?!
+[10:57] <Slow> s/ince/once
+[10:57] <clahey> Slow: You can't do that.
+[10:57] <Slow> on the canvas..
+[10:57] <Slow> at least for most common things..
+[10:57] <clahey> Slow: You can't just render xml.  It doesn't work.
+[10:57] <Slow> why not ?
+[10:57] <Slow> explain to me how it works then...
+[10:57] <clahey> Slow: xml doesn't define any semantics at all for the information that it contains.
+[10:57] <clahey> Slow: All xml is is a way to represent arbitrary trees of information.
+[10:57] <Slow> well, you have a node that describes a text sentence no ?
+[10:58] <clahey> Slow: Nope.
+[10:58] <clahey> Slow: Without an application to define it as a text sentence, for all you know it could be some scientific data.
+[10:58] <clahey> Slow: An application or another standard.
+[10:58] <Slow> right
+[10:58] <Slow> and you use tags to define the content ?
+[10:58] <Slow> or namespaces or something..
+[10:59] <clahey> Slow: So, for instance SGM (is that right?) that Raph was talking about.
+[10:59] <Slow> SVM
+[10:59] <clahey> Slow: SVM.
+[10:59] <clahey> Good.
+[10:59] <clahey> Slow: So, if a document is an SVM document, then it has semantics defined for it.
+[10:59] <Slow> clahey: what's an example of a node that contains a text sentence ?
+[10:59] <Slow> I still don't knwo what SVM is
+[10:59] <clahey> Slow: Another example.  A go document.
+[11:00] <clahey> Slow: If you have a go document, you know that it'll have a root node called "Document".
+[11:00] <clahey> Slow: The children of the root "Document" node will be "Paragraph" nodes.
+[11:00] <clahey> Slow: The children of a "Paragraph" node are "text" nodes.
+[11:00] <Slow> ok, so then you render the paragraph nodes
+[11:00] <Slow> onto a canvas
+[11:00] <Slow> text nodes then.. whatever
+[11:01] <clahey> Slow: "text" nodes contain (hopefully  :)  ) human readable text.
+[11:01] <tigert> Nether: well the guys say "Do a demo, as cool as you have a will to code "
+[11:01] <tigert> eek
+[11:01] <clahey> Slow: However, without go there, you don't know any of that.
+[11:01] <Slow> yes, so you create canvas items to represent that text..
+[11:01] <Slow> that's what I call 'rendering' to the canvas
+[11:02] <clahey> Slow: Right, but that has to be application specific.
+[11:02] <Slow> well yes and no
+[11:02] <Slow> we are certainly defining an application here..
+[11:02] <Slow> but with a canvas, you could make all kinds of node types
+[11:02] <clahey> Slow: Except that you also want to define a way to write applications, right?
+[11:02] <Slow> lemme finish
+[11:03] <Slow> you could include node types for the common GTK widgets
+[11:03] <Slow> text, images etc.
+[11:03] <Slow> containers
+[11:03] <Slow> and have things to render them on the canvas
+[11:03] <Slow> that's how you can create a DAII interface that can be used to create a word processor
+[11:04] <clahey> Slow: Let's call it edox.  For Extensible Document ox, for instance.  :)
+[11:04] <clahey> Slow: And dox would export a DAII interface.
+[11:04] <clahey> s/dox/edox/
+[11:04] <clahey> Slow: And edox would define an xml format.
+[11:05] <clahey> Slow: And you could write edox plugins that would look like applications to the user, right?
+[11:06] <clahey> And you would want a way to let edox files launch edox plugins.
+[11:06] <clahey> Perhaps even include javascript using either dom or daii in edox and let people embed things in their edox files?
+[11:07] <clahey> Slow: It's a good idea.
+[11:07] <clahey> Slow: It makes for really easy application development.
+[11:07] <clahey> Slow: It makes for easier sharing of plugins.
+[11:08] <clahey> Slow: A cool thing is that you can create bonobo nodes and embed non edox documents in edox.
+[11:11] <clahey> Slow: Still there?
+[11:13] <elerium> methinks he's not =)
+[11:15] <Slow> sorry
+[11:15] <Slow> my computer decided to spontaneously reboot
+[11:15] <Slow> (I'm ssh'd into work box)
+[11:15] <Slow> using screen
+[11:16] <elerium> screen?
+[11:16] <Slow> yeah, gnu screen
+[11:16] <Slow> lets you detach and reattach multiple logins..
+[11:16] <Slow> sorta like linux virtual consoles
+[11:16] <elerium> nifty ... checking into it right now ;)
+[11:16] <Slow> with the ability to attach and reattach from different plaves
+[11:16] <Slow> places rather
+[11:18] <Slow> clahey: the real advantage, is that plugins have a generic interface that they can use to modify the document
+[11:18] <Slow> clahey: and since the document can also be an application..
+[11:18] <Slow> you can have a spellcheck plugin that automagically works with all the applications that are built for edox and work with DAII
+[11:19] <Slow> so you could build your word processor as an edox plugin/application
+[11:19] <Slow> and then write a few plugins that you need..
+[11:19] <Slow> dictionarey lookup, spellchecker, syntax checker whatever..
+[11:19] <Slow> and you would gain all the plugins (that are applicable) that were previously written
+[11:19] <Slow> and your new plugins would work in all the other applications
+[11:20] <clahey> Slow: Except how does the plugin know what text to check?
+[11:20] <Slow> so in fact, your edox irc client now has spellchecking, your edox web browser now has dictionary lookups etc.
+[11:20] <Slow> using the XML node type
+[11:20] <Slow> and you need to have standardized types
+[11:20] <clahey> Slow: So we have to define all sorts of new text node types so that plugins can decide whether to look at that data?
+[11:21] <Slow> I guess so..
+[11:21] <Slow> isn't that part of XML already ?
+[11:21] <clahey> Slow: I guess that you would use an interface like getAllNodesByName or something like that.
+[11:21] <Slow> yeah sure, that's what I was thinking.. for better performance
+[11:21] <clahey> Slow: Almost nothing is part of xml.  It specifies how you build trees pretty much.
+[11:21] <Slow> well, you could use the 'name' field to specify the content type
+[11:21] <Slow> there would be a way I'm sure
+[11:21] <clahey> Slow: Right, but then the plugin has to know about all the different content types.
+[11:22] <Slow> yes..
+[11:22] <Slow> and this is why you want to have them standardized
+[11:22] <clahey> Slow: I think a much simpler way of doing it is simply to have to change the apps a bit to accomadate the plugins.
+[11:22] <Slow> otherwise, if you write a Go XML parser/renderer thing
+[11:22] <Slow> I won't be able to write plugins that work with both
+[11:22] <clahey> Slow: Have the app launch the spell checker plugin and point it at the correct piece of text.
+[11:23] <Slow> clahey: but how do you know what the plugin wants ?
+[11:23] <Slow> clahey: how about a syntax highlighter..
+[11:23] <clahey> Slow: Maybe you're right.  I'm not sure right this second.  :)
+[11:23] <Slow> it needs to run all the time.. you going to constantly tell it which nodes to look at ?
+[11:23] <clahey> Slow: So we would need to specify a rich text xml node?
+[11:23] <Slow> and you can also implemeng things like keybindings through DIAA too
+[11:23] <clahey> Slow: And all applications would use that node.
+[11:24] <clahey> Slow: I think that keeping things internally in a non-xml format could be a win.
+[11:24] <Slow> I thought XML didn't specify anything ? :)
+[11:24] <clahey> Slow: It doesn't.  That's why we would need to specify it.
+[11:24] <Slow> yeah, you'd need a common rich text format
+[11:24] <Slow> see, without these commonalities, plugins won't be able to work in other applications
+[11:24] <clahey> Slow: Which might be some subset of CSS2.
+[11:25] <Slow> but just think of the possibilities in an application where anything can work with anything else
+[11:25] <clahey> Slow: I'm still not completely convinced of the importance of plugins being that portable.
+[11:25] <clahey> Slow: But perhaps.  I don't know.
+[11:25] <Slow> clahey: it provides a complete environment
+[11:25] <Slow> the kind of environment we're lacking
+[11:25] <Slow> eg, say your an emacs fan
+[11:26] <clahey> You would get emacs keybindings everywhere.
+[11:26] <Slow> and say we're a long wasy along, and Edox has a programmers editor
+[11:26] <clahey> Hmm.
+[11:26] <Slow> word processor
+[11:26] <Slow> irc client
+[11:26] <Slow> everything coud use the emacs bindings
+[11:26] <Slow> everything could use the spellchecker
+[11:26] <Slow> a program called 'gdict' does dictionary lookups from a server at MIT I think it is
+[11:26] <clahey> Slow: Wel.  I already have the base emacs keybindings everywhere.  It's a much better example for vi bindings, but that's besides the point.  :)
+[11:26] <Slow> looks up words
+[11:27] <Slow> it would be trivial to write that as a DAII plugin
+[11:27] <Slow> and then any word anywhere in Edox you could look up
+[11:27] <Slow> browsing the web, irc, word processor .. anywhere
+[11:28] <clahey> Slow: Interesting.
+[11:28] <Slow> writing a technical manual, you could hav eyour syntax highlighter highlight the C code example in the middle
+[11:28] <Slow> there are lots of applications I'm sure I'm not even thinking of..
+[11:28] <clahey> Slow: You would get the same benefit from having an Editor interface though, for example.
+[11:28] <Slow> not to mention that you can have load/save plugins for everything..
+[11:29] <Slow> so you can save your document in PS, html etc..
+[11:29] <Slow> and same goes for the web page your browsing, or the code your editing
+[11:29] <clahey> Slow: You could get all these things by defining CORBA interfaces.
+[11:29] <Slow> basically, it makes much less duplication of work, and makes everything feature rich
+[11:29] <Slow> clahey: yes
+[11:29] <Slow> by using plugins through the DAII CORBA interface
+[11:30] <clahey> Slow: No.
+[11:30] <Slow> no ? :)
+[11:30] <clahey> Slow: I mean.  Yes, that's one way.  But that wasn't what I meant.
+[11:30] <Slow> you mean by making my own interface..
+[11:30] <clahey> Slow: I meant CORBA interfaces for different types of programs.
+[11:31] <Slow> yes, but it's a lot of work..
+[11:31] <clahey> Slow: For instance, you might have a text viewing interface for programs that view text.
+[11:31] <clahey> Slow: I know.
+[11:31] <Slow> that's basically what I'm doing with edox..
+[11:31] <clahey> Slow: It is a really interesting idea.  I'm going to have to think about it more.
+[11:31] <Slow> the other nice thing though, is that you could build much more complex applications with DAII
+[11:32] <clahey> Slow: Actually, I just came up with a better way.
+[11:32] <clahey> Slow: Possibly.
+[11:32] <Slow> a corba interface would have to be pretty complex
+[11:32] <Slow> I mean.. well, you can do it with DAII so, why not ? :)
+[11:32] <clahey> Slow: We define a bunch of xml node types.  gnome xml nodes.
+[11:32]  - gdog [gdog@spazz.ulink.net] has joined #gnome
+[11:33] <clahey> Slow: All you need to do to get the integration with all those plugins is to export a DAII interface that views an xml tree with gnome xml nodes in it.
+[11:33] <Slow> hmm.. isn't that basically what I'm suggesting ?
+[11:33] <clahey> Slow: You use the find by name interface in your plugins since you don't know what the structure above the gnome xml nodes is going to be.
+[11:33] <clahey> Slow: You're suggesting that you link it with the display method.
+[11:34] <clahey> Slow: I don't think that that's a good way to go.
+[11:34] <clahey> Slow: And I actually just came up with a good argument as to why not.
+[11:34] <clahey> Slow: The specific example is a date book.
+[11:34] <clahey> Slow: Built out of gtk objects.
+[11:34] <clahey> Slow: To use edox, you would build your objects in an xml tree.
+[11:35] <gdog> eh...when are they going to add a blinking cursor to gtk+?
+[11:35] <Slow> the implementaion of the display was not part of my argument for a common XML interface
+[11:35] <Slow> I just wanted to have a good XML-node -> display thing
+[11:35] <Slow> and didn't think it was good to have to reimplement it in each application
+[11:36] <Slow> so you do it once so that it can render many things to  canvas
+[11:36] <clahey> Slow: And that would work fine for the display, but the xml that daii sees shouldn't have all the GUI interface information in it.  It should represent the information.  Not the view of the information.
+[11:36] <Slow> and you have a more general purpose engine
+[11:36] <clahey> Slow: That's also the case for saving.
+[11:36] <clahey> Slow: If you save the xml document, you save all the GUI interface along with it?
+[11:36] <Slow> clahey: hmm.. interesting point
+[11:36] <clahey> Slow: That would be weird since the interface would change over time, but old documents wouldn't have changed.
+[11:36] <Slow> clahey: I guess so :)
+[11:37] <Slow> clahey: I guess you'd have to implement save for your application..
+[11:37] <Slow> or at least, give it the node types, and a starting tree node
+[11:37] <Slow> that would work for most things
+[11:37] <clahey> Slow: But the daii exported interface should also be GUI independent.
+[11:37] <Slow> it will be..
+[11:37] <Slow> I'm just saying that it would be nice not to have to rewrite the GUI for every app
+[11:37] <clahey> Slow: And one of the advantages of exporting a daii interface is that you don't need to implement a save.
+[11:38] <clahey> Slow: I think it's necessary.
+[11:38] <clahey> Slow: Or at least for most apps it is.
+[11:38] <clahey> Slow: For some apps it's not.
+[11:38] <Slow> clahey: certainly for some things..
+[11:38] <Slow> but for others, it's not
+[11:38] <clahey> Slow: For instance, irc.
+[11:38] <clahey> Slow: But even there I can see arguments against it.
+[11:38] <Slow> well, for irc, you just tell it to start at the top of the irc channel node, and save only text nodes
+[11:39] <clahey> Slow: Except that you also want the daii interface to output meta information about the channel and stuff.
+[11:39] <gdog> would it be hard to add a blinking cursor to GTK?
+[11:39] <clahey> Slow: Do you keep multiple nodes?
+[11:39] <clahey> gdog: I don't think so.  You would probably want to add a timeout for it.
+[11:39] <Slow> meta information ?
+[11:39] <Slow> oh, which channel and stuff
+[11:39] <gdog> clahey: how would I go about hacking it to do that?
+[11:40] <clahey> Slow: Server, channel, how many channels, that sort of thing.
+[11:40] <clahey> Slow: Exactly.
+[11:40] <clahey> Slow: Let me amend what I said about multiple nodes.
+[11:40] <Slow> clahey: well, you're going to have to do some fiddling to get that right either way now aren't you ?
+[11:40] <gdog> clahey: like, on a text input form...or even when using gedit...a blinking cursor makes it much easier to see..(where the cursor is)
+[11:40] <clahey> Slow: I meant to ask if you would keep multiple trees.
+[11:40] <clahey> gdog: You would have to implement it in the text widget.
+[11:40] <Slow> pobably not, I would recommend smart savers instead
+[11:40] <clahey> gdog: I'll keep in mind your request for use in go.
+[11:41] <clahey> Slow: Except that you want the daii interface to also be smart.
+[11:41] <gdog> clahey: who should I talk to? who's a good gtk+ hacker?
+[11:41] <gdog> clahey: go?
+[11:41] <Slow> clahey: I think you are nitpicking :)
+[11:41] <Slow> clahey: these problems are not hard to solve.. certainly no harder than the usual problems of writing an app
+[11:42] <Slow> but the whole process will be simpler, and you get other benifits like plugins..
+[11:42] <clahey> Slow: Hold on.  I thought we agreed that plugins were a separate issue from having GUI creation be automated.
+[11:42] <Slow> clahey: I'm arguing for a complete environment here..
+[11:42] <Slow> not just plugins or just this..
+[11:42] <clahey> Slow: I agree.
+[11:43] <clahey> Slow: I just think that the separate parts of the environment should be kept separate.
+[11:43] <Slow> I'm talking about the environment I'd like to see created with this
+[11:43] <Slow> and the environment should include a multipurpose XML renderer
+[11:43] <clahey> Slow: Agreed.
+[11:43] <clahey> Slow: But the multipurpose XML renderer does not have plugins as one of the advantages.
+[11:44] <Slow> so you don't have to reinvent the wheel each time.. otherwise, what the heck is the advantage of DIAA ?!
+[11:44] <clahey> Slow: The plugins thing comes from diaa and gnome specific xml node types.
+[11:44] <gdog> clahey: what's go?
+[11:44] <clahey> gdog: Word Processor.
+[11:44] <Slow> it just means you have to implement even more.. 
+[11:44] <clahey> Slow: Right.
+[11:45] <Slow> clahey: yes, I see what you are saying, and you are correct
+[11:45] <Slow> clahey: they are not tied to each other
+[11:45] <clahey> Slow: I'm being a bit pedantic.
+[11:45] <clahey> Slow: Well, they are tied together a tiny bit.
+[11:45] <Slow> yes, they would be
+[11:45] <Slow> in the sense that you are creating a complete environment
+[11:46] <Slow> and without the standardized XML types to renderer you'd be SOL
+[11:46] <clahey> Slow: Mainly that using the multipurpose xml renderer implies that your app will be daii and gnome specific xml node types compliant.
+[11:46] <gdog> clahey: what about gwp, and AbiWord? 
+[11:46] <Slow> clahey: yes
+[11:46] <clahey> gdog: I didn't know about either before I started work on go.
+[11:46] <Slow> clahey: and it'll kick AbiWord's butt ;-)
+[11:46] <clahey> Slow: I don't quite understand what you mean about a complete environment.  Unless you mean for the application developer.
+[11:47] <Slow> clahey: yeah, I mean for a plugin/application developer
+[11:47] <clahey> Slow: I think that a custom renderer and back end will still create a complete environment for the user.
+[11:47] <clahey> Slow: Oh!
+[11:47] <clahey> Slow: That would be part of my confusion.
+[11:47] <gdog> Hmm...AbiWord isn't that cool..but go doesn't sound like a cool name dude...it's gotta have a cool name...
+[11:47] <clahey> Slow: I had no clue how not using the xml renderer would prevent you from getting a complete environment for the user.
+[11:48] <Slow> hehehe :)
+[11:48] <clahey> gdog: I know.
+[11:48] <Slow> sorry
+[11:48] <clahey> Slow: Actually, wow.  That is pretty cool.
+[11:48] <clahey> Slow: edox would be great for RAD stuff.
+[11:48] <Slow> clahey: it would be great for lots of things..
+[11:49] <Slow> even just as a programmers editor.. you could create your own plugins in whatever language you want..
+[11:49] <Slow> never mind that it could also become other applications
+[11:50] <clahey> Slow: Well, once again, that's based on the gnome specific xml types (which I freely admit are inspired by edox's need for standard node types.)
+[11:50] <Slow> any little thing you implemented for one application, would be usable in another
+[11:50] <elerium> programmers editor with plugins using whatever language, can you say emacs on crack? that'd be great.
+[11:50] <Slow> hehe :)
+[11:50] <clahey> Slow: That's actually the much cooler thing.  Why create a programmer's editor?
+[11:50] <gdog> hmm...why'd they use MC for the file manager in GNOME?
+[11:50] <clahey> Slow: When there's emacs ready for the picking.
+[11:50] <Slow> clahey: because I can :)
+[11:51] <clahey> Slow: All you would need to do is equip it with a daii interface that uses the gnome specific xml types.
+[11:51] <Slow> clahey: because I'm not a big elisp fan.. I'd rather write my syntax highlighting modules in perl :)
+[11:51] <clahey> Slow: Right, but what I just described would allow that.
+[11:51] <Slow> clahey: oh, ic, add that to emacs ?
+[11:51] <Slow> that'd be silly..
+[11:51] <clahey> Slow: No, that'd be great!
+[11:51] <Slow> the idea is you can also do other stuff
+[11:51] <Slow> well, it'd be cool :)
+[11:52] <Slow> but the idea is that you could also use the regex search/replace in the word processor
+[11:52] <clahey> Slow: Your dictionary lookup plugin that contacts a server?  You'd be able to use it in emacs.
+[11:52] <clahey> Slow: Well.  Go already has a builting regex search/replace, but that's not the point.  :)
+[11:52] <Slow> or whatever else you have
+[11:52] <Slow> clahey: it's only an example.. you'd be able to use anything anywhere
+[11:52]  - bratsche [~bratsche@PPP28.fortworth.nationwide.net] has quit IRC (Connection reset by peer)
+[11:52] <clahey> Slow: Definitely.
+[11:52] <Slow> surely you must be seeing the benifits ? :)
+[11:53] <clahey> Slow: I sure am.
+[11:53] <clahey> Slow: I think it would be good to give this idea of gnome specific xml nodes a name.
+[11:53] <clahey> Slow: It's most definitely a separate thing from the xml renderer.
+[11:53] <clahey> Slow: Although the renderer sits on top of it.
+[11:53] <clahey> Slow: Perhaps we could give it a name that went back to its edox roots?
+[11:54] <Slow> such as ?
+[11:54] <clahey> Slow: I don't know.
+[11:54] <clahey> Slow: I'm sorry if I seem overly concerned with keeping those two concepts separate.
+[11:54] <Slow> the renderer is nice cause then you don't need to worry about implementing the renderer again elsewhere
+[11:54] <Slow> hehee :)
+[11:54] <Slow> ok
+[11:55] <clahey> Slow: They seem like very separate things to me though, and I'd rather be able to use one and not the other.
+[11:55] <Slow> well, you will..
+[11:55] <clahey> Slow: Specifically because of the problems I mentioned about not exporting interface through daii.
+[11:55] <Slow> this is part of the idea
+[11:55] <Slow> you also allow the renderer to act as an application builder
+[11:55] <Slow> that's not part of the Edox
+[11:55] <clahey> Slow: That would be cool.
+[11:56] <Slow> eg, just for creating apps real quick
+[11:56] <clahey> Slow: That's perfect for RAD.
+[11:56] <clahey> Slow: Actually, why not have enodes with some sort of scripting language in them?
+[11:56] <clahey> Slow: Then you would attach such nodes to GUI elements.
+[11:57] <clahey> Slow: And the renderer would become, essentially, your application "simulator".
+[11:57] <Slow> hmm.. DAII (the DOM spec really) specifies how UI events and such are handled
+[11:57] <clahey> Slow: You represent all application data as some sort of xml tree, perhaps?
+[11:58] <Slow> so you should be able to make XML nodes that end up being rendered as GTK widgets
+[11:58] <Slow> and then receive UI events for them
+[11:58] <clahey> Slow: And then you would have an application that you can halt and then restart in exactly the same position.  Your RAD applications would get free session management.
+[11:58] <Slow> hehe, you could actaully :)
+[11:59]  - gdog [gdog@spazz.ulink.net] has quit IRC (changing servers)
+[11:59] <clahey> Slow: I think that (daii+edox+enodes+attaching scripts within the xml) is the perfect answer to visual basic.
+[11:59] <Slow> clahey: hmm.. could be :)
+[11:59] <Slow> certainly you could build applications very easily
+[11:59] <Slow> you could even make an application builder
+[11:59] <clahey> Slow: I really like that.  Not for me really, but for all the people that would program in VB on a PC.
+[12:00] <Slow> and then save the xml
+[12:00] <clahey> Slow: And you get an xml file that you run in edox and it runs your app.
+[12:00] <Slow> hehe
+[12:00] <Slow> you could to :)
+[12:00] <Slow> that's scarey man
+[12:00] <clahey> Slow: And you implement saving by having them build another xml tree.
+[12:01] <clahey> Slow: I don't think most such applications need to save though.
+[12:01] <clahey> Slow: One of my arguments against edox was going to be that there really shouldn't be all that many applications.
+[12:01] <clahey> Slow: But I'm starting to think I might be wrong.
+[12:02] <Slow> well, also keep in mind that they are seperate proceses..
+[12:02] <clahey> Slow: So, the one last thing we need is a way to work databases into this.
+[12:02] <Slow> so the issue of bloat is not that bad
+[12:02] <Slow> clahey: hmm..
+[12:02] <Slow> I guess you just need to have a database interface app 
+[12:03] <clahey> Slow: That wasn't what I meant.  I just meant that there weren't as many things that people would want to do.  But then I think of all the little specialty apps that are written I see where I was wrong.
+[12:03] <clahey> s/as/so/
+[12:03] <clahey> Slow: But many of those sorts or apps would do well to be written in VB or edox-builder.
+[12:03] <Slow> EB :)
+[12:04] <clahey> Slow: I don't think that a database application is what I meant.
+[12:04] <Slow> right
+[12:04] <clahey> Slow: I didn't mean that sarcastically about a database applicatoin.
+[12:04] <clahey> s/oin/ion/
+[12:04] <Slow> no worries :)
+[12:04] <clahey> Slow: If we want a VB killer, we need something like access.
+[12:04] <Slow> I'm too tired to take anything harshly :)
+[12:05] <clahey> Slow: With EB and something like Access that works with EB like a breeze, we've got that done.
+[12:05] <clahey> Slow: I can't imagine that EB won't be completely as easy to use as VB.
+[12:06] <clahey> Slow: And it makes better applications.  Saving is a breeze.  Undo and redo are perhaps free.  Session management, if we do it correctly, is free.
+[12:07] <clahey> Slow: I'm all of a sudden excited about edox as a rapid application builder.
+[12:07] <Slow> haha :)
+[12:07] <Slow> clahey: sure :)
+[12:07] <Slow> clahey: I mostly just need help making the renderer
+[12:07] <Slow> and of course, DAII needs to be built
+[12:07] <clahey> Slow: Slow down Slow.  :)
+[12:07] <clahey> Slow: Sorry.  I had to say that.  :)
+[12:07] <Slow> hehe
+[12:07] <Slow> np :)
+[12:08] <Slow> but I think the renderer is actually a good generic, multi-purpose goal
+[12:08] <clahey> Slow: In any case, what I wanted to say was that there are a few things to do before making the renderer.  The first is, as you say, daii.
+[12:08] <clahey> Slow: The second is to define enodes or whatever we call it.
+[12:08] <Slow> yep
+[12:08] <Slow> that part will be easier
+[12:09] <Slow> the hardest part will be the renderer
+[12:09] <clahey> Slow: Well, there will be people that will have opinions about it.
+[12:09] <clahey> Slow: I think it's good to let people argue about it before writing the renderer.
+[12:09]  - kmaraas [~kmaraas@okofam-gw.online.no] has joined #gnome
+[12:09] <Slow> clahey: so long as it doesn't take as long to convince them as it took with you ;-)
+[12:09]  * Slow hides
+[12:09] <clahey> Slow: I don't think the renderer is actually all that hard.  All you have to do is create a conduit between xml and canvas.
+[12:10] <Slow> yep
+[12:10] <clahey> Slow: A fair criticism.  :)
+[12:10] <Slow> but you also need geometry management
+[12:10] <Slow> and you want to make the framework nice, so you can add new widgets/items fairly easily
+[12:10] <clahey> Slow: Well, Raph was talking about some of that earlier.
+[12:10] <Slow> yep
+[12:10] <clahey> Slow: In an earlier message, I mean.
+[12:11] <Slow> yeah, I was talking with him about it earlier too
+[12:11] <Slow> I should probly go to bed..
+[12:11] <clahey> Slow: Talking about making canvas items to do geometry management.
+[12:11] <Slow> gotta get up in 5 or 6 hours
+[12:11] <clahey> Slow: If you used those, you'd be set.
+[12:12] <Slow> clahey: yeah, too bad we couldn't make them use gtk boxes :)
+[12:12] <Slow> clahey: oh, even just having a common way to do rich text on a canvas would be cool
+[12:12] <clahey> Slow: Well, that will just have to be redone.  I don't think there's any way around it.
+[12:12] <Slow> hmm.. neat stuff
+[12:13] <clahey> Slow: Luckily, I don't think that's edox's job though.  I think edo will just have to map from xml to the canvas box items.
+[12:13] <Slow> yep
+[12:13] <clahey> Slow: The hard part isn't going to be the renderer.  It's going to be the editor.
+[12:13] <Slow> edox will mostly be about plugin framework
+[12:13] <Slow> editor ?
+[12:14] <clahey> Slow: The other hard part will be stomaching seeing the EB version of those event list boxes that you get in VB and knowing that I had some part in creating it.  :)
+[12:14] <clahey> Slow: For the application developer.
+[12:14] <Slow> aah, right :)
+[12:14] <Slow> hehe
+[12:15] <clahey> Slow: Isn't the plugin framework just daii+enodes+a couple small things?
+[12:15] <Slow> clahey: I would be very happy for someone to work with :)
+[12:15] <Slow> clahey: yeah, basically
+[12:15] <clahey> Slow: I just meant that I was here for this discussion.  :)
+[12:15] <clahey> Slow: I would consider working on it if I didn't already have a project.
+[12:16] <Slow> clahey: well, choice is yours of course :)
+[12:16] <clahey> Slow: Of course.
+[12:16] <Slow> clahey: I should get to sleep :)
+[12:16] <clahey> Slow: Just one minute?
+[12:16] <Slow> you bet
+[12:17] <clahey> Slow: I'm not sure what I'm trying to say.  :)
+[12:17] <clahey> Slow: So I keep deleting it.
+[12:17] <Slow> oh :)
+[12:17] <Slow> hehe
+[12:17] <clahey> Slow: I really like the idea of EB.
+[12:17] <clahey> Slow: I clearly like Daii after an evening of arguing about it.  :)
+[12:18] <Slow> haha
+[12:18] <clahey> Slow: I also like what I've been calling enodes.  A name for the standard would be great.  Enodes is good except for the similarity to elisp.
+[12:18]  * Slow nods
+[12:18] <clahey> Slow: I'm still reluctant on the idea of using the renderer for something like go.
+[12:19] <clahey> Slow: I'll try not to blinder myself.
+[12:19] <Slow> hmm.. how come ?
+[12:19] <Slow> performance ?
+[12:19] <clahey> Slow: And that opinion could backfire majorly on me when I no longer win the gnome wp war because of it. :)
+[12:19] <Slow> hehe
+[12:20] <Slow> it is quite hte war isn't it ? :)
+[12:20] <clahey> Slow: I thought you were asking why I wasn't going to blinder myself.  :)
+[12:20] <clahey> Slow: It's weird.
+[12:20] <clahey> Slow: Being in competition and cooperation at the same time.
+[12:20] <Slow> blinder ?
+[12:21] <clahey> Slow: I think the term comes from when they put pieces of material to either side of a horse so that it wouldn't turn its head to look at things.
+[12:21] <clahey> Slow: Those were blinders.
+[12:21] <clahey> Slow: I think it essentially means that I'll keep my mind open.
+[12:21] <clahey> Slow: That's what I'm saying.
+[12:21]  - montana [montana@helmi.satama.saunalahti.fi] has quit IRC (Ping timeout: 678 seconds)
+[12:21]  - kmaraas [~kmaraas@okofam-gw.online.no] has quit IRC (Ping timeout: 678 seconds)
+[12:21]  - kmaraas [~kmaraas@okofam-gw.online.no] has joined #gnome
+[12:22] <clahey> Slow: I'm not sure if it's a correct saying or whether my guess at the origin is correct, but what I'm saying is that I'll try to not close my mind to the idea.
+[12:22] <clahey> Slow: They put pieces of material to either side of a horse's head, I mean.
+[12:23] <Slow> aah, ok
+[12:23] <Slow> oh right.. I've seen that
+[12:23] <Slow> don't remember what they call them..
+[12:23] <elerium> I think they are called blinders =)
+[12:23] <clahey> Slow: In any case, the two main reasons I see right now against using edox in go are a) performance and b) the issues involved with not exporting the GUI in either the daii interface or the save mechanism.
+[12:24] <Slow> what do you mean 'not exporting the GUI' ?
+[12:24] <Slow> My personal opinion is that the renderer will have to be as high performance as possible.. 
+[12:24] <Slow> and that it could end up being tweaked by more people
+[12:24] <clahey> Slow: If I build a GUI using xml, then exporting that xml tree to daii exports my gui to daii.
+[12:25] <clahey> Slow: Actually, I'm not sure if toolbars and menus and scrollbars should be part of the renderer.
+[12:25] <clahey> Slow: Well, not the main toolbar, menus, and scrollbars.
+[12:25] <Slow> they wouldn't be in edox, that's the job of the plugin code
+[12:25] <clahey> Slow: And for a word processor, there isn't anything else.  :)
+[12:26] <Slow> along with the configuration of which tools end up on the toolbar in which modes etc.
+[12:26] <clahey> Slow: The performance issues come with keeping an xml tree as the representation instead of a custom widget.
+[12:26] <clahey> Slow: Although that might be worked into the edox framework.
+[12:27] <Slow> clahey: how much rapid changing of the gui is required tho ?
+[12:27] <Slow> I think the only real problem will be with memory usage, but even that shouldn't be too bad
+[12:27] <clahey> Slow: Since the custom widget would export an xml interface.
+[12:27] <clahey> Slow: Actually, there are lots of problems with using xml as the back end for a word processor.
+[12:27] <Slow> yes, the rich text interface would be the most important for speed
+[12:28] <clahey> Slow: The most prominent one I can think of is the fact that the xml is not geometrically addressable.
+[12:28] <clahey> Slow: You can't ask for the line of text containing the 9299th row of pixels.
+[12:28] <Slow> that could be handled with style sheets tho
+[12:28] <Slow> hmm..
+[12:28] <clahey> Slow: Hmmm.
+[12:28] <clahey> Slow: I just had an idea.
+[12:28] <Slow> I would like to be able to do that tho
+[12:28] <clahey> Slow: Okay.  Let me think for a second.
+[12:28] <clahey> Slow: Hmm.
+[12:29] <Slow> and also proper tab spaces for proportional fonts
+[12:29] <clahey> Slow: Okay, so why not let edox "components" have custom representations if they want to?
+[12:29] <Slow> what do you mean by custom representations ?
+[12:30] <clahey> Slow: Sorta like having an array of doubles in the back end, but exporting it through daii.
+[12:30] <clahey> Slow: But in your case, the representation changes as you move around the tree.
+[12:31] <clahey> Slow: So the rich text widget represents its xml tree as a custom tree tagged with geometric information (go already has such a tree in the GO_UNSTABLE branch.
+[12:31] <clahey> Slow: But that custom representation is contained in an xml tree.
+[12:31] <clahey> Slow: And you have vtables.
+[12:31] <Slow> hmm.. yeah
+[12:32] <Slow> you could also make 2 nodes
+[12:32] <clahey> Slow: If you had that, I would be almost completely convinces.
+[12:32] <clahey> convinced.
+[12:32] <Slow> one for the plain text 
+[12:32] <clahey> Slow: The only thing is that a word processor isn't all that complicated.
+[12:32] <clahey> Slow: At least the renderer isn't.  It's just a rich text widget.
+[12:33] <clahey> Slow: A word processor is all in the logic.
+[12:33] <Slow> clahey: no, but it's very demanding in terms of positioning and layout etc.
+[12:33] <Nat> Don't forget embedding and stuff.
+[12:33] <clahey> Slow: And I think I like a standard application way of thinking better.
+[12:33] <Slow> clahey: that's the other thing, you want to be able to have images and stuff
+[12:33] <clahey> Nat: Which is faster if you embed directly instead of through plug/socket.  Agreed.
+[12:34] <Slow> the overhead of using the socket is minimal
+[12:34] <clahey> Nat: Though a shared memory version of the canvas might be enough to offset that speed.
+[12:34] <Nat> Eh?
+[12:34] <Nat> you let bonobo worry about that
+[12:34] <Slow> clahey: you can just specify an url for the image file
+[12:34] <Slow> in an XMl node
+[12:34] <clahey> Slow: Hmm.  Interesting.
+[12:34] <Slow> and then have a plugin that deals with changing the embeded image
+[12:35] <clahey> Slow: Except that the rich text widget is using a custom representation so you can't do that.
+[12:35] <Slow> eh ?
+[12:35] <clahey> Slow: Essentially, the rich text widget has to contain special logic to deal with embedded images.
+[12:35] <Slow> sure you can, it's XML
+[12:35] <clahey> Slow: It's xml on the outside.  It's not xml on the inside.
+[12:35] <Slow> oh, I'm talking about the renderer
+[12:35] <Slow> the renderer would have to be built to deal with it
+[12:35] <clahey> Slow: The rich text renderer?
+[12:36] <Slow> that's what I'm trying to say.. once the renderer is there, it's up to it to do the work
+[12:36] <clahey> Slow: Which I could just use without using edox?  :)
+[12:36] <Slow> clahey: no, the multi-purpose one we were talking about earlier
+[12:36] <Slow> sure
+[12:36] <Slow> or you could make your word processor an edox plugin
+[12:36] <Slow> not that the thing needs to be called edox, but you get hte idea
+[12:36] <clahey> Slow: I understand.
+[12:36] <clahey> Slow: I prefer to think in a more standard way about this problem.
+[12:37] <clahey> Slow: But they're both options.
+[12:37] <clahey> Nat: Are you still around?
+[12:37] <Slow> I'm going to go to sleep :)
+[12:37] <Slow> g'night clahey
+[12:37] <clahey> Slow: Fair enough.
+[12:37] <clahey> Slow: Good night.
+[12:37] <Slow> been a very interesting talk :)
+[12:37] <clahey> Slow: Should I email Raph about EB?  Would he be interested?
+[12:38] <Slow> sure
+[12:38] <clahey> Slow: No question that it was an interesting talk.
+[12:38] <Slow> I imagine he would be, yep
+[12:38] <Slow> maybe we should start a mailing list soon ?
+[12:38] <clahey> Slow: Ian Main, right?
+[12:38] <Slow> yep
+[12:38] <Slow> imain@gtk.org
+[12:39]  - Slow is now known as Slow_bed
+[12:39] <clahey> Slow: daii@gnome.org?
+[12:39]  - kmaraas [~kmaraas@okofam-gw.online.no] has quit IRC (Ping timeout: 616 seconds)
+[12:39] <Slow_bed> hmm.. yep, could work :)
+[12:39] <Slow_bed> feel free to email me..
+[12:39]  * Slow_bed is off to listen to his pillow :)
+[12:40] <clahey> Slow_bed: I'll cc you in my email.  Feel free to complain if I misrepresent you at all.

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Patch for HTML SCRIPT</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Patch for HTML SCRIPT">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Patch for HTML SCRIPT</h1>
+<!-- received="Sun Oct 15 10:20:52 2000" -->
+<!-- isoreceived="20001015142052" -->
+<!-- sent="Sun, 15 Oct 2000 16:20:45 +0200" -->
+<!-- isosent="20001015142045" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Patch for HTML SCRIPT" -->
+<!-- id="20001015162045.I6250@w3.org" -->
+<!-- inreplyto="39E9B3E2.FE7EE23D@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 10:20:45 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0962.html">Bjorn Reese: "Re: [xml] Patch for HTML SCRIPT"</a>
+<li><strong>In reply to:</strong> <a href="0962.html">Bjorn Reese: "Re: [xml] Patch for HTML SCRIPT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 15, 2000 at 01:40:50PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; I looked at the attribute problem today, and made the attached patches.
+</em><br>
+<p>&nbsp;&nbsp;thanks for working on this !
+<br>
+<p><em>&gt; The change to HTMLtree.c prevents HTML attributes from being encoded
+</em><br>
+<em>&gt; when they are output.
+</em><br>
+<p>&nbsp;&nbsp;Hum, actually I think special characters in HTML attribute should be
+<br>
+escaped in all cases:
+<br>
+<a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data</a>
+<br>
+----------------
+<br>
+Note. The DTD defines script and style data to be CDATA for both element
+<br>
+&nbsp;&nbsp;&nbsp;content and attribute values. SGML rules do not allow character references
+<br>
+&nbsp;&nbsp;&nbsp;in CDATA element content but do allow them in CDATA attribute values.
+<br>
+----------------
+<br>
+<p><em>&gt; I have not found any justification for (or
+</em><br>
+<em>&gt; against) this in the HTML specification, but the change makes sense
+</em><br>
+<em>&gt; considering that one can embed code in attributes. Maybe this should
+</em><br>
+<em>&gt; be limited to event attributes?
+</em><br>
+<p>&nbsp;&nbsp;Well I think the previous Note makes clear that there is actually
+<br>
+a difference. I do think that the escaping is actually required by
+<br>
+SGML. Anyway it's allowed and for cleanness I think it should be used.
+<br>
+I actually wondered if this should be changed yesterday and started
+<br>
+working on it until I find the Note. I will add the detection function I
+<br>
+wrote yesterday since event attibute probably need special handling
+<br>
+at the client level anyway:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;int htmlIsScriptAttribute(const xmlChar *name);
+<br>
+<p><em>&gt; The change to SAX.c normalizes the HTML attributes. The normalization
+</em><br>
+<em>&gt; scheme mentioned in <a href="http://www.w3.org/TR/html4/types.html#h-6.2">http://www.w3.org/TR/html4/types.html#h-6.2</a> looks
+</em><br>
+<em>&gt; suspiciously like that of XML attribute normalization.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;I think it's due to XML Dtd specification being a compatible
+<br>
+subset of SGML Dtd's ones. Hence the inherited rules for the content
+<br>
+model of attributes in both metalanguages are similar, no surprize
+<br>
+but good catch ! I have applied that patch :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0962.html">Bjorn Reese: "Re: [xml] Patch for HTML SCRIPT"</a>
+<li><strong>In reply to:</strong> <a href="0962.html">Bjorn Reese: "Re: [xml] Patch for HTML SCRIPT"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 10:43:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

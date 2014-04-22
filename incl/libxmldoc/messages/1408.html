@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Encoding and Win32</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Encoding and Win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Encoding and Win32</h1>
+<!-- received="Fri Feb  2 10:13:45 2001" -->
+<!-- isoreceived="20010202151345" -->
+<!-- sent="Fri, 2 Feb 2001 16:12:47 +0100" -->
+<!-- isosent="20010202151247" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Encoding and Win32" -->
+<!-- id="20010202161247.L6648@imag.fr" -->
+<!-- inreplyto="001801c08d13$9a4dd120$0b01a8c0@home.loc" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Encoding%20and%20Win32"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 10:12:47 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1407.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1407.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 02, 2001 at 01:28:09PM +0100, Igor Zlatkovic wrote:
+<br>
+[ Please subscribe to the list, or double check you subsciption address
+<br>
+&nbsp;&nbsp;I won't approve all your mail manually indefinitely ... Daniel ]
+<br>
+<p><em>&gt; Conversions under other libraries, such as Microsoft NLS implementation
+</em><br>
+<em>&gt; found in Win32 is about the same. A conversion between any two encoding
+</em><br>
+<em>&gt; standards requires you to go through wide charracters. For example, there is
+</em><br>
+<p>&nbsp;&nbsp;Wich is plain braindead and simply stupid ...
+<br>
+<p><em>&gt; no direct conversion between UTF-8 and SHIFT-JIS, you have to convert UTF-8
+</em><br>
+<em>&gt; to wide char, then convert the resulting wide char to SHIFT-JIS. This is not
+</em><br>
+<p>&nbsp;&nbsp;Boo, I hope you don't consider this as normal !
+<br>
+<p><em>&gt; the downside of ICU, it is the common case everywhere. It can never be
+</em><br>
+<em>&gt; different, for writing conversions from any to any encoding would be a
+</em><br>
+<em>&gt; nightmare in its own right.
+</em><br>
+<p>&nbsp;&nbsp;Please look at iconv, it does convert directly from any to any. BTW,
+<br>
+this is standard on all recent linux and glibc based systems. 
+<br>
+<p><em>&gt; I haven't tried ICU seriously yet. I shall do that before I make any further
+</em><br>
+<em>&gt; statements about it.
+</em><br>
+<p>&nbsp;&nbsp;You should also look at what exists outside the windows world too.
+<br>
+Sorry libxml is UTF8 based for a very good reson, it's part of the 
+<br>
+GNOME framework and we decided that UTF8 made far much sense.
+<br>
+&nbsp;&nbsp;Adding a 0 every other chars for most processing done is just the
+<br>
+perfect way to destroy locality, caching, and speed on modern
+<br>
+architectures. the fact that MS standardized on this doesn't mean
+<br>
+it's the Right Way.
+<br>
+&nbsp;&nbsp;Libxml wasn't designed primarily for Windows, I'm very happy to have
+<br>
+Windows users, but please realize that my design constraints were not
+<br>
+compatibility with Windows API or framework.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Encoding%20and%20Win32">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Encoding%20and%20Win32">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1407.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<li><strong>In reply to:</strong> <a href="1407.html">Igor Zlatkovic: "Re: [xml] Encoding and Win32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 10:51:20 EST</em>
+</em>
+</small>
+</body>
+</html>

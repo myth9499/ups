@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Memory lacks using XMLLIB under MPE OS</title>
+<meta name="Author" content="Grasso Massimiliano (Massimiliano.Grasso@elsag.it)">
+<meta name="Subject" content="[xml] Memory lacks using XMLLIB under MPE OS">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Memory lacks using XMLLIB under MPE OS</h1>
+<!-- received="Thu Oct 12 04:23:33 2000" -->
+<!-- isoreceived="20001012082333" -->
+<!-- sent="Thu, 12 Oct 2000 10:23:22 +0200" -->
+<!-- isosent="20001012082322" -->
+<!-- name="Grasso Massimiliano" -->
+<!-- email="Massimiliano.Grasso@elsag.it" -->
+<!-- subject="[xml] Memory lacks using XMLLIB under MPE OS" -->
+<!-- id="747D2ED67A22D41181240090273F51E26ECCB4@gspsvr.gsp.elsag.it" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Grasso Massimiliano (<a href="mailto:Massimiliano.Grasso@elsag.it?subject=Re:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS"><em>Massimiliano.Grasso@elsag.it</em></a>)<br>
+<strong>Date:</strong> Thu Oct 12 2000 - 04:23:22 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<li><strong>Previous message:</strong> <a href="0934.html">Nabil Layaida: "Re: [xml] libxml for CE"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<li><strong>Reply:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+We're trying to use the XML library under the OS MPE 5.5 of  HP 3K
+<br>
+calculators. To compile the sources we had to write some system routines (),
+<br>
+non existent under MPE.  
+<br>
+In our applicaton we have a loop and for each iteration we perform a parsing
+<br>
+and a validation of a very simple XML syntax.  In lines below there is a
+<br>
+little sample of the source that we have written:
+<br>
+<p><p>xmlDocPtr doc;
+<br>
+xmlValidCtxt cvp;
+<br>
+char *own_memory_buffer;
+<br>
+int size;
+<br>
+<p>for(;;)
+<br>
+{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// alloc own_memory_buffer
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Load own_memory_buffer with XML file
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc=xmlParseMemory(own_memory_buffer,size);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;cvp.userData = (void *) stderr;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cvp.error    = (xmlValidityErrorFunc) fprintf;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cvp.warning  = (xmlValidityWarningFunc) fprintf;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if(xmlValidateDocument(&amp;cvp, doc))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf( &quot; DOC OK!!!\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf( &quot;DOC Error !!!\n&quot;);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;fflush(stdout);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xmlFreeDoc(doc);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlCleanupParser();
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;free(own_memory_buffer);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Check memory used with MPE routine mallinfo()
+<br>
+{
+<br>
+&nbsp;&nbsp;
+<br>
+<p>When we checked the memory allocated for the process we discovered that it
+<br>
+was increasing at each iteration. Perhaps our problem is in the use of
+<br>
+deallocation routines? Do someone use in the same way the library under
+<br>
+other OS without problems? In the latest case probably the problem could be
+<br>
+either in our porting or in the OS itself.
+<br>
+Thank a lot for help, sorry for English...
+<br>
+<p><p>Massimiliano Grasso
+<br>
+*	<a href="mailto:massimiliano.grasso@elsag.it?subject=Re:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">massimiliano.grasso@elsag.it</a>
+<br>
+*	+390106582940
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Memory%20lacks%20using%20XMLLIB%20under%20MPE%20OS">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<li><strong>Previous message:</strong> <a href="0934.html">Nabil Layaida: "Re: [xml] libxml for CE"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<li><strong>Reply:</strong> <a href="0936.html">Daniel Veillard: "Re: [xml] Memory lacks using XMLLIB under MPE OS"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 12 2000 - 04:43:51 EDT</em>
+</em>
+</small>
+</body>
+</html>

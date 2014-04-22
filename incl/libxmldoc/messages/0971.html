@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libXML, C++ and reinterpret_cast</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libXML, C++ and reinterpret_cast">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libXML, C++ and reinterpret_cast</h1>
+<!-- received="Sun Oct 15 15:45:03 2000" -->
+<!-- isoreceived="20001015194503" -->
+<!-- sent="Sun, 15 Oct 2000 21:44:59 +0200" -->
+<!-- isosent="20001015194459" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libXML, C++ and reinterpret_cast" -->
+<!-- id="20001015214459.N6250@w3.org" -->
+<!-- inreplyto="NDBBIAJIKKKODPBNNPLIEEPPCBAA.don@mail.advok.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libXML,%20C%2B%2B%20and%20reinterpret_cast"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 15 2000 - 15:44:59 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<li><strong>Previous message:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>In reply to:</strong> <a href="0965.html">Don Pellegrino: "[xml] libXML, C++ and reinterpret_cast"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 15, 2000 at 03:13:57PM -0400, Don Pellegrino wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am using libXML with C++ and I have found that my code is very ugly 
+</em><br>
+<em>&gt; due to reinterpret_cast's all over the place.  The problem seems to 
+</em><br>
+<em>&gt; be that xmlChar is an unsigned char and my c style strings are signed 
+</em><br>
+<em>&gt; char's.  So for example, to use xmlGetProp my commands look like this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; xmlwidth = xmlGetProp(node,
+</em><br>
+<em>&gt;                       reinterpret_cast&lt;const unsigned char *&gt;
+</em><br>
+<em>&gt;                       (&quot;width&quot;));
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a cleaner way to interact with xmlChar's without doing casts 
+</em><br>
+<em>&gt; for all of it's occurances?
+</em><br>
+<p>&nbsp;&nbsp;no, one need to cast. It's a good reminder taht the sring has to be
+<br>
+made of UTF8 chars and not anything else !
+<br>
+<p><em>&gt; Also, is there a way to read and write numerics in the tree with 
+</em><br>
+<em>&gt; libXML without using atoi and itoa?
+</em><br>
+<p>&nbsp;&nbsp;No, libxml don't have a type system more elaborated than XML-1.0
+<br>
+or DOM ... it's strings.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libXML,%20C%2B%2B%20and%20reinterpret_cast">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libXML,%20C%2B%2B%20and%20reinterpret_cast">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libXML,%20C%2B%2B%20and%20reinterpret_cast">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<li><strong>Previous message:</strong> <a href="0970.html">Daniel Veillard: "Re: [xml] internal tree ?"</a>
+<li><strong>In reply to:</strong> <a href="0965.html">Don Pellegrino: "[xml] libXML, C++ and reinterpret_cast"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0972.html">Daniel Veillard: "Re: [xml] libXML, C++ and reinterpret_cast"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 15 2000 - 16:43:15 EDT</em>
+</em>
+</small>
+</body>
+</html>

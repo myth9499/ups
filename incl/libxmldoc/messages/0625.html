@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Linx number available via SAX interface?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Linx number available via SAX interface?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Linx number available via SAX interface?</h1>
+<!-- received="Thu Jul 27 20:49:34 2000" -->
+<!-- isoreceived="20000728004934" -->
+<!-- sent="Thu, 27 Jul 2000 20:45:12 -0400" -->
+<!-- isosent="20000728004512" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Linx number available via SAX interface?" -->
+<!-- id="20000727204511.G16011@w3.org" -->
+<!-- inreplyto="20000728002626.12073.qmail@web124.yahoomail.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Jul 27 2000 - 20:45:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0626.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>Previous message:</strong> <a href="0624.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>In reply to:</strong> <a href="0624.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0626.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jul 27, 2000 at 05:26:26PM -0700, Shane Adams wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hmmm I wonder if I'm doing something fundamentally
+</em><br>
+<em>&gt; wrong.  The passed in ctx pointer (void *) I use as my
+</em><br>
+<em>&gt; &quot;internal&quot; data structure.  Now in error.c, the
+</em><br>
+<em>&gt; xmlParserError handler seems to cast it to a different
+</em><br>
+<em>&gt; object.  Should I really be doing something like this
+</em><br>
+<em>&gt; in my callbacks? (Ignoring the line # problem for a
+</em><br>
+<em>&gt; minute)
+</em><br>
+<p>&nbsp;The informations are extracted from the parser
+<br>
+context (more precisely the pointer to the current entity
+<br>
+being processed ctxt-&gt;input). If you use your own
+<br>
+&quot;internal&quot; data structure then:
+<br>
+&nbsp;&nbsp;1/ you better know what you are doing
+<br>
+&nbsp;&nbsp;2/ you need to write your own error/warning handling routines
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check xmlParserPrintFileInfo and xmlParserError for
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the standard code doing this. Those routines should
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replace the error/warning/fatalError in the SAX callback
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set.
+<br>
+&nbsp;&nbsp;3/ you should save the xmlParserCtxtPtr in use in the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;internal&quot; structure if you want to recover the extra
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line and context informations.
+<br>
+&nbsp;
+<br>
+&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Linx%20number%20available%20via%20SAX%20interface?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0626.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>Previous message:</strong> <a href="0624.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<li><strong>In reply to:</strong> <a href="0624.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0626.html">Shane Adams: "Re: [xml] Linx number available via SAX interface?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

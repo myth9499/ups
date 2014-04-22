@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] escaping and unescaping</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] escaping and unescaping">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] escaping and unescaping</h1>
+<!-- received="Thu Dec  9 10:54:59 1999" -->
+<!-- isoreceived="19991209155459" -->
+<!-- sent="Thu, 9 Dec 1999 10:54:57 -0500" -->
+<!-- isosent="19991209155457" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] escaping and unescaping" -->
+<!-- id="19991209105457.J6566@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.9912051826300.12315-100000@mofo.eecs.umich.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20escaping%20and%20unescaping"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Dec 09 1999 - 10:54:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0242.html">Daniel Veillard: "Re: [xml] how i have to do ?"</a>
+<li><strong>Previous message:</strong> <a href="0240.html">bmark@guestbooks.net: "[xml] laser printer toner advertisement"</a>
+<li><strong>In reply to:</strong> <a href="0232.html">David Helder: "[xml] escaping and unescaping"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0246.html">David Helder: "Re: [xml] escaping and unescaping"</a>
+<li><strong>Reply:</strong> <a href="0246.html">David Helder: "Re: [xml] escaping and unescaping"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Dec 05, 1999 at 06:31:40PM -0500, David Helder wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I want to make a node like this:
+</em><br>
+<em>&gt;   &lt;topic name=&quot;software &amp; hardware&quot;&gt;
+</em><br>
+<em>&gt; by doing this:
+</em><br>
+<em>&gt;   xmlSetProp(topic_node, &quot;name&quot;, &quot;software &amp; hardware&quot;);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But libxml complains of an unterminated entity because of the &amp;. From
+</em><br>
+<em>&gt; looking at the documentation, I think I need to use
+</em><br>
+<em>&gt; xmlEncodeEntitiesReentrant, which will convert the &amp; to something.  Is
+</em><br>
+<em>&gt; this right?  
+</em><br>
+<p>&nbsp;&nbsp;yes this WAs right, I changed it recently since nobody liked the
+<br>
+old way of letting the application take care of the substitution.
+<br>
+<p><em>&gt; How do I decode it?  Thanks!
+</em><br>
+<p>&nbsp;&nbsp;The entity substitution is done automatically by xmlGetProp():
+<br>
+<a href="http://xmlsoft.org/gnome-xml-tree.html#XMLGETPROP">http://xmlsoft.org/gnome-xml-tree.html#XMLGETPROP</a>
+<br>
+<p>I did uniformize the behaviour od xmlSetProp, so taht the entity
+<br>
+substitution is done automatically. So if you update from
+<br>
+a version on the CVS base the problem should be fixed
+<br>
+<p><a href="http://dev.w3.org/cvsweb/XML/tree.c.diff?r1=1.66&r2=1.67">http://dev.w3.org/cvsweb/XML/tree.c.diff?r1=1.66&r2=1.67</a>
+<br>
+<p>The fix was also comitted in the Gnome CVS base,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20escaping%20and%20unescaping">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20escaping%20and%20unescaping">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20escaping%20and%20unescaping">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0242.html">Daniel Veillard: "Re: [xml] how i have to do ?"</a>
+<li><strong>Previous message:</strong> <a href="0240.html">bmark@guestbooks.net: "[xml] laser printer toner advertisement"</a>
+<li><strong>In reply to:</strong> <a href="0232.html">David Helder: "[xml] escaping and unescaping"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0246.html">David Helder: "Re: [xml] escaping and unescaping"</a>
+<li><strong>Reply:</strong> <a href="0246.html">David Helder: "Re: [xml] escaping and unescaping"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:53 EDT</em>
+</em>
+</small>
+</body>
+</html>

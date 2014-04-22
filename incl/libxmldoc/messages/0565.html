@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Compile error libxml2-2.1.1/Solaris</title>
+<meta name="Author" content="Paul Barnfather (plb@clanger9.demon.co.uk)">
+<meta name="Subject" content="[xml] Compile error libxml2-2.1.1/Solaris">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Compile error libxml2-2.1.1/Solaris</h1>
+<!-- received="Mon Jul  3 14:59:45 2000" -->
+<!-- isoreceived="20000703185945" -->
+<!-- sent="Mon, 03 Jul 2000 19:55:51 +0100" -->
+<!-- isosent="20000703185551" -->
+<!-- name="Paul Barnfather" -->
+<!-- email="plb@clanger9.demon.co.uk" -->
+<!-- subject="[xml] Compile error libxml2-2.1.1/Solaris" -->
+<!-- id="3960E1B7.17B942E9@clanger9.demon.co.uk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Paul Barnfather (<a href="mailto:plb@clanger9.demon.co.uk?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris"><em>plb@clanger9.demon.co.uk</em></a>)<br>
+<strong>Date:</strong> Mon Jul 03 2000 - 14:55:51 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Previous message:</strong> <a href="0564.html">Marc Billaud: "Re: [xml] Compilation problem on gjobread"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Maybe reply:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Compilation fails with:
+<br>
+<p>/usr/local/bin/gcc -DHAVE_CONFIG_H -I. -I. -I. -I. -O2 -msupersparc -c
+<br>
+nanohttp.c  -fPIC -DPIC -o .libs/nanohttp.lo
+<br>
+nanohttp.c: In function `xmlNanoHTTPConnectAttempt':
+<br>
+nanohttp.c:659: `socklen_t' undeclared (first use in this function)
+<br>
+nanohttp.c:659: (Each undeclared identifier is reported only once
+<br>
+nanohttp.c:659: for each function it appears in.)
+<br>
+nanohttp.c:659: parse error before `len'
+<br>
+nanohttp.c:660: `len' undeclared (first use in this function)
+<br>
+nanohttp.c:661: warning: passing arg 4 of `getsockopt' from incompatible pointer
+<br>
+type
+<br>
+make[2]: *** [nanohttp.lo] Error 1
+<br>
+make[2]: Leaving directory `/src/build/libxml2-2.1.1'
+<br>
+<p>Using gcc-2.95.2/Solaris 2.6. 
+<br>
+Did autoconf miss a library out?
+<br>
+<p><pre>
+-- 
+ ~~~~~~~~~~~~~~~~~~~~~~~~ Paul Barnfather ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+|  <a href="mailto:plb@clanger9.demon.co.uk?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">plb@clanger9.demon.co.uk</a>  <a href="mailto:paul.barnfather@northern-electric.co.uk?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">paul.barnfather@northern-electric.co.uk</a> |
+|      __           <a href="http://www.clanger9.demon.co.uk">http://www.clanger9.demon.co.uk</a>    .             |
+     o--o-... 75TS                                    o'~o... 750SS
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/Solaris">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Previous message:</strong> <a href="0564.html">Marc Billaud: "Re: [xml] Compilation problem on gjobread"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0566.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Maybe reply:</strong> <a href="0568.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/Solaris"</a>
+<li><strong>Reply:</strong> <a href="0570.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

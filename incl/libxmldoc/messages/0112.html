@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Re: Bug#2022: libxml throws away attribute namespaces</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Re: Bug#2022: libxml throws away attribute namespaces">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Re: Bug#2022: libxml throws away attribute namespaces</h1>
+<!-- received="Sun Aug 29 17:31:46 1999" -->
+<!-- isoreceived="19990829213146" -->
+<!-- sent="Sun, 29 Aug 1999 17:31:38 -0400" -->
+<!-- isosent="19990829213138" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Re: Bug#2022: libxml throws away attribute namespaces" -->
+<!-- id="19990829173138.A26556@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.990829235459.13728D-100000@quoll.daa.com.au" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Aug 29 1999 - 17:31:38 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0113.html">art1234@ureach.com: "[xml] laser printer toner advertising"</a>
+<li><strong>Previous message:</strong> <a href="0111.html">Daniel Veillard: "Re: [xml] Error"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0114.html">Stephane Conversy: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0114.html">Stephane Conversy: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Aug 30, 1999 at 12:00:09AM +0800, James Henstridge wrote:
+<br>
+<em>&gt; Package: gnome-xml
+</em><br>
+<em>&gt; Version: 1.5.0
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When using the DOM interface of libxml, it throws away namespace prefixes 
+</em><br>
+<em>&gt; on element attributes.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As an example, if we have an element like:
+</em><br>
+<em>&gt;   &lt;sometag ns:attr=&quot;Hello&quot;&gt; ...
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Then xmlGetProp(node, &quot;ns:attr&quot;) will fail while xmlGetProp(node, &quot;attr&quot;)
+</em><br>
+<em>&gt; will succeed.  Taking a quick look in SAX.c, it does not look like libxml
+</em><br>
+<em>&gt; actually stores attribute namespaces anywhere.
+</em><br>
+<p>&nbsp;&nbsp;I commited a new version in the CVS bases, it include the necessary
+<br>
+changes to support namespaces on attributes, better validation, support
+<br>
+for IDs, improvements on XPath, lots of cleanup.
+<br>
+&nbsp;&nbsp;I have put this version 1.6 at:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a>
+<br>
+<p>&nbsp;&nbsp;Sources and RPMs,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0113.html">art1234@ureach.com: "[xml] laser printer toner advertising"</a>
+<li><strong>Previous message:</strong> <a href="0111.html">Daniel Veillard: "Re: [xml] Error"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0114.html">Stephane Conversy: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0114.html">Stephane Conversy: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:45 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Big clean up in XPath</title>
+<meta name="Author" content="TOM (ptittom@free.fr)">
+<meta name="Subject" content="Re: [xml] Big clean up in XPath">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Big clean up in XPath</h1>
+<!-- received="Thu Oct 26 13:03:42 2000" -->
+<!-- isoreceived="20001026170342" -->
+<!-- sent="Thu, 26 Oct 2000 16:16:26 +0200" -->
+<!-- isosent="20001026141626" -->
+<!-- name="TOM" -->
+<!-- email="ptittom@free.fr" -->
+<!-- subject="Re: [xml] Big clean up in XPath" -->
+<!-- id="20001026161626.A874@debian" -->
+<!-- inreplyto="20001026145706.E24266@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> TOM (<a href="mailto:ptittom@free.fr?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath"><em>ptittom@free.fr</em></a>)<br>
+<strong>Date:</strong> Thu Oct 26 2000 - 10:16:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>In reply to:</strong> <a href="1074.html">Daniel Veillard: "Re: [xml] Big clean up in XPath"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On 26/10/2000 14:57:06 Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Thu, Oct 26, 2000 at 01:33:16AM +0200, TOM wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Hi,
+</em><br>
+<em>&gt; &gt; The attached patch fixes many bugs in XPath implementation:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   First question:
+</em><br>
+<em>&gt;     - did you compile it ? Some added to xmlXPathNumberFunction()
+</em><br>
+<em>&gt;       is:
+</em><br>
+<em>&gt;       xmlChar* content = xmlNodeGetContent(ctxt-&gt;content-&gt;node);
+</em><br>
+<em>&gt;       clearly this is wrong, this should be 
+</em><br>
+<em>&gt;       xmlChar* content = xmlNodeGetContent(ctxt-&gt;context-&gt;node);
+</em><br>
+<em>&gt;       and there is a couple of other obvious errors proving this
+</em><br>
+<em>&gt;       wasn't even compiled.
+</em><br>
+<p>Yes I did, it seems I send an obsolete patch (but I believe I fixed it
+<br>
+too, I don't understand exactly what I did...).
+<br>
+I'm really sorry for this mistake...
+<br>
+<p><em>&gt; &gt;  - errors in function names (local-name() and namespace-uri(),
+</em><br>
+<em>&gt; &gt; not local-part() and namespace(); C function names now are
+</em><br>
+<em>&gt; &gt; xmlXPathLocalNameFunction() and xmlXPathNamespaceURIFunction())
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;      minor, applied but now that those function names get exported
+</em><br>
+<em>&gt;      via xpathInternals.h future changes to just rename function
+</em><br>
+<em>&gt;      will not be accepted to not break binary compatibility.
+</em><br>
+<p>Ok.
+<br>
+Note also that the xmlXPathNormalizeFunction() is registered twice, for
+<br>
+&quot;normalize&quot; (which isn't in the XPath spec) and &quot;normalize-space&quot;.
+<br>
+<p><em>&gt; &gt;  - adds the sum() function
+</em><br>
+<p>It's bogus, I'll fix this soon.
+<br>
+I have some segfaults from time to time...
+<br>
+<p><em>&gt; &gt;  - doesn't seem there is a namespace support for functions
+</em><br>
+<em>&gt; &gt; (last() is equivalent to foo:last() and bar:last()), it'll be
+</em><br>
+<em>&gt; &gt; necessary for proprietary XPath extension functions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;    humm, do we really need namespace in that case, IMHO it should
+</em><br>
+<em>&gt; just be  string comparisons.
+</em><br>
+<p>I haven't yet looked at it in details but it seems if we want to extend
+<br>
+XPath we must use our own namespace. And 2 extension sets could have
+<br>
+functions with the same name, they only differ by their namespace. It seems
+<br>
+it's what the Apache Group done for Xalan and its extensions (the one
+<br>
+about database connectivity for example if I have good memory)
+<br>
+I'll check it in details.
+<br>
+<p><em>&gt; &gt;  - it seems impossible to pass node-sets (actually only relative
+</em><br>
+<em>&gt; &gt; paths or abbreviated absolute paths, and the root node) to
+</em><br>
+<em>&gt; &gt; functions: [...]
+</em><br>
+<em>&gt;     gdb seems the only way to get this fixed . There is still a
+</em><br>
+<em>&gt; couple of evaluation problems, right.
+</em><br>
+<p>Yes, I didn't have time yesterday to debug all this. I'll try to do it
+<br>
+this afternoon.
+<br>
+<p><em>&gt; You should double check later once I have commited your patches
+</em><br>
+<em>&gt; into CVS.
+</em><br>
+<p>I won't neglect it!
+<br>
+<p>Tom
+<br>
+...sincerely sorry...
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Big%20clean%20up%20in%20XPath">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>In reply to:</strong> <a href="1074.html">Daniel Veillard: "Re: [xml] Big clean up in XPath"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 26 2000 - 13:43:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

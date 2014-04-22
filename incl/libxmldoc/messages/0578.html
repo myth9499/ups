@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/WIN32</title>
+<meta name="Author" content="Erwin Rol (Erwin.Rol@q-soft-engineering.com)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/WIN32</h1>
+<!-- received="Thu Jul  6 10:25:33 2000" -->
+<!-- isoreceived="20000706142533" -->
+<!-- sent="Thu, 06 Jul 2000 16:17:34 +0200" -->
+<!-- isosent="20000706141734" -->
+<!-- name="Erwin Rol" -->
+<!-- email="Erwin.Rol@q-soft-engineering.com" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/WIN32" -->
+<!-- id="396494FE.38A440AC@q-soft-engineering.com" -->
+<!-- charset="iso-8859-2" -->
+<!-- inreplyto="20000706155619.B20699@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Erwin Rol (<a href="mailto:Erwin.Rol@q-soft-engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32"><em>Erwin.Rol@q-soft-engineering.com</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 10:17:34 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0577.html">Jordan Henderson: "RE: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0583.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0583.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Thu, Jul 06, 2000 at 03:08:34PM +0200, Peter Jacobi wrote:
+</em><br>
+<em>&gt; &gt; Hi Erwin, Daniel, All,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Tribute due: David Doolin is probably the most aware of libxml
+</em><br>
+<em>&gt;                on windows issues
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   For the record, and if he accepts I would like to make him
+</em><br>
+<em>&gt; &quot;responsible&quot; for the Win32 issues, since he's the one who worked
+</em><br>
+<em>&gt; recently on the subject. The discussions on this topic should stay
+</em><br>
+<em>&gt; on this list anyway.
+</em><br>
+<p>That would be a good idea, patches could also go via David.
+<br>
+<p><p><em>&gt; 
+</em><br>
+<em>&gt; &gt; I'm somewhat behind updating my projects to the newest libxml versions,
+</em><br>
+<em>&gt; &gt; but I want to comment on Erwins's WIN32 compatibiliy report.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I urge not to make the WIN32 compatibility a MSVC only thing.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Just a) working around some UNIX-specific non-ANSI/ISO stuff and b)
+</em><br>
+<em>&gt; &gt; adapt for winsock should make every compiler on WIN32 happy.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Send patches :-)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Honnestly I'm Win32 agnostic. I just want:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     - not to destroy the existing code
+</em><br>
+That wasn't that plan , if so i would have written my own lib :-)
+<br>
+<p><em>&gt;     - to try to isolate those Win32 specific issues and constructs
+</em><br>
+<em>&gt;       in a separated file (specific includes, defines, exports for DLL,
+</em><br>
+<em>&gt;       etc...) hence the specific config file.
+</em><br>
+The DLL part might be tricky ? Does anybody else have experiance
+<br>
+building
+<br>
+DLL's without __declspec(dllexport) ? specific includes can go
+<br>
+in the winconfig.h (config.h what ever :-) The network functions (mainly
+<br>
+the nano
+<br>
+FTP/HTTPD stuff might be unavoidable to be changed a bit, to handle the
+<br>
+return values
+<br>
+correctly) but thats rather isolated in one or two files, and not
+<br>
+touching much of the
+<br>
+actual XML lib.
+<br>
+<p><p><em>&gt; 
+</em><br>
+<em>&gt;  Also don't ask me to check anything on Windows, I don't have it and
+</em><br>
+<em>&gt; don't expect to use or install it in the forseable future. Testing
+</em><br>
+Damn , not everybody is that lucky you know :-)
+<br>
+<p><em>&gt; occasionally on Solaris or AIX is possible for me without too much
+</em><br>
+<em>&gt; pain so I do it from time to time.
+</em><br>
+I can do testing on NT, 98 and 2K and Linux at home (to check if we
+<br>
+don't break
+<br>
+anything on UNIX :-)
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<p>- Erwin
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</em><br>
+<p><pre>
+-- 
+        Q - S O F T - E N G I N E E R I N G 
+     Rodachtalweg 11, 81549 Muenchen, Germany
+<p>Erwin Rol (Software Engineer)     phone: +49-89-68050051
+<a href="mailto:Erwin.Rol@Q-Soft-Engineering.com?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">Erwin.Rol@Q-Soft-Engineering.com</a>  fax  : +49-89-68050052
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0577.html">Jordan Henderson: "RE: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0583.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Reply:</strong> <a href="0583.html">Peter Jacobi: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:21 EDT</em>
+</em>
+</small>
+</body>
+</html>

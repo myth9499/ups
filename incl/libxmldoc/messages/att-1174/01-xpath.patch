@@ -1,0 +1,16 @@
+--- libxml2-2.2.7/xpath.c.orig	Mon Oct 30 08:09:56 2000
++++ libxml2-2.2.7/xpath.c	Sun Nov 12 17:57:17 2000
+@@ -5448,6 +5448,13 @@
+     CHECK_CONTEXT(ctx)
+ 
+     ctxt = xmlXPathNewParserContext(str, ctx);
++	
++	if (ctx->node != NULL) {
++		xmlXPathObjectPtr init;
++		init = xmlXPathNewNodeSet(ctx->node);
++		valuePush(ctxt, init);
++	}
++	
+     xmlXPathEvalExpr(ctxt);
+ 
+     if (ctxt->value == NULL) {

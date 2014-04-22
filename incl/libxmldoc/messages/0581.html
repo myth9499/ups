@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/WIN32</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/WIN32</h1>
+<!-- received="Thu Jul  6 11:20:54 2000" -->
+<!-- isoreceived="20000706152054" -->
+<!-- sent="Thu, 06 Jul 2000 11:17:16 -0400" -->
+<!-- isosent="20000706151716" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/WIN32" -->
+<!-- id="200007061517.LAA12308@duncan.cs.utk.edu" -->
+<!-- inreplyto="20000706155619.B20699@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 11:17:16 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0582.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0580.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20000706155619.B20699@w3.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">20000706155619.B20699@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;On Thu, Jul 06, 2000 at 03:08:34PM +0200, Peter Jacobi wrote:
+</em><br>
+<em>&gt;&gt; Hi Erwin, Daniel, All,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Tribute due: David Doolin is probably the most aware of libxml
+</em><br>
+<em>&gt;               on windows issues
+</em><br>
+<p>Thanks.  I really enjoy using the lib, and will even submit a 
+<br>
+note to a refeered journal on the markup I derived for my 
+<br>
+dissertation work.  Speaking of which, I need a formal, 
+<br>
+preferably peer-reviewed citation for libxml.  
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;  For the record, and if he accepts I would like to make him
+</em><br>
+<em>&gt;&quot;responsible&quot; for the Win32 issues, since he's the one who worked
+</em><br>
+<em>&gt;recently on the subject. The discussions on this topic should stay
+</em><br>
+<em>&gt;on this list anyway. 
+</em><br>
+<p>Beware!  I am in dissertation mode!  
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;&gt; I'm somewhat behind updating my projects to the newest libxml versions, 
+</em><br>
+<em>&gt;&gt; but I want to comment on Erwins's WIN32 compatibiliy report.
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; I urge not to make the WIN32 compatibility a MSVC only thing.
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Just a) working around some UNIX-specific non-ANSI/ISO stuff and b) 
+</em><br>
+<em>&gt;&gt; adapt for winsock should make every compiler on WIN32 happy.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Send patches :-)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  Honnestly I'm Win32 agnostic. I just want:
+</em><br>
+<p>Actually, I am pretty much operating system agnostic myself.   The whole topic 
+<br>
+kind of bores me.  I guess in a perfect world, sun4...  ;)
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;    - not to destroy the existing code
+</em><br>
+<em>&gt;    - to try to isolate those Win32 specific issues and constructs
+</em><br>
+<em>&gt;      in a separated file (specific includes, defines, exports for DLL,
+</em><br>
+<em>&gt;      etc...) hence the specific config file.
+</em><br>
+<p>This stuff should be relatively trivial.  It takes me just a few minutes
+<br>
+to put in the necessary changes that taking time to generate a patch 
+<br>
+seems counterproductive.   
+<br>
+<p>What I will do (on next release), is generate patches for as many of the 
+<br>
+cast/comparison warnings as I can, and a patch for the &lt;direct.h&gt; and 
+<br>
+&lt;strings.h&gt; includes.  What I will not do, is patch how the header files
+<br>
+are handled (win32config.h).  This is a little beyond what I care to 
+<br>
+tackle, being a design issue rather than an implementation issue.
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt; Also don't ask me to check anything on Windows, I don't have it and
+</em><br>
+<em>&gt;don't expect to use or install it in the forseable future. Testing
+</em><br>
+<em>&gt;occasionally on Solaris or AIX is possible for me without too much
+</em><br>
+<em>&gt;pain so I do it from time to time.
+</em><br>
+<p>Right.  You just keep on doing what you are doing...  This is really important
+<br>
+because otherwise, I would be linking the MS xml parser.  I really
+<br>
+*don't* want to do that...  at some point my code wants to go back to unix...
+<br>
+<p>Thanks,
+<br>
+Dave Doolin
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0582.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0580.html">Erwin Rol: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<li><strong>In reply to:</strong> <a href="0573.html">Daniel Veillard: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0579.html">David Doolin: "Re: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

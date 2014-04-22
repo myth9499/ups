@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Creating a DTD from a plain text buffer?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Creating a DTD from a plain text buffer?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Creating a DTD from a plain text buffer?</h1>
+<!-- received="Sun Oct 29 16:12:23 2000" -->
+<!-- isoreceived="20001029211223" -->
+<!-- sent="Sun, 29 Oct 2000 22:12:18 +0100" -->
+<!-- isosent="20001029211218" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Creating a DTD from a plain text buffer?" -->
+<!-- id="20001029221218.H22416@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10010291511330.16262-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Oct 29 2000 - 16:12:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1107.html">Harry Blundell: "[xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1107.html">Harry Blundell: "[xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Sun, Oct 29, 2000 at 03:15:15PM -0500, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The only way that I could find to create a DTD as an internal subset was
+</em><br>
+<em>&gt; to call xmlParseDTD to read it from a file or URL (I haven't tried it
+</em><br>
+<em>&gt; yet, but I've seen some discussion on it, so I assume it works), and then
+</em><br>
+<em>&gt; attach the resulting node tree to my XML DOM.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is it possible (and convenient ;-) to have the DTD in a plain text buffer
+</em><br>
+<em>&gt; and parse that?
+</em><br>
+<p>&nbsp;&nbsp;Try the following patch, it provides:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlDtdPtr       xmlIOParseDTD           (xmlSAXHandlerPtr sax, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputBufferPtr input,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlCharEncoding enc);
+<br>
+<p>&nbsp;you can generate an xmlParserInputBufferPtr from memory using
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputBufferPtr
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputBufferCreateMem           (const char *mem, int size,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlCharEncoding enc);
+<br>
+<p>exported from xmlIO.h .
+<br>
+&nbsp;Warning I didn't tested the routine, tell me if this works :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1108/01-dtdio.diff">dtdio.diff</a>
+</ul>
+<!-- attachment="01-dtdio.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Creating%20a%20DTD%20from%20a%20plain%20text%20buffer?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1107.html">Harry Blundell: "[xml] Creating a DTD from a plain text buffer?"</a>
+<li><strong>In reply to:</strong> <a href="1107.html">Harry Blundell: "[xml] Creating a DTD from a plain text buffer?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Oct 29 2000 - 16:48:50 EST</em>
+</em>
+</small>
+</body>
+</html>

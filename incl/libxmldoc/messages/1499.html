@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml-2.3.2 amd libxslt-0.3.0 are out</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] libxml-2.3.2 amd libxslt-0.3.0 are out">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml-2.3.2 amd libxslt-0.3.0 are out</h1>
+<!-- received="Mon Feb 26 05:58:06 2001" -->
+<!-- isoreceived="20010226105806" -->
+<!-- sent="Mon, 26 Feb 2001 10:54:07 +0000" -->
+<!-- isosent="20010226105407" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] libxml-2.3.2 amd libxslt-0.3.0 are out" -->
+<!-- id="3A9A35CE.3AB030AC@uk.sun.com" -->
+<!-- inreplyto="20010224225934.A13634@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 26 2001 - 05:54:07 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1498.html">michael scott frank: "[xml] segfault at xmlParseFile()"</a>
+<li><strong>In reply to:</strong> <a href="1496.html">Daniel Veillard: "[xml] libxml-2.3.2 amd libxslt-0.3.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>The configure script has been broken for non-gcc compilers (at least on
+<br>
+Solaris) in this release.
+<br>
+<p>in configure.in at line 159 there is a check which reads :-
+<br>
+<p>if test &quot;${GCC}&quot; != &quot;yes&quot; ; then
+<br>
+<p>I'm not sure what the part relating to HP should be changed to, but this
+<br>
+check is wrong when using the Sun compiler on Solaris since -Wall means
+<br>
+nothing to the Sun compiler.
+<br>
+<p>I think the line should be
+<br>
+<p>if test &quot;${GCC}&quot; = &quot;yes&quot; ; then
+<br>
+<p>however, as I said above, I'm not sure what impact this would have on the
+<br>
+check for hpux in the next statement.
+<br>
+<p>Gary
+<br>
+<p>Daniel Veillard wrote:
+<br>
+<p><em>&gt;   Downloads from:
+</em><br>
+<em>&gt;   <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   libxml-2.3.2 is a normal bugfix release there is just a couple
+</em><br>
+<em>&gt; of new APIs as a new list module from Gary Pennington. It fixes
+</em><br>
+<em>&gt; some XPath and libxml tree problems found by XSLT tests.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/XSLT/">http://xmlsoft.org/XSLT/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Libxslt-0.3.0 is the third beta release, it should cover
+</em><br>
+<em>&gt; most features from the XSLT-1.0 spec. Check the FEATURES file
+</em><br>
+<em>&gt; to get a precise idea.
+</em><br>
+<em>&gt; It requires libxml 2.3.2 or later.
+</em><br>
+<em>&gt;   The embedded xmlproc test program allow to run non-trivial
+</em><br>
+<em>&gt; transformations. The new set of example added in this release
+</em><br>
+<em>&gt; are using Norman Walsh DocBook XSL styleheets.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   The parts missing are:
+</em><br>
+<em>&gt;     - Extensions support
+</em><br>
+<em>&gt;     - Embedding Stylesheets
+</em><br>
+<em>&gt;     - document() and key() are incomplete
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   A quick grep on FEATURES indicates 152 YES and 13 NO.
+</em><br>
+<em>&gt; Future work is bug fixing, finishing the missing parts and
+</em><br>
+<em>&gt; starting to look at speeding up the process (early tests
+</em><br>
+<em>&gt; seems to indicate libxslt is relatively fast).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml-2.3.2%20amd%20libxslt-0.3.0%20are%20out">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1498.html">michael scott frank: "[xml] segfault at xmlParseFile()"</a>
+<li><strong>In reply to:</strong> <a href="1496.html">Daniel Veillard: "[xml] libxml-2.3.2 amd libxslt-0.3.0 are out"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 26 2001 - 06:43:29 EST</em>
+</em>
+</small>
+</body>
+</html>

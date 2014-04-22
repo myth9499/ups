@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] on this silly debate...</title>
+<meta name="Author" content="Alejandro Forero Cuervo (bachue@bachue.com)">
+<meta name="Subject" content="Re: [xml] on this silly debate...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] on this silly debate...</h1>
+<!-- received="Thu Jan 25 03:20:07 2001" -->
+<!-- isoreceived="20010125082007" -->
+<!-- sent="Thu, 25 Jan 2001 00:58:13 -0500" -->
+<!-- isosent="20010125055813" -->
+<!-- name="Alejandro Forero Cuervo" -->
+<!-- email="bachue@bachue.com" -->
+<!-- subject="Re: [xml] on this silly debate..." -->
+<!-- id="20010125005813.B17275@azul.dhis.org" -->
+<!-- inreplyto="Pine.LNX.4.30.0101240913170.14982-100000@sigil" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Alejandro Forero Cuervo (<a href="mailto:bachue@bachue.com?subject=Re:%20[xml]%20on%20this%20silly%20debate..."><em>bachue@bachue.com</em></a>)<br>
+<strong>Date:</strong> Thu Jan 25 2001 - 00:58:13 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>In reply to:</strong> <a href="1380.html">winterlion: "[xml] on this silly debate..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;well, seeing as there's helpers for ftp, http, and such it could
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;almost be reasonable to make a hook-system for file interface, as
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;well as for directories...
+<br>
+<p>Hahah, this would be cool, a DTD and make directories appear as XML
+<br>
+files. :)
+<br>
+<p>But yes, this would be nothing but useless, confusion-causing bloat
+<br>
+(hah, what if the user accidentally passes a directory and then starts
+<br>
+seeing lots of funny messages from the caller program stating that the
+<br>
+file does not adhere to the DTD the application expects).
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;if your interface can't filter out unreasonable files; fix the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;interface.  I've -never- had a program crash due to the person in
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;front of it entering unreasonable data - I always add filters at
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that point.  (and I've been writing programs for lots of years)
+<br>
+<p>I agree with this.  But the files are not always specified through a
+<br>
+GUI, they often come from command-line arguments, for example.  That
+<br>
+the filters must exist is granted (okay, in this case it's not that
+<br>
+bad if they don't exist, the error messages are messier but that's
+<br>
+about all that happens).  The point is that it would be easier to add
+<br>
+them inside libXML's File and Gzfile handlers than make code outside
+<br>
+of libxml duplicating the functionality of the handlers' Check
+<br>
+functions and then adding the check for directories only when the
+<br>
+filename does look like a filename (not a URL).
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;see above for graceful recovery.  This one suspects that XML uses
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;it's own &quot;open&quot; for retrieving documents referenced within an XML
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file but has not checked...
+<br>
+<p>Hmm.
+<br>
+<p>Must check this.  But first, must sleep.
+<br>
+<p>Thanks.
+<br>
+<p>Alejo.
+<br>
+<a href="http://bachue.com/alejo">http://bachue.com/alejo</a>
+<br>
+<p><pre>
+--
+The mere formulation of a problem is far more essential than its solution.
+      -- Albert Einstein.
+<p>$0='!/sfldbi!yjoV0msfQ!sfiupob!utvK'x44;print map{(&quot;\e[7m \e[0m&quot;,chr ord
+(chop$0)-1)[$_].(&quot;\n&quot;)[++$i%77]}split//,unpack'B*',pack'H*',($F='F'x19).
+&quot;F0F3E0607879CC1E0F0F339F3FF399C666733333CCF87F99E6133999999E67CFFCCF3&quot;.
+&quot;219CC1CCC033E7E660198CCE4E66798303873CCE60F3387$F&quot;#Don't you love Perl?
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20on%20this%20silly%20debate...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20on%20this%20silly%20debate...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1384.html">Alejandro Forero Cuervo: "[xml] Patch for libxml2's xmlIO.c"</a>
+<li><strong>In reply to:</strong> <a href="1380.html">winterlion: "[xml] on this silly debate..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 25 2001 - 04:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

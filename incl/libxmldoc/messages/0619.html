@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Released libxml-2.2.1</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] Released libxml-2.2.1">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Released libxml-2.2.1</h1>
+<!-- received="Fri Jul 21 20:22:35 2000" -->
+<!-- isoreceived="20000722002235" -->
+<!-- sent="Fri, 21 Jul 2000 20:18:30 -0400" -->
+<!-- isosent="20000722001830" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] Released libxml-2.2.1" -->
+<!-- id="200007220018.UAA00408@duncan.cs.utk.edu" -->
+<!-- inreplyto="[xml] Released libxml-2.2.1" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Released%20libxml-2.2.1"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Fri Jul 21 2000 - 20:18:30 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0620.html">David Kågedal: "Re: [xml] Released libxml-2.2.1"</a>
+<li><strong>Previous message:</strong> <a href="0618.html">Daniel Veillard: "[xml] Released libxml-2.2.1"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0618.html">Daniel Veillard: "[xml] Released libxml-2.2.1"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0620.html">David Kågedal: "Re: [xml] Released libxml-2.2.1"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20000722005107.A25112@w3.org?subject=Re:%20[xml]%20Released%20libxml-2.2.1">20000722005107.A25112@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;  Uploaded to
+</em><br>
+<em>&gt;     <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a>
+</em><br>
+<em>&gt;  
+</em><br>
+<em>&gt;  This is a bug-fix only release:
+</em><br>
+<em>&gt;    - fixed an encoding support problem when parsing from a memory block
+</em><br>
+<em>&gt;    - fixed a DOCTYPE parsing problem
+</em><br>
+<em>&gt;    - removed a bug in the function allowing to override the memory
+</em><br>
+<em>&gt;      allocation routines
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<p>Ok, short answer:  2.2.1 is a bit harder to build on win32 than 2.1 so it 
+<br>
+won't be today.
+<br>
+<p>Long answer:  I need to dedicate half a day to fixing build problems on win32.
+<br>
+A lot of these, most in fact, are things msvc is catching that gcc does not.
+<br>
+So fixing them would be a good thing.
+<br>
+<p>After I fix this stuff, I will ftp over to the debian box and diff the whole
+<br>
+mess.
+<br>
+<p>There are two things that would help me out *alot* to be distributed with 
+<br>
+the tar ball (which means put into cvs):
+<br>
+<p>&nbsp;&nbsp;- an include directory for all the header files
+<br>
+&nbsp;&nbsp;- a win32 directory for msvc, borland, watcom, etc stuff.  This could have the 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;win32 config file also.
+<br>
+<p>I will accept as much &quot;hand holding&quot; as any one cares to provide, so anyone 
+<br>
+with a couple of hours to burn, let me know.  Most of these warning date from 
+<br>
+at least 1.8.2, so it ouwld be nice to get a clean build.
+<br>
+<p>Dave D
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Released%20libxml-2.2.1">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Released%20libxml-2.2.1">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0620.html">David Kågedal: "Re: [xml] Released libxml-2.2.1"</a>
+<li><strong>Previous message:</strong> <a href="0618.html">Daniel Veillard: "[xml] Released libxml-2.2.1"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0618.html">Daniel Veillard: "[xml] Released libxml-2.2.1"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0620.html">David Kågedal: "Re: [xml] Released libxml-2.2.1"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:24 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] More uri.c bugs</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] More uri.c bugs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] More uri.c bugs</h1>
+<!-- received="Mon Sep  4 06:18:06 2000" -->
+<!-- isoreceived="20000904101806" -->
+<!-- sent="Mon, 4 Sep 2000 12:17:50 +0200" -->
+<!-- isosent="20000904101750" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] More uri.c bugs" -->
+<!-- id="20000904121750.C15538@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.21.0009040033070.12858-300000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20More%20uri.c%20bugs"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Sep 04 2000 - 06:17:50 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>In reply to:</strong> <a href="0723.html">Wayne Davison: "[xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Sep 04, 2000 at 01:15:04AM -0700, Wayne Davison wrote:
+<br>
+<em>&gt; I'm trying to use xmlBuildURI() in a program that needs to combine
+</em><br>
+<em>&gt; base and relative URIs together, and I found a number of things wrong.
+</em><br>
+<em>&gt; To facilitate testing, I modified testURI.c to allow a base URI to be
+</em><br>
+<em>&gt; used with an input file.  (See the attached testURI.patch.)
+</em><br>
+<p>&nbsp;&nbsp;Thanks ! that something I needed to ease regression test
+<br>
+for the URI module but never did :-\
+<br>
+<p><em>&gt; Using this version of the program and the attached uri.data file, run the
+</em><br>
+<em>&gt; following command:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     ./testURI -base '<a href="http://foo.com/path/to/index.html#help">http://foo.com/path/to/index.html#help</a>' &lt;uri.data
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I believe that the output should be (and is with my patch):
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/index.html#help">http://foo.com/path/to/index.html#help</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/">http://foo.com/path/to/</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar#baz">http://foo.com/path/to/bar#baz</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar?baz">http://foo.com/path/to/bar?baz</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/index.html#baz">http://foo.com/path/to/index.html#baz</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/index.html?baz">http://foo.com/path/to/index.html?baz</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/up.a.notch.html#wow">http://foo.com/path/up.a.notch.html#wow</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/up.a.notch.html?wow">http://foo.com/path/up.a.notch.html?wow</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/root.cgi#OK">http://foo.com/root.cgi#OK</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/root.cgi?OK">http://foo.com/root.cgi?OK</a>
+</em><br>
+<em>&gt; <a href="https://elsewhere.com/#deep">https://elsewhere.com/#deep</a>
+</em><br>
+<em>&gt; <a href="https://elsewhere.com/?deep">https://elsewhere.com/?deep</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; but is instead:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ::ERROR::
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/">http://foo.com/path/to/</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/to/bar">http://foo.com/path/to/bar</a>
+</em><br>
+<em>&gt; ::ERROR::
+</em><br>
+<em>&gt; ::ERROR::
+</em><br>
+<em>&gt; <a href="http://foo.com/path/up.a.notch.html">http://foo.com/path/up.a.notch.html</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/path/up.a.notch.html">http://foo.com/path/up.a.notch.html</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/root.cgi#OK">http://foo.com/root.cgi#OK</a>
+</em><br>
+<em>&gt; <a href="http://foo.com/root.cgi?OK">http://foo.com/root.cgi?OK</a>
+</em><br>
+<em>&gt; <a href="https://elsewhere.com/#deep">https://elsewhere.com/#deep</a>
+</em><br>
+<em>&gt; <a href="https://elsewhere.com/?deep">https://elsewhere.com/?deep</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In other words, there were quite a few cases where the fragment and the
+</em><br>
+<em>&gt; query were either dropped, or were not allowed to parse without more of
+</em><br>
+<em>&gt; the reference URI being present. 
+</em><br>
+<p>&nbsp;&nbsp;The point is that you modified the semantic of step 2 (adequately
+<br>
+modifying the comment). But step 2 (and the associated comment) is actually
+<br>
+extracted from RFC 2396 which precisely describes how the operation of
+<br>
+combining a base with an URI reference should be done to get the final
+<br>
+URI of the resource refered to.
+<br>
+&nbsp;&nbsp;I'm a bit puzzled because your examples and the test case seems sound and
+<br>
+what one would expect in practice, but doesn't match with what the wording
+<br>
+in 2) seems to indicate.  Something similar appears in 5), I think it's
+<br>
+okay anyway ...
+<br>
+<p><em>&gt; I'm assuming from the previous URI-bug
+</em><br>
+<em>&gt; discussion that we want to be able to combine &quot;&quot; with a base URI and get
+</em><br>
+<em>&gt; the base URI (the previous discussion made it sound like this is what
+</em><br>
+<em>&gt; happened even though it didn't work).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've attached uri.patch, with my suggested changes.
+</em><br>
+<p>&nbsp;&nbsp;Well, I trust you on this issue, I think you know this part of the code
+<br>
+better than me now :-). I will keep part of the old comment inherited from
+<br>
+the RFC for reference.
+<br>
+&nbsp;&nbsp;I will add a testURI in the regression tests, this is not yet commited.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks a lot,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20More%20uri.c%20bugs">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20More%20uri.c%20bugs">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0724.html">Wayne Davison: "Re: [xml] More uri.c bugs"</a>
+<li><strong>In reply to:</strong> <a href="0723.html">Wayne Davison: "[xml] More uri.c bugs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 04 2000 - 09:48:28 EDT</em>
+</em>
+</small>
+</body>
+</html>

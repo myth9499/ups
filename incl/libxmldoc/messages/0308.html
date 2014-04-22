@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] s-exprs</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] s-exprs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] s-exprs</h1>
+<!-- received="Wed Jan 26 04:34:53 2000" -->
+<!-- isoreceived="20000126093453" -->
+<!-- sent="Wed, 26 Jan 2000 04:34:49 -0500" -->
+<!-- isosent="20000126093449" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] s-exprs" -->
+<!-- id="20000126043449.C10714@w3.org" -->
+<!-- inreplyto="1263244847-78018857@jessenlenz.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20s-exprs"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 26 2000 - 04:34:49 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0309.html">Verstraete Nicolas: "[xml] WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0307.html">pj@walter-graphtek.com: "[xml] s-exprs"</a>
+<li><strong>In reply to:</strong> <a href="0307.html">pj@walter-graphtek.com: "[xml] s-exprs"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0314.html">David Doolin: "Re: [xml] s-exprs"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jan 26, 2000 at 10:12:10AM +0100, <a href="mailto:pj@walter-graphtek.com?subject=Re:%20[xml]%20s-exprs">pj@walter-graphtek.com</a> wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi Daniel, hi all,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This may score for the strangest feature request you've got, but I 
+</em><br>
+<em>&gt; would like to use libxml for parsing and (probably transcoding to 
+</em><br>
+<em>&gt; XML) configuration data in s-expr syntax.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Perhaps anyone has an idea how to plug an existing s-expr parser 
+</em><br>
+<em>&gt; into libxml?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The desired functionality, would be reading something like
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; (foo (bar x y z) hu fu 'gnu)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; application transparently as it were encoded as
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;foo&gt;&lt;bar&gt;&lt;x/&gt;&lt;y/&gt;&lt;z/&gt;&lt;/bar&gt;&lt;hu/&gt;&lt;fu/&gt;gnu&lt;/foo&gt;
+</em><br>
+<p>&nbsp;&nbsp;Hi Peter,
+<br>
+<p>&nbsp;Well shouldn't be a PhD thesis problem :-)
+<br>
+The code sequence needed is :
+<br>
+<p>&nbsp;&nbsp;doc = xmlNewDoc(&quot;1.0&quot;);
+<br>
+<p>&nbsp;&nbsp;doc-&gt;root = parseSExpr(doc, &quot;(foo (bar x y z) hu fu 'gnu)&quot;)
+<br>
+<p>and  parseSExpr is recursive , calling
+<br>
+<p>&nbsp;&nbsp;node = xmlNewDocNode(doc, NULL, name, NULL);
+<br>
+<p>on the first item and
+<br>
+<p>&nbsp;&nbsp;xmlNewChild(node, NULL, childname, NULL)
+<br>
+<p>for the following ones and recursing on (
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20s-exprs">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20s-exprs">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20s-exprs">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0309.html">Verstraete Nicolas: "[xml] WIN32"</a>
+<li><strong>Previous message:</strong> <a href="0307.html">pj@walter-graphtek.com: "[xml] s-exprs"</a>
+<li><strong>In reply to:</strong> <a href="0307.html">pj@walter-graphtek.com: "[xml] s-exprs"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0314.html">David Doolin: "Re: [xml] s-exprs"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:59 EDT</em>
+</em>
+</small>
+</body>
+</html>

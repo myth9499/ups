@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XPath normalize-string</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="[xml] XPath normalize-string">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XPath normalize-string</h1>
+<!-- received="Sun Sep 24 07:04:08 2000" -->
+<!-- isoreceived="20000924110408" -->
+<!-- sent="Sun, 24 Sep 2000 11:04:25 +0000" -->
+<!-- isosent="20000924110425" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="[xml] XPath normalize-string" -->
+<!-- id="39CDDFB9.96A34D69@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20XPath%20normalize-string"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Sun Sep 24 2000 - 07:04:25 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0801.html">Daniel Veillard: "Re: [xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+As a small exercise to familiarize myself with the code of libxml,
+<br>
+have I implemented the XPath normalize-string function.
+<br>
+<p>I have tried to follow the existing coding style, but have been
+<br>
+unable to tell Emacs to increase its indentation level from 2 to
+<br>
+4 (c-indent-level isn't recognized in Emacs 20, so if anybody can
+<br>
+tell me how, I would be grateful).
+<br>
+<p>I have attached a context diff against 2-2.2.3.
+<br>
+<p>
+*** libxml2-2.2.3/xpath.c	Sat Sep 16 21:46:39 2000
+<br>
+--- libxml/xpath.c	Sun Sep 24 03:02:09 2000
+<br>
+***************
+<br>
+*** 2796,2803 ****
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;xmlXPathNormalizeFunction(xmlXPathParserContextPtr ctxt, int nargs) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK_ARITY(1);
+<br>
+!     TODO /* normalize isn't as boring as translate, but pretty much */
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+--- 2796,2844 ----
+<br>
+&nbsp;&nbsp;&nbsp;*/
+<br>
+&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;xmlXPathNormalizeFunction(xmlXPathParserContextPtr ctxt, int nargs) {
+<br>
++   xmlXPathObjectPtr obj = NULL;
+<br>
++   xmlChar *source;
+<br>
++   xmlBufferPtr target;
+<br>
++   xmlChar blank;
+<br>
++   
+<br>
++   if (nargs &lt; 1) {
+<br>
++     /* Use current context node */
+<br>
++     CHECK_ARITY(0);
+<br>
++     TODO /* source = xmlNodeGetContent(ctxt-&gt;context-&gt;node); */
+<br>
++   } else if (nargs &gt;= 1) {
+<br>
++     /* Use argument */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK_ARITY(1);
+<br>
+!     obj = valuePop(ctxt);
+<br>
+!     if (obj == NULL) XP_ERROR(XPATH_INVALID_OPERAND);
+<br>
+!     source = obj-&gt;stringval;
+<br>
+!   }
+<br>
+!   target = xmlBufferCreate();
+<br>
+!   if (target &amp;&amp; source) {
+<br>
+!     
+<br>
+!     /* Skip leading whitespaces */
+<br>
+!     while (IS_BLANK(*source))
+<br>
+!       source++;
+<br>
+!   
+<br>
+!     /* Collapse intermediate whitespaces, and skip trailing whitespaces */
+<br>
+!     blank = 0;
+<br>
+!     while (*source) {
+<br>
+!       if (IS_BLANK(*source)) {
+<br>
+! 	blank = *source;
+<br>
+!       } else {
+<br>
+! 	if (blank) {
+<br>
+! 	  xmlBufferAdd(target, &amp;blank, 1);
+<br>
+! 	  blank = 0;
+<br>
+! 	}
+<br>
+! 	xmlBufferAdd(target, source, 1);
+<br>
+!       }
+<br>
+!       source++;
+<br>
+!     }
+<br>
+!   
+<br>
+!     valuePush(ctxt, xmlXPathNewString(xmlBufferContent(target)));
+<br>
+!     xmlBufferFree(target);
+<br>
+!   }
+<br>
+!   if (obj)
+<br>
+!     xmlXPathFreeObject(obj);
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20normalize-string">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20normalize-string">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0801.html">Daniel Veillard: "Re: [xml] uri.c bug in libxml2-2.2.3"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 24 2000 - 09:43:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

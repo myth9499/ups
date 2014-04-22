@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re[2]: [xml] HTML &amp; XML Parser</title>
+<meta name="Author" content="Manuel Guesdon (mguesdon@oxymium.net)">
+<meta name="Subject" content="Re[2]: [xml] HTML &amp; XML Parser">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re[2]: [xml] HTML &amp; XML Parser</h1>
+<!-- received="Sun Sep 24 17:01:06 2000" -->
+<!-- isoreceived="20000924210106" -->
+<!-- sent="Sun, 24 Sep 2000 22:54:26 +0200 (CEST)" -->
+<!-- isosent="20000924205426" -->
+<!-- name="Manuel Guesdon" -->
+<!-- email="mguesdon@oxymium.net" -->
+<!-- subject="Re[2]: [xml] HTML &amp; XML Parser" -->
+<!-- id="20000924205426.327B975C02@zen.sbuilders.com" -->
+<!-- inreplyto="20000924215315.I22500@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Manuel Guesdon (<a href="mailto:mguesdon@oxymium.net?subject=Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser"><em>mguesdon@oxymium.net</em></a>)<br>
+<strong>Date:</strong> Sun Sep 24 2000 - 16:54:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>Previous message:</strong> <a href="0806.html">Daniel Veillard: "Re: [xml] HTML &amp; XML Parser"</a>
+<li><strong>In reply to:</strong> <a href="0806.html">Daniel Veillard: "Re: [xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>Reply:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thanks for the help, Daniel.
+<br>
+<p>On Sun, 24 Sep 2000 21:53:16 +0200 Daniel Veillard wrote:
+<br>
+<em> &gt;| On Thu, Sep 21, 2000 at 03:40:24AM -0400, Manuel Guesdon wrote:
+</em><br>
+<em> &gt;| &gt; I'd like to parse HTML file with xml parser so people can change
+</em><br>
+<em> &gt;| &gt; DTDs (adding tags,...) without having to re-compile libxml.
+</em><br>
+<em> &gt;| &gt; The main problem is &quot;Auto Closed&quot; tag.
+</em><br>
+<em> &gt;| 
+</em><br>
+<em> &gt;|    Have you looked at the HTML parser in libxml ? did you noticed
+</em><br>
+<em> &gt;| it produces a similar tree as say an equivalent XHTML document would have
+</em><br>
+<em> &gt;| produced when parsed with the XML parser ? The HTmL parser of course handle
+</em><br>
+<em> &gt;| autoclosed (and auto-opened in some mesure) tags.
+</em><br>
+<p>I've seen this. This is one of the point which made me think I can select wich parser I want at run tine.
+<br>
+<p><p><em> &gt;| Latest and future versions
+</em><br>
+<em> &gt;| of HTML are XML  based, hence new extensions will be made using the
+</em><br>
+<em> &gt;| XHTML version and in an XML framework. Forget about auto-closed tags 
+</em><br>
+<em> &gt;| and other SGML minimizations nastyness this does not fit into this
+</em><br>
+<em> &gt;| framework anymore.
+</em><br>
+<p>OK. Good news :-)
+<br>
+<p><p><em> &gt;| &gt; So I'd like to know some things:
+</em><br>
+<em> &gt;| &gt;   Can I safetely mix html and xml parser functions (i.e. construct
+</em><br>
+<em> &gt;| &gt; a context with xmlCreateMemoryParserCtxt() and parse the doc with
+</em><br>
+<em> &gt;| &gt; htmlParseDocument.
+</em><br>
+<em> &gt;| 
+</em><br>
+<em> &gt;|   Can you tell me what you're aiming at this way ? I don't understand
+</em><br>
+<em> &gt;| your approach. If it's an HTML document use the HTML parser, otherwise
+</em><br>
+<em> &gt;| use the XML parser.
+</em><br>
+<p>My goal was to have a general wrapper around libxml which the minimum possible differences between handling html or xml (just a flag, for exemple).
+<br>
+To explain my need, now this wrapper is used in GNUstep for xml parsing and should be used in GNUstepWeb for HTML parsing.
+<br>
+<p><p><em> &gt;| &gt; My SAX functions use parser context _private member) ?
+</em><br>
+<em> &gt;| 
+</em><br>
+<em> &gt;|   I don't understand. _private are fields located in the DOM generated
+</em><br>
+<em> &gt;| tree structures. And you say you use SAX ... So I'm lost what are you doing
+</em><br>
+<em> &gt;| there, what API do you use exactly ?
+</em><br>
+<p>I use SAX because I want to handle some things (error messages, warning and Entity Loading) and haven't found a better way. So I create a SAX handler to put my own functions for these things. Others functions are the 'standards' ones (HTML or XML parser functions). 
+<br>
+My SAX handling functions use _private member of parser context, so if xml parser context and html parser context are not the same structures, I'll get into trouble because the structure offset of this member may won't be the same (or I have to write two sets of functions).
+<br>
+<p>If you tell me that the html and xml parser structures will be the same for future versions of libxml and if I can call htmlParseDocument with a parser context created with xmlCreateMemoryParserCtxt(), I'll be happy :-) 
+<br>
+In this case I just have to put a flag in the wrapper and call htmlParseDocument() or xmlParseDocument() depending on this flag.
+<br>
+<p>Manuel
+<br>
+<p><pre>
+--
+<p><p><p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re[2]:%20[xml]%20HTML%20&amp;%20XML%20Parser">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>Previous message:</strong> <a href="0806.html">Daniel Veillard: "Re: [xml] HTML &amp; XML Parser"</a>
+<li><strong>In reply to:</strong> <a href="0806.html">Daniel Veillard: "Re: [xml] HTML &amp; XML Parser"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<li><strong>Reply:</strong> <a href="0808.html">Daniel Veillard: "Re: Re[2]: [xml] HTML &amp; XML Parser"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sun Sep 24 2000 - 17:43:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

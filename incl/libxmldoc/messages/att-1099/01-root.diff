@@ -1,0 +1,84 @@
+diff -p -r1.86 xpath.c
+*** xpath.c	2000/10/27 16:57:25	1.86
+--- xpath.c	2000/10/28 10:03:10
+*************** xmlXPathNodeCollectAndTest(xmlXPathParse
+*** 2610,2622 ****
+   */
+  void
+  xmlXPathRoot(xmlXPathParserContextPtr ctxt) {
+-     if (ctxt->value != NULL) {
+- 	xmlXPathObjectPtr obj;
+- 
+- 	CHECK_TYPE(XPATH_NODESET);
+- 	obj = valuePop(ctxt);
+- 	xmlXPathFreeObject(obj);
+-     }
+      ctxt->context->node = (xmlNodePtr) ctxt->context->doc;
+      valuePush(ctxt, xmlXPathNewNodeSet(ctxt->context->node));
+  }
+--- 2610,2615 ----
+*************** xmlXPathEvalPathExpr(xmlXPathParserConte
+*** 4365,4370 ****
+--- 4358,4365 ----
+      } 
+  
+      if (lc) {
++ 	if (CUR == '/')
++ 	    xmlXPathRoot(ctxt);
+  	xmlXPathEvalLocationPath(ctxt);
+      } else {
+  	xmlXPathEvalFilterExpr(ctxt);
+*************** xmlXPathEvalLocationPath(xmlXPathParserC
+*** 5261,5267 ****
+  	    } else if (CUR == '/') {
+  		NEXT;
+  		SKIP_BLANKS;
+- 		xmlXPathRoot(ctxt);
+  		if (CUR != 0)
+  		    xmlXPathEvalRelativeLocationPath(ctxt);
+  	    }
+--- 5256,5261 ----
+*************** xmlXPathObjectPtr
+*** 5283,5289 ****
+  xmlXPathEval(const xmlChar *str, xmlXPathContextPtr ctx) {
+      xmlXPathParserContextPtr ctxt;
+      xmlXPathObjectPtr res = NULL, tmp;
+-     xmlXPathObjectPtr init = NULL;
+      int stack = 0;
+  
+      xmlXPathInit();
+--- 5277,5282 ----
+*************** xmlXPathEval(const xmlChar *str, xmlXPat
+*** 5291,5302 ****
+      CHECK_CONTEXT(ctx)
+  
+      ctxt = xmlXPathNewParserContext(str, ctx);
+-     if (ctx->node != NULL) {
+- 	init = xmlXPathNewNodeSet(ctx->node);
+- 	valuePush(ctxt, init);
+-     }
+-     if (str[0] == '/')
+- 	xmlXPathRoot(ctxt);
+      xmlXPathEvalExpr(ctxt);
+  
+      if (ctxt->value == NULL) {
+--- 5284,5289 ----
+*************** xmlXPathEval(const xmlChar *str, xmlXPat
+*** 5310,5317 ****
+          tmp = valuePop(ctxt);
+  	if (tmp != NULL) {
+  	    xmlXPathFreeObject(tmp);
+! 	    if (tmp != init)
+! 		stack++;    
+          }
+      } while (tmp != NULL);
+      if (stack != 0) {
+--- 5297,5303 ----
+          tmp = valuePop(ctxt);
+  	if (tmp != NULL) {
+  	    xmlXPathFreeObject(tmp);
+! 	    stack++;    
+          }
+      } while (tmp != NULL);
+      if (stack != 0) {
+

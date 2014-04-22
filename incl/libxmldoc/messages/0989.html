@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] 2.2.5 installation glitch on SunOS 5.6</title>
+<meta name="Author" content="Albert Chin-A-Young (china@thewrittenword.com)">
+<meta name="Subject" content="Re: [xml] 2.2.5 installation glitch on SunOS 5.6">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] 2.2.5 installation glitch on SunOS 5.6</h1>
+<!-- received="Mon Oct 16 16:45:07 2000" -->
+<!-- isoreceived="20001016204507" -->
+<!-- sent="Mon, 16 Oct 2000 15:21:39 -0500" -->
+<!-- isosent="20001016202139" -->
+<!-- name="Albert Chin-A-Young" -->
+<!-- email="china@thewrittenword.com" -->
+<!-- subject="Re: [xml] 2.2.5 installation glitch on SunOS 5.6" -->
+<!-- id="20001016152138.Q22300@postal.il.thewrittenword.com" -->
+<!-- inreplyto="20001016220725.U20166@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Albert Chin-A-Young (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6"><em>china@thewrittenword.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 16 2000 - 16:21:39 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0988.html">Kenneth Pronovici: "[xml] CDATA sections and validation"</a>
+<li><strong>In reply to:</strong> <a href="0987.html">Daniel Veillard: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 16, 2000 at 10:07:25PM +0200, Daniel Veillard wrote:
+<br>
+<em>&gt; On Mon, Oct 16, 2000 at 02:56:02PM -0500, Kenneth Pronovici wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I've found and &quot;fixed&quot; a minor installation glitch for libxml 2.2.5 under
+</em><br>
+<em>&gt; &gt; SunOS 5.6.  It appears that there are two versions of the test utility
+</em><br>
+<em>&gt; &gt; under SunOS, and one of them is broken.  The /usr/bin/test version of
+</em><br>
+<em>&gt; &gt; the utility recognizes the -e option, but the /bin/test version does
+</em><br>
+<em>&gt; &gt; not.  It will be pot-luck which one any given user has in their path 
+</em><br>
+<em>&gt; &gt; first - and if the broken version is found, the configure script will
+</em><br>
+<em>&gt; &gt; fail.
+</em><br>
+<p>On Solaris, /bin/test and /usr/bin/test are equivalent (because /bin
+<br>
+is a symlink to /usr/bin). What you found is that running 'test' under
+<br>
+/bin/sh gets you the shell built-in test command, not /bin/test (easy
+<br>
+test is to move /bin/test out of the way and run the test command
+<br>
+under /bin/sh). Most shells have their own version of the test command
+<br>
+built-in.
+<br>
+<p><em>&gt; &gt; What I did to make this work was to change the configure script to use
+</em><br>
+<em>&gt; &gt; -r rather than -e (the change is just the difference between &quot;exists&quot; 
+</em><br>
+<em>&gt; &gt; and &quot;exists and is readable&quot;).  Hopefully, this will be portable to 
+</em><br>
+<em>&gt; &gt; other systems with a broken test utility as well...as long as Daniel
+</em><br>
+<em>&gt; &gt; thinks it's safe.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Below my signature is a patch for configure.in.  I think I've provided
+</em><br>
+<em>&gt; &gt; the right kind of context diff, but let me know if there are problems 
+</em><br>
+<em>&gt; &gt; with it (it worked for me when I tested it).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   We actually went with Albert Chin-A-Young &lt;<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">china@thewrittenword.com</a>&gt;
+</em><br>
+<em>&gt; through a long series of attemps to find a portable solution to this
+</em><br>
+<em>&gt; problem ... And ended up with the enclosed patch (admitedly a bit more
+</em><br>
+<em>&gt; complex).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<p>[ patch removed]
+<br>
+<p><pre>
+-- 
+albert chin (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">china@thewrittenword.com</a>)
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%202.2.5%20installation%20glitch%20on%20SunOS%205.6">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0988.html">Kenneth Pronovici: "[xml] CDATA sections and validation"</a>
+<li><strong>In reply to:</strong> <a href="0987.html">Daniel Veillard: "Re: [xml] 2.2.5 installation glitch on SunOS 5.6"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 16 2000 - 17:43:21 EDT</em>
+</em>
+</small>
+</body>
+</html>

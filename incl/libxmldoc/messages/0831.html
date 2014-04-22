@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Indent - please help</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Indent - please help">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Indent - please help</h1>
+<!-- received="Wed Sep 27 18:51:22 2000" -->
+<!-- isoreceived="20000927225122" -->
+<!-- sent="Thu, 28 Sep 2000 00:51:12 +0200" -->
+<!-- isosent="20000927225112" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Indent - please help" -->
+<!-- id="20000928005112.F18301@w3.org" -->
+<!-- inreplyto="002601c028c8$548d71e0$0901020a@48650" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indent%20-%20please%20help"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Sep 27 2000 - 18:51:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0830.html">Nilo S. Mismetti: "[xml] Indent - please help"</a>
+<li><strong>In reply to:</strong> <a href="0830.html">Nilo S. Mismetti: "[xml] Indent - please help"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Sep 27, 2000 at 06:17:24PM -0300, Nilo S. Mismetti wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using LibXML to parse several documents and works fine.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now I'm trying to add a new node and works, except that when I save the
+</em><br>
+<em>&gt; result my additions appears on a single line:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;PosDB&gt;&lt;UserID&gt;&lt;User01&gt;3,1,86&lt;/User01&gt;&lt;/UserID&gt;&lt;/PosDB&gt;
+</em><br>
+<p>&nbsp;&nbsp;How is that a problem ;-) ?
+<br>
+<p><em>&gt; To add new nodes &lt;UserID&gt; and &lt;User01&gt; I'm using:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  if((curSection=xmlNewChild(BaseSection,NULL,lpAppName,NULL)) == NULL)
+</em><br>
+<em>&gt; return(0);
+</em><br>
+<em>&gt;  if((curKey=xmlNewTextChild(curSection,NULL,lpKeyName,Valor)) == NULL)
+</em><br>
+<em>&gt; return(0);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; lpAppName == &quot;UserID&quot;
+</em><br>
+<em>&gt; lpKeyName == &quot;User01&quot;
+</em><br>
+<em>&gt; Valor == &quot;3,1,86&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; To write the XML file I'm using:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  xmlIndentTreeOutput=TRUE;
+</em><br>
+<em>&gt;  xmlSetDocCompressMode(doc,CompressLevel);
+</em><br>
+<em>&gt;  return((xmlSaveFile(FileName,doc) == -1) ? TRUE : FALSE);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; A little help will be VERY useful.
+</em><br>
+<p>&nbsp;&nbsp;All blanks are significant in XML. Hence they are not dropped
+<br>
+at import and not added automatically. You can disable this by using
+<br>
+xmlKeepBlanksDefault(0); but think seriously about it first. The
+<br>
+right solution might be to actually insert the blanks instead
+<br>
+(by adding text nodes containing the formatting).
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Indent%20-%20please%20help">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Indent%20-%20please%20help">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0830.html">Nilo S. Mismetti: "[xml] Indent - please help"</a>
+<li><strong>In reply to:</strong> <a href="0830.html">Nilo S. Mismetti: "[xml] Indent - please help"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Sep 27 2000 - 19:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

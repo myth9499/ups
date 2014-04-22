@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] SAX, compression, etc</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] SAX, compression, etc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] SAX, compression, etc</h1>
+<!-- received="Fri May 26 03:23:50 2000" -->
+<!-- isoreceived="20000526072350" -->
+<!-- sent="Fri, 26 May 2000 09:22:00 +0200" -->
+<!-- isosent="20000526072200" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] SAX, compression, etc" -->
+<!-- id="965233754.0017@hypermail.dummy" -->
+<!-- inreplyto="Pine.GSO.4.05.10005251510120.8572-100000@fangio.magnet.fsu.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri May 26 2000 - 03:22:00 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0480.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0478.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>In reply to:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, May 25, 2000 at 03:20:51PM -0400, Adrian Feiguin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi, y'all. I have a couple of questions.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1) I found that it's possible to use compression for the DOM interfase (a
+</em><br>
+<em>&gt; la gnumeric). Is it possible to use it also for the SAX one? Is this
+</em><br>
+<p>&nbsp;&nbsp;yes it should, the way the parser core processes input is independent
+<br>
+of how this input is handled.
+<br>
+<p><em>&gt; feature also usable in the Win32 version?
+</em><br>
+<p>&nbsp;&nbsp;If it is configured in yes, in standard, I assume it's not the case
+<br>
+on Windows.
+<br>
+<p><em>&gt; 2) I am using libXML in SciGraphica
+</em><br>
+<em>&gt; (<a href="http://magnet.fsu.edu/~feiguin/scigraphica">http://magnet.fsu.edu/~feiguin/scigraphica</a>) to save two different type of
+</em><br>
+<em>&gt; objects: Worksheets and Plots, using an approach similar to gnumeric(for
+</em><br>
+<em>&gt; the format) and libglade(because I'm using SAX). 
+</em><br>
+<em>&gt; I can save the worksheets and plots separate (individually), or all
+</em><br>
+<em>&gt; toghether in a project. 
+</em><br>
+<em>&gt; Any idea about how to use the same two SAX parsers I use for the
+</em><br>
+<em>&gt; individual objects, for the entire project?
+</em><br>
+<p>&nbsp;&nbsp;what do you mean by SAX parser ? You may be able to use the same set
+<br>
+of callbacks, yes, but you will have to add some extra logic to be able
+<br>
+to process both inputs.
+<br>
+&nbsp;&nbsp;If you also mean the user data context, then it's completely dependant
+<br>
+on what is put in there.
+<br>
+&nbsp;
+<br>
+<em>&gt; Should I read the file once
+</em><br>
+<em>&gt; for the worksheets using the worksheet's SAX parser, and once for the
+</em><br>
+<em>&gt; plots using the plots' one? (this means reading the file twice). 
+</em><br>
+<em>&gt; Or I better merge the two parsers in a third one? This is not a bad idea:
+</em><br>
+<em>&gt; instead of two parsers, I use only a big one, and I use the same for
+</em><br>
+<em>&gt; reading worksheets, plots, and projects. Any suggestions are welcome!
+</em><br>
+<p>&nbsp;&nbsp;I can only comment on the fact that keeping all the worksheet in a 
+<br>
+single XmL file is more conveneient but also more dangerous. If you get
+<br>
+an error (say a bad spot on a floppy disk) then you potentially loose all
+<br>
+your files. This may also impact performances if you do frequent backups
+<br>
+in the background of the modified data.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20SAX,%20compression,%20etc">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0480.html">Adrian Feiguin: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>Previous message:</strong> <a href="0478.html">Daniel Veillard: "Re: [xml] SAX, compression, etc"</a>
+<li><strong>In reply to:</strong> <a href="0477.html">Adrian Feiguin: "[xml] SAX, compression, etc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0486.html">mdf@angoss.com: "Re: [xml] SAX, compression, etc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

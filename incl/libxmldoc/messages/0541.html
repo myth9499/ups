@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] entity ref. in attribute value</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] entity ref. in attribute value">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] entity ref. in attribute value</h1>
+<!-- received="Wed Jun 28 02:34:46 2000" -->
+<!-- isoreceived="20000628063446" -->
+<!-- sent="Wed, 28 Jun 2000 08:31:44 +0200" -->
+<!-- isosent="20000628063144" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] entity ref. in attribute value" -->
+<!-- id="20000628083144.C6160@w3.org" -->
+<!-- inreplyto="000d01bfe07b$731e5470$942e45c1@corena.no" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20ref.%20in%20attribute%20value"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jun 28 2000 - 02:31:44 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0540.html">Eric Bresie: "RE: [xml] How to stop SAX parsing ?"</a>
+<li><strong>In reply to:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Reply:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Jun 27, 2000 at 11:05:39PM +0200, Petr Kozelka wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; First of all, thank you (Daniel) for your quick replies.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now I have this problem: with the SAX parser, I receive startElement notification with attribute list. But attribute values in this
+</em><br>
+<em>&gt; list (each second string) are not unescaped, ie. when I have attribute like
+</em><br>
+<em>&gt; &lt;test we=&quot;you &amp;amp; I&quot;/&gt;
+</em><br>
+<em>&gt; I would expect to get the string &quot;you &amp; I&quot; for the 'we' attribute, but what I get is exactly the same like what I have in xml file.
+</em><br>
+<em>&gt; - is this correct ? (I suppose no)
+</em><br>
+<em>&gt; - if yes, what I have to do to get the correct string? Do I have to parse the value myself ?
+</em><br>
+<p>&nbsp;&nbsp;That's IMHO a limitation of the original SAx interface as provided
+<br>
+by expat, one can return only attribute strings. Since i want to
+<br>
+be able to generate entity ref within attribute values in the DOM tree
+<br>
+I have to pass the value as parsed and do the entity lookup later on.
+<br>
+Check the attribute() function in the SAX.c module.
+<br>
+&nbsp;&nbsp;I think that if you ask for automatic entity replacement, then
+<br>
+in that case you will get substituted values.
+<br>
+&nbsp;&nbsp;I didn't want to bypass the SAX layer when implementing the DOM
+<br>
+tree so I had to make a couple of decisions like this.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20entity%20ref.%20in%20attribute%20value">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20entity%20ref.%20in%20attribute%20value">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20entity%20ref.%20in%20attribute%20value">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0540.html">Eric Bresie: "RE: [xml] How to stop SAX parsing ?"</a>
+<li><strong>In reply to:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<li><strong>Reply:</strong> <a href="0542.html">Petr Kozelka: "Re: [xml] entity ref. in attribute value"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bad ilegal char handling</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bad ilegal char handling">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bad ilegal char handling</h1>
+<!-- received="Tue Aug 29 11:18:40 2000" -->
+<!-- isoreceived="20000829151840" -->
+<!-- sent="Tue, 29 Aug 2000 20:17:05 +0200" -->
+<!-- isosent="20000829181705" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bad ilegal char handling" -->
+<!-- id="20000829201705.T804@w3.org" -->
+<!-- inreplyto="007801c011dc$641a5ae0$0901020a@48650" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bad%20ilegal%20char%20handling"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 29 2000 - 14:17:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0702.html">Daniel Veillard: "Re: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0701.html">Nilo S. Mismetti: "[xml] Bad ilegal char handling"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 29, 2000 at 02:12:58PM -0300, Nilo S. Mismetti wrote:
+<br>
+<em>&gt; Sirs,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  Libxml (&quot;20202&quot;) loops trying to parse a file that contains low ASCII
+</em><br>
+<em>&gt; characters, example:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot; ?&gt;
+</em><br>
+<em>&gt;  &lt;NewHUB&gt;
+</em><br>
+<em>&gt;      &lt;MFYtext&gt;Xabdef&lt;/MFYtext&gt;
+</em><br>
+<em>&gt;  &lt;/NewHUB&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  when X is &quot;low ASCII&quot;, for example X=0x1b.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Tracing thru the code I notice that the routine &quot;xmlParseTryOrFinish&quot; loops
+</em><br>
+<em>&gt; looking over and over to the char 0x1b.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using Libxml on a Win98 machine but I did not notice ANY depencency on
+</em><br>
+<em>&gt; Win32.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Example attached.
+</em><br>
+<p>&nbsp;&nbsp;Oops right, the given .xml file is not an XML document and libxml
+<br>
+complains rightly about this:
+<br>
+<p>--------------------------------
+<br>
+~/gnome-xml -&gt; ./xmllint ~/newkvs.xml 
+<br>
+/u/veillard/newkvs.xml:12: error: detected an error in element content
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: Premature end of data in tag &lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Seri
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: detected an error in element content
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: Premature end of data in tag &lt;Configuration&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: detected an error in element content
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: Premature end of data in tag &lt;PosDB&gt;
+<br>
+&lt;!-- * --&gt; 
+<br>
+&lt;!-- Confi
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/u/veillard/newkvs.xml:12: error: Extra content at the end of the document
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPWIN.DLL&lt;/Dll&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+~/gnome-xml -&gt;
+<br>
+--------------------------------
+<br>
+<p>Except in push mode where it was looping because I forgot to add
+<br>
+one of the tests
+<br>
+&nbsp;&nbsp;
+<br>
+--------------------------------
+<br>
+~/gnome-xml -&gt; ./xmllint --push ~/newkvs.xml 
+<br>
+<p>~/gnome-xml -&gt; 
+<br>
+<p>&nbsp;So right, this is a bug in libxml I fixed it (patch enclosed) but you
+<br>
+will have to fix the document because it's not XML anyway. The range of
+<br>
+unicode chars allowed in XML is defined in the specification in section
+<br>
+2.2:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/REC-xml#charsets">http://www.w3.org/TR/REC-xml#charsets</a>
+<br>
+<p>The character whose value is 0x1b is definitely not part of the accepted
+<br>
+set, you have the right to complain to whoever provided this &quot;pseudo XML&quot;
+<br>
+file to you, it's plain wrong :-\
+<br>
+<p>&nbsp;&nbsp;&nbsp;thanks for the report,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bad%20ilegal%20char%20handling">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-0703/01-invchar.patch">invchar.patch</a>
+</ul>
+<!-- attachment="01-invchar.patch" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Bad%20ilegal%20char%20handling">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Bad%20ilegal%20char%20handling">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0702.html">Daniel Veillard: "Re: [xml] Encoding Problems with libxml 2.2.2"</a>
+<li><strong>In reply to:</strong> <a href="0701.html">Nilo S. Mismetti: "[xml] Bad ilegal char handling"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 29 2000 - 11:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] win32</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] win32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] win32</h1>
+<!-- received="Mon Jan 31 12:20:47 2000" -->
+<!-- isoreceived="20000131172047" -->
+<!-- sent="Mon, 31 Jan 2000 12:20:37 -0500" -->
+<!-- isosent="20000131172037" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] win32" -->
+<!-- id="965233742.0003@hypermail.dummy" -->
+<!-- inreplyto="[xml] win32" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20win32"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Mon Jan 31 2000 - 12:20:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0329.html">Stefan Bambach: "[xml] cutting of chars after # or ? in URL"</a>
+<li><strong>Previous message:</strong> <a href="0327.html">David Doolin: "Re: [xml] win32"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0326.html">David Doolin: "[xml] win32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0331.html">David Doolin: "Re: [xml] win32"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+The following code (in xpath.c) barfs at the error:
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... 
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#elif defined(finite) || defined(HAVE_FINITE)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int isinf(double x) { return !finite(x) &amp;&amp; x==x; }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#elif defined(HUGE_VAL)
+<br>
+-&gt;   static int isinf(double x)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (x == HUGE_VAL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (x == -HUGE_VAL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(-1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(0);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#endif 
+<br>
+<p><p>Here is what the compiler has to say about it:
+<br>
+<p>xpath.c
+<br>
+D:\dave\libxml-1.8.6\xpath.c(113) : error C2084: function 'int __cdecl isinf(double )' already has a body
+<br>
+D:\dave\libxml-1.8.6\xpath.c(1127) : warning C4244: 'function' : conversion from 'double ' to 'float ', possible loss of data
+<br>
+D:\dave\libxml-1.8.6\xpath.c(1176) : warning C4244: 'function' : conversion from 'double ' to 'float ', possible loss of data
+<br>
+D:\dave\libxml-1.8.6\xpath.c(2679) : warning C4244: '=' : conversion from 'double ' to 'int ', possible loss of data
+<br>
+D:\dave\libxml-1.8.6\xpath.c(2683) : warning C4244: '=' : conversion from 'double ' to 'int ', possible loss of data
+<br>
+Error executing cl.exe.
+<br>
+<p>My solution is to just comment out the offending code.  I then get a build
+<br>
+which correctly parses the examples.   However, this is a distasteful 
+<br>
+solution so I would like to fix it so it works.  This is a bit out 
+<br>
+of my area of expertise, so I welcome any comments.
+<br>
+<p>Please let me know if I have left out any useful information.
+<br>
+<p>Thanks,
+<br>
+<p>Dave Doolin
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20win32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20win32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0329.html">Stefan Bambach: "[xml] cutting of chars after # or ? in URL"</a>
+<li><strong>Previous message:</strong> <a href="0327.html">David Doolin: "Re: [xml] win32"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0326.html">David Doolin: "[xml] win32"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0331.html">David Doolin: "Re: [xml] win32"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:00 EDT</em>
+</em>
+</small>
+</body>
+</html>

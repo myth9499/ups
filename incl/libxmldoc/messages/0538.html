@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Char encoding again</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Char encoding again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Char encoding again</h1>
+<!-- received="Tue Jun 27 10:37:24 2000" -->
+<!-- isoreceived="20000627143724" -->
+<!-- sent="Tue, 27 Jun 2000 16:34:23 +0200" -->
+<!-- isosent="20000627143423" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Char encoding again" -->
+<!-- id="20000627163423.I28809@w3.org" -->
+<!-- inreplyto="200006271307.e5RD7Xa02411@mailsrvc.hrz.uni-oldenburg.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Char%20encoding%20again"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Jun 27 2000 - 10:34:23 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0537.html">Tobias Peters: "[xml] Char encoding again"</a>
+<li><strong>In reply to:</strong> <a href="0537.html">Tobias Peters: "[xml] Char encoding again"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0601.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Reply:</strong> <a href="0601.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Jun 27, 2000 at 03:07:41PM +0200, Tobias Peters wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I am using the tree interface in libxml2. I have made the following experiences with the
+</em><br>
+<em>&gt; parser:
+</em><br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;Hi Tobias,
+<br>
+<p>&nbsp;preliminary question, did you tried the CVS version ? I have made
+<br>
+serious improvement in that area.
+<br>
+<p><em>&gt; 1) Numeric character references (&amp;#...;) are translated to utf8.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 2) Non-Ascii characters (as a umlaut) are rejected by the parser when no encoding is
+</em><br>
+<em>&gt;    specified in the document.
+</em><br>
+<em>&gt; 3) Non-Ascii characters are accepted when the document uses the &quot;ISO-8859-1&quot; (or 
+</em><br>
+<em>&gt;    probably some other) encoding. They are left untouched by libxml.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; While 1) and 2) are good things, 3) is at least questionable, I think. But it gets
+</em><br>
+<em>&gt; *really* bad, when 1)and 3) come together: Suppose you have a document that declares
+</em><br>
+<em>&gt; to use the ISO-8859-1 encoding, that contains some special characters of this charset,
+</em><br>
+<em>&gt; but at the same time contains numeric character references that can or can not be
+</em><br>
+<em>&gt; represented in the chosen encoding. Either way, libxml will leave the special characters
+</em><br>
+<em>&gt; untouched and translate the numeric character reference to utf8. So you could end up
+</em><br>
+<em>&gt; having characters that use different encodings in a single string. That's what I consider 
+</em><br>
+<em>&gt; bad.
+</em><br>
+<p>&nbsp;&nbsp;yes, you are right ... 
+<br>
+&nbsp;Currently ISO Latin is handled differently than all other encodings in the
+<br>
+sense that it's not converted internally to UTF8. This is bad and mostly I
+<br>
+kept it that way due to historical reasons. This opens a lot of problems like 
+<br>
+being able to represent characters inserted as charrefs and not in the
+<br>
+ISO-Latin range, this is simply impossible right now
+<br>
+<p><em>&gt; having characters that use different encodings in a single string. That's what I consider 
+</em><br>
+<em>&gt; a) translate everything to utf8. If libxml does not know how to translate a specific 
+</em><br>
+<em>&gt;    charset, return an error. Let the library user supply conversion functions.
+</em><br>
+<em>&gt; b) try to translate everything to the given encoding. If this is impossible, return
+</em><br>
+<em>&gt;    an error.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I would prefer a).
+</em><br>
+<em>&gt; Maybe this is already implemented, but I have not found it yet.
+</em><br>
+<em>&gt; Comments welcome.
+</em><br>
+<p>&nbsp;&nbsp;I expect to do a)
+<br>
+People who want to keep the internal string in ISO-Latin instead of UTF8
+<br>
+will still be able to do that by registering a specific encoding handler
+<br>
+for that encoding using xmlRegisterCharEncodingHandler():
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/gnome-xml-encoding.html#XMLREGISTERCHARENCODINGHANDLER">http://xmlsoft.org/gnome-xml-encoding.html#XMLREGISTERCHARENCODINGHANDLER</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Char%20encoding%20again">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Char%20encoding%20again">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Char%20encoding%20again">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0539.html">Petr Kozelka: "[xml] entity ref. in attribute value"</a>
+<li><strong>Previous message:</strong> <a href="0537.html">Tobias Peters: "[xml] Char encoding again"</a>
+<li><strong>In reply to:</strong> <a href="0537.html">Tobias Peters: "[xml] Char encoding again"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0601.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<li><strong>Reply:</strong> <a href="0601.html">Daniel Veillard: "Re: [xml] Char encoding again"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

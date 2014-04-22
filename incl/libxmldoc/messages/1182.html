@@ -1,0 +1,567 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Release of libxml-2.2.8</title>
+<meta name="Author" content="Antonio Alvarado (aalvarado@sema.com.ve)">
+<meta name="Subject" content="RE: [xml] Release of libxml-2.2.8">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Release of libxml-2.2.8</h1>
+<!-- received="Mon Nov 13 14:43:52 2000" -->
+<!-- isoreceived="20001113194352" -->
+<!-- sent="Mon, 13 Nov 2000 16:42:45 -0400" -->
+<!-- isosent="20001113204245" -->
+<!-- name="Antonio Alvarado" -->
+<!-- email="aalvarado@sema.com.ve" -->
+<!-- subject="RE: [xml] Release of libxml-2.2.8" -->
+<!-- id="41157D026B64D311A78600D0090553565DB084@SVR_SEMA" -->
+<!-- inreplyto="[xml] Release of libxml-2.2.8" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Antonio Alvarado (<a href="mailto:aalvarado@sema.com.ve?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8"><em>aalvarado@sema.com.ve</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 15:42:45 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+For avoid SOCKLEN_T error, we must to add the follow line in
+<br>
+&quot;win32config.h&quot;:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#define SOCKLEN_T               size_t
+<br>
+<p>For avoid &quot;getcwd&quot; warning add follow to same file:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;direct.h&gt;
+<br>
+<p>For otherwise warning... close your eyes :-)
+<br>
+<p>I attach a context-diff-file with &quot;win32config.h&quot; modifications.
+<br>
+<p>&nbsp;
+<br>
+<p><em>&gt; -----Mensaje original-----
+</em><br>
+<em>&gt; De:	Timothee Besset [SMTP:<a href="mailto:timo@qeradiant.com?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">timo@qeradiant.com</a>]
+</em><br>
+<em>&gt; Enviado el:	Lunes 13 de Noviembre de 2000 03:17 PM
+</em><br>
+<em>&gt; Para:	<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Asunto:	Re: [xml] Release of libxml-2.2.8
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I checked it real quick on win32 / MSVC. Seems HTTP and FTP support are 
+</em><br>
+<em>&gt; broken (looks like we are not including the right headers or something:)
+</em><br>
+<em>&gt; e:\loki\libxml2\nanoftp.c(1275) : error C2065: 'SOCKLEN_T' : undeclared 
+</em><br>
+<em>&gt; identifier
+</em><br>
+<em>&gt; didn't look further into it, I use raw xml only (I disable every option 
+</em><br>
+<em>&gt; in xmlversion.h).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It compiles fine but I get a lot of
+</em><br>
+<em>&gt; e:\loki\libxml2\error.c(46) : warning C4273: 'xmlGenericError' : 
+</em><br>
+<em>&gt; inconsistent dll linkage.  dllexport assumed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; TTimo
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;   Okay I released a new version 2.2.8:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Where:
+</em><br>
+<em>&gt; &gt;   <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; &gt;   <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a> and on GNOME FTP server(s).
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; What's new:
+</em><br>
+<em>&gt; &gt;     - First version of XInclude support 
+</em><br>
+<em>&gt; &gt;     - Patch in conditional section handling 
+</em><br>
+<em>&gt; &gt;     - updated MS compiler project 
+</em><br>
+<em>&gt; &gt;     - fixed some XPath problems 
+</em><br>
+<em>&gt; &gt;     - added an URI escaping function 
+</em><br>
+<em>&gt; &gt;     - some other bug fixes 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   I think I integrated all the patches that were sent, and tried
+</em><br>
+<em>&gt; &gt; to fix all reported problems. The new thing is Xinclude which will
+</em><br>
+<em>&gt; &gt; probably need some small fixes to be added to Windows projects files.
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;   Again thanks to everybody who contributed,
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Daniel
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">majordomo@rpmfind.net</a>
+</em><br>
+<p>begin 600 win32config.diff
+<br>
+M*BHJ('=I;C,R8V]N9FEG+F@N;W)I9PE4=64@3V-T(#$P(#$Y.C`Q.C(X(#(P
+<br>
+M.C`-&quot;BTM+2!W:6XS,F-O;F9I9RYH&quot;4UO;B!.;W8@,3,@,34Z-#`Z,S8@,C`Z
+<br>
+M,`T**BHJ*BHJ*BHJ*BHJ*BHJ#0HJ*BH@.2PQ-`T*(&quot;`C:69D968@24Y#3%5$
+<br>
+M15]724Y33T-+#0H@(&quot;-I;F-L=61E(#QW:6YS;V-K,BYH/@T*(&quot;`-&quot;B`@(V1E
+<br>
+M9FEN92!%5T]53$1&quot;3$]#2R`@(&quot;`@(&quot;`@(&quot;`@(&quot;!74T%%5T]53$1&quot;3$]#2PT*
+<br>
+M(&quot;`C9&amp;5F:6YE($5)3E!23T=215-3(&quot;`@(&quot;`@(&quot;`@(&quot;`@(%=3045)3E!23T=2
+<br>
+M15-3#0H@(&quot;-D969I;F4@14%,4D5!1%D@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@5U-!14%,
+<br>
+M4D5!1%D-&quot;@T*+2TM(#DL,38@+2TM+2T-&quot;B`@(VEF9&amp;5F($E.0TQ51$5?5TE.
+<br>
+M4T]#2PT*(&quot;`C:6YC;'5D92`\=VEN&lt;V]C:S(N:#X-&quot;B`@#0HK(&quot;-D969I;F4@
+<br>
+M4T]#2TQ%3E]4(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@&lt;VEZ95]T#0HK(`T*(&quot;`C9&amp;5F:6YE
+<br>
+M($573U5,1$),3T-+(&quot;`@(&quot;`@(&quot;`@(&quot;`@(%=304573U5,1$),3T-+#0H@(&quot;-D
+<br>
+M969I;F4@14E.4%)/1U)%4U,@(&quot;`@(&quot;`@(&quot;`@(&quot;`@5U-!14E.4%)/1U)%4U,-
+<br>
+M&quot;B`@(V1E9FEN92!%04Q214%$62`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;!74T%%04Q214%$
+<br>
+M60T**BHJ*BHJ*BHJ*BHJ*BHJ#0HJ*BH@-#@L-30-&quot;B`@(V1E9FEN92!%4D5-
+<br>
+M3U1%(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;!74T%%4D5-3U1%#0H@(&quot;-E;F1I9B`O*B!)
+<br>
+M3D-,541%7U=)3E-/0TL@*B\-&quot;B`@#0HA(&quot;-D969I;F4@2$%615])4TE.1B`@
+<br>
+M(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@
+<br>
+M(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(V1E9FEN92!(059%7TE33D%.(&quot;`@(&quot;`-&quot;B`@#0H@
+<br>
+M(&quot;-I;F-L=61E(#QM871H+F@^#0H@('-T871I8R!I;G0@:7-I;F8@*&amp;1O=6)L
+<br>
+M92!D*2![#0H-&quot;BTM+2`U,&quot;PU-R`M+2TM+0T*(&quot;`C9&amp;5F:6YE($5214U/5$4@
+<br>
+M(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(%=3045214U/5$4-&quot;B`@(V5N9&amp;EF(&quot;\J($E.0TQ5
+<br>
+M1$5?5TE.4T]#2R`J+PT*(&quot;`-&quot;B$@(V1E9FEN92!(059%7TE324Y&amp;#0HA(&quot;-D
+<br>
+M969I;F4@2$%615])4TY!3@T*(&quot;`-&quot;B`@(VEN8VQU9&amp;4@/&amp;UA=&amp;@N:#X-&quot;B`@
+<br>
+M&lt;W1A=&amp;EC(&amp;EN=&quot;!I&lt;VEN9B`H9&amp;]U8FQE(&amp;0I('L-&quot;BHJ*BHJ*BHJ*BHJ*BHJ
+<br>
+M*@T**BHJ(#@Q+#@S#0H@(&quot;`@(&quot;`@(&quot;`@&lt;F5T=7)N(#`[#0H@(&quot;`@(&quot;!]#0H@
+<br>
+M('T-&quot;@T*+2TM(#@T+#@X(&quot;TM+2TM#0H@(&quot;`@(&quot;`@(&quot;`@&lt;F5T=7)N(#`[#0H@
+<br>
+H(&quot;`@(&quot;!]#0H@('T-&quot;BL@#0HK(&quot;-I;F-L=61E(#QD:7)E8W0N:#X-&quot;@==
+<br>
+`
+<br>
+end
+<br>
+<p>begin 600 winmail.dat
+<br>
+M&gt;)\^(C`4`0:0&quot;``$```````!``$``0&gt;0!@`(````Y`0```````#H``$(@`&lt;`
+<br>
+M&amp;````$E032Y-:6-R;W-O9G0@36%I;&quot;Y.;W1E`#$(`06``P`.````T`&lt;+``T`
+<br>
+M$``J`&quot;T``0!7`0$@@`,`#@```-`'&quot;P`-`!``*@`M``$`5P$!&quot;8`!`&quot;$````Y
+<br>
+M1#8W-D8Q,S&lt;T0CE$-#$Q0D,V.#`P,3`U044P,T%%-P`9!P$$@`$`(@```%)%
+<br>
+M.B!;&gt;&amp;UL72!296QE87-E(&amp;]F(&amp;QI8GAM;&quot;TR+C(N.`&quot;=&quot;@$-@`0``@````(`
+<br>
+M`@`!`Y`&amp;`-`*```K````&quot;P`&quot;``$````#`&quot;X``````$``.0`@W,A&amp;LDW``1X`
+<br>
+M&lt;``!````'@```%MX;6Q=(%)E;&amp;5A&lt;V4@;V8@;&amp;EB&gt;&amp;UL+3(N,BXX`````@%Q
+<br>
+M``$````;`````&lt;!-KRIKZ:V&lt;P;@7$=2GZ0#0&quot;0535@`!PYD@`!X`,4`!````
+<br>
+M&quot;@```$%!3%9!4D%$3P````,`&amp;D``````'@`P0`$````*````04%,5D%2041/
+<br>
+M`````P`90``````&quot;`0D0`0```%L&amp;``!7!@``\PD``$Q:1G5IXKC'`P`*`')C
+<br>
+M&lt;&amp;&lt;Q,C7R,@#[,S8!Z`*D`^,&quot;``1C:`K`&lt;V5T,&quot;`/!Q,&quot;@P!0$$9P&lt;G$R;Q%)
+<br>
+M#E`#U1%5?0J`&quot;,@@]CL);PXP-15O&quot;F`&quot;@`J!DG8(D'=K&quot;X!D-`Q@-F,`4`L#
+<br>
+M8P!!&quot;V!N9Y@S,#@3@0O$($8%L2!A=F]I9`8`3T.`2TQ%3E]4(`20`0-@&lt;BP@
+<br>
+M=V4@;:1U&lt;P5`=&amp;\:X&amp;0;,&amp;QT:!QP`A!L&quot;0`'X&amp;PG&quot;X`&lt;&lt;`N`(&quot;(#\&amp;XS`C(%
+<br>
+MH&amp;YF:6&lt;N:#PB.@JB&quot;H0*@0&amp;1(&quot;,?`0$&gt;$AM8(:P`D'IE7R9T'XH:N&quot;)G$1!C
+<br>
+M=_QD(AQ0&quot;L`#`!G`'0,=E;D&lt;X7-A!X`=@`,091]_&amp;R&quot;`&quot;X!C&quot;D`!`&quot;`\9%)I
+<br>
+M%M!C=!]`/B+^;UT=47(#\1QP).4N*S`@M2@@;RJ1&gt;0AA&amp;^!Y!Y'H.BTI)NI)
+<br>
+M&amp;N`&quot;0`#0#F@:X&quot;M@`B%E&gt;'0MVRB0`2`M)I(&lt;4&amp;D=4!Y^7QR`!'`&amp;D`W@+8!I
+<br>
+M`B!S(BXFZV]B:BV!&lt;&amp;C\7&quot;&lt;,`2;Z&quot;P,&gt;``\Q&amp;5$?,N$#8&quot;Y`*-`1U#$V(-HM
+<br>
+M-;)-&quot;?`F0&amp;H&lt;&lt;`6P_Q\@&quot;X`'0#6S)N8TQ#+C&quot;S'!-,9I+3$T-`%`'@!X,3@P
+<br>
+M`4`,T#E3('!$&gt;R;!#))B$3`'82HB''!&quot;`P&gt;0$0$@6U--5%#F.C$`!&amp;!`&lt;020
+<br>
+M'1`',&amp;4&quot;,&quot;X%H&amp;U=)N4@&lt;$5.;A@P'1`&lt;\&amp;5L.L=,1G4&gt;(`0@,3,@*%%.?F\8
+<br>
+M,0;0%M!`(@'0.&gt;`@`#`S.C$W(%!-%3WG4`K`83K'&gt;&amp;ULD$!R&lt;&amp;T@P60N'B!S
+<br>
+M(N8@&lt;$%S/[`&lt;X#K'4K&lt;FP#Q`0V%=1&lt;$FL&amp;$JD11O9AWQ8D-A+3(N_4&gt;0.#=?
+<br>
+M.&amp;HT%@Y0&amp;:(:`'XP$X$3@C+&lt;+6`0P`60:Q\)@!Y`!4`6T`=`('%UG0W@:RH0
+<br>
+M`Z`&gt;DR`O!=$\5D,K4`9@0*`$($A4/SR`&amp;N`8D!J@3R%$\'!PWPD1&amp;N!`T2;D
+<br>
+M0,!O3'`#H/XH&quot;0!1$`0@'@!,&lt;!Q24%)^;BH@'D$H(B4B'5(VD6B_!4`=8!T0
+<br>
+M!)`$(`6Q&lt;P-P]1$0:&quot;4A.BR5)L$9D%$0[P&quot;@-`%'0@Y07#;04I`!@(IP/9`H
+<br>
+M#B`W-2DL8$D;Y&quot;!#`=`V-47P)_T;5R=7\3^P!8$+8!;14(5_&amp;R`)\#$`'Q`$
+<br>
+MD&quot;;D*)!D_&amp;XG!4!1&lt;AV`&quot;'`J,AY!OQSA+T`&lt;0&quot;U@'*!3D6$'X/-#84V!;'E1
+<br>
+M4&quot;U@*)`F0+,&quot;8!QP978$D%[`;P4P_S$16G8#H$-A7Z$`D`(@'T#:*3%;205`
+<br>
+M/:%P)J$$(/D@PV)U!4`M8&quot;1A+&gt;$)`#\%0$;P57]6AAOS5W$T-O-7XB3F0S17
+<br>
+ML$&amp;06.!#8&gt;9'&quot;?`&amp;&lt;6-%'`)9DF!F?Q[A`)`&lt;L%L!0&quot;`=L!WR:WYA)&amp;`K4&amp;J&quot;
+<br>
+M+E!0!`00=;\'@$0`)NI/$#MA)NI$`'!S&quot;)`#(%9E`Q!:(1LP=^LTPB;;/B&amp;A
+<br>
+M3VL`7L`M8/\6T$:3&amp;S`M\!X@!^!A)4$@[T&gt;B)M5P@'`F5RI!)L9P@N-3X#*`
+<br>
+M.B\O0V%4P`&amp;`\BX%L&amp;&lt;O&lt;&quot;A7075-3T/!39%'3D]-14^$!)&quot;Y7Z$H&lt;V&amp;V&lt;VHM
+<br>
+M@&quot;&lt;$(/=QX719(:`M&amp;J`HH!RQ&lt;B;Y1O%822@53]9[;$*0)(#_+=`&gt;41[A*)`Q
+<br>
+M`DT!$0`HT']@(A#0&amp;)`&gt;`25`&gt;VQ/X&amp;3_+8!,@07A8L4%P#2Q-E`HT/M^71\0
+<br>
+M&gt;$R!5,)]0']!+=!_-+%?44[1&gt;VP=$7&amp;2`Z!5_E(M8`&gt;0,.!B\&quot;4Q7*`H$/]@
+<br>
+M&amp;7O&amp;A8,J(V.1B.&amp;%,8:HOW`H+6!5`DUP+6!=(64)P/^&quot;LP=``R`=4@JP?V$'
+<br>
+MD1U0?RV`'%%`T1$``C`&lt;0$]2=/\(@0LQ&lt;$0&lt;X84ACB,6T%`&quot;]TR!AC8K4%0=
+<br>
+M87'B50,&gt;0/4$(%@H!G=5$&quot;W!`_`=L+]P)H8R7T%&gt;P!X@A59S`,!W:J&amp;+9!SA
+<br>
+M8E(QA[,&lt;X5?_&amp;($=T`0@@\5C,F,1&gt;:\AH/Q!9PMQCR)J\)&gt;S7Y,&amp;X/YD7L&quot;4
+<br>
+MP!SP+A(%$&amp;.A&quot;8#^+'F^;F1YO&quot;;J-Q@V``00_VL1'8`#81U#'@`&lt;L4-O'Z+[
+<br>
+M!Q`0P&amp;E?H'&amp;A!4!%\'4/]W80!X&amp;APG-V)1SA/[!$\+YB!/*8`%@!$,`&lt;\&quot;*G
+<br>
+M&gt;7NBXB3`?!R`&quot;W`#(*G!:E\%L#[`/-&amp;C/Q2!`*P@``L``(`((`8``````,``
+<br>
+M``````!&amp;``````.%`````````P`%@`@@!@``````P````````$8`````$(4`
+<br>
+M```````+``N`&quot;&quot;`&amp;``````#`````````1@`````4A0````````,``8`((`8`
+<br>
+M`````,````````!&amp;`````%*%``&quot;W#0```P`#@`@@!@``````P````````$8`
+<br>
+M`````84````````&gt;``*`&quot;&quot;`&amp;``````#`````````1@````!4A0```0````0`
+<br>
+M```X+C``&quot;P`$@`@@!@``````P````````$8`````#H4````````#``:`&quot;&quot;`&amp;
+<br>
+M``````#`````````1@`````1A0````````,`!X`((`8``````,````````!&amp;
+<br>
+M`````!B%````````'@`(@`@@!@``````P````````$8`````-H4```$````!
+<br>
+M`````````!X`&quot;8`((`8``````,````````!&amp;`````#&gt;%```!`````0``````
+<br>
+M```&gt;``J`&quot;&quot;`&amp;``````#`````````1@`````XA0```0````$``````````P#Q
+<br>
+M/PH$```#`/T_Y`0```,`)@```````P`V```````#`(`0_____P(!1P`!````
+<br>
+M-````&amp;,]55,[83T@.W`]4V5M82!'&lt;F]U&lt;#ML/5-64E]314U!+3`P,3$Q,S(P
+<br>
+M-#(T-5HM,C&lt;Y-``&gt;`#A``0````H```!!04Q605)!1$\````&gt;`#E``0````H`
+<br>
+M``!!04Q605)!1$\```!```&lt;PL-'%1K)-P`%```@P$*PJ1[)-P`$&gt;`#T``0``
+<br>
+M``4```!213H@`````!X`'0X!````'@```%MX;6Q=(%)E;&amp;5A&lt;V4@;V8@;&amp;EB
+<br>
+M&gt;&amp;UL+3(N,BXX````'@`U$`$````R````/#0Q,34W1#`R-D(V-$0S,3%!-S@V
+<br>
+M,#!$,#`Y,#4U,S4V-41&quot;,#@T0%-64E]314U!/@````L`*0``````&quot;P`C````
+<br>
+M```#``80ZNE)F0,`!Q!F!0```P`0$``````#`!$0`````!X`&quot;!`!````90``
+<br>
+M`$9/4D%63TE$4T]#2TQ%3E1%4E)/4BQ714U54U143T%$1%1(149/3$Q/5TQ)
+<br>
+M3D5)3B)724XS,D-/3D9)1T@B.B-$149)3D533T-+3$5.5%-)6D541D]2059/
+<br>
+M240B1T540U=$(E&lt;``````@%_``$````R````/#0Q,34W1#`R-D(V-$0S,3%!
+<br>
+M-S@V,#!$,#`Y,#4U,S4V-41&quot;,#@T0%-64E]314U!/@```-74`@*0!@`.````
+<br>
+M`0`S`0``(``@``````!U``(2@`,`#@```-`'&quot;P`-``\`+0`'``$`,P$&quot;$X`#
+<br>
+M``X```#0!PL`#0`/`&quot;T`*``!`%0!`A&quot;``0`-````5TE.,S)#?C$N1$E&amp;`$8#
+<br>
+M`A&amp;`!@&quot;4#0```0`)```#R@8`````(08`````!0````$&quot;____``4````)`@``
+<br>
+M```$````!P$!`&amp;4```!!&quot;\8`B``@`&quot;```````&quot;``(```````*````&quot;`````@
+<br>
+M`````0`!``````````````````````````````````````#___\`\````_``
+<br>
+M``/P```#\````_````/P```#\````_````/P```#\````_````/P```#\```
+<br>
+M`_````/P```#\````_````/P```#\````_````/P```#\````_````/P```#
+<br>
+M\````_````/P```'\```#_```!_P```_\```?_```/\$````!P$!``4````)
+<br>
+M`@$````%`````0(!````!0````$&quot;____``4````)`@`````$````!P$#`&quot;$&amp;
+<br>
+M``!!&quot;T8`9@`@`&quot;```````&quot;``(```````*````&quot;`````@`````0`8````````
+<br>
+M````````````````````````````````````````````````````````````
+<br>
+M````````````````````````````````````````````````````````````
+<br>
+M`````````````````````````````````````````````````(&quot;`@,#`P,#`
+<br>
+MP,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`P,#`
+<br>
+MP,#`P,#`P,#`P,#`P,#`P,#`P,#`P````````````````````````````(&quot;`
+<br>
+M@/__________________________________________________________
+<br>
+M_________________________________\#`P```````````````````````
+<br>
+M`````(&quot;`@/__________________________________________________
+<br>
+M_________________________________________\#`P```````````````
+<br>
+M`````````````(&quot;`@/__________________________________________
+<br>
+M_________________________________________________\#`P```````
+<br>
+M`````````````````````(&quot;`@/__________________________________
+<br>
+M_________________________________________________________\#`
+<br>
+MP````````````````````````````(&quot;`@/__________________________
+<br>
+M____________________________________________________________
+<br>
+M_____\#`P````````````````````````````(&quot;`@/__________________
+<br>
+M____________________________________________________________
+<br>
+M_____________\#`P````````````````````````````(&quot;`@/__________
+<br>
+M_____________P```````````````````/__________________________
+<br>
+M_____P```/___________\#`P````````````````````````````(&quot;`@/__
+<br>
+M_____________P```/___P```/___P```````````````````/__________
+<br>
+M_____P```````````/___________\#`P```````````````````````````
+<br>
+M`(&quot;`@/_______________P```/___________________P```(``````````
+<br>
+M`````````````````````````/___________\#`P```````````````````
+<br>
+M`````````(&quot;`@/________________________\``/\``/\``/\``````/\`
+<br>
+M`/\```````````````````#__P```````/___________\#`P```````````
+<br>
+M`````````````````(&quot;`@/________________\``/____\``/____\``/\`
+<br>
+M`````/\``/\``/\```````#__P#__P#__P```````/___________\#`P```
+<br>
+M`````````````````````````(&quot;`@/________________\``/__________
+<br>
+M_________P```````/\``/\```````#__P#__P#__P```````/__________
+<br>
+M_\#`P````````````````````````````(&quot;`@/______________________
+<br>
+M_P``_P``_P``_P``_P```````````/\```````#__P#__P```````````/__
+<br>
+M_________\#`P````````````````````````````(&quot;`@/______________
+<br>
+M_P``_____P``_____P``_P``_P``````@```````````````````````````
+<br>
+M`````/___________\#`P````````````````````````````(&quot;`@/______
+<br>
+M_________P``_____________________P``````_P``_P``````````````
+<br>
+M``&quot;``````````/___________\#`P````````````````````````````(&quot;`
+<br>
+M@/_______________________P``````````````````````_P``_P``_P``
+<br>
+M``&quot;```&quot;```&quot;``````````/___________\#`P```````````````````````
+<br>
+M`````(&quot;`@/_______________P```/___P```/___P``````````````````
+<br>
+M_P``_P````&quot;```&quot;```&quot;``````````/___________\#`P```````````````
+<br>
+M`````````````(&quot;`@/_______________P```/___________________P``
+<br>
+M````````````_P````&quot;```&quot;``````````````/___________\#`P```````
+<br>
+M`````````````````````(&quot;`@/__________________________________
+<br>
+M_________P```````````````````````````````/_______________\#`
+<br>
+MP````````````````````````````(&quot;`@/__________________________
+<br>
+M_________________________P```````````````/__________________
+<br>
+M_____\#`P````````````````````````````(&quot;`@/__________________
+<br>
+M____________________________________________________________
+<br>
+M_____________\#`P````````````````````````````(&quot;`@/__________
+<br>
+M____________________________________________________________
+<br>
+M_____________________\#`P````````````````````````````(&quot;`@/__
+<br>
+M____________________________________________________________
+<br>
+M_____________________________\#`P```````````````````````````
+<br>
+M`(&quot;`@/______________________________________________________
+<br>
+M_________________X&quot;`@```````````````````````````````````````
+<br>
+M`````````(&quot;`@/______________________________________________
+<br>
+M_________________________X&quot;`@/_______\#`P(&quot;`@```````````````
+<br>
+M`````````````````(&quot;`@/______________________________________
+<br>
+M_________________________________X&quot;`@/___\#`P(&quot;`@```````````
+<br>
+M`````````````````````````(&quot;`@/______________________________
+<br>
+M_________________________________________X&quot;`@,#`P(&quot;`@```````
+<br>
+M`````````````````````````````````(&quot;`@/______________________
+<br>
+M_________________________________________________X&quot;`@(&quot;`@```
+<br>
+M`````````````````````````````````````````(&quot;`@/______________
+<br>
+M_________________________________________________________X&quot;`
+<br>
+M@````````````````````````````````````````````````(&quot;`@(&quot;`@(&quot;`
+<br>
+M@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`@(&quot;`
+<br>
+M@(&quot;`@(&quot;`@`````````````````````````````````0````'`0$`!0````D&quot;
+<br>
+M`0````4````!`@$````#```````!V@(!D`8`$0```'=I;C,R8V]N9FEG+F1I
+<br>
+M9F8`\`4&quot;!9`&amp;`/`````1`````P`A#@`````#``LW,P$```,`(`ZG$@```P#W
+<br>
+M#P````!```&lt;P(-^`.:I-P`%```@P`(H&gt;3:I-P`$#``4W`0```!X``3`!````
+<br>
+M$0```'=I;C,R8V]N9FEG+F1I9F8``````@$&quot;-P$`````````'@`#-P$````&amp;
+<br>
+M````+F1I9F8````&gt;``&lt;W`0```!$```!W:6XS,F-O;F9I9RYD:69F``````,`
+<br>
+M^G\`````0`#[?P!`W:-71;,,0`#\?P!`W:-71;,,`P#]?P`````+`/Y_````
+<br>
+?``(!^0\!````$````%V=K&gt;D7N-01I^D`T`D%4U:R+P==
+<br>
+`
+<br>
+end
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20Release%20of%20libxml-2.2.8">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1179.html">Daniel Veillard: "[xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 14:45:02 EST</em>
+</em>
+</small>
+</body>
+</html>

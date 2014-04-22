@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] xmlHasProp case sensitive ?</title>
+<meta name="Author" content="Marc Sanfacon (sanm@copernic.com)">
+<meta name="Subject" content="RE: [xml] xmlHasProp case sensitive ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] xmlHasProp case sensitive ?</h1>
+<!-- received="Mon Sep 25 10:43:18 2000" -->
+<!-- isoreceived="20000925144318" -->
+<!-- sent="Mon, 25 Sep 2000 10:44:28 -0400" -->
+<!-- isosent="20000925144428" -->
+<!-- name="Marc Sanfacon" -->
+<!-- email="sanm@copernic.com" -->
+<!-- subject="RE: [xml] xmlHasProp case sensitive ?" -->
+<!-- id="C5A7720BDEB7D3118A5200E018C200A0867253@EXCHANGE" -->
+<!-- inreplyto="[xml] xmlHasProp case sensitive ?" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Marc Sanfacon (<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?"><em>sanm@copernic.com</em></a>)<br>
+<strong>Date:</strong> Mon Sep 25 2000 - 10:44:28 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0817.html">Daniel Veillard: "Re: [xml] Warnings on LibXML"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0785.html">Marc Sanfacon: "[xml] xmlHasProp case sensitive ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Thank you.
+<br>
+<p>-----Original Message-----
+<br>
+From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">xml-request@rufus.w3.org</a>]On
+<br>
+Behalf Of Daniel Veillard
+<br>
+Sent: September 25, 2000 08:53
+<br>
+To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">xml@rpmfind.net</a>
+<br>
+Subject: Re: [xml] xmlHasProp case sensitive ?
+<br>
+<p><p><p>On Wed, Sep 20, 2000 at 03:07:17PM -0400, Marc Sanfacon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	one of my co-worker uses the HTMLParser from libxml in his work and
+</em><br>
+<em>&gt; found out that 'xmlHasProp' is case sensitive.
+</em><br>
+<p>&nbsp;&nbsp;yes, XML names are case sensitive.
+<br>
+<p><em>&gt; 	Which means that is someone writes: &lt;A Href=&quot;<a href="http://www.xml.org">http://www.xml.org</a>&quot;&gt;,
+</em><br>
+<em>&gt; and we look for href, we will not find it.
+</em><br>
+<p>&nbsp;&nbsp;Strange, the HTML parser take care of this to convert all names in
+<br>
+markup to lowercase, and the XHTML specification forced this conversion
+<br>
+for the XML versions of HTML.
+<br>
+<p><em>&gt; 	Is this the intended behavior ?
+</em><br>
+<p>&nbsp;&nbsp;Definitely ...
+<br>
+&nbsp;&nbsp;&nbsp;If you are using the XML parser you must use lowercase.
+<br>
+&nbsp;&nbsp;&nbsp;If you are using the HTML parser this is done automatically
+<br>
+&nbsp;You should just take care to use lowercase when modifying an already
+<br>
+parsed tree.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">majordomo@rpmfind.net</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20xmlHasProp%20case%20sensitive%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0817.html">Daniel Veillard: "Re: [xml] Warnings on LibXML"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0785.html">Marc Sanfacon: "[xml] xmlHasProp case sensitive ?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Sep 25 2000 - 10:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] building and validating</title>
+<meta name="Author" content="Joe McAlerney (joey@silicondefense.com)">
+<meta name="Subject" content="[xml] building and validating">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] building and validating</h1>
+<!-- received="Wed Jun 28 20:12:03 2000" -->
+<!-- isoreceived="20000629001203" -->
+<!-- sent="Wed, 28 Jun 2000 17:10:12 -0700" -->
+<!-- isosent="20000629001012" -->
+<!-- name="Joe McAlerney" -->
+<!-- email="joey@silicondefense.com" -->
+<!-- subject="[xml] building and validating" -->
+<!-- id="395A93E4.8DE44DF2@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Joe McAlerney (<a href="mailto:joey@silicondefense.com?subject=Re:%20[xml]%20building%20and%20validating"><em>joey@silicondefense.com</em></a>)<br>
+<strong>Date:</strong> Wed Jun 28 2000 - 20:10:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0546.html">Daniel Veillard: "[xml] New release of libxml-1.8.8 and libxml2-2.1.0"</a>
+<li><strong>Previous message:</strong> <a href="0544.html">Bill Randle: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0551.html">Joe McAlerney: "Re: [xml] building and validating"</a>
+<li><strong>Reply:</strong> <a href="0551.html">Joe McAlerney: "Re: [xml] building and validating"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello,
+<br>
+<p>I am trying to build a document, and do some validating.  I was unable
+<br>
+to find documentation on building a document from scratch, and
+<br>
+validating it along the way.  I've produced a simplified version of my
+<br>
+code below.
+<br>
+<p>&nbsp;&nbsp;xmlDtdPtr dtd;
+<br>
+&nbsp;&nbsp;xmlNodePtr root,alert;
+<br>
+&nbsp;&nbsp;xmlDocPtr doc;
+<br>
+<p>&nbsp;&nbsp;extern int xmlDoValidityCheckingDefaultValue;
+<br>
+&nbsp;&nbsp;xmlDoValidityCheckingDefaultValue = 1;
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;doc = xmlNewDoc(&quot;1.0&quot;);
+<br>
+<p>&nbsp;&nbsp;dtd = xmlParseDTD(NULL,&quot;/usr/local/src/xml/idef-message.dtd&quot;); //
+<br>
+error source
+<br>
+&nbsp;&nbsp;dtd-&gt;name = &quot;idef-message&quot;;
+<br>
+&nbsp;&nbsp;doc-&gt;intSubset = dtd;
+<br>
+<p>Here are a few of the errors that come from the line with the dtd
+<br>
+assignment.
+<br>
+<p>/usr/local/src/xml/idef-message.dtd:28: error:
+<br>
+SAX.entityDecl(ext.attlist.version) called while not in subset
+<br>
+&nbsp;&nbsp;&nbsp;&lt;!ENTITY % ext.attlist.version          &quot;&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/usr/local/src/snort-1.6/idef-message.dtd:36: error: PEReference:
+<br>
+%ext.attlist.version; not found
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+/usr/local/src/snort-1.6/idef-message.dtd:46: warning: PEReference:
+<br>
+%ext.attlist.global; not found
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+etc...
+<br>
+<p>I am able to run xmllint -valid somefile.xml, and everything checks out
+<br>
+fine.  I even altered the dtd to produce some errors to be sure.
+<br>
+<p>My guess is that I'm not using the library correctly.  Could someone
+<br>
+help me out?
+<br>
+<p>Many thanks,
+<br>
+<p>-Joe M.
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20building%20and%20validating">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20building%20and%20validating">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0546.html">Daniel Veillard: "[xml] New release of libxml-1.8.8 and libxml2-2.1.0"</a>
+<li><strong>Previous message:</strong> <a href="0544.html">Bill Randle: "Re: [xml] Compilation pbs for the example"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0551.html">Joe McAlerney: "Re: [xml] building and validating"</a>
+<li><strong>Reply:</strong> <a href="0551.html">Joe McAlerney: "Re: [xml] building and validating"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:17 EDT</em>
+</em>
+</small>
+</body>
+</html>

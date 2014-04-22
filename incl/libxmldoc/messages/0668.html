@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Bug #21194</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Bug #21194">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Bug #21194</h1>
+<!-- received="Tue Aug 22 16:18:28 2000" -->
+<!-- isoreceived="20000822201828" -->
+<!-- sent="Wed, 23 Aug 2000 01:16:05 +0200" -->
+<!-- isosent="20000822231605" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Bug #21194" -->
+<!-- id="20000823011605.D13313@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1000822171256.556F-100000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20#21194"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Aug 22 2000 - 19:16:05 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0669.html">Wayne Davison: "Re: [xml] htmlParserInputRead()"</a>
+<li><strong>Previous message:</strong> <a href="0667.html">Kenneth Pronovici: "[xml] Bug #21194"</a>
+<li><strong>In reply to:</strong> <a href="0667.html">Kenneth Pronovici: "[xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Aug 22, 2000 at 05:14:48PM -0500, Kenneth Pronovici wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel -
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I submitted bug #21194 about a week ago.  This had to do with printing the 
+</em><br>
+<em>&gt; DOCTYPE tag in XML documents which have an associated DTD.  I don't mean to
+</em><br>
+<em>&gt; be pushy, because I'm sure you're busy, but I'm just curious whether you had 
+</em><br>
+<em>&gt; a chance to consider the issue at all.
+</em><br>
+<p>&nbsp;&nbsp;Seems you didn't originally assigned it as to gnome-xml, so I didn't
+<br>
+received it, an it only show up in the database now:
+<br>
+<p>&nbsp;&nbsp;<a href="http://bugs.gnome.org/db/21/21194.html">http://bugs.gnome.org/db/21/21194.html</a>
+<br>
+<p>&nbsp;&nbsp;and the patches seems unreadable there :-\
+<br>
+I don't see any mail from you in the archive either:
+<br>
+<p>&nbsp;&nbsp;<a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+<br>
+<p>&nbsp;&nbsp;Something strange may have happened
+<br>
+<p><em>&gt; I needed the ability to print &lt;!DOCTYPE&gt; tags in XML documents I generated
+</em><br>
+<em>&gt; with libxml.
+</em><br>
+<p>&nbsp;&nbsp;Well, libxml saves all the Internal Subset declarations, for example
+<br>
+<p>~/XML -&gt; cat  dtd.xml 
+<br>
+&lt;!DOCTYPE doc [
+<br>
+&lt;!ELEMENT doc (#PCDATA)&gt;
+<br>
+&lt;!ATTLIST doc val ID #IMPLIED&gt;
+<br>
+]&gt;
+<br>
+&lt;doc val=&quot;v1&quot;&gt;&lt;/doc&gt;
+<br>
+~/XML -&gt; ./xmllint dtd.xml 
+<br>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt;!DOCTYPE doc [
+<br>
+&lt;!ELEMENT doc (#PCDATA)&gt;
+<br>
+&lt;!ATTLIST doc val ID #IMPLIED&gt;
+<br>
+]&gt;
+<br>
+&lt;doc val=&quot;v1&quot;/&gt;
+<br>
+~/XML -&gt; 
+<br>
+<p>&nbsp;&nbsp;So there is obviously some existing code to print at least the 
+<br>
+sequence of declarations from the DtD:
+<br>
+<p>xmlDtdDump(xmlBufferPtr buf, xmlDtdPtr dtd);
+<br>
+and
+<br>
+xmlDtdDumpOutput(xmlOutputBufferPtr buf, xmlDtdPtr dtd, const char *encoding);
+<br>
+<p>&nbsp;but those are not public,
+<br>
+&nbsp;I assume you would like to make similar functions public, could you send
+<br>
+me the patches again ?
+<br>
+<p>[... reading your second mail posted in the bug list ...]
+<br>
+<em>&gt; Having these functions (or similar functionality in other functions)
+</em><br>
+<em>&gt; in a real release would help a great deal.
+</em><br>
+<p>&nbsp;&nbsp;Sure if the codde is okay it may be included in the next one.
+<br>
+One just need to worry about the fact that extenal subsets must follow
+<br>
+the given constraints:
+<br>
+<p>[30] extSubset ::= TextDecl? extSubsetDecl
+<br>
+<p>&nbsp;and for example the TextDecl is present must contain an encoding
+<br>
+declaration ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Bug%20#21194">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Bug%20#21194">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0669.html">Wayne Davison: "Re: [xml] htmlParserInputRead()"</a>
+<li><strong>Previous message:</strong> <a href="0667.html">Kenneth Pronovici: "[xml] Bug #21194"</a>
+<li><strong>In reply to:</strong> <a href="0667.html">Kenneth Pronovici: "[xml] Bug #21194"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 22 2000 - 16:43:12 EDT</em>
+</em>
+</small>
+</body>
+</html>

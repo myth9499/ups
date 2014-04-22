@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] help with embedded DTD</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] help with embedded DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] help with embedded DTD</h1>
+<!-- received="Tue Jan 23 13:57:47 2001" -->
+<!-- isoreceived="20010123185747" -->
+<!-- sent="Tue, 23 Jan 2001 19:57:37 +0100" -->
+<!-- isosent="20010123185737" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] help with embedded DTD" -->
+<!-- id="20010123195737.B24743@imag.fr" -->
+<!-- inreplyto="852569DD.00635F7E.00@cinote.computrition.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20help%20with%20embedded%20DTD"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Tue Jan 23 2001 - 13:57:37 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<li><strong>Previous message:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<li><strong>In reply to:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Jan 23, 2001 at 01:16:21PM -0500, <a href="mailto:Fred_Smith@computrition.com?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">Fred_Smith@computrition.com</a> wrote:
+<br>
+[snip]
+<br>
+<em>&gt; DTD is stored in a file named &quot;CI7.dtd&quot;. I don't want the !DOCTYPE tag to
+</em><br>
+<em>&gt; include either the &quot;SYSTEM&quot; or the &quot;&quot;CI7.dtd&quot;&quot; fields, I want it just as
+</em><br>
+<em>&gt; shown in the first file.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here's an excerpt of the code I'm using to create the second file shown
+</em><br>
+<em>&gt; above, can someone show me what I need to change to make it work in the
+</em><br>
+<em>&gt; desired way?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #include &lt;stdio.h&gt;
+</em><br>
+<em>&gt; #include &lt;fcntl.h&gt;
+</em><br>
+<em>&gt; #include &lt;stdlib.h&gt;
+</em><br>
+<em>&gt; #include &lt;sys/types.h&gt;
+</em><br>
+<em>&gt; #include &lt;unistd.h&gt;
+</em><br>
+<em>&gt; #include &lt;libxml/tree.h&gt;
+</em><br>
+<em>&gt; #include &lt;libxml/SAX.h&gt;
+</em><br>
+<em>&gt; int main (int argc, char ** argv)
+</em><br>
+<em>&gt;      {
+</em><br>
+<em>&gt;      xmlDocPtr doc;
+</em><br>
+<em>&gt;      xmlNodePtr root;
+</em><br>
+<em>&gt;      xmlDtdPtr dtd;
+</em><br>
+<em>&gt;      doc = xmlNewDoc(&quot;1.0&quot;);
+</em><br>
+<em>&gt;      dtd = xmlParseDTD (NULL, &quot;CI7.dtd&quot;);
+</em><br>
+<p>the xmlDtdPtr structure is defined in tree.h
+<br>
+<p>add the following there:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dtd-&gt;ExternalID != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree((xmlChar *) dtd-&gt;ExternalID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;ExternalID = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dtd-&gt;SystemID != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlFree((xmlChar *) dtd-&gt;SystemID);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dtd-&gt;SystemID = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>you should also test that xmlNewDoc and xmlParseDTD didn't
+<br>
+returned NULL,
+<br>
+<p><em>&gt;      doc-&gt;intSubset = dtd;
+</em><br>
+<em>&gt;      dtd-&gt;parent = doc;
+</em><br>
+<em>&gt;      dtd-&gt;doc = doc;
+</em><br>
+<em>&gt;      doc-&gt;children = (xmlNodePtr) dtd;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;      root = xmlNewDocNode(doc, NULL, &quot;EXAMPLE&quot;, NULL);
+</em><br>
+<em>&gt;      xmlDocSetRootElement (doc, root);
+</em><br>
+<em>&gt; &lt;snip&gt;
+</em><br>
+<em>&gt;      }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'd appreciate some pointers/help in accomplishing this, I've been going
+</em><br>
+<em>&gt; crosseyed trying to read my way through the library hoping to figure it
+</em><br>
+<em>&gt; out, but so far I'm merely going blind.
+</em><br>
+<p>&nbsp;&nbsp;this kind of change is rather uncommon so there is no API
+<br>
+for those, but the structures are public (in tree.h)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20help%20with%20embedded%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<li><strong>Previous message:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<li><strong>In reply to:</strong> <a href="1371.html">Fred_Smith@computrition.com: "[xml] help with embedded DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 23 2001 - 14:43:39 EST</em>
+</em>
+</small>
+</body>
+</html>

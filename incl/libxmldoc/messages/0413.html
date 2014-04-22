@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Loss of whitespace</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Loss of whitespace">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Loss of whitespace</h1>
+<!-- received="Sat Mar  4 06:10:53 2000" -->
+<!-- isoreceived="20000304111053" -->
+<!-- sent="Fri, 3 Mar 2000 02:51:39 +0100" -->
+<!-- isosent="20000303015139" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Loss of whitespace" -->
+<!-- id="20000303025139.A11603@w3.org" -->
+<!-- inreplyto="20000302050237.G2869@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Mar 02 2000 - 20:51:39 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Previous message:</strong> <a href="0412.html">Bill Randle: "Re: [xml] Encoding question"</a>
+<li><strong>In reply to:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Following the feedback received I have made version 2.x comply with
+<br>
+the XML specification. All blanks spaces are passed to SAX as characters()
+<br>
+with the only exception of doing validating parsing and the element
+<br>
+is not defined as CDATA nor mixed content. The xml:space=&quot;preserve&quot;
+<br>
+is looked for in 2.x code and in that case blanks which can be ignored
+<br>
+accordingly to the Dtd are passed anyway through characters(), and will
+<br>
+generate nodes in the DOM tree.
+<br>
+&nbsp;&nbsp;I hope that my reading of the spec is right now.
+<br>
+&nbsp;&nbsp;I have spotted that point in the upgrade documentation, and made
+<br>
+a specific function:
+<br>
+<p>&nbsp;int             xmlKeepBlanksDefault    (int val);
+<br>
+<p>which can be called by 1.x code if they want to stick to the old
+<br>
+behaviour when linking to 2.x. This function will also allow code
+<br>
+linked against 1.8.7 and successor to force the &quot;keep blanks&quot; behaviour.
+<br>
+I also provided a commodity function:
+<br>
+<p>&nbsp;int             xmlIsBlankNode          (xmlNodePtr node);
+<br>
+<p>to detect blank nodes when navigating a generated DOM tree.
+<br>
+<p>&nbsp;&nbsp;I hope that this annoying issue is closed, but somewhat I doubt it :-\
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Loss%20of%20whitespace">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0414.html">Daniel Veillard: "Re: [xml] Callbacks for xmlIO"</a>
+<li><strong>Previous message:</strong> <a href="0412.html">Bill Randle: "Re: [xml] Encoding question"</a>
+<li><strong>In reply to:</strong> <a href="0403.html">Daniel Veillard: "Re: [xml] Loss of whitespace"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<li><strong>Reply:</strong> <a href="0417.html">Paul DuBois: "Re: [xml] Loss of whitespace"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:07 EDT</em>
+</em>
+</small>
+</body>
+</html>

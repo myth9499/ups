@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re-using an xmlDtd</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Re-using an xmlDtd">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re-using an xmlDtd</h1>
+<!-- received="Tue Jan  2 11:17:52 2001" -->
+<!-- isoreceived="20010102161752" -->
+<!-- sent="Tue, 2 Jan 2001 17:15:57 +0100" -->
+<!-- isosent="20010102161557" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Re-using an xmlDtd" -->
+<!-- id="20010102171557.A9654@w3.org" -->
+<!-- inreplyto="3A358198.43CA88AC@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Re-using%20an%20xmlDtd"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Tue Jan 02 2001 - 11:15:57 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1300.html">Helge Hess: "[xml] html attributes and colons"</a>
+<li><strong>In reply to:</strong> <a href="1284.html">Joe McAlerney: "[xml] Re-using an xmlDtd"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 11, 2000 at 05:38:32PM -0800, Joe McAlerney wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I originally dealt with this issue by creating an external subset via
+</em><br>
+<em>&gt; xmlNewDtd, manually connecting the two together with the doc-&gt;extSubset,
+</em><br>
+<em>&gt; dtd-&gt;doc, and dtd-parent pointers, then disconnected everything when I
+</em><br>
+<em>&gt; had to free the xmlDoc.  That worked fine until I needed to include the
+</em><br>
+<em>&gt; DOCTYPE declaration tag in the XML document.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I followed some relevant conversation between Daniel and Kenneth
+</em><br>
+<em>&gt; Pronovici titled &quot;Generating XML including &lt;!DOCTYPE&gt; external
+</em><br>
+<em>&gt; reference&quot; and &quot;Bug #21194&quot; to successfully add the DOCTYPE tags to my
+</em><br>
+<em>&gt; XML documents.  Unfortunately, this makes it more difficult to re-use
+</em><br>
+<em>&gt; the DTD, as it becomes a child of the xmlDoc itself.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've already written an xmlAddIntSubset() function to connect an
+</em><br>
+<em>&gt; existing Internal Subset to an existing xmlDoc, and I'm about to start
+</em><br>
+<em>&gt; writing a function to cleanly remove the Internal Subset.  Before I do
+</em><br>
+<em>&gt; this, I wanted to see if I'm re-inventing the wheel.  Does anyone else
+</em><br>
+<em>&gt; have a better way to re-use a xmlDtd so that it does not have to be
+</em><br>
+<em>&gt; recreated every time an xmlDoc is?
+</em><br>
+<p>&nbsp;&nbsp;Just found your mail while browsing the mail backlog I have
+<br>
+accumulated over December.
+<br>
+&nbsp;&nbsp;If you have coded those two functions, I would be
+<br>
+interested to look at them for possible inclusion.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20Re-using%20an%20xmlDtd">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Re-using%20an%20xmlDtd">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Re-using%20an%20xmlDtd">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1300.html">Helge Hess: "[xml] html attributes and colons"</a>
+<li><strong>In reply to:</strong> <a href="1284.html">Joe McAlerney: "[xml] Re-using an xmlDtd"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Jan 02 2001 - 11:44:34 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Flaw in libxml2-2.2.11</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Flaw in libxml2-2.2.11">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Flaw in libxml2-2.2.11</h1>
+<!-- received="Mon Jan 15 08:11:22 2001" -->
+<!-- isoreceived="20010115131122" -->
+<!-- sent="Mon, 15 Jan 2001 14:11:16 +0100" -->
+<!-- isosent="20010115131116" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Flaw in libxml2-2.2.11" -->
+<!-- id="20010115141116.F5518@imag.fr" -->
+<!-- inreplyto="21ACBAE9C35CD311800D005004869A7541FB12@dsdm02002.internet.datamedia.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Flaw%20in%20libxml2-2.2.11"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Mon Jan 15 2001 - 08:11:16 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1345.html">Vladimir Brauner: "[xml] Flaw in libxml2-2.2.11"</a>
+<li><strong>In reply to:</strong> <a href="1345.html">Vladimir Brauner: "[xml] Flaw in libxml2-2.2.11"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Jan 15, 2001 at 01:25:25PM +0100, Vladimir Brauner wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Dear Sir,
+</em><br>
+<em>&gt; We're completing a C 2000/10 XML Schema layer on top of your libxml stack (&amp;
+</em><br>
+<p>&nbsp;&nbsp;Hum, very interesting, do you plan to make it available ?
+<br>
+<p><em>&gt; try to make it DOM L3 CM/LS &quot;orientations&quot; compliant..)
+</em><br>
+<p>&nbsp;&nbsp;I didn't look at this, others especially in the Gnome/Php community 
+<br>
+are working on DOM implementations on top of libxml.
+<br>
+<p><em>&gt; Two small remarks about 2-2.2.11:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; * Flaw in tree.c:
+</em><br>
+<em>&gt; 	Function xmlDocDumpFormatMemoryEnc(... int format) forgets to pass
+</em><br>
+<em>&gt; this format argument when calling xmlDocContentDumpOutput (last arg, fixed
+</em><br>
+<em>&gt; as 1);
+</em><br>
+<p>&nbsp;&nbsp;I think this was already reported, right.
+<br>
+<p><em>&gt; * Error report enhancement (private comment):
+</em><br>
+<em>&gt; 	error.c :
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	You provide a generic error report callback, which can be set thru
+</em><br>
+<em>&gt; xmlSetGenericErrorFunc().
+</em><br>
+<em>&gt; 	Your code assumes that private context (void *ctx) is always a
+</em><br>
+<em>&gt; FILE*, which is a little restrictive (we use it to store something not
+</em><br>
+<em>&gt; related at all with stdio);
+</em><br>
+<em>&gt; 	The &quot;cause&quot; is just because you use vfprintf(ctx) in
+</em><br>
+<em>&gt; xmlParser(Validity)Error/Warning();
+</em><br>
+<em>&gt; 	As a &quot;bypass&quot;, we just changed these vfprintf as vsnprintf(local
+</em><br>
+<em>&gt; buffer) before calling xmlGenericError;
+</em><br>
+<p>&nbsp;&nbsp;Hum, sounds right. 
+<br>
+Could you subscribe to the mailing list and send a quick diff of the changes
+<br>
+you made to those 2 modules ? Thanks,
+<br>
+<p><em>&gt; Best Regards, and thanks for your great job on libxml!
+</em><br>
+<p>&nbsp;&nbsp;thanks,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20Flaw%20in%20libxml2-2.2.11">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Flaw%20in%20libxml2-2.2.11">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Flaw%20in%20libxml2-2.2.11">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1345.html">Vladimir Brauner: "[xml] Flaw in libxml2-2.2.11"</a>
+<li><strong>In reply to:</strong> <a href="1345.html">Vladimir Brauner: "[xml] Flaw in libxml2-2.2.11"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Jan 15 2001 - 08:52:02 EST</em>
+</em>
+</small>
+</body>
+</html>

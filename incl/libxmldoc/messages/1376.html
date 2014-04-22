@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] defaults in DTD defns?</title>
+<meta name="Author" content="Charlie Bozeman (cbozeman@HiWAAY.net)">
+<meta name="Subject" content="Re: [xml] defaults in DTD defns?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] defaults in DTD defns?</h1>
+<!-- received="Tue Jan 23 22:50:58 2001" -->
+<!-- isoreceived="20010124035058" -->
+<!-- sent="Tue, 23 Jan 2001 21:51:00 -0600" -->
+<!-- isosent="20010124035100" -->
+<!-- name="Charlie Bozeman" -->
+<!-- email="cbozeman@HiWAAY.net" -->
+<!-- subject="Re: [xml] defaults in DTD defns?" -->
+<!-- id="3A6E5123.4F45E80D@HiWAAY.net" -->
+<!-- inreplyto="14957.56476.111258.920052@lemming.engeast.baynetworks.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Charlie Bozeman (<a href="mailto:cbozeman@HiWAAY.net?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?"><em>cbozeman@HiWAAY.net</em></a>)<br>
+<strong>Date:</strong> Tue Jan 23 2001 - 22:51:00 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1375.html">Wayne Davison: "Re: [xml] Win32 shared object"</a>
+<li><strong>In reply to:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&quot;Paul D. Smith&quot; wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Does libxml support default values in the DTD in any way (in addition to
+</em><br>
+<em>&gt; recognizing them)?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Should it?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have a DTD with default values and I kind of assumed that, if I didn't
+</em><br>
+<em>&gt; supply a value in the XML file, libxml will fill in the default value
+</em><br>
+<em>&gt; into the parse tree.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; But, that doesn't seem to be happening.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there some approved/supported way of handling DEFAULT DTD values?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; E.g.,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;!ATTLIST  Spec
+</em><br>
+<em>&gt;              Name       CDATA                              #REQUIRED
+</em><br>
+<em>&gt;              Type       (Normal|Abnormal)                  &quot;Normal&quot;  &gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; then:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   &lt;Spec Name=&quot;Sponge&quot;&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When I look at the parse tree, there doesn't seem to be any help for
+</em><br>
+<em>&gt; getting the default value for the Type attribute.
+</em><br>
+<em>&gt; 
+</em><br>
+There is nothing special about the default value, libxml will set the
+<br>
+attribute to the defined default value. You can access it like so:
+<br>
+..
+<br>
+&nbsp;&nbsp;if (!xmlStrcmp(node-&gt;name, BAD_CAST &quot;Spec&quot;)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlChar   *type;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type = xmlGetProp(node, BAD_CAST &quot;Type&quot;);
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!xmlStrcmp(BAD_CAST &quot;Normal&quot;, type))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;found default!\n&quot;);
+<br>
+&nbsp;&nbsp;}
+<br>
+..
+<br>
+<em>&gt; --
+</em><br>
+<em>&gt; -------------------------------------------------------------------------------
+</em><br>
+<em>&gt;  Paul D. Smith &lt;<a href="mailto:psmith@baynetworks.com?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?">psmith@baynetworks.com</a>&gt;    HASMAT--HA Software Methods &amp; Tools
+</em><br>
+<em>&gt;  &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+</em><br>
+<em>&gt; -------------------------------------------------------------------------------
+</em><br>
+<em>&gt;    These are my opinions---Nortel Networks takes no responsibility for them.
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20defaults%20in%20DTD%20defns?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1375.html">Wayne Davison: "Re: [xml] Win32 shared object"</a>
+<li><strong>In reply to:</strong> <a href="1373.html">Paul D. Smith: "[xml] defaults in DTD defns?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 24 2001 - 00:43:45 EST</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] bug in libxml-1.8.10</title>
+<meta name="Author" content="Jordan Henderson (jhenderson@daynt1.daas.dla.mil)">
+<meta name="Subject" content="RE: [xml] bug in libxml-1.8.10">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] bug in libxml-1.8.10</h1>
+<!-- received="Thu Sep  7 11:29:59 2000" -->
+<!-- isoreceived="20000907152959" -->
+<!-- sent="Thu, 7 Sep 2000 11:33:29 -0400 " -->
+<!-- isosent="20000907153329" -->
+<!-- name="Jordan Henderson" -->
+<!-- email="jhenderson@daynt1.daas.dla.mil" -->
+<!-- subject="RE: [xml] bug in libxml-1.8.10" -->
+<!-- id="C02C9AA5C528D411A7840060B057CE011D323E@daynt1.daas.dla.mil" -->
+<!-- inreplyto="[xml] bug in libxml-1.8.10" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Jordan Henderson (<a href="mailto:jhenderson@daynt1.daas.dla.mil?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10"><em>jhenderson@daynt1.daas.dla.mil</em></a>)<br>
+<strong>Date:</strong> Thu Sep 07 2000 - 11:33:29 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Previous message:</strong> <a href="0740.html">Daniel Veillard: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0739.html">Marcus Lankenau: "[xml] bug in libxml-1.8.10"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Can anyone point me to the justification for making white space significant in
+<br>
+XML?
+<br>
+<p>When I heard about this, I couldn't hardly believe it.  I know this is going to
+<br>
+cause a 
+<br>
+million niggling problems like this one.
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: Daniel Veillard [mailto:<a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">Daniel.Veillard@w3.org</a>]
+</em><br>
+<em>&gt; Sent: Thursday, September 07, 2000 11:07 AM
+</em><br>
+<em>&gt; To: <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Cc: <a href="mailto:marcus.lankenau@socon.de?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">marcus.lankenau@socon.de</a>
+</em><br>
+<em>&gt; Subject: Re: [xml] bug in libxml-1.8.10
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Thu, Sep 07, 2000 at 02:19:07PM +0200, Marcus Lankenau wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Hi!
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; This is not realy a bug, but annoying. We are using libxml 
+</em><br>
+<em>&gt; with win32 and have content with
+</em><br>
+<em>&gt; &gt; linefeeds. These linefeeds are often corrupted since libxml 
+</em><br>
+<em>&gt; is reading files as binaries
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; input = _open (filename, O_RDONLY | _O_BINARY);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; and saves files as ascii:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; output = fopen(filename, &quot;w&quot;);
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; I changed this (tree.c:4598) to
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; output = fopen(filename, &quot;wb&quot;);	
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Okay, I propagated a fix in the CVS base to this effect.
+</em><br>
+<em>&gt; Note that libxml2 I/O support would have allowed to easily 
+</em><br>
+<em>&gt; (ie. without
+</em><br>
+<em>&gt; changing libxml itself) install a workaround for this kind of problems
+</em><br>
+<em>&gt; check the example in the dedicated page:
+</em><br>
+<em>&gt;   <a href="http://xmlsoft.org/xmlio.html#Example">http://xmlsoft.org/xmlio.html#Example</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; -- 
+</em><br>
+<em>&gt; <a href="mailto:Daniel.Veillard@w3.org?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt; Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML 
+</em><br>
+<em>&gt; libxml WWW
+</em><br>
+<em>&gt; Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome 
+</em><br>
+<em>&gt; rpm2html rpmfind
+</em><br>
+<em>&gt;  <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20bug%20in%20libxml-1.8.10">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Previous message:</strong> <a href="0740.html">Daniel Veillard: "Re: [xml] bug in libxml-1.8.10"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0739.html">Marcus Lankenau: "[xml] bug in libxml-1.8.10"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0742.html">Nilo S. Mismetti: "Re: [xml] bug in libxml-1.8.10"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Sep 07 2000 - 11:43:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

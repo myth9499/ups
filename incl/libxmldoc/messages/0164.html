@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</title>
+<meta name="Author" content="Kristian Hogsberg Kristensen (hogsberg@daimi.au.dk)">
+<meta name="Subject" content="Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c</h1>
+<!-- received="Tue Oct  5 20:53:48 1999" -->
+<!-- isoreceived="19991006005348" -->
+<!-- sent="06 Oct 1999 02:53:41 +0200" -->
+<!-- isosent="19991006005341" -->
+<!-- name="Kristian Hogsberg Kristensen" -->
+<!-- email="hogsberg@daimi.au.dk" -->
+<!-- subject="Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c" -->
+<!-- id="y6yd7utl36y.fsf@nero.daimi.au.dk" -->
+<!-- inreplyto="Tue, 5 Oct 1999 18:14:14 -0400&quot;" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Kristian Hogsberg Kristensen (<a href="mailto:hogsberg@daimi.au.dk?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c"><em>hogsberg@daimi.au.dk</em></a>)<br>
+<strong>Date:</strong> Tue Oct 05 1999 - 20:53:41 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Previous message:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard &lt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">Daniel.Veillard@w3.org</a>&gt; writes:
+<br>
+<p><p>[...]
+<br>
+<p><em>&gt; &gt; But actually I need the DOM tree later on anyway, so I would be happy
+</em><br>
+<em>&gt; &gt; if I could just add a SAX handler, instead of replacing to default
+</em><br>
+<em>&gt; &gt; one.  An elegant way to implement multiple SAX handlers could be to do
+</em><br>
+<em>&gt; &gt; a meta SAX handler, that has a list of SAX handlers and just
+</em><br>
+<em>&gt; &gt; propagates the callback to each of the handlers in the list.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   I would rather suggest that you provide your own SAX handler which 
+</em><br>
+<em>&gt; then call all the original SAX handler function, then do your own
+</em><br>
+<em>&gt; processing. I would not have to change data structures which would
+</em><br>
+<em>&gt; break binary compatibility :-\
+</em><br>
+<p>Yes, this is definately the simpler approach, which I would prefer as
+<br>
+well; there's no need to over-design things.  However, I wasn't sure
+<br>
+wether the default SAX callback handlers were public (names such as
+<br>
+startElement suggest otherwise), or are you supposed to get at them
+<br>
+through the global htmlDefaultHander struct?  And even so, I couldn't
+<br>
+call the default handlers, since they expect the parser context as
+<br>
+callback userdata, and I dont know about the context when calling from
+<br>
+a custom SAX handler...
+<br>
+<p><em>&gt; &gt; Finally, how about a way to attach custom data to xmlNode?  The
+</em><br>
+<p>[...]
+<br>
+<p><em>&gt;   There is a couple of fields dedicated to that and present at the
+</em><br>
+<em>&gt; beginning of most exportable data structures. Corba can be implemented
+</em><br>
+<em>&gt; withnonly one poiter but there is two so you should be able to use at
+</em><br>
+<em>&gt; least one of those:
+</em><br>
+<em>&gt; ---------------------------------
+</em><br>
+<em>&gt;     void           *_private;   /* for Corba, must be first ! */
+</em><br>
+<em>&gt;     void           *vepv;       /* for Corba, must be next ! */
+</em><br>
+<em>&gt; ---------------------------------
+</em><br>
+<p>Uh, okay... I've been reading the comments as if Corba would be
+<br>
+needing both pointers, but this isn't the case?  Anyways, I'll have to
+<br>
+study gdome a bit, hopefully that will clarify things.
+<br>
+<p>thanks,
+<br>
+Kristian
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20&lt;li&gt;%20closing%20&lt;li&gt;%20in%20HTTPparser.c">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<li><strong>Previous message:</strong> <a href="0163.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0165.html">Daniel Veillard: "Re: [xml] &lt;li&gt; closing &lt;li&gt; in HTTPparser.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

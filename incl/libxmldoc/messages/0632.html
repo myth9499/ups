@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] HTML push interface</title>
+<meta name="Author" content="Jordan Henderson (jhenderson@daynt1.daas.dla.mil)">
+<meta name="Subject" content="RE: [xml] HTML push interface">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] HTML push interface</h1>
+<!-- received="Tue Aug  1 17:25:38 2000" -->
+<!-- isoreceived="20000801212538" -->
+<!-- sent="Tue, 1 Aug 2000 17:23:52 -0400 " -->
+<!-- isosent="20000801212352" -->
+<!-- name="Jordan Henderson" -->
+<!-- email="jhenderson@daynt1.daas.dla.mil" -->
+<!-- subject="RE: [xml] HTML push interface" -->
+<!-- id="C02C9AA5C528D411A7840060B057CE011D30B1@daynt1.daas.dla.mil" -->
+<!-- inreplyto="[xml] HTML push interface" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Jordan Henderson (<a href="mailto:jhenderson@daynt1.daas.dla.mil?subject=RE:%20[xml]%20HTML%20push%20interface"><em>jhenderson@daynt1.daas.dla.mil</em></a>)<br>
+<strong>Date:</strong> Tue Aug 01 2000 - 17:23:52 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0633.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0633.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I can't help you, but I would like to point out that there is someone else who
+<br>
+is doing an C++ wrapper for libxml.
+<br>
+<p>See <a href="http://lusis.org/~ari/xml++/">http://lusis.org/~ari/xml++/</a> for more information.
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: Marc Sanfacon [mailto:<a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20HTML%20push%20interface">sanm@copernic.com</a>]
+</em><br>
+<em>&gt; Sent: Tuesday, August 01, 2000 2:37 PM
+</em><br>
+<em>&gt; To: '<a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>'
+</em><br>
+<em>&gt; Subject: [xml] HTML push interface
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi there,
+</em><br>
+<em>&gt; 	I am new to libxml (I've been using it for less than 1 week).  I
+</em><br>
+<em>&gt; have written a C++ interface on top of it.  It is not yet 
+</em><br>
+<em>&gt; finished, but it
+</em><br>
+<em>&gt; includes most features I need for now.  BTW, I am working 
+</em><br>
+<em>&gt; under Windows 2000
+</em><br>
+<em>&gt; using MSVC 6.0 SP3.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 	I have tried to parse a file using the html push 
+</em><br>
+<em>&gt; interface and have
+</em><br>
+<em>&gt; strange results.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Here is the code:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; FILE *f = fopen(CGL::ConvertString(p_FileName).c_str(), &quot;r&quot;);
+</em><br>
+<em>&gt; if (f != NULL) {
+</em><br>
+<em>&gt;     int res, size = 4096;
+</em><br>
+<em>&gt;     char chars[4096];
+</em><br>
+<em>&gt;     htmlParserCtxtPtr ctxt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;     res = fread(chars, 1, 4, f);
+</em><br>
+<em>&gt;     if (res &gt; 0) {
+</em><br>
+<em>&gt;         ctxt = htmlCreatePushParserCtxt(NULL, NULL,
+</em><br>
+<em>&gt; 		        chars, res, 0, static_cast&lt;xmlCharEncoding&gt;(0));
+</em><br>
+<em>&gt;         InitContext(ctxt);
+</em><br>
+<em>&gt;         while ((res = fread(chars, 1, size, f)) &gt; 0) {
+</em><br>
+<em>&gt;             htmlParseChunk(ctxt, chars, res, 0);
+</em><br>
+<em>&gt;         }
+</em><br>
+<em>&gt;         htmlParseChunk(ctxt, chars, 0, 1);
+</em><br>
+<em>&gt;         pDoc = ctxt-&gt;myDoc;
+</em><br>
+<em>&gt;         htmlFreeParserCtxt(ctxt);
+</em><br>
+<em>&gt;     }
+</em><br>
+<em>&gt;     fclose(f);
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This is mainly the code presented in 'testHTML.c' from the 
+</em><br>
+<em>&gt; package, except
+</em><br>
+<em>&gt; that I use a bigger buffer.  In my tests, one strange thing 
+</em><br>
+<em>&gt; happened.  When
+</em><br>
+<em>&gt; using a buffer large enough to fit one of my document, the 
+</em><br>
+<em>&gt; result of the
+</em><br>
+<em>&gt; parsing is not complete.  For now, I have only one document 
+</em><br>
+<em>&gt; that does this
+</em><br>
+<em>&gt; effect and I have attached it to this email.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; For example, the document is 2001 bytes long.  When reading 
+</em><br>
+<em>&gt; using fread, it
+</em><br>
+<em>&gt; strips the '\r' so this gives a total of 1971 bytes.  When I 
+</em><br>
+<em>&gt; put 1967 (1971
+</em><br>
+<em>&gt; - 4 bytes for the header) or more, I get the error, a big 
+</em><br>
+<em>&gt; chunk from my
+</em><br>
+<em>&gt; document is skipped, but if I put 1966 or less, the document 
+</em><br>
+<em>&gt; is parsed OK.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I even modified 'testHTML.c' to use buffer of 1967 bytes to 
+</em><br>
+<em>&gt; ensure I was OK,
+</em><br>
+<em>&gt; and I had the same error using: testHTML -debug -repeat -push doc2.htm
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Anyone can help me ?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Regards,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Marc.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;  &lt;&lt;doc2.htm&gt;&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ---------------------------------------------------------------------
+</em><br>
+<em>&gt;  &quot;If you choose not to decide, you still have made a choice.&quot;
+</em><br>
+<em>&gt; 				Neil Peart
+</em><br>
+<em>&gt; ---------------------------------------------------------------------
+</em><br>
+<em>&gt; Marc Sanfacon, Software developer	Copernic.com  
+</em><br>
+<em>&gt; e-mail: <a href="mailto:sanm@copernic.com?subject=RE:%20[xml]%20HTML%20push%20interface">sanm@copernic.com</a>		R&amp;D Group
+</em><br>
+<em>&gt; Tel   : (418) 527-0528 ext 1212		ICQ #7355101
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20HTML%20push%20interface">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0633.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<li><strong>Previous message:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<li><strong>Maybe in reply to:</strong> <a href="0631.html">Marc Sanfacon: "[xml] HTML push interface"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0633.html">Daniel Veillard: "Re: [xml] HTML push interface"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:25 EDT</em>
+</em>
+</small>
+</body>
+</html>

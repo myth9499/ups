@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml 2.0 on HP-UX</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml 2.0 on HP-UX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml 2.0 on HP-UX</h1>
+<!-- received="Fri Jun 23 05:59:08 2000" -->
+<!-- isoreceived="20000623095908" -->
+<!-- sent="Fri, 23 Jun 2000 13:55:58 +0200" -->
+<!-- isosent="20000623115558" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml 2.0 on HP-UX" -->
+<!-- id="965233754.0023@hypermail.dummy" -->
+<!-- inreplyto="F541F4AB5C0CD311B17F0090274EC2EDD68D5C@catus7.catalystwms.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jun 23 2000 - 07:55:58 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Previous message:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>In reply to:</strong> <a href="0530.html">John Kroll: "[xml] libxml 2.0 on HP-UX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Jun 22, 2000 at 06:08:11PM -0500, John Kroll wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1.  libxml 2.0 does not compile with HP-UX's optional ANSI-C compiler under
+</em><br>
+<em>&gt; HP-UX 11.00 due to macro limitations.  While this has been discussed in the
+</em><br>
+<em>&gt; newsgroup threads, the solution of compiling with gcc is not an option for
+</em><br>
+<em>&gt; me.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 2.  Therefore the enclosed proposed fix replaces the macros with function
+</em><br>
+<em>&gt; calls that perform a lookup equating to the original macro call.  Note that
+</em><br>
+<em>&gt; under Sun 5.6 (the only OS I have access to that compiles the macro
+</em><br>
+<em>&gt; version), the resulting debug (&quot;-g&quot;) versions of the libraries are about
+</em><br>
+<em>&gt; 116K smaller with the proposed changes.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 3.  The proposed fix has been compiled under HP-UX 11.00, AIX 4.3.2, and Sun
+</em><br>
+<em>&gt; 5.6.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Sincerely,
+</em><br>
+<em>&gt; John Kroll
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; P.S.  Note the initialization code for the fix was programmatically
+</em><br>
+<em>&gt; generated and verified using a test program.
+</em><br>
+<p>&nbsp;&nbsp;Thanks a lot for your patch, however I already worked in
+<br>
+that area since libxml-2.0.0 was released. I suggest you 
+<br>
+get the CVS version or the CVS tar.gz snapshot:
+<br>
+&nbsp;&nbsp;<a href="http://xmlsoft.org/#Downloads">http://xmlsoft.org/#Downloads</a>
+<br>
+<p>&nbsp;and recheck. I will also have a look ASAP on your patch,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml%202.0%20on%20HP-UX">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>Previous message:</strong> <a href="0532.html">Daniel Veillard: "Re: [xml] libxml 2.0 on HP-UX"</a>
+<li><strong>In reply to:</strong> <a href="0530.html">John Kroll: "[xml] libxml 2.0 on HP-UX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0534.html">Gupta, Sanjay: "RE: [xml] libxml 2.0 on HP-UX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] xmlElemDumpMemory</title>
+<meta name="Author" content="mskala@ansuz.sooke.bc.ca (mskala@ansuz.sooke.bc.ca)">
+<meta name="Subject" content="[xml] xmlElemDumpMemory">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] xmlElemDumpMemory</h1>
+<!-- received="Sat Jan 20 01:25:51 2001" -->
+<!-- isoreceived="20010120062551" -->
+<!-- sent="Fri, 19 Jan 2001 22:21:36 -0800 (PST)" -->
+<!-- isosent="20010120062136" -->
+<!-- name="mskala@ansuz.sooke.bc.ca" -->
+<!-- email="mskala@ansuz.sooke.bc.ca" -->
+<!-- subject="[xml] xmlElemDumpMemory" -->
+<!-- id="Pine.LNX.4.21.0101192206410.14740-100000@diamond.ansuz.sooke.bc.ca" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> <a href="mailto:mskala@ansuz.sooke.bc.ca?subject=Re:%20[xml]%20xmlElemDumpMemory"><em>mskala@ansuz.sooke.bc.ca</em></a><br>
+<strong>Date:</strong> Sat Jan 20 2001 - 01:21:36 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1357.html">Daniel Veillard: "Re: [xml] problem with xmlGetProp"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+If you want to write a document to a file handle, you can use xmlDocDump.
+<br>
+If you want to write a document to memory, you can use xmlDocDumpMemory.
+<br>
+If you want to write just an element (not an entire document) to a file
+<br>
+handle, you can use xmlElemDump.
+<br>
+I want to write just an element (not an entire document) to memory; I want
+<br>
+to use xmlElemDumpMemory.  But xmlElemDumpMemory does not exist.
+<br>
+<p>Could xmlElemDumpMemory be created?  It looks to me, from a first look at
+<br>
+tree.c, like it would be really easy to do.  xmlDocDumpMemory differs only
+<br>
+slightly from xmlDocDump, and it seems to me that the same difference
+<br>
+could be applied to xmlElemDump to create xmlElemDumpMemory.  It's
+<br>
+important because as far as I can tell there is no other way to turn just
+<br>
+*part* of a tree into flat data in memory; if I want to do that, at the
+<br>
+moment I have to write an entire new XML generator of my own and traverse
+<br>
+the tree myself instead of letting libxml do it.  I suppose another
+<br>
+solution would be to graft my subtree into a separate document of its own,
+<br>
+generate the XML for the document, and then strip out the prolog, but
+<br>
+that's not a great solution either.
+<br>
+<p>Given that you can write documents to file handles, documents to memory,
+<br>
+and elements to file handles, it seems like you should be able to write
+<br>
+elements to memory.  Furthermore, if you had to choose just one of
+<br>
+xmlElemDump and xmlElemDumpMemory, I think xmlElemDumpMemory is a lot more
+<br>
+useful anyway - because if I want to send the resulting fragment of XML to
+<br>
+a file, I can do that afterwards, whereas if I want to recover the data
+<br>
+for further processing in my program, it's practically impossible to do
+<br>
+that with xmlElemDump.  I'd probably have to create some kind of buffered
+<br>
+pipe to myself to make xmlElemDump work; a really yicky solution.
+<br>
+<p>Just for my own use I can easily modify my copy of libxml to provide this
+<br>
+function - but it would be really unpleasant if I had to distribute a
+<br>
+modified libxml to every user of my app.
+<br>
+<p>Matthew Skala
+<br>
+<a href="mailto:mskala@ansuz.sooke.bc.ca?subject=Re:%20[xml]%20xmlElemDumpMemory">mskala@ansuz.sooke.bc.ca</a>                   :CVECAT DELENDA EST
+<br>
+<a href="http://www.islandnet.com/~mskala/">http://www.islandnet.com/~mskala/</a>
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlElemDumpMemory">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlElemDumpMemory">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1357.html">Daniel Veillard: "Re: [xml] problem with xmlGetProp"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Jan 20 2001 - 02:45:11 EST</em>
+</em>
+</small>
+</body>
+</html>

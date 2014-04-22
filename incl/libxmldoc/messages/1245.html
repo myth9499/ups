@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] First message: text nodes</title>
+<meta name="Author" content="Rafael Peregrino (rafael.peregrino@innominate.com)">
+<meta name="Subject" content="Re: [xml] First message: text nodes">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] First message: text nodes</h1>
+<!-- received="Thu Nov 30 07:41:15 2000" -->
+<!-- isoreceived="20001130124115" -->
+<!-- sent="Thu, 30 Nov 2000 13:48:49 +0100" -->
+<!-- isosent="20001130124849" -->
+<!-- name="Rafael Peregrino" -->
+<!-- email="rafael.peregrino@innominate.com" -->
+<!-- subject="Re: [xml] First message: text nodes" -->
+<!-- id="3A264CB1.428BAEC4@innominate.com" -->
+<!-- inreplyto="3A25BE36.EEE6E429@HiWAAY.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Rafael Peregrino (<a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes"><em>rafael.peregrino@innominate.com</em></a>)<br>
+<strong>Date:</strong> Thu Nov 30 2000 - 07:48:49 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1246.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>Previous message:</strong> <a href="1244.html">Rob van der Leek: "[xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1243.html">Charlie Bozeman: "Re: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello,
+<br>
+<p>first of all thanks for the answer...
+<br>
+<p>Charlie Bozeman wrote:
+<br>
+<p><em>&gt; It's hard to tell without seeing the modifications you have made, but my
+</em><br>
+<em>&gt; guess is you have something in your xml file like:
+</em><br>
+<em>&gt; &lt;tag1&gt;blah blah&lt;tag2&gt;yada yada&lt;/tag2&gt;&lt;/tag1&gt;
+</em><br>
+<em>&gt; This will give you text nodes between elements.
+</em><br>
+<p>Weird... I don't see this... Have a look yourself below:
+<br>
+<p>&lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+<p>&lt;registry&gt;
+<br>
+<p>&nbsp;&nbsp;&lt;variables&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable name=&quot;NETNAME&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template&gt;~/templates/netname.xml&lt;/template&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sanity&gt;~/scripts/chknetname.sh&lt;/sanity&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;apache&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;file&gt;/etc/networks&lt;/file&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/variable&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable name=&quot;NETADDRESS&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template&gt;~/templates/netaddress.xml&lt;/template&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sanity&gt;~/scripts/chknetaddress.sh&lt;/sanity&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;apache&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;file&gt;/etc/networks&lt;/file&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/variable&gt;
+<br>
+<p><p><p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable name=&quot;SERVICE&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template&gt;~/templates/services.xml&lt;/template&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sanity&gt;~/scripts/chkservice.sh&lt;/sanity&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;inetd&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;services&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;file&gt;/etc/services&lt;/file&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/variable&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable name=&quot;PORT&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template&gt;~/templates/port.xml&lt;/template&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sanity&gt;~/scripts/chkport.sh&lt;/sanity&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;apache&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;services&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;file&gt;/etc/services&lt;/file&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/variable&gt;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable name=&quot;ALIASES&quot;&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template&gt;~/templates/aliases.xml&lt;/template&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sanity&gt;~/scripts/chkaliases.sh&lt;/sanity&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;services&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;service&gt;&lt;/service&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dependences&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;file&gt;/etc/services&lt;/file&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/configs&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/variable&gt;
+<br>
+<p>&nbsp;&nbsp;&lt;/variables&gt;
+<br>
+<p>&lt;/registry&gt;
+<br>
+<p>The changes I've made are really minimal. As said, just the name spaces
+<br>
+code is out and the variables' names were changed. I have even run both
+<br>
+programs in parallel with DDD and analysed/compared the structures while
+<br>
+stepping. I must be really overlooking a fully stupid thing...
+<br>
+<p>Best regards,
+<br>
+<p>Rafael
+<br>
+<pre>
+-- 
+<a href="mailto:rafael.peregrino@innominate.com?subject=Re:%20[xml]%20First%20message:%20text%20nodes">rafael.peregrino@innominate.com</a>
+software engineer                                        innominate AG
+server appliances                                 the linux architects
+tel: +49.30.308806-81  fax: -77              <a href="http://www.innominate.com">http://www.innominate.com</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20First%20message:%20text%20nodes">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1246.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>Previous message:</strong> <a href="1244.html">Rob van der Leek: "[xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1243.html">Charlie Bozeman: "Re: [xml] First message: text nodes"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1247.html">Antonio Alvarado: "RE: [xml] First message: text nodes"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Nov 30 2000 - 09:44:00 EST</em>
+</em>
+</small>
+</body>
+</html>

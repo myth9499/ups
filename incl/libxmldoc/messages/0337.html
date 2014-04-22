@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XPath Questions</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] XPath Questions">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XPath Questions</h1>
+<!-- received="Thu Feb  3 19:02:18 2000" -->
+<!-- isoreceived="20000204000218" -->
+<!-- sent="Thu, 3 Feb 2000 19:02:02 -0500" -->
+<!-- isosent="20000204000202" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] XPath Questions" -->
+<!-- id="20000203190202.T3963@w3.org" -->
+<!-- inreplyto="389A2581.78B0E807@i-no.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XPath%20Questions"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Feb 03 2000 - 19:02:02 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<li><strong>Previous message:</strong> <a href="0336.html">Art Gillespie: "[xml] XPath Questions"</a>
+<li><strong>In reply to:</strong> <a href="0336.html">Art Gillespie: "[xml] XPath Questions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<li><strong>Reply:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[ Sorry for those who may not be interested in the intricacies of the
+<br>
+&nbsp;&nbsp;XPath (mis)implementation, maybe I should create a separate list
+<br>
+&nbsp;&nbsp;for the people more interested in XPath/XSLT. I f I get more
+<br>
+&nbsp;&nbsp;than 5 responses I will create it, Daniel]
+<br>
+<p>On Thu, Feb 03, 2000 at 05:04:01PM -0800, Art Gillespie wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi guys,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Anyone familiar with the status of the XPath implementation in libxml?
+</em><br>
+<p>&nbsp;Hum, I'm supposed to :-)
+<br>
+<p><em>&gt; I'm working on an XSLT implementation, but the expression evaluation
+</em><br>
+<em>&gt; seems weird.  I can't seem to mix path evaluation and the other types of
+</em><br>
+<em>&gt; expression evaluation.  When I use xmlXPathEval(), I just get the path
+</em><br>
+<em>&gt; information up to the point where I do a comparison.  e.g.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; //revenue = 5
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Returns all of the revenue nodes, and not just the ones where the value
+</em><br>
+<em>&gt; is 5.
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;hum, right :-(
+<br>
+<p><em>&gt; If I use xmlXPathEvalExpression, I always get an invalid operand error
+</em><br>
+<em>&gt; with the carat at the last character of the expression.
+</em><br>
+<em>&gt; I tried running the testXPath executable that comes with libxml and had
+</em><br>
+<em>&gt; the same results.  The shell output is below (This example uses full
+</em><br>
+<em>&gt; syntax, but I assure you, I tried it with abbreviated syntax as well).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; [agillesp@cc828112-a libxml-1.8.5]$ ./testXPath
+</em><br>
+<em>&gt; 'child::chapter[child::title=&quot;Chapter 5&quot;]'
+</em><br>
+<em>&gt; xmlXPathNodeCollectAndTest xpath.c:1858 : nodelist and node are NULL
+</em><br>
+<em>&gt; xmlXPathNodeCollectAndTest xpath.c:1858 : nodelist and node are NULL
+</em><br>
+<em>&gt; Error xpath.c:1093: Invalid operand
+</em><br>
+<em>&gt; child::chapter[child::title=&quot;Chapter 5&quot;]
+</em><br>
+<em>&gt;                                        ^
+</em><br>
+<em>&gt; xmlXPathEval: 1 object left on the stack
+</em><br>
+<em>&gt; Object is empty (NULL)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; So, am I doing something wrong?
+</em><br>
+<p>No, there is clearly a bug here, I suggest that for debugging you
+<br>
+compiles the xpath module with the debug turned on (#define DEBUG_...
+<br>
+uncommened at the beginning of the xpath.c file). This expression
+<br>
+works:
+<br>
+<p>~/XML -&gt; ./testXPath -i tst3.xml '/child::doc/child::chapter[5=5]' 
+<br>
+Basis : computing new set
+<br>
+new step : axis 'child'  context contains 1 nodes
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;searching for name doc
+<br>
+Testing :  doc
+<br>
+Examined 1 nodes, found 1 nodes at that step
+<br>
+Basis :  doc
+<br>
+Step :  doc
+<br>
+Basis : computing new set
+<br>
+new step : axis 'child'  context contains 1 nodes
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;searching for name chapter
+<br>
+Testing :  chapter chapter chapter chapter
+<br>
+Examined 4 nodes, found 4 nodes at that step
+<br>
+Basis :  chapter chapter chapter chapter
+<br>
+After predicate :  chapter chapter chapter chapter
+<br>
+Step :  chapter chapter chapter chapter
+<br>
+Object is a Node Set :
+<br>
+Set contains 4 nodes:
+<br>
+1    ELEMENT chapter
+<br>
+2    ELEMENT chapter
+<br>
+3    ELEMENT chapter
+<br>
+4    ELEMENT chapter
+<br>
+~/XML -&gt; 
+<br>
+<p>&nbsp;So it seems to fails in the evaluation of the equality operator.
+<br>
+It is described at 
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://www.w3.org/TR/xpath#booleans">http://www.w3.org/TR/xpath#booleans</a>
+<br>
+<p>paragraph 4 to 7. But the error doesn't seems to be in 
+<br>
+the xmlXPathEqualValues but before. Only the string has been pushed on
+<br>
+the stack. It is in the first evalupation of xmlXPathEvalRelationalExpr()
+<br>
+<p>&quot;A location path can be used as an expression. The expression returns
+<br>
+&nbsp;the set of nodes selected by the path.&quot;
+<br>
+<p>&nbsp;I'm looking at it, it seems I didn't implement correctly the part where
+<br>
+the result of a node collection search is pushed into the stack in the
+<br>
+evaluation, I will try to fix this in the CVS base soon.
+<br>
+<p>&nbsp;&nbsp;I must admit that some parts of the XPath implementation didn't get
+<br>
+tested much (if any :-\) and I apologize in advance for the set of problems
+<br>
+you may find. 
+<br>
+<p>&nbsp;&nbsp;&nbsp;Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XPath%20Questions">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Questions">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20XPath%20Questions">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<li><strong>Previous message:</strong> <a href="0336.html">Art Gillespie: "[xml] XPath Questions"</a>
+<li><strong>In reply to:</strong> <a href="0336.html">Art Gillespie: "[xml] XPath Questions"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<li><strong>Reply:</strong> <a href="0338.html">Art Gillespie: "Re: [xml] XPath Questions"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

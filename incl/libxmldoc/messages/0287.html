@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] getting/putting variables</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] getting/putting variables">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] getting/putting variables</h1>
+<!-- received="Wed Jan 12 04:05:11 2000" -->
+<!-- isoreceived="20000112090511" -->
+<!-- sent="Wed, 12 Jan 2000 04:05:06 -0500" -->
+<!-- isosent="20000112090506" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] getting/putting variables" -->
+<!-- id="20000112040506.E6096@w3.org" -->
+<!-- inreplyto="00011119393401.13638@lolita" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20getting/putting%20variables"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Jan 12 2000 - 04:05:06 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0288.html">Sean Han: "[xml] Validation"</a>
+<li><strong>Previous message:</strong> <a href="0286.html">Gregory Babior: "[xml] bug"</a>
+<li><strong>In reply to:</strong> <a href="0284.html">Anthony Tekatch: "[xml] getting/putting variables"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[ Do not Cc <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20getting/putting%20variables">xml@rufus.w3.org</a> when sending mail to <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20getting/putting%20variables">xml@xmlsoft.org</a>,
+<br>
+&nbsp;&nbsp;that's the same list/machine and you are just sending the message
+<br>
+&nbsp;&nbsp;twice, Daniel ]
+<br>
+<p>On Tue, Jan 11, 2000 at 07:39:17PM -0500, Anthony Tekatch wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there an easy way of getting or putting variables into the XML image in
+</em><br>
+<em>&gt; memory rather than recursively parsing it. 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;From the following XML code snippet:
+</em><br>
+<em>&gt;   &lt;my&gt;
+</em><br>
+<em>&gt;     &lt;variable&gt;
+</em><br>
+<em>&gt;       23
+</em><br>
+<em>&gt;     &lt;/variable&gt;
+</em><br>
+<em>&gt;   &lt;/my&gt;
+</em><br>
+<em>&gt;   
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I would like to get variables like this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   myvariable = doc-&gt;my.variable.val;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I would like to variables like this:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   doc-&gt;my.variable.val = myvariable;
+</em><br>
+<em>&gt;   
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is something like this possible?
+</em><br>
+<p>this is too application specific to be included by default in libxml
+<br>
+try to design a pair of function to do this, This won't be harder to
+<br>
+use. 
+<br>
+&nbsp;&nbsp;BTW your naming scheme can't work you can have sibling with the same
+<br>
+name:
+<br>
+<p>&nbsp;&lt;my&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable&gt;12&lt;/variable&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable&gt;14&lt;/variable&gt;
+<br>
+&nbsp;&lt;/my&gt;
+<br>
+<p>what would be doc-&gt;my.variable.val ? 12 ? 14 ? 13 ? ...
+<br>
+Look at the XPath [1] syntax and design functions like
+<br>
+<p>&nbsp;&nbsp;myvariable = xmlValue(doc, &quot;/my/variable[1]&quot;);
+<br>
+<p>you can reuse the xpath code to get teh list of nodes corrsponding to
+<br>
+the second argument passed to the function. Look at the xmlShell() in
+<br>
+debugXML.c implementation it uses XPath in similar ways:
+<br>
+<p><a href="http://xmlsoft.org/gnome-xml-debugxml.html#XMLSHELL">http://xmlsoft.org/gnome-xml-debugxml.html#XMLSHELL</a>
+<br>
+<p>Daniel
+<br>
+<p>[1] <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a>
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20getting/putting%20variables">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20getting/putting%20variables">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20getting/putting%20variables">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0288.html">Sean Han: "[xml] Validation"</a>
+<li><strong>Previous message:</strong> <a href="0286.html">Gregory Babior: "[xml] bug"</a>
+<li><strong>In reply to:</strong> <a href="0284.html">Anthony Tekatch: "[xml] getting/putting variables"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:58 EDT</em>
+</em>
+</small>
+</body>
+</html>

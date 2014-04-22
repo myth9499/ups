@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: Memory problem when calling xmlBufferGrow/realloc (Re:</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)</h1>
+<!-- received="Fri Feb 16 12:52:35 2001" -->
+<!-- isoreceived="20010216175235" -->
+<!-- sent="Fri, 16 Feb 2001 18:52:18 +0100" -->
+<!-- isosent="20010216175218" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)" -->
+<!-- id="20010216185218.P791@imag.fr" -->
+<!-- inreplyto="20010216171540.8D26576240@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20Memory%20problem%20when%20calling%20xmlBufferGrow/realloc%20(Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size)"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Fri Feb 16 2001 - 12:52:18 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1459.html">Manuel Guesdon: "Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)"</a>
+<li><strong>In reply to:</strong> <a href="1459.html">Manuel Guesdon: "Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Feb 16, 2001 at 06:15:40PM +0100, Manuel Guesdon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I've investigated deeply on the problem and it seems that realloc() call may produce a failure:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When calling xmlCharEncInFunc, I have
+</em><br>
+<em>&gt;         buffer 8124460 : content 8126aa0, base =3D 8126aa0, cur 5, use 40, size 4000
+</em><br>
+<em>&gt; xmlCharEncInFunc call xmlBufferGrow
+</em><br>
+<em>&gt; which call realloc (xmlReallocLoc) with ptr=0x8126aa0 size=8100
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; in xmlReallocLoc p0x8126a80 before realloc() call
+</em><br>
+<em>&gt; After it is changed to 0x811ab28 and the new ptr is 0x811ab48 (instead of ptr=0x8126aa0).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; After that, I get a
+</em><br>
+<em>&gt; &quot;base mismatch problem
+</em><br>
+<em>&gt; buffer 8124460 : content 811ab48, base =3D 8126aa0, cur 5, use 2020, size 8100
+</em><br>
+<em>&gt; &quot;
+</em><br>
+<em>&gt; because content was changed but not base.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; If I reflect content change in base and cur after this, I get no more error.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; realloc() man page say &quot;realloc(ptr) returns a pointer ... which ...  may be different from ptr...&quot;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It's the case here and it break things.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Now, I knwo the problem but I don't know enough libxml internal to provide a patch :-(
+</em><br>
+<p>&nbsp;&nbsp;Okay thanks for going deeper into it,
+<br>
+I have a better idea of what went wrong, I will try to fix it,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20Memory%20problem%20when%20calling%20xmlBufferGrow/realloc%20(Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size)">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20Memory%20problem%20when%20calling%20xmlBufferGrow/realloc%20(Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size)">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20Memory%20problem%20when%20calling%20xmlBufferGrow/realloc%20(Re:%20[xml]%20Strange%20error%20depending%20on%20buffer%20size)">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1459.html">Manuel Guesdon: "Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)"</a>
+<li><strong>In reply to:</strong> <a href="1459.html">Manuel Guesdon: "Memory problem when calling xmlBufferGrow/realloc (Re: [xml] Strange error depending on buffer size)"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 16 2001 - 14:43:41 EST</em>
+</em>
+</small>
+</body>
+</html>

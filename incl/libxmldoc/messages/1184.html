@@ -1,0 +1,476 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Release of libxml-2.2.8</title>
+<meta name="Author" content="Timothee Besset (timo@qeradiant.com)">
+<meta name="Subject" content="Re: [xml] Release of libxml-2.2.8">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Release of libxml-2.2.8</h1>
+<!-- received="Mon Nov 13 17:09:30 2000" -->
+<!-- isoreceived="20001113220930" -->
+<!-- sent="Mon, 13 Nov 2000 16:09:10 -0600" -->
+<!-- isosent="20001113220910" -->
+<!-- name="Timothee Besset" -->
+<!-- email="timo@qeradiant.com" -->
+<!-- subject="Re: [xml] Release of libxml-2.2.8" -->
+<!-- id="3A106686.50803@qeradiant.com" -->
+<!-- inreplyto="3A103E0F.2010808@qeradiant.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Timothee Besset (<a href="mailto:timo@qeradiant.com?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8"><em>timo@qeradiant.com</em></a>)<br>
+<strong>Date:</strong> Mon Nov 13 2000 - 17:09:10 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1183.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>In reply to:</strong> <a href="1180.html">Timothee Besset: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I integrated the changes reported by Wayne and Antonio, but still 
+<br>
+couldn't figure out the DLL export problems. Finally found out:
+<br>
+The MSDev project file is building a static library only, not a dll. I 
+<br>
+added a STATIC define to the .dsp file.
+<br>
+I never looked into building a dll out of libxml on win32..
+<br>
+<p>TTimo
+<br>
+<p>Timothee Besset wrote:
+<br>
+<p><em>&gt; 
+</em><br>
+<em>&gt; I checked it real quick on win32 / MSVC. Seems HTTP and FTP support 
+</em><br>
+<em>&gt; are broken (looks like we are not including the right headers or 
+</em><br>
+<em>&gt; something:)
+</em><br>
+<em>&gt; e:\loki\libxml2\nanoftp.c(1275) : error C2065: 'SOCKLEN_T' : 
+</em><br>
+<em>&gt; undeclared identifier
+</em><br>
+<em>&gt; didn't look further into it, I use raw xml only (I disable every 
+</em><br>
+<em>&gt; option in xmlversion.h).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It compiles fine but I get a lot of
+</em><br>
+<em>&gt; e:\loki\libxml2\error.c(46) : warning C4273: 'xmlGenericError' : 
+</em><br>
+<em>&gt; inconsistent dll linkage.  dllexport assumed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; TTimo
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Daniel Veillard wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;&gt;   Okay I released a new version 2.2.8:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Where:
+</em><br>
+<em>&gt;&gt;   <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt;&gt;   <a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a> and on GNOME FTP server(s).
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; What's new:
+</em><br>
+<em>&gt;&gt;     - First version of XInclude support     - Patch in conditional 
+</em><br>
+<em>&gt;&gt; section handling     - updated MS compiler project     - fixed some 
+</em><br>
+<em>&gt;&gt; XPath problems     - added an URI escaping function     - some other 
+</em><br>
+<em>&gt;&gt; bug fixes
+</em><br>
+<em>&gt;&gt;   I think I integrated all the patches that were sent, and tried
+</em><br>
+<em>&gt;&gt; to fix all reported problems. The new thing is Xinclude which will
+</em><br>
+<em>&gt;&gt; probably need some small fixes to be added to Windows projects files.
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt;   Again thanks to everybody who contributed,
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Daniel
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<p><p><p><p>
+# Microsoft Developer Studio Project File - Name=&quot;libxml2&quot; - Package Owner=&lt;4&gt;
+<br>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+<br>
+# ** DO NOT EDIT **
+<br>
+<p># TARGTYPE &quot;Win32 (x86) Static Library&quot; 0x0104
+<br>
+<p>CFG=libxml2 - Win32 Debug
+<br>
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+<br>
+!MESSAGE use the Export Makefile command and run
+<br>
+!MESSAGE 
+<br>
+!MESSAGE NMAKE /f &quot;libxml2.mak&quot;.
+<br>
+!MESSAGE 
+<br>
+!MESSAGE You can specify a configuration when running NMAKE
+<br>
+!MESSAGE by defining the macro CFG on the command line. For example:
+<br>
+!MESSAGE 
+<br>
+!MESSAGE NMAKE /f &quot;libxml2.mak&quot; CFG=&quot;libxml2 - Win32 Debug&quot;
+<br>
+!MESSAGE 
+<br>
+!MESSAGE Possible choices for configuration are:
+<br>
+!MESSAGE 
+<br>
+!MESSAGE &quot;libxml2 - Win32 Release&quot; (based on &quot;Win32 (x86) Static Library&quot;)
+<br>
+!MESSAGE &quot;libxml2 - Win32 Debug&quot; (based on &quot;Win32 (x86) Static Library&quot;)
+<br>
+!MESSAGE 
+<br>
+<p># Begin Project
+<br>
+# PROP AllowPerConfigDependencies 0
+<br>
+# PROP Scc_ProjName &quot;&quot;
+<br>
+# PROP Scc_LocalPath &quot;&quot;
+<br>
+CPP=cl.exe
+<br>
+F90=df.exe
+<br>
+RSC=rc.exe
+<br>
+<p>!IF  &quot;$(CFG)&quot; == &quot;libxml2 - Win32 Release&quot;
+<br>
+<p># PROP BASE Use_MFC 0
+<br>
+# PROP BASE Use_Debug_Libraries 0
+<br>
+# PROP BASE Output_Dir &quot;Release&quot;
+<br>
+# PROP BASE Intermediate_Dir &quot;Release&quot;
+<br>
+# PROP BASE Target_Dir &quot;&quot;
+<br>
+# PROP Use_MFC 0
+<br>
+# PROP Use_Debug_Libraries 0
+<br>
+# PROP Output_Dir &quot;Release&quot;
+<br>
+# PROP Intermediate_Dir &quot;Release&quot;
+<br>
+# PROP Target_Dir &quot;&quot;
+<br>
+# ADD BASE F90 /include:&quot;Release/&quot;
+<br>
+# ADD F90 /include:&quot;Release/&quot;
+<br>
+# ADD BASE CPP /nologo /W3 /GX /O2 /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /c
+<br>
+# ADD CPP /nologo /W3 /GX /O2 /I &quot;..\..\include&quot; /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /D &quot;STATIC&quot; /YX /FD /c
+<br>
+# ADD BASE RSC /l 0x409 /d &quot;NDEBUG&quot;
+<br>
+# ADD RSC /l 0x409 /d &quot;NDEBUG&quot;
+<br>
+BSC32=bscmake.exe
+<br>
+# ADD BASE BSC32 /nologo
+<br>
+# ADD BSC32 /nologo
+<br>
+LIB32=link.exe -lib
+<br>
+# ADD BASE LIB32 /nologo
+<br>
+# ADD LIB32 /nologo
+<br>
+<p>!ELSEIF  &quot;$(CFG)&quot; == &quot;libxml2 - Win32 Debug&quot;
+<br>
+<p># PROP BASE Use_MFC 0
+<br>
+# PROP BASE Use_Debug_Libraries 1
+<br>
+# PROP BASE Output_Dir &quot;Debug&quot;
+<br>
+# PROP BASE Intermediate_Dir &quot;Debug&quot;
+<br>
+# PROP BASE Target_Dir &quot;&quot;
+<br>
+# PROP Use_MFC 0
+<br>
+# PROP Use_Debug_Libraries 1
+<br>
+# PROP Output_Dir &quot;Debug&quot;
+<br>
+# PROP Intermediate_Dir &quot;Debug&quot;
+<br>
+# PROP Target_Dir &quot;&quot;
+<br>
+# ADD BASE F90 /include:&quot;Debug/&quot;
+<br>
+# ADD F90 /include:&quot;Debug/&quot;
+<br>
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /YX /FD /GZ /c
+<br>
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I &quot;..\..\include&quot; /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_MBCS&quot; /D &quot;_LIB&quot; /D &quot;STATIC&quot; /YX /FD /GZ /c
+<br>
+# ADD BASE RSC /l 0x409 /d &quot;_DEBUG&quot;
+<br>
+# ADD RSC /l 0x409 /d &quot;_DEBUG&quot;
+<br>
+BSC32=bscmake.exe
+<br>
+# ADD BASE BSC32 /nologo
+<br>
+# ADD BSC32 /nologo
+<br>
+LIB32=link.exe -lib
+<br>
+# ADD BASE LIB32 /nologo
+<br>
+# ADD LIB32 /nologo
+<br>
+<p>!ENDIF 
+<br>
+<p># Begin Target
+<br>
+<p># Name &quot;libxml2 - Win32 Release&quot;
+<br>
+# Name &quot;libxml2 - Win32 Debug&quot;
+<br>
+# Begin Group &quot;Source Files&quot;
+<br>
+<p># PROP Default_Filter &quot;cpp;c;cxx;rc;def;r;odl;idl;hpj;bat&quot;
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\debugXML.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\encoding.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\entities.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\error.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\hash.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\HTMLparser.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\HTMLtree.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\nanoftp.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\nanohttp.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\parser.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\parserInternals.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\SAX.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\tree.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\uri.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\valid.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xlink.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xmlIO.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xmlmemory.c
+<br>
+# End Source File
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\xpath.c
+<br>
+# End Source File
+<br>
+# End Group
+<br>
+# Begin Group &quot;Header Files&quot;
+<br>
+<p># PROP Default_Filter &quot;h;hpp;hxx;hm;inl&quot;
+<br>
+# Begin Source File
+<br>
+<p>SOURCE=..\..\include\libxml\xmlversion.h
+<br>
+# End Source File
+<br>
+# End Group
+<br>
+# End Target
+<br>
+# End Project
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Release%20of%20libxml-2.2.8">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1183.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<li><strong>In reply to:</strong> <a href="1180.html">Timothee Besset: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1181.html">Wayne Davison: "Re: [xml] Release of libxml-2.2.8"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Nov 13 2000 - 17:43:26 EST</em>
+</em>
+</small>
+</body>
+</html>

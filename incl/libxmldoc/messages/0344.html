@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: embedded libxml</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Re: embedded libxml">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: embedded libxml</h1>
+<!-- received="Tue Feb  8 03:55:26 2000" -->
+<!-- isoreceived="20000208085526" -->
+<!-- sent="Tue, 8 Feb 2000 09:54:51 +0100" -->
+<!-- isosent="20000208085451" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Re: embedded libxml" -->
+<!-- id="20000208095451.J24054@w3.org" -->
+<!-- inreplyto="000901bf719e$25b2ceb0$1601a8c0@KUMQUAT" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20embedded%20libxml"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Feb 08 2000 - 03:54:51 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0345.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0342.html">Gregory Babior: "RE: [xml] Re: embedded libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Feb 07, 2000 at 11:04:23AM -0800, Gregory Babior wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Glad I could help.  By the way - in doing the following you can
+</em><br>
+<em>&gt; keep a switch available to compile in either direction:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define COMPILE_FOR_SPEED
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #ifdef COMPILE_FOR_SPEED
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; /* keep the current NEXT macro as is */
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #else
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; void nextFunc(xmlParserCtxtPtr ctxt)
+</em><br>
+<em>&gt; {
+</em><br>
+<em>&gt;   // blah blah blah
+</em><br>
+<em>&gt; }
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #define NEXT nextFunc(ctxt)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; #endif  /* COMPILE_FOR_SPEED */
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; This works because (fortunately) in all instances of NEXT the variable
+</em><br>
+<em>&gt; holding the xmlParserCtxtPtr has the same name (ctxt).
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Not fortunate, NEXT() was using ctxt ...
+<br>
+<p><em>&gt; The best of both worlds, no??
+</em><br>
+<p>&nbsp;&nbsp;&nbsp;Well not really because I'm adding more stuff to the xmlNextFunc(),
+<br>
+like the UTF-8 checking of input, and I would rather not include that in
+<br>
+a macro. xmlNextFunc() is too central now to be kept as a macro.
+<br>
+&nbsp;&nbsp;For me the tests indicate that the speed improvement introduced by
+<br>
+keepting it a macro is not worth the hassle.
+<br>
+<p><em>&gt; As a reminder - I also found significant size gains in turning the macro
+</em><br>
+<em>&gt; SKIP_BLANKS into a function.  You can do the same thing with this
+</em><br>
+<em>&gt; as done w/ the NEXT macro above - i.e. you can put in a switch so that
+</em><br>
+<em>&gt; you don't have to sacrifice the speed if you wish to have it.
+</em><br>
+<p>&nbsp;&nbsp;Yep I contemplated doing the same tests for SKIP_BLANKS. I will check
+<br>
+again.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Re:%20embedded%20libxml">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Re:%20embedded%20libxml">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Re:%20embedded%20libxml">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0345.html">Y. Cheng: "Re: [xml] Re: I18N Issues."</a>
+<li><strong>Previous message:</strong> <a href="0343.html">Daniel Veillard: "[xml] Re: I18N Issues."</a>
+<li><strong>In reply to:</strong> <a href="0342.html">Gregory Babior: "RE: [xml] Re: embedded libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:01 EDT</em>
+</em>
+</small>
+</body>
+</html>

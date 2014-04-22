@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] encoding, SAX callbacks</title>
+<meta name="Author" content="James McCann (james@votehere.net)">
+<meta name="Subject" content="RE: [xml] encoding, SAX callbacks">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] encoding, SAX callbacks</h1>
+<!-- received="Thu Feb 22 19:05:52 2001" -->
+<!-- isoreceived="20010223000552" -->
+<!-- sent="Thu, 22 Feb 2001 15:10:47 -0800" -->
+<!-- isosent="20010222231047" -->
+<!-- name="James McCann" -->
+<!-- email="james@votehere.net" -->
+<!-- subject="RE: [xml] encoding, SAX callbacks" -->
+<!-- id="0102AE2D3200D4118AE20050DACDB02E363412@congress.vhcorp.com" -->
+<!-- inreplyto="[xml] encoding, SAX callbacks" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> James McCann (<a href="mailto:james@votehere.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks"><em>james@votehere.net</em></a>)<br>
+<strong>Date:</strong> Thu Feb 22 2001 - 18:10:47 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1488.html">Daniel Veillard: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Do you realize I am assuming SAX is an external interface?
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;  No, the internal representation is UTF8. The encoding conversion in
+</em><br>
+<em>&gt;done before the data is passed to the parser. I don't think it's
+</em><br>
+<em>&gt;a bug, but a feature :-)
+</em><br>
+<em>&gt;
+</em><br>
+<p>I realize the internal representation is UTF8, but if my document is in 
+<br>
+ISO-8859-whatever, that is the character set I wish to use and see.  The
+<br>
+mechanism for setting the encoding of the input to the callback functions 
+<br>
+should be similar to the DOM I/O functions:   If there is an encoding set,
+<br>
+then when outputting a tree, that encoding should be used.  If there is a 
+<br>
+SAX parser, then when calling the callbacks, that encoding should be used.
+<br>
+<p>The encoding should be under the control of the user.  The user should 
+<br>
+not be responsible for translating encodings unless this is what the user 
+<br>
+wishes, &amp; I would also argue that the user should be able to specify a 
+<br>
+different encoding to be received by the callback functions.
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;  This is the intended behavior. And I'm afraid you would have
+</em><br>
+<em>&gt;serious troubles trying to change libxml use only the original
+</em><br>
+<em>&gt;encoding. Please check 
+</em><br>
+<em>&gt;     <a href="http://xmlsoft.org/encoding.html">http://xmlsoft.org/encoding.html</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; for more explanation on those issues.
+</em><br>
+<p>I have read this.  I am not suggesting keeping the internal representation
+<br>
+in the original encoding, but if a user has a doc in whatever encoding the 
+<br>
+user may wish to use that encoding, in fact he most likely does.  If this
+<br>
+were not so then you would not have bothered putting the transcoding into
+<br>
+the DOM output functions.  I do not understand the rationale for forcing 
+<br>
+a user to handle UTF8 if the original xml is encoded in something else.
+<br>
+<p>To quote from the above referenced document:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Having internationalization support in libxml means the foolowing:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the document is properly parsed 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;informations about it's encoding are saved 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it can be modified 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it can be saved in its original encoding 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it can also be saved in another encoding supported by libxml 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for example straight UTF8 or even an ASCII form) 
+<br>
+<p>I argue that point two is not followed by the SAX parser if callbacks are
+<br>
+presented text in an encoding other than that used by the document and the
+<br>
+spirit of points 2, 4 and 5 are broken as well.  The principle seems to be
+<br>
+that the user can determine which encoding he wishes to handle.  
+<br>
+<p>James McCann
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20encoding,%20SAX%20callbacks">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1488.html">Daniel Veillard: "Re: [xml] encoding, SAX callbacks"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1487.html">James McCann: "[xml] encoding, SAX callbacks"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Feb 22 2001 - 20:44:21 EST</em>
+</em>
+</small>
+</body>
+</html>

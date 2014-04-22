@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Compile error libxml2-2.1.1/WIN32</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] Compile error libxml2-2.1.1/WIN32">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Compile error libxml2-2.1.1/WIN32</h1>
+<!-- received="Thu Jul  6 13:28:17 2000" -->
+<!-- isoreceived="20000706172817" -->
+<!-- sent="Thu, 06 Jul 2000 13:24:36 -0400" -->
+<!-- isosent="20000706172436" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] Compile error libxml2-2.1.1/WIN32" -->
+<!-- id="200007061724.NAA14280@duncan.cs.utk.edu" -->
+<!-- inreplyto="[xml] Compile error libxml2-2.1.1/WIN32" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Thu Jul 06 2000 - 13:24:36 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0587.html">Alfred Reibenschuh: "[xml] RE: Segmentation fault on windows"</a>
+<li><strong>Previous message:</strong> <a href="0585.html">Jordan Henderson: "RE: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+[snip snap]
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;I am concerned that once you start becoming dependent on msvc, 
+</em><br>
+<em>&gt;you get into situations like what has happened with ActiveState
+</em><br>
+<em>&gt;Perl.  Now, I have nothing against ActiveState.  They've done
+</em><br>
+<em>&gt;an _excellent_ job.  I am concerned that their toolset having
+</em><br>
+<em>&gt;unique MS-Windows utilities and options could end up eventually
+</em><br>
+<em>&gt;forking the Perl code base and world.  MS gives ActiveState 
+</em><br>
+<em>&gt;funding and MS has tried to fragment the Java through embrace
+</em><br>
+<em>&gt;and extend.
+</em><br>
+<p>Absolutely.  Don't want critical dependence in on *any* os as far as 
+<br>
+I am concerned.   So far, Daniel has done an almost unreasonably good
+<br>
+job.  For instance, relying on lex/yacc/flex/bison to compile would 
+<br>
+be a complete show-stopper for me, and probably a lot of other win32
+<br>
+people.  Not that lex/yacc is bad, they are great in fact.  They just 
+<br>
+don't ship with msvc (unfortunately).  So there is some extra effort
+<br>
+in the parser on that count.
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;I hope we can agree that any changes necessary to support Win32 
+</em><br>
+<em>&gt;would be completely compatible from the API standpoint with the Unix 
+</em><br>
+<em>&gt;code base.
+</em><br>
+<p>Absolutely.  That's why I am using the raw win32 api instead  of
+<br>
+mfc in my current code (it's not that bad btw, considering its
+<br>
+age and the amount of backwards compatibility supported). 
+<br>
+Having a completely api compatible across win32 and unix is 
+<br>
+in fact the point.  Anyone wanting to use MS specific xml 
+<br>
+features really should just link to the MS xml parser anyway.
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;If the Cygwin environment works as intended, there wouldn't be
+</em><br>
+<em>&gt;any changes from the Unix sources necessary.  Of course, this
+</em><br>
+<em>&gt;is not always possible and a lot of sources &quot;ported&quot; to work
+</em><br>
+<em>&gt;under Cygwin have changes that conflict with the msvc
+</em><br>
+<em>&gt;compilers, often involving incorrect use of &quot;#ifdef WIN32&quot; when
+</em><br>
+<em>&gt;a Cygwin specific #ifdef was what was required. 
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;I completely agree that if libxml were made to work with 
+</em><br>
+<em>&gt;Cygwin that care should be taken not to conflict with msvc
+</em><br>
+<em>&gt;changes.
+</em><br>
+<p>I like the idea of libxml compiling under everything.  
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;I'm also in sympathy with Erwin Rol's concerns surrounding
+</em><br>
+<em>&gt;Cygwin.  In many ways it is an immature environment and I
+</em><br>
+<em>&gt;wonder if it will ever be useful for programs upon which
+</em><br>
+<em>&gt;people can depend.  Although, you can distribute binaries
+</em><br>
+<p>In my case, I am collaborating with several others civil engineers,
+<br>
+some of whom are using fortran on a parallel code base.  It really
+<br>
+is unreasonable to expect them to master the intricacies of 
+<br>
+the unix build system.   Much better for them to concentrate
+<br>
+on writing correct code and doing correct engineering.  The purity 
+<br>
+of the engineering overides the purity of the build 
+<br>
+environment.  Having written makefile and done a bit of autoconfiscating
+<br>
+myself, it just is much easier to use the appropriate tools
+<br>
+for the platform.  On windows, this will be an ide for 
+<br>
+most people.
+<br>
+<p><p><em>&gt;built on Cygwin with a DLL that doesn't require one
+</em><br>
+<em>&gt;to install the compiler and environment.  Also, there is
+</em><br>
+<em>&gt;the MINGW32 set of tools, which is the GNU tools and 
+</em><br>
+<em>&gt;compilers using the MS C DLLs.  This is another flavor 
+</em><br>
+<em>&gt;that might be investigated.
+</em><br>
+<em>&gt;
+</em><br>
+<p>On the other hand, I really like gcc, and frankly, I trust it
+<br>
+to be a better iso c compiler than msvc.  Which is why I 
+<br>
+periodically spend a few days blasting my numerical kernel 
+<br>
+through gcc.  The xml being essentially platform independent
+<br>
+is a big boon here.
+<br>
+<p><em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Also, nothing personal here, so don't take it so...
+</em><br>
+<em>&gt;&gt; For those of us limited to ms tools, not having libxml
+</em><br>
+<em>&gt;&gt; means linking ms xml parser.   
+</em><br>
+<em>&gt;&gt; So there is a bit of give and take here. 
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;This is a _very_ good point.
+</em><br>
+<p>libxml can be a &quot;compelling&quot; app for windows developers.
+<br>
+The more Windows developers that use libxml, the more
+<br>
+Windows developers will use xml.  It will bootstrap itself.
+<br>
+The main contribution I think I have made is not at all
+<br>
+in the libxml code base, nor in its use, but providing
+<br>
+the msvc ide files.  My goal has been someone should be 
+<br>
+able to dl what I posted, double click the workspace,
+<br>
+build it, and use it.  Eventually, I would like to see a 
+<br>
+win32 subdirectory in the cvs sources for any ide:
+<br>
+msvc, borland, whatever.  Make it really *easy* for 
+<br>
+a win32 developer to use it, so easy that they have no 
+<br>
+excuse not too.  FWIW, its pretty much sop in the Windows world
+<br>
+to distribute ide files with ssource (and there is a 
+<br>
+considerable amount of free example code running around the win32
+<br>
+world, I would be hosed without it).
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;I think we're in agreement here, but I would like to 
+</em><br>
+<em>&gt;point out that having options surrounding using libxml on
+</em><br>
+<em>&gt;Win32 environments (msvc built, Cygwin, Borland, etc.) is
+</em><br>
+<em>&gt;also a good in that it gives people who wish to
+</em><br>
+<em>&gt;use libxml in Windows environments more flexibility.
+</em><br>
+<p>I agree; we are thinking more or less along the same lines.
+<br>
+<p>-dmd
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Compile%20error%20libxml2-2.1.1/WIN32">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0587.html">Alfred Reibenschuh: "[xml] RE: Segmentation fault on windows"</a>
+<li><strong>Previous message:</strong> <a href="0585.html">Jordan Henderson: "RE: [xml] Compile error libxml2-2.1.1/WIN32"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<!-- Version=03.00.00 --> 
+<!-- * --> 
+<!-- NewPOS® NewKVS database --> 
+<!-- NewPOS® Copyright© 1998-2000 NewPOS Inc. and MediaWorks --> 
+<!-- * --> 
+<PosDB>
+<!-- * --> 
+<!-- Configuration Parameters --> 
+<!-- * --> 
+	<Configuration>
+		<Dll>DSPWIN.DLL</Dll>
+		<SerialPort>1</SerialPort>
+		<ShowCursor>1</ShowCursor>
+		<KvsClass>0</KvsClass>
+	</Configuration>
+	<International>
+		<Language>en</Language>
+		<Currency>$</Currency>
+		<Decimals>2</Decimals>
+	</International>
+	<Sizes>
+		<NumberOfWindows>1</NumberOfWindows>
+		<NumberOfColumns>6</NumberOfColumns>
+		<NumberOfRows>2</NumberOfRows>
+		<ConsolidationCell>8</ConsolidationCell> <!-- -1 means no consolidation -->
+		<HeldCell>9</HeldCell>					 <!-- -1 means no held -->
+	</Sizes>
+	<PanelColors>
+		<CaptionFocusColor>15</CaptionFocusColor>
+		<CaptionNonFocusColor>0</CaptionNonFocusColor>
+		<NewFocusColor>3</NewFocusColor>
+		<ConsolidationColor>0</ConsolidationColor>
+		<CaptionTextAccColor>15</CaptionTextAccColor>
+		<CaptionBgAccColor>1</CaptionBgAccColor>
+		<NormalColor>18</NormalColor>
+		<TenderedColor>0</TenderedColor>
+		<VoidedColor>8</VoidedColor>
+		<ChangedColor>11</ChangedColor>
+		<HeldedColor>12</HeldedColor>
+		<AddedColor>18</AddedColor>
+		<UndoColor>16</UndoColor>
+		<OnTheFlyColor>17</OnTheFlyColor>
+		<BGtextColor>0</BGtextColor>
+		<AccTextColor>15</AccTextColor>
+		<AccTextColorZero>8</AccTextColorZero>
+		<BgAddedLine>1</BgAddedLine>
+		<TextAddedLine>15</TextAddedLine>
+		<BgGrillLine>15</BgGrillLine>
+		<TextGrillLine>0</TextGrillLine>
+	</PanelColors>
+	<Colors>
+		<BGcolor>0x00600000</BGcolor>
+		<DefaultColorUp>8</DefaultColorUp>
+		<DefaultColorDn>15</DefaultColorDn>
+		<DefaultColorText>1</DefaultColorText>
+		<Color0>0x00000000</Color0>			<!-- Black -->
+		<Color1>0x00FF0000</Color1>			<!-- Blue -->
+		<Color2>0x0000FF00</Color2>			<!-- Green -->
+		<Color3>0x00800000</Color3>			<!-- Cyan -->
+		<Color4>0x000000FF</Color4>			<!-- Red -->
+		<Color5>0x00FF00FF</Color5>			<!-- Magenta -->
+		<Color6>0x0000FFFF</Color6>			<!-- Yellow -->
+		<Color7>0x00C0C0C0</Color7>			<!-- White -->
+		<Color8>0x00808080</Color8>			<!-- Gray -->
+		<Color9>0x00FF0000</Color9>			<!-- Light Blue -->
+		<Color10>0x00A3FFA3</Color10>		<!-- Light Green -->
+		<Color11>0x00505000</Color11>		<!-- Light Cyan -->
+		<Color12>0x000000a0</Color12>		<!-- Light Red -->
+		<Color13>0x00FFBBFF</Color13>		<!-- Light Magenta -->
+		<Color14>0x00186060</Color14>		<!-- Dark Yellow -->
+		<Color15>0x00FFFFFF</Color15>		<!-- Light White -->
+		<Color16>0x00804080</Color16>		<!-- Light Magenta -->
+		<Color17>0x004a4a60</Color17>		<!-- Dark Brown -->
+		<Color18>0x00005000</Color18>		<!-- Added -->
+	</Colors>
+	<ProdColors>
+		<Color0>0x00000000</Color0>			<!-- Black -->
+		<Color1>0x00FFFF00</Color1>			<!-- Blue -->
+		<Color2>0x0000FF00</Color2>			<!-- Green -->
+		<Color3>0x00FFFF00</Color3>			<!-- Cyan -->
+		<Color4>0x000000FF</Color4>			<!-- Red -->
+		<Color5>0x00FF00FF</Color5>			<!-- Magenta -->
+		<Color6>0x0000FFFF</Color6>			<!-- Yellow -->
+		<Color7>0x00FFFFFF</Color7>			<!-- White -->
+		<Color8>0x00808080</Color8>			<!-- Gray -->
+		<Color9>0x00FF0000</Color9>			<!-- Light Blue -->
+		<Color10>0x0000FF00</Color10>		<!-- Light Green -->
+		<Color11>0x00FFFF00</Color11>		<!-- Light Cyan -->
+		<Color12>0x000000FF</Color12>		<!-- Light Red -->
+		<Color13>0x00FF00FF</Color13>		<!-- Light Magenta -->
+		<Color14>0x0000FFFF</Color14>		<!-- Light Yellow -->
+		<Color15>0x00FFFFFF</Color15>		<!-- Light White -->
+		<Color16>0x005E92FF</Color16>		<!-- Abobora -->
+	</ProdColors>
+</PosDB>
+

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re[2]: [xml] Encoding Problems with libxml 2.2.2</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re[2]: [xml] Encoding Problems with libxml 2.2.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re[2]: [xml] Encoding Problems with libxml 2.2.2</h1>
+<!-- received="Wed Aug 30 02:33:16 2000" -->
+<!-- isoreceived="20000830063316" -->
+<!-- sent="Wed, 30 Aug 2000 11:31:47 +0200" -->
+<!-- isosent="20000830093147" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re[2]: [xml] Encoding Problems with libxml 2.2.2" -->
+<!-- id="1932009339.20000830113147@triplex.de" -->
+<!-- inreplyto="20000829193605.S804@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Wed Aug 30 2000 - 05:31:47 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0705.html">Antony Stace: "[xml] List of apps anywhere which uses libxml"</a>
+<li><strong>In reply to:</strong> <a href="0702.html">Daniel Veillard: "Re: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hallo Daniel,
+<br>
+<p><p><p>Tuesday, August 29, 2000, 7:36:05 PM, you wrote:
+<br>
+<p><p>DV&gt; On Tue, Aug 29, 2000 at 06:04:12PM +0200, Stefan Bambach wrote:
+<br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Hi,
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; I wrote a basic libxml wrapper for python (very basic :-) ). I walk
+</em><br>
+<em>&gt;&gt; through the DOM tree by myself (child = child-&gt;next) and read out the
+</em><br>
+<em>&gt;&gt; content. I had access to the TAGs and the values, attributes, ... .
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Now with libxml 2.2.2 the DOM tree's content is UTF8 encoded and can't
+</em><br>
+<em>&gt;&gt; read out it as simple as it was before. I have to convert the values
+</em><br>
+<em>&gt;&gt; to ISO-8859-1.
+</em><br>
+<p>DV&gt;  Or EUC-JP if you're japanese or ISO-8859-2 if you're russian, etc ...
+<br>
+DV&gt; Yes libxml is now consistant independantly of the kind of input.
+<br>
+I have to store some data from the XML file in MySQL. It's enough to
+<br>
+store it as 8859-1, because I know that the system is intended for
+<br>
+germans only :-) So I don't need all features.
+<br>
+<p><em>&gt;&gt; Is there a Funktion that is equivalent to some kind of ugly code like
+</em><br>
+<em>&gt;&gt; printf ('%s', node-&gt;name) doing the encoding, too ?
+</em><br>
+<p>DV&gt;  question is what encoding .... Are you just interested in ISO-8859-1 ?
+<br>
+DV&gt; If the answer is yes it's a good idea to ask you the question: why ?
+<br>
+I read the value of a tag (e.g. &lt;TEST&gt;with german special chars like
+<br>
+äöüß&lt;/TEST&gt;) with xmlNodeListGetString(). This function returns the
+<br>
+UTF8 String from DOM tree. That String will be stored in MySQL, read
+<br>
+out of this later and displayed on some Browers (HTML encoding is
+<br>
+implemented by me). This was fine with Version 2.0.0 because I got the
+<br>
+special chars in the right encoding. Now I get some UTF8 encoded
+<br>
+Chars, that are stored in Mysql as normal String. The result is that I
+<br>
+get wrong string to display.
+<br>
+Yesterday, I used the UTF8toisolat1() function to do the job for me (I
+<br>
+have to convert each value I read from DOM tree by myself). Is there I
+<br>
+function like xmlNodeListGetString() with an additional parameter, the
+<br>
+encoding string, and I get the String as I need it ?
+<br>
+<p><em>&gt;&gt; Are there functions to read out the content (value) of a tag, the tag
+</em><br>
+<em>&gt;&gt; itself and attribute names with there value ?
+</em><br>
+<p>DV&gt;  Do you mean that python has no support for handling UTF8 strings ???
+<br>
+DV&gt; How is python expected to work in Internationalized environments ?
+<br>
+I don't know it for sure, but I think I have seen some kind of
+<br>
+encoding modules. So I will search for it. I think there are converter
+<br>
+functions which can do the job for me, but I have to convert each
+<br>
+value to store it in DOM tree or visa versa.
+<br>
+<p>DV&gt;  Converting the value as you read them from the tree content may not
+<br>
+DV&gt; make much sense, I would expect high level languages like python to
+<br>
+DV&gt; be able to work out of the box with UTF8 strings, I am very surprized.
+<br>
+I will tell you if I find something about that.
+<br>
+<p>DV&gt; Daniel
+<br>
+<p><p><p><p>Mit freundlichen Grüssen.
+<br>
+Stefan Bambach
+<br>
+<p><pre>
+-- 
+Stefan Bambach
+<p>triplex-agentur fuer neue medien GmbH
+herzog-heinrich-strasse 11-13
+80336 muenchen
+<p>tel: 089-209 138 29
+fax: 089-209 138 10
+<p>mailto:<a href="mailto:bambach@triplex.de?subject=Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">bambach@triplex.de</a>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re[2]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0705.html">Antony Stace: "[xml] List of apps anywhere which uses libxml"</a>
+<li><strong>In reply to:</strong> <a href="0702.html">Daniel Veillard: "Re: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 30 2000 - 02:45:05 EDT</em>
+</em>
+</small>
+</body>
+</html>

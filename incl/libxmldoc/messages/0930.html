@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml v2.2.4 and Digital UNIX</title>
+<meta name="Author" content="Albert Chin-A-Young (china@thewrittenword.com)">
+<meta name="Subject" content="Re: [xml] libxml v2.2.4 and Digital UNIX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml v2.2.4 and Digital UNIX</h1>
+<!-- received="Wed Oct 11 10:28:22 2000" -->
+<!-- isoreceived="20001011142822" -->
+<!-- sent="Wed, 11 Oct 2000 09:12:24 -0500" -->
+<!-- isosent="20001011141224" -->
+<!-- name="Albert Chin-A-Young" -->
+<!-- email="china@thewrittenword.com" -->
+<!-- subject="Re: [xml] libxml v2.2.4 and Digital UNIX" -->
+<!-- id="20001011091223.A7196@postal.il.thewrittenword.com" -->
+<!-- inreplyto="20001010233617.P23005@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Albert Chin-A-Young (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX"><em>china@thewrittenword.com</em></a>)<br>
+<strong>Date:</strong> Wed Oct 11 2000 - 10:12:24 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0929.html">David Doolin: "Re: [xml] nanohttp.c and winsock"</a>
+<li><strong>In reply to:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 10, 2000 at 11:36:17PM +0200, Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; On Mon, Oct 09, 2000 at 05:52:06PM -0500, Albert Chin-A-Young wrote:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; What's the purpose of:
+</em><br>
+<em>&gt; &gt; (xmlversion.h)
+</em><br>
+<em>&gt; &gt; #ifndef HAVE_SOCKLEN_T
+</em><br>
+<em>&gt; &gt; #if defined(__osf__) || defined(__Linux__)
+</em><br>
+<em>&gt; &gt; #define HAVE_SOCKLEN_T
+</em><br>
+<em>&gt; &gt; #endif
+</em><br>
+<em>&gt; &gt; #endif
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; This causes the build of libxml 2.2.4 to fail under Digital UNIX 4.0D
+</em><br>
+<em>&gt; &gt; and 5.0A. There is no socklen_t defined in /usr/include/*/*.h under
+</em><br>
+<em>&gt; &gt; 4.0D and 5.0A has the following in /usr/include/sys/socket.h:
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; /*
+</em><br>
+<em>&gt; &gt;  * This data type is needed for both UNIX98 and POSIX support.
+</em><br>
+<em>&gt; &gt;  */
+</em><br>
+<em>&gt; &gt; #if (defined (_XOPEN_SOURCE) &amp;&amp; (_XOPEN_SOURCE&gt;=500)) || \
+</em><br>
+<em>&gt; &gt;     defined(_POSIX_PII_SOCKET)
+</em><br>
+<em>&gt; &gt; typedef unsigned long   socklen_t;      /* 64-bits */
+</em><br>
+<em>&gt; &gt; #endif
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; Here's the failure:
+</em><br>
+<em>&gt; &gt; cc -DHAVE_CONFIG_H -I. -I. -I. -I. -I/opt/TWWfsw/zlib11/include
+</em><br>
+<em>&gt; &gt; -I/opt/TWWfsw/readline4/include -I/opt/TWWfsw/readline4/include -O2
+</em><br>
+<em>&gt; &gt; -std1 -c nanohttp.c  -DPIC -o .libs/nanohttp.lo
+</em><br>
+<em>&gt; &gt; cc: Error: nanohttp.c, line 648: In this declaration, &quot;socklen_t&quot; must
+</em><br>
+<em>&gt; &gt; specify a type.
+</em><br>
+<em>&gt; &gt;         socklen_t len;
+</em><br>
+<em>&gt; &gt; --------^
+</em><br>
+<em>&gt; &gt; cc: Error: nanohttp.c, line 652: In this statement, &quot;len&quot; is not
+</em><br>
+<em>&gt; &gt; declared.
+</em><br>
+<em>&gt; &gt;         len = sizeof(status);
+</em><br>
+<em>&gt; &gt; --------^
+</em><br>
+<em>&gt; &gt; gmake[2]: *** [nanohttp.lo] Error 1
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Well I have access to one DU machine and I tested this code there
+</em><br>
+<em>&gt; and it worked. I'm pretty sure I used the native C compiler and not gcc.
+</em><br>
+<p>What version of DU? I'm going to write up an autoconf test to
+<br>
+determing what the fifth argument should be.
+<br>
+<p><pre>
+-- 
+albert chin (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">china@thewrittenword.com</a>)
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0929.html">David Doolin: "Re: [xml] nanohttp.c and winsock"</a>
+<li><strong>In reply to:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 11 2000 - 10:43:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

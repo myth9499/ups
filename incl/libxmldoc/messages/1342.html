@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlNanoHTTPMethod closing stdin on connection er</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] xmlNanoHTTPMethod closing stdin on connection error?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlNanoHTTPMethod closing stdin on connection error?</h1>
+<!-- received="Wed Jan 10 09:45:50 2001" -->
+<!-- isoreceived="20010110144550" -->
+<!-- sent="Wed, 10 Jan 2001 15:45:41 +0100" -->
+<!-- isosent="20010110144541" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] xmlNanoHTTPMethod closing stdin on connection error?" -->
+<!-- id="20010110154541.C20713@imag.fr" -->
+<!-- inreplyto="Pine.GSO.4.05.10101091722370.19211-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20xmlNanoHTTPMethod%20closing%20stdin%20on%20connection%20error?"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Wed Jan 10 2001 - 09:45:41 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1341.html">Harry Blundell: "[xml] xmlNanoHTTPMethod closing stdin on connection error?"</a>
+<li><strong>In reply to:</strong> <a href="1341.html">Harry Blundell: "[xml] xmlNanoHTTPMethod closing stdin on connection error?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jan 10, 2001 at 09:37:41AM -0500, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I think there's a problem with xmlNanoHTTPMethod: in the case that it is
+</em><br>
+<em>&gt; unable to connect, it closes stdin.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It calls xmlNanoHTTPNewCtxt to get ctxt, with the memory (including
+</em><br>
+<em>&gt; ctxt-&gt;fd) all zeroed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It then calls xmlNanoHTTPConnectHost to make the connection - if this
+</em><br>
+<em>&gt; function is unable to connect, it returns -1, which then triggers a call
+</em><br>
+<em>&gt; to xmlNanoHTTPFreeCtxt, which closes ctxt-&gt;fd if it is &gt;=0.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It seems to me that we could avoid this by initializing ret-&gt;fd
+</em><br>
+<em>&gt; (ctxt-&gt;fd) to -1 in xmlNanoHTTPNewCtxt.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Or am I missing something?
+</em><br>
+<p>&nbsp;&nbsp;No, this sounds perfectly right, this is broken and is the right
+<br>
+fix obviously ! Good catch, i hope it didn't took too much time to find
+<br>
+this &lt;grin/&gt;.
+<br>
+&nbsp;&nbsp;Commited in CVS,
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;thanks again,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:daniel@veillard.com?subject=Re:%20[xml]%20xmlNanoHTTPMethod%20closing%20stdin%20on%20connection%20error?">daniel@veillard.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlNanoHTTPMethod%20closing%20stdin%20on%20connection%20error?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlNanoHTTPMethod%20closing%20stdin%20on%20connection%20error?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1341.html">Harry Blundell: "[xml] xmlNanoHTTPMethod closing stdin on connection error?"</a>
+<li><strong>In reply to:</strong> <a href="1341.html">Harry Blundell: "[xml] xmlNanoHTTPMethod closing stdin on connection error?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 10 2001 - 10:44:13 EST</em>
+</em>
+</small>
+</body>
+</html>

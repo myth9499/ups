@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re[4]: [xml] Encoding Problems with libxml 2.2.2</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="Re[4]: [xml] Encoding Problems with libxml 2.2.2">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re[4]: [xml] Encoding Problems with libxml 2.2.2</h1>
+<!-- received="Wed Aug 30 06:24:31 2000" -->
+<!-- isoreceived="20000830102431" -->
+<!-- sent="Wed, 30 Aug 2000 15:23:02 +0200" -->
+<!-- isosent="20000830132302" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="Re[4]: [xml] Encoding Problems with libxml 2.2.2" -->
+<!-- id="1665064402.20000830152302@triplex.de" -->
+<!-- inreplyto="20000830121019.D16558@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re[4]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Wed Aug 30 2000 - 09:23:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0710.html">Stefan Bambach: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>In reply to:</strong> <a href="0707.html">Daniel Veillard: "Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hallo Daniel,
+<br>
+<p><p><p>Wednesday, August 30, 2000, 12:10:19 PM, you wrote:
+<br>
+<p><p>DV&gt; On Wed, Aug 30, 2000 at 11:31:47AM +0200, Stefan Bambach wrote:
+<br>
+<em>&gt;&gt; DV&gt;  Or EUC-JP if you're japanese or ISO-8859-2 if you're russian, etc ...
+</em><br>
+<em>&gt;&gt; DV&gt; Yes libxml is now consistant independantly of the kind of input.
+</em><br>
+<em>&gt;&gt; I have to store some data from the XML file in MySQL. It's enough to
+</em><br>
+<em>&gt;&gt; store it as 8859-1, because I know that the system is intended for
+</em><br>
+<em>&gt;&gt; germans only :-) So I don't need all features.
+</em><br>
+<p>DV&gt;   Just to give you an example, I'm french and we are supposed to use
+<br>
+DV&gt; ISO-8859-1, except it lacks the o-e ligature &amp;oelig; character. You're
+<br>
+DV&gt; lucky if all your data can be expressed with ISO-8859-1 :-)
+<br>
+Yes I am :-)
+<br>
+<p><em>&gt;&gt; Yesterday, I used the UTF8toisolat1() function to do the job for me (I
+</em><br>
+<em>&gt;&gt; have to convert each value I read from DOM tree by myself). Is there I
+</em><br>
+<em>&gt;&gt; function like xmlNodeListGetString() with an additional parameter, the
+</em><br>
+<em>&gt;&gt; encoding string, and I get the String as I need it ?
+</em><br>
+<p>DV&gt;   Hum ... it's not that simple. This would work well with ISO-8859-1
+<br>
+DV&gt; but a lot of character encoders need to maintain a state, which means
+<br>
+DV&gt; that if we fallback to iconv we should try to keep the same encoder
+<br>
+DV&gt; and not open/convert/close for each operation (iconv potentially
+<br>
+DV&gt; ends-up looking for a shared lib and loading it when requesting a new
+<br>
+DV&gt; encoder, this may become very heavy, very fast). So the function should
+<br>
+DV&gt; rather had an xmlCharEncodingHandlerPtr as the second argument. 
+<br>
+DV&gt; I will look into this,
+<br>
+Fine.
+<br>
+<p><p>Are there other similar functions for reading out the content of
+<br>
+tagnames, tagvalues, attributenames, attributevalues, ... ? Most of
+<br>
+the thing I get with 'node-&gt;name' or something like this. This is no
+<br>
+nice way of programming such critical code :-(
+<br>
+<p><p>Personal question:
+<br>
+Where did you come from ?
+<br>
+You answer my question very fast. So is libxml your working place ?
+<br>
+Or is it only your personal pleasure ?
+<br>
+<p>Some other changes in my libxml2.2.2 Version:
+<br>
+<p>Please check it, if you want to place it in your cvs !
+<br>
+<p>=====================================================================
+<br>
+1.) MEMORY LEAK:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there will be a memory leak, if string is empty (strlen(str) == 0),
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because you allocate at least 1 byte with xmlMemStrdup(buf) for '\0'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that will never be freed.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please check if it is right. I found this error some times ago, while
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checking for memory leaks in an older version of libxml. But
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is still there.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nanohttp.c: xmlNanoHTTPReadLine()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;463     if(*bp == '\n') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;464         *bp = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;465         return(xmlMemStrdup(buf));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;466     }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACED BY:            
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;463     if(*bp == '\n') {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;464             if (bp == buf)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;465                     return(NULL);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;466             else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;467                     *bp = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;468             return(xmlMemStrdup(buf));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;469     }
+<br>
+<p>=====================================================================
+<br>
+2.)     ERROR HANDLING:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I need a better errorhandling that all errors/warnings,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;even validation errors/warnings are welcome
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tree.c: xmlNewDoc() (518 ff)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSERTED AT:            
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;518    cur-&gt;verr = 0;               /* Validator Error Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;519    cur-&gt;vwarn = 0;              /* Validator Warning Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;520    cur-&gt;perr = 0;               /* Parser Error Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;521    cur-&gt;pwarn = 0;              /* Parser Warning Counter */
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tree.h: struct _xmlDoc (354 ff)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSERTED AT:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;355     int                              verr;          /* Validator Error Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;356     int                              vwarn;         /* Validator Warning Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;357     int                              perr;          /* Parser Error Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;358     int                              pwarn;         /* Parser Warning Counter */
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error.c: xmlParserError()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error.c: xmlParserWarning()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error.c: xmlParserValidityError()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error.c: xmlParserValidityWarning)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----------------------------------
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADDED LINE &quot;ctxt-&gt;myDoc-&gt;...++; /* increase Error or Warning Counter */&quot;:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserError(void *ctx, const char *msg, ...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr cur = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_list args;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;myDoc!=NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;myDoc-&gt;perr++;            /* increase Parser Error Counter */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...     
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserWarning(void *ctx, const char *msg, ...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr cur = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_list args;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;myDoc!=NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;myDoc-&gt;pwarn++;           /* increase Parser Warning Counter */
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...     
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserValidityError(void *ctx, const char *msg, ...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_list args;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;myDoc!=NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;myDoc-&gt;verr++;            /* increase Validator Error Counter */
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...     
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserValidityWarning(void *ctx, const char *msg, ...)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputPtr input;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va_list args;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ctxt-&gt;myDoc!=NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;myDoc-&gt;vwarn++;           /* increase Validator Warning Counter */
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...     
+<br>
+<p>=====================================================================
+<br>
+3.)     IGNORE COMMENTS IN DOM TREE:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I don't need comments in my DOM tree =&gt; added variable
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.c:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADDED AT:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;51      int xmlGetCommentsDefaultValue = 1;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.h:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADDED AT:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;307     extern int xmlGetCommentsDefaultValue;
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAX.c: xmlDefaultSAXHandlerInit() (1512 ff)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------------------------------------
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADDED AT:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1512 if (xmlGetCommentsDefaultValue == 0)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1513        xmlDefaultSAXHandler.comment = NULL;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1514 else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1515        xmlDefaultSAXHandler.comment = comment;
+<br>
+<p><p><p><p><p>Mit freundlichen Grüssen.
+<br>
+Stefan Bambach
+<br>
+<p><pre>
+-- 
+Stefan Bambach
+<p>triplex-agentur fuer neue medien GmbH
+herzog-heinrich-strasse 11-13
+80336 muenchen
+<p>tel: 089-209 138 29
+fax: 089-209 138 10
+<p>mailto:<a href="mailto:bambach@triplex.de?subject=Re[4]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">bambach@triplex.de</a>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re[4]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re[4]:%20[xml]%20Encoding%20Problems%20with%20libxml%202.2.2">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0710.html">Stefan Bambach: "Re: [xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>Previous message:</strong> <a href="0708.html">Andrew Logan: "[xml] xmlDocDump( FILE *, xmlDocPtr )"</a>
+<li><strong>In reply to:</strong> <a href="0707.html">Daniel Veillard: "Re: Re[2]: [xml] Encoding Problems with libxml 2.2.2"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 30 2000 - 09:43:50 EDT</em>
+</em>
+</small>
+</body>
+</html>

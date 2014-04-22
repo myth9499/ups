@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] on this silly debate...</title>
+<meta name="Author" content="winterlion (winterlion@fsj.net)">
+<meta name="Subject" content="[xml] on this silly debate...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] on this silly debate...</h1>
+<!-- received="Wed Jan 24 12:59:48 2001" -->
+<!-- isoreceived="20010124175948" -->
+<!-- sent="Wed, 24 Jan 2001 09:21:12 -0800 (PST)" -->
+<!-- isosent="20010124172112" -->
+<!-- name="winterlion" -->
+<!-- email="winterlion@fsj.net" -->
+<!-- subject="[xml] on this silly debate..." -->
+<!-- id="Pine.LNX.4.30.0101240913170.14982-100000@sigil" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> winterlion (<a href="mailto:winterlion@fsj.net?subject=Re:%20[xml]%20on%20this%20silly%20debate..."><em>winterlion@fsj.net</em></a>)<br>
+<strong>Date:</strong> Wed Jan 24 2001 - 12:21:12 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1381.html">Bjorn Reese: "[xml] SCRIPT patch for HTMLtree.c"</a>
+<li><strong>Previous message:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+on passing URL's into XML's open:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reasonable; particularily if that is the form your environment
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handles -all- filesystem/network interfaces (mine does)
+<br>
+<p>on passing directories:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at first glimpse -&gt; fix the programmer! XML should fail
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gracefully (say, return value from open() signifying a problem)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;but other than that not an XML issue
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on second glimpse -&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;well, seeing as there's helpers for ftp, http, and such
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it could almost be reasonable to make a hook-system for
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file interface, as well as for directories...
+<br>
+<p>the problem with the last is bloat -&gt; and I don't know if it's appropriate
+<br>
+for XML to handle.  I like the idea of a library that makes a directory
+<br>
+appear as an XML file but I suspect it's beyond the mandate of libXML :)
+<br>
+(actually it's too open to too many possibilities and filetype handling is
+<br>
+a real pain...  hrmm....  sounds like fun :)
+<br>
+<p>On the subject of user interfaces loading files:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if your interface can't filter out unreasonable files; fix the
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interface.  I've -never- had a program crash due to the person
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in front of it entering unreasonable data - I always add filters
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at that point.  (and I've been writing programs for lots of years)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; this is a GOOD example of &quot;fix the programmer&quot;
+<br>
+<p>On the subject of broken XML files links:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;see above for graceful recovery.  This one suspects that XML
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uses it's own &quot;open&quot; for retrieving documents referenced within
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an XML file but has not checked...
+<br>
+<p>I can't think at the moment for any other situations...
+<br>
+<p>G'day, eh? :)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Winterlion
+<br>
+<p><pre>
+-- 
+Any fool could be a witch with a runic knife, but it took skill to be one
+with an apple-corer.
+	- Terry Pratchet, Carpe Jugulum
+<p>Member in too many techs ruin the stew standing of the Mad Poet's Society.
+Trying to bring truth from beauty is Winterlion.
+find at this &lt;a href=&quot;<a href="http://geocities.com/winterlion">http://geocities.com/winterlion</a>&quot;&gt;winterlions' page&lt;/a&gt;
+<p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20on%20this%20silly%20debate...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20on%20this%20silly%20debate...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1381.html">Bjorn Reese: "[xml] SCRIPT patch for HTMLtree.c"</a>
+<li><strong>Previous message:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 24 2001 - 14:45:12 EST</em>
+</em>
+</small>
+</body>
+</html>

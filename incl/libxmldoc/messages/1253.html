@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Whitespace rears its ugly head again</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Whitespace rears its ugly head again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Whitespace rears its ugly head again</h1>
+<!-- received="Mon Dec  4 15:36:35 2000" -->
+<!-- isoreceived="20001204203635" -->
+<!-- sent="Mon, 4 Dec 2000 21:36:30 +0100" -->
+<!-- isosent="20001204203630" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Whitespace rears its ugly head again" -->
+<!-- id="20001204213630.E16903@w3.org" -->
+<!-- inreplyto="Pine.GSO.4.05.10012041434050.14618-100000@columbia" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Mon Dec 04 2000 - 15:36:30 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1252.html">Dave Madole: "[xml] Xpath/Xpointer question..."</a>
+<li><strong>In reply to:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Dec 04, 2000 at 03:06:28PM -0500, Harry Blundell wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi folks,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I just upgraded from 2.2.6 to 2.2.10, and now when I read in and save an
+</em><br>
+<em>&gt; XML document, I get back a document where the XML is all on one line.
+</em><br>
+<em>&gt; Previously, it had some newlines in there, which was more readable.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I found a dialog between Matthew Kellett and Daniel in the archive, where
+</em><br>
+<em>&gt; it was decided that the xmlDocDumpMemory function should no longer add
+</em><br>
+<em>&gt; newlines when dumping a document into a buffer, for 2.2.8.  I suspect
+</em><br>
+<em>&gt; that this is what has changed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Using whitespace in my input document and trying to preserve it with the
+</em><br>
+<em>&gt; xmlKeepBlanksDefault function doesn't help because none of my elements
+</em><br>
+<em>&gt; have mixed content, so the areBlanks function always returns 1.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is there a way to format the output XML in the current version?
+</em><br>
+<p>&nbsp;&nbsp;Hum, I'm not testing well the memory I/O interfaces, it seems
+<br>
+I should work more on this. I will look at it. I don't see an easy
+<br>
+way to get this changed right now except by rolling back the
+<br>
+changes applied. xmlKeepBlanksDefault is set by default in libxml2
+<br>
+so I assume it's not directly related.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Whitespace%20rears%20its%20ugly%20head%20again">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1252.html">Dave Madole: "[xml] Xpath/Xpointer question..."</a>
+<li><strong>In reply to:</strong> <a href="1251.html">Harry Blundell: "[xml] Whitespace rears its ugly head again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 04 2000 - 15:43:42 EST</em>
+</em>
+</small>
+</body>
+</html>

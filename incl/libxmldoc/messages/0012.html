@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] XML fragments</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] XML fragments">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] XML fragments</h1>
+<!-- received="Sun Feb 28 10:34:07 1999" -->
+<!-- isoreceived="19990228153407" -->
+<!-- sent="Sun, 28 Feb 1999 10:34:03 -0500" -->
+<!-- isosent="19990228153403" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] XML fragments" -->
+<!-- id="19990228103403.A31090@w3.org" -->
+<!-- inreplyto="Pine.BSF.3.95.990227202039.6253M-100000@Venus.mcs.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XML%20fragments"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sun Feb 28 1999 - 10:34:03 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<li><strong>In reply to:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<li><strong>Reply:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Havoc,
+<br>
+<p><em>&gt; Can I convince libxml to parse an XML fragment? Just a part of a document?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Something like:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;foo&gt;
+</em><br>
+<em>&gt; Text
+</em><br>
+<em>&gt; &lt;/foo&gt;
+</em><br>
+<em>&gt; &lt;bar&gt;
+</em><br>
+<em>&gt; Text
+</em><br>
+<em>&gt; &lt;/bar&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It appears to only parse the first element, since a complete document is
+</em><br>
+<em>&gt; supposed to be contained in an element I guess.
+</em><br>
+<p>&nbsp;&nbsp;Yes, and yes :-)
+<br>
+<p>Concerning the second point, yes the XML specification allow only one 
+<br>
+root in an XML document.
+<br>
+Concerning the first point you need to use the xmlParseElement() function:
+<br>
+<p><a href="http://rpmfind.net/veillard/XML/gnome-xml-parserinternals.html#XMLPARSEELEMENT">http://rpmfind.net/veillard/XML/gnome-xml-parserinternals.html#XMLPARSEELEMENT</a>
+<br>
+<p>This is part of the parser internal routines set exported through 
+<br>
+parserInternals.h available in the latests libxml packages (or CVS).
+<br>
+<p>&nbsp;&nbsp;The problem is to generate the parser context input corresponding to
+<br>
+your piece of input. I currently don't export such a function, it's
+<br>
+lacking from the API. I will try to provide those ASAP by splitting
+<br>
+the functions like xmlSAXParseMemory() in an initialization part and
+<br>
+and the actuall call to the parser. I will try to do that and commit it
+<br>
+this afternoon.
+<br>
+<p>&nbsp;&nbsp;BTW, could you indicate what kind of use you have in mind ? If this
+<br>
+turn out to be useful to others I may move it directly in tree.h .
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+	    [Yes, I have moved back to France !]
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20XML%20fragments">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20XML%20fragments">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20XML%20fragments">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<li><strong>Previous message:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<li><strong>In reply to:</strong> <a href="0011.html">Havoc Pennington: "[xml] XML fragments"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<li><strong>Reply:</strong> <a href="0013.html">Havoc Pennington: "Re: [xml] XML fragments"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:26 EDT</em>
+</em>
+</small>
+</body>
+</html>

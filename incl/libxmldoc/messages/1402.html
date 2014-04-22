@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Core dumped (Floating exception) with libxml2-2-[11|</title>
+<meta name="Author" content="Caran julien (julien.caran@ties.itu.ch)">
+<meta name="Subject" content="[xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0</h1>
+<!-- received="Fri Feb  2 02:10:28 2001" -->
+<!-- isoreceived="20010202071028" -->
+<!-- sent="Fri, 2 Feb 2001 08:09:59 +0100" -->
+<!-- isosent="20010202070959" -->
+<!-- name="Caran julien" -->
+<!-- email="julien.caran@ties.itu.ch" -->
+<!-- subject="[xml] Core dumped (Floating exception) with libxml2-2-[11|12] on Digital Unix V4.0" -->
+<!-- id="00c701c08ce7$27fc15e0$8c866a9c@itu.ch" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Caran julien (<a href="mailto:julien.caran@ties.itu.ch?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0"><em>julien.caran@ties.itu.ch</em></a>)<br>
+<strong>Date:</strong> Fri Feb 02 2001 - 02:09:59 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1403.html">Marc Sanfacon: "[xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>Previous message:</strong> <a href="1401.html">hayward@slothmud.org: "[xml] Using libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Salut,
+<br>
+<p>If someone could help I will appreciate, this problem drive me crazy..here
+<br>
+is my build script and the output :
+<br>
+<p>./configure --prefix=/opt/libxml \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--without-iconv \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--with-zlib=/usr/local
+<br>
+$ gmake
+<br>
+...
+<br>
+$ gmake check
+<br>
+....
+<br>
+##
+<br>
+## XML regression tests
+<br>
+##
+<br>
+Testing att1
+<br>
+/bin/sh: 17188 Floating exception - core dumped
+<br>
+1,2d0
+<br>
+&lt; &lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt; &lt;doc attr=&quot;to normalize with a    space&quot;/&gt;
+<br>
+/bin/sh: 28183 Floating exception - core dumped
+<br>
+Testing att2
+<br>
+/bin/sh: 27768 Floating exception - core dumped
+<br>
+1,2d0
+<br>
+&lt; &lt;?xml version=&quot;1.0&quot;?&gt;
+<br>
+&lt; &lt;doc attr=&quot;to normalize   with a space&quot;/&gt;
+<br>
+/bin/sh: 3155 Floating exception - core dumped
+<br>
+Testing bigentname.xml
+<br>
+<p>gmake[2]: *** [XMLtests] Interrupt
+<br>
+gmake[1]: *** [check-am] Interrupt
+<br>
+gmake: *** [check-recursive] Interrupt
+<br>
+<p>Here is some extra informations :
+<br>
+<p>when I used the following configure it worked (but I need the xptr support)
+<br>
+:
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Configure.....&quot;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;./configure --prefix=/opt/libxml \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--without-iconv \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--with-zlib=/usr/local \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--without-xinclude \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--without-xpath \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--without-xptr
+<br>
+<p>I also successfully compiled the libxm-2.2.2 with all options (but I need
+<br>
+libxm &gt; 2.2.7 for PHP).
+<br>
+<p>cheers.
+<br>
+<p>Julien
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Core%20dumped%20(Floating%20exception)%20with%20libxml2-2-[11|12]%20on%20Digital%20Unix%20V4.0">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1403.html">Marc Sanfacon: "[xml] Bug in xmlNormalizeURIPath"</a>
+<li><strong>Previous message:</strong> <a href="1401.html">hayward@slothmud.org: "[xml] Using libxml"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Feb 02 2001 - 02:46:32 EST</em>
+</em>
+</small>
+</body>
+</html>

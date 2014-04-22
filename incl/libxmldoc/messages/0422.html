@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Prerelease of libxml 2.0.0beta</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="[xml] Prerelease of libxml 2.0.0beta">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Prerelease of libxml 2.0.0beta</h1>
+<!-- received="Tue Mar 14 15:14:40 2000" -->
+<!-- isoreceived="20000314201440" -->
+<!-- sent="Tue, 14 Mar 2000 21:14:31 +0100" -->
+<!-- isosent="20000314201431" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="[xml] Prerelease of libxml 2.0.0beta" -->
+<!-- id="20000314211431.N21488@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Prerelease%20of%20libxml%202.0.0beta"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Mar 14 2000 - 15:14:31 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0423.html">Steve Hawkinson: "[xml] Building a DTD from scratch"</a>
+<li><strong>Previous message:</strong> <a href="0421.html">Christophe Le Gal: "[xml] xmlAddNextSibling, xmlAddPrevSibling"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Ok this is the code I have been working on over the last 2 months.
+<br>
+It breaks binary compatibility, and currently it's a beta release.
+<br>
+&nbsp;It is available from:
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="ftp://rpmfind.net/pub/libxml/">ftp://rpmfind.net/pub/libxml/</a>
+<br>
+<p>as tar.gz and RPMs. You may have to force it a bit to coexist with
+<br>
+libxml-1.x but it's doable :-) . The old devel should be removed and
+<br>
+replaced.
+<br>
+<p>This includes a very large set of changes. From a programming point
+<br>
+of view applications should not have to be modified too much, check
+<br>
+the upgrade page 
+<br>
+&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/upgrade.html">http://xmlsoft.org/upgrade.html</a>
+<br>
+<p>Some interfaces may still  changes (especially a bit about encoding). 
+<br>
+the updates includes: 
+<br>
+&nbsp;- fix I18N support. ISO-Latin-x/UTF-8/UTF-16 (nearly) seems
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;correctly handled now 
+<br>
+&nbsp;- Better handling of entities, especially well formedness checking
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and proper PEref extensions in external subsets 
+<br>
+&nbsp;- DTD conditional sections 
+<br>
+&nbsp;- Validation now correcly handle entities content 
+<br>
+&nbsp;- change structures to accomodate DOM 
+<br>
+&nbsp;- Serious progress were made toward compliance, here are the result
+<br>
+&nbsp;&nbsp;&nbsp;of the test against the OASIS testsuite (except the japanese tests
+<br>
+&nbsp;&nbsp;&nbsp;since I don't support that encoding yet). This URL
+<br>
+&nbsp;&nbsp;&nbsp;is rebuilt every couple of hours using the CVS head version. 
+<br>
+<p>&nbsp;&nbsp;&nbsp;<a href="http://xmlsoft.org/conf/result.html">http://xmlsoft.org/conf/result.html</a>
+<br>
+<p>&nbsp;One of the main things still generating problem is bad/incorrect 
+<br>
+standalone flag checking and handling. There is still an extension needed
+<br>
+to handle complicated UTF-16 inputs.
+<br>
+<p>&nbsp;&nbsp;Please try it, and report problems, 
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Prerelease%20of%20libxml%202.0.0beta">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Prerelease%20of%20libxml%202.0.0beta">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Prerelease%20of%20libxml%202.0.0beta">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0423.html">Steve Hawkinson: "[xml] Building a DTD from scratch"</a>
+<li><strong>Previous message:</strong> <a href="0421.html">Christophe Le Gal: "[xml] xmlAddNextSibling, xmlAddPrevSibling"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:08 EDT</em>
+</em>
+</small>
+</body>
+</html>

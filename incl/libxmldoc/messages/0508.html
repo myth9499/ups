@@ -1,0 +1,458 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] UNIX man page</title>
+<meta name="Author" content="Ziying Sherwin (sherwin@nlm.nih.gov)">
+<meta name="Subject" content="[xml] UNIX man page">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] UNIX man page</h1>
+<!-- received="Mon Jun  5 14:28:30 2000" -->
+<!-- isoreceived="20000605182830" -->
+<!-- sent="Mon, 5 Jun 2000 14:25:03 -0400 (EDT)" -->
+<!-- isosent="20000605182503" -->
+<!-- name="Ziying Sherwin" -->
+<!-- email="sherwin@nlm.nih.gov" -->
+<!-- subject="[xml] UNIX man page" -->
+<!-- id="Pine.GSO.4.05.10006051419450.23469-100000@hume.nlm.nih.gov" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Ziying Sherwin (<a href="mailto:sherwin@nlm.nih.gov?subject=Re:%20[xml]%20UNIX%20man%20page"><em>sherwin@nlm.nih.gov</em></a>)<br>
+<strong>Date:</strong> Mon Jun 05 2000 - 14:25:03 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0509.html">Daniel Veillard: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>Previous message:</strong> <a href="0507.html">Juan José Rodríguez: "Re: [xml] Need help in compiling to HP-UX"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Dear LIBXML Community,
+<br>
+<p>First thank you for the this great package contributed to the computing
+<br>
+society.
+<br>
+<p>We just installed the libxml 2.0.0 package and it works great. We also
+<br>
+think it would be even better with some UNIX man pages. Here attach the
+<br>
+man pages that we wrote and we hope it would be of any use to this
+<br>
+package.
+<br>
+<p>Regards,
+<br>
+Ziying Sherwin
+<br>
+<p>----------------------------------------------------------------------
+<br>
+xmllint.1
+<br>
+----------------------------------------------------------------------
+<br>
+.TH XMLLINT 1 &quot;12 April 2000&quot; 
+<br>
+.SH NAME
+<br>
+xmllint \- parse XML files and print the result of parsing
+<br>
+.SH SYNOPSIS
+<br>
+.B xmllint
+<br>
+.RB [ \-\-compress ]
+<br>
+.RB [ \-\-copy ]
+<br>
+.RB [ \-\-debug ]
+<br>
+.RB [ \-\-debugent ]
+<br>
+.RB [ \-\-htmlout ]
+<br>
+.RB [ \-\-insert ]
+<br>
+.RB [ \-\-noblanks ]
+<br>
+.RB [ \-\-noent ]
+<br>
+.RB [ \-\-noout ]
+<br>
+.RB [ \-\-nowarning ]
+<br>
+.RB [ \-\-nowarp ]
+<br>
+.RB [ \-\-postvalid ]
+<br>
+.RB [ \-\-push ]
+<br>
+.RB [ \-\-recover ]
+<br>
+.RB [ \-\-repeat ]
+<br>
+.RB [ \-\-shell ]
+<br>
+.RB [ \-\-testIO ]
+<br>
+.RB [ \-\-valid ]
+<br>
+.IR xmlfile ...
+<br>
+.SH DESCRIPTION
+<br>
+The 
+<br>
+.IR xmllint 
+<br>
+program parses one or more XML files,
+<br>
+specified on the command line as 
+<br>
+.IR xmlfile ....
+<br>
+It prints various types of output
+<br>
+(depending upon the options selected).
+<br>
+It is useful for detecting errors both in XML code and in the 
+<br>
+XML parser itself.
+<br>
+.SH OPTIONS
+<br>
+.TP 12
+<br>
+.B \-\-compress
+<br>
+Do 
+<br>
+.IR gzip (1)
+<br>
+compression for the output.
+<br>
+.TP 
+<br>
+.B \-\-copy
+<br>
+Test the internal copy implementation.
+<br>
+.TP
+<br>
+.B \-\-debug
+<br>
+Dump a debug tree of the in-memory document.
+<br>
+.TP
+<br>
+.B \-\-debugent
+<br>
+Debug the entities defined in the document.
+<br>
+.TP
+<br>
+.B \-\-htmlout
+<br>
+Output results in
+<br>
+.I html
+<br>
+format.
+<br>
+.TP
+<br>
+.B \-\-insert
+<br>
+Test for valid insertion.
+<br>
+.TP
+<br>
+.B \-\-noblanks
+<br>
+Drop blanks from the output.
+<br>
+.TP
+<br>
+.B \-\-noent
+<br>
+Substitute entity references by their value.
+<br>
+.TP
+<br>
+.B \-\-noout
+<br>
+Do not output the result tree.
+<br>
+.TP
+<br>
+.B \-\-nowarning
+<br>
+Do not print warning messages from the parser or validator.
+<br>
+.TP
+<br>
+.B \-\-nowarp
+<br>
+Do not put 
+<br>
+.I html
+<br>
+document wrapper.
+<br>
+.TP
+<br>
+.B \-\-postvalid
+<br>
+Do a
+<br>
+.I posteriori
+<br>
+validation.
+<br>
+.TP
+<br>
+.B \-\-push
+<br>
+Use the push mode for the parser.
+<br>
+.TP
+<br>
+.B \-\-recover
+<br>
+Output what was parsable on broken XML documents.
+<br>
+.TP
+<br>
+.B \-\-repeat
+<br>
+Repeat the process 100 times, for the purpose of timing and profiling.
+<br>
+.TP
+<br>
+.B \-\-shell
+<br>
+Run a navigating shell.
+<br>
+.TP
+<br>
+.B \-\-testIO
+<br>
+Test user i/o support.
+<br>
+.TP
+<br>
+.B \-\-valid
+<br>
+Validate the document in addition to std well-formed.
+<br>
+.SH FILES
+<br>
+.TP 2.2i
+<br>
+.B /depot/package/libxml_2.0.0/bin/xmllint
+<br>
+executable 
+<br>
+.SH &quot;SEE ALSO&quot;
+<br>
+.BR libxml (4)
+<br>
+.SH AUTHOR
+<br>
+Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20UNIX%20man%20page">Daniel.Veillard@w3.org</a>)
+<br>
+Manual page by Ziying Sherwin,
+<br>
+Lister Hill National Center for Biomedical Communication,
+<br>
+U.S. National Library of Medicine (<a href="mailto:sherwin@nlm.nih.gov?subject=Re:%20[xml]%20UNIX%20man%20page">sherwin@nlm.nih.gov</a>).
+<br>
+.\&quot; end of manual page
+<br>
+<p>------------------------------------------------------------------------
+<br>
+libxml.4
+<br>
+------------------------------------------------------------------------
+<br>
+<p>.TH libxml 4 &quot;12 April 2000&quot;
+<br>
+.SH NAME
+<br>
+libxml \- library used to parse XML files
+<br>
+.SH DESCRIPTION
+<br>
+The
+<br>
+.I  libxml
+<br>
+library is used to parse XML files. 
+<br>
+Its internal document repesentation is as close as possible to the 
+<br>
+.I DOM 
+<br>
+(Document Object Model) interface,
+<br>
+an API for accessing XML or HTML structured documents.
+<br>
+.LP
+<br>
+The
+<br>
+.I libxml
+<br>
+library also has a 
+<br>
+.IR SAX -like
+<br>
+interface, 
+<br>
+which is designed to be compatible with 
+<br>
+.IR expat (1).
+<br>
+NOTE:
+<br>
+.IR SAX , 
+<br>
+the Simple API for XML,
+<br>
+is a standard interface for event-based XML parsing,
+<br>
+developed collaboratively by the members of the XML-DEV mailing list, 
+<br>
+currently hosted by OASIS.
+<br>
+The
+<br>
+.I expat
+<br>
+library is a XML 1.0 parser written in C,
+<br>
+which aims to be fully conforming. 
+<br>
+It is currently not a validating XML processor.
+<br>
+.LP
+<br>
+The
+<br>
+.I libxml 
+<br>
+library now includes a nearly complete 
+<br>
+.I XPath 
+<br>
+implementation. 
+<br>
+The
+<br>
+.I XPath
+<br>
+(XML Path Language) is a language for addressing parts of an 
+<br>
+XML document,
+<br>
+designed to be used by both 
+<br>
+.I XSLT 
+<br>
+and 
+<br>
+.IR XPointer .
+<br>
+.LP
+<br>
+The
+<br>
+.I libxml 
+<br>
+library exports Push and Pull type parser interfaces for both XML and 
+<br>
+.IR html . 
+<br>
+.SH FILES
+<br>
+.TP 2.2i
+<br>
+.B /depot/lib/libxml_2.0.0/libxml.a
+<br>
+static library
+<br>
+.TP
+<br>
+.B /depot/lib/libxml_2.0.0/libxml.so
+<br>
+shareable library
+<br>
+.TP
+<br>
+.B /depot/package/libxml_2.0.0/bin/xmllint
+<br>
+binary application for parsing XML files
+<br>
+.SH AUTHORS
+<br>
+Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20UNIX%20man%20page">Daniel.Veillard@w3.org</a>).
+<br>
+If you download and install this package please send the author email.
+<br>
+Manual page by Ziying Sherwin (<a href="mailto:sherwin@nlm.nih.gov?subject=Re:%20[xml]%20UNIX%20man%20page">sherwin@nlm.nih.gov</a>),
+<br>
+Lister Hill National Center for Biomedical Communications,
+<br>
+U.S. National Library of Medicine.
+<br>
+.\&quot; end of manual page
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20UNIX%20man%20page">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20UNIX%20man%20page">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0509.html">Daniel Veillard: "Re: [xml] Embedding DTD into document"</a>
+<li><strong>Previous message:</strong> <a href="0507.html">Juan José Rodríguez: "Re: [xml] Need help in compiling to HP-UX"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:14 EDT</em>
+</em>
+</small>
+</body>
+</html>

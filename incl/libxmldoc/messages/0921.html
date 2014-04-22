@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] nanohttp.c and winsock</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] nanohttp.c and winsock">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] nanohttp.c and winsock</h1>
+<!-- received="Wed Oct 11 07:13:21 2000" -->
+<!-- isoreceived="20001011111321" -->
+<!-- sent="Wed, 11 Oct 2000 13:13:14 +0200" -->
+<!-- isosent="20001011111314" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] nanohttp.c and winsock" -->
+<!-- id="20001011131314.F28988@w3.org" -->
+<!-- inreplyto="39E1B64A.98AD706E@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20nanohttp.c%20and%20winsock"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Oct 11 2000 - 07:13:14 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0922.html">Daniel Veillard: "Re: [xml] libxml for CE"</a>
+<li><strong>Previous message:</strong> <a href="0920.html">Daniel Veillard: "Re: [xml] &quot;make install&quot; problem in test-2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0900.html">Bjorn Reese: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0929.html">David Doolin: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 09, 2000 at 12:12:58PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Wayne Davison wrote:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt;  - I changed read() into recv() (but see note below).
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt;  - I changed write() into send() (but see note below).
+</em><br>
+<em>&gt; &gt; 
+</em><br>
+<em>&gt; &gt; In order to have a minimal impact on non-winsock code, I defined
+</em><br>
+<em>&gt; &gt; recv/send/closesocket to be their former functions on non-winsock systems
+</em><br>
+<em>&gt; &gt; (even though I don't think that the recv and send defines are strictly
+</em><br>
+<em>&gt; &gt; needed).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; You are correct, the recv/send defines are not strictly needed. Most
+</em><br>
+<em>&gt; Unix programmers use read/write because they are generic functions
+</em><br>
+<em>&gt; that works on sockets as well as files, devices, and others. However,
+</em><br>
+<em>&gt; read/write just calls recv/send for sockets, so there is really no
+</em><br>
+<em>&gt; reason for the two defines.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I have written socket code for several cross-platform projects, and
+</em><br>
+<em>&gt; done exactly (with the exception of the recv/send defines) as you
+</em><br>
+<em>&gt; have done.
+</em><br>
+<p>&nbsp;&nbsp;I implemented Bjorn suggestion, recv and send should be compatible
+<br>
+with read and write on any decently Posixised system :-)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20nanohttp.c%20and%20winsock">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20nanohttp.c%20and%20winsock">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20nanohttp.c%20and%20winsock">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0922.html">Daniel Veillard: "Re: [xml] libxml for CE"</a>
+<li><strong>Previous message:</strong> <a href="0920.html">Daniel Veillard: "Re: [xml] &quot;make install&quot; problem in test-2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0900.html">Bjorn Reese: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0929.html">David Doolin: "Re: [xml] nanohttp.c and winsock"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Oct 11 2000 - 09:43:41 EDT</em>
+</em>
+</small>
+</body>
+</html>

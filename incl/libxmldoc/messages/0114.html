@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Re: Bug#2022: libxml throws away attribute names</title>
+<meta name="Author" content="Stephane Conversy (Stephane.Conversy@lri.fr)">
+<meta name="Subject" content="Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces</h1>
+<!-- received="Mon Aug 30 05:16:51 1999" -->
+<!-- isoreceived="19990830091651" -->
+<!-- sent="Mon, 30 Aug 1999 11:16:02 +0200" -->
+<!-- isosent="19990830091602" -->
+<!-- name="Stephane Conversy" -->
+<!-- email="Stephane.Conversy@lri.fr" -->
+<!-- subject="Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces" -->
+<!-- id="37CA4BD1.C860898A@lri.fr" -->
+<!-- inreplyto="19990829173138.A26556@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stephane Conversy (<a href="mailto:Stephane.Conversy@lri.fr?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces"><em>Stephane.Conversy@lri.fr</em></a>)<br>
+<strong>Date:</strong> Mon Aug 30 1999 - 05:16:02 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Previous message:</strong> <a href="0113.html">art1234@ureach.com: "[xml] laser printer toner advertising"</a>
+<li><strong>In reply to:</strong> <a href="0112.html">Daniel Veillard: "[xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;   I commited a new version in the CVS bases, it include the necessary
+</em><br>
+<em>&gt; changes to support namespaces on attributes, better validation, support
+</em><br>
+<em>&gt; for IDs, improvements on XPath, lots of cleanup.
+</em><br>
+<em>&gt;   I have put this version 1.6 at:
+</em><br>
+<em>&gt;     <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   Sources and RPMs,
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<p>compiling the lib on sgi gives the warnings I quoted at the end of the mail
+<br>
+(just to mention them).
+<br>
+A problem: when compiling something that uses libxml with a c++ compiler, I
+<br>
+get these errors:
+<br>
+<p>cc-1311 CC: ERROR File = /u/conversy/local/include/gnome-xml/xml-error.h, Line
+<br>
+= 12
+<br>
+&nbsp;&nbsp;The indicated linkage specification is incompatible with previous
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;xmlParserValidityError&quot; (declared at line 27 of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/u/conversy/local/include/gnome-xml/valid.h&quot;).
+<br>
+<p>&nbsp;&nbsp;void  xmlParserValidityError  (void *ctx,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1311 CC: ERROR File = /u/conversy/local/include/gnome-xml/xml-error.h, Line
+<br>
+= 15
+<br>
+&nbsp;&nbsp;The indicated linkage specification is incompatible with previous
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;xmlParserValidityWarning&quot; (declared at line 28 of
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/u/conversy/local/include/gnome-xml/valid.h&quot;).
+<br>
+<p>&nbsp;&nbsp;void  xmlParserValidityWarning(void *ctx,
+<br>
+<p><p>by surronding valid.h with:
+<br>
+<p>#ifdef __cplusplus
+<br>
+extern &quot;C&quot; {
+<br>
+#endif
+<br>
+<p>...
+<br>
+<p>#ifdef __cplusplus
+<br>
+}
+<br>
+#endif
+<br>
+<p><p>, the errors vanish.
+<br>
+<p><p>WARNINGS:
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.0\&quot; -g -c  -DPIC
+<br>
+parser.c -o .libs/parser.lo
+<br>
+cc-1552 cc: WARNING File = parser.c, Line = 4649
+<br>
+&nbsp;&nbsp;The variable &quot;cons&quot; is set but never used.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int cons = ctxt-&gt;input-&gt;consumed;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1552 cc: WARNING File = parser.c, Line = 5148
+<br>
+&nbsp;&nbsp;The variable &quot;node_info&quot; is set but never used.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserNodeInfo node_info;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.0\&quot; -g -c  -DPIC
+<br>
+HTMLparser.c -o
+<br>
+.libs/HTMLparser.lo
+<br>
+cc-1552 cc: WARNING File = HTMLparser.c, Line = 2222
+<br>
+&nbsp;&nbsp;The variable &quot;node_info&quot; is set but never used.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserNodeInfo node_info;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.0\&quot; -g -c  -DPIC
+<br>
+xpath.c -o .libs/xpath.lo
+<br>
+cc-1552 cc: WARNING File = xpath.c, Line = 3933
+<br>
+&nbsp;&nbsp;The variable &quot;attribute&quot; is set but never used.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int attribute = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc -DHAVE_CONFIG_H -I. -I. -I. -I. -DLIBXML_VERSION=\&quot;1.6.0\&quot; -g -c  -DPIC
+<br>
+valid.c -o .libs/valid.lo
+<br>
+cc-1185 cc: WARNING File = valid.c, Line = 71
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;type = type;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = valid.c, Line = 397
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;type = type;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = valid.c, Line = 792
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!xmlValidateAttributeValue(type, defaultValue))) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = valid.c, Line = 850
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;type = type;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br>
+<p>cc-1185 cc: WARNING File = valid.c, Line = 853
+<br>
+&nbsp;&nbsp;An enumerated type is mixed with another type.
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret-&gt;def = def;
+<br>
+<p><pre>
+--
+Stéphane Conversy
+<a href="http://www-ihm.lri.fr/~conversy/">http://www-ihm.lri.fr/~conversy/</a>
+mailto:<a href="mailto:conversy@lri.fr?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">conversy@lri.fr</a>
+<p><p><p>----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Re:%20Bug#2022:%20libxml%20throws%20away%20attribute%20namespaces">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Previous message:</strong> <a href="0113.html">art1234@ureach.com: "[xml] laser printer toner advertising"</a>
+<li><strong>In reply to:</strong> <a href="0112.html">Daniel Veillard: "[xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<li><strong>Reply:</strong> <a href="0115.html">Daniel Veillard: "Re: [xml] Re: Bug#2022: libxml throws away attribute namespaces"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:46 EDT</em>
+</em>
+</small>
+</body>
+</html>

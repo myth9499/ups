@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+EXEC SQL INCLUDE sqlca;
+
+int dbtest1(char *p1,char *p2,char *p3)
+{
+	EXEC SQL connect to apsdb;
+	if(SQLCODE!=0)
+		return -1;
+	else
+		return 0;
+}
+int dbtest2(char *par1,char *par2,char *par3)
+{
+	EXEC SQL begin declare section;
+	char	apsno[13];
+	EXEC SQL end declare section;
+
+	if(SQLCODE!=0)
+	{
+		printf("connect to apsdb error[%d]",SQLCODE);
+		return -1;
+	}
+	printf("connect to apsdb ok\n");
+	EXEC SQL select apsno into :apsno from t_ibps_txreg where apsno ='000002707701'; 
+	if(SQLCODE!=0)
+	{
+		printf("select from apsdb error[%d]",SQLCODE);
+		return -1;
+	}
+	printf("the apsno is [%s]\n",apsno);
+	char	msgid[20];
+	memset(msgid,0,sizeof(msgid));
+	get_var_value("V_A01",20,1,msgid);
+	printf("msgid is [%s]\n",msgid);
+	char	msgid2[20];
+	memset(msgid2,0,sizeof(msgid2));
+	get_var_value("V_A02",20,1,msgid2);
+	printf("msgid2 is [%s]\n",msgid2);
+	return  0;
+}
+int dbtest3(char *par1,char *par2,char *par3)
+{
+	EXEC SQL begin declare section;
+	char	apsno[13];
+	EXEC SQL end declare section;
+
+	EXEC SQL update t_ibps_txreg  set msgid  = '99999999' where apsno ='000002707701'; 
+	if(SQLCODE!=0)
+	{
+		printf("select from apsdb error[%d]",SQLCODE);
+		return -1;
+	}
+	seterr("EEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
+	return  0;
+}
+int dbtest4(char *par1,char *par2,char *par3)
+{
+	EXEC SQL connect reset;
+}

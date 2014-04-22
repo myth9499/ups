@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml -&gt; .</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml -&gt; .">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml -&gt; .</h1>
+<!-- received="Tue Oct  3 09:52:00 2000" -->
+<!-- isoreceived="20001003135200" -->
+<!-- sent="Tue, 3 Oct 2000 15:51:56 +0200" -->
+<!-- isosent="20001003135156" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml -&gt; ." -->
+<!-- id="20001003155155.K14437@w3.org" -->
+<!-- inreplyto="200010031318.JAA02302@vixen.cs.utk.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 03 2000 - 09:51:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0868.html">Marc Sanfacon: "RE: [xml] URI question..."</a>
+<li><strong>Previous message:</strong> <a href="0866.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>In reply to:</strong> <a href="0866.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0870.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 03, 2000 at 09:18:52AM -0400, David Doolin wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; []
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt;  The right way will be to have an include/libxml tree in the libxml
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Absolutely.  I do this for the win32 port.
+</em><br>
+<p>&nbsp;&nbsp;Okay
+<br>
+<p><em>&gt; &gt;sources . I would rather not have to change the structure of the
+</em><br>
+<em>&gt; &gt;CVS code base now, but I can probably manage to get the tarballs to follow
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; cvs can be picky about such things, but it is very doable.
+</em><br>
+<em>&gt; It helps (alot) to understand how ./CVS/Entries  works.
+</em><br>
+<p>&nbsp;&nbsp;I think I understand pretty well how CVS work, I don't want
+<br>
+to break CVS checkout of people especilly on the Gnome CVS base.
+<br>
+<p>&nbsp;&nbsp;There is either:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- create the new directory, move the files there, cvs delete
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an then cvs add in the new directory.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; I don't want this option before a new major change to
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avoid loosing the CVS logs
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- simply move the ,v files on the server but I'm absolutely opposed
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to this since this will break all the client checkouts, it's
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bad behaviour
+<br>
+<p>&nbsp;&nbsp;I don't want to mess with the CVS repository now, there is of
+<br>
+course things which could be done to not break existing checkouts and
+<br>
+make that change at the CVS level, but people updating without -d 
+<br>
+could be in trouble. 
+<br>
+<p><em>&gt; &gt;this structure automatically. I don't think I will change the CVs structure
+</em><br>
+<em>&gt; &gt;(and hence my enviroment) soon, maybe when switching to libxml3 if it
+</em><br>
+<em>&gt; &gt;ever get released :-)
+</em><br>
+<em>&gt; &gt;  I will play with the tarball generation,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I guess I am better with cvs than with tar, because I would find 
+</em><br>
+<em>&gt; much, much faster to reoroganize the repository than figure out 
+</em><br>
+<em>&gt; how to make tar so this!   
+</em><br>
+<p>&nbsp;I don't ask you to do it, I will ... Next revision of libxml tar will
+<br>
+have an include/libxml/ subtree containing the .h files.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20.">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0868.html">Marc Sanfacon: "RE: [xml] URI question..."</a>
+<li><strong>Previous message:</strong> <a href="0866.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>In reply to:</strong> <a href="0866.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0870.html">David Doolin: "Re: [xml] libxml -&gt; ."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 03 2000 - 10:43:42 EDT</em>
+</em>
+</small>
+</body>
+</html>

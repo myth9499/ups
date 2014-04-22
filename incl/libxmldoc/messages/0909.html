@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] libxml v2.2.4 and Digital UNIX</title>
+<meta name="Author" content="Albert Chin-A-Young (china@thewrittenword.com)">
+<meta name="Subject" content="[xml] libxml v2.2.4 and Digital UNIX">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] libxml v2.2.4 and Digital UNIX</h1>
+<!-- received="Tue Oct 10 17:19:34 2000" -->
+<!-- isoreceived="20001010211934" -->
+<!-- sent="Mon, 9 Oct 2000 17:52:06 -0500" -->
+<!-- isosent="20001009225206" -->
+<!-- name="Albert Chin-A-Young" -->
+<!-- email="china@thewrittenword.com" -->
+<!-- subject="[xml] libxml v2.2.4 and Digital UNIX" -->
+<!-- id="20001009175205.A23039@postal.il.thewrittenword.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Albert Chin-A-Young (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX"><em>china@thewrittenword.com</em></a>)<br>
+<strong>Date:</strong> Mon Oct 09 2000 - 18:52:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0910.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Reply:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Reply:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+What's the purpose of:
+<br>
+(xmlversion.h)
+<br>
+#ifndef HAVE_SOCKLEN_T
+<br>
+#if defined(__osf__) || defined(__Linux__)
+<br>
+#define HAVE_SOCKLEN_T
+<br>
+#endif
+<br>
+#endif
+<br>
+<p>This causes the build of libxml 2.2.4 to fail under Digital UNIX 4.0D
+<br>
+and 5.0A. There is no socklen_t defined in /usr/include/*/*.h under
+<br>
+4.0D and 5.0A has the following in /usr/include/sys/socket.h:
+<br>
+<p>/*
+<br>
+&nbsp;* This data type is needed for both UNIX98 and POSIX support.
+<br>
+&nbsp;*/
+<br>
+#if (defined (_XOPEN_SOURCE) &amp;&amp; (_XOPEN_SOURCE&gt;=500)) || \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;defined(_POSIX_PII_SOCKET)
+<br>
+typedef unsigned long   socklen_t;      /* 64-bits */
+<br>
+#endif
+<br>
+<p>Here's the failure:
+<br>
+cc -DHAVE_CONFIG_H -I. -I. -I. -I. -I/opt/TWWfsw/zlib11/include
+<br>
+-I/opt/TWWfsw/readline4/include -I/opt/TWWfsw/readline4/include -O2
+<br>
+-std1 -c nanohttp.c  -DPIC -o .libs/nanohttp.lo
+<br>
+cc: Error: nanohttp.c, line 648: In this declaration, &quot;socklen_t&quot; must
+<br>
+specify a type.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socklen_t len;
+<br>
+--------^
+<br>
+cc: Error: nanohttp.c, line 652: In this statement, &quot;len&quot; is not
+<br>
+declared.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len = sizeof(status);
+<br>
+--------^
+<br>
+gmake[2]: *** [nanohttp.lo] Error 1
+<br>
+<p><pre>
+-- 
+albert chin (<a href="mailto:china@thewrittenword.com?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">china@thewrittenword.com</a>)
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20v2.2.4%20and%20Digital%20UNIX">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0910.html">Daniel Veillard: "Re: [xml] Whitespace problem with external DTD validation"</a>
+<li><strong>Previous message:</strong> <a href="0908.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Reply:</strong> <a href="0913.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Reply:</strong> <a href="0914.html">Daniel Veillard: "Re: [xml] libxml v2.2.4 and Digital UNIX"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 10 2000 - 17:44:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

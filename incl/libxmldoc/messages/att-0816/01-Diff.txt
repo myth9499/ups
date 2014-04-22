@@ -1,0 +1,44 @@
+*HTMLparser.c
+1254c1254
+<         if (html40EntitiesTable[i].value == c) {
+---
+>         if ((unsigned int)html40EntitiesTable[i].value == c) {
+1260c1260
+<         if (html40EntitiesTable[i].value > c)
+---
+>         if ((unsigned int)html40EntitiesTable[i].value > c)
+2673c2673
+<             atts = (const xmlChar **) xmlRealloc(atts, maxatts * sizeof(xmlChar *));
+---
+>             atts = (const xmlChar **) xmlRealloc((void *) atts, maxatts * sizeof(xmlChar *));
+*parser.c
+7876c7876
+<             atts = (const xmlChar **) xmlRealloc(atts,
+---
+>             atts = (const xmlChar **) xmlRealloc((void *) atts,
+7929c7929
+<     xmlFree(atts);
+---
+>     xmlFree((void *) atts);
+*tree.c
+3946c3946
+<     if (len > buf->use) return(-1);
+---
+>     if (len > (int)(buf->use)) return(-1);
+3969c3969
+<     if (len <= buf->use) return(0);
+---
+>     if (len <= (int) (buf->use)) return(0);
+4057c4057
+<     if(size < buf->size)
+---
+>     if(size < (int) buf->size)
+4120c4120
+<     if(needSize > buf->size){
+---
+>     if(needSize > (int) buf->size){
+4165c4165
+<     if(needSize > buf->size){
+---
+>     if(needSize > (int) buf->size){
+

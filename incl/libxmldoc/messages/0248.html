@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml linking using rpms</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml linking using rpms">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml linking using rpms</h1>
+<!-- received="Sat Dec 11 06:50:49 1999" -->
+<!-- isoreceived="19991211115049" -->
+<!-- sent="Sat, 11 Dec 1999 06:50:46 -0500" -->
+<!-- isosent="19991211115046" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml linking using rpms" -->
+<!-- id="19991211065046.C15271@w3.org" -->
+<!-- inreplyto="38514CD9.70C2FA23@rayva.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Dec 11 1999 - 06:50:46 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0249.html">Steve Webster: "Re: Re: [xml] libxml linking using rpms"</a>
+<li><strong>Previous message:</strong> <a href="0247.html">Steve Webster: "[xml] libxml linking using rpms"</a>
+<li><strong>In reply to:</strong> <a href="0247.html">Steve Webster: "[xml] libxml linking using rpms"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0255.html">Steve Webster: "Re: [xml] libxml linking using rpms"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Dec 10, 1999 at 01:56:25PM -0500, Steve Webster wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Greetings,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm having troubles linking with the library that's provided with
+</em><br>
+<em>&gt; libxml[-devel]-1.7.4-SNAP.i386.rpm. After using the htmlParseDoc method,
+</em><br>
+<em>&gt; I get an &quot;undefined reference to htmlParseDoc(unsigned char *, char
+</em><br>
+<em>&gt; const *)&quot; linker error upon compiling. I found this behavior strange,
+</em><br>
+<em>&gt; since I've been running successfully with the xml portion of the api.
+</em><br>
+<em>&gt; Was this binary built so as not to expose the html features? Where might
+</em><br>
+<em>&gt; I find documentation to enable html if a binary rebuild is required?
+</em><br>
+<p>&nbsp;&nbsp;Hum, strange:
+<br>
+<p>Can you double-check the following ?
+<br>
+[root@orchis /root]# rpm -qf /usr/lib/libxml.so.1.7.4 
+<br>
+libxml-1.7.4-SNAP
+<br>
+[root@orchis /root]# nm /usr/lib/libxml.so.1.7.4 | grep htmlParseDoc
+<br>
+0002ccc0 T htmlParseDoc
+<br>
+0002b540 T htmlParseDocTypeDecl
+<br>
+0002c600 T htmlParseDocument
+<br>
+[root@orchis /root]# rpm -qf /usr/lib/libxml.a        
+<br>
+libxml-devel-1.7.4-SNAP
+<br>
+[root@orchis /root]# nm /usr/lib/libxml.a | grep htmlParseDoc
+<br>
+00003d80 T htmlParseDoc
+<br>
+00002780 T htmlParseDocTypeDecl
+<br>
+00003750 T htmlParseDocument
+<br>
+[root@orchis /root]# ls -l /usr/lib/libxml.so.1
+<br>
+lrwxrwxrwx   1 root     root           15 Dec 11 13:42 /usr/lib/libxml.so.1 -&gt; libxml.so.1.7.4
+<br>
+[root@orchis /root]# 
+<br>
+<p>&nbsp;The RPMs as found at <a href="ftp://rpmfind.net/pub/veillard/">ftp://rpmfind.net/pub/veillard/</a> are definitely 
+<br>
+compiled with the HTML (this is not a configure option)
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20libxml%20linking%20using%20rpms">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0249.html">Steve Webster: "Re: Re: [xml] libxml linking using rpms"</a>
+<li><strong>Previous message:</strong> <a href="0247.html">Steve Webster: "[xml] libxml linking using rpms"</a>
+<li><strong>In reply to:</strong> <a href="0247.html">Steve Webster: "[xml] libxml linking using rpms"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0255.html">Steve Webster: "Re: [xml] libxml linking using rpms"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:54 EDT</em>
+</em>
+</small>
+</body>
+</html>

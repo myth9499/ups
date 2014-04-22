@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] bug in valid.c</title>
+<meta name="Author" content="Gary Pennington (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="[xml] bug in valid.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] bug in valid.c</h1>
+<!-- received="Wed Feb  7 13:03:25 2001" -->
+<!-- isoreceived="20010207180325" -->
+<!-- sent="Wed, 07 Feb 2001 17:38:19 +0000" -->
+<!-- isosent="20010207173819" -->
+<!-- name="Gary Pennington" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="[xml] bug in valid.c" -->
+<!-- id="3A81880B.C55D08CD@uk.sun.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20bug%20in%20valid.c"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Wed Feb 07 2001 - 12:38:19 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>Previous message:</strong> <a href="1431.html">Gary Pennington: "Re: [xml] Validating a previously validated and then modified document"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>Reply:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi,
+<br>
+<p>I've found what I think is a bug in the xmlValidateOneAttribute
+<br>
+function. When checking for validity the routine does not detect that an
+<br>
+error has been flagged for a duplicate ID or non existent ref without
+<br>
+this patch. Thus invalid documents, although reported as such by the
+<br>
+error and warning functions, are not reported as invalid by the
+<br>
+xmlValidateDocument (etc... ) routines.
+<br>
+<p>Patch is :-
+<br>
+<p>*** ../ORIG/libxml2-2.2.11/valid.c      Fri Jan  5 06:39:29 2001
+<br>
+--- valid.c     Wed Feb  7 17:31:11 2001
+<br>
+***************
+<br>
+*** 2831,2842 ****
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Validity Constraint: ID uniqueness */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (attrDecl-&gt;atype == XML_ATTRIBUTE_ID) {
+<br>
+!         xmlAddID(ctxt, doc, value, attr);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((attrDecl-&gt;atype == XML_ATTRIBUTE_IDREF) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(attrDecl-&gt;atype == XML_ATTRIBUTE_IDREFS)) {
+<br>
+!         xmlAddRef(ctxt, doc, value, attr);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Validity Constraint: Notation Attributes */
+<br>
+--- 2831,2844 ----
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Validity Constraint: ID uniqueness */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (attrDecl-&gt;atype == XML_ATTRIBUTE_ID) {
+<br>
+!         if (xmlAddID(ctxt, doc, value, attr) == NULL)
+<br>
+!             ret = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((attrDecl-&gt;atype == XML_ATTRIBUTE_IDREF) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(attrDecl-&gt;atype == XML_ATTRIBUTE_IDREFS)) {
+<br>
+!         if (xmlAddRef(ctxt, doc, value, attr) == NULL)
+<br>
+!             ret = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Validity Constraint: Notation Attributes */
+<br>
+<p><p>Yours,
+<br>
+<p>Gary
+<br>
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>Previous message:</strong> <a href="1431.html">Gary Pennington: "Re: [xml] Validating a previously validated and then modified document"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<li><strong>Reply:</strong> <a href="1433.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Feb 07 2001 - 14:46:04 EST</em>
+</em>
+</small>
+</body>
+</html>

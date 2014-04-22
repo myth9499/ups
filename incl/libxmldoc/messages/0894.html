@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prerelease of 2.2.5</title>
+<meta name="Author" content="Wayne Davison (wayned@users.sourceforge.net)">
+<meta name="Subject" content="Re: [xml] prerelease of 2.2.5">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prerelease of 2.2.5</h1>
+<!-- received="Fri Oct  6 18:52:54 2000" -->
+<!-- isoreceived="20001006225254" -->
+<!-- sent="Fri, 6 Oct 2000 15:52:51 -0700 (PDT)" -->
+<!-- isosent="20001006225251" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@users.sourceforge.net" -->
+<!-- subject="Re: [xml] prerelease of 2.2.5" -->
+<!-- id="Pine.LNX.4.21.0010061522440.6506-100000@phong.blorf.net" -->
+<!-- inreplyto="39DE4AB6.9010205@qeradiant.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@users.sourceforge.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5"><em>wayned@users.sourceforge.net</em></a>)<br>
+<strong>Date:</strong> Fri Oct 06 2000 - 18:52:51 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0893.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0893.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, 6 Oct 2000, Timothee Besset wrote:
+<br>
+<em>&gt; One question though: what's the purpose of the Makefile.mygwin? The 
+</em><br>
+<em>&gt; configure script works fine with cygwin already?
+</em><br>
+<p>That's &quot;mingw&quot;, not &quot;mygwin&quot;.  See <a href="http://www.mingw.org/">http://www.mingw.org/</a> for full details,
+<br>
+but in a nutshell:  it's how you can use the gnu tools to compile Win32
+<br>
+applications without all the posix-layer stuff that Cygwin provides.  This
+<br>
+means that we can't depend on being able to run the configure script
+<br>
+(since there's no guarantee that /bin/sh even exists), and the Makefile
+<br>
+actually creates a DLL (which the existing Makefile does not attempt).
+<br>
+<p>Also, mingw appears to be better licensed than Cygwin, so you can use it
+<br>
+to create a DLL that doesn't transmogrify your software's license into the
+<br>
+GPL.  For instance, if someone were to use Cygwin to release a libxml.dll,
+<br>
+you would have to distribute a cygwin*.dll to use it, and that would
+<br>
+encumber the libxml library with the GPL's restrictions (not the LGPL that
+<br>
+it currently uses).  I believe at that point it would be impossible to use
+<br>
+such a libxml.dll with any non-GPLed code (BSD, Artistic, or whatever)
+<br>
+without it too becoming GPLed.
+<br>
+<p>So, Makefile.mingw sets up the mingw build environment to create a
+<br>
+regular, (LGPLed) Win32 DLL of libxml -- one that should be able to be
+<br>
+used by normal Win32 applications.
+<br>
+<p>..wayne..
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prerelease%20of%202.2.5">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Previous message:</strong> <a href="0893.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>In reply to:</strong> <a href="0893.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<li><strong>Reply:</strong> <a href="0895.html">Timothee Besset: "Re: [xml] prerelease of 2.2.5"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Oct 06 2000 - 19:43:21 EDT</em>
+</em>
+</small>
+</body>
+</html>

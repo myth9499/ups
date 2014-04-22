@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Another HTML parser issue...</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Another HTML parser issue...">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Another HTML parser issue...</h1>
+<!-- received="Fri Nov 17 10:56:21 2000" -->
+<!-- isoreceived="20001117155621" -->
+<!-- sent="Fri, 17 Nov 2000 16:56:16 +0100" -->
+<!-- isosent="20001117155616" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Another HTML parser issue..." -->
+<!-- id="20001117165616.M31202@w3.org" -->
+<!-- inreplyto="C5A7720BDEB7D3118A5200E018C200A0B19A42@EXCHANGE" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue..."><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Nov 17 2000 - 10:56:16 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1203.html">Marc Sanfacon: "[xml] Another HTML parser issue..."</a>
+<li><strong>In reply to:</strong> <a href="1203.html">Marc Sanfacon: "[xml] Another HTML parser issue..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Nov 17, 2000 at 09:57:13AM -0500, Marc Sanfacon wrote:
+<br>
+<em>&gt; Hi again,
+</em><br>
+<em>&gt; 	I found another problem with the HTML parser.  I know, that this is
+</em><br>
+<em>&gt; non-valid HTML, but...  Here is the case:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+</em><br>
+<em>&gt; &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Title&lt;/TITLE&gt;
+</em><br>
+<em>&gt; &lt;META http-equiv=Content-Type content=&quot;text/html; charset=windows-1252&quot;&gt;
+</em><br>
+<em>&gt; &lt;/HEAD&gt;
+</em><br>
+<em>&gt; &lt;BODY&gt;
+</em><br>
+<em>&gt;       So &lt;A href=&quot;<a href="http://www.ebay.com/">http://www.ebay.com/</a>&quot;&gt;eBay&amp;#174 Company&lt;/A&gt;
+</em><br>
+<em>&gt; &lt;/BODY&gt;&lt;/HTML&gt;
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As you can see, the line that contains the href contains the following
+</em><br>
+<em>&gt; '&amp;#174' and it doesn't end with a ';'.  So the result from libxml is:
+</em><br>
+<p>&nbsp;&nbsp;I have made a slightly different fix generating the following:
+<br>
+<p>SAX.startElement(a, href='<a href="http://www.ebay.com/">http://www.ebay.com/</a>')
+<br>
+SAX.characters(eBay, 4)
+<br>
+SAX.error: htmlParseCharRef: invalid decimal value
+<br>
+SAX.characters( Company, 8)
+<br>
+SAX.endElement(a)
+<br>
+<p>&nbsp;&nbsp;thanks for the report,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+<p></pre>
+<hr noshade>
+<ul>
+<li>text/plain attachment: <a href="att-1204/01-HTMLparser.diff">HTMLparser.diff</a>
+</ul>
+<!-- attachment="01-HTMLparser.diff" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Another%20HTML%20parser%20issue...">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1203.html">Marc Sanfacon: "[xml] Another HTML parser issue..."</a>
+<li><strong>In reply to:</strong> <a href="1203.html">Marc Sanfacon: "[xml] Another HTML parser issue..."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Fri Nov 17 2000 - 11:47:19 EST</em>
+</em>
+</small>
+</body>
+</html>

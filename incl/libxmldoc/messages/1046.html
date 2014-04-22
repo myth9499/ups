@@ -1,0 +1,341 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] XSLT again</title>
+<meta name="Author" content="Antonio Alvarado (aalvarado@sema.com.ve)">
+<meta name="Subject" content="RE: [xml] XSLT again">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] XSLT again</h1>
+<!-- received="Mon Oct 23 14:54:24 2000" -->
+<!-- isoreceived="20001023185424" -->
+<!-- sent="Mon, 23 Oct 2000 15:45:35 -0400" -->
+<!-- isosent="20001023194535" -->
+<!-- name="Antonio Alvarado" -->
+<!-- email="aalvarado@sema.com.ve" -->
+<!-- subject="RE: [xml] XSLT again" -->
+<!-- id="41157D026B64D311A78600D0090553565DA9E5@SVR_SEMA" -->
+<!-- inreplyto="[xml] XSLT again" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Antonio Alvarado (<a href="mailto:aalvarado@sema.com.ve?subject=RE:%20[xml]%20XSLT%20again"><em>aalvarado@sema.com.ve</em></a>)<br>
+<strong>Date:</strong> Mon Oct 23 2000 - 15:45:35 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1045.html">TOM: "Re: [xml] Auto-close in HTML parser."</a>
+<li><strong>Maybe in reply to:</strong> <a href="1027.html">Bjorn Reese: "[xml] XSLT again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Can I help you with XSLT?
+<br>
+I can coding, testing or documenting.
+<br>
+I really want to know/work around XSLT!
+<br>
+<p><em>&gt; -----Mensaje original-----
+</em><br>
+<em>&gt; De:	TOM [SMTP:<a href="mailto:ptittom@free.fr?subject=RE:%20[xml]%20XSLT%20again">ptittom@free.fr</a>]
+</em><br>
+<em>&gt; Enviado el:	Domingo 22 de Octubre de 2000 01:57 PM
+</em><br>
+<em>&gt; Para:	<a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20XSLT%20again">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Asunto:	Re: [xml] XSLT again
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; On 22/10/2000 13:52:41 Bjorn Reese wrote:
+</em><br>
+<em>&gt; &gt; There has previously been some talk about building an XSLT
+</em><br>
+<em>&gt; &gt; processor on top of libxml. Has anybody started working on this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; As Daniel said, I started working on this.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; If so, how far did you get, and is the sourcecode available
+</em><br>
+<em>&gt; &gt; anywhere?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Currently not very far.
+</em><br>
+<em>&gt; I started thinking on the contexts and began coding the extension
+</em><br>
+<em>&gt; functions for XPath (document() is nearly done, others in the TODO list).
+</em><br>
+<em>&gt; At the moment, the code is only on my hard disk. It isn't consistent
+</em><br>
+<em>&gt; enough to have been made public.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; A feasible approach seems to be to start with evaluating existing
+</em><br>
+<em>&gt; &gt; XSLT processors, and if possible &quot;borrow&quot; ideas and code from
+</em><br>
+<em>&gt; &gt; them.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; That's what I began to do with Sablotron from Ginger Alliance
+</em><br>
+<em>&gt; &lt;<a href="http://www.gingerall.com/">http://www.gingerall.com/</a>&gt;
+</em><br>
+<em>&gt; In my opinion, the first thing to do is to define the structures for
+</em><br>
+<em>&gt; accessing templates and the processor context (and probably also a parser
+</em><br>
+<em>&gt; context).
+</em><br>
+<em>&gt; Then implement tree parsing (the part on preserving blanks seems to be
+</em><br>
+<em>&gt; quite difficult to resolve, with my today's programming knowledge) and
+</em><br>
+<em>&gt; first processing (templates and apply-templates and all node creation XSLT
+</em><br>
+<em>&gt; elements in a first time, then add the other stuff : output, variables and
+</em><br>
+<em>&gt; params, loops and tests, etc.)
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; The reason why I began working on the XSLT functions is to familiarize
+</em><br>
+<em>&gt; (is this english ?) me with XPath and its internal behaviour.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Oh, Daniel, I think all implicit and explicit XPath functions should be
+</em><br>
+<em>&gt; made public, or at least in a xpathInternals.h, for XPath extension
+</em><br>
+<em>&gt; facilities (for example, in the document() XSLT function, we need to
+</em><br>
+<em>&gt; convert
+</em><br>
+<em>&gt; the first argument to a string (xmlXPathStringFunction) unless it's a
+</em><br>
+<em>&gt; node-set in which case we need to merge different node-sets
+</em><br>
+<em>&gt; (xmlXPathNodeSetMerge)).
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Bjorn, contact me in private to discuss about all of this.
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20XSLT%20again">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20XSLT%20again">majordomo@rpmfind.net</a>
+</em><br>
+<p>begin 600 winmail.dat
+<br>
+M&gt;)\^(B83`0:0&quot;``$```````!``$``0&gt;0!@`(````Y`0```````#H``$(@`&lt;`
+<br>
+M&amp;````$E032Y-:6-R;W-O9G0@36%I;&quot;Y.;W1E`#$(`06``P`.````T`&lt;*`!&lt;`
+<br>
+M#P`M`&quot;,``0!8`0$@@`,`#@```-`'&quot;@`7``\`+0`C``$`6`$!&quot;8`!`&quot;$```!&quot;
+<br>
+M-#E&amp;-D,R-T5%03A$-#$Q0D,V.#`P,3`U044P,T%%-P!#!P$$@`$`%0```%)%
+<br>
+M.B!;&gt;&amp;UL72!84TQ4(&amp;%G86EN`(4&amp;`0V`!``&quot;`````@`&quot;``$#D`8`E`L``&quot;H`
+<br>
+M```+``(``0````,`+@``````0``Y`/`]?\\I/&lt;`!'@!P``$````1````6WAM
+<br>
+M;%T@6%-,5&quot;!A9V%I;@`````&quot;`7$``0```!L````!P#Q8].!`SD:VIAL1U*?H
+<br>
+M`-`)!5-6`#)?M^``'@`Q0`$````*````04%,5D%2041/`````P`:0``````&gt;
+<br>
+M`#!``0````H```!!04Q605)!1$\````#`!E```````(!&quot;1`!````50&lt;``%$'
+<br>
+M``!P&quot;P``3%I&amp;=0HW.W$#``H`&lt;F-P9S$R-?(R`/LS-@'H`J0#XP(`!&amp;-H&quot;L!S
+<br>
+M970P(`\'$P*#`%`01G!R&lt;3)O$4D.4`/5$55]&quot;H`(R&quot;#V.PEO#C`U%6\*8`*`
+<br>
+M&quot;H&amp;2=@B0=VL+@&amp;0T#&amp;`V8P!0&quot;P-C`$$+8&amp;YGF#,P.!.!&quot;\0@0P.1`$D@:&amp;5L
+<br>
+M&lt;&quot;!Y!0A@(`/P=&amp;@@6%.X3%0_&quot;J(*@!KP8P.1A06@9`N`9RP@=`&gt;0&quot;G0=,2`%
+<br>
+ML61O8W5W!X`&quot;,!TQ+AQ&amp;%M`'0&amp;P.&gt;1N0`'`%0'1O(&amp;L@;F]W+W&lt;%L&amp;L@[PK`
+<br>
+M&quot;&amp;`8D!OC(1Q$(&lt;@+,+QL:0\Q&amp;5$!0!*0;QV`A&amp;-T$=0Q-B`M)()&quot;30GP&lt;V%J
+<br>
+M91WQ:?YG&quot;X`'0&quot;2#(&lt;8CE&quot;-A&quot;Q/!(Y9I+3$T-`%`(N`X,3@P`4`,T&quot;@C8B`H
+<br>
+M1&amp;4Z#(-B$3!43P!-(%M33510.F&lt;%,!NP(#!M0`-0&quot;&gt;`N30-072'%*5!%;A@P
+<br>
+M8&gt;T&gt;,&quot;`;(&quot;F71`-P'3$@0&quot;8R$L`!`&quot;!/(]!U8@\6T&quot;XB`=`HL&quot;`P,3J@-3&lt;@
+<br>
+M4$TKQU`*P`)A*9=X;6Q`&lt;G!F;2?P&amp;)`N;A$0*\=![G,A,&quot;`P*9=2*8`J4#%!
+<br>
+M]ET;XR#P9PMR)C\G22+F]PY0&amp;:(:`#`3@1.&quot;#`$AW0T*@$\#H&quot;X`+S$P+PDO
+<br>
+M$S$S+X`R.C0Q^&quot;!&quot;:@6P`Z`SL`&gt;0)3#N=R.2*9`&lt;4SXJ$!L0+K&amp;W$-`$(!*0
+<br>
+M91@P&quot;&amp;!S'[%R8@GA(',#&lt;&quot;4P`9!LRR#A!N!U!4!B=0,0'2+?(/`#H!OR/!8C
+<br>
+M@6,'D#XPCP7``B`@(1M`;V8@(N!B8C%!+B!(/0$`&lt;'G]!N!D'\`=H`K`'8`A
+<br>
+M4&quot;&quot;R^QW#06%H!``&lt;-1Q$,L`I8,\`&lt;`B0`R`E`&amp;ED'6`:\.]#/T1$'N4\%DE!
+<br>
+MT#XP'6#R:&quot;&quot;`(&amp;8*P1T@(5`;8OYG$1`=8`!P(5`$`$11)3&quot;?/C`(&lt;$#@'0$E
+<br>
+M,&amp;%V&quot;W#;&quot;V`&quot;8&amp;4\%D*Q=SRB1*M^0PAP%M`&quot;,!^Q('`%0':_!)`?P$FA'N=&amp;
+<br>
+MED1A;D/HQR4P!:`&quot;,&amp;5X=$*2(5#_/&gt;`TL!SF2Q-2(23A/7`TY7YF(3`CT%0A
+<br>
+M!&quot;`&quot;$`7`6,LP&lt;!O!*!XV*&quot;E*XC(`_PK`'[$&gt;,#(`'6`CH#RA!&quot;!G&quot;X!+$RH@
+<br>
+M1$]!X1V@*?T&gt;Y4$@$4LQ!&amp;`&gt;&lt;AUA4;/?+C%*\0(@'[%!46T?P!#1TR%0'2!S
+<br>
+M:T)0205`!`#\;B&lt;%0%'A`)`=H!Z!'$3[&quot;?`(8&amp;&lt;;T&quot;`Q$-!/4#W46P#`+C%P
+<br>
+M+I`BX&amp;-(#4'?29`?@`&quot;03'$@\'`C@0#0\QO0$0!E;4L!($`]X&quot;`B[T:3&amp;Y0]
+<br>
+M4`=`=56P'&lt;)2(-]8\1TQ/!8T4T&quot;W&lt;TJ50=#L&lt;&amp;\$$&amp;&amp;#(@;@3I`@@/XB2N`!
+<br>
+M`$*#(5!+PP-2/!;=2R%M2`L\D%6P)P0@35#_5;`:X5*T(#$LH1NC!A`&quot;8,\C
+<br>
+MH`-@`Z`#4B!''3$$D)\10!^@!S!4T$R5/&amp;@&quot;0-AP.B\@H&amp;_`+B6!;B'%'Y$N
+<br>
+M!:!M+SX&lt;15NS_T&amp;0&quot;X!4(5IT)_`0\%FR4T/_;&amp;-*\FQA`1`+@#YA2S)M4/\8
+<br>
+MT&quot;Z`%M!5,QQ$`-!`XE-#_V*`&quot;U$=@4JC2R)`N%'E5&gt;#[2K(C@6),81_`!T`^
+<br>
+M,&quot;#P_ST@$.)UA5'E628\D0.@!W!_&quot;U!B@!Z!'7`)T7H3'&lt;(H_W=S8W)!43TQ
+<br>
+M&gt;E$8,!W1`F#=`'!K!&quot;!B:1Q$&lt;3]`'8#G2=$!(`W@=6P@$W4A!O`?3U`=8!NC
+<br>
+M6]$@,&amp;1A&gt;&gt;=K42.!&quot;&lt;!A;2VB(%-,@/YD2F!6D$JQ5%5RDT&quot;U?53W=JMAT1^P
+<br>
+M+89]'Z!/`2XQ_P4`'X!4\C_I&amp;R!\8U@#&gt;@#O&lt;H4'&lt;5ISBO%D=U17LT:!^G4!
+<br>
+M(&quot;`ST#[Q7]!*@4P@_P&lt;A3'%24QQ$&quot;K&amp;#H&amp;:1&quot;0&quot;_09!W%1V19I$1$&amp;`@*6I&lt;
+<br>
+M_R4P'W$^,`.@35`?P&amp;O60[O_)3`T4U2X&lt;Z1)H&quot;V@;H$%$+IZ3)4H2O-*\0GP
+<br>
+M9UCA_1O0/U:0/E$;I%6C2K.*L_\=@`2@!T`]T5[A/7%/QCDE_F@=8$6D1E)0
+<br>
+MXXB#?&quot;(-X/\;L$JC4B&quot;&lt;Y5645+B7D`A@_S]@@`=?B5&gt;1!&lt;!KH4R`/0#_7,&amp;*
+<br>
+M\IV@5;%Q4)ET1_&quot;;4;]56%/.`-&quot;5T1VP!Y$H55+_4B&quot;#H'Q!'6!8)58)E%N&quot;
+<br>
+M,?\E,#(`4+(@0%'A3U$R)7)(_0K`9QYC(&quot;)Z`'2Q?5,Q0?55DU.K4T94Q5:0
+<br>
+M(3&quot;.@=M8`6M&quot;81Q$B-(M$0%8$O]-4`W@&amp;]`&lt;P#N&quot;J%@'@*IP?X#4/+$@`:YV
+<br>
+M$)&quot;69*O&amp;3ML$&lt;09@=&quot;30L+$I628&lt;1/\Z\QU@4&gt;(`T`5`/E%8(1*0_FE,((#!
+<br>
+M;%($`!Y0!!$^U/^(DD'!1\DEZ&quot;30!!`TH&amp;DD_TL36.(Q/T4D2Y!$&lt;$]0AS&amp;_
+<br>
+M!4`ST&amp;]5NL$^,`&amp;`+@6PS&amp;&lt;O!X&amp;YDG,OJ64@0/LA,#+08@3R/&gt;`ST`6026#O
+<br>
+M9[&quot;_2;JR:#!\7W$#$5]QKSL!'C`$8+K_&quot;A2!`,/P````&quot;P``@`@@!@``````
+<br>
+MP````````$8``````X4````````#``6`&quot;&quot;`&amp;``````#`````````1@`````0
+<br>
+MA0````````,``8`((`8``````,````````!&amp;`````%*%``&quot;W#0```P`#@`@@
+<br>
+M!@``````P````````$8``````84````````&gt;``*`&quot;&quot;`&amp;``````#`````````
+<br>
+M1@````!4A0```0````0````X+C``&quot;P`$@`@@!@``````P````````$8`````
+<br>
+M#H4````````#``:`&quot;&quot;`&amp;``````#`````````1@`````1A0````````,`!X`(
+<br>
+M(`8``````,````````!&amp;`````!B%````````'@`(@`@@!@``````P```````
+<br>
+M`$8`````-H4```$````!`````````!X`&quot;8`((`8``````,````````!&amp;````
+<br>
+M`#&gt;%```!`````0`````````&gt;``J`&quot;&quot;`&amp;``````#`````````1@`````XA0``
+<br>
+M`0````$``````````P#Q/PH$```#`/T_Y`0```,`)@```````P`V```````#
+<br>
+M`(`0_____P(!1P`!````-````&amp;,]55,[83T@.W`]4V5M82!'&lt;F]U&lt;#ML/5-6
+<br>
+M4E]314U!+3`P,3`R,S$Y-#4S-5HM,S8S,@`&gt;`#A``0````H```!!04Q605)!
+<br>
+M1$\````&gt;`#E``0````H```!!04Q605)!1$\```!```&lt;P&lt;*%QSRD]P`%```@P
+<br>
+MP#FMSRD]P`$&gt;`#T``0````4```!213H@`````!X`'0X!````$0```%MX;6Q=
+<br>
+M(%A33%0@86=A:6X`````'@`U$`$````R````/#0Q,34W1#`R-D(V-$0S,3%!
+<br>
+M-S@V,#!$,#`Y,#4U,S4V-41!.44U0%-64E]314U!/@````L`*0``````&quot;P`C
+<br>
+M```````#``807_.%%@,`!Q`O!P```P`0$``````#`!$0`````!X`&quot;!`!````
+<br>
+M90```$-!3DE(14Q064]55TE42%A33%0_24-!3D-/1$E.1RQ415-424Y'3U)$
+<br>
+M3T-5345.5$E.1TE214%,3%E704Y45$]+3D]7+U=/4DM!4D]53D184TQ4+2TM
+<br>
+M+2U-14Y304I%3U))1TD``````@%_``$````R````/#0Q,34W1#`R-D(V-$0S
+<br>
+G,3%!-S@V,#!$,#`Y,#4U,S4V-41!.44U0%-64E]314U!/@```,0V
+<br>
+`
+<br>
+end
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=RE:%20[xml]%20XSLT%20again">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=RE:%20[xml]%20XSLT%20again">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1045.html">TOM: "Re: [xml] Auto-close in HTML parser."</a>
+<li><strong>Maybe in reply to:</strong> <a href="1027.html">Bjorn Reese: "[xml] XSLT again"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 23 2000 - 15:44:48 EDT</em>
+</em>
+</small>
+</body>
+</html>

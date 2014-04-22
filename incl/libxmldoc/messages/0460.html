@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Memory parser bug</title>
+<meta name="Author" content="kavoos (kavoos@issn.org)">
+<meta name="Subject" content="[xml] Memory parser bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Memory parser bug</h1>
+<!-- received="Mon Apr 17 10:33:21 2000" -->
+<!-- isoreceived="20000417143321" -->
+<!-- sent="Mon, 17 Apr 2000 16:33:09 +0200" -->
+<!-- isosent="20000417143309" -->
+<!-- name="kavoos" -->
+<!-- email="kavoos@issn.org" -->
+<!-- subject="[xml] Memory parser bug" -->
+<!-- id="38FB20A5.1D4EAB6B@issn.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> kavoos (<a href="mailto:kavoos@issn.org?subject=Re:%20[xml]%20Memory%20parser%20bug"><em>kavoos@issn.org</em></a>)<br>
+<strong>Date:</strong> Mon Apr 17 2000 - 10:33:09 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<li><strong>Previous message:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<li><strong>Reply:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi !
+<br>
+<p>I have found a little bug when using xmlParseMemory() whith a
+<br>
+UTF-16 document, this patch correct the probleme ...
+<br>
+<p>--- ../old/libxml2-2.0.0/parser.c       Wed Apr 12 15:50:22 2000
+<br>
++++ parser.c    Mon Apr 17 16:17:25 2000
+<br>
+@@ -2317,7 +2317,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((enc == XML_CHAR_ENCODING_UTF16BE) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;cur[0] == 0xFE) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;cur[1] == 0xFF)) {
+<br>
+-                       SKIP(2);
+<br>
++                        SKIP(2);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+@@ -2400,8 +2400,13 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;xmlSwitchEncoding : out of memory\n&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
++                   if ( (ctxt-&gt;input-&gt;cur[0]==0xFE &amp;&amp;
+<br>
+ctxt-&gt;input-&gt;cur[1]==0xFF) || (ctxt-&gt;input-&gt;cur[0]==0xFF &amp;&amp;
+<br>
+ctxt-&gt;input-&gt;cur[1]==0xFE)) 
+<br>
++                   res = handler-&gt;input(buf, ctxt-&gt;input-&gt;length * 4,
+<br>
++                                        &amp;ctxt-&gt;input-&gt;cur[2], &amp;len);
+<br>
++                   else
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = handler-&gt;input(buf, ctxt-&gt;input-&gt;length * 4,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;input-&gt;cur, &amp;len);
+<br>
++
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((res &lt; 0) ||
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(len != ctxt-&gt;input-&gt;length - processed)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error !=
+<br>
+NULL))
+<br>
+@@ -2416,8 +2421,10 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;input-&gt;free != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;input-&gt;base != NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;input-&gt;free((xmlChar *)
+<br>
+ctxt-&gt;input-&gt;base);
+<br>
+-                   ctxt-&gt;input-&gt;base = ctxt-&gt;input-&gt;cur = buf;
+<br>
+-                   ctxt-&gt;input-&gt;length = res;
+<br>
++
+<br>
++                       ctxt-&gt;input-&gt;base = ctxt-&gt;input-&gt;cur = buf;
+<br>
++                       ctxt-&gt;input-&gt;length = res;
+<br>
++
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br>
+@@ -2442,17 +2449,9 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* default encoding, no conversion should be needed */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case XML_CHAR_ENCODING_UTF16LE:
+<br>
+-           ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+<br>
+-           if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+-                ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+-                 &quot;char encoding UTF16 little endian not supported\n&quot;);
+<br>
+-            break;
+<br>
++               return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case XML_CHAR_ENCODING_UTF16BE:
+<br>
+-           ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+<br>
+-           if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+-                ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+-                 &quot;char encoding UTF16 big endian not supported\n&quot;);
+<br>
+-            break;
+<br>
++               return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case XML_CHAR_ENCODING_UCS4LE:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+@@ -10406,7 +10405,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;base = BAD_CAST buffer;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;cur = BAD_CAST buffer;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input-&gt;free = NULL;
+<br>
+-
+<br>
++    input-&gt;length=size;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputPush(ctxt, input);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ctxt);
+<br>
+&nbsp;}
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Memory%20parser%20bug">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Memory%20parser%20bug">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<li><strong>Previous message:</strong> <a href="0459.html">Daniel Veillard: "Re: [xml] Entities in dtd"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<li><strong>Reply:</strong> <a href="0461.html">Hugh Greene: "RE: [xml] Memory parser bug"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

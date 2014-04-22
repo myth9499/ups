@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Memory leak in tree.c</title>
+<meta name="Author" content="Steve Ratcliffe (steve@parabola.demon.co.uk)">
+<meta name="Subject" content="[xml] Memory leak in tree.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Memory leak in tree.c</h1>
+<!-- received="Tue Jun  8 15:01:26 1999" -->
+<!-- isoreceived="19990608190126" -->
+<!-- sent="Tue, 8 Jun 1999 19:46:12 +0100" -->
+<!-- isosent="19990608184612" -->
+<!-- name="Steve Ratcliffe" -->
+<!-- email="steve@parabola.demon.co.uk" -->
+<!-- subject="[xml] Memory leak in tree.c" -->
+<!-- id="19990608194612.A13188@parabola.demon.co.uk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Steve Ratcliffe (<a href="mailto:steve@parabola.demon.co.uk?subject=Re:%20[xml]%20Memory%20leak%20in%20tree.c"><em>steve@parabola.demon.co.uk</em></a>)<br>
+<strong>Date:</strong> Tue Jun 08 1999 - 14:46:12 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0064.html">Perik, Mike: "FW: [xml] Bug in parser.c"</a>
+<li><strong>Previous message:</strong> <a href="0062.html">Daniel Veillard: "Re: [xml] streaming output"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<li><strong>Reply:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I also have an app that builds up a tree only to print it out.  With 1.0.0
+<br>
+this took ~3 seconds and used 18M of memory for a 25000 node tree giving
+<br>
+an output file size of a little over 1M.
+<br>
+<p>With 1.1.0 it took an unacceptable amount of time and memory usage
+<br>
+swelled to 103M!
+<br>
+<p>Tracked this down to a memory leak, patch below (this may not be the
+<br>
+best fix of course).  Performance is now on a par with 1.0.0.
+<br>
+<p>Cheers,
+<br>
+..Steve
+<br>
+<p>--- tree.c.ORIG	Tue Jun  8 19:10:46 1999
+<br>
++++ tree.c	Tue Jun  8 19:17:31 1999
+<br>
+@@ -675,8 +675,12 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (node-&gt;type == XML_TEXT_NODE) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (inLine)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = xmlStrcat(ret, node-&gt;content);
+<br>
+-	    else
+<br>
+-		ret = xmlStrcat(ret, xmlEncodeEntities(doc, node-&gt;content));
+<br>
++	    else {
+<br>
++		CHAR *tmp;
+<br>
++		tmp = xmlEncodeEntities(doc, node-&gt;content);
+<br>
++		ret = xmlStrcat(ret, tmp);
+<br>
++		free(tmp);
+<br>
++	    }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (node-&gt;type == XML_ENTITY_REF_NODE) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (inLine) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ent = xmlGetDocEntity(doc, node-&gt;name);
+<br>
+@@ -2568,8 +2572,12 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;type == XML_TEXT_NODE) {
+<br>
+-	if (cur-&gt;content != NULL)
+<br>
+-	    xmlBufferWriteCHAR(buf, xmlEncodeEntities(doc, cur-&gt;content));
+<br>
++	if (cur-&gt;content != NULL) {
+<br>
++	    CHAR *tmp;
+<br>
++	    tmp = xmlEncodeEntities(doc, cur-&gt;content);
+<br>
++	    xmlBufferWriteCHAR(buf, tmp);
+<br>
++	    free(tmp);
+<br>
++	}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;type == XML_COMMENT_NODE) {
+<br>
+@@ -2607,8 +2615,12 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlBufferWriteChar(buf, &quot;&gt;&quot;);
+<br>
+-    if (cur-&gt;content != NULL)
+<br>
+-	xmlBufferWriteCHAR(buf, xmlEncodeEntities(doc, cur-&gt;content));
+<br>
++    if (cur-&gt;content != NULL) {
+<br>
++	CHAR *tmp;
+<br>
++	tmp = xmlEncodeEntities(doc, cur-&gt;content);
+<br>
++	xmlBufferWriteCHAR(buf, tmp);
+<br>
++	free(tmp);
+<br>
++    }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur-&gt;childs != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodeListDump(buf, doc, cur-&gt;childs, level + 1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Memory%20leak%20in%20tree.c">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Memory%20leak%20in%20tree.c">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0064.html">Perik, Mike: "FW: [xml] Bug in parser.c"</a>
+<li><strong>Previous message:</strong> <a href="0062.html">Daniel Veillard: "Re: [xml] streaming output"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<li><strong>Reply:</strong> <a href="0065.html">Daniel Veillard: "Re: [xml] Memory leak in tree.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

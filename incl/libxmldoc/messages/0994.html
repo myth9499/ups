@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] prefix values inconsistent in sources</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] prefix values inconsistent in sources">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] prefix values inconsistent in sources</h1>
+<!-- received="Tue Oct 17 18:58:27 2000" -->
+<!-- isoreceived="20001017225827" -->
+<!-- sent="Wed, 18 Oct 2000 00:58:23 +0200" -->
+<!-- isosent="20001017225823" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] prefix values inconsistent in sources" -->
+<!-- id="20001018005823.H6503@w3.org" -->
+<!-- inreplyto="39ECD45D.949AE7FB@cddb.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 17 2000 - 18:58:23 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0993.html">Dave Madole: "[xml] prefix values inconsistent in sources"</a>
+<li><strong>In reply to:</strong> <a href="0993.html">Dave Madole: "[xml] prefix values inconsistent in sources"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Tue, Oct 17, 2000 at 03:36:14PM -0700, Dave Madole wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; It seems that the default prefix (install base directory) in for
+</em><br>
+<em>&gt; libxml2-2.2.5 is /usr/local
+</em><br>
+<p>&nbsp;&nbsp;Huh ???
+<br>
+&nbsp;&nbsp;no it's /usr
+<br>
+<p>~ -&gt; rpm -qlp ~ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm
+<br>
+/usr/bin/xmllint
+<br>
+/usr/doc/libxml2-2.2.5
+<br>
+/usr/doc/libxml2-2.2.5/AUTHORS
+<br>
+[...]
+<br>
+/usr/doc/libxml2-2.2.5/TODO
+<br>
+/usr/lib/libxml.so.2
+<br>
+/usr/lib/libxml.so.2.2.5
+<br>
+/usr/man/man1/xml-config.1
+<br>
+/usr/man/man1/xmllint.1
+<br>
+/usr/man/man4/libxml.4
+<br>
+<p><em>&gt; but for libxml2-devel-2.2.5-1 is /usr.   I can't figure out how to use
+</em><br>
+<p>&nbsp;&nbsp;yep
+<br>
+<p>~ -&gt; rpm -qlp ~ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm
+<br>
+/usr/bin/xml-config
+<br>
+/usr/include/libxml
+<br>
+/usr/include/libxml/HTMLparser.h
+<br>
+[...]
+<br>
+/usr/include/libxml/xpointer.h
+<br>
+/usr/lib/libxml.a
+<br>
+/usr/lib/libxml.la
+<br>
+/usr/lib/libxml.so
+<br>
+/usr/lib/xmlConf.sh
+<br>
+<p><em>&gt; rpm (or cpio) to extract the devel package in /usr/local.  (I've tried
+</em><br>
+<em>&gt; passing a --prefix argument, editing the rpm2cpio output, etc.).
+</em><br>
+<p>&nbsp;&nbsp;The packages are built for /usr this is a common policy when
+<br>
+shipping RPMs I'm not gonna break, rebuild locally from the tar otherwise
+<br>
+<p>~ -&gt; ls -l ~ftp/pub/libxml/libxml2-2.2.5.tar.gz 
+<br>
+-rw-r--r--    1 veillard www       1116690 Oct 15 16:45 /serveur/ftp/pub/libxml/libxml2-2.2.5.tar.gz
+<br>
+~ -&gt; 
+<br>
+<p><em>&gt; Could the devel package be put on the ftp site in a tarball?
+</em><br>
+<p>&nbsp;&nbsp;no, the -devel is generated as the same time as the normal package in
+<br>
+a single pass
+<br>
+<p><em>&gt; I realize this is more of a linux admin question (I'm more familiar with
+</em><br>
+<em>&gt; Solaris) than an xml question, and may be slightly out of band, but any
+</em><br>
+<em>&gt; help would be appreciated.  Also it may be easier if they both defaulted
+</em><br>
+<em>&gt; to the same prefix value.
+</em><br>
+<p>&nbsp;&nbsp;they are, make sure you get them from 
+<br>
+<a href="ftp://xmlsoft.org/">ftp://xmlsoft.org/</a> or <a href="ftp://rpmfind.net/pub/libxml">ftp://rpmfind.net/pub/libxml</a> (same machine)
+<br>
+<p>they should be signed with my GPG key available on my home page at rpmfind
+<br>
+~ -&gt; rpm --checksig ~ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm 
+<br>
+/serveur/ftp/pub/libxml/libxml2-2.2.5-1.i386.rpm: md5 gpg OK
+<br>
+~ -&gt; rpm --checksig ~ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm 
+<br>
+/serveur/ftp/pub/libxml/libxml2-devel-2.2.5-1.i386.rpm: md5 gpg OK
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20prefix%20values%20inconsistent%20in%20sources">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0993.html">Dave Madole: "[xml] prefix values inconsistent in sources"</a>
+<li><strong>In reply to:</strong> <a href="0993.html">Dave Madole: "[xml] prefix values inconsistent in sources"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 17 2000 - 19:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

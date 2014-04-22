@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Adding implied P tags?</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="Re: [xml] Adding implied P tags?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Adding implied P tags?</h1>
+<!-- received="Thu Aug 17 11:22:41 2000" -->
+<!-- isoreceived="20000817152241" -->
+<!-- sent="Thu, 17 Aug 2000 11:19:22 -0700 (PDT)" -->
+<!-- isosent="20000817181922" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="Re: [xml] Adding implied P tags?" -->
+<!-- id="Pine.LNX.4.21.0008171008550.21417-100000@phong.blorf.net" -->
+<!-- inreplyto="20000817114736.A8147@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20Adding%20implied%20P%20tags?"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Thu Aug 17 2000 - 14:19:22 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0654.html">Daniel Veillard: "Re: [xml] Adding implied P tags?"</a>
+<li><strong>In reply to:</strong> <a href="0654.html">Daniel Veillard: "Re: [xml] Adding implied P tags?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, 17 Aug 2000, Daniel Veillard wrote:
+<br>
+<em>&gt; However, this is unclear how deep one should go in this direction,
+</em><br>
+<em>&gt; there is two conflicting goals:
+</em><br>
+<em>&gt;    - try to get &quot;valid&quot; (in the XML sense) input, and this imply adding
+</em><br>
+<em>&gt;      elements and modifying the structure of what is the input document
+</em><br>
+<em>&gt;      (when it has any structure at all :-\)
+</em><br>
+<em>&gt;    - try to provide a set of SAX callbacks (or a DOM tree representation)
+</em><br>
+<em>&gt;      as close as possible from the input
+</em><br>
+<p>This might be a good area to add one or more options so that the user can
+<br>
+decide how raw the HTML data should be.  For the program I've written
+<br>
+(which takes in HTML files and outputs a Rocket eBook file), I want to see
+<br>
+the implied tags.  If the sax callbacks don't give me implied P tags, for
+<br>
+instance, I'll have to add code to add them myself (because I offer an
+<br>
+option to re-render paragraphs in &quot;book form&quot;, I need to know where all
+<br>
+the paragraphs are so I can change them).
+<br>
+<p>This enhanced-HTML output is why I switched over from libwww's HTML
+<br>
+callbacks to libxml (since libwww doesn't even give me implied close tags,
+<br>
+making it harder to re-render things like tables into the simple elements
+<br>
+that the Rocket eBook understands).
+<br>
+<p>Here's another problem case for P-tag inferral:
+<br>
+<p>&lt;h1&gt;CHAPTER 1&lt;/h1&gt;
+<br>
+&lt;a id=&quot;p1&quot;&gt;&lt;/a&gt;&lt;p&gt;Paragraph #1&lt;/p&gt;
+<br>
+&lt;a id=&quot;p2&quot;&gt;&lt;/a&gt;&lt;p&gt;Paragraph #2&lt;/p&gt;
+<br>
+<p>The A tags outside the paragraphs doesn't have any rendered content, so it
+<br>
+would be nice if there were not any implied P tags added (Baen books loves
+<br>
+to do things like this).  [Aside: I ran this test case through your latest
+<br>
+XML code, and it stopped parsing after the first paragraph].  I'm not sure
+<br>
+what the official HTML spec says about such code, though.  It may well be
+<br>
+that the A tags should get an implied P wrapper, and that the renderer
+<br>
+should treat the effectively-empty paragraph as invisible.
+<br>
+<p>Also (and you've probably already noticed this) the new code is adding
+<br>
+implied P tags for whitespace between tags:
+<br>
+<p>&lt;p&gt;one&lt;/p&gt;
+<br>
+&lt;p&gt;two&lt;/p&gt;
+<br>
+<p>becomes:
+<br>
+<p>&lt;p&gt;one&lt;/p&gt;&lt;p&gt;
+<br>
+&lt;/p&gt;&lt;p&gt;two&lt;/p&gt;
+<br>
+<p><em>&gt;   I dunno how far should one go in the direction of cleaning
+</em><br>
+<em>&gt; up at parsing time the HTML input. 
+</em><br>
+<p>A difficult question.  While it would be great to have extra cleanup
+<br>
+available (e.g. properly nesting mis-ordered tags), the best place to
+<br>
+push this functionality may well be into a separate library.
+<br>
+<p>..wayne..
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Adding%20implied%20P%20tags?">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Adding%20implied%20P%20tags?">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0654.html">Daniel Veillard: "Re: [xml] Adding implied P tags?"</a>
+<li><strong>In reply to:</strong> <a href="0654.html">Daniel Veillard: "Re: [xml] Adding implied P tags?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Aug 17 2000 - 11:43:13 EDT</em>
+</em>
+</small>
+</body>
+</html>

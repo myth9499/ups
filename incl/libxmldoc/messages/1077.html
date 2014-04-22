@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] XPath Lack ?</title>
+<meta name="Author" content="Stefan Bambach (bambach@triplex.de)">
+<meta name="Subject" content="[xml] XPath Lack ?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] XPath Lack ?</h1>
+<!-- received="Thu Oct 26 10:30:24 2000" -->
+<!-- isoreceived="20001026143024" -->
+<!-- sent="Thu, 26 Oct 2000 16:31:52 +0200" -->
+<!-- isosent="20001026143152" -->
+<!-- name="Stefan Bambach" -->
+<!-- email="bambach@triplex.de" -->
+<!-- subject="[xml] XPath Lack ?" -->
+<!-- id="18522523336.20001026163152@triplex.de" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stefan Bambach (<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20XPath%20Lack%20?"><em>bambach@triplex.de</em></a>)<br>
+<strong>Date:</strong> Thu Oct 26 2000 - 10:31:52 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>Previous message:</strong> <a href="1076.html">Daniel Veillard: "Re: [xml] Creating a DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>Reply:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel and all others,
+<br>
+<p><p>I have some troubles with XPath functions:
+<br>
+<p>xmlXPathContextPtr xmlXPathNewContext(xmlDocPtr doc);
+<br>
+xmlXPathObjectPtr xmlXPathEval(const xmlChar *str, xmlXPathContextPtr ctxt);
+<br>
+<p>I use these two function (and some other of course) to get some XPath
+<br>
+objects. Is there a way that I can give a node ptr to newcontext ? So
+<br>
+that all results are from within this node ?
+<br>
+<p>e.g.
+<br>
+&lt;TAG1&gt;
+<br>
+&nbsp;&nbsp;&lt;TAG2&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_hehe1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_hehe2&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A HREF=&quot;hehe&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/TAG2&gt;
+<br>
+&nbsp;&nbsp;&lt;TAG3&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_huhu1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_huhu1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A HREF=&quot;huhu&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/TAG3&gt;
+<br>
+&nbsp;&nbsp;&lt;TAG4&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_haha1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_haha2&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;A HREF=&quot;haha&quot;/&gt;
+<br>
+&nbsp;&nbsp;&lt;/TAG4&gt;
+<br>
+&lt;/TAG1&gt;
+<br>
+<p>Let's say that this is my XPath expression:
+<br>
+&nbsp;&nbsp;XPath = &quot;A/@NAME&quot;
+<br>
+Now I want all results from within TAG3, that should be data from
+<br>
+TAGs:   &lt;A NAME=&quot;name_huhu1&quot;/&gt;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;A NAME=&quot;name_huhu1&quot;/&gt;
+<br>
+<p>MY PROBLEM:
+<br>
+You can only have XPath expressions that are from root element ('/').
+<br>
+So my expression &quot;A/@NAME&quot; would not find anything because there is no
+<br>
+such element from root. I switched to &quot;//A/@NAME&quot;. Now I got 6 results
+<br>
+of course and not only my two within TAG3.
+<br>
+<p><p>Is there any functionallity in this way:
+<br>
+&nbsp;&nbsp;xmlXPathNewContext(xmlNodePtr node); ??????????
+<br>
+<p><p><p>Mit freundlichen Grüssen.
+<br>
+Stefan Bambach
+<br>
+<p><pre>
+-- 
+Stefan Bambach
+<p>triplex-agentur fuer neue medien GmbH
+herzog-heinrich-strasse 11-13
+80336 muenchen
+<p>tel: 089-209 138 29
+fax: 089-209 138 10
+<p>mailto:<a href="mailto:bambach@triplex.de?subject=Re:%20[xml]%20XPath%20Lack%20?">bambach@triplex.de</a>
+<a href="http://www.triplex.de">http://www.triplex.de</a>
+<p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20XPath%20Lack%20?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20XPath%20Lack%20?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>Previous message:</strong> <a href="1076.html">Daniel Veillard: "Re: [xml] Creating a DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<li><strong>Reply:</strong> <a href="1078.html">Daniel Veillard: "Re: [xml] XPath Lack ?"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 26 2000 - 10:43:49 EDT</em>
+</em>
+</small>
+</body>
+</html>

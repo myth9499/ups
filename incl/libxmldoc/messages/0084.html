@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Progressive parsing</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Progressive parsing">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Progressive parsing</h1>
+<!-- received="Fri Jul 23 20:01:05 1999" -->
+<!-- isoreceived="19990724000105" -->
+<!-- sent="Fri, 23 Jul 1999 20:00:56 -0400" -->
+<!-- isosent="19990724000056" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Progressive parsing" -->
+<!-- id="19990723200056.J22818@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.9907172222420.28194-100000@tyderian.corplink.com.au" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Progressive%20parsing"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Fri Jul 23 1999 - 20:00:56 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0085.html">Daniel Veillard: "[xml] Re: gnome-xml, solaris 2.7"</a>
+<li><strong>Previous message:</strong> <a href="0083.html">Michael Day: "[xml] Progressive parsing"</a>
+<li><strong>In reply to:</strong> <a href="0083.html">Michael Day: "[xml] Progressive parsing"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0086.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<li><strong>Reply:</strong> <a href="0086.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+&nbsp;&nbsp;Hi Michael,
+<br>
+<p><em>&gt; Does libxml provide any support for progressive parsing, or will it in the
+</em><br>
+<em>&gt; near future? I believe this issue has arisen before, but I am unsure of
+</em><br>
+<em>&gt; its current status. What I am looking for is the capability to stream in
+</em><br>
+<em>&gt; XML from a socket or other &quot;slow&quot; medium, hand each chunk to libxml as
+</em><br>
+<em>&gt; they come in, and receive SAX callbacks as the data is parsed. Currently
+</em><br>
+<em>&gt; the entrypoints appear to require an entire document to parse at once, and
+</em><br>
+<em>&gt; the only C or C++ library I can find with this kind of functionality is
+</em><br>
+<em>&gt; expat, which is awkward for other reasons. I'm assuming others would also
+</em><br>
+<em>&gt; desire such a feature, would it be unwise to begin using libxml on the
+</em><br>
+<em>&gt; assumption of progressive parsing being implemented over the next few
+</em><br>
+<em>&gt; months?
+</em><br>
+<p>&nbsp;&nbsp;Yes, that's definitely in my TODO list, but it has been there for some
+<br>
+time now &lt;grin/&gt;
+<br>
+&nbsp;&nbsp;I cannot promises any hard deadline on libxml coding unfortunately,
+<br>
+but i definitely support it. Switching to progressive parsing need a bit
+<br>
+of rework of the parser internals (to move some state from the call stack to
+<br>
+the parser context), it's definitely in scope and I already worked toward 
+<br>
+this in the past.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Progressive%20parsing">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux, WWW, rpmfind,
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | rpm2html, XML,
+<a href="http://www.w3.org/People/W3Cpeople.html#Veillard">http://www.w3.org/People/W3Cpeople.html#Veillard</a> | badminton, and Kaffe.
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Progressive%20parsing">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Progressive%20parsing">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0085.html">Daniel Veillard: "[xml] Re: gnome-xml, solaris 2.7"</a>
+<li><strong>Previous message:</strong> <a href="0083.html">Michael Day: "[xml] Progressive parsing"</a>
+<li><strong>In reply to:</strong> <a href="0083.html">Michael Day: "[xml] Progressive parsing"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0086.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<li><strong>Reply:</strong> <a href="0086.html">Daniel Veillard: "Re: [xml] Progressive parsing"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:39 EDT</em>
+</em>
+</small>
+</body>
+</html>

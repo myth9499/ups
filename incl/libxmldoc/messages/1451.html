@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] bug in valid.c</title>
+<meta name="Author" content="Gary Pennington - UK Performance Centre (Gary.Pennington@uk.sun.com)">
+<meta name="Subject" content="Re: [xml] bug in valid.c">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] bug in valid.c</h1>
+<!-- received="Mon Feb 12 10:26:48 2001" -->
+<!-- isoreceived="20010212152648" -->
+<!-- sent="Mon, 12 Feb 2001 15:24:32 +0000" -->
+<!-- isosent="20010212152432" -->
+<!-- name="Gary Pennington - UK Performance Centre" -->
+<!-- email="Gary.Pennington@uk.sun.com" -->
+<!-- subject="Re: [xml] bug in valid.c" -->
+<!-- id="3A880030.9B3B24F6@uk.sun.com" -->
+<!-- inreplyto="20010209171448.K3940@imag.fr" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Gary Pennington - UK Performance Centre (<a href="mailto:Gary.Pennington@uk.sun.com?subject=Re:%20[xml]%20bug%20in%20valid.c"><em>Gary.Pennington@uk.sun.com</em></a>)<br>
+<strong>Date:</strong> Mon Feb 12 2001 - 10:24:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1450.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<li><strong>In reply to:</strong> <a href="1442.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1438.html">TOM: "Re: [xml] bug in valid.c"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hi Daniel,
+<br>
+<p>I got the source from gnome and started thinking about implementing this functionality.
+<br>
+<p>I'm not sure that I can use your existing xmlNodeSetPtr becase I actually need to
+<br>
+maintain a list of xmlRefPtr.
+<br>
+<p>When I add a reference, I want to update the ref table with a key (the value which is
+<br>
+passed into the xmlAddRef function) which identifies a list of xmlRefPtrs. I can then
+<br>
+use that key to retrieve all refs that refer to the key and I can free the refs when
+<br>
+I free the table or remove an individual reference.
+<br>
+<p>Your xmlNodePtr code assumes that the manipulated data structures are xmlNode based,
+<br>
+but xmlRef isn't.
+<br>
+<p>I think this means we have two options :-
+<br>
+<p>1. Modify xmlRef so that it conforms to the standard xmlNode structure.
+<br>
+2. Add a new set of list manipulation functions that allows us to manipulate
+<br>
+non-xmlNode based data types.
+<br>
+<p>I would prefer to go with 2, I have a set of list manipulation functions which we could
+<br>
+use, but I'll await your feedback.
+<br>
+<p>Or am I missing something?
+<br>
+<p>Gary
+<br>
+<p><p>Daniel Veillard wrote:
+<br>
+<p><em>&gt; On Fri, Feb 09, 2001 at 04:00:53PM +0000, Gary Pennington wrote:
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Hi Daniel,
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; I've been busy on other work the last couple of days. I'll look at doing this next
+</em><br>
+<em>&gt; &gt; week.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Where should I go to get the latest source,
+</em><br>
+<em>&gt; &gt; <a href="ftp://rpmfind.net/pub/libxml/cvs-snapshot.tar.gz">ftp://rpmfind.net/pub/libxml/cvs-snapshot.tar.gz</a> or
+</em><br>
+<em>&gt; &gt; <a href="http://cvs.gnome.org/bonsai/rview.cgi?cvsroot=/cvs/gnome&dir=gnome-xml">http://cvs.gnome.org/bonsai/rview.cgi?cvsroot=/cvs/gnome&dir=gnome-xml</a> ?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;   get it from gnome, I'm unsure my script on rpmfind is not using W3C
+</em><br>
+<em>&gt; CVs base (now out of date).
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --
+</em><br>
+<em>&gt; Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+</em><br>
+<em>&gt; <a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20bug%20in%20valid.c">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+</em><br>
+<em>&gt; <a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+</em><br>
+<em>&gt; ----
+</em><br>
+<em>&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+</em><br>
+<em>&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</em><br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20bug%20in%20valid.c">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1450.html">Daniel Veillard: "Re: [xml] May I have line breaks in a property?"</a>
+<li><strong>In reply to:</strong> <a href="1442.html">Daniel Veillard: "Re: [xml] bug in valid.c"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1438.html">TOM: "Re: [xml] bug in valid.c"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Feb 12 2001 - 10:44:56 EST</em>
+</em>
+</small>
+</body>
+</html>

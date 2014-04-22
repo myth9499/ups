@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Generating XML-Documents from a given DTD</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@imag.fr)">
+<meta name="Subject" content="Re: [xml] Generating XML-Documents from a given DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Generating XML-Documents from a given DTD</h1>
+<!-- received="Thu Jan 18 03:56:06 2001" -->
+<!-- isoreceived="20010118085606" -->
+<!-- sent="Thu, 18 Jan 2001 09:55:54 +0100" -->
+<!-- isosent="20010118085554" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@imag.fr" -->
+<!-- subject="Re: [xml] Generating XML-Documents from a given DTD" -->
+<!-- id="20010118095554.A6869@imag.fr" -->
+<!-- inreplyto="Pine.LNX.4.10.10101171544130.4299-100000@olive.eecg.toronto.edu" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@imag.fr?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD"><em>Daniel.Veillard@imag.fr</em></a>)<br>
+<strong>Date:</strong> Thu Jan 18 2001 - 03:55:54 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1349.html">H.-Arno Jacobsen: "[xml] Generating XML-Documents from a given DTD"</a>
+<li><strong>In reply to:</strong> <a href="1349.html">H.-Arno Jacobsen: "[xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Jan 17, 2001 at 03:48:04PM -0500, H.-Arno Jacobsen wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; has anybody written a function to automatically generate
+</em><br>
+<em>&gt; XML documents from a provided DTD for libxml ?
+</em><br>
+<p>&nbsp;&nbsp;Not that I know of.
+<br>
+&nbsp;&nbsp;The main problem is that it is hard to make such a function
+<br>
+given that a DTD can generate (quite often) an infinity of
+<br>
+document instance conforming to it. A DTD which would generate
+<br>
+a single instance is possible but I have never seen one :-)
+<br>
+<p>&nbsp;&nbsp;You could write a big ball of heuristics and try to get one
+<br>
+document generated but chances are very high that it would
+<br>
+not suit the needs of the caller...
+<br>
+&nbsp;There is 2 functions which could help if you're trying to
+<br>
+automatically generate such a tree (or a list of choices
+<br>
+in a GUI):
+<br>
+&nbsp;&nbsp;- xmlValidGetValidElements ()
+<br>
+<a href="http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETVALIDELEMENTS">http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETVALIDELEMENTS</a>
+<br>
+&nbsp;&nbsp;- xmlValidGetPotentialChildren ()
+<br>
+<a href="http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETPOTENTIALCHILDREN">http://xmlsoft.org/html/gnome-xml-valid.html#XMLVALIDGETPOTENTIALCHILDREN</a>
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Generating%20XML-Documents%20from%20a%20given%20DTD">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1349.html">H.-Arno Jacobsen: "[xml] Generating XML-Documents from a given DTD"</a>
+<li><strong>In reply to:</strong> <a href="1349.html">H.-Arno Jacobsen: "[xml] Generating XML-Documents from a given DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Jan 18 2001 - 04:44:47 EST</em>
+</em>
+</small>
+</body>
+</html>

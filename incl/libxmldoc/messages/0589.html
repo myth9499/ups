@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml security</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] libxml security">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml security</h1>
+<!-- received="Sat Jul  8 06:14:38 2000" -->
+<!-- isoreceived="20000708101438" -->
+<!-- sent="Sat, 8 Jul 2000 12:11:06 +0200" -->
+<!-- isosent="20000708101106" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] libxml security" -->
+<!-- id="20000708121106.D16945@w3.org" -->
+<!-- inreplyto="39664054.7E2C323A@silicondefense.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20security"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Sat Jul 08 2000 - 06:11:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0590.html">Nicholas Lewin-Koh: "[xml] RE: Segmentation fault on windows"</a>
+<li><strong>Previous message:</strong> <a href="0588.html">Joe McAlerney: "[xml] libxml security"</a>
+<li><strong>In reply to:</strong> <a href="0588.html">Joe McAlerney: "[xml] libxml security"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Fri, Jul 07, 2000 at 01:40:52PM -0700, Joe McAlerney wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello Daniel,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I was wondering about the precautions taken to avoid such caterstrophic
+</em><br>
+<em>&gt; things as buffer overflows and the like in libxml.  Since libxml is
+</em><br>
+<em>&gt; widely portable, I'm assuming that efforts have been made to avoid using
+</em><br>
+<em>&gt; secure OS specific functions.  I noticed in some places that you use
+</em><br>
+<em>&gt; snprintf if it is available, and sprintf if it is not.  Obviously you
+</em><br>
+<em>&gt; have put thought into this issue as well, and have coded accordingly.
+</em><br>
+<p>&nbsp;&nbsp;First I'm not a security expert. I know how buffers overflows can be
+<br>
+used to execute arbitrary code, and I have tried to write libxml in
+<br>
+the most robust fashion. Basically rather that targetting at security
+<br>
+I targetted at &quot;no input given to libxml should ever allow it to segfault&quot;.
+<br>
+&nbsp;&nbsp;This is a different bias, but I assume it should lead to a secure
+<br>
+library. 
+<br>
+&nbsp;&nbsp;Now as far as I know I received only once a security related message,
+<br>
+it was about places where I didn't used snprintf when available. I don't
+<br>
+think there was really a strong security audit of libxml itself, and I'm
+<br>
+afraid I don't really have the expertise. Feddback on this issue are
+<br>
+really welcome.
+<br>
+<p><em>&gt; We want to use libxml in a project, and just wanted to get a sense of
+</em><br>
+<em>&gt; how it may hold up against something like a rogue xml document being fed
+</em><br>
+<em>&gt; into the parser.  Unfortunately, I don't have enought experience to do a
+</em><br>
+<em>&gt; full audit of the code.  If you can provide any insite on this subject,
+</em><br>
+<em>&gt; it would be most appreciated.
+</em><br>
+<p>&nbsp;&nbsp;Well I think crashing libxml with random input should not be easy,
+<br>
+It's a good first point. But I can't provide guarantees except to 
+<br>
+close any hole pointed at me !
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20security">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20libxml%20security">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20libxml%20security">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0590.html">Nicholas Lewin-Koh: "[xml] RE: Segmentation fault on windows"</a>
+<li><strong>Previous message:</strong> <a href="0588.html">Joe McAlerney: "[xml] libxml security"</a>
+<li><strong>In reply to:</strong> <a href="0588.html">Joe McAlerney: "[xml] libxml security"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:22 EDT</em>
+</em>
+</small>
+</body>
+</html>

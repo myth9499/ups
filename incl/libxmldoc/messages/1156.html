@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Glitch with external entity files; patch enclosed</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Glitch with external entity files; patch enclosed">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Glitch with external entity files; patch enclosed</h1>
+<!-- received="Wed Nov  8 17:35:21 2000" -->
+<!-- isoreceived="20001108223521" -->
+<!-- sent="Wed, 8 Nov 2000 23:35:14 +0100" -->
+<!-- isosent="20001108223514" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Glitch with external entity files; patch enclosed" -->
+<!-- id="20001108233514.D27831@w3.org" -->
+<!-- inreplyto="Pine.LNX.3.96.1001108154625.16307T-200000@skyjammer.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 17:35:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1155.html">Kenneth Pronovici: "[xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1155.html">Kenneth Pronovici: "[xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 08, 2000 at 04:11:29PM -0600, Kenneth Pronovici wrote:
+<br>
+<em>&gt; We have been seeing problems with external entity files included in DTDs,
+</em><br>
+<em>&gt; in our case when using an external entity loader.  We're using 2.2.7.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Since all of my DTDs are stored in &quot;/dvl/fds/dtd&quot;, my external entity loader 
+</em><br>
+<em>&gt; takes the URL it's passed and tacks &quot;/dvl/fds/dtd&quot; on the front, so libxml 
+</em><br>
+<em>&gt; can find the DTD.
+</em><br>
+<p>&nbsp;&nbsp;I think this is completely bogus and the reason of your problem.
+<br>
+You just assume that in all and any URI-Reference computation leading
+<br>
+to an external fetching this sequence should be added. You don't have
+<br>
+the right to do this.
+<br>
+<p>&nbsp;&nbsp;If your DTD is in /dvl/fds/dtd the URI-Reference from the XML document
+<br>
+should point at it there.
+<br>
+&nbsp;&nbsp;However I must admit (I discovered it today) that the entity loader
+<br>
+is called and the URI location of the resource effectively used has
+<br>
+been changed, then this must me made available back to the parser. I
+<br>
+think it is through the filename field of the returned 
+<br>
+xmlParserInputPtr but I must double check that it's done the right way
+<br>
+(especially if it uses HTTP and a redirection).
+<br>
+&nbsp;
+<br>
+Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Glitch%20with%20external%20entity%20files;%20patch%20enclosed">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1155.html">Kenneth Pronovici: "[xml] Glitch with external entity files; patch enclosed"</a>
+<li><strong>In reply to:</strong> <a href="1155.html">Kenneth Pronovici: "[xml] Glitch with external entity files; patch enclosed"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 17:44:24 EST</em>
+</em>
+</small>
+</body>
+</html>

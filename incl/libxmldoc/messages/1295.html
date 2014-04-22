@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] encoding in htmlParseDoc</title>
+<meta name="Author" content="Tenihin Andrey (algorithm@peterlink.ru)">
+<meta name="Subject" content="Re: [xml] encoding in htmlParseDoc">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] encoding in htmlParseDoc</h1>
+<!-- received="Mon Dec 18 07:19:27 2000" -->
+<!-- isoreceived="20001218121927" -->
+<!-- sent="Mon, 18 Dec 2000 15:21:04 +0300" -->
+<!-- isosent="20001218122104" -->
+<!-- name="Tenihin Andrey" -->
+<!-- email="algorithm@peterlink.ru" -->
+<!-- subject="Re: [xml] encoding in htmlParseDoc" -->
+<!-- id="20001218152104.A2745@pc4.spectrum.local" -->
+<!-- inreplyto="20001215133355.F2964@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Tenihin Andrey (<a href="mailto:algorithm@peterlink.ru?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc"><em>algorithm@peterlink.ru</em></a>)<br>
+<strong>Date:</strong> Mon Dec 18 2000 - 07:21:04 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Previous message:</strong> <a href="1294.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1286.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Reply:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Here is the patch for handling `encoding' in 
+<br>
+htmlParseDoc and htmlSAXParseDoc.
+<br>
+<p>Encoding passed to htmlParseDoc has higher 
+<br>
+prioritet when html document has &quot;Content-Type&quot;.
+<br>
+<p>HTML browser also ignore encoding in html if
+<br>
+there is encoding in &quot;Content-Type&quot; returned by
+<br>
+HTTP server (and passed to htmlParseDoc).
+<br>
+<p>patch against libxml-2.2.10
+<br>
+<p>Andrey.
+<br>
+<p>--- HTMLparser.c.orig	Mon Dec 18 13:44:20 2000
+<br>
++++ HTMLparser.c	Mon Dec 18 14:20:43 2000
+<br>
+@@ -2787,6 +2787,10 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt == NULL) || (attvalue == NULL))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;
+<br>
++    /* do not change encoding */	
+<br>
++    if (ctxt-&gt;input-&gt;encoding != NULL)
+<br>
++        return;
+<br>
++
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encoding = xmlStrcasestr(attvalue, BAD_CAST&quot;charset=&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (encoding != NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encoding += 8;
+<br>
+@@ -4822,6 +4826,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParserInputPtr inputStream;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlParserInputBufferPtr buf;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* htmlCharEncoding enc; */
+<br>
++    xmlChar *content, *content_line = &quot;charset=&quot;;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf = xmlParserInputBufferCreateFilename(filename, XML_CHAR_ENCODING_NONE);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (buf == NULL) return(NULL);
+<br>
+@@ -4852,6 +4857,22 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputStream-&gt;free = NULL;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputPush(ctxt, inputStream);
+<br>
++    
+<br>
++    /* set encoding */
+<br>
++    if (encoding)
+<br>
++    {
+<br>
++        content = xmlMalloc (strlen (content_line) + strlen (encoding) + 1);
+<br>
++	
+<br>
++	if (content)
+<br>
++        {  
+<br>
++	    strcpy (content, content_line);
+<br>
++            strcat (content, encoding);
+<br>
++            htmlCheckEncoding (ctxt, content);    
+<br>
++	    xmlFree (content);
+<br>
++	}
+<br>
++    }
+<br>
++
+<br>
++    
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ctxt);
+<br>
+&nbsp;}
+<br>
+&nbsp;
+<br>
+<p><p><p><p><p><p><p><p><p><p><p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20encoding%20in%20htmlParseDoc">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Previous message:</strong> <a href="1294.html">Bjorn Reese: "Re: [xml] ipv6 and gnome-xml"</a>
+<li><strong>In reply to:</strong> <a href="1286.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<li><strong>Reply:</strong> <a href="1296.html">Daniel Veillard: "Re: [xml] encoding in htmlParseDoc"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Dec 18 2000 - 09:44:04 EST</em>
+</em>
+</small>
+</body>
+</html>

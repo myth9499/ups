@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Feature request</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Feature request">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Feature request</h1>
+<!-- received="Wed Dec  6 08:14:02 2000" -->
+<!-- isoreceived="20001206131402" -->
+<!-- sent="Wed, 6 Dec 2000 03:36:05 +0100" -->
+<!-- isosent="20001206023605" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Feature request" -->
+<!-- id="20001206033605.H8490@w3.org" -->
+<!-- inreplyto="20001129150510.352857576C@zen.sbuilders.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Feature%20request"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Dec 05 2000 - 21:36:05 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1269.html">Daniel Veillard: "Re: [xml] Last xinclude vs. DTD problem"</a>
+<li><strong>Previous message:</strong> <a href="1267.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1242.html">Manuel Guesdon: "[xml] Feature request"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 29, 2000 at 04:05:10PM +0100, Manuel Guesdon wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hello,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; We have two problems with the HTML parser:
+</em><br>
+<em>&gt;         o when &lt;html&gt;&lt;body&gt; is missing in the file/buffer to parse (because it's a &quot;sub-component&quot;), libxml add it (it is
+</em><br>
+<em>&gt; done in htmlCheckImplied function).
+</em><br>
+<em>&gt;         o we use a &quot;proprietary&quot; tag which is not recognized so a message is printed.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Is it possible to add a parameter/option, so libxml doesn't add the &lt;html&gt;&lt;body&gt; tags when they are missing ?
+</em><br>
+<p>&nbsp;&nbsp;yes, I added the following call, just call it at init time with val = 0;
+<br>
+to desactivate the auto-insertion of omitted tags.
+<br>
+<p>&nbsp;&nbsp;int htmlHandleOmittedElem(int val);
+<br>
+<em>&gt; Is it possible to add a function so &quot;proprietary tags&quot; could be added in HTMLparser knwon tags ?
+</em><br>
+<p>&nbsp;&nbsp;Hum, I dislike that. I would prefer you establish you own error handler
+<br>
+and catch this specific error. I prefer that libxml reports errors like
+<br>
+this, and that you work around it, unless you can point me to a public
+<br>
+request to add this extension in some standard body (W3C/IETF/...).
+<br>
+&nbsp;&nbsp;Sorry the proper way is to use XHTML and XML namespaces to extend the
+<br>
+original vocabulary ...
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Feature%20request">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Feature%20request">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Feature%20request">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1269.html">Daniel Veillard: "Re: [xml] Last xinclude vs. DTD problem"</a>
+<li><strong>Previous message:</strong> <a href="1267.html">Daniel Veillard: "Re: [xml] xmlParseChunk: encoder error"</a>
+<li><strong>In reply to:</strong> <a href="1242.html">Manuel Guesdon: "[xml] Feature request"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Dec 06 2000 - 09:43:47 EST</em>
+</em>
+</small>
+</body>
+</html>

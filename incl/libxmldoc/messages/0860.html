@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] libxml -&gt; .</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: [xml] libxml -&gt; .">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] libxml -&gt; .</h1>
+<!-- received="Mon Oct  2 21:38:55 2000" -->
+<!-- isoreceived="20001003013855" -->
+<!-- sent="Mon, 02 Oct 2000 21:38:49 -0400" -->
+<!-- isosent="20001003013849" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: [xml] libxml -&gt; ." -->
+<!-- id="200010030138.VAA27123@vixen.cs.utk.edu" -->
+<!-- inreplyto="[xml] libxml -&gt; ." -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20[xml]%20libxml%20-&gt;%20."><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Mon Oct 02 2000 - 21:38:49 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0859.html">Daniel Veillard: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Maybe in reply to:</strong> <a href="0857.html">Timothee Besset: "[xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;<a href="mailto:20001003011940.L5935@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20.">20001003011940.L5935@w3.org</a>&gt;, Daniel Veillard writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;On Mon, Oct 02, 2000 at 05:46:40PM -0500, Timothee Besset wrote:
+</em><br>
+<em>&gt;&gt; 
+</em><br>
+<em>&gt;&gt; Why does the configure script creates a libxml symlink which points to 
+</em><br>
+<em>&gt;&gt; the main dir? Are the #include &quot;libxml/*.h&quot; from old code that relied on 
+</em><br>
+<em>&gt;&gt; a libxml/ directory? This is causing problems for win32 builds.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  This is not a legacy problem it's a current problem
+</em><br>
+<em>&gt;Includes have to be made &lt;libxml/xxx.h&gt; though the .h are in the
+</em><br>
+<em>&gt;same directory as the .c . To cope with the issue I used a symlink
+</em><br>
+<em>&gt;this work on unix, I don't know how you can do this on Windows
+</em><br>
+<p>This can be solved through clever (arcane maybe) use of preprocessor,
+<br>
+at least I am pretty sure it can be.  Note that I am at the moment working
+<br>
+far too many hours in the day on some other bsd/win32/linux 
+<br>
+cross-platform code.  
+<br>
+<p>What I did with libxml is simply commented out the stuff that 
+<br>
+broke too badly to fix fast (or #defined SYM 0 for 1), and 
+<br>
+moved the headers into their own directory.  This could be 
+<br>
+done like this: libxml, libxml/src, libxml/include, libxml/bin
+<br>
+etc.  All this is a matter of taste, I personally like because
+<br>
+I can snap the entire header directory to $MSDEV\include
+<br>
+and do #include &lt;libxml/whatever.h&gt;.  Note that the internally
+<br>
+used headers should be included using quotes. 
+<br>
+<p>Like I said, some of this is a matter of taste, some of it a matter
+<br>
+of making cross-platform builds as easy as possible.  It's 
+<br>
+Daniel's call in the end.
+<br>
+<p>I should probably add that the current structure of libxml 
+<br>
+slows me down a bit for building in win32.  Since I am 
+<br>
+painfully well aware of my profoiund ignorance wrt to the 
+<br>
+intricacies of cross-platfrom building, anyone so inclined 
+<br>
+is welcome to provide me with due dose of enlightenment.
+<br>
+<p>ciao
+<br>
+<p><p><p><em>&gt;
+</em><br>
+<em>&gt;&gt; Also, I used the --disable-iconv option in the configure script, but the 
+</em><br>
+<em>&gt;&gt; resulting xmlversion.h didn't reflect my changes. It was still
+</em><br>
+<em>&gt;&gt; #if 1
+</em><br>
+<em>&gt;&gt; #define LIBXML_ICONV_ENABLED
+</em><br>
+<em>&gt;&gt; #else
+</em><br>
+<em>&gt;&gt; #define LIBXML_ICONV_DISABLED
+</em><br>
+<em>&gt;&gt; #endif
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;configure --help
+</em><br>
+<em>&gt;[...]
+</em><br>
+<em>&gt;--with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+</em><br>
+<em>&gt;--without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+</em><br>
+<em>&gt;[...]
+</em><br>
+<em>&gt;--with-iconv            Add the ICONV support (on)
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;When the way to disable them is --without-iconv
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt; What is iconv? Is it an external library?
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;  POSIX libray: codeset conversion facility 
+</em><br>
+<em>&gt;    <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/iconv.h.html">http://www.opengroup.org/onlinepubs/007908799/xsh/iconv.h.html</a>
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;Daniel
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;-- 
+</em><br>
+<em>&gt;<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20libxml%20-&gt;%20.">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+</em><br>
+<em>&gt;Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+</em><br>
+<em>&gt;Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+</em><br>
+<em>&gt; <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20libxml%20-&gt;%20.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0859.html">Daniel Veillard: "Re: [xml] libxml -&gt; ."</a>
+<li><strong>Maybe in reply to:</strong> <a href="0857.html">Timothee Besset: "[xml] libxml -&gt; ."</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Oct 02 2000 - 21:43:18 EDT</em>
+</em>
+</small>
+</body>
+</html>

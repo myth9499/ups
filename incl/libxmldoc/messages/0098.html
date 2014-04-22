@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] External DTD</title>
+<meta name="Author" content="Stephane Conversy (Stephane.Conversy@lri.fr)">
+<meta name="Subject" content="Re: [xml] External DTD">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] External DTD</h1>
+<!-- received="Mon Aug 23 11:45:53 1999" -->
+<!-- isoreceived="19990823154553" -->
+<!-- sent="Mon, 23 Aug 1999 17:45:06 +0200" -->
+<!-- isosent="19990823154506" -->
+<!-- name="Stephane Conversy" -->
+<!-- email="Stephane.Conversy@lri.fr" -->
+<!-- subject="Re: [xml] External DTD" -->
+<!-- id="37C16C82.57659D51@lri.fr" -->
+<!-- inreplyto="19990823113039.I30741@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Stephane Conversy (<a href="mailto:Stephane.Conversy@lri.fr?subject=Re:%20[xml]%20External%20DTD"><em>Stephane.Conversy@lri.fr</em></a>)<br>
+<strong>Date:</strong> Mon Aug 23 1999 - 11:45:06 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<li><strong>Previous message:</strong> <a href="0097.html">Daniel Veillard: "Re: [xml] External DTD"</a>
+<li><strong>In reply to:</strong> <a href="0097.html">Daniel Veillard: "Re: [xml] External DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<li><strong>Reply:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+with version 1.5. 'Hope the syntax is correct...
+<br>
+by replacing &quot;&lt;!DOCTYPE quasi_module SYSTEM &quot;qm.dtd&quot;&gt;&quot; by
+<br>
+the dtd, it runs fine...
+<br>
+<p><p><p><pre>
+--
+Stéphane Conversy
+<a href="http://www-ihm.lri.fr/~conversy/">http://www-ihm.lri.fr/~conversy/</a>
+mailto:<a href="mailto:conversy@lri.fr?subject=Re:%20[xml]%20External%20DTD">conversy@lri.fr</a>
+<p><p><p></pre>
+<p>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE quasi_module SYSTEM &quot;qm.dtd&quot;&gt;
+<p>&lt;quasi_module name=&quot;Reverb&quot; category=&quot;FX&quot;&gt;
+<p>&lt;definition language=&quot;csound&quot;&gt;
+<p>instr &quot;Reverb&quot;
+<p>ktime      init      0.1
+ainput     init      0
+aoutput    init      0
+<p><p>aoutput  reverb  ainput, ktime 
+<p>endin
+<p>&lt;/definition&gt;
+<p>&lt;interface height=&quot;2&quot;&gt;
+<p>&lt;label xpos=&quot;10&quot; ypos=&quot;5&quot;&gt;
+Reverb
+&lt;/label&gt;
+<p>&lt;knob xpos=&quot;45&quot; ypos=&quot;2&quot;
+	label=&quot;Time&quot;
+	label_position=&quot;top&quot;
+	param=&quot;ktime&quot;      
+	start=&quot;0.01&quot;
+	end=&quot;5.0&quot;
+	step=&quot;0.01&quot;
+	page=&quot;0.1&quot;
+/&gt;
+<p>&lt;socket xpos=&quot;10&quot; ypos=&quot;40&quot;
+	label=&quot;Input&quot;
+	param=&quot;ainput&quot;
+	flags=&quot;input&quot;
+/&gt;
+<p>&lt;socket xpos=&quot;80&quot; ypos=&quot;40&quot;
+	label=&quot;Output&quot;
+	param=&quot;aoutput&quot;
+	flags=&quot;output&quot;
+/&gt;
+<p>&lt;/interface&gt;
+<p>&lt;/quasi_module&gt;
+<p><p>
+&lt;!DOCTYPE quasi_module [
+<p>	&lt;!ELEMENT quasi_module (table*, definition, interface)&gt;
+	&lt;!ATTLIST quasi_module
+		name CDATA #REQUIRED
+		category CDATA #REQUIRED
+	&gt;
+<p>	&lt;!ELEMENT table EMPTY&gt;
+	&lt;!ATTLIST table
+		name CDATA #REQUIRED
+		generator CDATA #REQUIRED
+		time CDATA #REQUIRED
+		size CDATA #REQUIRED
+		param CDATA #REQUIRED
+	&gt;
+<p>	&lt;!ELEMENT definition (#PCDATA)&gt;
+	&lt;!ATTLIST definition
+		language (csound | Q | SAOL) &quot;csound&quot;
+	&gt;
+<p>	&lt;!ELEMENT interface (label, (socket | knob)*)&gt;
+	&lt;!ATTLIST interface
+		height CDATA &quot;2&quot;
+	&gt;
+<p>	&lt;!ELEMENT label (#PCDATA)&gt;
+	&lt;!ATTLIST label
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+	&gt;
+<p>	&lt;!ELEMENT knob EMPTY&gt;
+	&lt;!ATTLIST knob
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		start CDATA &quot;0&quot;
+		end CDATA &quot;1&quot;
+		step CDATA &quot;0.01&quot;
+		page CDATA &quot;0.1&quot;
+	&gt;
+<p>	&lt;!ELEMENT vslider EMPTY&gt;
+	&lt;!ATTLIST vslider
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		start CDATA &quot;0&quot;
+		end CDATA &quot;1&quot;
+		step CDATA &quot;0.01&quot;
+		page CDATA &quot;0.1&quot;
+	&gt;
+<p>	&lt;!ELEMENT hslider EMPTY&gt;
+	&lt;!ATTLIST hslider
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		start CDATA &quot;0&quot;
+		end CDATA &quot;1&quot;
+		step CDATA &quot;0.01&quot;
+		page CDATA &quot;0.1&quot;
+	&gt;
+<p>	&lt;!ELEMENT ftselector EMPTY&gt;
+	&lt;!ATTLIST ftselector
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+	&gt;
+<p>	&lt;!ELEMENT sfselector EMPTY&gt;
+	&lt;!ATTLIST sfselector
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+	&gt;
+<p>	&lt;!ELEMENT mcselector EMPTY&gt;
+	&lt;!ATTLIST mcselector
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+	&gt;
+<p>	&lt;!ELEMENT pushbutton EMPTY&gt;
+	&lt;!ATTLIST pushbutton
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		state CDATA #REQUIRED
+		trigger CDATA #FIXED &quot;Restart&quot;
+	&gt;
+<p>	&lt;!ELEMENT multiway EMPTY&gt;
+	&lt;!ATTLIST multiway
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		state CDATA #REQUIRED
+		trigger CDATA #FIXED &quot;Restart&quot;
+	&gt;
+<p>	&lt;!ELEMENT socket EMPTY&gt;
+	&lt;!ATTLIST socket
+		xpos CDATA #REQUIRED
+		ypos CDATA #REQUIRED
+		label CDATA #IMPLIED
+		label_position (top | bottom | left | right | upper_left | upper_right | lower_left | lower_right) &quot;top&quot;
+		param CDATA #IMPLIED
+		flags (input | output | multin | trigger) #REQUIRED
+	&gt;
+<p><p>]&gt;
+<p><p><pre>
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20External%20DTD">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20External%20DTD">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<li><strong>Previous message:</strong> <a href="0097.html">Daniel Veillard: "Re: [xml] External DTD"</a>
+<li><strong>In reply to:</strong> <a href="0097.html">Daniel Veillard: "Re: [xml] External DTD"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<li><strong>Reply:</strong> <a href="0099.html">Stephane Conversy: "[xml] Error"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:42 EDT</em>
+</em>
+</small>
+</body>
+</html>

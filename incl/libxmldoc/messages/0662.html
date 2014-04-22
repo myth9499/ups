@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Another encoder truncation bug</title>
+<meta name="Author" content="Wayne Davison (wayned@blorf.net)">
+<meta name="Subject" content="[xml] Another encoder truncation bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Another encoder truncation bug</h1>
+<!-- received="Tue Aug 22 13:35:04 2000" -->
+<!-- isoreceived="20000822173504" -->
+<!-- sent="Tue, 22 Aug 2000 13:32:08 -0700 (PDT)" -->
+<!-- isosent="20000822203208" -->
+<!-- name="Wayne Davison" -->
+<!-- email="wayned@blorf.net" -->
+<!-- subject="[xml] Another encoder truncation bug" -->
+<!-- id="Pine.LNX.4.21.0008221158040.28317-200000@phong.blorf.net" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Wayne Davison (<a href="mailto:wayned@blorf.net?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug"><em>wayned@blorf.net</em></a>)<br>
+<strong>Date:</strong> Tue Aug 22 2000 - 16:32:08 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0663.html">Daniel Veillard: "Re: [xml] Bug in uri.c"</a>
+<li><strong>Previous message:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+I found another case where the push code can truncate the HTML input.  
+<br>
+If the input file has a high-bit character in it (e.g. 0xA0 = nbsp)
+<br>
+but there is currently no encoding, the input is assumed to be
+<br>
+ISO-8859-1 and the first line is decoded (about 40 chars or so).  
+<br>
+However, after these characters get parsed, the htmlParseChunk() call
+<br>
+returns without processing the rest of the raw buffer.  If the very
+<br>
+next call is a flush, all the remaining (raw) data is lost.  I've
+<br>
+attached a simple html file that will cause &quot;testHTML --sax --push&quot; to
+<br>
+fail.
+<br>
+<p>I whipped up a solution that works for me -- when the user flushes the
+<br>
+buffer, make sure that we've encoded all of &quot;raw&quot; into &quot;buffer&quot; before
+<br>
+the call to htmlParseTryOrFinish().  A better solution might be to
+<br>
+ensure that the characters get processed before returning from the
+<br>
+htmlParseChunk() call so that there isn't such a potential for delayed
+<br>
+handling.
+<br>
+<p>My quick fix is as follows:
+<br>
+<p>Index: HTMLparser.c
+<br>
+@@ -4220,8 +4220,10 @@
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((terminate) || (ctxt-&gt;input-&gt;buf-&gt;buffer-&gt;use &gt; 80))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParseTryOrFinish(ctxt, terminate);
+<br>
+-    } else if (ctxt-&gt;instate != XML_PARSER_EOF)
+<br>
++    } else if (ctxt-&gt;instate != XML_PARSER_EOF) {
+<br>
++	xmlParserInputBufferPush(ctxt-&gt;input-&gt;buf, 0, &quot;&quot;);	      
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlParseTryOrFinish(ctxt, terminate);
+<br>
++    }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (terminate) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((ctxt-&gt;instate != XML_PARSER_EOF) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ctxt-&gt;instate != XML_PARSER_EPILOG) &amp;&amp;
+<br>
+<p>Also, I'm curious why the htmlParserInputRead() function goes to the
+<br>
+trouble of shifting a buffer of pushed data since it can't read any
+<br>
+new data into the buffer.  Adding the following check makes the
+<br>
+function return without doing anything if there is no readcallback
+<br>
+defined:
+<br>
+<p>Index: parser.c
+<br>
+@@ -443,6 +443,7 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (in-&gt;base == NULL) return(-1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (in-&gt;cur == NULL) return(-1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (in-&gt;buf-&gt;buffer == NULL) return(-1);
+<br>
++    if (in-&gt;buf-&gt;readcallback == NULL) return(-1);
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK_BUFFER(in);
+<br>
+&nbsp;
+<br>
+..wayne..
+<br>
+<p><p><hr noshade>
+<ul>
+<li>TEXT/html attachment: <a href="att-0662/01-test.html">A small file with raw 0xA0 chars</a>
+</ul>
+<!-- attachment="01-test.html" -->
+<pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Another%20encoder%20truncation%20bug">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0663.html">Daniel Veillard: "Re: [xml] Bug in uri.c"</a>
+<li><strong>Previous message:</strong> <a href="0661.html">Daniel Veillard: "[xml] Re: Bug#21552: libxml fails to decode &amp;amp; properly"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Aug 22 2000 - 13:43:11 EDT</em>
+</em>
+</small>
+</body>
+</html>

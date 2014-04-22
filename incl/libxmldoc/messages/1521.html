@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Some words about libxslt</title>
+<meta name="Author" content="Daniel Veillard (veillard@redhat.com)">
+<meta name="Subject" content="Re: [xml] Some words about libxslt">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Some words about libxslt</h1>
+<!-- received="Mon Mar  5 08:49:19 2001" -->
+<!-- isoreceived="20010305134919" -->
+<!-- sent="Mon, 5 Mar 2001 08:48:43 -0500" -->
+<!-- isosent="20010305134843" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="veillard@redhat.com" -->
+<!-- subject="Re: [xml] Some words about libxslt" -->
+<!-- id="20010305084843.B28590@imag.fr" -->
+<!-- inreplyto="20010305143547.A414@debian" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Some%20words%20about%20libxslt"><em>veillard@redhat.com</em></a>)<br>
+<strong>Date:</strong> Mon Mar 05 2001 - 08:48:43 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Previous message:</strong> <a href="1520.html">Tom .: "[xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1520.html">Tom .: "[xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Reply:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Mar 05, 2001 at 02:35:47PM +0100, Tom . wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; Hi,
+</em><br>
+<em>&gt; Here are some notes about XPath/XSLT functions in libxslt.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; In xsltDocumentFunction, the problem with XPointer could have been solved
+</em><br>
+<em>&gt; with some kind of &quot;Simple API for XPath/XPtr/XSLT&quot; as I earlier suggested
+</em><br>
+<em>&gt; it : whether an XPtrExpr returns a location set or a node-set can be
+</em><br>
+<em>&gt; guessed by its syntax (if it uses the range, range-inside, start-point,
+</em><br>
+<em>&gt; end-point, range-to or string-range functions) ; using a &quot;plugable&quot; API
+</em><br>
+<em>&gt; similar to the SAX one allows you to handle expressions differently without
+</em><br>
+<em>&gt; having to write another parser. I'm writing such an API and will keep you
+</em><br>
+<em>&gt; informed.
+</em><br>
+<p>&nbsp;&nbsp;Humm, open source projects don't work that way ... You can't say
+<br>
+&quot;hold on I'm writing some code you may look at later&quot;, sorry :-)
+<br>
+<p><em>&gt; Another solution should be to evaluate the XPointer expression
+</em><br>
+<em>&gt; and test the result type.
+</em><br>
+<p>&nbsp;&nbsp;yes and it seems quite simpler.
+<br>
+<p><em>&gt; In xsltKeyFunction, the &quot;TODO: find uri when qualified name&quot; is, I guess,
+</em><br>
+<em>&gt; just a call to xmlXPathNsLookup to add, isn't it?
+</em><br>
+<p>&nbsp;&nbsp;more or less
+<br>
+<p><em>&gt; The TODO &quot;handle NODE set as 2nd args of key()&quot; should be very easy to
+</em><br>
+<em>&gt; solve. It's basically the same as the id() function when passing a node-set
+</em><br>
+<em>&gt; argument.
+</em><br>
+<p>&nbsp;&nbsp;sounds so, yes.
+<br>
+&nbsp;&nbsp;
+<br>
+<em>&gt; There is a problem in xsltSystemPropertyFunction : you don't use QNames.
+</em><br>
+<em>&gt; The Rec says &quot;version&quot;, &quot;vendor&quot; and &quot;vendor-url&quot; «are all in the XSLT
+</em><br>
+<p>&nbsp;&nbsp;There is a TODO on this matter.
+<br>
+<p><em>&gt; prefix isn't necessary bound to the XSLT namespace. I also suggest using an
+</em><br>
+<em>&gt; hash table to set and retrieve predefined and &quot;vendor-defined&quot; properties.
+</em><br>
+<em>&gt; This hash table should be application-wide, not bound to each evaluation
+</em><br>
+<em>&gt; context.
+</em><br>
+<p>&nbsp;&nbsp;extension functions (and elements) are alreeady in an hash table.
+<br>
+The prefix binding has to be recomputed for each context.
+<br>
+<p><em>&gt; In xsltFunctionAvailableFunction, it seems you just need to call
+</em><br>
+<em>&gt; xmlXPathFunctionLookupNs after having expanded the prefix with
+</em><br>
+<em>&gt; xmlXPathNsLookup.
+</em><br>
+<p>&nbsp;&nbsp;yes,
+<br>
+<p><em>&gt; I'll try to provide some patch soon...
+</em><br>
+<p>&nbsp;&nbsp;okay,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+Daniel Veillard      | Red Hat Network <a href="http://redhat.com/products/network/">http://redhat.com/products/network/</a>
+<a href="mailto:veillard@redhat.com?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">veillard@redhat.com</a>  | libxml Gnome XML toolkit  <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+<a href="http://veillard.com/">http://veillard.com/</a> | Rpmfind RPM search engine <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Some%20words%20about%20libxslt">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Previous message:</strong> <a href="1520.html">Tom .: "[xml] Some words about libxslt"</a>
+<li><strong>In reply to:</strong> <a href="1520.html">Tom .: "[xml] Some words about libxslt"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<li><strong>Reply:</strong> <a href="1522.html">Tom .: "Re: [xml] Some words about libxslt"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Mon Mar 05 2001 - 10:43:37 EST</em>
+</em>
+</small>
+</body>
+</html>

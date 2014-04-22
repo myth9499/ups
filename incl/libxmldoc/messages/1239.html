@@ -1,0 +1,666 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Another xinclude vs. DTD patch</title>
+<meta name="Author" content="Paul D. Smith (pausmith@nortelnetworks.com)">
+<meta name="Subject" content="[xml] Another xinclude vs. DTD patch">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Another xinclude vs. DTD patch</h1>
+<!-- received="Tue Nov 28 23:22:11 2000" -->
+<!-- isoreceived="20001129042211" -->
+<!-- sent="Tue, 28 Nov 2000 23:20:53 -0500" -->
+<!-- isosent="20001129042053" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="pausmith@nortelnetworks.com" -->
+<!-- subject="[xml] Another xinclude vs. DTD patch" -->
+<!-- id="14884.33829.960232.593568@lemming.engeast.baynetworks.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Paul D. Smith (<a href="mailto:pausmith@nortelnetworks.com?subject=Re:%20[xml]%20Another%20xinclude%20vs.%20DTD%20patch"><em>pausmith@nortelnetworks.com</em></a>)<br>
+<strong>Date:</strong> Tue Nov 28 2000 - 23:20:53 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1238.html">Paul D. Smith: "[xml] Fix for xinclude with DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+This fixes my third problem with DTD validation in the presence of
+<br>
+xinclude operations.  Only one left...
+<br>
+<p>In playing with this I realized that the two functions
+<br>
+xmlValidateElementTypeElement() and xmlValidateElementTypeExpr() shared
+<br>
+three instances of exactly the same code between them, and that this
+<br>
+code was causing my problem by not properly ignoring the
+<br>
+XML_XINCLUDE_START and XML_XINCLUDE_END nodes.
+<br>
+<p>So, I refactored this out into its own internal function
+<br>
+xmlValidateFindNextElement(), and changed the other two to invoke it.  I
+<br>
+modified this section of code to use a switch statement instead of a
+<br>
+series of if statements, which simplified it a good bit I think.
+<br>
+<p>Also, there was one other place which seemed like it should be testing
+<br>
+for these ignorable nodes, although my sample didn't cause a problem
+<br>
+there.  I added them.
+<br>
+<p>I think this is maybe not the best way forward in general, esp. if you
+<br>
+envision more of these &quot;ignorable node types&quot; in the future.
+<br>
+<p>Here's an idea: you create a bit which, if set in the node type value,
+<br>
+means &quot;ignorable&quot;.  Then for the ignorable flags you or (|) that bit
+<br>
+into the value of the type.
+<br>
+<p>Now in the code when you want to skip ignorable nodes, you can walk
+<br>
+through them testing to see if that bit is set; if it is, the node is
+<br>
+ignorable.  If not, it isn't.
+<br>
+<p>The advantage here isn't so much speed (although it will be faster to
+<br>
+test this bit than testing equality with 5 or more values), but rather
+<br>
+ease of adding new ignorable nodes... rather than go through the entire
+<br>
+codebase determining which loops skip ignorable nodes and adding tests
+<br>
+for the new ones, you just set the bit on the type in tree.h and you're
+<br>
+done.
+<br>
+<p>That might look something like this (in tree.h):
+<br>
+<p>&nbsp;&nbsp;#define XML_IGNORABLE_BIT     0x80000000
+<br>
+<p>&nbsp;&nbsp;typedef enum {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ELEMENT_NODE=		1,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ATTRIBUTE_NODE=	2,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_TEXT_NODE=		3,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_CDATA_SECTION_NODE=	4,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ENTITY_REF_NODE=	5,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ENTITY_NODE=		6,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_PI_NODE=		(7 | XML_IGNORABLE_BIT),
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_COMMENT_NODE=		(8 | XML_IGNORABLE_BIT),
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_DOCUMENT_NODE=	9,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_DOCUMENT_TYPE_NODE=	10,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_DOCUMENT_FRAG_NODE=	11,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_NOTATION_NODE=	12,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_HTML_DOCUMENT_NODE=	13,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_DTD_NODE=		14,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ELEMENT_DECL=		15,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ATTRIBUTE_DECL=	16,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_ENTITY_DECL=		17,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_NAMESPACE_DECL=	18,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_XINCLUDE_START=	(19 | XML_IGNORABLE_BIT),
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML_XINCLUDE_END=		(20 | XML_IGNORABLE_BIT)
+<br>
+&nbsp;&nbsp;#ifdef LIBXML_SGML_ENABLED
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,XML_SGML_DOCUMENT_NODE=	21
+<br>
+&nbsp;&nbsp;#endif
+<br>
+&nbsp;&nbsp;} xmlElementType;
+<br>
+<p>&nbsp;&nbsp;/* extern int xmlIsIgnorable(xmlElementType type); */
+<br>
+&nbsp;&nbsp;#define xmlIsIgnorable(_t)    ((_t) &amp; XML_IGNORABLE_BIT)
+<br>
+<p>Now use &quot;if (xmlIsIgnorable(node-&gt;type))&quot; as the test.
+<br>
+<p>Alternatively, if you didn't want to change the values of the
+<br>
+xmlElementType enum like that, you could define the xmlIsIgnorable()
+<br>
+macro in tree.h to check to see if &quot;type&quot; was ignorable by testing all
+<br>
+the ignorable values, like this:
+<br>
+<p>&nbsp;&nbsp;/* NOTE!  The argument has macro side-effects! */
+<br>
+&nbsp;&nbsp;#define xmlIsIgnorable(_t) ((_t)==XML_PI_NODE \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (_t)==XML_COMMENT_NODE \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (_t)==XML_XINCLUDE_START \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (_t)==XML_XINCLUDE_END)
+<br>
+<p>This still pulls the &quot;ignorability&quot; into a single point of change, but
+<br>
+isn't as efficient.  Well, anyway, here's my patch.
+<br>
+<p><p>--- valid.c-dist	Tue Nov  7 08:19:11 2000
+<br>
++++ valid.c	Tue Nov 28 22:59:08 2000
+<br>
+@@ -2900,6 +2900,54 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ret);
+<br>
+&nbsp;}
+<br>
+&nbsp;
+<br>
++/* Find the next XML_ELEMENT_NODE, subject to the content constraints.
+<br>
++ * Return -1 if we found something unexpected, or 1 otherwise.
+<br>
++ */
+<br>
++
+<br>
++static int
+<br>
++xmlValidateFindNextElement(xmlValidCtxtPtr ctxt, xmlNodePtr *child,
+<br>
++                           xmlElementContentPtr cont)
+<br>
++{
+<br>
++  while (*child &amp;&amp; (*child)-&gt;type != XML_ELEMENT_NODE) {
+<br>
++    switch ((*child)-&gt;type) {
+<br>
++      /*
+<br>
++       * If there is an entity declared and it's not empty
+<br>
++       * Push the current node on the stack and process with the
+<br>
++       * entity content.
+<br>
++       */
+<br>
++      case XML_ENTITY_REF_NODE:
+<br>
++        if (((*child)-&gt;children != NULL) &amp;&amp;
+<br>
++            ((*child)-&gt;children-&gt;children != NULL)) {
+<br>
++          nodeVPush(ctxt, *child);
+<br>
++          *child = (*child)-&gt;children-&gt;children;
+<br>
++          continue;
+<br>
++        }
+<br>
++        break;
+<br>
++
+<br>
++      /* These things are ignored (skipped) during validation.  */
+<br>
++      case XML_PI_NODE:
+<br>
++      case XML_COMMENT_NODE:
+<br>
++      case XML_XINCLUDE_START:
+<br>
++      case XML_XINCLUDE_END:
+<br>
++        break;
+<br>
++
+<br>
++      case XML_TEXT_NODE:
+<br>
++        if (xmlIsBlankNode(*child)
+<br>
++            &amp;&amp; (cont-&gt;type == XML_ELEMENT_CONTENT_ELEMENT
+<br>
++                || cont-&gt;type == XML_ELEMENT_CONTENT_SEQ
+<br>
++                || cont-&gt;type == XML_ELEMENT_CONTENT_OR))
+<br>
++          break;
+<br>
++        return -1;
+<br>
++
+<br>
++      default:
+<br>
++        return -1;
+<br>
++    }
+<br>
++    *child = (*child)-&gt;next;
+<br>
++  }
+<br>
++
+<br>
++  return 1;
+<br>
++}
+<br>
++
+<br>
+&nbsp;int xmlValidateElementTypeElement(xmlValidCtxtPtr ctxt, xmlNodePtr *child,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlElementContentPtr cont);
+<br>
+&nbsp;
+<br>
+@@ -2924,42 +2972,9 @@
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cont == NULL) return(-1);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG_VALID_STATE(*child, cont)
+<br>
+-    while (*child != NULL) {
+<br>
+-        if ((*child)-&gt;type == XML_ENTITY_REF_NODE) {
+<br>
+-	    /*
+<br>
+-	     * If there is an entity declared an it's not empty
+<br>
+-	     * Push the current node on the stack and process with the
+<br>
+-	     * entity content.
+<br>
+-	     */
+<br>
+-	    if (((*child)-&gt;children != NULL) &amp;&amp;
+<br>
+-		((*child)-&gt;children-&gt;children != NULL)) {
+<br>
+-		nodeVPush(ctxt, *child);
+<br>
+-		*child = (*child)-&gt;children-&gt;children;
+<br>
+-	    } else
+<br>
+-		*child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if (((*child)-&gt;type == XML_TEXT_NODE) &amp;&amp;
+<br>
+-	    (xmlIsBlankNode(*child)) &amp;&amp;
+<br>
+-	    ((cont-&gt;type == XML_ELEMENT_CONTENT_ELEMENT) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_SEQ) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_OR))) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_PI_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_COMMENT_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-	else if ((*child)-&gt;type != XML_ELEMENT_NODE) {
+<br>
++    ret = xmlValidateFindNextElement(ctxt, child, cont);
+<br>
++    if (ret &lt; 0)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(-1);
+<br>
+-	}
+<br>
+-	break;
+<br>
+-    }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG_VALID_STATE(*child, cont)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (cont-&gt;type) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case XML_ELEMENT_CONTENT_PCDATA:
+<br>
+@@ -3032,47 +3047,14 @@
+<br>
+&nbsp;xmlValidateElementTypeElement(xmlValidCtxtPtr ctxt, xmlNodePtr *child,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlElementContentPtr cont) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlNodePtr cur;
+<br>
+-    int ret = 1;
+<br>
++    int ret;
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cont == NULL) return(-1);
+<br>
+&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG_VALID_STATE(*child, cont)
+<br>
+-    while (*child != NULL) {
+<br>
+-        if ((*child)-&gt;type == XML_ENTITY_REF_NODE) {
+<br>
+-	    /*
+<br>
+-	     * If there is an entity declared an it's not empty
+<br>
+-	     * Push the current node on the stack and process with the
+<br>
+-	     * entity content.
+<br>
+-	     */
+<br>
+-	    if (((*child)-&gt;children != NULL) &amp;&amp;
+<br>
+-		((*child)-&gt;children-&gt;children != NULL)) {
+<br>
+-		nodeVPush(ctxt, *child);
+<br>
+-		*child = (*child)-&gt;children-&gt;children;
+<br>
+-	    } else
+<br>
+-		*child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if (((*child)-&gt;type == XML_TEXT_NODE) &amp;&amp;
+<br>
+-	    (xmlIsBlankNode(*child)) &amp;&amp;
+<br>
+-	    ((cont-&gt;type == XML_ELEMENT_CONTENT_ELEMENT) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_SEQ) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_OR))) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_PI_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_COMMENT_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-	else if ((*child)-&gt;type != XML_ELEMENT_NODE) {
+<br>
++    ret = xmlValidateFindNextElement(ctxt, child, cont);
+<br>
++    if (ret &lt; 0)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(-1);
+<br>
+-	}
+<br>
+-	break;
+<br>
+-    }
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEBUG_VALID_STATE(*child, cont)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = *child;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = xmlValidateElementTypeExpr(ctxt, child, cont);
+<br>
+@@ -3082,8 +3064,10 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ret == 1) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* skip ignorable elems */
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((*child != NULL) &amp;&amp;
+<br>
+-		       (((*child)-&gt;type == XML_PI_NODE) ||
+<br>
+-			((*child)-&gt;type == XML_COMMENT_NODE))) {
+<br>
++		       ((*child)-&gt;type == XML_PI_NODE
+<br>
++                        || (*child)-&gt;type == XML_COMMENT_NODE
+<br>
++                        || (*child)-&gt;type == XML_XINCLUDE_START
+<br>
++                        || (*child)-&gt;type == XML_XINCLUDE_END)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while ((*child)-&gt;next == NULL) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((*child)-&gt;parent != NULL) &amp;&amp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*child)-&gt;parent-&gt;type == XML_ENTITY_REF_NODE)) {
+<br>
+@@ -3119,8 +3103,8 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (*child == NULL)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break; /* while */
+<br>
+-		if (((*child)-&gt;type == XML_TEXT_NODE) &amp;&amp;
+<br>
+-		    (xmlIsBlankNode(*child))) {
+<br>
++		if ((*child)-&gt;type == XML_TEXT_NODE
+<br>
++                    &amp;&amp; xmlIsBlankNode(*child)) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*child = (*child)-&gt;next;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+@@ -3132,43 +3116,8 @@
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*child = cur;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+-    while (*child != NULL) {
+<br>
+-        if ((*child)-&gt;type == XML_ENTITY_REF_NODE) {
+<br>
+-	    /*
+<br>
+-	     * If there is an entity declared an it's not empty
+<br>
+-	     * Push the current node on the stack and process with the
+<br>
+-	     * entity content.
+<br>
+-	     */
+<br>
+-	    if (((*child)-&gt;children != NULL) &amp;&amp;
+<br>
+-		((*child)-&gt;children-&gt;children != NULL)) {
+<br>
+-		nodeVPush(ctxt, *child);
+<br>
+-		*child = (*child)-&gt;children-&gt;children;
+<br>
+-	    } else
+<br>
+-		*child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if (((*child)-&gt;type == XML_TEXT_NODE) &amp;&amp;
+<br>
+-	    (xmlIsBlankNode(*child)) &amp;&amp;
+<br>
+-	    ((cont-&gt;type == XML_ELEMENT_CONTENT_ELEMENT) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_SEQ) ||
+<br>
+-	     (cont-&gt;type == XML_ELEMENT_CONTENT_OR))) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_PI_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-        if ((*child)-&gt;type == XML_COMMENT_NODE) {
+<br>
+-	    *child = (*child)-&gt;next;
+<br>
+-	    continue;
+<br>
+-	}
+<br>
+-	else if ((*child)-&gt;type != XML_ELEMENT_NODE) {
+<br>
+-	    return(-1);
+<br>
+-	}
+<br>
+-	break;
+<br>
+-    }
+<br>
+-    return(1);
+<br>
++
+<br>
++    return xmlValidateFindNextElement(ctxt, child, cont);
+<br>
+&nbsp;}
+<br>
+&nbsp;
+<br>
+&nbsp;/**
+<br>
+<p><p><pre>
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith &lt;<a href="mailto:psmith@baynetworks.com?subject=Re:%20[xml]%20Another%20xinclude%20vs.%20DTD%20patch">psmith@baynetworks.com</a>&gt;    HASMAT--HA Software Methods &amp; Tools
+ &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Another%20xinclude%20vs.%20DTD%20patch">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Another%20xinclude%20vs.%20DTD%20patch">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1238.html">Paul D. Smith: "[xml] Fix for xinclude with DTD"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Nov 28 2000 - 23:44:59 EST</em>
+</em>
+</small>
+</body>
+</html>

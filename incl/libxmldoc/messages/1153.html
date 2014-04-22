@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] xmlDocDumpMemory and xmlParseMemory</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] xmlDocDumpMemory and xmlParseMemory">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] xmlDocDumpMemory and xmlParseMemory</h1>
+<!-- received="Wed Nov  8 14:15:43 2000" -->
+<!-- isoreceived="20001108191543" -->
+<!-- sent="Wed, 8 Nov 2000 19:45:32 +0100" -->
+<!-- isosent="20001108184532" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] xmlDocDumpMemory and xmlParseMemory" -->
+<!-- id="20001108194532.H14384@w3.org" -->
+<!-- inreplyto="5.0.0.25.2.20001108131518.009e2eb0@quad.rebel.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Nov 08 2000 - 13:45:32 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>Previous message:</strong> <a href="1152.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>In reply to:</strong> <a href="1152.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>Reply:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Nov 08, 2000 at 01:22:12PM -0500, Matthew Kellett wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; Yes.  It works perfectly.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I changed it to
+</em><br>
+<em>&gt;          xmlNodeDump(buf, cur, child, 0, 0);
+</em><br>
+<p>&nbsp;Okay,
+<br>
+<p><em>&gt; and commented out the next line.
+</em><br>
+<em>&gt; /*      xmlBufferWriteChar(buf, '\n');*/
+</em><br>
+<p>&nbsp;&nbsp;Not okay,
+<br>
+at that point this is no more XML elements parsing/saving, and I think
+<br>
+this should be kept as is, as we won't generate text nodes for this
+<br>
+anyway.
+<br>
+<p><em>&gt; I'm sorry I don't have a patch to give you.  Is it possible to get this 
+</em><br>
+<em>&gt; into 2.2.8?
+</em><br>
+<p>&nbsp;&nbsp;I will propagate the first fix in 2.2.8 and see if people complain.
+<br>
+I don't think this will annoy people as this is is simply a libxml 1.x
+<br>
+to 2.x change I simply forgot to propagate.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | libxml Gnome XML toolkit
+Tel : +33 476 615 257  | 655, avenue de l'Europe | <a href="http://xmlsoft.org/">http://xmlsoft.org/</a>
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Rpmfind search site
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | <a href="http://rpmfind.net/">http://rpmfind.net/</a>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20xmlDocDumpMemory%20and%20xmlParseMemory">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>Previous message:</strong> <a href="1152.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>In reply to:</strong> <a href="1152.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<li><strong>Reply:</strong> <a href="1154.html">Matthew Kellett: "Re: [xml] xmlDocDumpMemory and xmlParseMemory"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Nov 08 2000 - 14:47:11 EST</em>
+</em>
+</small>
+</body>
+</html>

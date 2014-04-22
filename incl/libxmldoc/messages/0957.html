@@ -1,0 +1,537 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: [xml] Patch for HTML SCRIPT</title>
+<meta name="Author" content="Bjorn Reese (breese@mail1.stofanet.dk)">
+<meta name="Subject" content="[xml] Patch for HTML SCRIPT">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>[xml] Patch for HTML SCRIPT</h1>
+<!-- received="Sat Oct 14 13:25:59 2000" -->
+<!-- isoreceived="20001014172559" -->
+<!-- sent="Sat, 14 Oct 2000 17:26:26 +0000" -->
+<!-- isosent="20001014172626" -->
+<!-- name="Bjorn Reese" -->
+<!-- email="breese@mail1.stofanet.dk" -->
+<!-- subject="[xml] Patch for HTML SCRIPT" -->
+<!-- id="39E89742.6B888AF5@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Bjorn Reese (<a href="mailto:breese@mail1.stofanet.dk?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT"><em>breese@mail1.stofanet.dk</em></a>)<br>
+<strong>Date:</strong> Sat Oct 14 2000 - 13:26:26 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>Previous message:</strong> <a href="0956.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Attached is patch for the HTML SCRIPT element, whose contents should
+<br>
+not be parse or encoded. The regression tests breaks, but that is
+<br>
+because the results of the regression tests are wrong.
+<br>
+<p>A similar problem exists for the HTML STYLE element (which should be
+<br>
+straight-forward to add), and for attributes containing script code.
+<br>
+The latter could be solved by recognizing quotes for the attributes.
+<br>
+My patch does not include any of this.
+<br>
+<p>I have also attached a simplistic .html file used for testing.
+<br>
+<p>
+*** ../libxml2-2.2.5/HTMLparser.c	Wed Oct 11 01:12:56 2000
+<br>
+--- HTMLparser.c	Sat Oct 14 19:13:14 2000
+<br>
+***************
+<br>
+*** 2210,2215 ****
+<br>
+--- 2210,2242 ----
+<br>
+&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;/**
+<br>
++  * htmlParseScript:
+<br>
++  * @ctxt:  an HTML parser context
+<br>
++  */
+<br>
++ void htmlParseScript(htmlParserCtxtPtr ctxt) {
+<br>
++     int i = 0;
+<br>
++     const xmlChar *start = CUR_PTR;
+<br>
++ 
+<br>
++     while (IS_CHAR(CUR)) {
+<br>
++ 	if ((CUR == '&lt;') &amp;&amp; (NXT(1) == '/') &amp;&amp;
+<br>
++ 	    (UPP(2) == 'S') &amp;&amp; (UPP(3) == 'C') &amp;&amp;
+<br>
++ 	    (UPP(4) == 'R') &amp;&amp; (UPP(5) == 'I') &amp;&amp;
+<br>
++ 	    (UPP(6) == 'P') &amp;&amp; (UPP(7) == 'T') &amp;&amp;
+<br>
++ 	    (NXT(8) == '&gt;'))
+<br>
++ 	    break; /* while */
+<br>
++ 	NEXT;
+<br>
++     }
+<br>
++     if ((ctxt-&gt;sax != NULL) &amp;&amp; (!ctxt-&gt;disableSAX)) {
+<br>
++ 	if (ctxt-&gt;sax-&gt;cdataBlock!= NULL) {
+<br>
++ 	    /*
+<br>
++ 	     * Insert as CDATA, which is the same as HTML_PRESERVE_NODE
+<br>
++ 	     */
+<br>
++ 	    ctxt-&gt;sax-&gt;cdataBlock(ctxt-&gt;userData, start, CUR_PTR - start);
+<br>
++ 	}
+<br>
++     }
+<br>
++ }
+<br>
++ 
+<br>
++ /**
+<br>
+&nbsp;&nbsp;&nbsp;* htmlParseCharData:
+<br>
+&nbsp;&nbsp;&nbsp;* @ctxt:  an HTML parser context
+<br>
+&nbsp;&nbsp;&nbsp;* @cdata:  int indicating whether we are within a CDATA section
+<br>
+***************
+<br>
+*** 3112,3179 ****
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * Sometimes DOCTYPE arrives in the middle of the document
+<br>
+! 	 */
+<br>
+! 	if ((CUR == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp;
+<br>
+! 	    (UPP(2) == 'D') &amp;&amp; (UPP(3) == 'O') &amp;&amp;
+<br>
+! 	    (UPP(4) == 'C') &amp;&amp; (UPP(5) == 'T') &amp;&amp;
+<br>
+! 	    (UPP(6) == 'Y') &amp;&amp; (UPP(7) == 'P') &amp;&amp;
+<br>
+! 	    (UPP(8) == 'E')) {
+<br>
+! 	    if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+! 		ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+! 		     &quot;Misplaced DOCTYPE declaration\n&quot;);
+<br>
+! 	    ctxt-&gt;wellFormed = 0;
+<br>
+! 	    htmlParseDocTypeDecl(ctxt);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * First case :  a comment
+<br>
+! 	 */
+<br>
+! 	if ((CUR == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp;
+<br>
+! 		 (NXT(2) == '-') &amp;&amp; (NXT(3) == '-')) {
+<br>
+! 	    htmlParseComment(ctxt);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * Second case :  a sub-element.
+<br>
+! 	 */
+<br>
+! 	else if (CUR == '&lt;') {
+<br>
+! 	    htmlParseElement(ctxt);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * Third case : a reference. If if has not been resolved,
+<br>
+! 	 *    parsing returns it's Name, create the node 
+<br>
+! 	 */
+<br>
+! 	else if (CUR == '&amp;') {
+<br>
+! 	    htmlParseReference(ctxt);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * Fourth : end of the resource
+<br>
+! 	 */
+<br>
+! 	else if (CUR == 0) {
+<br>
+! 	    htmlAutoClose(ctxt, NULL);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	/*
+<br>
+! 	 * Last case, text. Note that References are handled directly.
+<br>
+! 	 */
+<br>
+! 	else {
+<br>
+! 	    htmlParseCharData(ctxt, 0);
+<br>
+! 	}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	if (cons == ctxt-&gt;nbChars) {
+<br>
+! 	    if (ctxt-&gt;node != NULL) {
+<br>
+! 		if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+! 		    ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+! 			 &quot;detected an error in element content\n&quot;);
+<br>
+! 		ctxt-&gt;wellFormed = 0;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+-             break;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+- 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GROW;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (currentNode != NULL) xmlFree(currentNode);
+<br>
+--- 3139,3212 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;
+<br>
+! 	if (xmlStrEqual(currentNode, &quot;script&quot;)) {
+<br>
+! 	    /*
+<br>
+! 	     * Handle SCRIPT separately
+<br>
+! 	     */
+<br>
+! 	    htmlParseScript(ctxt);
+<br>
+! 	} else {
+<br>
+! 	    /*
+<br>
+! 	     * Sometimes DOCTYPE arrives in the middle of the document
+<br>
+! 	     */
+<br>
+! 	    if ((CUR == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp;
+<br>
+! 		(UPP(2) == 'D') &amp;&amp; (UPP(3) == 'O') &amp;&amp;
+<br>
+! 		(UPP(4) == 'C') &amp;&amp; (UPP(5) == 'T') &amp;&amp;
+<br>
+! 		(UPP(6) == 'Y') &amp;&amp; (UPP(7) == 'P') &amp;&amp;
+<br>
+! 		(UPP(8) == 'E')) {
+<br>
+! 		if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+! 		    ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+! 				     &quot;Misplaced DOCTYPE declaration\n&quot;);
+<br>
+! 		ctxt-&gt;wellFormed = 0;
+<br>
+! 		htmlParseDocTypeDecl(ctxt);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    /*
+<br>
+! 	     * First case :  a comment
+<br>
+! 	     */
+<br>
+! 	    if ((CUR == '&lt;') &amp;&amp; (NXT(1) == '!') &amp;&amp;
+<br>
+! 		(NXT(2) == '-') &amp;&amp; (NXT(3) == '-')) {
+<br>
+! 		htmlParseComment(ctxt);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    /*
+<br>
+! 	     * Second case :  a sub-element.
+<br>
+! 	     */
+<br>
+! 	    else if (CUR == '&lt;') {
+<br>
+! 		htmlParseElement(ctxt);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    /*
+<br>
+! 	     * Third case : a reference. If if has not been resolved,
+<br>
+! 	     *    parsing returns it's Name, create the node 
+<br>
+! 	     */
+<br>
+! 	    else if (CUR == '&amp;') {
+<br>
+! 		htmlParseReference(ctxt);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    /*
+<br>
+! 	     * Fourth : end of the resource
+<br>
+! 	     */
+<br>
+! 	    else if (CUR == 0) {
+<br>
+! 		htmlAutoClose(ctxt, NULL);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    /*
+<br>
+! 	     * Last case, text. Note that References are handled directly.
+<br>
+! 	     */
+<br>
+! 	    else {
+<br>
+! 		htmlParseCharData(ctxt, 0);
+<br>
+! 	    }
+<br>
+&nbsp;&nbsp;
+<br>
+! 	    if (cons == ctxt-&gt;nbChars) {
+<br>
+! 		if (ctxt-&gt;node != NULL) {
+<br>
+! 		    if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+<br>
+! 			ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+<br>
+! 					 &quot;detected an error in element content\n&quot;);
+<br>
+! 		    ctxt-&gt;wellFormed = 0;
+<br>
+! 		}
+<br>
+! 		break;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GROW;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (currentNode != NULL) xmlFree(currentNode);
+<br>
+*** ../libxml2-2.2.5/HTMLtree.c	Wed Oct 11 01:12:56 2000
+<br>
+--- HTMLtree.c	Sat Oct 14 19:04:13 2000
+<br>
+***************
+<br>
+*** 818,823 ****
+<br>
+--- 818,833 ----
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlOutputBufferWriteString(buf, &quot;;&quot;);
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
++     if (cur-&gt;type == HTML_PRESERVE_NODE) {
+<br>
++ 	if (cur-&gt;content != NULL) {
+<br>
++ #ifndef XML_USE_BUFFER_CONTENT
+<br>
++ 	    xmlOutputBufferWriteString(buf, (const char *)cur-&gt;content);
+<br>
++ #else
+<br>
++ 	    xmlOutputBufferWriteString(buf, xmlBufferContent(cur-&gt;content));
+<br>
++ #endif
+<br>
++ 	}
+<br>
++ 	return;
+<br>
++     }
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Get specific HTmL info for taht node.
+<br>
+*** ../libxml2-2.2.5/include/libxml/HTMLtree.h	Wed Oct 11 01:12:56 2000
+<br>
+--- include/libxml/HTMLtree.h	Sat Oct 14 18:51:19 2000
+<br>
+***************
+<br>
+*** 22,27 ****
+<br>
+--- 22,28 ----
+<br>
+&nbsp;&nbsp;#define HTML_TEXT_NODE		XML_TEXT_NODE
+<br>
+&nbsp;&nbsp;#define HTML_ENTITY_REF_NODE	XML_ENTITY_REF_NODE
+<br>
+&nbsp;&nbsp;#define HTML_COMMENT_NODE	XML_COMMENT_NODE
+<br>
++ #define HTML_PRESERVE_NODE	XML_CDATA_SECTION_NODE
+<br>
+&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;htmlDocPtr	htmlNewDoc		(const xmlChar *URI,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *ExternalID);
+<br>
+<p>
+<HEAD><TITLE>Script tests</TITLE></HEAD>
+<BODY>
+<SCRIPT language=javascript>
+    if (window.open<max) ;
+</SCRIPT>
+<INPUT ONCLICK="if(window.open<max);">
+</BODY>
+
+
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Patch%20for%20HTML%20SCRIPT">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0958.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>Previous message:</strong> <a href="0956.html">Daniel Veillard: "Re: [xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Sat Oct 14 2000 - 13:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

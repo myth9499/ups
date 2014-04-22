@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Don't read XML from directories.</title>
+<meta name="Author" content="Igor Zlatkovic (igorz@dialup.nacamar.de)">
+<meta name="Subject" content="Re: [xml] Don't read XML from directories.">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Don't read XML from directories.</h1>
+<!-- received="Wed Jan 24 11:50:48 2001" -->
+<!-- isoreceived="20010124165048" -->
+<!-- sent="Wed, 24 Jan 2001 17:22:14 +0100" -->
+<!-- isosent="20010124162214" -->
+<!-- name="Igor Zlatkovic" -->
+<!-- email="igorz@dialup.nacamar.de" -->
+<!-- subject="Re: [xml] Don't read XML from directories." -->
+<!-- id="000e01c08621$ceb53a00$0b01a8c0@home.loc" -->
+<!-- inreplyto="20010124003728.A5801@azul.dhis.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Igor Zlatkovic (<a href="mailto:igorz@dialup.nacamar.de?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories."><em>igorz@dialup.nacamar.de</em></a>)<br>
+<strong>Date:</strong> Wed Jan 24 2001 - 11:22:14 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1377.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1377.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Hello.
+<br>
+<p>Alejo, I see your point. Indeed, your argumenting contains a fair amount of
+<br>
+reason and there are a lot of points I would agree with you at, including
+<br>
+the statement that I abused the strlen example, for it is most true :-). I
+<br>
+can only hope that you see my point as well, for it is not that much
+<br>
+different to yours.
+<br>
+<p><em>&gt; However, you see, correctness and sanity of parameters are
+</em><br>
+<em>&gt; completely relative to the function's precondition.
+</em><br>
+<p>I can but agree with that. Still, you must agree with me about  the calling
+<br>
+program is the one who comes up with those parameters.
+<br>
+<p>I think the point where Alejandro and myself disagree is not checking the
+<br>
+parameters in its own right, but the definition of The Check That Need Be
+<br>
+(TCTNB, in the following) and The Check That Overbloats Code (TCTOC in the
+<br>
+following). I need not mention that the two are mutualy exclusive.
+<br>
+<p>recedence: list
+<br>
+Reply-To: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+<br>
+Errors-To: <a href="mailto:xml-error@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml-error@rpmfind.net</a>
+<br>
+X-loop: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+<br>
+X-mailing-list: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+<br>
+Resent-from: <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+<br>
+<p><p>It looks to me that Alejo and myself have stated our opinion the best way we
+<br>
+could. Each has presented reasons for why things should be the way he
+<br>
+considers it apropriate. Nothing more one of us could say would change the
+<br>
+opinion of the other and I am not quite sure if the issue is significant
+<br>
+enough to justify pumping huge amounts of text, such asAlejandro pointed out to amount of URL processing which appearantly takes
+<br>
+place somewhere within xmlParseFile. According to that, libxml checks the
+<br>
+resource locators passed to it and after determining the transmission
+<br>
+channel which can be used for the particular URL, it proceeds. Is this check
+<br>
+TCTNB or TCTOC?
+<br>
+<p>We are happy to have a libxml which handles a lot of resource locators, gods
+<br>
+bless Daniel Veillard for making it. What sorts of URL's can be handled
+<br>
+here? Well, there is http://, ftp://, file://, perh my last reply, into
+<br>
+the mailing list :-).
+<br>
+<p>I would say, now that we have made our points, let the others decide. If a
+<br>
+patch should be made, then we shall make one.
+<br>
+<p>Alejo, It is a fact that this must be done slightly differently under Win32
+<br>
+than under UNIX, a courtesy of a rather unreasonable naming conventions used
+<br>
+in Microsoft's C-runtime. If the people wish this patch, I would be glad to
+<br>
+help if you cannot test it under both platforms.
+<br>
+<p>Cheers
+<br>
+Igor
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived ataps a few others. libxml
+checks if a URL is http://, ftp://, file:// or whatever, before trying to
+access data the URL points to. This happens because that very check
+determines the transmission channel and the subset of the underlying
+operating system funcitons which must be used in order to access the data.
+This is a part of a very normal URL processing and must be done. This is
+therefore TCTNB.
+<p>Now, Alejandro claims, that if the URL points to a file in the local
+filesystem, an additional check should be made to ensure that it indeed
+specifies a file, not a directory. Would this check be TCTNB, or TCTOC?
+<p>One can specify a directory through a http:// URL as well, not just through
+file://. I mean, I can say
+<a href="http://xmlfiles.xml.org/archive/1998">http://xmlfiles.xml.org/archive/1998</a>
+... but in the other hand,  I can also say:
+<a href="http://xmlfiles.xml.org/archive/1998/acct.xml">http://xmlfiles.xml.org/archive/1998/acct.xml</a>.
+Should checking be done here as well? If file:// URLs are disallowed to
+point to a directory, why allow http:// and ftp:// URLs to do so? Clear, if
+I use a http:// URL and speci : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+fy a directory, there is a slight possibility
+for XML still to come, that being in contrast to the filesystem.
+Nevertheless, some consistence would not hurt a library which claims to
+handle something transparently to the programmer.
+<p>There is more. The reason why a directory check should be imlemented is to
+prevent the programmer to choose the source which can never contain XML
+data, or so I see it. In fact, there are many different things one can find
+on the filesystem. There are device descriptors, named pipes, sockets, all
+of which are not known for being a good source of XML data, unless designed
+specifically for such purpose. In the realm of regular files, it is a fact
+that executable files contain no XML data, at least nothing parsable by
+libxml. It is rumored that files which contain media, like JPEG images, also
+lack XML structure.
+<p>If libxml calls stat(2) in order to find out if the URL points to a regular
+file, then I see it responsible for ensuring that the URL points to
+something that really contains XML as well. Why is a gzipped tarball a
+better source of XML data than a directory? Just like directories cannot
+contain any XML, neither tarballs can. If you look at these two as a
+possible source of XML data, they are completely equal. If I can use
+fopen(3) on one of them and not on the other is of no consequence. I cannot
+think of a good reason why are directories so much worse than any other
+point in the filesystem without XML, so that they would deserve an extra
+check? My opinion remains: this sort of check is TCTOC.
+<p>&gt; Following your logic, why bother checking the return
+&gt; value for the open(2) call in libxml at all?  After all, the
+&gt; programmer passed a filename that can't be opened
+&gt; so it's his fault for not establishing the correctness
+&gt; and sanity of parameters.
+<p>This can only mean you misunderstood my logic, most certainly because I
+haven't defined it good enough. If you are this far, then you have read
+things regarding the TCTNB and TCTOC and if I succeeded in making my point,
+then you know that checking the return value of open(2) is what I came to
+call TCTNB, in my eyes.
+<p>&gt; Currently, the (implicit) precondition is &quot;pass a
+&gt; filename that points to a file (not directory; if it points
+&gt; to directory, errors will occur)&quot;.  So yes, for that
+&gt; precondition, you must make sure your filename
+&gt; does point to a file, not a directory.  I am just proposing
+&gt; changing that (again, implicit) precondition to &quot;pass a
+&gt; filename that can point to both a file or a directory and
+&gt; let libxml signal an error if it is a directory&quot;.
+<p>But... that is exactly what happens. You pass a filename that can point to
+anything and libxml signals an error if it does not contain valid XML, be it
+a directory, or be it /dev/random. What you pass to xmlParseFile should be
+viewed not as a file-or-directory-item, but much more abstract, as a
+resource locator which points to the XML source. This abstraction allows
+using http://, ftp:// and friends. libxml does and should continue to differ
+between valid and invalid XML sources, not between files and directories.
+<p>I would like to add my opinion about usability and user-friendliness by
+referring to the example Alejandro gave: The user sits there, chooses
+something in a file selection dialog and presses OK. What happens? Alejandro
+gave three possible options.
+<p>The option I would use is to present a file-selection dialog which does
+justice to its name. If things which are not considered good simply don't
+appear in the selection dialog, there is nothing the user can do wrong. This
+can be as simple as showing only files which end with &quot;.xml&quot;, as the vast
+majority of XML files do. Every file-selection dialog from any widget set
+known to me supports a thing called a  filter, which can be preset
+programatically before the dialog is displayed. In addition to that, all
+those dialogs present directories and files visually distinguishable from
+each other. The user can alter the filter after the dialog has been
+presented and thus open a file which does not end with &quot;.xml&quot;, should she
+see it apropriate. Should something go wrong, no user I dealt with would
+misunderstand the message if it says that something other than a file which
+contains XML data cannot be a valid source of XML data.
+<p>To address the problem with directories, which are displayed in the above
+option, let me state this: Basic knowledge about filesystem organisation can
+be expressed in few sentences:
+- Files contain data.
+- Directories are not files. They contain files and/or other directories.
+If there are users who are puzzled about this, they must be educated. They
+would not understand a &quot;cannot read XML from a directory&quot; any better than a
+&quot;selected file contains no valid XML&quot;, since they seem not to see the
+difference between a file and a directory anyway. Keeping them from learning
+the above basics does them no good, since they have most certainly huge
+problems and zero fun with every program they use. If they happen to be
+one's customers, then one must either educate or lose them, since the effort
+and cost of supporting them would never be compensated by any gain they can
+ever deliver. This is a sad, but true fact of life.
+<p>Thanks for listening. I mean it. :-)
+Igor
+<p><p><p><p>----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Don't%20read%20XML%20from%20directories.">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>Previous message:</strong> <a href="1377.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<li><strong>In reply to:</strong> <a href="1377.html">Alejandro Forero Cuervo: "Re: [xml] Don't read XML from directories."</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="1379.html">Daniel Veillard: "Re: [xml] Don't read XML from directories."</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Jan 24 2001 - 12:43:51 EST</em>
+</em>
+</small>
+</body>
+</html>

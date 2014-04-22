@@ -1,0 +1,200 @@
+*** src/libxml2-2.2.5/tree.c	Sun Oct 15 01:18:50 2000
+--- dev/libxml2-2.2.5/tree.c	Fri Oct 20 20:54:44 2000
+*************** xmlAddNextSibling(xmlNodePtr cur, xmlNod
+*** 1798,1803 ****
+--- 1798,1829 ----
+      }
+  
+      xmlUnlinkNode(elem);
++ 
++     if (elem->type == XML_TEXT_NODE) {
++ 	if (cur->type == XML_TEXT_NODE) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlNodeAddContent(cur, elem->content);
++ #else
++ 	    xmlNodeAddContent(cur, xmlBufferContent(elem->content));
++ #endif
++ 	    return(cur);
++ 	}
++ 	if ((cur->next != NULL) && (cur->type == XML_TEXT_NODE)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlChar *tmp;
++ 
++ 	    tmp = xmlStrdup(elem->content);
++ 	    tmp = xmlStrcat(tmp, cur->next->content);
++ 	    xmlNodeSetContent(cur->next, tmp);
++ 	    xmlFree(tmp);
++ #else
++ 	    xmlBufferAddHead(cur->next, xmlBufferContent(elem->content),
++ 			     xmlBufferLength(elem->content));
++ #endif
++ 	    return(cur->next);
++ 	}
++     }
++ 
+      elem->doc = cur->doc;
+      elem->parent = cur->parent;
+      elem->prev = cur;
+*************** xmlAddNextSibling(xmlNodePtr cur, xmlNod
+*** 1816,1821 ****
+--- 1842,1848 ----
+   * @elem:  the new node
+   *
+   * Add a new element @elem as the previous siblings of @cur
++  * merging adjacent TEXT nodes (@elem isn't freed)
+   * If the new element was already inserted in a document it is
+   * first unlinked from its existing context.
+   *
+*************** xmlAddPrevSibling(xmlNodePtr cur, xmlNod
+*** 1837,1842 ****
+--- 1864,1895 ----
+      }
+  
+      xmlUnlinkNode(elem);
++ 
++     if (elem->type == XML_TEXT_NODE) {
++ 	if (cur->type == XML_TEXT_NODE) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlChar *tmp;
++ 
++ 	    tmp = xmlStrdup(elem->content);
++ 	    tmp = xmlStrcat(tmp, cur->content);
++ 	    xmlNodeSetContent(cur, tmp);
++ 	    xmlFree(tmp);
++ #else
++ 	    xmlBufferAddHead(cur->content, xmlBufferContent(elem->content), 
++ 			     xmlBufferLength(elem->content));
++ #endif
++ 	    return(cur);
++ 	}
++ 	if ((cur->prev != NULL) && (cur->prev->type == XML_TEXT_NODE)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlNodeAddContent(cur->prev, elem->content);
++ #else
++ 	    xmlNodeAddContent(cur->prev, xmlBufferContent(elem->content));
++ #endif
++ 	    return(cur->prev);
++ 	}
++     }
++ 
+      elem->doc = cur->doc;
+      elem->parent = cur->parent;
+      elem->next = cur;
+*************** xmlAddPrevSibling(xmlNodePtr cur, xmlNod
+*** 1855,1860 ****
+--- 1908,1914 ----
+   * @elem:  the new node
+   *
+   * Add a new element @elem to the list of siblings of @cur
++  * merging adjacent TEXT nodes (@elem isn't freed)
+   * If the new element was already inserted in a document it is
+   * first unlinked from its existing context.
+   *
+*************** xmlAddSibling(xmlNodePtr cur, xmlNodePtr
+*** 1892,1897 ****
+--- 1946,1961 ----
+      }
+  
+      xmlUnlinkNode(elem);
++ 
++     if ((cur->type == XML_TEXT_NODE) && (elem->type == XML_TEXT_NODE)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	xmlNodeAddContent(cur, elem->content);
++ #else
++ 	xmlNodeAddContent(cur, xmlBufferContent(elem->content));
++ #endif
++ 	return(cur);
++     }
++ 
+      if (elem->doc == NULL)
+  	elem->doc = cur->doc; /* the parent may not be linked to a doc ! */
+  
+*************** xmlAddSibling(xmlNodePtr cur, xmlNodePtr
+*** 1912,1917 ****
+--- 1976,1982 ----
+   * @cur:  the first node in the list
+   *
+   * Add a list of node at the end of the child list of the parent
++  * merging adjacent TEXT nodes
+   *
+   * Returns the last child or NULL in case of error.
+   */
+*************** xmlAddChildList(xmlNodePtr parent, xmlNo
+*** 1946,1951 ****
+--- 2011,2033 ----
+      if (parent->children == NULL) {
+  	parent->children = cur;
+      } else {
++ 	/*
++ 	 * If cur and parent->last both are TEXT nodes, then merge them.
++ 	 */
++ 	if ((cur->type == XML_TEXT_NODE) && 
++ 	    (parent->last->type == XML_TEXT_NODE)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlNodeAddContent(parent->last, cur->content);
++ #else
++ 	    xmlNodeAddContent(parent->last, xmlBufferContent(cur->content));
++ #endif
++ 	    /*
++ 	     * if it's the only child, nothing more to be done.
++ 	     */
++ 	    if (cur->next == NULL)
++ 		return(parent->last);
++ 	    cur = cur->next;
++ 	}
+  	prev = parent->last;
+  	prev->next = cur;
+  	cur->prev = prev;
+*************** xmlAddChildList(xmlNodePtr parent, xmlNo
+*** 1967,1973 ****
+   * @parent:  the parent node
+   * @cur:  the child node
+   *
+!  * Add a new child element, to @parent, at the end of the child list.
+   * Returns the child or NULL in case of error.
+   */
+  xmlNodePtr
+--- 2049,2056 ----
+   * @parent:  the parent node
+   * @cur:  the child node
+   *
+!  * Add a new child element, to @parent, at the end of the child list
+!  * merging adjacent TEXT nodes (@cur isn't freed).
+   * Returns the child or NULL in case of error.
+   */
+  xmlNodePtr
+*************** xmlAddChild(xmlNodePtr parent, xmlNodePt
+*** 1996,2001 ****
+--- 2079,2109 ----
+      }
+  
+      /* 
++      * If cur is a TEXT node, merge its content with adjacent TEXT nodes
++      * or with parent->content if parent->content != NULL.
++      */
++     if (cur->type == XML_TEXT_NODE) {
++ 	if (((parent->type == XML_ELEMENT_NODE) || 
++ 	     (parent->type == XML_TEXT_NODE)) &&
++ 	    (parent->content != NULL)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlNodeAddContent(parent, cur->content);
++ #else
++ 	    xmlNodeAddContent(parent, xmlBufferContent(cur->content));
++ #endif
++ 	    return(parent);
++ 	}
++ 	if ((parent->last != NULL) && (parent->last->type == XML_TEXT_NODE)) {
++ #ifndef XML_USE_BUFFER_CONTENT
++ 	    xmlNodeAddContent(parent->last, cur->content);
++ #else
++ 	    xmlNodeAddContent(parent->last, xmlBufferContent(cur->content));
++ #endif
++ 	    return(parent->last);
++ 	}
++     }
++ 
++     /*
+       * add the new element at the end of the children list.
+       */
+      cur->parent = parent;
+

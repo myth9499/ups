@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] parsing multiple files</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] parsing multiple files">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] parsing multiple files</h1>
+<!-- received="Thu Mar 30 22:50:10 2000" -->
+<!-- isoreceived="20000331035010" -->
+<!-- sent="Fri, 31 Mar 2000 05:50:03 +0200" -->
+<!-- isosent="20000331035003" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] parsing multiple files" -->
+<!-- id="20000331055003.A1595@w3.org" -->
+<!-- inreplyto="Pine.LNX.4.10.10003301324290.2335-100000@DHCP2-197.narus.com" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20parsing%20multiple%20files"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Thu Mar 30 2000 - 22:50:03 EST
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0439.html">Brian Craft: "[xml] saving parser state"</a>
+<li><strong>Previous message:</strong> <a href="0437.html">Alice Tull: "[xml] parsing multiple files"</a>
+<li><strong>In reply to:</strong> <a href="0437.html">Alice Tull: "[xml] parsing multiple files"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Thu, Mar 30, 2000 at 01:29:37PM -0800, Alice Tull wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; hi,
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I'm using the SAX parser to parser a set of XML files.
+</em><br>
+<em>&gt; I used xmlCreatePushParserCtxt to create the parser
+</em><br>
+<em>&gt; context each time, and xmlFreeParserCtxt after 
+</em><br>
+<em>&gt; parsing every document. This seems quite expensive.
+</em><br>
+<p>&nbsp;&nbsp;There is nothing really expensive in there. A couple of
+<br>
+structures are allocated and filled in with default values.
+<br>
+I think that this should be quite reasonable for most 
+<br>
+use in regard to actually get the data fetched and processed.
+<br>
+<p><em>&gt; Is there a way to create the parser context only once, 
+</em><br>
+<em>&gt; and reset it before parsing each xml file? I tried to 
+</em><br>
+<em>&gt; use xmlClearParserCtxt instead of freeing it, but seems 
+</em><br>
+<em>&gt; like it clears my SAXHandler and userData also ...
+</em><br>
+<p>&nbsp;&nbsp;xmlInitParserCtxt() does such a job of initializing
+<br>
+a parser context. But it will override the sax value too
+<br>
+and if not careful you may end-up with serious memory leaks
+<br>
+by not freeing-up previously allocated memory.
+<br>
+&nbsp;&nbsp;Having a look at that function (in parser.c) you can see
+<br>
+what fields are reset, they all in one way or another
+<br>
+represent some of the parser state. Doing those initialization
+<br>
+in a separate function could be done but I don't recommend
+<br>
+that since this is not guaranteed to work well in future
+<br>
+versions, and an inadequate initialization of one of the
+<br>
+input, name or space information stacks may just lead to
+<br>
+unreliable parsing.
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20parsing%20multiple%20files">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20parsing%20multiple%20files">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20parsing%20multiple%20files">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0439.html">Brian Craft: "[xml] saving parser state"</a>
+<li><strong>Previous message:</strong> <a href="0437.html">Alice Tull: "[xml] parsing multiple files"</a>
+<li><strong>In reply to:</strong> <a href="0437.html">Alice Tull: "[xml] parsing multiple files"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:09 EDT</em>
+</em>
+</small>
+</body>
+</html>

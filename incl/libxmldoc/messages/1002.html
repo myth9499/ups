@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: R: [xml] very large XML docs</title>
+<meta name="Author" content="David Doolin (doolin@cs.utk.edu)">
+<meta name="Subject" content="Re: R: [xml] very large XML docs">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: R: [xml] very large XML docs</h1>
+<!-- received="Thu Oct 19 09:28:50 2000" -->
+<!-- isoreceived="20001019132850" -->
+<!-- sent="Thu, 19 Oct 2000 09:28:42 -0400" -->
+<!-- isosent="20001019132842" -->
+<!-- name="David Doolin" -->
+<!-- email="doolin@cs.utk.edu" -->
+<!-- subject="Re: R: [xml] very large XML docs" -->
+<!-- id="200010191328.JAA15345@vixen.cs.utk.edu" -->
+<!-- inreplyto="R: [xml] very large XML docs" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> David Doolin (<a href="mailto:doolin@cs.utk.edu?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs"><em>doolin@cs.utk.edu</em></a>)<br>
+<strong>Date:</strong> Thu Oct 19 2000 - 09:28:42 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="1001.html">Andrea LUCIANO: "R: [xml] very large XML docs"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1001.html">Andrea LUCIANO: "R: [xml] very large XML docs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+In message &lt;00b701c039a7$34010e60$<a href="mailto:1000000a@icteam.it?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">1000000a@icteam.it</a>&gt;, &quot;Andrea LUCIANO&quot; writes:
+<br>
+<em>&gt;
+</em><br>
+<em>&gt;I don't know and can't imagine your requirements, but just one question: is
+</em><br>
+<em>&gt;it really necessary in your project to store a so long data stream in a tag?
+</em><br>
+<em>&gt;Sometime it's better to use a property that specify a media reference that
+</em><br>
+<em>&gt;provides data stream (i.e. a link to a file on your file system).
+</em><br>
+<p>HD5 is supposed to be using xml description now.  They have 
+<br>
+probably already crossed this bridge.  (HD5 is at NCSA, for 
+<br>
+ultra large data sets).
+<br>
+<p><em>&gt;
+</em><br>
+<em>&gt;Bye,
+</em><br>
+<em>&gt;A.L.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;----- Original Message -----
+</em><br>
+<em>&gt;From: F. David Sacerdoti &lt;<a href="mailto:fds@cs.ucsd.edu?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">fds@cs.ucsd.edu</a>&gt;
+</em><br>
+<em>&gt;To: &lt;<a href="mailto:xml@xmlsoft.org?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">xml@xmlsoft.org</a>&gt;
+</em><br>
+<em>&gt;Sent: Wednesday, October 18, 2000 9:53 PM
+</em><br>
+<em>&gt;Subject: [xml] very large XML docs
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; I am using libxml for a scientific library project here at UCSD in
+</em><br>
+<em>&gt;&gt; conjunction with the San Diego Supercomputing Center. The library will
+</em><br>
+<em>&gt;&gt; be running on supercomputer clusters (Blue Horizon), and is used in very
+</em><br>
+<em>&gt;&gt; large calculations.
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; I have a question about dealing with very large documents. Since I may
+</em><br>
+<em>&gt;&gt; be creating tags with several hundred megabytes of data in them, I would
+</em><br>
+<em>&gt;&gt; like to stream the xml doc to disk as it is created. This would allow me
+</em><br>
+<em>&gt;&gt; to use a limited buffer size for these very large tags.
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; I have seen xmlOutputBufferCreateFile() which can be used with
+</em><br>
+<em>&gt;&gt; xmlOutputBufferWrite() to write a fixed length buffer to disk, but is it
+</em><br>
+<em>&gt;&gt; true that the entire xml doc must be built in memory before any of it
+</em><br>
+<em>&gt;&gt; can be written to disk?
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; Would it be possible to write a partially created xml tree to disk,
+</em><br>
+<em>&gt;&gt; allowing me to free some memory buffers, and then go on to compute and
+</em><br>
+<em>&gt;&gt; write the rest of the tree?
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; Thank you,
+</em><br>
+<em>&gt;&gt; David Sacerdoti
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;&gt; ----
+</em><br>
+<em>&gt;&gt; Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;&gt; Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;&gt; to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">majordomo@rpmfind.net</a>
+</em><br>
+<em>&gt;&gt;
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;----
+</em><br>
+<em>&gt;Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">xml@rpmfind.net</a>
+</em><br>
+<em>&gt;Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+</em><br>
+<em>&gt;to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">majordomo@rpmfind.net</a>
+</em><br>
+<pre>
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20R:%20[xml]%20very%20large%20XML%20docs">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="1001.html">Andrea LUCIANO: "R: [xml] very large XML docs"</a>
+<li><strong>Maybe in reply to:</strong> <a href="1001.html">Andrea LUCIANO: "R: [xml] very large XML docs"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Thu Oct 19 2000 - 09:44:16 EDT</em>
+</em>
+</small>
+</body>
+</html>

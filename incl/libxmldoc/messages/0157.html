@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Interactive node insertion</title>
+<meta name="Author" content="Mathias Hasselmann (Mathias.Hasselmann@gmx.de)">
+<meta name="Subject" content="Re: [xml] Interactive node insertion">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Interactive node insertion</h1>
+<!-- received="Sun Oct  3 17:51:07 1999" -->
+<!-- isoreceived="19991003215107" -->
+<!-- sent="Sun, 03 Oct 1999 23:36:58 +0200" -->
+<!-- isosent="19991003213658" -->
+<!-- name="Mathias Hasselmann" -->
+<!-- email="Mathias.Hasselmann@gmx.de" -->
+<!-- subject="Re: [xml] Interactive node insertion" -->
+<!-- id="37F7CC7A.3186601@gmx.de" -->
+<!-- inreplyto="19991003164029.A10725@w3.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Mathias Hasselmann (<a href="mailto:Mathias.Hasselmann@gmx.de?subject=Re:%20[xml]%20Interactive%20node%20insertion"><em>Mathias.Hasselmann@gmx.de</em></a>)<br>
+<strong>Date:</strong> Sun Oct 03 1999 - 17:36:58 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Previous message:</strong> <a href="0156.html">Daniel Veillard: "Re: [xml] Interactive node insertion"</a>
+<li><strong>In reply to:</strong> <a href="0156.html">Daniel Veillard: "Re: [xml] Interactive node insertion"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Reply:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Daniel Veillard wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; &gt; After parsing and validating a xml file I would like to insert new
+</em><br>
+<em>&gt; &gt; elements interactivly without breaking the validated tree.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Since users don't have to know the DTD I need a way to find out, which
+</em><br>
+<em>&gt; &gt; insertions are allowed for a selected elements.
+</em><br>
+<em>&gt; &gt;
+</em><br>
+<em>&gt; &gt; Is there a common way to do this?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Hum, no, and that's a good point.
+</em><br>
+<em>&gt; I added validation to the parsing step, but it's not really glued in
+</em><br>
+<em>&gt; the tree manipulation functions yet.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   Would something like:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   int xmlIsValidChild(const xmlChar *parent, const xmlChar *child);
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   suit your needs, or does something more prospective like returning
+</em><br>
+<em>&gt; the list of valid child be more useful. In the later, I'm afraid it
+</em><br>
+<em>&gt; won't be really more easy to use/remap the existing list based functions
+</em><br>
+<em>&gt; and switch to arrays. All advanced structured editors I have seen in
+</em><br>
+<em>&gt; the past were &quot;guiding&quot; the user with a list of possible childs. So
+</em><br>
+<em>&gt; the second kind of function would still be useful.
+</em><br>
+<p>The second function is similar to that what I want. But since we have
+<br>
+xmlGetDtdElementDesc the list easily could be build by walking through
+<br>
+xmlElement::children and calling xmlIsValidChild for each (unique)
+<br>
+name. (We simply would need xmlIsValidChild.)
+<br>
+<p>BUT at least I would need something more specific functions:
+<br>
+<p>&nbsp;&nbsp;* int xmlIsPrependable (xmlNode element, const xmlChar *new_element);
+<br>
+&nbsp;&nbsp;* int xmlIsValidReplacement (xmlNode element, 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const xmlChar *new_element);
+<br>
+&nbsp;&nbsp;* int xmlIsAppendable (xmlNode element, const xmlChar *new_element);
+<br>
+<p>(xmlIsValidChild implemented by using such functions, 
+<br>
+&nbsp;xmlGetValidChilds too...)
+<br>
+<p>Probably you find a function declaration more generical than this,
+<br>
+but since DTD are quite powerfull I think we have to separate the
+<br>
+cases mentioned...
+<br>
+<p><p>If you could give me a clue how to implement the functions...
+<br>
+<p><p>Ciao,
+<br>
+Mathias
+<br>
+<pre>
+-- 
+WWW: <a href="http://www.arco.de/~mhasselm/">http://www.arco.de/~mhasselm/</a> <a href="http://www.dominanz-haus.de/">http://www.dominanz-haus.de/</a>
+PGP-Fingerprint: 4D15 89ED 7299 6428 FEE6  C66F 5D40 6504 55E5 72F3
+----
+Message from the list <a href="mailto:xml@rufus.w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion">xml@rufus.w3.org</a>
+Archived at : <a href="http://rufus.w3.org/veillard/XML/messages">http://rufus.w3.org/veillard/XML/messages</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rufus.w3.org?subject=Re:%20[xml]%20Interactive%20node%20insertion">majordomo@rufus.w3.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Previous message:</strong> <a href="0156.html">Daniel Veillard: "Re: [xml] Interactive node insertion"</a>
+<li><strong>In reply to:</strong> <a href="0156.html">Daniel Veillard: "Re: [xml] Interactive node insertion"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<li><strong>Reply:</strong> <a href="0158.html">Mathias Hasselmann: "Re: [xml] Interactive node insertion"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:29:47 EDT</em>
+</em>
+</small>
+</body>
+</html>

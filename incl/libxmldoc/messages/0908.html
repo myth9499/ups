@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Extending XPath?</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Extending XPath?">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Extending XPath?</h1>
+<!-- received="Tue Oct 10 17:18:35 2000" -->
+<!-- isoreceived="20001010211835" -->
+<!-- sent="Tue, 10 Oct 2000 23:18:32 +0200" -->
+<!-- isosent="20001010211832" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Extending XPath?" -->
+<!-- id="20001010231832.L23005@w3.org" -->
+<!-- inreplyto="39E1D2FD.84F8FFC3@mail1.stofanet.dk" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Tue Oct 10 2000 - 17:18:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0909.html">Albert Chin-A-Young: "[xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Previous message:</strong> <a href="0907.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0904.html">Bjorn Reese: "[xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Mon, Oct 09, 2000 at 02:15:25PM +0000, Bjorn Reese wrote:
+<br>
+<em>&gt; 
+</em><br>
+<em>&gt; I had a look at how to implement XPointer in libxml, and I see
+</em><br>
+<em>&gt; that Daniel has been doing something similar in the latest
+</em><br>
+<em>&gt; releases, so it may be a good idea to discuss how it is best
+</em><br>
+<em>&gt; implemented.
+</em><br>
+<p>&nbsp;&nbsp;With C code :-) Seriously it's coming soon !
+<br>
+<p><em>&gt; XPointer uses and extends XPath expressions. It extends both
+</em><br>
+<em>&gt; the data types and functions. Other standards such as XQL (and
+</em><br>
+<em>&gt; XSLT?) also uses and extends XPath expressions, although in
+</em><br>
+<em>&gt; different directions than that of XPointer.
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; I think that the current XPath implementation is good, but
+</em><br>
+<em>&gt; difficult to extend. Even if we do not want to implement XQL,
+</em><br>
+<em>&gt; it should still be possible to implement XQL on top of libxml.
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I can think of four feasable solutions for extending XPath
+</em><br>
+<em>&gt; expressions:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt;   1) Patch xpath.c directly. This way xpath.c can become very
+</em><br>
+<em>&gt;      difficult to maintain.
+</em><br>
+<p>&nbsp;&nbsp;a bit is needed, it's minimal
+<br>
+<p><em>&gt;   2) Make the parsing and and stack functionality of xpath.c
+</em><br>
+<em>&gt;      public (most of it is currently private macros).
+</em><br>
+<p>&nbsp;&nbsp;only a bit was needed
+<br>
+<p><em>&gt;   3) Inherit from an XPath &quot;class&quot;. Although this is not
+</em><br>
+<em>&gt;      conveniently done in C, it is possible to a certain
+</em><br>
+<em>&gt;      degree.
+</em><br>
+<p>&nbsp;&nbsp;out of scope, not needed.
+<br>
+<em>&gt;   4) Provide extendibility hooks.
+</em><br>
+<p>&nbsp;&nbsp;provided new api and new types.
+<br>
+<p><p>&nbsp;&nbsp;FYI I expect to have a complete XPointer implementation around the
+<br>
+end of the week. I didn't ship the xpointer code in 2.2.4 but I will
+<br>
+in 2.2.5
+<br>
+<p>&nbsp;&nbsp;check xpointer.[ch] from
+<br>
+&nbsp;&nbsp;<a href="http://dev.w3.org/cvsweb/XML/">http://dev.w3.org/cvsweb/XML/</a>
+<br>
+<p>Daniel
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+<pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Extending%20XPath?">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">xml@rpmfind.net</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@rpmfind.net?subject=Re:%20[xml]%20Extending%20XPath?">majordomo@rpmfind.net</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0909.html">Albert Chin-A-Young: "[xml] libxml v2.2.4 and Digital UNIX"</a>
+<li><strong>Previous message:</strong> <a href="0907.html">Bjorn Reese: "Re: [xml] Extending XPath?"</a>
+<li><strong>In reply to:</strong> <a href="0904.html">Bjorn Reese: "[xml] Extending XPath?"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Tue Oct 10 2000 - 17:44:38 EDT</em>
+</em>
+</small>
+</body>
+</html>

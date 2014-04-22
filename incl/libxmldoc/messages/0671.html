@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: Re: [xml] Aliases for encodings</title>
+<meta name="Author" content="Daniel Veillard (Daniel.Veillard@w3.org)">
+<meta name="Subject" content="Re: [xml] Aliases for encodings">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>Re: [xml] Aliases for encodings</h1>
+<!-- received="Wed Aug 23 03:45:55 2000" -->
+<!-- isoreceived="20000823074555" -->
+<!-- sent="Wed, 23 Aug 2000 11:24:41 +0200" -->
+<!-- isosent="20000823092441" -->
+<!-- name="Daniel Veillard" -->
+<!-- email="Daniel.Veillard@w3.org" -->
+<!-- subject="Re: [xml] Aliases for encodings" -->
+<!-- id="20000823112441.B514@w3.org" -->
+<!-- inreplyto="39A372E2.CE5160AB@lmt.lv" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Daniel Veillard (<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Aliases%20for%20encodings"><em>Daniel.Veillard@w3.org</em></a>)<br>
+<strong>Date:</strong> Wed Aug 23 2000 - 05:24:41 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Previous message:</strong> <a href="0670.html">Vjacheslav Chekushin: "Re: [xml] Aliases for encodings"</a>
+<li><strong>In reply to:</strong> <a href="0670.html">Vjacheslav Chekushin: "Re: [xml] Aliases for encodings"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+On Wed, Aug 23, 2000 at 09:44:50AM +0300, Vjacheslav Chekushin wrote:
+<br>
+[ Could you please subscribe to the list ? ]
+<br>
+<em>&gt; Hi.
+</em><br>
+<em>&gt; Yes, I tried it.
+</em><br>
+<em>&gt; And that how it works:
+</em><br>
+<em>&gt; First time after registering the alias for encoding everything is Ok:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; I try to parse xml document with encoding &quot;windows-1257&quot; and get following
+</em><br>
+<em>&gt; debug records:
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; 1. Unknown encoding windows-1257
+</em><br>
+<p>&nbsp;it's not one of the predefined names (when trying to find the canonical
+<br>
+name for the encoding).
+<br>
+<p><em>&gt; 2. Found registered handler for encoding windows-1257
+</em><br>
+<p>&nbsp;found the one you just provided.
+<br>
+<p><em>&gt; 3. converted 45 bytes to 45 bytes of input, 439 left
+</em><br>
+<em>&gt; 4. converted 439 bytes to 441 bytes of input
+</em><br>
+<p>&nbsp;Successful conversion
+<br>
+<p><em>&gt; 5. closed the encoding handler
+</em><br>
+[..]
+<br>
+<em>&gt; I can't understant 5.
+</em><br>
+<p>&nbsp;&nbsp;Most of the encodings actually need to maintain a state. The iconv interface
+<br>
+hence suggest to open/use/close encoding as needed. The open and close allows
+<br>
+to manage the associated state datastructure.
+<br>
+<p><em>&gt; Does it mean that I need to register this encoding again?
+</em><br>
+<em>&gt; And why it is closed any way?
+</em><br>
+<em>&gt; 
+</em><br>
+<em>&gt; When my program tries to parse this document second time libxml returns NULL or
+</em><br>
+<em>&gt; segmentation fault occurs.
+</em><br>
+<p>&nbsp;&nbsp;the data structure for the iconv processing have been deallocated in
+<br>
+the meantime, so it's clear you're gonna run into problems, as things are done
+<br>
+now. The iconv routines are really not designed to work that way and I'm
+<br>
+afraid trying to patch the existing API to support aliases will just add
+<br>
+code mess.
+<br>
+&nbsp;&nbsp;It will work just fine, but only once, that's normal.
+<br>
+<p><em>&gt; (By the way, I work with libxml 2.2.2)
+</em><br>
+<p>&nbsp;&nbsp;Sounds that the best way to handle this is to add routines to provide
+<br>
+encoding aliases, and possibly remove them:
+<br>
+<p>int xmlAddEncodingAlias(const char *name, const char *alias);
+<br>
+int xmlDelEncodingAlias(const char *alias);
+<br>
+<p>&nbsp;&nbsp;I will try to implement those before the next release,
+<br>
+<p>Daniel
+<br>
+<p><pre>
+-- 
+<a href="mailto:Daniel.Veillard@w3.org?subject=Re:%20[xml]%20Aliases%20for%20encodings">Daniel.Veillard@w3.org</a> | W3C, INRIA Rhone-Alpes  | Today's Bookmarks :
+Tel : +33 476 615 257  | 655, avenue de l'Europe | Linux XML libxml WWW
+Fax : +33 476 615 207  | 38330 Montbonnot FRANCE | Gnome rpm2html rpmfind
+ <a href="http://www.w3.org/People/all#veillard%40w3.org">http://www.w3.org/People/all#veillard%40w3.org</a>  | RPM badminton Kaffe
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=Re:%20[xml]%20Aliases%20for%20encodings">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=Re:%20[xml]%20Aliases%20for%20encodings">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Previous message:</strong> <a href="0670.html">Vjacheslav Chekushin: "Re: [xml] Aliases for encodings"</a>
+<li><strong>In reply to:</strong> <a href="0670.html">Vjacheslav Chekushin: "Re: [xml] Aliases for encodings"</a>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 23 2000 - 04:43:19 EDT</em>
+</em>
+</small>
+</body>
+</html>

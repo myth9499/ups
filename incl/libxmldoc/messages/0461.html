@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>XML: RE: [xml] Memory parser bug</title>
+<meta name="Author" content="Hugh Greene (hughg@owl.co.uk)">
+<meta name="Subject" content="RE: [xml] Memory parser bug">
+<link rev="made" href="mailto:veillard@w3.org">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<h1>RE: [xml] Memory parser bug</h1>
+<!-- received="Tue Apr 18 13:19:38 2000" -->
+<!-- isoreceived="20000418171938" -->
+<!-- sent="Tue, 18 Apr 2000 18:12:32 +0100" -->
+<!-- isosent="20000418171232" -->
+<!-- name="Hugh Greene" -->
+<!-- email="hughg@owl.co.uk" -->
+<!-- subject="RE: [xml] Memory parser bug" -->
+<!-- id="HJEDICHMBDEIPAHPDGNKAEIACAAA.hughg@owl.co.uk" -->
+<!-- inreplyto="38FB20A5.1D4EAB6B@issn.org" -->
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<p>
+<strong>From:</strong> Hugh Greene (<a href="mailto:hughg@owl.co.uk?subject=RE:%20[xml]%20Memory%20parser%20bug"><em>hughg@owl.co.uk</em></a>)<br>
+<strong>Date:</strong> Tue Apr 18 2000 - 13:12:32 EDT
+<p>
+<!-- next="start" -->
+<ul>
+<li><strong>Next message:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<li><strong>Previous message:</strong> <a href="0460.html">kavoos: "[xml] Memory parser bug"</a>
+<li><strong>In reply to:</strong> <a href="0460.html">kavoos: "[xml] Memory parser bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<li><strong>Reply:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<!-- reply="end" -->
+</ul>
+<hr noshade><p>
+<!-- body="start" -->
+<p>
+Well spotted :-)  This doesn't seem quite right, though (I haven't looked at
+<br>
+this code much, however, so I could be completely wrong!).  Not that the
+<br>
+things I see would make any functional difference, but ...
+<br>
+<p><em>&gt; -----Original Message-----
+</em><br>
+<em>&gt; From: <a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Memory%20parser%20bug">xml-request@rufus.w3.org</a> [mailto:<a href="mailto:xml-request@rufus.w3.org?subject=RE:%20[xml]%20Memory%20parser%20bug">xml-request@rufus.w3.org</a>]On
+</em><br>
+<em>&gt; Behalf Of kavoos
+</em><br>
+<em>&gt; Sent: 17 April 2000 15:33
+</em><br>
+<em>&gt; ...
+</em><br>
+<em>&gt; I have found a little bug when using xmlParseMemory() whith a
+</em><br>
+<em>&gt; UTF-16 document, this patch correct the probleme ...
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt; --- ../old/libxml2-2.0.0/parser.c       Wed Apr 12 15:50:22 2000
+</em><br>
+<em>&gt; +++ parser.c    Mon Apr 17 16:17:25 2000
+</em><br>
+<em>&gt; @@ -2317,7 +2317,7 @@
+</em><br>
+<em>&gt;                     if ((enc == XML_CHAR_ENCODING_UTF16BE) &amp;&amp;
+</em><br>
+<em>&gt;                         (ctxt-&gt;input-&gt;cur[0] == 0xFE) &amp;&amp;
+</em><br>
+<em>&gt;                         (ctxt-&gt;input-&gt;cur[1] == 0xFF)) {
+</em><br>
+<em>&gt; -                       SKIP(2);
+</em><br>
+<em>&gt; +                        SKIP(2);
+</em><br>
+<em>&gt;                     }
+</em><br>
+<em>&gt;
+</em><br>
+<em>&gt;                     /*
+</em><br>
+<p>This looks like you've accidentally inserted an extra space -- I can't see
+<br>
+it making any difference!
+<br>
+<p><em>&gt; @@ -2400,8 +2400,13 @@
+</em><br>
+<em>&gt;                                  &quot;xmlSwitchEncoding : out of memory\n&quot;);
+</em><br>
+<em>&gt;                         return;
+</em><br>
+<em>&gt;                     }
+</em><br>
+<em>&gt; +                   if ( (ctxt-&gt;input-&gt;cur[0]==0xFE &amp;&amp;
+</em><br>
+<em>&gt; ctxt-&gt;input-&gt;cur[1]==0xFF) || (ctxt-&gt;input-&gt;cur[0]==0xFF &amp;&amp;
+</em><br>
+<em>&gt; ctxt-&gt;input-&gt;cur[1]==0xFE))
+</em><br>
+<em>&gt; +                   res = handler-&gt;input(buf, ctxt-&gt;input-&gt;length * 4,
+</em><br>
+<em>&gt; +                                        &amp;ctxt-&gt;input-&gt;cur[2], &amp;len);
+</em><br>
+<em>&gt; +                   else
+</em><br>
+<em>&gt;                     res = handler-&gt;input(buf, ctxt-&gt;input-&gt;length * 4,
+</em><br>
+<em>&gt;                                          ctxt-&gt;input-&gt;cur, &amp;len);
+</em><br>
+<em>&gt; +
+</em><br>
+<em>&gt;                     if ((res &lt; 0) ||
+</em><br>
+<em>&gt;                         (len != ctxt-&gt;input-&gt;length - processed)) {
+</em><br>
+<em>&gt;                         if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error !=
+</em><br>
+<em>&gt; NULL))
+</em><br>
+<p>I think, in order to be consistent with the first branch of the &quot;if
+<br>
+(ctxt-&gt;input-&gt;buf != NULL)&quot;, the test-and-fix for the endian-mark should be
+<br>
+done the same way as there and should happen before the assignment to
+<br>
+&quot;processed&quot;, so that it's consistent with ctxt-&gt;input-&gt;cur.  (Come to think
+<br>
+of it, why don't both cases of the test use the &quot;NXT&quot; macro?)
+<br>
+<p>I get the feeling that it should be possible to &quot;lift&quot; sizeable chunks of
+<br>
+this code out of the &quot;if (ctxt-&gt;input-&gt;buf != NULL)&quot; (e.g., the assignments
+<br>
+to processed and len, the endian test-and-fix, the buffer alloc-with-retry)
+<br>
+but I haven't worked out the details yet :-)
+<br>
+<p><em>&gt; @@ -2416,8 +2421,10 @@
+</em><br>
+<em>&gt;                     if ((ctxt-&gt;input-&gt;free != NULL) &amp;&amp;
+</em><br>
+<em>&gt;                         (ctxt-&gt;input-&gt;base != NULL))
+</em><br>
+<em>&gt;                         ctxt-&gt;input-&gt;free((xmlChar *)
+</em><br>
+<em>&gt; ctxt-&gt;input-&gt;base);
+</em><br>
+<em>&gt; -                   ctxt-&gt;input-&gt;base = ctxt-&gt;input-&gt;cur = buf;
+</em><br>
+<em>&gt; -                   ctxt-&gt;input-&gt;length = res;
+</em><br>
+<em>&gt; +
+</em><br>
+<em>&gt; +                       ctxt-&gt;input-&gt;base = ctxt-&gt;input-&gt;cur = buf;
+</em><br>
+<em>&gt; +                       ctxt-&gt;input-&gt;length = res;
+</em><br>
+<em>&gt; +
+</em><br>
+<em>&gt;                 }
+</em><br>
+<em>&gt;             }
+</em><br>
+<em>&gt;         } else {
+</em><br>
+<p>Again, it looks like you've just changed the indentation here -- and this
+<br>
+time it makes a (bad) difference, in that it incorrectly suggests two
+<br>
+assignments are part of the &quot;if&quot; when they're not.
+<br>
+<p><em>&gt; @@ -2442,17 +2449,9 @@
+</em><br>
+<em>&gt;             /* default encoding, no conversion should be needed */
+</em><br>
+<em>&gt;              return;
+</em><br>
+<em>&gt;          case XML_CHAR_ENCODING_UTF16LE:
+</em><br>
+<em>&gt; -           ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+</em><br>
+<em>&gt; -           if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+</em><br>
+<em>&gt; -                ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+</em><br>
+<em>&gt; -                 &quot;char encoding UTF16 little endian not supported\n&quot;);
+</em><br>
+<em>&gt; -            break;
+</em><br>
+<em>&gt; +               return;
+</em><br>
+<em>&gt;          case XML_CHAR_ENCODING_UTF16BE:
+</em><br>
+<em>&gt; -           ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+</em><br>
+<em>&gt; -           if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+</em><br>
+<em>&gt; -                ctxt-&gt;sax-&gt;error(ctxt-&gt;userData,
+</em><br>
+<em>&gt; -                 &quot;char encoding UTF16 big endian not supported\n&quot;);
+</em><br>
+<em>&gt; -            break;
+</em><br>
+<em>&gt; +               return;
+</em><br>
+<em>&gt;          case XML_CHAR_ENCODING_UCS4LE:
+</em><br>
+<em>&gt;             ctxt-&gt;errNo = XML_ERR_UNSUPPORTED_ENCODING;
+</em><br>
+<em>&gt;             if ((ctxt-&gt;sax != NULL) &amp;&amp; (ctxt-&gt;sax-&gt;error != NULL))
+</em><br>
+<p>These changes look pointless: the &quot;return&quot; statements will never be reached
+<br>
+and in any case, nothing happens after the switch except exiting the
+<br>
+function.  Switch statements are confusing enough without &quot;return&quot;s in the
+<br>
+middle ;-)
+<br>
+<p><em>&gt; @@ -10406,7 +10405,7 @@
+</em><br>
+<em>&gt;      input-&gt;base = BAD_CAST buffer;
+</em><br>
+<em>&gt;      input-&gt;cur = BAD_CAST buffer;
+</em><br>
+<em>&gt;      input-&gt;free = NULL;
+</em><br>
+<em>&gt; -
+</em><br>
+<em>&gt; +    input-&gt;length=size;
+</em><br>
+<em>&gt;      inputPush(ctxt, input);
+</em><br>
+<em>&gt;      return(ctxt);
+</em><br>
+<em>&gt;  }
+</em><br>
+<em>&gt; ----
+</em><br>
+<p>This looks reasonable, though I don't know if it's right or not.
+<br>
+<p><p>Hope this helps,
+<br>
+Hugh
+<br>
+<p><pre>
+----
+Message from the list <a href="mailto:xml@xmlsoft.org?subject=RE:%20[xml]%20Memory%20parser%20bug">xml@xmlsoft.org</a>
+Archived at : <a href="http://xmlsoft.org/messages/">http://xmlsoft.org/messages/</a>
+to unsubscribe: echo &quot;unsubscribe xml&quot; | mail  <a href="mailto:majordomo@xmlsoft.org?subject=RE:%20[xml]%20Memory%20parser%20bug">majordomo@xmlsoft.org</a>
+</pre>
+<p><!-- body="end" -->
+<hr noshade>
+<ul>
+<!-- next="start" -->
+<li><strong>Next message:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<li><strong>Previous message:</strong> <a href="0460.html">kavoos: "[xml] Memory parser bug"</a>
+<li><strong>In reply to:</strong> <a href="0460.html">kavoos: "[xml] Memory parser bug"</a>
+<!-- nextthread="start" -->
+<li><strong>Next in thread:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<li><strong>Reply:</strong> <a href="0462.html">kavoos: "RE: [xml] Memory parser bug"</a>
+<!-- reply="end" -->
+</ul>
+<div align="center">
+<table border="2" width="100%">
+<tr>
+<th><a href="date.html">Date view</a></th>
+<th><a href="index.html">Thread view</a></th>
+<th><a href="subject.html">Subject view</a></th>
+<th><a href="author.html">Author view</a></th>
+</tr>
+</table>
+</div>
+<!-- trailer="footer" -->
+<p>
+<small>
+<em>
+This archive was generated by <a href="http://www.hypermail.org/">hypermail 2b29</a> 
+: <em>Wed Aug 02 2000 - 12:30:11 EDT</em>
+</em>
+</small>
+</body>
+</html>
