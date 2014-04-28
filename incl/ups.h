@@ -79,7 +79,7 @@ typedef struct KEYVALUE
 /** inner comm msg type **/
 typedef struct COMMMSG
 {
-	char	commname[20];
+	char	commname[100];
 	int	len;
 	char	commvar[10];
 	char	commmark[1024];
@@ -93,6 +93,7 @@ typedef struct FLOW
 	char	flowso[20];
 	char	flowfunc[40];
 	char	funcpar1[1024];
+	char	errflow[60];
 }_flow;
 
 /** 核心服务登记表 **/
@@ -116,6 +117,7 @@ typedef struct XMLCFG
 	char	isneed[2];
 	char	sign[2];
 	char	loop[2];
+	int		depth;
 }_xmlcfg;
 
 /** 信号量 **/

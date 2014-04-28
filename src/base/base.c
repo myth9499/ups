@@ -4,34 +4,35 @@
 #include  <libxml/parser.h>
 
 /** 调用函数动态库，执行函数 **/
-int do_so(char *so_name,char *func_name,char *par1,char *par2,char *par3)
+int do_so(char *so_name,char *func_name,char *par1)
 {
 	if(so_name==NULL||func_name==NULL)
 	{
-		printf("invalid so name of func name\n");
+		SysLog(1,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
 		return -1;
 	}
 	void *handle = NULL;
-	int (*func)(char *par1,char *par2,char *par3);
-	handle = dlopen(so_name,RTLD_NOW);
+	int (*func)(char *par1);
+	handle = dlopen(so_name,RTLD_LAZY);
 	if(handle == NULL)
 	{
-		printf("open [%s] error[%s]\n",so_name,dlerror());
+		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,strerror(errno));
 		return -1;
 	}
-	func = (int(*)(char *par1,char *par2,char *par3))dlsym(handle,func_name);
+	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{
-		printf("find func [%s] error[%s]\n",so_name,dlerror());
+		SysLog(1,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
 		return -1;
 	}
-	if(func(par1,par2,par3)!=0)
+		SysLog(1,"@@@@@@@@@@@FILE [%s] LINE [%d]:执行函数[%s]参数:%s\n",__FILE__,__LINE__,func_name,par1);
+	if(func(par1)==-1)
 	{
-		printf("do the func error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
 		return -1;
 	}
 	dlclose(handle);
-	printf("执行函数[%s]成功\n",func_name);
+	SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
 	return 0;
 }
 
@@ -47,28 +48,26 @@ int	getmsgid(char *msgname,int *msgidi,int *msgido)
 	/** 1 for in msg queue **/
 	if((key=ftok(ftokpath,1))==-1)
 	{
-		printf("ftok error[%s]",strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
 		return -1;
 	}
 	if((*msgidi = msgget(key,IPC_EXCL))==-1)
 	{
-		perror("msgget error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
-	printf("msg get ok,msgid [%d]\n",*msgidi);
-
 	/** 2 for out msg queue **/
 	if((key=ftok(ftokpath,2))==-1)
 	{
-		printf("ftok error[%s]",strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
 		return -1;
 	}
 	if((*msgido = msgget(key,IPC_EXCL))==-1)
 	{
-		perror("msgget error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
-	printf("msg get ok,msgid [%d]\n",*msgido);
+	SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]成功:进入队列[%d]外出队列[%d]\n",__FILE__,__LINE__,msgname,*msgidi,*msgido);
 	return 0;
 }
 int getshm(int procid,size_t shmsize)
@@ -77,15 +76,15 @@ int getshm(int procid,size_t shmsize)
 	key_t   key;
 	if((key = ftok("/item/ups/etc/mq_1",procid))==-1)
 	{
-		perror("ftok error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
-		perror("shmget error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	printf("shmget ok[%d]\n",shmid);
+	SysLog(1,"FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);
 	return 0;
 }
 
@@ -98,13 +97,13 @@ int initservregsem()
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{         
-		printf("get serv shm id error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	printf("shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL) 
 	{
-		printf("shmat sreg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	for(i=0;i<1024;i++)
@@ -123,18 +122,20 @@ int getNodePath(char *path,xmlNodePtr cur)
 	curNode = cur;
 	char	tmppath[256];
 	memset(tmppath,0,sizeof(tmppath));
+	int loop = 0 ;
 
 	while(curNode!=NULL)
 	{
-		//printf("curNode parent path is [%s]\n",curNode->name);
 		if(curNode->name!=NULL&&strcmp(curNode->name,"text"))
 		{
 			sprintf(path,"%s.%s",curNode->name,tmppath);
 			strcpy(tmppath,path);
 		}
 		curNode = curNode->parent;
+		loop++;
 	}
 	path[strlen(path)-1]='\0';
+	return loop;
 }
 
 /** 设置错误代码函数 **/
@@ -142,15 +143,14 @@ int	seterr(char *errcode,char *errmsg)
 {
 	if(put_var_value("V_ERRCODE",10,1,errcode)==-1)
 	{
-		printf("set err code error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:设置V_ERRCODE为:%s失败\n",__FILE__,__LINE__,errcode);
 		return -1;
 	}
 	if(put_var_value("V_ERRMSG",60,1,errmsg)==-1)
 	{
-		printf("set err msg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:设置V_ERRMSG为:%s失败\n",__FILE__,__LINE__,errcode);
 		return -1;
 	}
-	printf("set err ok\n");
 	return 0;
 }
 
@@ -159,7 +159,7 @@ int gettranmap(_tranmap *tmap,char *trancode)
 {
 	if((tmap == NULL)||(trancode == NULL))
 	{
-		printf("传入参数错误\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]的交易属性参数有误\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	_tranmap *ttmap = NULL;
@@ -167,21 +167,20 @@ int gettranmap(_tranmap *tmap,char *trancode)
 	int shmsize = MAXTRANMAP*(sizeof(_tranmap));
 	if((shmid = getshmid(5,shmsize))==-1)
 	{         
-		printf("get tranmap shm id error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时获取共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	printf("shmid is[%d]\n",shmid);
 	ttmap  = shmat(shmid,NULL,0);
 	if(ttmap == (void *)-1)
 	{
-		printf("tranmap shmat error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时链接共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	while(strcmp(ttmap->trancode,"END"))
 	{
 		if(!strcmp(ttmap->trancode,trancode))
 		{
-			//printf("find it\n");
 			memcpy(tmap,ttmap,sizeof(_tranmap));
 			shmdt(ttmap);
 			return  0;
@@ -204,6 +203,5 @@ void trim (char *str)
 		while(p1>p&&isspace(*p1))
 			*p1--='\0';
 	}
-	printf("!!![%s]\n",p);
 	strcpy(str,p);
 }

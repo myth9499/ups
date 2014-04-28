@@ -134,14 +134,14 @@ int main(int argc,char *argv[])
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
-		perror("malloc msgbuf error");
+		SysLog(1,"FILE [%s] LINE [%d]:申请msgbuf内存失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 
 	tranbuf = (_tran *)malloc(sizeof(_tran));
 	if(tranbuf == (void *)-1)
 	{
-		perror("malloc msgbuf error");
+		SysLog(1,"FILE [%s] LINE [%d]:申请tranbuf内存失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		free(mbuf);
 		return -1;
 	}
@@ -149,7 +149,7 @@ int main(int argc,char *argv[])
 	iret = init_var_hash();
 	if(iret != 0)
 	{
-		printf("init var hash error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:初始化变量存放hash表失败\n",__FILE__,__LINE__);
 		free(tranbuf);
 		free(mbuf);
 		return -1;
@@ -158,7 +158,7 @@ int main(int argc,char *argv[])
 	/** 渠道参数需要传入，服务根据渠道多少划分，防止一个服务挂掉所有都挂掉 **/
 	if(getmsgid("测试渠道",&msgidi,&msgido)!=0)
 	{
-		printf("get msgid error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取测试渠道消息队列失败\n",__FILE__,__LINE__);
 		free(tranbuf);
 		free(mbuf);
 		return -1;
@@ -167,14 +167,15 @@ int main(int argc,char *argv[])
 	/** 注册serv **/
 	if(insert_servreg("测试渠道")==0)
 	{
-		printf("注册服务成功\n");
+		SysLog(1,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
 	}else
 	{
-		printf("注册服务失败\n");
+		SysLog(1,"FILE [%s] LINE [%d]:注册服务失败,PID[%ld]\n",__FILE__,__LINE__,getpid());
 		free(tranbuf);
 		free(mbuf);
 		return -1;
 	}
+	seterr("AAAAAAAA","交易正常结束");
 	
 	/** 堵塞到信号 **/
 	signal(SIGUSR2,serv);
@@ -190,104 +191,53 @@ int main(int argc,char *argv[])
 }
 void serv(int sig)
 {
-	printf("获取信号!!!\n");
-	char errmsg[80];
-	char errcode[20];
-	memset(errmsg,0,sizeof(errmsg));
-	memset(errcode,0,sizeof(errcode));
+	SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
 
-	strcpy(errcode,"AAAAAAAA");
-	strcpy(errmsg,"ok");
-
-	printf("mbuf size[%d]\n",sizeof(mbuf->tranbuf));
 	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),0,IPC_NOWAIT);
 	if(iret > 0)
 	{
-		/** 先返回 0000表示成功 暂时不要尝试一下  
-		  strncpy(mbuf->tranbuf,"0000",strlen("0000"));
-		  strncpy(mbuf->tranbuf+4,"ok",strlen("ok"));
-		  iret  = msgsnd(msgidi,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
-		  if(iret <0 )
-		  {
-		  printf("返回原发起渠道错\n");
-		  continue;
-		  }
-		 **/
 		innerid = mbuf->innerid ; 
-		printf("处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
-		printf("全局跟踪号为:[%ld]\n",innerid);
+		SysLog(1,"FILE [%s] LINE [%d] 处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",__FILE__,__LINE__,mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
+		SysLog(1,"FILE [%s] LINE[%d] 全局跟踪号为:[%ld]\n",__FILE__,__LINE__,innerid);
 		if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
 		{
-			printf("innerid[%ld]\tinbuf[%s]\n",mbuf->innerid,tranbuf->intran);
-			/*
-			strcpy(tranbuf->outtran,tranbuf->intran);
-			iret = shm_hash_update(mbuf->innerid,NULL,tranbuf->outtran);
-			if(iret == -1)
-			{
-				memset(errmsg,0,sizeof(errmsg));
-				memset(errcode,0,sizeof(errcode));
-				strcpy(errcode,"EEEEEEEE");
-				strcpy(errmsg,"shm hash update error");
-			}
-			*/
+			SysLog(1,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->intran);
 			if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran)==-1)
 			{
-				memset(errmsg,0,sizeof(errmsg));
-				memset(errcode,0,sizeof(errcode));
-				strcpy(errcode,"EEEEEEEE");
-				strcpy(errmsg,"unpack tran buf  error");
+				SysLog(1,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);
+				seterr("EEEEEEEE","解包失败");
 			}
-			testvar();
 			if(serv_flow(mbuf->tranbuf.trancode)!=0)
 			{
-				memset(errmsg,0,sizeof(errmsg));
-				memset(errcode,0,sizeof(errcode));
-				strcpy(errcode,"EEEEEEEE");
-				strcpy(errmsg,"do serv flow  error");
+				SysLog(1,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
+				seterr("EEEEEEEE","执行交易失败");
 			}else
 			{
-				memset(errmsg,0,sizeof(errmsg));
-				memset(errcode,0,sizeof(errcode));
-				strcpy(errcode,"EEEEEEEE");
-				strcpy(errmsg,"do serv flow  ok");
+				SysLog(1,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
 			}
 		}
 	}else if(errno  == ENOMSG)
 	{
-		memset(errmsg,0,sizeof(errmsg));
-		memset(errcode,0,sizeof(errcode));
-		strcpy(errcode,"EEEEEEEE");
-		strcpy(errmsg,"no msg ");
+		SysLog(1,"获取不到交易信息\n");
+		seterr("EEEEEEEE","获取不到交易信息");
 	}else if(errno  !=ENOMSG )
 	{
-		perror("123");
-		memset(errmsg,0,sizeof(errmsg));
-		memset(errcode,0,sizeof(errcode));
-		strcpy(errcode,"EEEEEEEE");
-		strcpy(errmsg,"msg  recv error");
+		SysLog(1,"其他错误\n");
+		seterr("EEEEEEEE","其他错误");
 	}else
 	{
-		memset(errmsg,0,sizeof(errmsg));
-		memset(errcode,0,sizeof(errcode));
-		strcpy(errcode,"EEEEEEEE");
-		strcpy(errmsg,"msg  recv other error");
+		SysLog(1,"其他错误\n");
+		seterr("EEEEEEEE","其他错误");
 	}
-	printf("errmsg:[%s]\n",errmsg);
-	strcpy(mbuf->tranbuf.chnlname,"核心服务一");
-	strcpy(mbuf->tranbuf.trancode,errmsg);
-	mbuf->tranbuf.buffsize = strlen(errmsg);
-
-	/** 返回处理结果到前端 
-	iret = msgsnd(msgidi,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
-	if(iret == -1)
-	{
-		strcpy(errmsg,"respos msg error");
-	}
-	strcpy(errmsg,"respos msg ok");
-	printf("errmsg:[%s]\n",errmsg);
-	**/
+	/** 删除共享内存hash表中的交易信息 
+    if(delete_shm_hash(mbuf->innerid)==-1)
+    {
+        SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+    }
+**/
 	/**修改状态为空闲 **/
 	updatestat();
+	alarm(0);
 	return ;
 }
 int testvar(void)
@@ -310,11 +260,11 @@ int serv_flow(char *trancode)
 	trim(trancode);
 	if(gettranmap(&tmap,trancode)==-1)
 	{
-		printf("根据交易码获取交易流程失败，请查看是否配置\n");
+		SysLog(1,"FILE [%s] LINE[%d] 根据交易码获取交易流程失败，请查看是否配置\n",__FILE__,__LINE__);
 		seterr("EEEEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
 		return -1;
 	}
-	printf("trancode[%s]tranname[%s]tranflow[%s]timeout[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
+	SysLog(1,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
 	alarm(tmap.timeout);
 	key_t	key;
 	int shmid,i=0;
@@ -326,35 +276,40 @@ int serv_flow(char *trancode)
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
-		printf("get shm error\n");
+		SysLog(1,"FILE [%s] LINE[%d] 获取共享内存号失败\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","获取共享内存失败");
 		return -1;
 	}
 	if(trancode==NULL)
 	{
-		printf("the flow error\n");
+		SysLog(1,"FILE [%s] LINE[%d]获取交易码失败\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","获取交易码失败");
 		return -1;
 	}
-	printf("start serv flow trancode[%s] \n",trancode);
+	SysLog(1,"开始执行流程[%s] \n",tmap.tranname);
 	flow = (_flow *)shmat(shmid,NULL,0);
 	if(flow == NULL)
 	{
-		printf("flow shmat error\n");
+		SysLog(1,"FILE [%s] LINE[%d]链接共享内存失败\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","链接共享内存失败");
 		return -1;
 	}
 	tmpshmdt = flow;
 	while(strcmp(flow->flowname,"END"))
 	{
-		printf("flow flowname[%s]\n",flow->flowname);
 		if(!strcmp(flow->flowname,tmap.tranflow)&&(strcmp(flow->flowso,"")))
 		{
-			printf("开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",flow->flowname,
+			SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",flow->flowname,
 					flow->flowso,flow->flowfunc,flow->funcpar1);
-			if(do_so(flow->flowso,flow->flowfunc,flow->funcpar1,NULL,NULL)==0)
+			trim(flow->flowso);
+			trim(flow->flowfunc);
+			trim(flow->funcpar1);
+			if(do_so(flow->flowso,flow->flowfunc,flow->funcpar1)==0)
 			{
-				printf("流程处理成功\n");
+				SysLog(1,"流程处理成功\n");
 			}else
 			{
-				printf("流程处理失败\n");
+				SysLog(1,"流程处理失败\n");
 				/** 执行错误流程**/
 			}
 			flow++;

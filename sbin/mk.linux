@@ -1,8 +1,10 @@
-cd ../src/base
+cd ../src/hash
+make
+cd ../base
 make
 cd ../commmsg
 make
-cd ../hash
+cd ../unpack
 make
 cd ../channel
 rm sync_chnl

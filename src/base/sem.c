@@ -8,15 +8,15 @@ int get_sem()
 	system("touch /item/ups/etc/mq_2");
 	if((key=ftok("/item/ups/etc/mq_2",1))==-1)
 	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		printf("ftok error[%s]",strerror(errno));
 		return -1;
 	}
 	if((semid = semget(key,0,IPC_EXCL))==-1)
 	{
-		perror("semget error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	printf("sem get ok,msgid [%d]\n",semid);
 	return  semid;
 }
 int init_sem(int	init_value)
@@ -27,15 +27,14 @@ int init_sem(int	init_value)
 	system("touch /item/ups/etc/mq_2");
 	if((key=ftok("/item/ups/etc/mq_2",1))==-1)
 	{
-		printf("ftok error[%s]",strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((semid = semget(key,1,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
-		perror("semget error");
+		SysLog(1,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	printf("sem get ok,msgid [%d]\n",semid);
 	return  0;
 	union	semun sem_union;
 	sem_union.val = init_value;

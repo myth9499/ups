@@ -7,34 +7,34 @@ int main(int argc,char *argv[])
 {
 	if(load_commmsg_cfg("/item/ups/src/cfg/channel/chnl.cfg")==0)
 	{
-		printf("load commsg cfg ok\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
 	}else
 	{
-		printf("load commsg cfg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
 		return -1;
 	}
 	if(load_flow_cfg("/item/ups/src/cfg/flow/flow.cfg")==0)
 	{
-		printf("load flow cfg ok\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
 	}else
 	{
-		printf("load flow cfg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
 		return -1;
 	}
 	if(load_xmlcfg("hvps.111.001.01","/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml")==0)
 	{
-		printf("load xml cfg ok\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
 	}else
 	{
-		printf("load xml cfg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
 		return -1;
 	}
 	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
 	{
-		printf("load tranmap cfg ok\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
 	}else
 	{
-		printf("load tranmap cfg error\n");
+		SysLog(1,"FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
 		return -1;
 	}
 	return 0;
@@ -182,6 +182,7 @@ int load_flow_cfg(char *filename)
 		strcpy(flow->flowso,strtok(NULL,"^"));
 		strcpy(flow->flowfunc,strtok(NULL,"^"));
 		strcpy(flow->funcpar1,strtok(NULL,"^"));
+		strcpy(flow->errflow,strtok(NULL,"^"));
 		flow++;
 		memset(buff,0,sizeof(buff));
 	}
@@ -235,7 +236,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 	xmlChar	*szKey;
 	xmlNodePtr curNode ;
 	curNode = cur;
-	int  i = 0;
+	int  i = 0,iret = 0;
 	char	path[256];
 	memset(path,0,sizeof(path));
 
@@ -248,7 +249,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 		{
 			szKey = xmlNodeGetContent(curNode);
 			printf("[%s]---%s---\n",curNode->name,szKey);
-			getNodePath(path,curNode);
+			iret = getNodePath(path,curNode);
 			printf("path is [%s]\n",path);
 			for(i=0;i<MAXXMLCFG;i++)
 			{
@@ -259,6 +260,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					strcpy((xmlcfg+i)->mark,curNode->name);
 					strcpy((xmlcfg+i)->fullpath,path);
 					strcpy((xmlcfg+i)->varname,szKey);
+					(xmlcfg+i)->depth = iret;
 					break;
 				}
 			}

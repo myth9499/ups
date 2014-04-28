@@ -26,7 +26,7 @@ int SysLog(int loglevel,char *format,...)
 	{
     	sprintf(log_path,"/item/ups/log/log_%ld.log",innerid);
 	}
-	printf("log path is [%s]\n",log_path);
+	//printf("log path is [%s]\n",log_path);
     fp = fopen(log_path,"a");
     if(fp == NULL)
     {

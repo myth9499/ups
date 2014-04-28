@@ -53,12 +53,12 @@ int main(int argc,char *argv[])
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
-		perror("malloc msgbuf error");
+		SysLog(1,"FILE[%s] LINE[%d] 申请消息队列内存失败[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if(getmsgid(chnl_name,&msgidi,&msgido)==-1)
 	{
-		printf("get msgid error\n");
+		SysLog(1,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
 	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
@@ -84,22 +84,21 @@ int main(int argc,char *argv[])
 				continue;
 			}else
 			{
-				printf("pid [%ld] mbuf[%s] errno is [%ld][%d]\n",getpid(),mbuf->tranbuf.trancode,errno,EIDRM);
-				perror("msg recv error\n");
+				SysLog(1,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 			}
 			//continue;
 		}
-		printf("!!!!!!!![%s]\n",mbuf->tranbuf.trancode);
+		SysLog(1,"FILE[%s] LINE[%d] 渠道[%s]获取到交易码[%s]\n",__FILE__,__LINE__,chnl_name,mbuf->tranbuf.trancode);
 		pid = fork();
 		if(pid == 0)
 		{
 			if(sendprocess(mbuf->innerid)==0)
 			{
-				printf("发送渠道处理成功\n");
+				SysLog(1,"FILE [%s] LINE[%d] 处理成功\n",__FILE__,__LINE__);
 				msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 			}else
 			{
-				printf("发送渠道处理失败\n");
+				SysLog(1,"FILE [%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
 				msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 			}
 			/** 防止SIGCHLD信号丢失**/
@@ -112,6 +111,7 @@ int main(int argc,char *argv[])
 }
 int sendprocess(long inerid)
 {
+				SysLog(1,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]\n",__FILE__,__LINE__,inerid);
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
 	alarm(20);
@@ -121,32 +121,30 @@ int sendprocess(long inerid)
 	sockfd = socket(AF_INET,SOCK_STREAM,0);
 	if(sockfd <0)
 	{
-		printf("get sockfd error\n");
+		SysLog(1,"FILE [%s] LINE[%d] 获取sockfd失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	bzero(&servaddr,sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_port = htons(12345);
-	inet_pton(AF_INET,"192.168.56.102",&servaddr.sin_addr);
+	servaddr.sin_port = htons(10000);
+	inet_pton(AF_INET,"192.168.0.102",&servaddr.sin_addr);
 
-	if(connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr))<0)
-	{
-		perror("connect error");
-		/**
-		if(shm_hash_insert(inerid,"EEEEEEEE",NULL)==-1)
+	//if(connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr))<0)
+	//{
+		SysLog(1,"FILE [%s] LINE[%d] 建立连接失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		if(shm_hash_update(inerid,"EEEEEEE|建立连接失败",NULL)==-1)
 		{
 			printf("insert hash shm error\n");
 			return -1;
 		}
-		**/
 		return -1;
-	}else
-	{
-		if(send(sockfd,"error",strlen("error"),0)==-1)
-		{
-			perror("write error");
-			return  -1;
-		}
-	}
+	//}else
+	//{
+	//	if(send(sockfd,"error",strlen("error"),0)==-1)
+	//	{
+	//		perror("write error");
+	//		return  -1;
+	//	}
+	//}
 	return 0;
 }

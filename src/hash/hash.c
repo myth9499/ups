@@ -57,18 +57,18 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 
 	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
 	{
-		perror("ftok error");
+		SysLog(1,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		perror("shmget error");
+		SysLog(1,"获取hash存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		perror("shmat error");
+		SysLog(1,"连接hash存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -90,7 +90,7 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 			return 0;
 		}
 	}
-	printf("hash bucket full\n");
+	SysLog(1,"HASH桶满\n");
 	shmdt(transhm);
 	return -1;
 }
@@ -109,18 +109,18 @@ int get_shm_hash(long innerid,_tran *tranbuf)
 
 	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
 	{
-		perror("ftok error");
+		SysLog(1,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		perror("shmget error");
+		SysLog(1,"获取HASH存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		perror("shmat error");
+		SysLog(1,"链接HASH存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -155,18 +155,18 @@ int delete_shm_hash(long innerid)
 
 	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
 	{
-		perror("ftok error");
+		SysLog(1,"获取HASH存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		perror("shmget error");
+		SysLog(1,"获取HASH存储区恭喜内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		perror("shmat error");
+		SysLog(1,"链接HASH存储区恭喜内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -190,7 +190,7 @@ int init_var_hash(void)
 	kvalue  = (_keyvalue *)malloc(HASHCNT*sizeof(_keyvalue));
 	if(kvalue == NULL)
 	{
-		printf("malloc keyvalue error\n");
+		SysLog(1,"申请服务变量存放区内存失败\n");
 		return -1;
 	}
 	for(i=0;i<HASHCNT;i++)
@@ -210,28 +210,29 @@ int put_var_value(char *varname,int len,int loop,char *value)
 
 	if(kvalue == NULL)
 	{
-		printf("key value not malloc \n");
+		SysLog(1,"服务变量存放区内存未申请\n");
 		return -1;
 	}
 	if(loop==0)
 	{
 		hash = hashfunc(varname);
-		printf("#####################[%d]#######\n",hash);
+		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
 		tmpkvalue = kvalue+hash;
 
 		if(tmpkvalue->varname[0]==' ')
 		{
-			printf("$$$$$$$$the first \n");
+			SysLog(1,"原内存无该变量，第一次赋值 \n");
 			strcpy(tmpkvalue->varname,varname);
 			//tmpkvalue->value = (char *)malloc(len*sizeof(char));
 			tmpkvalue->value = (char *)malloc(len);
 			if(tmpkvalue->value == NULL)
 			{
-				printf("malloc value error\n");
+				SysLog(1,"申请变量值存放内存失败\n");
 				return -1;
 			}
 			//strncpy(tmpkvalue->value,value,len*sizeof(char));
-			strncpy(tmpkvalue->value,value,len);
+			memcpy(tmpkvalue->value,value,len);
+			SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value);
 			return 0;
 		}else
 		{
@@ -242,19 +243,19 @@ int put_var_value(char *varname,int len,int loop,char *value)
 				/** fangzhi  chongxin malloc **/
 				if(!strcmp(tmpkvalue->varname,varname))
 				{
-					memset(tmpkvalue->value,0,sizeof(tmpkvalue->value));
+					memset(tmpkvalue->value,0,len);
 					//strncpy(tmpkvalue->value,value,len*sizeof(char));
-					strncpy(tmpkvalue->value,value,len);
+					memcpy(tmpkvalue->value,value,len);
 					return 0;
 				}
 				tmpkvalue = tmpkvalue->next;
 				i++;
-				printf("%%%%%%%%%%%%%%[%d]\n",i);
+				//SysLog(1,"第[%d]次查找变量\n",i);
 			}
 			tmpkvalue = (_keyvalue *)malloc(sizeof(_keyvalue));
 			if(tmpkvalue == NULL)
 			{
-				printf("malloc tmpkvalue error\n");
+				SysLog(1,"申请新的keyvalue失败\n");
 				return -1;
 			}
 			tmpkvalue->end=tmpkvalue;
@@ -266,34 +267,36 @@ int put_var_value(char *varname,int len,int loop,char *value)
 			tmpkvalue->value = (char *)malloc(len);
 			if(tmpkvalue->value == NULL)
 			{
-				printf("malloc value error\n");
+				SysLog(1,"申请变量值内存区失败\n");
 				return -1;
 			}
 			//strncpy(tmpkvalue->value,value,len*sizeof(char));
 			strncpy(tmpkvalue->value,value,len);
-				printf("!!!!!!!!!!!!!!!!!!!!!!!!![%d]\n",i);
+			SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value);
 			return  0;
 		}
 	}else
 	{
 		memset(varnameloop,0,sizeof(varnameloop));
-		sprintf(varnameloop,"%s[%d]",varname,loop);
+		sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 		hash = hashfunc(varnameloop);
-		printf("#####################[%d]#######\n",hash);
+		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
+		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varnameloop,hash);
 		tmpkvalue = kvalue+hash;
 		if(tmpkvalue->varname[0]==' ')
 		{
-			printf("$$$$$$$$the first \n");
+			SysLog(1,"原内存无该变量，第一次赋值 \n");
 			strcpy(tmpkvalue->varname,varname);
 			//tmpkvalue->value = (char *)malloc(len*sizeof(char));
 			tmpkvalue->value = (char *)malloc(len);
 			if(tmpkvalue->value == NULL)
 			{
-				printf("malloc value error\n");
+				SysLog(1,"申请变量值内存失败\n");
 				return -1;
 			}
 			//strncpy(tmpkvalue->value,value,len*sizeof(char));
-			strncpy(tmpkvalue->value,value,len);
+			memcpy(tmpkvalue->value,value,len);
+			SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 			return 0;
 		}else
 		{
@@ -304,19 +307,20 @@ int put_var_value(char *varname,int len,int loop,char *value)
 				/** fangzhi  chongxin malloc **/
 				if(!strcmp(tmpkvalue->varname,varname))
 				{
-					memset(tmpkvalue->value,0,sizeof(tmpkvalue->value));
-					//strncpy(tmpkvalue->value,value,len*sizeof(char));
-					strncpy(tmpkvalue->value,value,len);
+					//memset(tmpkvalue->value,0,sizeof(len*sizeof(char)));
+					//strncpy(tmpkvalue->value,value,len);
+					memset(tmpkvalue->value,0,sizeof(len));
+					memcpy(tmpkvalue->value,value,len);
 					return 0;
 				}
 				tmpkvalue = tmpkvalue->next;
 				i++;
-				printf("%%%%%%%%%%%%%%[%d]\n",i);
+				//SysLog(1,"第[%d]次查找变量\n",i);
 			}
 			tmpkvalue = (_keyvalue *)malloc(sizeof(_keyvalue));
 			if(tmpkvalue == NULL)
 			{
-				printf("malloc tmpkvalue error\n");
+				SysLog(1,"申请tmpkeyvalue内存失败\n");
 				return -1;
 			}
 			tmpkvalue->end=tmpkvalue;
@@ -328,12 +332,12 @@ int put_var_value(char *varname,int len,int loop,char *value)
 			tmpkvalue->value = (char *)malloc(len);
 			if(tmpkvalue->value == NULL)
 			{
-				printf("malloc value error\n");
+				SysLog(1,"申请变量值内存失败\n");
 				return -1;
 			}
 			//strncpy(tmpkvalue->value,value,len*sizeof(char));
-			strncpy(tmpkvalue->value,value,len);
-			printf("!!!!!!!!!!!!!!!!!!!!!!!!![%d]\n",i);
+			memcpy(tmpkvalue->value,value,len);
+			SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 			return  0;
 		}
 		return 0;
@@ -347,26 +351,28 @@ int get_var_value(char *varname,int *len,int loop,char *value)
 	int hash = 0;
 	if(kvalue == NULL)
 	{
-		printf("key value not malloc \n");
+		SysLog(1,"进程变量值内存空间未申请 \n");
 		return -1;
 	}
 	if(loop == 0)
 	{
 		hash = hashfunc(varname);
-		printf("**********************[%d]******************\n",hash);
+		SysLog(1,"变量[%s]HASH值为[%d]\n",varname,hash);
 	}else
 	{
 		memset(varnameloop,0,sizeof(varnameloop));
-		sprintf(varnameloop,"%s[%d]",varname,loop);
+		//sprintf(varnameloop,"%s[%d]",varname,loop);
+		sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 		hash = hashfunc(varnameloop);
-		printf("**********************[%d]******************\n",hash);
+		SysLog(1,"变量[%s]HASH值为[%d]\n",varnameloop,hash);
 	}
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
 	{
-		printf("@@@@@[%s]\n",tmpkvalue->varname);
+		//SysLog(1,"变量名[%s]变量值为[%s]\n",tmpkvalue->varname,tmpkvalue->value);
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
+			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
 			strcpy(value,tmpkvalue->value);
 			return 0;
 		}
@@ -382,7 +388,7 @@ void destory_var_hash(void)
 		return ;
 	while(i<HASHCNT)
 	{
-		printf("start at [%d]\n",i);
+		SysLog(1,"start at [%d]\n",i);
 		endkvalue = kvalue+i;
 		if(endkvalue->next==NULL)
 		{
@@ -419,18 +425,18 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 
 	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
 	{
-		perror("ftok error");
+		SysLog(1,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		perror("shmget error");
+		SysLog(1,"获取hash存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		perror("shmat error");
+		SysLog(1,"连接hash存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -451,6 +457,6 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 			return 0;
 		}
 	}
-	printf("hash bucket full\n");
+	SysLog(1,"HASH桶满\n");
 	shmdt(transhm);
 }

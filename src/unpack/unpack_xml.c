@@ -4,7 +4,7 @@
 #include <libxml/parser.h>
 
 _xmlcfg *xmlcfg = NULL;
-int up(char *a,char *c,char *b)
+int upnew(char *a)
 {
 	if(unpack_xml("hvps.111.001.01","/item/ups/src/unpack/hvps.111.001.01_1.xml")==-1)
 	{
@@ -12,6 +12,7 @@ int up(char *a,char *c,char *b)
 		return -1;
 	}
 		printf("unpack xml ok");
+return 0;
 }
 int unpack_xml(char *xmltype,char *filename)
 {
@@ -80,7 +81,7 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 				if(!strcmp(tmpcfg->fullpath,path)&&!strcmp(tmpcfg->xmlname,xmltype))
 				{
 					printf("路径[%s]变量名[%s]变量值[%s]\n",tmpcfg->fullpath,tmpcfg->varname,szKey);
-					if(put_var_value(tmpcfg->varname,strlen(szKey),1,szKey)!=0)
+					if(put_var_value(tmpcfg->varname,strlen(szKey)+1,1,szKey)!=0)
 					{
 						printf("put error\n");
 						return -1;

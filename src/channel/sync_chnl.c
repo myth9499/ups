@@ -75,6 +75,8 @@ void do_exit(void)
 int  chnlprocess(int clifd );
 int main(int argc,char *argv[])
 {
+
+	/** 需要屏蔽所有信号 **/
 	atexit(do_exit);
 	struct sockaddr_in serv_addr;
 	struct sockaddr_in cli_addr;
@@ -170,17 +172,9 @@ int main(int argc,char *argv[])
 			if(chnlprocess(clifd)==0)
 			{
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
-				if(msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT))
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:反馈服务失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-				}
 			}else
 			{
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
-				if(msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT))
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:反馈服务失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-				}
 			}
 			/** 防止SIGCHLD信号丢失**/
 			kill(getppid(),35);
@@ -207,7 +201,7 @@ int chnlprocess(int clifd)
 
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
-	alarm(20);
+	alarm(30);
 	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:读取socket报文失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
@@ -299,77 +293,51 @@ int chnlprocess(int clifd)
 		}
 		return -1;
 	}
-	/** 取消回应看看效果 
 	iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
 	if(iret < 0)
 	{
-		printf("msg recv error[%s]\n",strerror(errno));
-		if(send(clifd,"error",strlen("error"),0)==-1)
-		{
-			perror("write error");
-			printf("!!!!error clifd is [%d]\n",clifd);
-		}
-		delete_shm_hash(mbuf->innerid);
-		return -1;
-	}else if(memcmp(mbuf->tranbuf,"0000",4))
-	{
-		printf("主机接收处理出错\n");
+		SysLog(1,"FILE [%s] LINE [%d]:获取服务返回失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		if(send(clifd,"交易处理失败",strlen("交易处理失败"),0)==-1)
 		{
-			perror("write error");
-			printf("!!!!error clifd is [%d]\n",clifd);
+			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
-		delete_shm_hash(mbuf->innerid);
+		/**还需要删除消息队列信息，防止堵塞 **/
+		if(delete_shm_hash(mbuf->innerid)==-1)
+		{
+			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		}
+		close(clifd);
+		return -1;
 	}else
 	{
-		printf("主机已开始接收处理\n");
-		**/
-		iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
-		if(iret < 0)
+		SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息\n",__FILE__,__LINE__);
+		//printf("渠道名称[%20s]交易码[%10s]返回数据长度[%10ld]\n",mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
+		if(get_shm_hash(mbuf->innerid,tranbuf)!=-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:获取服务返回失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-			if(send(clifd,"交易处理失败",strlen("交易处理失败"),0)==-1)
+			SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息，跟踪号[%ld]返回信息[%s]\n",__FILE__,__LINE__,mbuf->innerid,tranbuf->outtran);
+			if(write(clifd,tranbuf->outtran,strlen(tranbuf->outtran))==-1)
 			{
 				SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
-			/**还需要删除消息队列信息，防止堵塞 **/
+			memset(tranbuf,0,sizeof(_tran));
 			if(delete_shm_hash(mbuf->innerid)==-1)
 			{
 				SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 			}
 			close(clifd);
-			return -1;
+			return  0;
 		}else
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息\n",__FILE__,__LINE__);
-			//printf("渠道名称[%20s]交易码[%10s]返回数据长度[%10ld]\n",mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
-			if(get_shm_hash(mbuf->innerid,tranbuf)!=-1)
+			if(send(clifd,"error",strlen("error"),0)==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息，跟踪号[%ld]返回信息[%s]\n",__FILE__,__LINE__,mbuf->innerid,tranbuf->outtran);
-				if(write(clifd,tranbuf->outtran,strlen(tranbuf->outtran))==-1)
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-				}
-				memset(tranbuf,0,sizeof(_tran));
-				if(delete_shm_hash(mbuf->innerid)==-1)
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
-				}
-				close(clifd);
-				return  0;
-			}else
-			{
-				if(send(clifd,"error",strlen("error"),0)==-1)
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-				}
-				if(delete_shm_hash(mbuf->innerid)==-1)
-				{
-					SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
-				}
-				close(clifd);
-				return  -1;
+				SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
+			if(delete_shm_hash(mbuf->innerid)==-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			}
+			close(clifd);
+			return  -1;
 		}
-	//}
+	}
 }

@@ -11,8 +11,8 @@
 		</GrpHdr>
 		<CdtTrfTxInf>
 			<PmtId>
-				<EndToEndId>1234567891234567</EndToEndId>
-				<TxId>1234567891234567</TxId>
+				<EndToEndId>abcd1234</EndToEndId>
+				<TxId>8888888888888</TxId>
 			</PmtId>
 			<PmtTpInf>
 				<CtgyPurp>

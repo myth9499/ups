@@ -16,7 +16,7 @@
 			</PmtId>
 			<PmtTpInf>
 				<CtgyPurp>
-					<Prtry>V_A07 </Prtry>
+					<Prtry>V_A07</Prtry>
 				</CtgyPurp>
 			</PmtTpInf>
 			<IntrBkSttlmAmt Ccy="CNY">V_A08</IntrBkSttlmAmt>
