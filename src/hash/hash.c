@@ -208,9 +208,9 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	char varnameloop[1024];
 	int hash = 0;
 
-	if(kvalue == NULL)
+	if(kvalue == NULL||varname ==NULL||strlen(varname)==0)
 	{
-		SysLog(1,"服务变量存放区内存未申请\n");
+		SysLog(1,"服务变量存放区内存未申请或变量名为空\n");
 		return -1;
 	}
 	if(loop==0)

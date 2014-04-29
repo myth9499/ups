@@ -235,6 +235,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 {
 	xmlChar	*szKey;
 	xmlNodePtr curNode ;
+	xmlAttr	*attr;
 	curNode = cur;
 	int  i = 0,iret = 0;
 	char	path[256];
@@ -251,6 +252,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 			printf("[%s]---%s---\n",curNode->name,szKey);
 			iret = getNodePath(path,curNode);
 			printf("path is [%s]\n",path);
+			attr = curNode->parent->properties;
 			for(i=0;i<MAXXMLCFG;i++)
 			{
 				if(!strcmp((xmlcfg+i)->xmlname,""))
@@ -260,7 +262,29 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					strcpy((xmlcfg+i)->mark,curNode->name);
 					strcpy((xmlcfg+i)->fullpath,path);
 					strcpy((xmlcfg+i)->varname,szKey);
-					(xmlcfg+i)->depth = iret;
+					SysLog(1,"FILE[%s] LINE[%d] 放入变量[%s]\n",__FILE__,__LINE__,(xmlcfg+i)->varname);
+					if(attr==NULL)
+					{
+						(xmlcfg+i)->depth = -1;
+						break;
+					} else
+					{
+						while(attr)
+						{
+							SysLog(1,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
+							if(!strcmp(attr->name,"seq"))
+							{
+								(xmlcfg+i)->depth = atoi(attr->children->content);
+								break;
+							}
+							else
+							{
+								(xmlcfg+i)->depth = -1;
+								break;
+							}
+							attr = attr->next;
+						}
+					}
 					break;
 				}
 			}
