@@ -1,2 +1,4 @@
+/item/ups/sbin/del.sh
+/item/ups/sbin/mk.linux
 /item/ups/src/shm/initshm
 /item/ups/src/cfg/loadcfg

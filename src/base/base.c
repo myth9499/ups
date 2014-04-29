@@ -128,7 +128,7 @@ int getNodePath(char *path,xmlNodePtr cur)
 	{
 		if(curNode->name!=NULL&&strcmp(curNode->name,"text"))
 		{
-			sprintf(path,"%s.%s",curNode->name,tmppath);
+			sprintf(path,"%s/%s",curNode->name,tmppath);
 			strcpy(tmppath,path);
 		}
 		curNode = curNode->parent;

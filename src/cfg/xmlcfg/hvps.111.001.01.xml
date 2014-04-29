@@ -95,16 +95,22 @@
 				<Prtry>V_A26</Prtry>
 			</Purp>
 			<RmtInf>
-				<Ustrd>V_A27</Ustrd>
-				<Ustrd>/B17/卡卡</Ustrd>
-				<Ustrd>/B13/梅西</Ustrd>
-				<Ustrd>/A60/103100000018</Ustrd>
-				<Ustrd>/B12/103100000018</Ustrd>
-				<Ustrd>/B22/梅西</Ustrd>
-				<Ustrd>/D31/CNY0.00</Ustrd>
-				<Ustrd>/D11/CNY100000.00</Ustrd>
-				<Ustrd>/C09/2010-09-15</Ustrd>
-				<Ustrd>/A07/103200000013</Ustrd>
+				<Ustrd seq="1">V_A27</Ustrd>
+				<Ustrd seq="2">V_A28</Ustrd>
+				<Ustrd seq="3">V_A29</Ustrd>
+				<Ustrd seq="4">V_A30</Ustrd>
+				<Ustrd seq="5">V_A31</Ustrd>
+				<Ustrd seq="6">V_A32</Ustrd>
+				<Ustrd seq="7">V_A33</Ustrd>
+				<Ustrd seq="8">V_A34</Ustrd>
+				<Ustrd seq="9">V_A35</Ustrd>
+				<Ustrd seq="10">V_A36</Ustrd>
+				<Ustrd seq="11">V_A37</Ustrd>
+				<Ustrd seq="12">V_A38</Ustrd>
+				<Ustrd seq="13">V_A39</Ustrd>
+				<Ustrd seq="14">V_A40</Ustrd>
+				<Ustrd seq="15">V_A41</Ustrd>
+				<Ustrd seq="16">V_A42</Ustrd>
 			</RmtInf>
 		</CdtTrfTxInf>
 	</FIToFICstmrCdtTrf>
