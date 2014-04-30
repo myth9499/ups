@@ -85,6 +85,8 @@ int main(int argc,char *argv[])
 			}else
 			{
 				SysLog(1,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+				sleep (5);
+				continue;
 			}
 			//continue;
 		}
