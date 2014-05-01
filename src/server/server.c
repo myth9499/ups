@@ -4,32 +4,89 @@ void destory_var_hash(void);
 void serv(int sig);
 
 /** 超时函数 **/
+_tranmap tmap;
 void servtimeout(int signal)
 {
 	seterr("EEEEEEEE","交易超时结束");
 }
+
+/** 获取配套流程 **/
+int	get_flow(char	*trancode,_flow	*localflow)
+{
+	if(localflow==NULL||trancode==NULL)
+	{
+		SysLog(1,"获取流程传入参数错误\n");
+		return -1;
+	}
+
+	/** 根据交易码，获取到流程名称 **/
+	SysLog(1,"FILE[%s] LINE[%d] 传入交易码:%s\n",__FILE__,__LINE__,trancode);
+	trim(trancode);
+	if(gettranmap(&tmap,trancode)==-1)
+	{
+		SysLog(1,"FILE [%s] LINE[%d] 根据交易码获取交易流程失败，请查看是否配置\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
+		return -1;
+	}
+	SysLog(1,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
+	
+	int shmid,loop=0;
+	_flow *flow=NULL;
+	_flow *tmpshmdt=NULL;
+	size_t shmsize;
+
+	SysLog(1,"开始获取交易码为[%s]的流程配置\n",trancode);
+	shmsize=MAXFLOW*sizeof(_flow);
+	if((shmid=getshmid(8,shmsize))==-1)
+	{
+		SysLog(1,"FILE [%s] LINE[%d] 获取共享内存号失败\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","获取共享内存失败");
+		return -1;
+	}
+	flow = (_flow *)shmat(shmid,NULL,0);
+	if(flow == NULL)
+	{
+		SysLog(1,"FILE [%s] LINE[%d]链接共享内存失败\n",__FILE__,__LINE__);
+		seterr("EEEEEEEEEE","链接共享内存失败");
+		return -1;
+	}
+	tmpshmdt = flow;
+	SysLog(1,"开始执行流程[%s] \n",tmap.tranflow);
+	while(strcmp(flow->flowname,"END"))
+	{
+		if(!strcmp(flow->flowname,tmap.tranflow))
+		{
+			memcpy(localflow+loop,flow,sizeof(_flow));
+			loop++;
+		}
+		flow++;
+	}
+	strcpy((localflow+loop)->flowname,"END");
+	shmdt(tmpshmdt);
+	return 0;
+}
 void delservpid(void)
 {
-	printf("开始删除共享内存数据[%ld]\n",getpid());
+	SysLog(1,"开始删除共享内存数据[%ld]\n",getpid());
 	pid_t ret = 0;
 	int shmid = 0,i=0,semid = 0;
 	_servreg *sreg = NULL;
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		printf("get serv shm id error\n");
+		SysLog(1,"get serv shm id error\n");
 		return ;
 	}
-	printf("shmid is[%d]\n",shmid);
+	SysLog(1,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		printf("shmat sreg error\n");
+		SysLog(1,"shmat sreg error\n");
 		return ;
 	}
 	/** 信号量控制 **/
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
 		if((sreg+i)->servpid==getpid())
 		{
 			sem_wait(&((sreg+i)->sem1));
@@ -51,18 +108,18 @@ int updatestat(void)
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		printf("get serv shm id error\n");
+		SysLog(1,"get serv shm id error\n");
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
+	SysLog(1,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		printf("shmat sreg error\n");
+		SysLog(1,"shmat sreg error\n");
 		return -1;
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
 		if((sreg+i)->servpid==getpid())
 		{
 			sem_wait(&((sreg+i)->sem1));
@@ -74,7 +131,7 @@ int updatestat(void)
 
 	}
 	shmdt(sreg);
-	printf("解除信号量成功\n");
+	SysLog(1,"解除信号量成功\n");
 	return ret;
 }
 
@@ -86,18 +143,18 @@ int insert_servreg(char *chnlname )
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		printf("get serv shm id error\n");
+		SysLog(1,"get serv shm id error\n");
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
+	SysLog(1,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		printf("shmat sreg error\n");
+		SysLog(1,"shmat sreg error\n");
 		return -1;
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		printf("i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		SysLog(1,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
 		if((sreg+i)->servpid==0)
 		{
 			(sreg+i)->servpid = getpid();
@@ -245,78 +302,64 @@ int testvar(void)
 	char value[1024];
 	memset(value,0,sizeof(value));
 	get_var_value("V_CHANNEL",1024,1,value);
-	printf("var value is [%s]\n",value);
+	SysLog(1,"var value is [%s]\n",value);
 	get_var_value("V_TRAN",1024,1,value);
-	printf("var value is [%s]\n",value);
+	SysLog(1,"var value is [%s]\n",value);
 	get_var_value("V_BUFF",1024,1,value);
-	printf("var value is [%s]\n",value);
+	SysLog(1,"var value is [%s]\n",value);
 	return 0;
 }
 int serv_flow(char *trancode)
 {
-	_tranmap tmap;
-	/** 根据交易码，获取到流程名称 **/
-	printf("1111\n");
-	trim(trancode);
-	if(gettranmap(&tmap,trancode)==-1)
-	{
-		SysLog(1,"FILE [%s] LINE[%d] 根据交易码获取交易流程失败，请查看是否配置\n",__FILE__,__LINE__);
-		seterr("EEEEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
-		return -1;
-	}
-	SysLog(1,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
-	alarm(tmap.timeout);
-	key_t	key;
-	int shmid,i=0;
-	_flow *flow=NULL;
-	char *tmpbuf = NULL;
-	_flow *tmpshmdt=NULL;
-	size_t shmsize;
-	/** init commmsg **/
-	shmsize=MAXFLOW*sizeof(_flow);
-	if((shmid=getshmid(8,shmsize))==-1)
-	{
-		SysLog(1,"FILE [%s] LINE[%d] 获取共享内存号失败\n",__FILE__,__LINE__);
-		seterr("EEEEEEEEEE","获取共享内存失败");
-		return -1;
-	}
 	if(trancode==NULL)
 	{
 		SysLog(1,"FILE [%s] LINE[%d]获取交易码失败\n",__FILE__,__LINE__);
 		seterr("EEEEEEEEEE","获取交易码失败");
 		return -1;
 	}
-	SysLog(1,"开始执行流程[%s] \n",tmap.tranname);
-	flow = (_flow *)shmat(shmid,NULL,0);
-	if(flow == NULL)
+	_flow	localflow[1024];
+	memset(localflow,0,sizeof(localflow));
+
+	alarm(tmap.timeout);
+	int i=1,j=1;
+	/** 获取流程 **/
+	if(get_flow(trancode,localflow)!=0)
 	{
-		SysLog(1,"FILE [%s] LINE[%d]链接共享内存失败\n",__FILE__,__LINE__);
-		seterr("EEEEEEEEEE","链接共享内存失败");
+		SysLog(1,"获取交易码为[%s]的流程失败\n",trancode);
 		return -1;
 	}
-	tmpshmdt = flow;
-	while(strcmp(flow->flowname,"END"))
+	for(i=1;strcmp(localflow[i].flowname,"END");i++)
 	{
-		if(!strcmp(flow->flowname,tmap.tranflow)&&(strcmp(flow->flowso,"")))
+		SysLog(1,"----------执行流程序号[%d]\t流程名称[%s]函数名称[%s]\n",i,localflow[i].flowname,localflow[i].flowfunc);
+	}
+	i=1;
+	/** init commmsg **/
+	while(strcmp(localflow[i].flowname,"END"))
+	{
+		SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
+		trim(localflow[i].flowso);
+		trim(localflow[i].flowfunc);
+		trim(localflow[i].funcpar1);
+		if(do_so(localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1)==0)
 		{
-			SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",flow->flowname,
-					flow->flowso,flow->flowfunc,flow->funcpar1);
-			trim(flow->flowso);
-			trim(flow->flowfunc);
-			trim(flow->funcpar1);
-			if(do_so(flow->flowso,flow->flowfunc,flow->funcpar1)==0)
+			SysLog(1,"流程处理成功\n");
+		}else
+		{
+			SysLog(1,"流程处理失败\n");
+			/** 执行错误流程**/
+			if(get_flow(localflow[i].errflow,localflow)!=0)
 			{
-				SysLog(1,"流程处理成功\n");
-			}else
-			{
-				SysLog(1,"流程处理失败\n");
-				/** 执行错误流程**/
+				SysLog(1,"获取交易码为[%s]的流程失败\n",trancode);
+				return -1;
 			}
-			flow++;
+			for(j=1;strcmp(localflow[j].flowname,"END");j++)
+			{
+				SysLog(1,"----------执行流程序号[%d]\t流程名称[%s]函数名称[%s]\n",j,localflow[j].flowname,localflow[j].flowfunc);
+			}
+			i=1;
 			continue;
 		}
-		flow++;
+		i++;
 	}
-	shmdt(tmpshmdt);
 	return 0;
 }
