@@ -1,0 +1,123 @@
+#include "ups.h"
+EXEC SQL INCLUDE SQLCA;
+
+EXEC SQL BEGIN DECLARE SECTION;
+struct  XML2TABLEMAP
+{
+	char    msgtype[33];
+	char    inoutflag[3];
+	char    varname[26];
+	char    varlen[6];
+	char    varvalue[26];
+	char    tablename[26];
+	char    colname[26];
+}xml2tab;
+struct  HV111
+{
+	char    A01[26];
+	char    A02[26];
+	char    A03[26];
+}hv111;
+	char	mtype[26];
+EXEC SQL END DECLARE SECTION;
+
+int opendb()
+{
+	EXEC SQL connect to ibpsdb;
+	if(SQLCODE!=0)
+		return -1;
+	else
+		return 0;
+}
+int xml2table(char *msgtype)
+{
+	SysLog(1,"开始进入DB2函数处理\n");
+	strcpy(mtype,msgtype);
+
+	char	*tmpvalue;
+	char	sqlbuf1[1024];
+	char	sqlbuf2[1024];
+	char	sqlbuf3[1024];
+	char	sqlbuf4[1024];
+	memset(sqlbuf1,0,sizeof(sqlbuf1));
+	memset(sqlbuf2,0,sizeof(sqlbuf2));
+	memset(sqlbuf3,0,sizeof(sqlbuf3));
+	memset(sqlbuf4,0,sizeof(sqlbuf4));
+
+	if(opendb()!=0)
+	{
+		SysLog(1,"open db error[%d]\n",SQLCODE);
+		return -1;
+	}
+
+	SysLog(1,"connect to ibpsdb ok\n");
+	EXEC SQL declare xml2table cursor  for select *  from xml2tablemap where msgtype = :mtype;
+	if(SQLCODE!=0)
+	{
+		SysLog(1,"select from ibpsdb error[%d]",SQLCODE);
+		EXEC SQL  connect reset;
+		return -1;
+	}
+	EXEC  SQL  open xml2table;
+	if(SQLCODE!=0)
+	{
+		SysLog(1,"open cursor xml2table error[%d]",SQLCODE);
+		EXEC SQL connect reset;
+		return -1;
+	}
+	for(;;)
+	{
+		EXEC SQL fetch xml2table into :xml2tab;
+
+		if(SQLCODE==100)
+		{
+			SysLog(1,"no data\n");
+			break;
+		}
+		SysLog(1,"table[%s] var[%s]\n",xml2tab.tablename,xml2tab.varname);
+		trim(xml2tab.colname);
+		trim(xml2tab.varname);
+		trim(xml2tab.tablename);
+		strcat(sqlbuf1,xml2tab.colname );
+		strcat(sqlbuf1,"," );
+
+		/** value **/
+		sprintf(sqlbuf2,"%s.%s",xml2tab.tablename,xml2tab.colname);
+		if((tmpvalue = (char *)malloc(atoi(xml2tab.varlen)*sizeof(char)))==NULL)
+		{
+			SysLog(1,"临时申请内存失败:%s\n",strerror(errno));
+			return -1;
+		}
+		get_var_value(xml2tab.varname,atoi(xml2tab.varlen),1,tmpvalue);
+		strcat(sqlbuf3,"'" );
+		strcat(sqlbuf3,tmpvalue );
+		strcat(sqlbuf3,"'" );
+		strcat(sqlbuf3,"," );
+		free(tmpvalue);
+	}
+	sqlbuf1[strlen(sqlbuf1)-1]='\0';
+	sqlbuf3[strlen(sqlbuf3)-1]='\0';
+	SysLog(1,"sql1buf is [%s]\n",sqlbuf1);
+	SysLog(1,"sql3buf is [%s]\n",sqlbuf3);
+	sprintf(sqlbuf4,"%s %s %s %s %s","insert into t_hvps111 (",sqlbuf1,") values (",sqlbuf3,")");
+	SysLog(1,"sql4buf is [%s]\n",sqlbuf4);
+	EXEC SQL PREPARE	str FROM :sqlbuf4;
+	if(SQLCODE!=0)
+	{
+		SysLog(1,"insert hv111 error[%d]",SQLCODE);
+		EXEC SQL connect reset;
+		return -1;
+	}
+	EXEC SQL	EXECUTE str ;
+	if(SQLCODE!=0)
+	{
+		SysLog(1,"execute hv111 error[%d]",SQLCODE);
+		EXEC SQL connect reset;
+		return -1;
+	}
+	/**
+	**/
+	EXEC SQL close xml2table;
+		EXEC SQL connect reset;
+	return  0;
+}

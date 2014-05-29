@@ -1,0 +1,9 @@
+define process (mqrcv) appltype(UNIX) APPLICID('/item/ups/src/channel/mqrcv')
+define ql(QFORTRIGGER)
+define ql(TEST) initq(QFORTRIGGER) trigger trigtype(FIRST) process(mqrcv) replace
+runmqtrm -m dev01 -q QFORTRIGGER
+
+define process (mqsend) appltype(UNIX) APPLICID('/item/ups/src/channel/mqsend')
+define ql(RQFORTRIGGER)
+define ql(RTEST) initq(RQFORTRIGGER) trigger trigtype(FIRST) process(mqsend) replace
+runmqtrm -m dev01 -q RQFORTRIGGER
