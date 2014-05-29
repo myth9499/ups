@@ -3,7 +3,7 @@
 char chnl_name[20];
 char	syncflag[2];
 int iret = 0;
-int msgidi=0,msgido=0;
+int msgidi=0,msgido=0,msgidr=0;
 
 
 /** 主进程注册信号，当子进程退出时进行后续处理
@@ -56,7 +56,7 @@ int main(int argc,char *argv[])
 		SysLog(1,"FILE[%s] LINE[%d] 申请消息队列内存失败[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	if(getmsgid(chnl_name,&msgidi,&msgido)==-1)
+	if(getmsgid(chnl_name,&msgidi,&msgido,&msgidr)==-1)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;

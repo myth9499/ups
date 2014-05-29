@@ -5,7 +5,7 @@ int send_to_channel(char *chnlname)
 {
 	SysLog(1,"开始发送报文到渠道[%s]\n",chnlname);
 	_msgbuf	*mbuf ;
-	int	msgidi,msgido;
+	int	msgidi,msgido,msgidr;
 	int iret ;
 
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
@@ -16,9 +16,9 @@ int send_to_channel(char *chnlname)
 	}
 	memset(mbuf,0,sizeof(mbuf));
 	mbuf->innerid = innerid;
-	strcpy(mbuf->tranbuf.trancode,"IXO101");
+	strcpy(mbuf->tranbuf.trancode,"核心服务");
 	mbuf->tranbuf.buffsize=123;
-	if(getmsgid(chnlname,&msgidi,&msgido)!=0)
+	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)!=0)
 	{
 		SysLog(1,"获取渠道[%s]消息队列失败\n",chnlname);
 		free(mbuf);
@@ -39,7 +39,7 @@ int recv_from_channel(char *chnlname)
 {
 	SysLog(1,"开始接收渠道[%s]返回报文\n",chnlname);
 	_msgbuf	*mbuf ;
-	int	msgidi,msgido;
+	int	msgidi,msgido,msgidr;
 	int iret ;
 	_tran *tranbuf;
 
@@ -50,13 +50,13 @@ int recv_from_channel(char *chnlname)
 		return -1;
 	}
 	memset(mbuf,0,sizeof(mbuf));
-	if(getmsgid(chnlname,&msgidi,&msgido)!=0)
+	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)!=0)
 	{
 		SysLog(1,"获取渠道[%s]消息队列失败\n",chnlname);
 		free(mbuf);
 		return -1;
 	}
-	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),innerid,0);
+	iret = msgrcv(msgidr,mbuf,sizeof(mbuf->tranbuf),innerid,0);
 	if(iret == -1)
 	{
 		SysLog(1,"接收渠道[%s]返回报文失败:%s\n",chnlname,strerror(errno));

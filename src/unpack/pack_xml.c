@@ -6,6 +6,21 @@
 
 _xmlcfg *tmpcfg = NULL;
 _xmlcfg *dtcfg = NULL;
+/** 生成最新的文件名 **/
+int	GetNewFileName(char	*ffile,char	*nfilename)
+{
+	if(nfilename == NULL)
+	{
+		SysLog(1,"传入生成文件名存放空间为NULL\n");
+		return -1;
+	}
+	memset(nfilename,0,L_tmpnam);
+	memset(ffile,0,sizeof(ffile));
+	strcpy(nfilename,tmpnam(nfilename));
+	sprintf(ffile,"%s%s","/item/ups/log",nfilename);
+	SysLog(1,"临时文件名[%s]\n",ffile);
+	return 0;
+}
 xmlDocPtr  getdoc (char *docname) 
 {                                                  
 	xmlDocPtr doc;                                                                     
@@ -19,7 +34,7 @@ xmlDocPtr  getdoc (char *docname)
 	return doc;                                                                        
 }                                                                                    
 
-xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath)
+xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 {                       
 
 	if(doc == NULL || strlen(xpath)==0)
@@ -35,13 +50,26 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath)
 		SysLog(1,"FILE [%s] LINE[%d] Error in xmlXPathNewContext. \n",__FILE__,__LINE__);                          
 		return NULL;                                                                     
 	}
-	xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST"urn:iso:std:iso:20022:tech:xsd:pacs.008.001.02");  
-	if(!context)  
-	{  
-		SysLog(1,"Error: unable to create new XPath context\n");  
-		xmlFreeDoc(doc);   
-		return(NULL);  
-	}  
+	/** 根据报文类型，设置xpath命名空间 **/
+	if(!strcmp(xmltype,"hvps.111.001.01"))
+	{
+		xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST"urn:iso:std:iso:20022:tech:xsd:pacs.008.001.02");  
+		if(!context)  
+		{  
+			SysLog(1,"Error: unable to create new XPath context\n");  
+			xmlFreeDoc(doc);   
+			return(NULL);  
+		}
+	}else if(!strcmp(xmltype,"ccms.990.001.02"))	
+	{
+		xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST"urn:cnaps:std:ccms:2010:tech:xsd:ccms.990.001.02");  
+		if(!context)  
+		{  
+			SysLog(1,"Error: unable to create new XPath context\n");  
+			xmlFreeDoc(doc);   
+			return(NULL);  
+		}
+	}
 	result = xmlXPathEvalExpression(xpath, context);                                   
 	xmlXPathFreeContext(context);                                                      
 	if (result == NULL) {                                                              
@@ -69,9 +97,19 @@ int pack_xml(char *xmltype)
 	char	lastpath[256];
 	char	*tmp;
 	size_t shmsize = MAXXMLCFG*sizeof(_xmlcfg);
+	char	xmlcfgpath[60];
+	char	msgtype[30];
+
+	char	nfilename[L_tmpnam];
+	char	ffile[60];
+
 
 	memset(tmppath,0,sizeof(tmppath));
 	memset(lastpath,0,sizeof(lastpath));
+	memset(xmlcfgpath,0,sizeof(xmlcfgpath));
+	memset(msgtype,0,sizeof(msgtype));
+	memset(ffile,0,sizeof(ffile));
+
 
 
 	if((shmid = getshmid(6,shmsize))==-1)
@@ -88,7 +126,27 @@ int pack_xml(char *xmltype)
 	xmlKeepBlanksDefault(0);
 	xmlIndentTreeOutput = 1;
 
-	doc = getdoc("/item/ups/src/cfg/xmlcfg/111.xml");
+	/** 获取变量对应配置 **/
+	if(!strcmp(xmltype,"V")||strlen(xmltype)==0)
+	{
+		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
+		if(get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype)!=0)
+		{
+			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
+			return  -1;
+		}
+		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
+		trim(msgtype);
+		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",msgtype);
+	}else
+	{
+		SysLog(1,"直接从参数读取");
+		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",xmltype);
+		strcpy(msgtype,xmltype);
+	}
+
+
+	doc = getdoc(xmlcfgpath);
 	if(doc == NULL)
 	{
 		SysLog(1,"FILE [%s] LINE [%d] 获取doc指针\n",__FILE__,__LINE__);
@@ -98,7 +156,7 @@ int pack_xml(char *xmltype)
 
 	while(strcmp(tmpcfg->xmlname,""))
 	{
-		SysLog(1,"FILE [%s] LINE [%d] xmlnames[%s]fullpath[%s] last path[%s]xmltype[%s]\n",__FILE__,__LINE__,tmpcfg->xmlname,tmpcfg->fullpath,lastpath,xmltype);
+		//SysLog(1,"FILE [%s] LINE [%d] xmlnames[%s]fullpath[%s] last path[%s]xmltype[%s]\n",__FILE__,__LINE__,tmpcfg->xmlname,tmpcfg->fullpath,lastpath,xmltype);
 		//if(!strcmp(tmpcfg->xmlname,xmltype))
 		if(!strcmp(tmpcfg->xmlname,xmltype)&&strcmp(lastpath,tmpcfg->fullpath))
 		{
@@ -111,14 +169,15 @@ int pack_xml(char *xmltype)
 			}
 			memset(tmppath,0,sizeof(tmppath));
 			strcpy(tmppath,tmpcfg->fullpath);
-						SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
+			SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
 			tmp = strtok(tmppath,"/");
 			sprintf(xpath,"/lilei:%s",tmp);
 			while((tmp = strtok(NULL,"/"))!=NULL)
 			{
 				sprintf(xpath,"%s/lilei:%s",xpath,tmp);
 			}
-			result = getnodeset(doc,xpath);
+			SysLog(1,"FILE[%s]LINE[%d]xpath is [%s]\n",__FILE__,__LINE__,xpath);
+			result = getnodeset(doc,xpath,xmltype);
 			if(result)
 			{
 				nodeset = result->nodesetval;
@@ -154,7 +213,34 @@ int pack_xml(char *xmltype)
 		strcpy(lastpath,tmpcfg->fullpath);
 		tmpcfg++;
 	}
-	xmlSaveFormatFile("/item/ups/log/111.xml",doc,1);
+	/** 生成新的文件名,放置到变量中 **/
+	if(GetNewFileName(ffile,nfilename)==0)
+	{
+		xmlSaveFormatFile(ffile,doc,1);
+		/** 放置到变量中**/
+		if(put_var_value("V_XMLFILE",strlen(ffile),1,ffile)!=0)
+		{
+			SysLog(1,"打包文件失败\n");
+			xmlFreeDoc(doc);
+			xmlCleanupParser();
+			shmdt(dtcfg);
+			return -1;
+		}else
+		{
+			SysLog(1,"打包文件成功[%s]\n",ffile);
+			xmlFreeDoc(doc);
+			xmlCleanupParser();
+			shmdt(dtcfg);
+			return 0;
+		}
+	}else
+	{
+		SysLog(1,"打包文件失败\n");
+		xmlFreeDoc(doc);
+		xmlCleanupParser();
+		shmdt(dtcfg);
+		return -1;
+	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 	shmdt(dtcfg);

@@ -119,7 +119,7 @@ int updatestat(void)
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		//SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
 		if((sreg+i)->servpid==getpid())
 		{
 			sem_wait(&((sreg+i)->sem1));
@@ -128,6 +128,7 @@ int updatestat(void)
 			sem_post(&((sreg+i)->sem1));
 			break;
 		}
+		//sem_post(&((sreg+i)->sem1));
 
 	}
 	shmdt(sreg);
@@ -160,6 +161,7 @@ int insert_servreg(char *chnlname )
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
 			(sreg+i)->stat[0]='N';
+			(sreg+i)->type[0]='S';
 			shmdt(sreg);
 			return 0;
 		}else if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
@@ -177,7 +179,7 @@ int insert_servreg(char *chnlname )
 
 
 int iret = 0;
-int msgidi=0,msgido=0;
+int msgidi=0,msgido=0,msgidr;
 key_t key;
 _msgbuf *mbuf=NULL;
 _tran *tranbuf = NULL;
@@ -185,6 +187,11 @@ _tran *tranbuf = NULL;
 
 int main(int argc,char *argv[])
 {
+	if(argc < 2)
+	{
+		printf("服务启动参数不正确:usage appname chnlname\n");
+		return -1;
+	}
 	atexit(destory_var_hash);
 	atexit(delservpid);
 
@@ -213,7 +220,7 @@ int main(int argc,char *argv[])
 	}
 
 	/** 渠道参数需要传入，服务根据渠道多少划分，防止一个服务挂掉所有都挂掉 **/
-	if(getmsgid("测试渠道",&msgidi,&msgido)!=0)
+	if(getmsgid(argv[1],&msgidi,&msgido,&msgidr)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取测试渠道消息队列失败\n",__FILE__,__LINE__);
 		free(tranbuf);
@@ -222,7 +229,7 @@ int main(int argc,char *argv[])
 	}
 
 	/** 注册serv **/
-	if(insert_servreg("测试渠道")==0)
+	if(insert_servreg(argv[1])==0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
 	}else
@@ -237,6 +244,7 @@ int main(int argc,char *argv[])
 	/** 堵塞到信号 **/
 	signal(SIGUSR2,serv);
 	signal(SIGALRM,servtimeout);
+	signal(SIGPIPE,SIG_IGN);
 	signal(SIGUSR1,SIG_IGN);
 	while (1)
 	{
@@ -263,15 +271,22 @@ void serv(int sig)
 			{
 				SysLog(1,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);
 				seterr("EEEEEEEE","解包失败");
-			}
-			if(serv_flow(mbuf->tranbuf.trancode)!=0)
-			{
-				SysLog(1,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
-				seterr("EEEEEEEE","执行交易失败");
 			}else
 			{
-				SysLog(1,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
+				if(serv_flow(mbuf->tranbuf.trancode)!=0)
+				{
+					SysLog(1,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
+					seterr("EEEEEEEE","执行交易失败");
+				}else
+				{
+					SysLog(1,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
+				}
 			}
+		}else
+		{
+			SysLog(1,"FILE [%s] LINE[%d] 获取全局跟踪号:[%ld]信息失败\n",__FILE__,__LINE__,innerid);
+			updatestat();
+			return ;
 		}
 	}else if(errno  == ENOMSG)
 	{
@@ -286,12 +301,14 @@ void serv(int sig)
 		SysLog(1,"其他错误\n");
 		seterr("EEEEEEEE","其他错误");
 	}
-	/** 删除共享内存hash表中的交易信息 
+	/** 删除共享内存hash表中的交易信息 **/
     if(delete_shm_hash(mbuf->innerid)==-1)
     {
         SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		updatestat();
+		return ;
     }
-**/
+    SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);
@@ -345,7 +362,7 @@ int serv_flow(char *trancode)
 			SysLog(1,"流程处理成功\n");
 		}else
 		{
-			SysLog(1,"流程处理失败\n");
+			SysLog(1,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 			/** 执行错误流程**/
 			if(get_flow(localflow[i].errflow,localflow)!=0)
 			{

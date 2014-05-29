@@ -29,8 +29,8 @@
 
 /** func define **/
 
-static int BUCKETSCNT=1000;
-static int HASHCNT=131;
+static int BUCKETSCNT=100;
+static int HASHCNT=13;
 static int VARCNT=1024;
 static int MAXCOMMMSG=1024;
 static int MAXFLOW=1024;
@@ -42,11 +42,13 @@ static int MAXTRANMAP=100;
 typedef struct TRAN
 {
 	long	innerid;
-	char	intran[4096];
-	char	outtran[4096];
+	char	intran[1048576];
+	char	outtran[1048576];
 	time_t	stime;
 	time_t	etime;
 	char	stat[2];
+	sem_t	sem1;
+	sem_t	sem2;
 }_tran;
 
 /** main msg buf 
@@ -102,6 +104,7 @@ typedef struct SERVREG
 	pid_t	servpid;
 	char	stat[2];
 	char	chnlname[20];
+	char	type[2];//S代表服务,C代表渠道
 	sem_t	sem1;
 	sem_t	sem2;
 }_servreg;

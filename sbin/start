@@ -1,4 +1,5 @@
-/item/ups/sbin/del.sh
-/item/ups/sbin/mk.linux
 /item/ups/src/shm/initshm
 /item/ups/src/cfg/loadcfg
+/item/ups/src/monitor/startups
+sleep 1
+/item/ups/src/monitor/monitor

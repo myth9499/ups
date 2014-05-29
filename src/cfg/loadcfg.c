@@ -7,34 +7,42 @@ int main(int argc,char *argv[])
 {
 	if(load_commmsg_cfg("/item/ups/src/cfg/channel/chnl.cfg")==0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
 		return -1;
 	}
 	if(load_flow_cfg("/item/ups/src/cfg/flow/flow.cfg")==0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
 		return -1;
 	}
 	if(load_xmlcfg("hvps.111.001.01","/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml")==0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
+		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
+		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
+		return -1;
+	}
+	if(load_xmlcfg("ccms.990.001.02","/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml")==0)
+	{
+		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml");
+	}else
+	{
+		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml");
 		return -1;
 	}
 	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
 		return -1;
 	}
 	return 0;
@@ -57,17 +65,16 @@ int load_commmsg_cfg(char *filename)
 	shmsize=MAXCOMMMSG*sizeof(_commmsg);
 	if((shmid=getshmid(9,shmsize))==-1)
 	{
-		printf("get shm error\n");
+		SysLog(1,"get shm error\n");
 		return -1;
 	}
-	printf("start loadcfg \n");
+	SysLog(1,"start loadcfg \n");
 	cmsg = (_commmsg *)shmat(shmid,NULL,0);
 	if(cmsg == NULL)
 	{
-		printf("cmsg shmat error\n");
+		SysLog(1,"cmsg shmat error\n");
 		return -1;
 	}
-	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
@@ -110,7 +117,7 @@ int load_commmsg_cfg(char *filename)
 	}
 	shmdt(cmsg);
 	fclose(fp);
-	printf("load ok\n");
+	SysLog(1,"load ok\n");
 	return 0;
 }
 int load_flow_cfg(char *filename)
@@ -131,14 +138,14 @@ int load_flow_cfg(char *filename)
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
-		printf("get shm error\n");
+		SysLog(1,"get shm error\n");
 		return -1;
 	}
-	printf("start loadcfg \n");
+	SysLog(1,"start loadcfg \n");
 	flow = (_flow *)shmat(shmid,NULL,0);
 	if(flow == NULL)
 	{
-		printf("cmsg shmat error\n");
+		SysLog(1,"cmsg shmat error\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
@@ -188,7 +195,7 @@ int load_flow_cfg(char *filename)
 	}
 	shmdt(flow);
 	fclose(fp);
-	printf("load ok\n");
+	SysLog(1,"load ok\n");
 	return 0;
 }
 
@@ -203,12 +210,12 @@ int load_xmlcfg(char *xmltype,char *filename)
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		printf("get xml cfg error\n");
+		SysLog(1,"get xml cfg error\n");
 		return -1;
 	}
 	if((xmlcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		printf("shmat xml cfg error\n");
+		SysLog(1,"shmat xml cfg error\n");
 		return -1;
 	}
 
@@ -216,14 +223,14 @@ int load_xmlcfg(char *xmltype,char *filename)
 	doc = xmlReadFile(filename,"UTF-8",XML_PARSE_RECOVER);
 	if(doc == NULL)
 	{
-		printf("parse file error\n");
+		SysLog(1,"parse file error\n");
 		return -1;
 	}
 
 	curNode = xmlDocGetRootElement(doc);
 	if(curNode == NULL)
 	{
-		printf("get root elemenet error\n");
+		SysLog(1,"get root elemenet error\n");
 		xmlFreeDoc(doc);
 		return -1;
 	}
@@ -245,13 +252,13 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 	{
 		if(curNode->type == XML_ELEMENT_NODE)
 		{
-			printf("ELement name [%s]\n",curNode->name);
+			SysLog(1,"ELement name [%s]\n",curNode->name);
 		}else if(curNode->type == XML_TEXT_NODE)
 		{
 			szKey = xmlNodeGetContent(curNode);
-			printf("[%s]---%s---\n",curNode->name,szKey);
+			SysLog(1,"[%s]---%s---\n",curNode->name,szKey);
 			iret = getNodePath(path,curNode);
-			printf("path is [%s]\n",path);
+			SysLog(1,"path is [%s]\n",path);
 			attr = curNode->parent->properties;
 			for(i=0;i<MAXXMLCFG;i++)
 			{
@@ -310,14 +317,14 @@ int load_tranmap_cfg(char *filename)
 	shmsize=MAXTRANMAP*sizeof(_tranmap);
 	if((shmid=getshmid(5,shmsize))==-1)
 	{
-		printf("get shm error\n");
+		SysLog(1,"get shm error\n");
 		return -1;
 	}
-	printf("start load tranmap  cfg \n");
+	SysLog(1,"start load tranmap  cfg \n");
 	tmap = (_tranmap *)shmat(shmid,NULL,0);
 	if(tmap == NULL)
 	{
-		printf("tranmap shmat error\n");
+		SysLog(1,"tranmap shmat error\n");
 		return -1;
 	}
 	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
@@ -351,6 +358,6 @@ int load_tranmap_cfg(char *filename)
 	}
 	shmdt(tmap);
 	fclose(fp);
-	printf("load ok\n");
+	SysLog(1,"load ok\n");
 	return 0;
 }

@@ -1,6 +1,6 @@
 static char sqla_program_id[292] = 
 {
- 172,0,65,69,65,78,65,73,105,65,78,97,84,83,69,101,48,49,49,49,
+ 172,0,65,69,65,78,65,73,90,65,115,79,84,66,70,101,48,49,49,49,
  49,32,50,32,32,32,32,32,32,32,32,32,8,0,68,69,86,32,32,32,
  32,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -147,6 +147,7 @@ EXEC SQL select apsno into :apsno from t_ibps_txreg where apsno ='000002707701';
 	char	msgid2[20];
 	memset(msgid2,0,sizeof(msgid2));
 	get_var_value("V_A02",20,1,msgid2);
+	put_var_value("V_A02",20,1,"test upate value");
 	printf("msgid2 is [%s]\n",msgid2);
 	return  0;
 }
@@ -157,7 +158,7 @@ int dbtest3(char *par1,char *par2,char *par3)
 EXEC SQL begin declare section;
 */
 
-#line 46 "db2demo.sqc"
+#line 47 "db2demo.sqc"
 
 	char	apsno[13];
 	
@@ -165,7 +166,7 @@ EXEC SQL begin declare section;
 EXEC SQL end declare section;
 */
 
-#line 48 "db2demo.sqc"
+#line 49 "db2demo.sqc"
 
 
 	
@@ -174,23 +175,23 @@ EXEC SQL update t_ibps_txreg  set msgid  = '99999999' where apsno ='000002707701
 */
 
 {
-#line 50 "db2demo.sqc"
+#line 51 "db2demo.sqc"
   sqlastrt(sqla_program_id, &sqla_rtinfo, &sqlca);
-#line 50 "db2demo.sqc"
+#line 51 "db2demo.sqc"
   sqlacall((unsigned short)24,2,0,0,0L);
-#line 50 "db2demo.sqc"
+#line 51 "db2demo.sqc"
   sqlastop(0L);
 }
 
-#line 50 "db2demo.sqc"
+#line 51 "db2demo.sqc"
  
 	if(SQLCODE!=0)
 	{
 		printf("select from apsdb error[%d]",SQLCODE);
 		return -1;
 	}
-	seterr("EEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
-	return  0;
+	seterr("EEEEEEEE","DB2 OPEN ERROR");
+	return 0;
 }
 int dbtest4(char *par1,char *par2,char *par3)
 {
@@ -200,14 +201,14 @@ EXEC SQL connect reset;
 */
 
 {
-#line 61 "db2demo.sqc"
+#line 62 "db2demo.sqc"
   sqlastrt(sqla_program_id, &sqla_rtinfo, &sqlca);
-#line 61 "db2demo.sqc"
+#line 62 "db2demo.sqc"
   sqlacall((unsigned short)29,3,0,0,0L);
-#line 61 "db2demo.sqc"
+#line 62 "db2demo.sqc"
   sqlastop(0L);
 }
 
-#line 61 "db2demo.sqc"
+#line 62 "db2demo.sqc"
 
 }

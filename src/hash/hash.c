@@ -48,6 +48,7 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 	key_t   key;
 	char inpid[20];
 	int pos=0,i=0;
+	int 	iret=0;
 	memset(inpid,0,sizeof(inpid));
 
 	sprintf(inpid,"2%010ld",innerid);
@@ -76,6 +77,13 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 	{
 		if((transhm+pos+i)->innerid == 0)
 		{
+			iret = sem_trywait(&((transhm+pos+i)->sem1));
+			if(iret !=0&&errno==EAGAIN)
+			{
+				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
+				i++;
+				continue;
+			}
 			(transhm+pos+i)->innerid = innerid;
 			if(intran!=NULL)
 			{
@@ -86,11 +94,12 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 				strcpy((transhm+pos+i)->outtran,outtran);
 			}
 			(transhm+pos+i)->stat[0]='N';
+			sem_post(&((transhm+pos+i)->sem1));
 			shmdt(transhm);
 			return 0;
 		}
 	}
-	SysLog(1,"HASH桶满\n");
+	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
 	shmdt(transhm);
 	return -1;
 }
@@ -174,7 +183,9 @@ int delete_shm_hash(long innerid)
 	{
 		if((transhm+pos+i)->innerid == innerid)
 		{
+			sem_wait(&((transhm+pos+i)->sem1));
 			memset(transhm+pos+i,0,sizeof(_tran));
+			sem_post(&((transhm+pos+i)->sem1));
 			shmdt(transhm);
 			return 0;
 		}
@@ -221,6 +232,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 
 		if(tmpkvalue->varname[0]==' ')
 		{
+			/** 注意注意，需要根据变量定义来分配大小，否则可能导致后期问题 **/
 			SysLog(1,"原内存无该变量，第一次赋值 \n");
 			strcpy(tmpkvalue->varname,varname);
 			//tmpkvalue->value = (char *)malloc(len*sizeof(char));
@@ -243,7 +255,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 				/** fangzhi  chongxin malloc **/
 				if(!strcmp(tmpkvalue->varname,varname))
 				{
-					memset(tmpkvalue->value,0,len);
+					memset(tmpkvalue->value,0x00,strlen(tmpkvalue->value));
 					//strncpy(tmpkvalue->value,value,len*sizeof(char));
 					memcpy(tmpkvalue->value,value,len);
 					return 0;
@@ -307,9 +319,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 				/** fangzhi  chongxin malloc **/
 				if(!strcmp(tmpkvalue->varname,varname))
 				{
-					//memset(tmpkvalue->value,0,sizeof(len*sizeof(char)));
-					//strncpy(tmpkvalue->value,value,len);
-					memset(tmpkvalue->value,0,sizeof(len));
+					memset(tmpkvalue->value,0,strlen(tmpkvalue->value));
 					memcpy(tmpkvalue->value,value,len);
 					return 0;
 				}
@@ -416,6 +426,7 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	key_t   key;
 	char inpid[20];
 	int pos=0,i=0;
+	int	iret=0;
 	memset(inpid,0,sizeof(inpid));
 
 	sprintf(inpid,"2%010ld",innerid);
@@ -444,19 +455,29 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	{
 		if((transhm+pos+i)->innerid == innerid)
 		{
+			iret = sem_trywait(&((transhm+pos+i)->sem1));
+			if(iret !=0&&errno==EAGAIN)
+			{
+				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
+				i++;
+				continue;
+			}
 			if(intran!=NULL)
 			{
+				memset((transhm+pos+i)->intran,0,sizeof((transhm+pos+i)->intran));
 				strcpy((transhm+pos+i)->intran,intran);
 			}
 			if(outtran!=NULL)
 			{
+				memset((transhm+pos+i)->outtran,0,sizeof((transhm+pos+i)->outtran));
 				strcpy((transhm+pos+i)->outtran,outtran);
 			}
 			(transhm+pos+i)->stat[0]='N';
+			sem_post(&((transhm+pos+i)->sem1));
 			shmdt(transhm);
 			return 0;
 		}
 	}
-	SysLog(1,"HASH桶满\n");
+	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
 	shmdt(transhm);
 }

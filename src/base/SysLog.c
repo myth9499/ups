@@ -33,9 +33,10 @@ int SysLog(int loglevel,char *format,...)
         perror("file open error");
         return -1;
     }
-	fprintf(fp,"TIME[%d:%d:%d]",ttm->tm_hour,ttm->tm_min,ttm->tm_sec);
+	fprintf(fp,"进程号:[%ld]\tTIME[%d:%d:%d]平台跟踪号[%ld]",(long)getpid(),ttm->tm_hour,ttm->tm_min,ttm->tm_sec,innerid);
     ret = vfprintf(fp,format,argptr);
     fclose(fp);
+	free(log_path);
     va_end(argptr);
     return (ret);
 }

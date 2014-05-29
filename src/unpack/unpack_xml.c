@@ -7,13 +7,49 @@ int loop=0;
 _xmlcfg *xmlcfg = NULL;
 int upnew(char *a)
 {
-	if(unpack_xml("hvps.111.001.01","/item/ups/src/unpack/hvps.111.001.01_1.xml")==-1)
+	int iret;
+	char	msgtype[30];
+	char	msgtypefile[60];
+
+	memset(msgtype,0,sizeof(msgtype));
+	memset(msgtypefile,0,sizeof(msgtypefile));
+
+	if(!strcmp(a,"V"))
 	{
-		SysLog(1,"unpack xml error");
-		return -1;
+		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
+		iret = get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype);
+		if(iret == -1)
+		{
+			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
+			return  -1;
+		}
+		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
+		trim(msgtype);
+
+		SysLog(1,"从变量V_XMLFILE读取报文进行处理");
+		iret = get_var_value("V_XMLFILE",sizeof(msgtypefile),1,msgtypefile);
+		if(iret == -1)
+		{
+			SysLog(1,"从变量V_XMLFILE读取报文进行处理失败");
+			return  -1;
+		}
+		SysLog(1,"获取到待处理报文[%s]",msgtypefile);
+		trim(msgtypefile);
+		if(unpack_xml(msgtype,msgtypefile)==-1)
+		{
+			SysLog(1,"解报文类型[%s]失败",msgtype);
+			return  -1;
+		}
+		return  0;
 	}
-		SysLog(1,"unpack xml ok");
-return 0;
+	sprintf(msgtypefile,"%s/%s_1.xml","/item/ups/src/unpack",a);
+	if(unpack_xml(a,msgtypefile)==-1)
+	{
+		SysLog(1,"解报文类型[%s]失败",a);
+		return  -1;
+	}
+	SysLog(1,"unpack xml ok");
+	return 0;
 }
 int unpack_xml(char *xmltype,char *filename)
 {

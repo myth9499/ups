@@ -46,7 +46,7 @@ int unpack(char *chnlname,char *commbuf)
 	tmpshmdt = cmsg;
 	while(strcmp(cmsg->commname,"END"))
 	{
-		SysLog(1,"FILE[%s] LINE[%d]渠道配置名称[%s]\n",__FILE__,__LINE__,cmsg->commname);
+		//SysLog(1,"FILE[%s] LINE[%d]渠道配置名称[%s]\n",__FILE__,__LINE__,cmsg->commname);
 		if(!strcmp(cmsg->commname,chnlname))
 		{
 			flag = 1;
@@ -152,7 +152,7 @@ int pack(char *msgtype)
 			SysLog(1,"待打包报文类型不正确\n");
 			return -1;
 		}
-		printf("start pack msgtype[%s] \n",msgtype);
+		//printf("start pack msgtype[%s] \n",msgtype);
 		cmsg = (_commmsg *)shmat(shmid,NULL,0);
 		if(cmsg == NULL)
 		{
@@ -177,6 +177,7 @@ int pack(char *msgtype)
 				if(get_var_value(cmsg->commvar,cmsg->len,1,tmpbuf)==-1)
 				{
 					SysLog(1,"获取变量[%s]失败\n",cmsg->commvar);
+					free(tmpbuf);
 					shmdt(tmpshmdt);
 					return -1;
 				}
@@ -191,9 +192,10 @@ int pack(char *msgtype)
 		if(flag == 0)
 		{
 			SysLog(1,"无打包渠道为[%s]的配置 \n",msgtype);
+			return -1;
 		}else
 		{
-			printf("found msg cfg \n");
+			SysLog(1,"打类型[%s]包成功 \n",msgtype);
 		}
 		/** 根据报文格式配置，打返回包**/
 		iret = shm_hash_update(innerid,NULL,outtran);

@@ -37,7 +37,7 @@ int do_so(char *so_name,char *func_name,char *par1)
 }
 
 
-int	getmsgid(char *msgname,int *msgidi,int *msgido)
+int	getmsgid(char *msgname,int *msgidi,int *msgido,int	*msgidr)
 {
 	key_t key;
 	char ftokpath[30];
@@ -67,7 +67,18 @@ int	getmsgid(char *msgname,int *msgidi,int *msgido)
 		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]成功:进入队列[%d]外出队列[%d]\n",__FILE__,__LINE__,msgname,*msgidi,*msgido);
+	/** 3 for 应答核心 msg queue **/
+	if((key=ftok(ftokpath,3))==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
+		return -1;
+	}
+	if((*msgidr = msgget(key,IPC_EXCL))==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
+		return -1;
+	}
+	SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]成功:进入队列[%d]外出队列[%d]应答核心队列[%d]\n",__FILE__,__LINE__,msgname,*msgidi,*msgido,*msgidr);
 	return 0;
 }
 int getshm(int procid,size_t shmsize)
@@ -94,6 +105,8 @@ int initservregsem()
 	pid_t ret = 0;
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
+	_tran	*tran = NULL;
+
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{         
@@ -112,6 +125,25 @@ int initservregsem()
 		sem_init(&(sreg+i)->sem2,1,1);
 	}
 	shmdt(sreg);
+	/** 初始化tran的sem **/
+	shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
+	/** init tran shm **/
+	if((shmid = getshmid(10,shmsize))==-1)
+	{
+		SysLog(1,"获取交易hash桶共享内存ID失败\n");
+		return -1;
+	}
+	if((tran = shmat(shmid,NULL,0))==NULL) 
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	for(i=0;i<HASHCNT*BUCKETSCNT;i++)
+	{
+		sem_init(&(tran+i)->sem1,1,1);
+		sem_init(&(tran+i)->sem2,1,1);
+	}
+	shmdt(tran);
 	return  0;
 }
 
@@ -157,37 +189,40 @@ int	seterr(char *errcode,char *errmsg)
 /** 获取交易属性 **/
 int gettranmap(_tranmap *tmap,char *trancode)
 {
+	int iret =-1;
+	int shmid ;
+	int shmsize = MAXTRANMAP*(sizeof(_tranmap));
+
 	if((tmap == NULL)||(trancode == NULL))
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]的交易属性参数有误\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
-	_tranmap *ttmap = NULL;
-	int shmid ;
-	int shmsize = MAXTRANMAP*(sizeof(_tranmap));
+	_tranmap *ttmap,*tstmap = NULL;
 	if((shmid = getshmid(5,shmsize))==-1)
 	{         
 		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时获取共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
-	ttmap  = shmat(shmid,NULL,0);
-	if(ttmap == (void *)-1)
+	tstmap  = shmat(shmid,NULL,0);
+	if(tstmap == (void *)-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时链接共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
+	ttmap = tstmap;
 	while(strcmp(ttmap->trancode,"END"))
 	{
 		if(!strcmp(ttmap->trancode,trancode))
 		{
 			memcpy(tmap,ttmap,sizeof(_tranmap));
-			shmdt(ttmap);
-			return  0;
+			iret = 0;
+			break;
 		}
 		ttmap++;
 	}
-	return -1;
+	shmdt(tstmap);
+	return iret;
 }
 void trim (char *str)
 {
@@ -205,3 +240,123 @@ void trim (char *str)
 	}
 	strcpy(str,p);
 }
+/** 获取可用服务 **/
+pid_t getservpid(char *chnl_name)
+{
+	pid_t ret = 0;
+	int err;
+	int shmid = 0,i=0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:连接服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	/** 信号量控制 **/
+	for(i=0;i<MAXSERVREG;i++)
+	{
+		//printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name)&&!strcmp((sreg+i)->type,"S"))
+		{
+			err=sem_trywait(&((sreg+i)->sem1));
+			if(err!=0&&errno==EAGAIN)
+			{
+				SysLog(1,"FILE[%s] LINE[%d]当前正在占用，尝试下一个\n",__FILE__,__LINE__);
+				i++;
+				continue;
+			}
+			SysLog(1,"FILE[%s]LINE[%d]开始修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+			(sreg+i)->stat[0]='L';
+			ret = (sreg+i)->servpid ;
+			sem_post(&((sreg+i)->sem1));
+			SysLog(1,"FILE[%s]LINE[%d]结束修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+			break;
+		}
+		//sem_post(&((sreg+i)->sem1));
+	}
+	shmdt(sreg);
+	return ret;
+}
+int insert_chnlreg(char *chnlname )
+{
+	int shmid = 0,i=0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		SysLog(1,"get serv shm id error\n");
+		return -1;
+	}
+	SysLog(1,"shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		SysLog(1,"shmat sreg error\n");
+		return -1;
+	}
+	for(i=0;i<MAXSERVREG;i++)
+	{
+		//SysLog(1,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		if((sreg+i)->servpid==0)
+		{
+			(sreg+i)->servpid = getpid();
+			strcpy((sreg+i)->chnlname,chnlname);
+			(sreg+i)->stat[0]='N';
+			(sreg+i)->type[0]='C';
+			shmdt(sreg);
+			return 0;
+		}else if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
+		{
+			(sreg+i)->servpid = getpid();
+			strcpy((sreg+i)->chnlname,chnlname);
+			(sreg+i)->stat[0]='N';
+			shmdt(sreg);
+			return 0;
+		}
+	}
+	shmdt(sreg);
+	return -1;
+}
+
+
+int updatestat_foroth(pid_t	pid)
+{
+	int ret = 0;
+	int shmid = 0,i=0,semid = 0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		SysLog(1,"get serv shm id error\n");
+		return -1;
+	}
+	SysLog(1,"shmid is[%d]\n",shmid);
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		SysLog(1,"shmat sreg error\n");
+		return -1;
+	}
+	for(i=0;i<MAXSERVREG;i++)
+	{
+		//SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		if((sreg+i)->servpid==pid)
+		{
+			sem_wait(&((sreg+i)->sem1));
+			(sreg+i)->stat[0]='N';
+			ret = 0;
+			sem_post(&((sreg+i)->sem1));
+			break;
+		}
+		//sem_post(&((sreg+i)->sem1));
+
+	}
+	shmdt(sreg);
+	SysLog(1,"解除信号量成功\n");
+	return ret;
+}
+
