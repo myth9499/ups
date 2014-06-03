@@ -15,9 +15,14 @@ void child_exit(int signal)
 {
 	pid_t   pid;
 	int     stat;
-	while((pid = waitpid(-1,&stat,WNOHANG))>0)
+	//while((pid = waitpid(-1,&stat,WNOHANG))>0)
+	while((pid = waitpid(-1,&stat,WNOHANG|WUNTRACED))>0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:子进程[%d]退出，退出状态[%d]\n",__FILE__,__LINE__,pid,stat);
+	}
+	if(pid == -1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:ERROR[%s]!!!\n",__FILE__,__LINE__,strerror(errno));
 	}
 	return ;
 }
@@ -27,7 +32,7 @@ void child_exit(int signal)
 void timeout(int signal)
 {
 	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束\n",__FILE__,__LINE__);
-	if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0)==-1)
+	if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 	}
@@ -90,7 +95,8 @@ int main(int argc,char *argv[])
 
 	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
 	signal(SIGPIPE,SIG_IGN);
-	signal(SIGCHLD,child_exit);
+	//signal(SIGCHLD,child_exit);
+	signal(SIGCHLD,SIG_IGN);
 	//signal(35,child_exit);
 	signal(SIGUSR1,SIG_IGN);
 #ifdef WIN32
@@ -152,7 +158,8 @@ int main(int argc,char *argv[])
 			int iiret = 0;
 			memset(rcvbuf,0,sizeof(rcvbuf));
 			close(sockfd);
-			if(chnlprocess(clifd)==0)
+			iret = chnlprocess(clifd);
+			if(iret == 0)
 			{
 				/** 返回交易信息到服务端**/
 				iret = shm_hash_update(mbuf->innerid,"AAAAAAA|渠道处理成功",NULL);
@@ -166,17 +173,17 @@ int main(int argc,char *argv[])
 				/** 检测一下再关闭 **/
 				SysLog(1,"开始检测\n");
 				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
+				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
 				if(iiret ==-1||iiret ==0)
 				{
 					close(clifd);
-					break;
 				}
 			//	shutdown(clifd,SHUT_RDWR);
-			//		close(clifd);
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
-			}else
+				close(clifd);
+			}else if(iret == -1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+				//SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				/** 返回交易信息到服务端**/
 				iret = shm_hash_update(mbuf->innerid,"EEEEEEE|渠道处理失败",NULL);
 				if(iret == -1)
@@ -189,18 +196,35 @@ int main(int argc,char *argv[])
 				/** 检测一下再关闭 **/
 				SysLog(1,"开始检测\n");
 				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
+				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
 				if(iiret ==-1||iiret ==0)
 				{
 					close(clifd);
-					break;
 				}
 			//	shutdown(clifd,SHUT_RDWR);
-			//	close(clifd);
-				SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
+				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+				close(clifd);
+			}else 
+			{
+				/** 检测一下再关闭 **/
+				SysLog(1,"开始检测\n");
+				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
+				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
+				if(iiret ==-1||iiret ==0)
+				{
+					close(clifd);
+				}
+			//	shutdown(clifd,SHUT_RDWR);
+				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+				close(clifd);
 			}
 			/** 防止SIGCHLD信号丢失**/
 			//kill(getppid(),35);
+			alarm(0);
 			exit(0);
+		}else if(pid<0)
+		{
+				SysLog(1,"FILE [%s] LINE [%d]:FORK ERROR\n",__FILE__,__LINE__);
 		}
 		close(clifd);
 	}
@@ -229,14 +253,31 @@ int chnlprocess(int clifd)
 
 	/** 设置socket参数 
 	struct linger so_linger;
-	so_linger.l_onoff = 1;
+	so_linger.l_onoff = 0;
 	so_linger.l_linger = 2;
 	if(setsockopt(clifd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof so_linger)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
-	}**/
-	//alarm(30);
+	}
+	**/
+	int	keepAlive = 1;
+	if(setsockopt(clifd, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(keepAlive))!=0)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	/**  设置recv超时时间 **/
+	struct timeval tv;
+	tv.tv_sec = 5;
+	tv.tv_usec = 0;
+	if(setsockopt(clifd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval))!=0)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+
+	alarm(10);
 	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:读取socket报文失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
@@ -284,7 +325,7 @@ int chnlprocess(int clifd)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
-		return -1;
+		return -2;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:获取可用服务[%ld]\n",__FILE__,__LINE__,ipid);
 	if(shm_hash_insert(mbuf->innerid,rcvbuf,NULL)==-1)

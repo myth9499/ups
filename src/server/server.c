@@ -353,7 +353,7 @@ int serv_flow(char *trancode)
 	/** init commmsg **/
 	while(strcmp(localflow[i].flowname,"END"))
 	{
-		SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
+		SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t\n",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
 		trim(localflow[i].flowso);
 		trim(localflow[i].flowfunc);
 		trim(localflow[i].funcpar1);

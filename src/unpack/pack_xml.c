@@ -140,7 +140,7 @@ int pack_xml(char *xmltype)
 		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",msgtype);
 	}else
 	{
-		SysLog(1,"直接从参数读取");
+		SysLog(1,"直接从参数读取\n");
 		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
