@@ -31,11 +31,16 @@ void child_exit(int signal)
  * */
 void timeout(int signal)
 {
-	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束\n",__FILE__,__LINE__);
-	if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
+	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据\n",__FILE__,__LINE__);
+	if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:超时删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 	}
+	if(delete_shm_hash(mbuf->innerid)==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:超时删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+	}
+	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据成功\n",__FILE__,__LINE__);
 	return ;
 }
 /** 注册程序退出函数 
@@ -154,6 +159,8 @@ int main(int argc,char *argv[])
 		pid = fork();
 		if(pid == 0)
 		{
+			/** 设定超时时间，超时时间从配置读取 **/
+			alarm(10);
 			char	rcvbuf[1024];
 			int iiret = 0;
 			memset(rcvbuf,0,sizeof(rcvbuf));
@@ -277,7 +284,6 @@ int chnlprocess(int clifd)
 		return -1;
 	}
 
-	alarm(10);
 	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:读取socket报文失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));

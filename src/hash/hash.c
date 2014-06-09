@@ -81,22 +81,28 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 			if(iret !=0&&errno==EAGAIN)
 			{
 				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
-				i++;
-				continue;
-			}
-			(transhm+pos+i)->innerid = innerid;
-			if(intran!=NULL)
+			}else if(iret == 0)
 			{
-				strcpy((transhm+pos+i)->intran,intran);
-			}
-			if(outtran!=NULL)
+				(transhm+pos+i)->innerid = innerid;
+				if(intran!=NULL)
+				{
+					strcpy((transhm+pos+i)->intran,intran);
+				}
+				if(outtran!=NULL)
+				{
+					strcpy((transhm+pos+i)->outtran,outtran);
+				}
+				(transhm+pos+i)->stat[0]='N';
+				sem_post(&((transhm+pos+i)->sem1));
+				shmdt(transhm);
+				return 0;
+			}else
 			{
-				strcpy((transhm+pos+i)->outtran,outtran);
+				/** 添加hash表错误 **/
+				SysLog(1,"FILE[%s]LINE[%d]添加hash错误\n",__FILE__,__LINE__);
+				shmdt(transhm);
+				return -1;
 			}
-			(transhm+pos+i)->stat[0]='N';
-			sem_post(&((transhm+pos+i)->sem1));
-			shmdt(transhm);
-			return 0;
 		}
 	}
 	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
@@ -135,6 +141,7 @@ int get_shm_hash(long innerid,_tran *tranbuf)
 	pos = hashfunc(inpid);
 	for(i=0;i<BUCKETSCNT;i++)
 	{
+		SysLog(1,"fucking FILE[%s] LINE[%d] pos[%d] i[%d] intran[%s] outtran[%s]\n",__FILE__,__LINE__,pos,i,(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
 		if((transhm+pos+i)->innerid == innerid)
 		{
 			//printf("in hash intran[%s]\t outtran[%s]\n",(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
@@ -455,13 +462,16 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	{
 		if((transhm+pos+i)->innerid == innerid)
 		{
-			iret = sem_trywait(&((transhm+pos+i)->sem1));
+			//iret = sem_trywait(&((transhm+pos+i)->sem1));
+			iret = sem_wait(&((transhm+pos+i)->sem1));
+			/**
 			if(iret !=0&&errno==EAGAIN)
 			{
 				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
 				i++;
 				continue;
 			}
+			**/
 			if(intran!=NULL)
 			{
 				memset((transhm+pos+i)->intran,0,sizeof((transhm+pos+i)->intran));
@@ -478,6 +488,7 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 			return 0;
 		}
 	}
-	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
+	SysLog(1,"FILE[%s] LINE[%d]HASH桶满,更新失败\n",__FILE__,__LINE__);
 	shmdt(transhm);
+	return -1;
 }
