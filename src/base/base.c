@@ -16,13 +16,13 @@ int do_so(char *so_name,char *func_name,char *par1)
 	handle = dlopen(so_name,RTLD_LAZY);
 	if(handle == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
 		return -1;
 	}
 	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
+		SysLog(1,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,dlerror());
 		return -1;
 	}
 		SysLog(1,"@@@@@@@@@@@FILE [%s] LINE [%d]:执行函数[%s]参数:%s\n",__FILE__,__LINE__,func_name,par1);
