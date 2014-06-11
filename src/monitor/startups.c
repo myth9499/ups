@@ -9,8 +9,8 @@ int main(int argc,char *argv[] )
 	int 	i;
 
 	char	chnlname[60];
-	char	systemcmd[60];
-	char	servbuf[60];
+	char	systemcmd[100];
+	char	servbuf[100];
 	int		servcnt;
 	int		ret;
 
@@ -28,6 +28,7 @@ int main(int argc,char *argv[] )
 		printf("打开文件[%s]失败:%s\n",servcfgpath,strerror(errno));
 		return -1;
 	}
+	memset(buffer,0,sizeof(buffer));
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
 	{
 		buffer[strlen(buffer)-1]='\0';
@@ -71,6 +72,8 @@ int main(int argc,char *argv[] )
 			printf("启动渠道[%s]第[%d]个服务 启动命令[%s]成功\n",chnlname,i,servbuf);
 		}
 		printf("渠道[%s]\t执行命令[%s]\t启动服务数[%d]启动成功\n",chnlname,systemcmd,servcnt);
+		memset(buffer,0,sizeof(buffer));
+		sleep (1);
 	}
 	fclose(fp);
 	return 0;

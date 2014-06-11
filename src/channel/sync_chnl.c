@@ -306,6 +306,8 @@ int chnlprocess(int clifd)
 	//
 	strcpy(mbuf->tranbuf.chnlname,chnl_name);
 	strcpy(mbuf->tranbuf.trancode,strtok(rbuf,"|"));
+	memset(mbuf->tranbuf.trancode,0,sizeof(mbuf->tranbuf.trancode));
+	strcpy(mbuf->tranbuf.trancode,strtok(NULL,"|"));
 	mbuf->tranbuf.buffsize = strlen(rcvbuf);
 
 	SysLog(1,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
