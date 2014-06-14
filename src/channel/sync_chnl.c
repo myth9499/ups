@@ -177,7 +177,9 @@ int main(int argc,char *argv[])
 				{
 					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 				}
-				/** 检测一下再关闭 **/
+				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
+                防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
+				/** for 低性能机器代码 
 				SysLog(1,"开始检测\n");
 				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
@@ -186,6 +188,8 @@ int main(int argc,char *argv[])
 					close(clifd);
 				}
 			//	shutdown(clifd,SHUT_RDWR);
+				**/
+				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
 				close(clifd);
 			}else if(iret == -1)
@@ -200,7 +204,9 @@ int main(int argc,char *argv[])
 				{
 					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 				}
-				/** 检测一下再关闭 **/
+				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
+                防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
+				/** for 低性能机器代码 
 				SysLog(1,"开始检测\n");
 				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
@@ -209,11 +215,15 @@ int main(int argc,char *argv[])
 					close(clifd);
 				}
 			//	shutdown(clifd,SHUT_RDWR);
+				**/
+				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				close(clifd);
 			}else 
 			{
-				/** 检测一下再关闭 **/
+				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
+                防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
+				/** for 低性能机器代码 
 				SysLog(1,"开始检测\n");
 				iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
@@ -222,6 +232,8 @@ int main(int argc,char *argv[])
 					close(clifd);
 				}
 			//	shutdown(clifd,SHUT_RDWR);
+				**/
+				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				close(clifd);
 			}
