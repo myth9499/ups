@@ -179,30 +179,35 @@ int sendprocess(long inerid)
 		return -1;
 	}else
 	{
-		tranbuf = (_tran *)malloc(sizeof(tranbuf));
-		if(tranbuf == NULL)
+	SysLog(1,"FILE[%s]LINE[%d] 链接成功，开始发送....\n",__FILE__,__LINE__);
+		tranbuf = (_tran *)malloc(sizeof(_tran));
+		if(tranbuf == (void *)-1)
 		{
 			SysLog(1,"MALLOC tranbuf 失败:%s\n",strerror(errno));
 			return -1;
 		}
-		if(get_shm_hash(innerid,tranbuf)!=-1)
+		if(get_shm_hash(inerid,tranbuf)!=-1)
 		{
 			/** 获取共享内存信息，outtran 读取发送到外部系统 **/
-			if(send(sockfd,tranbuf->outtran,strlen(tranbuf->outtran),0)==-1)
+			SysLog(1,"FILE[%s]LINE[%d] 链接成功，开始发送[%s]....\n",__FILE__,__LINE__,tranbuf->outtran);
+			if(send(sockfd,tranbuf->outtran,strlen(tranbuf->outtran),MSG_DONTWAIT)==-1)
 			{
 				SysLog(1,"发送到其他系统失败:%s\n",strerror(errno));
 				close(sockfd);
+				free(tranbuf);
 				return  -1;
 			}else
 			{
-				SysLog(1,"发送到其他系统成功:%ld\n",innerid);
+				SysLog(1,"发送到其他系统成功:%ld\n",inerid);
 				close(sockfd);
+				free(tranbuf);
 				return  0;
 			}
 		}else
 		{
 				SysLog(1,"核心无:[%ld]信息\n",innerid);
 				close(sockfd);
+				free(tranbuf);
 				return -1;
 		}
 		close(sockfd);
