@@ -261,24 +261,30 @@ pid_t getservpid(char *chnl_name)
 	/** 信号量控制 **/
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		//printf("i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
-		if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name)&&!strcmp((sreg+i)->type,"S"))
+		err=sem_trywait(&((sreg+i)->sem1));
+		if(err!=0&&errno==EAGAIN)
 		{
-			err=sem_trywait(&((sreg+i)->sem1));
-			if(err!=0&&errno==EAGAIN)
+			SysLog(1,"FILE[%s] LINE[%d]当前正在占用，尝试下一个\n",__FILE__,__LINE__);
+			continue;
+		}else if(err == 0)
+		{
+			if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name)&&!strcmp((sreg+i)->type,"S"))
 			{
-				SysLog(1,"FILE[%s] LINE[%d]当前正在占用，尝试下一个\n",__FILE__,__LINE__);
-				i++;
-				continue;
+				SysLog(1,"FILE[%s]LINE[%d]开始修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+				(sreg+i)->stat[0]='L';
+				ret = (sreg+i)->servpid ;
+				sem_post(&((sreg+i)->sem1));
+				SysLog(1,"FILE[%s]LINE[%d]结束修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+				break;
+			}else
+			{
+				sem_post(&((sreg+i)->sem1));
 			}
-			SysLog(1,"FILE[%s]LINE[%d]开始修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
-			(sreg+i)->stat[0]='L';
-			ret = (sreg+i)->servpid ;
-			sem_post(&((sreg+i)->sem1));
-			SysLog(1,"FILE[%s]LINE[%d]结束修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+		}else
+		{
+			SysLog(1,"FILE[%s]LINE[%d]加锁进程[%ld]状态失败:%s\n",__FILE__,__LINE__,(sreg+i)->servpid,strerror(errno));
 			break;
 		}
-		//sem_post(&((sreg+i)->sem1));
 	}
 	shmdt(sreg);
 	return ret;

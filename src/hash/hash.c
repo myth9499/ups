@@ -75,13 +75,14 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 	pos = hashfunc(inpid);
 	for(i=0;i<BUCKETSCNT;i++)
 	{
-		if((transhm+pos+i)->innerid == 0)
+		iret = sem_trywait(&((transhm+pos+i)->sem1));
+		if(iret !=0&&errno==EAGAIN)
 		{
-			iret = sem_trywait(&((transhm+pos+i)->sem1));
-			if(iret !=0&&errno==EAGAIN)
-			{
-				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
-			}else if(iret == 0)
+			SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
+			continue;
+		}else if(iret == 0)
+		{
+			if((transhm+pos+i)->innerid == 0)
 			{
 				(transhm+pos+i)->innerid = innerid;
 				if(intran!=NULL)
@@ -96,13 +97,19 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 				sem_post(&((transhm+pos+i)->sem1));
 				shmdt(transhm);
 				return 0;
-			}else
-			{
-				/** 添加hash表错误 **/
-				SysLog(1,"FILE[%s]LINE[%d]添加hash错误\n",__FILE__,__LINE__);
-				shmdt(transhm);
-				return -1;
 			}
+			else
+			{
+				sem_post(&((transhm+pos+i)->sem1));
+				continue;	
+			}
+		}
+		else
+		{
+			/** 添加hash表错误 **/
+			SysLog(1,"FILE[%s]LINE[%d]添加hash错误\n",__FILE__,__LINE__);
+			shmdt(transhm);
+			return -1;
 		}
 	}
 	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
