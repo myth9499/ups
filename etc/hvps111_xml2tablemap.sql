@@ -1,0 +1,25 @@
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A01','35','VV_A01','t_hvps111','msgid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A02','20','VV_A02','t_hvps111','credttm');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A03','15','VV_A03','t_hvps111','nboftxs');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A04','4','VV_A04','t_hvps111','sttlmmtd');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A05','35','VV_A05','t_hvps111','endtoendid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A06','35','VV_A06','t_hvps111','txid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A07','4','VV_A07','t_hvps111','prtry');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A08','20','VV_A08','t_hvps111','intrbksttlmamt');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A09','4','VV_A09','t_hvps111','sttlmprty');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A10','4','VV_A10','t_hvps111','chrgbr');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A11','14','VV_A11','t_hvps111','fmmbid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A12','14','VV_A12','t_hvps111','fid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A13','14','VV_A13','t_hvps111','smmbid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A14','14','VV_A14','t_hvps111','sid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A15','140','VV_A15','t_hvps111','fnm');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A16','70','VV_A16','t_hvps111','faddr');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A17','34','VV_A17','t_hvps111','payno');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A18','35','VV_A18','t_hvps111','pmmbid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A19','140','VV_A19','t_hvps111','pmmnm');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A20','35','VV_A20','t_hvps111','rmmbid');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A21','140','VV_A21','t_hvps111','rmmnm');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A22','140','VV_A22','t_hvps111','rnm');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A23','70','VV_A23','t_hvps111','raddr');
+insert into xml2tablemap values ('hvps.111.001.01','0','V_A24','5','VV_A24','t_hvps111','ywzlbm');
+~                                                                                                   

@@ -12,18 +12,12 @@ struct  XML2TABLEMAP
 	char    tablename[26];
 	char    colname[26];
 }xml2tab;
-struct  HV111
-{
-	char    A01[26];
-	char    A02[26];
-	char    A03[26];
-}hv111;
 	char	mtype[26];
 EXEC SQL END DECLARE SECTION;
 
 int opendb()
 {
-	EXEC SQL connect to ibpsdb;
+	EXEC SQL connect to devdb;
 	if(SQLCODE!=0)
 		return -1;
 	else
@@ -50,8 +44,8 @@ int xml2table(char *msgtype)
 		return -1;
 	}
 
-	SysLog(1,"connect to ibpsdb ok\n");
-	EXEC SQL declare xml2table cursor  for select *  from xml2tablemap where msgtype = :mtype;
+	SysLog(1,"connect to devdb ok\n");
+	EXEC SQL declare xml2table cursor  for select *  from xml2tablemap where msgtype = :mtype order by varname;
 	if(SQLCODE!=0)
 	{
 		SysLog(1,"select from ibpsdb error[%d]",SQLCODE);
