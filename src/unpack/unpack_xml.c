@@ -137,6 +137,8 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 							SysLog(1,"put error\n");
 							return -1;
 						}
+						/** 防止多与的循环，找到后直接跳出循环 **/
+						break;
 					}
 				}
 				tmpcfg++;
