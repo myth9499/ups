@@ -257,6 +257,14 @@ int main(int argc,char *argv[])
 void serv(int sig)
 {
 	SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
+	if(memset_var_hash()==0)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]初始化变量存放区成功\n",__FILE__,__LINE__,getpid());
+	}else
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]初始化变量存放区失败\n",__FILE__,__LINE__,getpid());
+		return ;
+	}
 
 	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),0,IPC_NOWAIT);
 	if(iret > 0)
