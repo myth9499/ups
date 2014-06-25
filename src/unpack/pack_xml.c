@@ -197,13 +197,24 @@ int pack_xml(char *xmltype)
 					{
 						SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
 						free(keyword);
-						free(xpath);
-						return -1;
+						/** 继续进行下一节点打包 **/
+						//free(xpath);
+						nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
+						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
+						{
+							nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
+						}else
+						{
+							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
+						}
+						continue;
+					}else
+					{
+						SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
+						xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
+						memset(keyword,0,sizeof(keyword));
+						free(keyword);
 					}
-					SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
-					xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
-					memset(keyword,0,sizeof(keyword));
-					free(keyword);
 				}
 				xmlXPathFreeObject(result);
 			}
