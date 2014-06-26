@@ -207,6 +207,7 @@ int pack_xml(char *xmltype)
 						{
 							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
 						}
+						xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
 						continue;
 					}else
 					{
