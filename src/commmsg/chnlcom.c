@@ -16,6 +16,7 @@ int send_to_channel(char *chnlname)
 	}
 	memset(mbuf,0,sizeof(mbuf));
 	mbuf->innerid = innerid;
+	memset(mbuf->tranbuf.trancode,0,sizeof(mbuf->tranbuf.trancode));
 	strcpy(mbuf->tranbuf.trancode,"核心服务");
 	mbuf->tranbuf.buffsize=123;
 	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)!=0)

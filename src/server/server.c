@@ -239,7 +239,6 @@ int main(int argc,char *argv[])
 		free(mbuf);
 		return -1;
 	}
-	seterr("AAAAAAAA","交易正常结束");
 	
 	/** 堵塞到信号 **/
 	signal(SIGUSR2,serv);
@@ -265,6 +264,7 @@ void serv(int sig)
 		SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]初始化变量存放区失败\n",__FILE__,__LINE__,getpid());
 		return ;
 	}
+	seterr("AAAAAAAA","交易正常结束");
 
 	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),0,IPC_NOWAIT);
 	if(iret > 0)
