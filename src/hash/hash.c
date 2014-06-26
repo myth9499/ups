@@ -268,7 +268,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 	hash = hashfunc(varnameloop);
 	SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
-	SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varnameloop,hash);
+	SysLog(1,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
 	tmpkvalue = kvalue+hash;
 	if(strlen(tmpkvalue->varname)==0)
 	{
@@ -298,6 +298,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 			{
 				memset(tmpkey->value,0,strlen(tmpkey->value));
 				memcpy(tmpkey->value,value,len);
+				tmpkey->value[len]='\0';
 				return 0;
 			}
 			pre = tmpkey;
@@ -323,6 +324,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		}
 		//strncpy(tmpkvalue->value,value,len*sizeof(char));
 		memcpy(tmpkey->value,value,len);
+		tmpkey->value[len]='\0';
 		tmpkey->next=NULL;
 		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
 	}
