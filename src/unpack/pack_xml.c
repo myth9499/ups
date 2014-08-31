@@ -7,15 +7,15 @@
 _xmlcfg *tmpcfg = NULL;
 _xmlcfg *dtcfg = NULL;
 /** 生成最新的文件名 **/
-int	GetNewFileName(char	*ffile,char	*nfilename)
+int	GetNewFileName(char	*ffile)
 {
-	if(nfilename == NULL)
+	char	nfilename[L_tmpnam+1];
+	if(ffile == NULL)
 	{
 		SysLog(1,"传入生成文件名存放空间为NULL\n");
 		return -1;
 	}
-	memset(nfilename,0,L_tmpnam);
-	memset(ffile,0,sizeof(ffile));
+	memset(nfilename,0,L_tmpnam+1);
 	strcpy(nfilename,tmpnam(nfilename));
 	sprintf(ffile,"%s%s","/item/ups/log",nfilename);
 	SysLog(1,"临时文件名[%s]\n",ffile);
@@ -87,7 +87,7 @@ int pack_xml(char *xmltype)
 {
 	int shmid = 0,flag = 0;
 	xmlDocPtr doc = NULL;
-	xmlChar	*xpath;
+	xmlChar	xpath[1024];
 	xmlNodeSetPtr	nodeset;
 	xmlXPathObjectPtr	result;
 	int i ;
@@ -100,7 +100,6 @@ int pack_xml(char *xmltype)
 	char	xmlcfgpath[60];
 	char	msgtype[30];
 
-	char	nfilename[L_tmpnam];
 	char	ffile[60];
 
 
@@ -161,12 +160,14 @@ int pack_xml(char *xmltype)
 		if(!strcmp(tmpcfg->xmlname,xmltype)&&strcmp(lastpath,tmpcfg->fullpath))
 		{
 			//SysLog(1,"FILE[%s] LINE[%d] 路径[%s]变量名[%s]变量值[%s]深度[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,tmpcfg->varname,"123",tmpcfg->depth);
+		/**
 			xpath  = (xmlChar *)malloc(sizeof(xmlChar)*1024);
 			if(xpath == NULL)
 			{
 				SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
 				return -1;
 			}
+		**/
 			memset(tmppath,0,sizeof(tmppath));
 			strcpy(tmppath,tmpcfg->fullpath);
 			SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
@@ -186,7 +187,7 @@ int pack_xml(char *xmltype)
 					keyword  = (xmlChar *)malloc(sizeof(xmlChar)*1024);
 					if(keyword == NULL)
 					{
-						free(xpath);
+						memset(xpath,0,sizeof(xpath));
 						SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
 						return -1;
 					}
@@ -213,20 +214,21 @@ int pack_xml(char *xmltype)
 					{
 						SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
 						xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
-						memset(keyword,0,sizeof(keyword));
+						//memset(keyword,0,sizeof(keyword));
 						free(keyword);
 					}
 				}
 				xmlXPathFreeObject(result);
 			}
-			free(xpath);
+			memset(xpath,0,sizeof(xpath));
 		}
 		memset(lastpath,0,sizeof(lastpath));
 		strcpy(lastpath,tmpcfg->fullpath);
 		tmpcfg++;
 	}
 	/** 生成新的文件名,放置到变量中 **/
-	if(GetNewFileName(ffile,nfilename)==0)
+	memset(ffile,0,sizeof(ffile));
+	if(GetNewFileName(ffile)==0)
 	{
 		xmlSaveFormatFile(ffile,doc,1);
 		/** 放置到变量中**/

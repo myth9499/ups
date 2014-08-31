@@ -4,7 +4,7 @@ sysctl -w kernel.msgmnb=1000000
 export LD_LIBRARY_PATH=/item/ups/src/lib/
 
 #socket 参数
-sysctl -w net.ipv4.tcp_keepalive_time=10
+sysctl -w net.ipv4.tcp_keepalive_time=2
 sysctl -w net.ipv4.tcp_keepalive_probes=2
 sysctl -w net.ipv4.tcp_keepalive_intvl=1
 

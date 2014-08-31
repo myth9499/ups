@@ -4,8 +4,6 @@ char chnl_name[20];
 char	syncflag[2];
 int iret = 0;
 int msgidi=0,msgido=0,msgidr=0;
-_msgbuf *mbuf=NULL;
-_tran *tranbuf=NULL;
 long i=1L;
 
 /** 主进程注册信号，当子进程退出时进行后续处理
@@ -32,6 +30,7 @@ void child_exit(int signal)
 void timeout(int signal)
 {
 	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据\n",__FILE__,__LINE__);
+	/**
 	if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:超时删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
@@ -41,16 +40,17 @@ void timeout(int signal)
 		SysLog(1,"FILE [%s] LINE [%d]:超时删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据成功\n",__FILE__,__LINE__);
+	**/
 	return ;
 }
 /** 注册程序退出函数 
  * 释放申请的资源等信息 **/
 void do_exit(void)
 {
-	free(tranbuf);
-	free(mbuf);
+	//free(tranbuf);
+	//free(mbuf);
 }
-int  chnlprocess(int clifd );
+int  chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf );
 int main(int argc,char *argv[])
 {
 
@@ -75,26 +75,10 @@ int main(int argc,char *argv[])
 	strcpy(chnl_name,argv[1]);
 	syncflag[0]='S';
 
-	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
-	if(mbuf == (void *)-1)
-	{
-		SysLog(1,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
-	}
-
-	tranbuf = (_tran *)malloc(sizeof(_tran));
-	if(tranbuf == (void *)-1)
-	{
-		SysLog(1,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		free(mbuf);
-		return -1;
-	}
 
 	if(getmsgid(chnl_name,&msgidi,&msgido,&msgidr)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
-		//free(tranbuf);
-		//free(mbuf);
 		return -1;
 	}
 
@@ -159,23 +143,45 @@ int main(int argc,char *argv[])
 		pid = fork();
 		if(pid == 0)
 		{
+			//alarm(10);
+			close(sockfd);
+			_msgbuf *mbuf = NULL;
+			_tran *tranbuf = NULL;
 			/** 设定超时时间，超时时间从配置读取 **/
-			alarm(10);
 			char	rcvbuf[1024];
 			int iiret = 0;
 			memset(rcvbuf,0,sizeof(rcvbuf));
-			close(sockfd);
-			iret = chnlprocess(clifd);
+
+			mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
+			if(mbuf == (void *)-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				return -2;
+			}
+
+			tranbuf = (_tran *)malloc(sizeof(_tran));
+			if(tranbuf == (void *)-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				free(mbuf);
+				return -2;
+			}
+
+			iret = chnlprocess(clifd,mbuf,tranbuf);
 			if(iret == 0)
 			{
 				/** 返回交易信息到服务端**/
+				SysLog(1,"FILE [%s] LINE [%d]:11111 innerid[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
 				iret = shm_hash_update(mbuf->innerid,"AAAAAAA|渠道处理成功",NULL);
+				SysLog(1,"FILE [%s] LINE [%d]:2222\n",__FILE__,__LINE__);
 				if(iret == -1)
 				{
 					SysLog(1,"放置打包信息到共享内存失败 \n");
 				}else
 				{
+				SysLog(1,"FILE [%s] LINE [%d]:3333\n",__FILE__,__LINE__);
 					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+				SysLog(1,"FILE [%s] LINE [%d]:4444[%d]\n",__FILE__,__LINE__,msgidr);
 				}
 				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
                 防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
@@ -192,6 +198,8 @@ int main(int argc,char *argv[])
 				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
 				close(clifd);
+				free(mbuf);
+				free(tranbuf);
 			}else if(iret == -1)
 			{
 				//SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
@@ -219,6 +227,8 @@ int main(int argc,char *argv[])
 				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				close(clifd);
+				free(mbuf);
+				free(tranbuf);
 			}else 
 			{
 				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
@@ -236,23 +246,24 @@ int main(int argc,char *argv[])
 				/**for 高性能机器代码，不检查，直接关闭 **/
 				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				close(clifd);
+				free(mbuf);
+				free(tranbuf);
 			}
 			/** 防止SIGCHLD信号丢失**/
 			//kill(getppid(),35);
-			alarm(0);
 			exit(0);
 		}else if(pid<0)
 		{
 				SysLog(1,"FILE [%s] LINE [%d]:FORK ERROR\n",__FILE__,__LINE__);
 		}
+		//alarm(0);
 		close(clifd);
 	}
-	free(tranbuf);
-	free(mbuf);
 	return 0;
 }
-int chnlprocess(int clifd)
+int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 {
+
 	int ipid = 0;
 	char rcvbuf[4096],rbuf[4096];
 	char tranid[5];
@@ -293,7 +304,7 @@ int chnlprocess(int clifd)
 	if(setsockopt(clifd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval))!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
+		return -2;
 	}
 
 	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
@@ -304,7 +315,7 @@ int chnlprocess(int clifd)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
-		return  -1;
+		return  -2;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:获取到的报文信息为[%s]\n",__FILE__,__LINE__,rcvbuf);
 	memset(mbuf,0,sizeof(mbuf));

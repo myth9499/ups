@@ -152,7 +152,7 @@ int sendprocess(long inerid)
 	SysLog(1,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]&&&&&&&&&&&&&&&&&&&\n",__FILE__,__LINE__,inerid);
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
-	alarm(10);
+	//alarm(10);
 	int sockfd;
 
 	struct sockaddr_in  servaddr;

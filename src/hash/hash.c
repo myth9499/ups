@@ -220,10 +220,12 @@ int init_var_hash(void)
 	}
 	for(i=0;i<HASHCNT;i++)
 	{
-		(kvalue+i)->pre = NULL;
-		(kvalue+i)->next = NULL;
-		(kvalue+i)->value = NULL;
-		memset((kvalue+i)->varname,0,sizeof((kvalue+i)->varname));
+		(kvalue+i)->head = kvalue+i; /** 链表的头指针等于NULL **/
+		(kvalue+i)->pre = kvalue+i;     /** 链表的前个指针为自身 **/
+		(kvalue+i)->next = NULL;     /** 链表的下一个指针为空 **/
+		(kvalue+i)->value = NULL;    /** 链表的值指针为空**/
+		(kvalue+i)->end = NULL;    /** 链表的值指针为空**/
+		memset((kvalue+i)->varname,0,sizeof((kvalue+i)->varname)); /** 初始化变量名存放区 **/
 	}
 	return 0;
 }
@@ -231,22 +233,22 @@ int init_var_hash(void)
 /** memset var hash **/
 int	memset_var_hash(void)
 {
+	/** 释放所有已申请空间 **/
 	int i = 0;
-	_keyvalue *tmpk,*tmpk2=NULL;
-	tmpk = kvalue;
+	_keyvalue *tmpk=NULL,*tk=NULL;
 	for(i=0;i<HASHCNT;i++)
 	{
-		SysLog(1,"开始初始化变量[%s]\n",(tmpk+i)->varname);
-		memset((tmpk+i)->varname,0,sizeof((tmpk+i)->varname));
-		if((tmpk+i)->value!=NULL)
-			memset((tmpk+i)->value,0,strlen((tmpk+i)->value));
-		tmpk2=(tmpk+i)->next;
-		while(tmpk2!=NULL)
+		tmpk = (kvalue+i)->end;/** 指向最后一个地址 **/
+		while(tmpk!=(kvalue+i)->head&&tmpk!=NULL)
 		{
-			SysLog(1,"开始初始化变量[%s]\n",tmpk2->varname);
-			memset(tmpk2->value,0,strlen(tmpk2->value));
-			memset(tmpk2->varname,0,sizeof(tmpk2->varname));
-			tmpk2=tmpk2->next;
+			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,tmpk->varname);
+			memset(tmpk->varname,0,sizeof(tmpk->value));
+			tk=tmpk;
+			free(tmpk->value);/** 释放申请的变量区 **/
+			free(tmpk);       /** 释放本身 **/
+			tmpk=tk->pre;
+			tmpk->next=NULL;
+			tk = NULL;
 		}
 	}
 	return 0;
@@ -254,7 +256,7 @@ int	memset_var_hash(void)
 /** 利用双向链表管理 **/
 int put_var_value(char *varname,int len,int loop,char *value)
 {
-	_keyvalue *tmpkvalue,*tmpkey;
+	_keyvalue *tmpkvalue,*tmpkey,*head;
 	_keyvalue *pre;
 	char varnameloop[1024];
 	int hash = 0;
@@ -269,64 +271,55 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	hash = hashfunc(varnameloop);
 	SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
 	SysLog(1,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
-	tmpkvalue = kvalue+hash;
-	if(strlen(tmpkvalue->varname)==0)
+	head = kvalue+hash;
+	tmpkvalue = head;
+	pre = tmpkvalue;
+	while(tmpkvalue!=NULL)
 	{
-		SysLog(1,"原内存无该变量，第一次赋值 \n");
-		strcpy(tmpkvalue->varname,varname);
-		//tmpkvalue->value = (char *)malloc(len*sizeof(char));
-		tmpkvalue->value = (char *)malloc(len);
-		if(tmpkvalue->value == NULL)
+	SysLog(1,"FILE [%s]  LINE[%d] lilei1234原来已有申请新内存!!!!!\n",__FILE__,__LINE__);
+		if(!strcmp(tmpkvalue->varname,varname))
 		{
-			SysLog(1,"申请变量值内存失败\n");
-			return -1;
-		}
-		//strncpy(tmpkvalue->value,value,len*sizeof(char));
-		memcpy(tmpkvalue->value,value,len);
-		tmpkvalue->next=NULL;
-		tmpkvalue->pre=tmpkvalue;
-		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
-	}else
-	{
-		/** 说明第一个已经存在变量，现从第二个开始查找可用空间 **/
-		tmpkey = tmpkvalue->next;
-		pre = tmpkvalue;
-		while(tmpkey !=NULL)
-		{
-			/** fangzhi  chongxin malloc **/
-			if(!strcmp(tmpkey->varname,varname))
+	SysLog(1,"FILE [%s]  LINE[%d] 原来已有申请新内存!!!!!\n",__FILE__,__LINE__);
+			/** 初始化一次 **/
+			free(tmpkvalue->value);
+			tmpkvalue->value = (char *)malloc(len+1);
+			if(tmpkvalue->value==NULL)
 			{
-				memset(tmpkey->value,0,strlen(tmpkey->value));
-				memcpy(tmpkey->value,value,len);
-				tmpkey->value[len]='\0';
+				SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+				return -1;
+			}else
+			{
+				memcpy(tmpkvalue->value,value,len);
+				SysLog(1,"FILE[%s] LINE[%d] [多次传入]变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 				return 0;
 			}
-			pre = tmpkey;
-			tmpkey = tmpkey->next;
 		}
-		/** 说明目前没有存放，需要新申请链表存放 **/
-		tmpkey = (_keyvalue *)malloc(sizeof(_keyvalue));
-		if(tmpkey == NULL)
-		{
-			SysLog(1,"申请tmpkeyvalue内存失败\n");
-			return -1;
-		}
-		tmpkey->end=NULL;
-		tmpkey->pre=pre;
-		pre->next=tmpkey;
+		pre = tmpkvalue;
+		tmpkvalue=tmpkvalue->next;
+	}
+	/** 第一次申请内存 **/
+	SysLog(1,"FILE [%s]  LINE[%d] 开始申请新内存!!!!!\n",__FILE__,__LINE__);
+	tmpkey = (_keyvalue *)malloc(sizeof(_keyvalue));
+	if(tmpkey == NULL)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		return -1;
+	}
+	tmpkey->value = (char *)malloc(len+1);
+	if(tmpkey->value==NULL)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		return -1;
+	}else
+	{
+		head->end=tmpkey;
 		strcpy(tmpkey->varname,varname);
-		//tmpkvalue->value = (char *)malloc(len*sizeof(char));
-		tmpkey->value = (char *)malloc(len);
-		if(tmpkey->value == NULL)
-		{
-			SysLog(1,"申请变量值内存失败\n");
-			return -1;
-		}
-		//strncpy(tmpkvalue->value,value,len*sizeof(char));
 		memcpy(tmpkey->value,value,len);
-		tmpkey->value[len]='\0';
-		tmpkey->next=NULL;
-		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
+		SysLog(1,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
+		tmpkey->next = NULL;
+		tmpkey->pre = pre;
+		pre->next = tmpkey;	
+		tmpkvalue = tmpkey;
 	}
 	return 0;
 }
@@ -355,7 +348,7 @@ int get_var_value(char *varname,int *len,int loop,char *value)
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
 	{
-		//SysLog(1,"变量名[%s]变量值为[%s]\n",tmpkvalue->varname,tmpkvalue->value);
+		SysLog(1,"变量名[%s]变量值为[%s]\n",tmpkvalue->varname,tmpkvalue->value);
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
 			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);

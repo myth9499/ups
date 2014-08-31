@@ -1,2 +1,2 @@
 initshm:initshm.c
-	gcc -o initshm initshm.c  -lbase  -I ../../incl/ -L ../lib
+	gcc -g -o initshm initshm.c  -lbase  -I ../../incl/ -L ../lib

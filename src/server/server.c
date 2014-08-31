@@ -2,12 +2,27 @@
 
 void destory_var_hash(void);
 void serv(int sig);
+int iret = 0;
+int msgidi=0,msgido=0,msgidr;
+key_t key;
+_msgbuf *mbuf=NULL;
+_tran *tranbuf = NULL;
 
 /** 超时函数 **/
 _tranmap tmap;
 void servtimeout(int signal)
 {
 	seterr("EEEEEEEE","交易超时结束");
+	/** 删除共享内存hash表中的交易信息 **/
+    if(delete_shm_hash(mbuf->innerid)==-1)
+    {
+        SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		updatestat();
+		return ;
+    }
+    SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
+	/**修改状态为空闲 **/
+	updatestat();
 }
 
 /** 获取配套流程 **/
@@ -30,6 +45,8 @@ int	get_flow(char	*trancode,_flow	*localflow)
 	}
 	SysLog(1,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
 	
+	/** 增加超时 **/
+	alarm(tmap.timeout);	
 	int shmid,loop=0;
 	_flow *flow=NULL;
 	_flow *tmpshmdt=NULL;
@@ -177,12 +194,6 @@ int insert_servreg(char *chnlname )
 	return -1;
 }
 
-
-int iret = 0;
-int msgidi=0,msgido=0,msgidr;
-key_t key;
-_msgbuf *mbuf=NULL;
-_tran *tranbuf = NULL;
 
 
 int main(int argc,char *argv[])
