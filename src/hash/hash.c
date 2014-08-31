@@ -148,7 +148,7 @@ int get_shm_hash(long innerid,_tran *tranbuf)
 	pos = hashfunc(inpid);
 	for(i=0;i<BUCKETSCNT;i++)
 	{
-		SysLog(1,"fucking FILE[%s] LINE[%d] pos[%d] i[%d] intran[%s] outtran[%s]\n",__FILE__,__LINE__,pos,i,(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
+		//SysLog(1,"fucking FILE[%s] LINE[%d] pos[%d] i[%d] intran[%s] outtran[%s]\n",__FILE__,__LINE__,pos,i,(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
 		if((transhm+pos+i)->innerid == innerid)
 		{
 			//printf("in hash intran[%s]\t outtran[%s]\n",(transhm+pos+i)->intran,(transhm+pos+i)->outtran);

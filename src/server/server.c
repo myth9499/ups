@@ -12,8 +12,8 @@ _tran *tranbuf = NULL;
 _tranmap tmap;
 void servtimeout(int signal)
 {
-	seterr("EEEEEEEE","交易超时结束");
-	/** 删除共享内存hash表中的交易信息 **/
+	seterr("TTTTTTTT","交易超时结束");
+	/** 删除共享内存hash表中的交易信息 
     if(delete_shm_hash(mbuf->innerid)==-1)
     {
         SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
@@ -21,8 +21,7 @@ void servtimeout(int signal)
 		return ;
     }
     SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
-	/**修改状态为空闲 **/
-	updatestat();
+	**/
 }
 
 /** 获取配套流程 **/
@@ -325,6 +324,7 @@ void serv(int sig)
     {
         SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		updatestat();
+		alarm(0);
 		return ;
     }
     SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
@@ -356,7 +356,6 @@ int serv_flow(char *trancode)
 	_flow	localflow[1024];
 	memset(localflow,0,sizeof(localflow));
 
-	alarm(tmap.timeout);
 	int i=1,j=1;
 	/** 获取流程 **/
 	if(get_flow(trancode,localflow)!=0)

@@ -6,6 +6,7 @@ int iret = 0;
 int msgidi=0,msgido=0,msgidr=0;
 char	rip[16];
 int	rport;
+_tran	*tranbuf=NULL;
 
 
 /** 主进程注册信号，当子进程退出时进行后续处理
@@ -115,29 +116,43 @@ int main(int argc,char *argv[])
 		{
 			if(sendprocess(mbuf->innerid)==0)
 			{
-				SysLog(1,"FILE [%s] LINE[%d] 处理成功\n",__FILE__,__LINE__);
-				/** 返回核心 **/
-				if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
+				if(get_shm_hash(mbuf->innerid,tranbuf)==-1)
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
-					exit(0);
+					SysLog(1,"FILE [%s] LINE[%d] 处理成功，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					exit(-1);
 				}else
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
-					exit(-1);
+					SysLog(1,"FILE [%s] LINE[%d] 处理成功\n",__FILE__,__LINE__);
+					/** 返回核心 **/
+					if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
+					{
+						SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
+						exit(0);
+					}else
+					{
+						SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
+						exit(-1);
+					}
 				}
 			}else
 			{
-				SysLog(1,"FILE [%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
-				/** 返回核心 **/
-				if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
+				if(get_shm_hash(mbuf->innerid,tranbuf)==-1)
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
-					exit(0);
+					SysLog(1,"FILE [%s] LINE[%d] 处理失败，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					exit(-1);
 				}else
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
-					exit(-1);
+					SysLog(1,"FILE [%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
+					/** 返回核心 **/
+					if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
+					{
+						SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
+						exit(0);
+					}else
+					{
+						SysLog(1,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
+						exit(-1);
+					}
 				}
 			}
 			exit(0);
@@ -148,7 +163,6 @@ int main(int argc,char *argv[])
 }
 int sendprocess(long inerid)
 {
-	_tran	*tranbuf=NULL;
 	SysLog(1,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]&&&&&&&&&&&&&&&&&&&\n",__FILE__,__LINE__,inerid);
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
