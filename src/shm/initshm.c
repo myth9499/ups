@@ -98,6 +98,14 @@ int main(int argc,char *argv[])
 		return -1;
 	}
 
+	/** init the vardef shm cfg **/
+	shmsize = MAXVARDEF*sizeof(_vardef);
+	if(getshm(4,shmsize)==-1)
+	{
+		SysLog(1,"获取变量定义映射配置共享内存失败\n");
+		return -1;
+	}
+
 	/** 初始化系统所有渠道的队列区 **/
 	fp = fopen("/item/ups/src/cfg/chnl.cfg","r");
 	if(fp == NULL)
@@ -123,6 +131,7 @@ int main(int argc,char *argv[])
 			continue;
 		}
 	}
+	fclose(fp);
 
 	/** init sem **/
 	if(initservregsem()!=0)

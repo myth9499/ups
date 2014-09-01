@@ -371,4 +371,42 @@ int updatestat_foroth(pid_t	pid)
 	SysLog(1,"解除信号量成功\n");
 	return ret;
 }
+/** 获取交易属性 **/
+int get_vardef(char	*varname,_vardef	*vardef)
+{
+	int iret =-1;
+	int shmid ;
+	int shmsize = MAXVARDEF*(sizeof(_vardef));
+
+	if((varname == NULL)||(vardef == NULL))
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]的配置失败\n",__FILE__,__LINE__,varname);
+		return -1;
+	}
+	_vardef *tvardef,*tstvardef = NULL;
+	if((shmid = getshmid(4,shmsize))==-1)
+	{         
+		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]时获取共享内存失败\n",__FILE__,__LINE__,varname);
+		return -1;
+	}
+	tstvardef  = shmat(shmid,NULL,0);
+	if(tstvardef == (void *)-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]时链接共享内存失败\n",__FILE__,__LINE__,varname);
+		return -1;
+	}
+	tvardef = tstvardef;
+	while(strcmp(tvardef->varname,"END"))
+	{
+		if(!strcmp(tvardef->varname,varname))
+		{
+			memcpy(vardef,tvardef,sizeof(_vardef));
+			iret = 0;
+			break;
+		}
+		tvardef++;
+	}
+	shmdt(tstvardef);
+	return iret;
+}
 

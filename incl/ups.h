@@ -31,12 +31,12 @@
 
 static int BUCKETSCNT=100; /** HASH最大值 **/
 static int HASHCNT=13;	   /** HASH桶最大值 **/
-static int VARCNT=1024;    /** 最大支持变量个数**/
 static int MAXCOMMMSG=1024;/** 通信区最大支持传输报文个数**/
 static int MAXFLOW=1024;   /** 最大支持的流程个数 **/
 static int MAXSERVREG=1024;/** 最大支持的服务个数 **/
 static int MAXXMLCFG=1024; /** 最大支持的XML报文配置个数**/
 static int MAXTRANMAP=100; /** 最大支持的内外部交易映射个数 **/
+static int MAXVARDEF=1000; /** 最大支持的变量配置个数 **/
 
 /**main tran buf **/
 typedef struct TRAN
@@ -140,6 +140,16 @@ typedef struct TRANMAP
 	char	tranflow[60];	/** 对应流程名称 **/
 	int		timeout;		/** 交易超时时间 **/
 }_tranmap;
+
+/** 变量配置映射表 **/
+typedef	struct 	VARDEF
+{
+	char	varname[60];/** 变量名称 **/
+	char	varmark[256];/** 变量说明 **/
+	char	vartype[2];  /** 变量类型 S-字符串 **/
+	int	varlen;    /** 变量长度 **/
+}_vardef;
+
 static _keyvalue *kvalue = NULL;
 long	innerid;//跟踪号，全局使用
 /** hash shm buckets **/

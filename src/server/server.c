@@ -10,6 +10,7 @@ _tran *tranbuf = NULL;
 
 /** 超时函数 **/
 _tranmap tmap;
+char	cmd[100];
 void servtimeout(int signal)
 {
 	seterr("TTTTTTTT","交易超时结束");
@@ -204,6 +205,12 @@ int main(int argc,char *argv[])
 	}
 	atexit(destory_var_hash);
 	atexit(delservpid);
+	
+	memset(cmd,0,sizeof(cmd));
+
+	sprintf(cmd,"%s %ld","ps -aux|grep ",getpid());
+	//fprintf(stderr,"the first ps aux\n");
+	//system(cmd);
 
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
@@ -211,6 +218,8 @@ int main(int argc,char *argv[])
 		SysLog(1,"FILE [%s] LINE [%d]:申请msgbuf内存失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
+	//fprintf(stderr,"the second ps aux\n");
+	//system(cmd);
 
 	tranbuf = (_tran *)malloc(sizeof(_tran));
 	if(tranbuf == (void *)-1)
@@ -219,6 +228,8 @@ int main(int argc,char *argv[])
 		free(mbuf);
 		return -1;
 	}
+	//fprintf(stderr,"the three ps aux\n");
+	//system(cmd);
 
 	iret = init_var_hash();
 	if(iret != 0)
@@ -228,6 +239,8 @@ int main(int argc,char *argv[])
 		free(mbuf);
 		return -1;
 	}
+	//fprintf(stderr,"the fourth ps aux\n");
+	//system(cmd);
 
 	/** 渠道参数需要传入，服务根据渠道多少划分，防止一个服务挂掉所有都挂掉 **/
 	if(getmsgid(argv[1],&msgidi,&msgido,&msgidr)!=0)
@@ -237,11 +250,14 @@ int main(int argc,char *argv[])
 		free(mbuf);
 		return -1;
 	}
+	//fprintf(stderr,"the five ps aux\n");
+	//system(cmd);
 
 	/** 注册serv **/
 	if(insert_servreg(argv[1])==0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
+		//system(cmd);
 	}else
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:注册服务失败,PID[%ld]\n",__FILE__,__LINE__,getpid());
@@ -265,7 +281,10 @@ int main(int argc,char *argv[])
 }
 void serv(int sig)
 {
+
 	SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
+	//fprintf(stderr,"the six ps aux\n");
+	//system(cmd);
 	if(memset_var_hash()==0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]初始化变量存放区成功\n",__FILE__,__LINE__,getpid());
@@ -274,16 +293,22 @@ void serv(int sig)
 		SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]初始化变量存放区失败\n",__FILE__,__LINE__,getpid());
 		return ;
 	}
+	//fprintf(stderr,"the server ps aux\n");
+	//system(cmd);
 	seterr("AAAAAAAA","交易正常结束");
 
 	iret = msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),0,IPC_NOWAIT);
 	if(iret > 0)
 	{
+	//fprintf(stderr,"the eigth ps aux\n");
+	//system(cmd);
 		innerid = mbuf->innerid ; 
 		SysLog(1,"FILE [%s] LINE [%d] 处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",__FILE__,__LINE__,mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
 		SysLog(1,"FILE [%s] LINE[%d] 全局跟踪号为:[%ld]\n",__FILE__,__LINE__,innerid);
 		if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
 		{
+	//fprintf(stderr,"the nine ps aux\n");
+	//system(cmd);
 			SysLog(1,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->intran);
 			if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran)==-1)
 			{
@@ -291,12 +316,18 @@ void serv(int sig)
 				seterr("EEEEEEEE","解包失败");
 			}else
 			{
+	//fprintf(stderr,"the ten ps aux\n");
+		//system(cmd);
 				if(serv_flow(mbuf->tranbuf.trancode)!=0)
 				{
+	//fprintf(stderr,"the eleven ps aux\n");
+		//system(cmd);
 					SysLog(1,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
 					seterr("EEEEEEEE","执行交易失败");
 				}else
 				{
+	//fprintf(stderr,"the twlen ps aux\n");
+		//system(cmd);
 					SysLog(1,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
 				}
 			}
@@ -322,6 +353,7 @@ void serv(int sig)
 	/** 删除共享内存hash表中的交易信息 **/
     if(delete_shm_hash(mbuf->innerid)==-1)
     {
+		//system(cmd);
         SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		updatestat();
 		alarm(0);
@@ -330,6 +362,7 @@ void serv(int sig)
     SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
 	/**修改状态为空闲 **/
 	updatestat();
+		//system(cmd);
 	alarm(0);
 	return ;
 }
@@ -347,6 +380,8 @@ int testvar(void)
 }
 int serv_flow(char *trancode)
 {
+	//fprintf(stderr,"the 13 ps aux\n");
+	//system(cmd);
 	if(trancode==NULL)
 	{
 		SysLog(1,"FILE [%s] LINE[%d]获取交易码失败\n",__FILE__,__LINE__);
@@ -355,6 +390,8 @@ int serv_flow(char *trancode)
 	}
 	_flow	localflow[1024];
 	memset(localflow,0,sizeof(localflow));
+	//fprintf(stderr,"the 14 ps aux\n");
+		//system(cmd);
 
 	int i=1,j=1;
 	/** 获取流程 **/
@@ -363,23 +400,35 @@ int serv_flow(char *trancode)
 		SysLog(1,"获取交易码为[%s]的流程失败\n",trancode);
 		return -1;
 	}
+	//fprintf(stderr,"the 15 ps aux\n");
+	//system(cmd);
 	for(i=1;strcmp(localflow[i].flowname,"END");i++)
 	{
 		SysLog(1,"----------执行流程序号[%d]\t流程名称[%s]函数名称[%s]\n",i,localflow[i].flowname,localflow[i].flowfunc);
 	}
+	//fprintf(stderr,"the 16 ps aux\n");
+	//system(cmd);
 	i=1;
 	/** init commmsg **/
 	while(strcmp(localflow[i].flowname,"END"))
 	{
+	//fprintf(stderr,"the 17 ps aux\n");
+	//system(cmd);
 		SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t\n",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
 		trim(localflow[i].flowso);
 		trim(localflow[i].flowfunc);
 		trim(localflow[i].funcpar1);
+	//fprintf(stderr,"the 18 ps aux\n");
+	//system(cmd);
 		if(do_so(localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1)==0)
 		{
+	//fprintf(stderr,"the 19 ps aux\n");
+	//system(cmd);
 			SysLog(1,"流程处理成功\n");
 		}else
 		{
+	//fprintf(stderr,"the 20 ps aux\n");
+	//system(cmd);
 			SysLog(1,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 			/** 执行错误流程**/
 			if(get_flow(localflow[i].errflow,localflow)!=0)
@@ -396,5 +445,7 @@ int serv_flow(char *trancode)
 		}
 		i++;
 	}
+	//fprintf(stderr,"the 21 ps aux\n");
+	//system(cmd);
 	return 0;
 }

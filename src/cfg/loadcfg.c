@@ -45,6 +45,14 @@ int main(int argc,char *argv[])
 		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
 		return -1;
 	}
+	if(load_vardef_cfg("/item/ups/src/cfg/vardef/vardef.cfg")==0)
+	{
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+	}else
+	{
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		return -1;
+	}
 	return 0;
 }
 int load_commmsg_cfg(char *filename)
@@ -357,6 +365,59 @@ int load_tranmap_cfg(char *filename)
 		tmap++;
 	}
 	shmdt(tmap);
+	fclose(fp);
+	SysLog(1,"load ok\n");
+	return 0;
+}
+int load_vardef_cfg(char *filename)
+{
+	int shmid,i=0;
+	char buff[1200];
+	_vardef *vardef=NULL;
+	char *tmpbuf = NULL;
+	size_t shmsize;
+	FILE *fp=NULL;
+
+
+	memset(buff,0,sizeof(buff));
+	/** init vardef **/
+	shmsize=MAXVARDEF*sizeof(_vardef);
+	if((shmid=getshmid(4,shmsize))==-1)
+	{
+		SysLog(1,"get shm error\n");
+		return -1;
+	}
+	SysLog(1,"start load vardef  cfg \n");
+	vardef = (_vardef *)shmat(shmid,NULL,0);
+	if(vardef == NULL)
+	{
+		SysLog(1,"vardef shmat error\n");
+		return -1;
+	}
+	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
+	fp = fopen(filename,"r");
+	if(fp==NULL)
+	{
+		perror("file open error");
+		shmdt(vardef);
+		return -1;
+	}
+	while(fgets(buff,sizeof(buff),fp)!=NULL)
+	{
+		buff[strlen(buff)-1]='\0';
+		if(buff[0]=='#')
+		{
+			//cmsg++;
+			continue;
+		}
+		/** need if else **/
+		strcpy(vardef->varname,strtok(buff,"^"));
+		strcpy(vardef->varmark,strtok(NULL,"^"));
+		strcpy(vardef->vartype,strtok(NULL,"^"));
+		vardef->varlen=atoi(strtok(NULL,"^"));
+		vardef++;
+	}
+	shmdt(vardef);
 	fclose(fp);
 	SysLog(1,"load ok\n");
 	return 0;

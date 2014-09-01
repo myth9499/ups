@@ -235,20 +235,22 @@ int	memset_var_hash(void)
 {
 	/** 释放所有已申请空间 **/
 	int i = 0;
-	_keyvalue *tmpk=NULL,*tk=NULL;
+	_keyvalue *tmpk=NULL;
+	_vardef	vardef;/* 存放变量配置 **/
+
 	for(i=0;i<HASHCNT;i++)
 	{
-		tmpk = (kvalue+i)->end;/** 指向最后一个地址 **/
-		while(tmpk!=(kvalue+i)->head&&tmpk!=NULL)
+		tmpk = kvalue+i;/** 指向最后一个地址 **/
+		while((tmpk->value)!=NULL)
 		{
 			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,tmpk->varname);
-			memset(tmpk->varname,0,sizeof(tmpk->value));
-			tk=tmpk;
-			free(tmpk->value);/** 释放申请的变量区 **/
-			free(tmpk);       /** 释放本身 **/
-			tmpk=tk->pre;
-			tmpk->next=NULL;
-			tk = NULL;
+			if(get_vardef(tmpk->varname,&vardef)!=0)
+			{
+				SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,tmpk->varname);
+				return -1;
+			}
+			memset(tmpk->value,0,vardef.varlen);
+			tmpk=tmpk->next;
 		}
 	}
 	return 0;
@@ -259,7 +261,20 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	_keyvalue *tmpkvalue,*tmpkey,*head;
 	_keyvalue *pre;
 	char varnameloop[1024];
+	_vardef	vardef;/* 存放变量配置 **/
 	int hash = 0;
+
+	if(get_vardef(varname,&vardef)!=0)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		return -1;
+	}
+	if(len>vardef.varlen)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
+		return -1;
+	}
+	SysLog(1,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 
 	if(kvalue == NULL||varname ==NULL||strlen(varname)==0)
 	{
@@ -276,36 +291,37 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	pre = tmpkvalue;
 	while(tmpkvalue!=NULL)
 	{
-	SysLog(1,"FILE [%s]  LINE[%d] lilei1234原来已有申请新内存!!!!!\n",__FILE__,__LINE__);
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
-	SysLog(1,"FILE [%s]  LINE[%d] 原来已有申请新内存!!!!!\n",__FILE__,__LINE__);
-			/** 初始化一次 **/
+			SysLog(1,"FILE [%s]  LINE[%d] 变量[%s] 原来已申请过内存!!!!!\n",__FILE__,__LINE__,tmpkvalue->varname);
+			/** 初始化一次 
 			free(tmpkvalue->value);
-			tmpkvalue->value = (char *)malloc(len+1);
+			tmpkvalue->value = (char *)malloc(vardef.varlen);
 			if(tmpkvalue->value==NULL)
 			{
 				SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 				return -1;
 			}else
 			{
-				memcpy(tmpkvalue->value,value,len);
-				SysLog(1,"FILE[%s] LINE[%d] [多次传入]变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
-				return 0;
-			}
+			**/
+			memset(tmpkvalue->value,0,vardef.varlen);
+			memcpy(tmpkvalue->value,value,len);
+			SysLog(1,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
+			return 0;
+			//}
 		}
 		pre = tmpkvalue;
 		tmpkvalue=tmpkvalue->next;
 	}
 	/** 第一次申请内存 **/
-	SysLog(1,"FILE [%s]  LINE[%d] 开始申请新内存!!!!!\n",__FILE__,__LINE__);
+	SysLog(1,"FILE [%s]  LINE[%d] 变量[%s]第一次使用，申请新内存!!!!!\n",__FILE__,__LINE__,varname);
 	tmpkey = (_keyvalue *)malloc(sizeof(_keyvalue));
 	if(tmpkey == NULL)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 		return -1;
 	}
-	tmpkey->value = (char *)malloc(len+1);
+	tmpkey->value = (char *)malloc(vardef.varlen);
 	if(tmpkey->value==NULL)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
@@ -328,6 +344,20 @@ int get_var_value(char *varname,int *len,int loop,char *value)
 	_keyvalue *tmpkvalue;
 	char varnameloop[1024];
 	int hash = 0;
+
+	_vardef	vardef;/* 存放变量配置 **/
+
+	if(get_vardef(varname,&vardef)!=0)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		return -1;
+	}
+	if(vardef.varlen>vardef.varlen)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
+		return -1;
+	}
+	SysLog(1,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 	if(kvalue == NULL)
 	{
 		SysLog(1,"进程变量值内存空间未申请 \n");
