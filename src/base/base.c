@@ -3,9 +3,42 @@
 #include  <libxml/tree.h>
 #include  <libxml/parser.h>
 
+/** 获取当前内存占用 **/
+
+void prtusage()
+{
+        FILE    *fp ;
+        char    filepath[100];
+        char    str[100];
+        memset(filepath,0,sizeof(filepath));
+        memset(str,0,sizeof(str));
+
+        sprintf(filepath,"/proc/%ld/status",getpid());
+        fp = fopen(filepath,"r");
+        if(fp == NULL)
+        {
+                fprintf(stderr,"获取进程信息失败\n");
+                return  ;
+        }
+        while(fgets(str,sizeof(str),fp)!=NULL)
+        {
+                if(memcmp(str,"VmRSS",5)==0)
+                {
+                        str[strlen(str)-1]='\0';
+                        fprintf(stderr,"当前占用内存:[%s]\n",str+5);
+                        break;
+                }
+                memset(str,0,sizeof(str));
+        }
+        fclose(fp);
+        return ;
+}
+
 /** 调用函数动态库，执行函数 **/
 int do_so(char *so_name,char *func_name,char *par1)
 {
+	fprintf(stderr,"in do so 1\n");
+	prtusage();
 	if(so_name==NULL||func_name==NULL)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
@@ -13,12 +46,18 @@ int do_so(char *so_name,char *func_name,char *par1)
 	}
 	void *handle = NULL;
 	int (*func)(char *par1);
-	handle = dlopen(so_name,RTLD_LAZY);
+	handle = dlopen(so_name,RTLD_NOLOAD);
 	if(handle == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
-		return -1;
+		handle = dlopen(so_name,RTLD_LAZY);
+		if(handle == NULL)
+		{
+			SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
+			return -1;
+		}
 	}
+	fprintf(stderr,"in do so 2\n");
+	prtusage();
 	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{
@@ -26,13 +65,19 @@ int do_so(char *so_name,char *func_name,char *par1)
 		return -1;
 	}
 		SysLog(1,"@@@@@@@@@@@FILE [%s] LINE [%d]:执行函数[%s]参数:%s\n",__FILE__,__LINE__,func_name,par1);
+	fprintf(stderr,"in do so 3\n");
+	prtusage();
 	if(func(par1)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
 		return -1;
 	}
+	fprintf(stderr,"in do so 4\n");
+	prtusage();
 	dlclose(handle);
 	SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
+	fprintf(stderr,"in do so 5\n");
+	prtusage();
 	return 0;
 }
 
