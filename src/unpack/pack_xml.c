@@ -109,7 +109,7 @@ int pack_xml(char *xmltype)
 	memset(msgtype,0,sizeof(msgtype));
 	memset(ffile,0,sizeof(ffile));
 
-
+	xmlInitParser();
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
@@ -155,19 +155,8 @@ int pack_xml(char *xmltype)
 
 	while(strcmp(tmpcfg->xmlname,""))
 	{
-		//SysLog(1,"FILE [%s] LINE [%d] xmlnames[%s]fullpath[%s] last path[%s]xmltype[%s]\n",__FILE__,__LINE__,tmpcfg->xmlname,tmpcfg->fullpath,lastpath,xmltype);
-		//if(!strcmp(tmpcfg->xmlname,xmltype))
 		if(!strcmp(tmpcfg->xmlname,xmltype)&&strcmp(lastpath,tmpcfg->fullpath))
 		{
-			//SysLog(1,"FILE[%s] LINE[%d] 路径[%s]变量名[%s]变量值[%s]深度[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,tmpcfg->varname,"123",tmpcfg->depth);
-		/**
-			xpath  = (xmlChar *)malloc(sizeof(xmlChar)*1024);
-			if(xpath == NULL)
-			{
-				SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
-				return -1;
-			}
-		**/
 			memset(tmppath,0,sizeof(tmppath));
 			strcpy(tmppath,tmpcfg->fullpath);
 			SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
@@ -184,22 +173,19 @@ int pack_xml(char *xmltype)
 				nodeset = result->nodesetval;
 				for(i=0;i<nodeset->nodeNr;i++)
 				{
-					keyword  = (xmlChar *)malloc(sizeof(xmlChar)*1024);
+					keyword = xmlNodeListGetString(doc,nodeset->nodeTab[i]->xmlChildrenNode,1);
 					if(keyword == NULL)
 					{
 						memset(xpath,0,sizeof(xpath));
 						SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
-						return -1;
+						break;
 					}
-					keyword = xmlNodeListGetString(doc,nodeset->nodeTab[i]->xmlChildrenNode,1);
 					/** 根据值获取到对应变量信息 **/
 					memset(keyvalue,0,sizeof(keyvalue));
 					if(get_var_value(keyword,sizeof(keyvalue),1,keyvalue)==-1)
 					{
 						SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
-						free(keyword);
-						/** 继续进行下一节点打包 **/
-						//free(xpath);
+						/**
 						nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
 						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
 						{
@@ -208,13 +194,24 @@ int pack_xml(char *xmltype)
 						{
 							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
 						}
-						xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
+						**/
+						/** test not use 
+						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
+						{
+							nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
+						}else
+						{
+							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
+						}
+						**/
+						free(keyword);
+						//xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
+						//xmlXPathFreeObject(result);
 						continue;
 					}else
 					{
 						SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
 						xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
-						//memset(keyword,0,sizeof(keyword));
 						free(keyword);
 					}
 				}
@@ -237,6 +234,8 @@ int pack_xml(char *xmltype)
 			SysLog(1,"打包文件失败\n");
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
+			//xmlXPathFreeObject(result);
+			xmlMemoryDump();
 			shmdt(dtcfg);
 			return -1;
 		}else
@@ -244,6 +243,8 @@ int pack_xml(char *xmltype)
 			SysLog(1,"打包文件成功[%s]\n",ffile);
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
+			//xmlXPathFreeObject(result);
+			xmlMemoryDump();
 			shmdt(dtcfg);
 			return 0;
 		}
@@ -252,11 +253,15 @@ int pack_xml(char *xmltype)
 		SysLog(1,"打包文件失败\n");
 		xmlFreeDoc(doc);
 		xmlCleanupParser();
+		//xmlXPathFreeObject(result);
+		xmlMemoryDump();
 		shmdt(dtcfg);
 		return -1;
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
+	//xmlXPathFreeObject(result);
+	xmlMemoryDump();
 	shmdt(dtcfg);
 	return  0;
 }
