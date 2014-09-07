@@ -159,6 +159,7 @@ int pack(char *msgtype)
 			SysLog(1,"链接共享内存区失败\n");
 			return -1;
 		}
+		memset(cmsg,0,sizeof(cmsg));
 		tmpshmdt = cmsg;
 		while(strcmp(cmsg->commname,"END"))
 		{
@@ -167,13 +168,15 @@ int pack(char *msgtype)
 			{
 				flag = 1;
 				SysLog(1,"待打包报文类型[%s]\t变量长度[%d]\t变量名[%s]\t备注[%s]\t\n",cmsg->commname, cmsg->len,cmsg->commvar,cmsg->commmark);
-				tmpbuf = (char *)malloc(cmsg->len*(sizeof(char)));
+				//tmpbuf = (char *)malloc(cmsg->len+sizeof(char)+1);
+				tmpbuf = (char *)malloc(cmsg->len+sizeof(char)+1);
 				if(tmpbuf == NULL)
 				{
 					SysLog(1,"申请变量临时内存失败\n");
 					shmdt(tmpshmdt);
 					break;
 				}
+				memset(tmpbuf,0,sizeof(tmpbuf));
 				if(get_var_value(cmsg->commvar,cmsg->len,1,tmpbuf)==-1)
 				{
 					SysLog(1,"获取变量[%s]失败\n",cmsg->commvar);
