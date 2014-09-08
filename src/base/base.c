@@ -37,8 +37,6 @@ void prtusage()
 /** 调用函数动态库，执行函数 **/
 int do_so(char *so_name,char *func_name,char *par1)
 {
-	fprintf(stderr,"in do so 1\n");
-	prtusage();
 	if(so_name==NULL||func_name==NULL)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
@@ -56,28 +54,22 @@ int do_so(char *so_name,char *func_name,char *par1)
 			return -1;
 		}
 	}
-	fprintf(stderr,"in do so 2\n");
-	prtusage();
 	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,dlerror());
+		dlclose(handle);
 		return -1;
 	}
 		SysLog(1,"@@@@@@@@@@@FILE [%s] LINE [%d]:执行函数[%s]参数:%s\n",__FILE__,__LINE__,func_name,par1);
-	fprintf(stderr,"in do so 3\n");
-	prtusage();
 	if(func(par1)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
+		dlclose(handle);
 		return -1;
 	}
-	fprintf(stderr,"in do so 4\n");
-	prtusage();
 	dlclose(handle);
 	SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
-	fprintf(stderr,"in do so 5\n");
-	prtusage();
 	return 0;
 }
 
@@ -269,7 +261,7 @@ int gettranmap(_tranmap *tmap,char *trancode)
 	shmdt(tstmap);
 	return iret;
 }
-void trim (char *str)
+void Trim (char *str)
 {
 	char    *p = str;
 	char    *p1;
@@ -284,6 +276,23 @@ void trim (char *str)
 			*p1--='\0';
 	}
 	strcpy(str,p);
+}
+
+#define        ISSPACE(x)        ((x)==' '||(x)=='\r'||(x)=='\n'||(x)=='\f'||(x)=='\b'||(x)=='\t')
+
+void trim( char *String )
+{
+        char        *Tail, *Head;
+
+        for ( Tail = String + strlen( String ) - 1; Tail >= String; Tail -- )
+                if ( !ISSPACE( *Tail ) )
+                        break;
+        Tail[1] = 0;
+        for ( Head = String; Head <= Tail; Head ++ )
+                if ( !ISSPACE( *Head ) )
+                        break;
+        if ( Head != String )
+                memcpy( String, Head, ( Tail - Head + 2 ) * sizeof( char ) );
 }
 /** 获取可用服务 **/
 pid_t getservpid(char *chnl_name)

@@ -230,27 +230,61 @@ int init_var_hash(void)
 	return 0;
 }
 
-/** memset var hash **/
+/** 进程退出时释放申请的内存 **/
 int	memset_var_hash(void)
 {
 	/** 释放所有已申请空间 **/
 	int i = 0;
 	_keyvalue *tmpk=NULL;
+	_keyvalue *endk,*tk;
 	_vardef	vardef;/* 存放变量配置 **/
 
 	for(i=0;i<HASHCNT;i++)
 	{
 		tmpk = kvalue+i;/** 指向最后一个地址 **/
-		while((tmpk->value)!=NULL)
+		if(tmpk->next==NULL)
+			continue;
+		endk=tmpk->end;
+		while(endk!=tmpk)
 		{
-			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,tmpk->varname);
-			if(get_vardef(tmpk->varname,&vardef)!=0)
+			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			if(get_vardef(endk->varname,&vardef)!=0)
 			{
 				SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,tmpk->varname);
 				return -1;
 			}
-			memset(tmpk->value,0,vardef.varlen);
-			tmpk=tmpk->next;
+			free(endk->value);
+			tk=endk->pre;
+			free(endk);
+			endk=tk;
+		}
+	}
+	free(kvalue);
+	return 0;
+}
+/** 每次执行完成后初始化已申请空间 **/
+int	init_malloced_hash(void)
+{
+	/** 释放所有已申请空间 **/
+	int i = 0;
+	_keyvalue *tmpk=NULL;
+	_keyvalue *endk;
+	_vardef	vardef;/* 存放变量配置 **/
+
+	for(i=0;i<HASHCNT;i++)
+	{
+		tmpk = kvalue+i;/** 指向最后一个地址 **/
+		endk=tmpk;
+		while(endk!=NULL&&endk!=tmpk)
+		{
+			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			if(get_vardef(endk->varname,&vardef)!=0)
+			{
+				SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,endk->varname);
+				return -1;
+			}
+			memset(endk->value,0,vardef.varlen);
+			endk=endk->next;
 		}
 	}
 	return 0;
@@ -286,29 +320,20 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	hash = hashfunc(varnameloop);
 	SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
 	SysLog(1,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
+
 	head = kvalue+hash;
-	tmpkvalue = head;
-	pre = tmpkvalue;
+	tmpkvalue = kvalue+hash;
+	pre = kvalue+hash;
+
 	while(tmpkvalue!=NULL)
 	{
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
 			SysLog(1,"FILE [%s]  LINE[%d] 变量[%s] 原来已申请过内存!!!!!\n",__FILE__,__LINE__,tmpkvalue->varname);
-			/** 初始化一次 
-			free(tmpkvalue->value);
-			tmpkvalue->value = (char *)malloc(vardef.varlen);
-			if(tmpkvalue->value==NULL)
-			{
-				SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
-				return -1;
-			}else
-			{
-			**/
 			memset(tmpkvalue->value,0,vardef.varlen);
 			memcpy(tmpkvalue->value,value,len);
 			SysLog(1,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 			return 0;
-			//}
 		}
 		pre = tmpkvalue;
 		tmpkvalue=tmpkvalue->next;
@@ -325,11 +350,13 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	if(tmpkey->value==NULL)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		free(tmpkey);
 		return -1;
 	}else
 	{
 		head->end=tmpkey;
 		strcpy(tmpkey->varname,varname);
+		memset(tmpkey->value,0,vardef.varlen);
 		memcpy(tmpkey->value,value,len);
 		SysLog(1,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
 		tmpkey->next = NULL;
@@ -339,7 +366,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	}
 	return 0;
 }
-int get_var_value(char *varname,int *len,int loop,char *value)
+int get_var_value(char *varname,int len,int loop,char *value)
 {
 	_keyvalue *tmpkvalue;
 	char varnameloop[1024];
@@ -352,7 +379,8 @@ int get_var_value(char *varname,int *len,int loop,char *value)
 		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
-	if(vardef.varlen>vardef.varlen)
+	/** 当变量定义长度大于传入取出值存放变量时，不取出，存放不了，会core done **/
+	if(vardef.varlen>len)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
 		return -1;
@@ -381,8 +409,20 @@ int get_var_value(char *varname,int *len,int loop,char *value)
 		SysLog(1,"变量名[%s]变量值为[%s]\n",tmpkvalue->varname,tmpkvalue->value);
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
+			trim(tmpkvalue->value);
 			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
-			strcpy(value,tmpkvalue->value);
+			//memcpy(value,tmpkvalue->value,strlen(tmpkvalue->value));
+			memcpy(value,tmpkvalue->value,len);
+			/**
+			if(strlen(tmpkvalue->value)>len)
+			{
+				memcpy(value,tmpkvalue->value,len);
+			}else
+			{
+				memcpy(value,tmpkvalue->value,strlen(tmpkvalue->value));
+			}
+			**/
+			//*len=strlen(tmpkvalue->value); //传出实际值
 			return 0;
 		}
 		tmpkvalue = tmpkvalue->next;
