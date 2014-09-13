@@ -320,14 +320,15 @@ pid_t getservpid(char *chnl_name)
 	servpos = MAXSERVREG/2;
 	for(i=0;i<MAXSERVREG;i++)
 	{
+		//SysLog(1,"#####FILE[%s] LINE[%d]@@@@pid  [%ld] 尝试[%d]个\n",__FILE__,__LINE__,getpid(),i);
 		err=sem_trywait(&((sreg+i)->sem1));
 		if(err!=0&&errno==EAGAIN)
 		{
-			SysLog(1,"FILE[%s] LINE[%d]当前正在占用，尝试下一个\n",__FILE__,__LINE__);
+			SysLog(1,"FILE[%s] LINE[%d]pid[%ld]当前正在占用，尝试下一个[%d]\n",__FILE__,__LINE__,getpid(),i);
 			// 为了最大限度保证每次查询都可以查询的到，尝试得不到的时候直接加一半再找 
-			i+=servpos;
+			//i+=servpos;
 			continue;
-			servpos = servpos/2;
+			//servpos = servpos/2;
 		}else if(err == 0)
 		{
 			if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name)&&!strcmp((sreg+i)->type,"S"))

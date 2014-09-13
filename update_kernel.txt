@@ -7,6 +7,7 @@ export LD_LIBRARY_PATH=/item/ups/src/lib/
 sysctl -w net.ipv4.tcp_keepalive_time=2
 sysctl -w net.ipv4.tcp_keepalive_probes=2
 sysctl -w net.ipv4.tcp_keepalive_intvl=1
+sysctl -w net.ipv4.tcp_tw_recycle=1
 
 #注意：分支语句只会找一个入口，有匹配条件后就结束
 #switch 条件表达式的值比如与case常量值一致，如switch为int 则case必须为int ，不能为true，switch 必须为byte,short,int,char,enum
