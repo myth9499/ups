@@ -16,7 +16,12 @@ int	GetNewFileName(char	*ffile)
 		return -1;
 	}
 	memset(nfilename,0,L_tmpnam+1);
-	strcpy(nfilename,tmpnam(nfilename));
+	//strcpy(nfilename,tmpnam(nfilename));
+	if(tmpnam(nfilename)==NULL)
+	{
+		SysLog(1,"生成临时文件失败[%s]\n",strerror(errno));
+		return -1;
+	}
 	sprintf(ffile,"%s%s","/item/ups/log",nfilename);
 	SysLog(1,"临时文件名[%s]\n",ffile);
 	return 0;
@@ -195,15 +200,12 @@ int pack_xml(char *xmltype)
 							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
 						}
 						**/
-						/** test not use 
-						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
-						{
-							nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
-						}else
-						{
-							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
-						}
-						**/
+						/** test not use  **/
+						xmlNodePtr	tempNode;
+						tempNode=nodeset->nodeTab[i]->next;
+						xmlUnlinkNode(nodeset->nodeTab[i]);
+						xmlFreeNode(nodeset->nodeTab[i]);
+						nodeset->nodeTab[i]=tempNode;
 						free(keyword);
 						//xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
 						//xmlXPathFreeObject(result);

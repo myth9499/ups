@@ -42,18 +42,20 @@ int do_so(char *so_name,char *func_name,char *par1)
 		SysLog(1,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
 		return -1;
 	}
-	void *handle = NULL;
+	void *handle;
 	int (*func)(char *par1);
+	/**
 	handle = dlopen(so_name,RTLD_NOLOAD);
 	if(handle == NULL)
 	{
-		handle = dlopen(so_name,RTLD_LAZY);
-		if(handle == NULL)
-		{
-			SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
-			return -1;
-		}
+	**/
+	handle = dlopen(so_name,RTLD_LAZY);
+	if(handle == NULL)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
+		return -1;
 	}
+	//}
 	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{

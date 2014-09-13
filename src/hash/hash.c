@@ -412,7 +412,8 @@ int get_var_value(char *varname,int len,int loop,char *value)
 			trim(tmpkvalue->value);
 			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
 			//memcpy(value,tmpkvalue->value,strlen(tmpkvalue->value));
-			memcpy(value,tmpkvalue->value,len);
+			//memcpy(value,tmpkvalue->value,len);
+			memcpy(value,tmpkvalue->value,vardef.varlen);
 			/**
 			if(strlen(tmpkvalue->value)>len)
 			{
