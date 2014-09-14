@@ -6,6 +6,54 @@
 
 _xmlcfg *tmpcfg = NULL;
 _xmlcfg *dtcfg = NULL;
+
+int	regNs(xmlXPathContextPtr context,char	*xmltype)
+{
+	FILE    *fp=NULL;
+	char    buffer[1024];
+	char    xmlname[256];
+	char    cfgfile[256];
+	char    xmlns[256];
+
+	memset(buffer,0,sizeof(buffer));
+	memset(xmlname,0,sizeof(xmlname));
+	memset(cfgfile,0,sizeof(cfgfile));
+	memset(xmlns,0,sizeof(xmlns));
+
+	fp = fopen("/item/ups/src/cfg/xmlcfg/loadxml.list","r");
+	if(fp == NULL)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/loadxml.list");
+		return -1;
+	}
+	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
+	{
+		if(buffer[0]=='#')
+			continue;
+		buffer[strlen(buffer)-1]='\0';
+		strcpy(xmlname,strtok(buffer,"^"));
+		strcpy(cfgfile,strtok(NULL,"^"));
+		strcpy(xmlns,strtok(NULL,"^"));
+		if(!strcmp(xmltype,xmlname))
+		{
+			xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST(xmlns));  
+			if(!context)  
+			{  
+				SysLog(1,"Error: unable to create new XPath context\n");  
+				fclose(fp);
+				return -1;  
+			}
+			fclose(fp);
+			return 0;
+		}
+		memset(buffer,0,sizeof(buffer));
+		memset(xmlname,0,sizeof(xmlname));
+		memset(cfgfile,0,sizeof(cfgfile));
+		memset(xmlns,0,sizeof(xmlns));
+	}
+	fclose(fp);
+	return -1;
+}
 /** 生成最新的文件名 **/
 int	GetNewFileName(char	*ffile)
 {
@@ -56,24 +104,11 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 		return NULL;                                                                     
 	}
 	/** 根据报文类型，设置xpath命名空间 **/
-	if(!strcmp(xmltype,"hvps.111.001.01"))
+	if(regNs(context,xmltype)!=0)
 	{
-		xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST"urn:iso:std:iso:20022:tech:xsd:pacs.008.001.02");  
-		if(!context)  
-		{  
-			SysLog(1,"Error: unable to create new XPath context\n");  
-			xmlFreeDoc(doc);   
-			return(NULL);  
-		}
-	}else if(!strcmp(xmltype,"ccms.990.001.02"))	
-	{
-		xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST"urn:cnaps:std:ccms:2010:tech:xsd:ccms.990.001.02");  
-		if(!context)  
-		{  
-			SysLog(1,"Error: unable to create new XPath context\n");  
-			xmlFreeDoc(doc);   
-			return(NULL);  
-		}
+		xmlXPathFreeContext(context);                                                      
+		xmlFreeDoc(doc);   
+		return NULL;                                                                     
 	}
 	result = xmlXPathEvalExpression(xpath, context);                                   
 	xmlXPathFreeContext(context);                                                      
@@ -97,7 +132,7 @@ int pack_xml(char *xmltype)
 	xmlXPathObjectPtr	result;
 	int i ;
 	xmlChar	*keyword;
-	char	keyvalue[1024];
+	char	keyvalue[4096];
 	char	tmppath[256];
 	char	lastpath[256];
 	char	*tmp;

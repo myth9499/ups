@@ -318,7 +318,6 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	memset(varnameloop,0,sizeof(varnameloop));
 	sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 	hash = hashfunc(varnameloop);
-	SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]HASH值[%d]\n",__FILE__,__LINE__,varname,hash);
 	SysLog(1,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
 
 	head = kvalue+hash;
@@ -329,7 +328,6 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	{
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
-			SysLog(1,"FILE [%s]  LINE[%d] 变量[%s] 原来已申请过内存!!!!!\n",__FILE__,__LINE__,tmpkvalue->varname);
 			memset(tmpkvalue->value,0,vardef.varlen);
 			memcpy(tmpkvalue->value,value,len);
 			SysLog(1,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
@@ -406,7 +404,6 @@ int get_var_value(char *varname,int len,int loop,char *value)
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
 	{
-		SysLog(1,"变量名[%s]变量值为[%s]\n",tmpkvalue->varname,tmpkvalue->value);
 		if(!strcmp(tmpkvalue->varname,varname))
 		{
 			trim(tmpkvalue->value);

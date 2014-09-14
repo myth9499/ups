@@ -10,6 +10,7 @@ long i=1L;
 char     QMName[50];             /* queue manager name            */
 char	LQName[60];
 char	trancode[30];
+char	waitsec[10];
 
 int	getchnlcfg(char *chnlname)
 {
@@ -56,6 +57,10 @@ int	getchnlcfg(char *chnlname)
 						strcpy(trancode,trancode+1);
 					}
 				}
+				if(!memcmp(tmpbuf,"无交易等待间隔",14))
+				{
+					strcpy(waitsec,strstr(tmpbuf,":")+1);
+				}
 				if(tmpbuf[0]=='@')
 					return 0;
 			}
@@ -78,20 +83,19 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 		return -1;
 	}
 	printf("buffer is [%s]\n",buffer);
-	memcpy(msgtype,buffer+58,20);
-	memcpy(msgid,buffer+78,20);
+	memcpy(msgtype,buffer+54,20);
+	memcpy(msgid,buffer+74,20);
 
 	trim(msgtype);
 	trim(msgid);
 	sprintf(xmlfile,"%s/%s","/item/ups/log",msgid);
-	//sprintf(xmlfile,"%s/%s","/item/ups/log","123456");
 	fp = fopen(xmlfile,"w");
 	if(fp == NULL)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:打开文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		return -1;
 	}
-	if(fwrite(buffer+131,strlen(buffer)-131,1,fp)==-1)
+	if(fwrite(buffer+126,strlen(buffer)-126,1,fp)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:写文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		fclose(fp);
@@ -101,38 +105,6 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 	return  0;
 }
 
-int getservpid(void)
-{
-	pid_t ret = 0;
-	int shmid = 0,i=0;
-	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
-	if((shmid = getshmid(7,shmsize))==-1)
-	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
-	}
-	if((sreg = shmat(shmid,NULL,0))==NULL)
-	{
-		SysLog(1,"FILE [%s] LINE [%d]:连接服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
-	}
-	/** 信号量控制 **/
-	for(i=0;i<MAXSERVREG;i++)
-	{
-		//SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
-		if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnlname))
-		{
-			sem_wait(&((sreg+i)->sem1));
-			(sreg+i)->stat[0]='L';
-			ret = (sreg+i)->servpid ;
-			sem_post(&((sreg+i)->sem1));
-			break;
-		}
-	}
-	shmdt(sreg);
-	return ret;
-}
 /** 主进程注册信号，当子进程退出时进行后续处理
  * 防止僵尸进程
  **/
@@ -169,10 +141,7 @@ int chnlprocess(char *buffer)
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
 	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	//sSysLog(1,mbuf->tranbuf,"%20s|%10s|%10d",chnl_name,"IXO101",strlen(rcvbuf));
-	//
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
-	//strcpy(mbuf->tranbuf.trancode,"RecvMsg");
 	strcpy(mbuf->tranbuf.trancode,trancode);
 	mbuf->tranbuf.buffsize = strlen(buffer);
 
@@ -196,7 +165,7 @@ int chnlprocess(char *buffer)
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
 	/** 发送信号到核心服务 **/
-	if((ipid = getservpid())<=0)
+	if((ipid = getservpid(chnlname))<=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
 		/** 删除消息队列信息，防止堵塞 **/
@@ -268,7 +237,6 @@ int main(int argc, char **argv)
 	memset(sendbuf,0,sizeof(sendbuf));
 	memset(msgtype,0,sizeof(msgtype));
 
-	//strcpy(QMName,"dev01");
 	strcpy(chnlname,"MQ接收渠道");
 	if(getchnlcfg(chnlname)!=0)
 	{
@@ -373,6 +341,7 @@ int main(int argc, char **argv)
 	if (OpenCode == MQCC_FAILED)
 	{
 		SysLog(1,"unable to open queue for input\n");
+		return -1;
 	}
 
 	/******************************************************************/
@@ -402,8 +371,8 @@ int main(int argc, char **argv)
 	gmo.Version=MQGMO_VERSION_2;
 
 	//while (CompCode != MQCC_FAILED)
-	//while (1)
-	//{
+	while (1)
+	{
 	buflen = sizeof(buffer) - 1; /* buffer size available for GET   */
 
 	/****************************************************************/
@@ -449,7 +418,8 @@ int main(int argc, char **argv)
 		if (Reason == MQRC_NO_MSG_AVAILABLE)
 		{                         /* special report for normal end    */
 			SysLog(1,"no more messages\n");
-			//continue;
+			sleep(atoi(waitsec));
+			continue;
 		}
 		else                      /* general report for other reasons */
 		{
@@ -460,6 +430,7 @@ int main(int argc, char **argv)
 			{
 				CompCode = MQCC_FAILED;
 			}
+			return -1;
 		}
 	}
 
@@ -491,7 +462,7 @@ int main(int argc, char **argv)
 		}
 
 	}
-	//}
+	}
 
 	/******************************************************************/
 	/*                                                                */

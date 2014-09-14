@@ -5,7 +5,7 @@
 
 int loop=0;
 _xmlcfg *xmlcfg = NULL;
-int upnew(char *a)
+int xml_unpack(char *a)
 {
 	int iret;
 	char	msgtype[30];

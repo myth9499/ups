@@ -2,12 +2,12 @@
 <Document xmlns="urn:cnaps:std:ccms:2010:tech:xsd:ccms.990.001.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ComConf>
 		<ConfInf>
-			<OrigSndr>V_A12</OrigSndr>
-			<OrigSndDt>V_A02</OrigSndDt>
+			<OrigSndr>A16</OrigSndr>
+			<OrigSndDt>C30</OrigSndDt>
 			<MT>V_MSGTYPE</MT>
-			<MsgId>V_A01</MsgId>
-			<MsgRefId>V_A01</MsgRefId>
-			<MsgPrcCd>V_A04</MsgPrcCd>
+			<MsgId>E20</MsgId>
+			<MsgRefId>E21</MsgRefId>
+			<MsgPrcCd>V_CLRG</MsgPrcCd>
 		</ConfInf>	
 	</ComConf>
 </Document>

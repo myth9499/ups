@@ -5,6 +5,17 @@
 
 int main(int argc,char *argv[])
 {
+	FILE	*fp=NULL;
+	char	buffer[1024];
+	char	xmlname[256];
+	char	cfgfile[256];
+	char	xmlns[256];
+
+	memset(buffer,0,sizeof(buffer));
+	memset(xmlname,0,sizeof(xmlname));
+	memset(cfgfile,0,sizeof(cfgfile));
+	memset(xmlns,0,sizeof(xmlns));
+
 	if(load_commmsg_cfg("/item/ups/src/cfg/channel/chnl.cfg")==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
@@ -21,22 +32,38 @@ int main(int argc,char *argv[])
 		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
 		return -1;
 	}
-	if(load_xmlcfg("hvps.111.001.01","/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml")==0)
+
+	/**装载XML配置 **/
+	fp = fopen("/item/ups/src/cfg/xmlcfg/loadxml.list","r");
+	if(fp == NULL)
 	{
-		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
-	}else
-	{
-		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml");
+		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/loadxml.list");
 		return -1;
 	}
-	if(load_xmlcfg("ccms.990.001.02","/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml")==0)
+	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
 	{
-		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml");
-	}else
-	{
-		printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml");
-		return -1;
+		if(buffer[0]=='#')
+			continue;
+		buffer[strlen(buffer)-1]='\0';
+		/** 需要增加检查，防止配置错误 **/
+		strcpy(xmlname,strtok(buffer,"^"));
+		strcpy(cfgfile,strtok(NULL,"^"));
+		strcpy(xmlns,strtok(NULL,"^"));
+		if(load_xmlcfg(xmlname,cfgfile)==0)
+		{
+			printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]成功\n",__FILE__,__LINE__,cfgfile);
+		}else
+		{
+			printf("FILE [%s] LINE [%d]:加载报文配置文件[%s]失败\n",__FILE__,__LINE__,cfgfile);
+			fclose(fp);
+			return -1;
+		}
+		memset(buffer,0,sizeof(buffer));
+		memset(xmlname,0,sizeof(xmlname));
+		memset(cfgfile,0,sizeof(cfgfile));
+		memset(xmlns,0,sizeof(xmlns));
 	}
+	fclose(fp);
 	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
