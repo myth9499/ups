@@ -15,7 +15,7 @@ int getshmid(int procid,size_t shmsize)
 	}
 	return shmid;
 }
-int unpack(char *chnlname,char *commbuf)
+int unpack(char *chnlname,char *commbuf,char	*delim)
 {
 	key_t	key;
 	int shmid,i=0;
@@ -54,7 +54,7 @@ int unpack(char *chnlname,char *commbuf)
 			SysLog(1,"commname[%s]\tlen[%d]\tcommvar[%s]\tmark[%s]\t\n",cmsg->commname,cmsg->len,cmsg->commvar,cmsg->commmark);
 			if(i==0)
 			{
-				tmpbuf = strtok(commbuf,"|");
+				tmpbuf = strtok(commbuf,delim);
 				if(tmpbuf==NULL)
 				{
 					SysLog(1,"FILE [%s] LINE[%d] 待解包数据格式错\n",__FILE__,__LINE__);
@@ -80,7 +80,7 @@ int unpack(char *chnlname,char *commbuf)
 				continue;
 			}else
 			{
-				tmpbuf = strtok(NULL,"|");
+				tmpbuf = strtok(NULL,delim);
 				if(tmpbuf==NULL)
 				{
 					SysLog(1,"FILE [%s] LINE[%d] 待解包数据格式错\n",__FILE__,__LINE__);
@@ -210,3 +210,41 @@ int pack(char *msgtype)
 		SysLog(1,"打[%s]包成功 \n",msgtype);
 		return 0;
 }
+
+
+/** 根据交易码进行详细报文解包 **/
+/** 先获取到交易码，再根据交易码获取到对应的详细报文格式 **/
+int     unpack_detail(char      *varname)
+{
+        char    trancode[10];
+        char    tranmsg[4096];
+        _tranmap        tmap;
+        memset(trancode,0,sizeof(trancode));
+        memset(tranmsg,0,sizeof(tranmsg));
+
+        if(get_var_value(varname,sizeof(trancode),1,trancode)==-1)
+        {
+                SysLog(1,"FILE [%s] LINE[%d] 获取交易码失败:%s\n",__FILE__,__LINE__,varname);
+                return -1;
+        }
+        if(get_var_value("V_TRANMSG",sizeof(tranmsg),1,tranmsg)==-1)
+        {
+                SysLog(1,"FILE [%s] LINE[%d] 获取交易信息失败:%s\n",__FILE__,__LINE__,"V_TRANMSG");
+                return -1;
+        }
+
+        /** 获取交易码对应的明细报文配置  **/
+        if(gettranmap(&tmap,trancode)==-1)
+        {
+                SysLog(1,"FILE [%s] LINE[%d] 根据交易码获取交易流程失败，请查看>是否配置\n",__FILE__,__LINE__);
+                seterr("EEEEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
+                return -1;
+        }
+        if(unpack(tmap.tranname,tranmsg,"^")==-1)
+        {
+                SysLog(1,"FILE [%s] LINE[%d] 解详细包失败\n",__FILE__,__LINE__);
+                return -1;
+        }
+        return 0;
+}
+
