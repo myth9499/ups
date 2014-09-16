@@ -46,7 +46,7 @@ int unpack(char *chnlname,char *commbuf,char	*delim)
 	tmpshmdt = cmsg;
 	while(strcmp(cmsg->commname,"END"))
 	{
-		//SysLog(1,"FILE[%s] LINE[%d]渠道配置名称[%s]\n",__FILE__,__LINE__,cmsg->commname);
+		//SysLog(1,"解包报文格式[%s]FILE[%s] LINE[%d]渠道配置名称[%s]\n",chnlname,__FILE__,__LINE__,cmsg->commname);
 		if(!strcmp(cmsg->commname,chnlname))
 		{
 			flag = 1;
@@ -159,7 +159,7 @@ int pack(char *msgtype)
 			SysLog(1,"链接共享内存区失败\n");
 			return -1;
 		}
-		memset(cmsg,0,sizeof(cmsg));
+		//memset(cmsg,0,sizeof(cmsg));
 		tmpshmdt = cmsg;
 		while(strcmp(cmsg->commname,"END"))
 		{
