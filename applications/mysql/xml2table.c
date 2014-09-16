@@ -62,10 +62,12 @@ int xml2table(char	*xmltype)
 			if(row[4][0]=='B')
 			{
 				SysLog(1,"从变量获取\n");
+				memset(value,0,sizeof(atoi(row[3])));
 				get_var_value(row[2],atoi(row[3]),1,value);
 			}else if(row[4][0]=='S')
 			{
 				SysLog(1,"从常量获取\n");
+				memset(value,0,sizeof(atoi(row[3])));
 				strcpy(value,row[4]+1);
 			}
 			strcat(sqlstr2,"'");

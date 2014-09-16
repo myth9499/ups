@@ -79,7 +79,7 @@ int recv_from_channel(char *chnlname)
 	if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
 	{
 		SysLog(1,"交易跟踪号[%ld]\t[%s]渠道返回信息信息[%s]\n",mbuf->innerid,chnlname,tranbuf->intran);
-		if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran)==-1)
+		if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran,"|")==-1)
 		{
 			SysLog(1,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);
 			seterr("EEEEEEEE","解包失败");
