@@ -344,6 +344,15 @@ int main(int argc, char **argv)
 				if (Reason != MQRC_NONE)
 				{
 					SysLog(1,"MQPUT ended with reason code %d\n", Reason);
+					/** 返回交易信息到服务端**/
+					iret = shm_hash_update(mbuf->innerid,"EEEEEEE|发送失败",NULL);
+					if(iret == -1)
+					{
+						SysLog(1,"放置打包信息到共享内存失败 \n");
+					}else
+					{
+						msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+					}
 				}
 				/** 返回交易信息到服务端**/
 				iret = shm_hash_update(mbuf->innerid,"AAAAAAA|发送成功",NULL);
@@ -352,7 +361,7 @@ int main(int argc, char **argv)
 					SysLog(1,"放置打包信息到共享内存失败 \n");
 				}else
 				{
-					msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
+					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 				}
 			}
 			else   /* satisfy end condition when empty line is read */
