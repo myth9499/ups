@@ -2,3 +2,5 @@
 hvps.111.001.01^/item/ups/src/cfg/xmlcfg/hvps.111.001.01.xml^urn:iso:std:iso:20022:tech:xsd:pacs.008.001.02
 ibps.101.001.01^/item/ups/src/cfg/xmlcfg/ibps.101.001.01.xml^urn:iso:std:iso:20022:tech:xsd:pacs.008.001.02
 ccms.990.001.02^/item/ups/src/cfg/xmlcfg/ccms.990.001.02.xml^urn:cnaps:std:ccms:2010:tech:xsd:ccms.990.001.02
+ccms.990.001.01^/item/ups/src/cfg/xmlcfg/ccms.990.001.01.xml^urn:cnaps:std:ibps:2010:tech:xsd:ccms.990.001.01
+saps.601.001.01^/item/ups/src/cfg/xmlcfg/saps.601.001.01.xml^urn:iso:std:iso:20022:tech:xsd:camt.054.001.02

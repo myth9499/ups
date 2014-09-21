@@ -90,3 +90,17 @@ int xml2table(char	*xmltype)
 	}
 	mysql_close(mysql);
 }
+
+int	init_var(char *a)
+{
+	put_var_value("V_NETGRND",1,1,"1");
+	put_var_value("V_NETDATE",10,1,"2014-09-20");
+	put_var_value("V_BOOK",4,1,"BOOK");
+	put_var_value("V_PMNT",4,1,"PMNT");
+	put_var_value("V_OTHR",4,1,"OTHR");
+	put_var_value("V_IBPS",4,1,"IBPS");
+	put_var_value("V_AT01",4,1,"AT01");
+	put_var_value("V_STAT",4,1,"0000");
+	put_var_value("V_CRDT",4,1,"CRDT");
+	return 0;
+}
