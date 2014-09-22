@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>E20</MsgId>
+      <CreDtTm>C70</CreDtTm>
+      <MsgRcpt>
+        <CtctDtls>
+          <EmailAdr>K05</EmailAdr>
+        </CtctDtls>
+      </MsgRcpt>
+      <AddtlInf>E22</AddtlInf>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>E20</Id>
+      <CreDtTm>C70</CreDtTm>
+      <RptgSrc>
+        <Prtry>V_NETGRND</Prtry>
+      </RptgSrc>
+      <Acct>
+        <Id>
+          <Othr>
+            <Id>A02</Id>
+          </Othr>
+        </Id>
+      </Acct>
+      <RltdAcct>
+        <Id>
+          <Othr>
+            <Id>A02</Id>
+          </Othr>
+        </Id>
+      </RltdAcct>
+      <Ntry>
+        <Amt Ccy="CNY">D11</Amt>
+        <CdtDbtInd>V_CRDT</CdtDbtInd>
+        <Sts>V_BOOK</Sts>
+        <BookgDt>
+          <Dt>V_NETDATE</Dt>
+        </BookgDt>
+        <BkTxCd>
+          <Domn>
+            <Cd>V_PMNT</Cd>
+            <Fmly>
+              <Cd>V_OTHR</Cd>
+              <SubFmlyCd>V_OTHR</SubFmlyCd>
+            </Fmly>
+          </Domn>
+        </BkTxCd>
+        <AmtDtls>
+          <InstdAmt>
+            <Amt Ccy="CNY">D11</Amt>
+          </InstdAmt>
+        </AmtDtls>
+        <NtryDtls>
+          <TxDtls>
+            <Refs>
+              <ClrSysRef>V_IBPS</ClrSysRef>
+            </Refs>
+            <RltdPties>
+              <Dbtr>
+                <Nm>B01</Nm>
+              </Dbtr>
+              <DbtrAcct>
+                <Id>
+                  <Othr>
+                    <Id>B00</Id>
+                    <Issr>A50</Issr>
+                  </Othr>
+                </Id>
+                <Tp>
+                  <Prtry>V_AT01</Prtry>
+                </Tp>
+              </DbtrAcct>
+            </RltdPties>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+
+</Document>
