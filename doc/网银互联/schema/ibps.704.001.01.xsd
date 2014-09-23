@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by TEAM ViRiLiTY (VRL) -->
+<xs:schema xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.704.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cnaps:std:ibps:2010:tech:xsd:ibps.704.001.01" elementFormDefault="qualified">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="DtlRspn" type="DtlRspnV01"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DtlRspnV01">
+		<xs:sequence>
+			<xs:element name="GrpHdr" type="GroupHeader1"/>
+			<xs:element name="InstgPty" type="Max12NumericText"/>
+			<xs:element name="InstdPty" type="Max12NumericText"/>
+			<xs:element name="ChckDt" type="ISODate"/>
+			<xs:element name="OrgnlGrpInf" type="OrgnlGrpInf1"/>
+			<xs:element name="ProcSts" type="Max4Text"/>
+			<xs:element name="ProcCd" type="Max8Text" minOccurs="0"/>
+			<xs:element name="RjctInf" type="Max105Text" minOccurs="0"/>
+			<xs:element name="RspsnInf" type="RspsnInf1" minOccurs="0"/>
+			<xs:element name="DgtSgntr" type="Max2048Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroupHeader1">
+		<xs:sequence>
+			<xs:element name="MsgId" type="Max35Text"/>
+			<xs:element name="CreDtTm" type="ISODateTime"/>
+			<xs:element name="TtlNb" type="Max8NumericText"/>
+			<xs:element name="StartNb" type="Max8NumericText"/>
+			<xs:element name="EndNb" type="Max8NumericText"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrgnlGrpInf1">
+		<xs:sequence>
+			<xs:element name="OrgnlMsgId" type="Max35Text"/>
+			<xs:element name="ProcSts" type="Max4Text"/>
+			<xs:element name="TxNetgDt" type="ISODate"/>
+			<xs:element name="TxNetgRnd" type="Max2Text"/>
+			<xs:element name="MsgTp" type="Max35Text"/>
+			<xs:element name="SndRcvInd" type="SendReceiveCode1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RspsnInf1">
+		<xs:sequence>
+			<xs:element name="GrpInf" type="GrpInf1" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GrpInf1">
+		<xs:sequence>
+			<xs:element name="OrgnlSndrId" type="Max12NumericText"/>
+			<xs:element name="MsgId" type="Max35Text"/>
+			<xs:element name="CdtOrDbtBkRcvFlg" type="CDReceiveCode1" minOccurs="0"/>
+			<xs:element name="IntrBkSttlmAmt" type="CurrencyAndAmount" minOccurs="0"/>
+			<xs:element name="InstdAmt" type="CurrencyAndAmount" minOccurs="0"/>
+			<xs:element name="ChrgAmt" type="CurrencyAndAmount" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Max8NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{1,8}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max12NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max2048Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2048"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max2Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max4Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max8Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max35Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max105Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="105"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ISODate">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="SendReceiveCode1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SR00"/>
+			<xs:enumeration value="SR01"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyAndAmount_SimpleType">
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="(\d{1,18})|(\d{1,18}\.)|(\d{1,17}\.\d{0,1})|(\d{1,16}\.\d{0,2})|(\.\d{1,2})"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CurrencyAndAmount">
+		<xs:simpleContent>
+			<xs:extension base="CurrencyAndAmount_SimpleType">
+				<xs:attribute name="Ccy" type="CurrencyCode" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="CurrencyCode">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{3,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CDReceiveCode1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RF00"/>
+			<xs:enumeration value="RF01"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,11 @@
+{H:01MBFE        IBPS103100000018IBPS20100901 13123XMLccms.990.001.01     00002010090121312316e3a38128bf0fb9e47f513D         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.990.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">    <ComuCnfm>
+        <OrigSndr>103100000018</OrigSndr>
+        <OrigSndDt>20100901</OrigSndDt>
+        <MsgTp>ibps.331.001.01</MsgTp>
+        <MsgId>00002010090121312316</MsgId>
+        <MsgRefId>e3a38128bf0fb9e47f51</MsgRefId>
+        <MsgProCd>0001</MsgProCd>
+    </ComuCnfm>
+</Document>

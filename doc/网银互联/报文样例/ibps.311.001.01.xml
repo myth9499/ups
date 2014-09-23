@@ -1,0 +1,27 @@
+{H:01104100000004IBPS102100099996IBPS20100915103915XMLibps.311.001.01     6c64a128ceb6eab67ee06c64a128ceb6eab67edf3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.311.001.01">
+  <AthtctnAcctTxInfReq>
+    <GrpHdr>
+      <MsgId>1041000000042010100511000006</MsgId>
+      <CreDtTm>2010-10-03T16:28:11</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <AcctQryInf>
+      <PtcId>111111222222</PtcId>
+      <QristAcct>333333333333</QristAcct>
+      <QristNm>孔一一</QristNm>
+      <QristPtyNm>招商银行股份有限公司北京分行</QristPtyNm>
+      <QristPtyHdl>104100000004</QristPtyHdl>
+      <RplirAcct>222222222222</RplirAcct>
+      <RplirNm>孟一</RplirNm>
+      <RplirDpsNm>中国工商银行总行清算中心</RplirDpsNm>
+      <RplirDpsHdl>102100099996</RplirDpsHdl>
+      <StartgDt>2010-09-02</StartgDt>
+      <DdlnDt>2010-09-03</DdlnDt>
+    </AcctQryInf>
+    <RmkInf>311-正常案例</RmkInf>
+    <DgtSgntr>M8AoP+O36i5F319TwHP/juUB8y+3ITKGi4ToOdaZuiALNtcGc1CVml7tB21nQGqLfGTkDDTAfrY1CSVFQSge8u4kgs86PErUSoshgoxp6mq7Hb3YTs1ZOwVvcPUsbMFKSsdnP4NU2umBbt7bhYg/fORtG1L9WoZ0BAEHyEEvzg4=</DgtSgntr>
+  </AthtctnAcctTxInfReq>
+</Document>

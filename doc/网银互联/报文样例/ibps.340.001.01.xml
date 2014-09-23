@@ -1,0 +1,25 @@
+{H:01104100000004IBPS102100099996IBPS20100915103915XMLibps.340.001.01     6c64a128ceb6eab67de66c64a128ceb6eab67de53U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.340.001.01">
+  <AcctPtcMgmtRspn>
+    <GrpHdr>
+      <MsgId>1041000000042010090526000010</MsgId>
+      <CreDtTm>2010-09-05T10:10:10</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1021000999962010090425900031</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR05</RspsnSts>
+      <PtcId>1112</PtcId>
+      <RplirAcct>3332</RplirAcct>
+      <RplirNm>CNCC</RplirNm>
+      <RplirAcctTp>AT00</RplirAcctTp>
+      <RplirDpsNm>中行</RplirDpsNm>
+    </RspsnInf>
+    <RmkInf>340-CNCC</RmkInf>
+    <DgtSgntr>PRnRSIeLAYvCdeHAFOwXQ8HmBsDIhOcVfJtMHeZrheueY1SFQpzXNv/EUA3tnc+7gqaJuHWmpdIxsI2+mXr4VU8ujnjp5q32/LAw/6jmJewtl/6el2mpLPZk1TR8qrfAX/xzUvUwy51BqbqeJPZ1ssI+VBuuMejqoVwgHQFCW7Y=</DgtSgntr>
+  </AcctPtcMgmtRspn>
+</Document>

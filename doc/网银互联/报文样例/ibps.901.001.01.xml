@@ -1,0 +1,74 @@
+{H:010000        IBPS000000000000IBPS20100517161528XMLibps.901.001.01     IBPS3353007589      IBPS3353007589      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.901.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <BkClssNtfctn>
+    <GrpHdr>
+      <MsgId>0000000000002010072100010816</MsgId>
+      <CreDtTm>2010-05-17T16:15:28</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <SysCd>IBPS</SysCd>
+    <BkClssInf>
+      <ChgTp>CC02</ChgTp>
+      <BkCtgyCd>910</BkCtgyCd>
+      <BkCtgyNm>李明涛</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC01</ChgTp>
+      <BkCtgyCd>908</BkCtgyCd>
+      <BkCtgyNm>电子商业汇票系统</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>501</BkCtgyCd>
+      <BkCtgyNm>汇丰银行（中国）有限公司</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>502</BkCtgyCd>
+      <BkCtgyNm>东亚银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>503</BkCtgyCd>
+      <BkCtgyNm>南洋商业银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>504</BkCtgyCd>
+      <BkCtgyNm>恒生银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>505</BkCtgyCd>
+      <BkCtgyNm>中银香港</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>506</BkCtgyCd>
+      <BkCtgyNm>集友银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>507</BkCtgyCd>
+      <BkCtgyNm>廖创兴银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>508</BkCtgyCd>
+      <BkCtgyNm>亚洲商业银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>509</BkCtgyCd>
+      <BkCtgyNm>道亨银行</BkCtgyNm>
+    </BkClssInf>
+    <BkClssInf>
+      <ChgTp>CC00</ChgTp>
+      <BkCtgyCd>510</BkCtgyCd>
+      <BkCtgyNm>永亨银行</BkCtgyNm>
+    </BkClssInf>
+  </BkClssNtfctn>
+
+</Document>

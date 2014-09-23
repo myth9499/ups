@@ -1,0 +1,19 @@
+{H:010000        IBPS000000000000IBPS20100903075423XMLccms.809.001.01     IBPS4099009159      IBPS4099009159      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.809.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <StopgNtfctn>
+    <GrpHdr>
+      <MsgId>0000000000002010100500014522</MsgId>
+      <CreDtTm>2010-09-03T07:54:23</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <SysCd>IBPS</SysCd>
+    <StopgSvcInf>
+      <StopgSvcDt>2010-10-06</StopgSvcDt>
+      <EstmtdStartSvc>2010-10-12T10:10:10</EstmtdStartSvc>
+    </StopgSvcInf>
+    <RmkInf>停运</RmkInf>
+  </StopgNtfctn>
+
+</Document>

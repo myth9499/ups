@@ -1,0 +1,86 @@
+{H:010000        IBPS104100000004IBPS20100903093139XMLsaps.601.001.01     IBPS4099009511      IBPS4099009511      3D2        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>0000000000002010100700014617</MsgId>
+      <CreDtTm>2010-09-03T09:31:39</CreDtTm>
+      <MsgRcpt>
+        <CtctDtls>
+          <EmailAdr>MLnmxROhmaUT2HIajzr6VzZBnvEHeMs/zaDKDO00YdV7zcl2lLbBDv32nKYnHfu+5c8a
+6oRDaUVtY020wKlgDff1uBjF1TQ8PPH/STIY/0YOhD9W1Ec5+TfZkw4hJuXOXB2nfDmv
++zPHvSsK1GfR4M37pdsgnPbh31mpItN9LO4=</EmailAdr>
+        </CtctDtls>
+      </MsgRcpt>
+      <AddtlInf>ibps.101</AddtlInf>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>1021000999962010100113000424</Id>
+      <CreDtTm>2010-10-01T14:23:07</CreDtTm>
+      <RptgSrc>
+        <Prtry>1</Prtry>
+      </RptgSrc>
+      <Acct>
+        <Id>
+          <Othr>
+            <Id>104100000004</Id>
+          </Othr>
+        </Id>
+      </Acct>
+      <RltdAcct>
+        <Id>
+          <Othr>
+            <Id>102100099996</Id>
+          </Othr>
+        </Id>
+      </RltdAcct>
+      <Ntry>
+        <Amt Ccy="CNY">9.99</Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Sts>BOOK</Sts>
+        <BookgDt>
+          <Dt>2010-10-07</Dt>
+        </BookgDt>
+        <BkTxCd>
+          <Domn>
+            <Cd>PMNT</Cd>
+            <Fmly>
+              <Cd>OTHR</Cd>
+              <SubFmlyCd>OTHR</SubFmlyCd>
+            </Fmly>
+          </Domn>
+        </BkTxCd>
+        <AmtDtls>
+          <InstdAmt>
+            <Amt Ccy="CNY">9.99</Amt>
+          </InstdAmt>
+        </AmtDtls>
+        <NtryDtls>
+          <TxDtls>
+            <Refs>
+              <ClrSysRef>IBPS</ClrSysRef>
+            </Refs>
+            <RltdPties>
+              <Dbtr>
+                <Nm>miss刘</Nm>
+              </Dbtr>
+              <DbtrAcct>
+                <Id>
+                  <Othr>
+                    <Id>654321</Id>
+                    <Issr>中国民生银行北京分行</Issr>
+                  </Othr>
+                </Id>
+                <Tp>
+                  <Prtry>AT01</Prtry>
+                </Tp>
+              </DbtrAcct>
+            </RltdPties>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+
+</Document>

@@ -1,0 +1,20 @@
+{H:01102100099996IBPS104100000004IBPS20100915103915XMLibps.342.001.01     6c64a128ceb6eab67d3d6c64a128ceb6eab67d3c3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.342.001.01">
+  <AcctPtcNtfctnRspn>
+    <GrpHdr>
+      <MsgId>1021000999962010100110000224</MsgId>
+      <CreDtTm>2010-09-30T10:10:10</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>104100000004</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1041000000042010100510000144</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR05</RspsnSts>
+    </RspsnInf>
+    <RmkInf>342-正常案例OK</RmkInf>
+    <DgtSgntr>JiRQ732XtAfUg0L4Aen3Cv7HUz7dPl8VWgSB3Ll7nHN32/1NiyrD4Qt1HrvOL9YEXwOTI66gy+MhJv55Q8G+yeM/W64cYMo96EQSnGlCreXksKQVETvmtcE1X3Jug7ynQ6AXkMzUaaFlfumUYYZjStOHlt1e0pihJPSRl2BKa9k=</DgtSgntr>
+  </AcctPtcNtfctnRspn>
+</Document>

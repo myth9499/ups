@@ -1,0 +1,39 @@
+{H:01102100099996IBPS104100000004IBPS20100528112132XMLibps.312.001.01     6c64a128ceb6eab67cb16c64a128ceb6eab67cb03U         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.312.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <AthtctnAcctTxInfRspn>
+    <GrpHdr>
+      <MsgId>1021000999962010100831252689</MsgId>
+      <CreDtTm>2010-10-07T15:15:48</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>104100000004</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1041000000042010100512000020</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR05</RspsnSts>
+      <ProcDt>2010-10-12</ProcDt>
+    </RspsnInf>
+    <QryRslt>
+      <Acct>11111111111</Acct>
+      <AcctTp>AT00</AcctTp>
+      <AcctRslt>
+        <DbtAcct>
+          <Ntry>
+            <Dt>2010-09-14</Dt>
+            <Summry>summry</Summry>
+            <Amt Ccy="CNY">100.00</Amt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+            <Bal Ccy="CNY">3000.00</Bal>
+            <VsAcct>11111111111</VsAcct>
+            <VsNm>北京支行</VsNm>
+          </Ntry>
+        </DbtAcct>
+      </AcctRslt>
+    </QryRslt>
+    <DgtSgntr>qzQ7XYGf8GqvcsbQ+nQRFGsxwz13JBKKeMoYn7DMGUR6KelMpllAer+3VcW/CXUZj5rhaEPeSSXRBMS0uMrEny8stQo/jcvRnD/ho8SqsIAMgnwijKM9dMj4EjpppiHf0SwX5Q9bo0ky14wJ7/3wKhGzhHBZBcSfyRBZyrkpNQo=</DgtSgntr>
+  </AthtctnAcctTxInfRspn>
+
+</Document>

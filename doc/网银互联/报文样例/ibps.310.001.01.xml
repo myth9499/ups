@@ -1,0 +1,37 @@
+{H:01102100099996IBPS104100000004IBPS20101001101807XMLibps.310.001.01     6c64a128ceb6eab67df86c64a128ceb6eab67df73U         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.310.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <AthtctnAcctInfRspn>
+    <GrpHdr>
+      <MsgId>1021000999962010100114000038</MsgId>
+      <CreDtTm>2010-10-01T10:53:17</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>104100000004</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1041000000042010100113000034</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR05</RspsnSts>
+      <ProcDt>2010-10-07</ProcDt>
+    </RspsnInf>
+    <QryRslt>
+      <Acct>654321</Acct>
+      <AcctTp>AT00</AcctTp>
+      <AcctRslt>
+        <DbtAcct>
+          <Ntry>
+            <Acct>1234567890</Acct>
+            <Bal Ccy="CNY">10000.00</Bal>
+            <TpNm>定期存款</TpNm>
+            <StartDt>2009-09-09</StartDt>
+            <EndDt>2010-10-10</EndDt>
+          </Ntry>
+        </DbtAcct>
+      </AcctRslt>
+    </QryRslt>
+    <DgtSgntr>Y53QQtNO7Rd3vrcJD+8/58mViKvCD7oM3ErokcsUGK4CoRTw9pXl1mBso/rixp6IsNlcZO95ZFgM8zhWrabwg0O/v9xDAObtOBBaOW2PBRTdDXcyyMNyIhAvEXgBBRoWrl9g/qr2nQOIGVzHtkQ+QB+sh4h9DwQHqzNYt60E6pQ=</DgtSgntr>
+  </AthtctnAcctInfRspn>
+
+</Document>

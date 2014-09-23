@@ -1,0 +1,27 @@
+{H:01313100000013IBPS102100099996IBPS20101007112132XMLibps.331.001.01     6c64a128ceb6eab67d786c64a128ceb6eab67d773U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.331.001.01">
+  <AuthstnReq>
+    <GrpHdr>
+      <MsgId>3131000000132010100733152611</MsgId>
+      <CreDtTm>2010-10-07T17:00:48</CreDtTm>
+    </GrpHdr>
+    <InstgPty>313100000013</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <AuthstnApplInf>
+      <AuthstnDtTm>2010-10-07T11:15:59</AuthstnDtTm>
+      <TxTpCd>C203</TxTpCd>
+      <CtgyPurpCd>02021</CtgyPurpCd>
+      <DbtrDpsHdl>102100099996</DbtrDpsHdl>
+      <AcctLtd>TL01</AcctLtd>
+      <MrchntCd>123456</MrchntCd>
+      <MrchntNm>商户</MrchntNm>
+      <Amt Ccy="CNY">123.12</Amt>
+      <OlnTxId>111111111</OlnTxId>
+      <OlnTxDtTm>2010-10-07T11:20:01</OlnTxDtTm>
+      <OlnTxSpcfctn>111111111111</OlnTxSpcfctn>
+    </AuthstnApplInf>
+    <RmkInf>搜集报文331</RmkInf>
+    <DgtSgntr>lHAwIY+n0LhJJurQ3HQ+BkieLMUUxtKmhTWNZYxqQSRlB5FrkojtP9DGoPE1pVMXZ+2zMDWyQAyu8syHr2R2oc5cM7LRaGTh/u0rdKmDVB99mxUctrAU4DNTknh+OplaFy9DWTY9jdva0exnmj9Ft1kBQH9miIyGj+ACBS4gx9k=</DgtSgntr>
+  </AuthstnReq>
+</Document>

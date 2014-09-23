@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.705.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cnaps:std:ibps:2010:tech:xsd:ibps.705.001.01" elementFormDefault="qualified">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="TxDwnldReq" type="TxDwnldReqV01"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TxDwnldReqV01">
+		<xs:sequence>
+			<xs:element name="GrpHdr" type="GroupHeader1"/>
+			<xs:element name="InstgPty" type="Max12NumericText"/>
+			<xs:element name="InstdPty" type="Max12NumericText"/>
+			<xs:element name="ChckDt" type="ISODate"/>
+			<xs:element name="ApplInf" type="ApplInf1"/>
+			<xs:element name="DgtSgntr" type="Max2048Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroupHeader1">
+		<xs:sequence>
+			<xs:element name="MsgId" type="Max35Text"/>
+			<xs:element name="CreDtTm" type="ISODateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplInf1">
+		<xs:sequence>
+			<xs:element name="OrgnlGrpInf" type="OrgnlGrpInf1" maxOccurs="1000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrgnlGrpInf1">
+		<xs:sequence>
+			<xs:element name="OrgnlSndrId" type="Max12NumericText"/>
+			<xs:element name="OrgnlMsgId" type="Max35Text"/>
+			<xs:element name="SndRcvInd" type="SendReceiveCode1"/>
+			<xs:element name="CdtOrDbtBkRcvFlg" type="CDReceiveCode1" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Max12NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max2048Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2048"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max35Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ISODate">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="CDReceiveCode1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RF00"/>
+			<xs:enumeration value="RF01"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SendReceiveCode1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SR00"/>
+			<xs:enumeration value="SR01"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

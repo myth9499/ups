@@ -1,0 +1,46 @@
+{H:010000        IBPS104100000004IBPS20100903072605XMLibps.308.001.01     IBPS4099008856      IBPS4099008856      3D         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.002.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <FIToFIPmtStsRpt>
+    <GrpHdr>
+      <MsgId>0000000000002010100500014443</MsgId>
+      <CreDtTm>2010-09-03T07:26:05</CreDtTm>
+      <InstgAgt>
+        <FinInstnId>
+          <Othr>
+            <Id>0000</Id>
+          </Othr>
+        </FinInstnId>
+      </InstgAgt>
+      <InstdAgt>
+        <FinInstnId>
+          <Othr>
+            <Id>104100000004</Id>
+          </Othr>
+        </FinInstnId>
+      </InstdAgt>
+    </GrpHdr>
+    <OrgnlGrpInfAndSts>
+      <OrgnlMsgId>1041000000042010100110058823</OrgnlMsgId>
+      <OrgnlMsgNmId>ibps.307.001.01</OrgnlMsgNmId>
+      <StsRsnInf>
+        <Orgtr>
+          <CtctDtls>
+            <EmailAdr>JYfeswD1DcauzF7WDhczesr+atS0jsNGDpdODyD+S5bPUEe5goRreKJajG43zjt+vAlw
+ytdPl91/jIKXjlAfIpEGaN4TxmCo7+k1R2zCMu2zGFq8w1LkqKunjgyV0j1K5g8wIukH
+v51HIC6eNoWNWCtnERtkdYqV2xkY5WfK6Kk=</EmailAdr>
+          </CtctDtls>
+        </Orgtr>
+        <AddtlInf>IB1I0000</AddtlInf>
+        <AddtlInf>处理成功!</AddtlInf>
+      </StsRsnInf>
+    </OrgnlGrpInfAndSts>
+    <TxInfAndSts>
+      <StsId>PR07</StsId>
+      <OrgnlInstrId>1041000000042010100510059326</OrgnlInstrId>
+      <ClrSysRef>2010-10-05</ClrSysRef>
+    </TxInfAndSts>
+  </FIToFIPmtStsRpt>
+
+</Document>

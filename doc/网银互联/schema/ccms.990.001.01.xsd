@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.990.001.01" targetNamespace="urn:cnaps:std:ibps:2010:tech:xsd:ccms.990.001.01" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="ComuCnfm" type="ComuCnfmV01"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ComuCnfmV01">
+		<xs:sequence>
+			<xs:element name="OrigSndr" type="Max12Text"/>
+			<xs:element name="OrigSndDt" type="Max8Text"/>
+			<xs:element name="MsgTp" type="Max20Text"/>
+			<xs:element name="MsgId" type="Max20Text"/>
+			<xs:element name="MsgRefId" type="Max20Text"/>
+			<xs:element name="MsgProCd" type="Max8Text"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Max12Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max8Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max20Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

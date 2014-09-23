@@ -1,0 +1,113 @@
+{H:010000        IBPS104100000004IBPS20100903080949XMLibps.701.001.01     IBPS4099009322      IBPS4099009322      3D1        }
+
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.701.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <TtlInf>
+    <GrpHdr>
+      <MsgId>0000000000002010100600014567</MsgId>
+      <CreDtTm>2010-09-03T08:09:49</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <InstdPty>104100000004</InstdPty>
+    <ChckDt>2010-10-05</ChckDt>
+    <SndTtlCnt>6</SndTtlCnt>
+    <RcvTtlCnt>4</RcvTtlCnt>
+    <ColltnInf>
+      <ProcSts>PR08</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.103.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">10.00</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR09</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.103.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">10.00</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR09</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.105.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">100.11</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR09</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.309.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR09</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.311.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR05</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.337.001.01</MsgTp>
+      <SndCnt>1</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>0</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR09</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>0</TxNetgRnd>
+      <MsgTp>ibps.339.001.01</MsgTp>
+      <SndCnt>0</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>1</RcvCnt>
+      <RcvAmt Ccy="CNY">0.00</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR04</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>1</TxNetgRnd>
+      <MsgTp>ibps.101.001.01</MsgTp>
+      <SndCnt>0</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>2</RcvCnt>
+      <RcvAmt Ccy="CNY">1120.28</RcvAmt>
+    </ColltnInf>
+    <ColltnInf>
+      <ProcSts>PR04</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>1</TxNetgRnd>
+      <MsgTp>ibps.103.001.01</MsgTp>
+      <SndCnt>0</SndCnt>
+      <SndAmt Ccy="CNY">0.00</SndAmt>
+      <RcvCnt>1</RcvCnt>
+      <RcvAmt Ccy="CNY">1.23</RcvAmt>
+    </ColltnInf>
+    <DgtSgntr>PQe+aSik8ydBd3h3HEs0jN0qotHXd2GT/WB397KnPYXeSSGgJc6nS5GpUI8ph7gKoRKS
+
+sIBaxkplqKhIHLzYFYcNrZaLSab24bOF6Ngx0sJJa4zM94uRRZkslh4SAWdba9E6Px8I
+
+vBGJCvdRiZsAWANNYmA8nSvYpzm0rE+xZWA=</DgtSgntr>
+  </TtlInf>
+
+</Document>

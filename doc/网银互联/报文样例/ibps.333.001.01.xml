@@ -1,0 +1,31 @@
+{H:01313100000013IBPS102100099996IBPS20100528112132XMLibps.333.001.01     6c64a128ceb6eab67d466c64a128ceb6eab67d453U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.333.001.01">
+  <AuthstnCclReq>
+    <GrpHdr>
+      <MsgId>3131000000132010100633352616</MsgId>
+      <CreDtTm>2010-10-07T16:45:21</CreDtTm>
+    </GrpHdr>
+    <InstgPty>313100000013</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <AuthstnApplInf>
+      <AuthstnId>123</AuthstnId>
+      <AuthstnCclDtTm>2010-10-07T16:13:07</AuthstnCclDtTm>
+      <TxTpCd>C201</TxTpCd>
+      <CtgyPurpCd>02002</CtgyPurpCd>
+      <DbtrAcct>12345</DbtrAcct>
+      <DbtrNm>付款人</DbtrNm>
+      <DbtrAcctTp>AT01</DbtrAcctTp>
+      <DbtrDpsNm>北京分行</DbtrDpsNm>
+      <DbtrDpsHdl>102100099996</DbtrDpsHdl>
+      <MrchntCd>11111111</MrchntCd>
+      <MrchntNm>商户</MrchntNm>
+      <Amt Ccy="CNY">123.00</Amt>
+      <OlnTxId>11111111</OlnTxId>
+      <OlnTxDtTm>2010-10-07T19:27:40</OlnTxDtTm>
+      <OlnTxSpcfctn>12345</OlnTxSpcfctn>
+    </AuthstnApplInf>
+    <RmkInf>11111111111111</RmkInf>
+    <DgtSgntr>PUXABERBP4dE41U2iHJdxligAPifVyDekRfTWvrp2H85g6By/zvzqz7/BLgSrzvKTfr5n/jHoqzmeb2fWwyWBoKfnlzaD9KA5O+eRhptibupbBP6gpHu0Ao0w//wKr7kFrQVsJDzpCpSiiKwUOisO0UFN7gSU89bb7YGvaUV3Kg=</DgtSgntr>
+  </AuthstnCclReq>
+</Document>

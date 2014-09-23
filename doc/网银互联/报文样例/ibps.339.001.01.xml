@@ -1,0 +1,24 @@
+{H:01102100099996IBPS104100000004IBPS20100915103915XMLibps.339.001.01     6c64a128ceb6eab67dfe6c64a128ceb6eab67dfd3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.339.001.01">
+  <AcctPtcMgmtReq>
+    <GrpHdr>
+      <MsgId>1021000999962010090425900031</MsgId>
+      <CreDtTm>2010-09-01T10:10:10</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>104100000004</InstdPty>
+    <MgmtTp>MT00</MgmtTp>
+    <PtcInf>
+      <PtcId>0</PtcId>
+      <RplirDpsHdl>104100000004</RplirDpsHdl>
+      <AcctLtd>TL02</AcctLtd>
+      <QristAcct>100000000001</QristAcct>
+      <QristNm>孟三三</QristNm>
+      <QristPtyNm>北京银行北京分行</QristPtyNm>
+      <QristPtyHdl>102100099996</QristPtyHdl>
+    </PtcInf>
+    <RmkInf>339-正常案例-00030</RmkInf>
+    <DgtSgntr>F0aa75UzC3gqEE6vJ2N5KoyA6cq7JsENDfYQN/t+Zl/orZeaaO2ayg68YIejBvHEFT0nc1FytoN4LU2tWx2li+NAzkpUDFYHmB7vF1oDZwx6ZyQMn1T+jelBaiufqvW4zdhxzt2LX+w19UJnUbpwT9ODutM7nYvDt/pSBLNURZc=</DgtSgntr>
+  </AcctPtcMgmtReq>
+</Document>

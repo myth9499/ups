@@ -1,0 +1,26 @@
+{H:01313100000013IBPS102100099996IBPS20100528112132XMLibps.335.001.01     6c64a128ceb6eab67d196c64a128ceb6eab67d183U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.335.001.01">
+  <PmtPtcMgmtReq>
+    <GrpHdr>
+      <MsgId>3131000000132010100733552605</MsgId>
+      <CreDtTm>2010-10-07T14:01:03</CreDtTm>
+    </GrpHdr>
+    <InstgPty>313100000013</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <MgmtTp>MT00</MgmtTp>
+    <PtcInf>
+      <PtcId>0</PtcId>
+      <CstmrNb>第三方</CstmrNb>
+      <DbtrDpsHdl>102100099996</DbtrDpsHdl>
+      <AcctLtd>TL01</AcctLtd>
+      <CdtrAcct>1234567890</CdtrAcct>
+      <CdtrNm>收款人</CdtrNm>
+      <CdtrDpsNm>北京分行</CdtrDpsNm>
+      <CdtrDpsHdl>104100000004</CdtrDpsHdl>
+      <AthtctnPmtCtgy>02010</AthtctnPmtCtgy>
+    </PtcInf>
+    <RmkInf>搜集报文</RmkInf>
+    <DgtSgntr>L/w/uPD3xZXkEz7/+3Ui1YRUUi6xX3pB26OChpNQXY96RstRdtIz69Vr6bAG5GYzw8QXd7SIEoBuOT2w+6tDRt0BdH4wFnUruZ2XROZCuxF1G4S8cxjkx5CdyySgWCo80jEH1rVFMJppgufrGd/5A5up8nbU8wuEnF4O1H6LLhQ=</DgtSgntr>
+  </PmtPtcMgmtReq>
+</Document>

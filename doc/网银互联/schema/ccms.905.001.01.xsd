@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.905.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cnaps:std:ibps:2010:tech:xsd:ccms.905.001.01" elementFormDefault="qualified">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="PtyNtfctn" type="PtyNtfctnV01"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PtyNtfctnV01">
+		<xs:sequence>
+			<xs:element name="GrpHdr" type="GroupHeader1"/>
+			<xs:element name="InstgPty" type="Max12NumericText"/>
+			<xs:element name="SysCd" type="SystemCode1"/>
+			<xs:element name="ChngCnt" type="Max8NumericText"/>
+			<xs:element name="PtyInf" type="PartyInformation1" maxOccurs="unbounded"/>
+			<xs:element name="RmkInf" type="Max256Text" minOccurs="0"/>
+			<xs:element name="DgtSgntr" type="Max2048Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroupHeader1">
+		<xs:sequence>
+			<xs:element name="MsgId" type="Max35Text"/>
+			<xs:element name="CreDtTm" type="ISODateTime"/>
+			<xs:element name="TtlNb" type="Max8NumericText"/>
+			<xs:element name="StartNb" type="Max8NumericText"/>
+			<xs:element name="EndNb" type="Max8NumericText"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyInformation1">
+		<xs:sequence>
+			<xs:element name="ChgTp" type="ChangeType1"/>
+			<xs:element name="PtyId" type="Max12NumericText"/>
+			<xs:element name="PtyNm" type="Max60Text"/>
+			<xs:element name="PtyAlsNm" type="Max60Text"/>
+			<xs:element name="BkCtgyCd" type="Max3Text"/>
+			<xs:element name="PtyTp" type="PartyType1"/>
+			<xs:element name="SttlmAgtId" type="Max12NumericText" minOccurs="0"/>
+			<xs:element name="FctvDt" type="ISODate"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ChangeType1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CC00"/>
+			<xs:enumeration value="CC01"/>
+			<xs:enumeration value="CC02"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PartyType1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CL00"/>
+			<xs:enumeration value="CL01"/>
+			<xs:enumeration value="CL02"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max3Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max8NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="8"/>
+			<xs:pattern value="[0-9]{1,8}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max12NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max60Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max256Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="256"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max2048Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2048"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max35Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ISODate">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="SystemCode1">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SAPS"/>
+			<xs:enumeration value="HVPS"/>
+			<xs:enumeration value="BEPS"/>
+			<xs:enumeration value="CCMS"/>
+			<xs:enumeration value="PMIS"/>
+			<xs:enumeration value="IBPS"/>
+			<xs:enumeration value="NCIS"/>
+			<xs:enumeration value="ECDS"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,22 @@
+{H:01102100099996IBPS0000        IBPS20101007113135XMLibps.703.001.01     6c64a128ceb6eab67e136c64a128ceb6eab67e123U         }
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.703.001.01">
+  <DtlReq>
+    <GrpHdr>
+      <MsgId>10210009999620101004000009</MsgId>
+      <CreDtTm>2010-10-01T20:52:50</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>0000</InstdPty>
+    <ChckDt>2010-10-05</ChckDt>
+    <ApplInf>
+      <ProcSts>PR04</ProcSts>
+      <TxNetgDt>2010-10-05</TxNetgDt>
+      <TxNetgRnd>1</TxNetgRnd>
+      <MsgTp>ibps.103.001.01</MsgTp>
+      <SndRcvInd>SR00</SndRcvInd>
+    </ApplInf>
+    <DgtSgntr>Jtgz2hE2xfY74BYRnBt1UX6s3ZecMAETITCMDeYJSt5xKfdnFilPXHUJpY2bV/LoyAqY19aLmEcFCUp/tIPV13uI9qT6fZCMfi9J/3AiCb22Hze8Fz7ye9zBTTtiweKrstklEGZFOXKzJOQ7evXdCHSVMLixB92WtgEEXUkY8J0=</DgtSgntr>
+  </DtlReq>
+</Document>

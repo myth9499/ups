@@ -1,0 +1,24 @@
+{H:01102100099996IBPS313100000013IBPS20100528112132XMLibps.332.001.01     6c64a128ceb6eab67d6d6c64a128ceb6eab67d6c3U         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.332.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <AuthstnRspn>
+    <GrpHdr>
+      <MsgId>1021000999962010100733252601</MsgId>
+      <CreDtTm>2010-10-07T15:49:17</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>313100000013</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>3131000000132010100733152611</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR01</RspsnSts>
+      <ProcDt>2010-10-08</ProcDt>
+      <URLIdInf>urlsdhlfh</URLIdInf>
+    </RspsnInf>
+    <RmkInf>搜集332</RmkInf>
+    <DgtSgntr>krawLj93uJs2tWUYBSS6k4cc8vLrPqAFSDWQagq6N1qmfpY2LcYpWYueIpHPqNd4VtHdXMBrNwL7ezU+U4xVjXLoTZ7em+bY6uriZAMmtT4iN5MU1isDYiMuPqx5Dl7BN4DYgyPJn0ieuOFfuVNAlGeGT6BXt35bL7LvmO7jiYk=</DgtSgntr>
+  </AuthstnRspn>
+
+</Document>
