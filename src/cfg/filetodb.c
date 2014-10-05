@@ -93,6 +93,46 @@ int main(int argc,char *argv[])
 	}
 	fclose(fp);
 
+	memset(sql,0,sizeof(sql));
+	/** 先删除 **/
+	strcpy(sql,"delete from tranmap ");
+
+	rc = sqlite3_exec(db,sql,NULL,NULL,NULL);
+	if(rc!=SQLITE_OK)
+	{
+		fprintf(stderr,"Cannot prepare sql\n");
+		sqlite3_close(db);
+		exit(1);
+	}
+
+	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
+	{
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+	}else
+	{
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		return -1;
+	}
+	memset(sql,0,sizeof(sql));
+	/** 先删除 **/
+	strcpy(sql,"delete from vardef ");
+
+	rc = sqlite3_exec(db,sql,NULL,NULL,NULL);
+	if(rc!=SQLITE_OK)
+	{
+		fprintf(stderr,"Cannot prepare sql\n");
+		sqlite3_close(db);
+		exit(1);
+	}
+	if(load_vardef_cfg("/item/ups/src/cfg/vardef/vardef.cfg")==0)
+	{
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+	}else
+	{
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		return -1;
+	}
+
 	sqlite3_close(db);
 	return 0;
 }
@@ -116,7 +156,7 @@ int load_commmsg_cfg(char *filename)
 		exit(1);
 	}
 	memset(sql,0,sizeof(sql));
-	strcpy(sql,"insert into commmsg values (?,?,?,?);");
+	strcpy(sql,"insert into commmsg values (NULL,?,?,?,?);");
 
 	rc = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
 	if(rc!=SQLITE_OK)
@@ -236,7 +276,7 @@ int load_flow_cfg(char *filename)
 	}
 
 	memset(sql,0,sizeof(sql));
-	strcpy(sql,"insert into flow values (?,?,?,?,?,?);");
+	strcpy(sql,"insert into flow values (NULL,?,?,?,?,?,?);");
 
 	rc = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
 	if(rc!=SQLITE_OK)
@@ -363,7 +403,7 @@ int insertcfg(xmlNodePtr cur,char *xmltype)
 	memset(path,0,sizeof(path));
 
 	memset(sql,0,sizeof(sql));
-	strcpy(sql,"insert into xmlcfg values (?,?,?,?,?,?,?,?);");
+	strcpy(sql,"insert into xmlcfg values (NULL,?,?,?,?,?,?,?,?);");
 
 	rc = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
 	if(rc!=SQLITE_OK)
@@ -437,38 +477,29 @@ int insertcfg(xmlNodePtr cur,char *xmltype)
 		}
 	return  0;
 }
-#ifdef lilei
 int load_tranmap_cfg(char *filename)
 {
-	int shmid,i=0;
 	char buff[1200];
-	_tranmap *tmap=NULL;
-	char *tmpbuf = NULL;
-	size_t shmsize;
+	_tranmap	tmap;
 	FILE *fp=NULL;
 
 
+	memset(sql,0,sizeof(sql));
+	strcpy(sql,"insert into tranmap values (NULL,?,?,?,?);");
+
+	rc = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
+	if(rc!=SQLITE_OK)
+	{
+		fprintf(stderr,"Cannot prepare sql :%s\n",sqlite3_errmsg(db));
+		sqlite3_close(db);
+		exit(1);
+	}
+
 	memset(buff,0,sizeof(buff));
-	/** init commmsg **/
-	shmsize=MAXTRANMAP*sizeof(_tranmap);
-	if((shmid=getshmid(5,shmsize))==-1)
-	{
-		printf("get shm error\n");
-		return -1;
-	}
-	printf("start load tranmap  cfg \n");
-	tmap = (_tranmap *)shmat(shmid,NULL,0);
-	if(tmap == NULL)
-	{
-		printf("tranmap shmat error\n");
-		return -1;
-	}
-	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
 		perror("file open error");
-		shmdt(tmap);
 		return -1;
 	}
 	while(fgets(buff,sizeof(buff),fp)!=NULL)
@@ -476,58 +507,59 @@ int load_tranmap_cfg(char *filename)
 		buff[strlen(buff)-1]='\0';
 		if(buff[0]=='#')
 		{
-			//cmsg++;
 			continue;
 		}
 		if(buff[0]=='*')
 		{
-			strcpy(tmap->trancode,buff+1);
-			tmap++;
+			strcpy(tmap.trancode,buff+1);
 			continue;
 		}
 		/** need if else **/
-		strcpy(tmap->trancode,strtok(buff,"^"));
-		strcpy(tmap->tranname,strtok(NULL,"^"));
-		strcpy(tmap->tranflow,strtok(NULL,"^"));
-		tmap->timeout=atoi(strtok(NULL,"^"));
-		tmap++;
+		strcpy(tmap.trancode,strtok(buff,"^"));
+		strcpy(tmap.tranname,strtok(NULL,"^"));
+		strcpy(tmap.tranflow,strtok(NULL,"^"));
+		tmap.timeout=atoi(strtok(NULL,"^"));
+
+		sqlite3_bind_text(stmt,1,tmap.trancode,strlen(tmap.trancode),NULL);
+		sqlite3_bind_text(stmt,2,tmap.tranname,strlen(tmap.tranname),NULL);
+		sqlite3_bind_text(stmt,3,tmap.tranflow,strlen(tmap.tranflow),NULL);
+		sqlite3_bind_int(stmt,4,tmap.timeout);
+		rc = sqlite3_step(stmt);
+		if(rc!=SQLITE_DONE)
+		{
+			fprintf(stderr,"Cannot setp sql :%s\n",sqlite3_errmsg(db));
+			sqlite3_finalize(stmt);
+			exit(1);
+		}
+		sqlite3_reset(stmt);
 	}
-	shmdt(tmap);
 	fclose(fp);
 	printf("load ok\n");
 	return 0;
 }
 int load_vardef_cfg(char *filename)
 {
-	int shmid,i=0;
 	char buff[1200];
-	_vardef *vardef=NULL;
-	char *tmpbuf = NULL;
-	size_t shmsize;
+	_vardef vardef;
 	FILE *fp=NULL;
 
 
+	memset(sql,0,sizeof(sql));
+	strcpy(sql,"insert into vardef values (NULL,?,?,?,?);");
+
+	rc = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
+	if(rc!=SQLITE_OK)
+	{
+		fprintf(stderr,"Cannot prepare sql :%s\n",sqlite3_errmsg(db));
+		sqlite3_close(db);
+		exit(1);
+	}
+
 	memset(buff,0,sizeof(buff));
-	/** init vardef **/
-	shmsize=MAXVARDEF*sizeof(_vardef);
-	if((shmid=getshmid(4,shmsize))==-1)
-	{
-		printf("get shm error\n");
-		return -1;
-	}
-	printf("start load vardef  cfg \n");
-	vardef = (_vardef *)shmat(shmid,NULL,0);
-	if(vardef == NULL)
-	{
-		printf("vardef shmat error\n");
-		return -1;
-	}
-	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
 		perror("file open error");
-		shmdt(vardef);
 		return -1;
 	}
 	while(fgets(buff,sizeof(buff),fp)!=NULL)
@@ -535,20 +567,28 @@ int load_vardef_cfg(char *filename)
 		buff[strlen(buff)-1]='\0';
 		if(buff[0]=='#')
 		{
-			//cmsg++;
 			continue;
 		}
 		/** need if else **/
-		strcpy(vardef->varname,strtok(buff,"^"));
-		strcpy(vardef->varmark,strtok(NULL,"^"));
-		strcpy(vardef->vartype,strtok(NULL,"^"));
-		vardef->varlen=atoi(strtok(NULL,"^"));
-		vardef++;
+		strcpy(vardef.varname,strtok(buff,"^"));
+		strcpy(vardef.varmark,strtok(NULL,"^"));
+		strcpy(vardef.vartype,strtok(NULL,"^"));
+		vardef.varlen=atoi(strtok(NULL,"^"));
+
+		sqlite3_bind_text(stmt,1,vardef.varname,strlen(vardef.varname),NULL);
+		sqlite3_bind_text(stmt,2,vardef.varmark,strlen(vardef.varmark),NULL);
+		sqlite3_bind_text(stmt,3,vardef.vartype,strlen(vardef.vartype),NULL);
+		sqlite3_bind_int(stmt,4,vardef.varlen);
+		rc = sqlite3_step(stmt);
+		if(rc!=SQLITE_DONE)
+		{
+			fprintf(stderr,"Cannot setp sql :%s\n",sqlite3_errmsg(db));
+			sqlite3_finalize(stmt);
+			exit(1);
+		}
+		sqlite3_reset(stmt);
 	}
-	shmdt(vardef);
 	fclose(fp);
 	printf("load ok\n");
 	return 0;
 }
-
-#endif
