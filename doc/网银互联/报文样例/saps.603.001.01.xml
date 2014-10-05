@@ -1,0 +1,80 @@
+{H:010000        IBPS102100099996IBPS20100904022220XMLsaps.603.001.01     IBPS4099010571      IBPS4099010571      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <BkToCstmrStmt>
+    <GrpHdr>
+      <MsgId>0000000000002010101300014877</MsgId>
+      <CreDtTm>2010-09-04T02:22:20</CreDtTm>
+      <MsgRcpt>
+        <CtctDtls>
+          <EmailAdr>UlRcK173tCfkFDNGmlYyicP2kU1jSBQhWk0tVafGY1Cb76CvACMPMHleLHH0S0ndNra1
+r24SHrwE5V4PWY0m04suMoM0JGecXEbMhN93byQXX0Tlp7Q/RbBvBGnNh0VI6g8p4si6
+CqgriWBiMrgx2pzrD/VWmF27ALFBHtGdj+U=</EmailAdr>
+        </CtctDtls>
+      </MsgRcpt>
+    </GrpHdr>
+    <Stmt>
+      <Id>0</Id>
+      <CreDtTm>2010-09-04T02:22:20</CreDtTm>
+      <RptgSrc>
+        <Prtry>01</Prtry>
+      </RptgSrc>
+      <Acct>
+        <Id>
+          <Othr>
+            <Id>102100099996</Id>
+          </Othr>
+        </Id>
+      </Acct>
+      <Bal>
+        <Tp>
+          <CdOrPrtry>
+            <Prtry>INFO</Prtry>
+          </CdOrPrtry>
+        </Tp>
+        <Amt Ccy="CNY">0</Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Dt>
+          <Dt>2010-10-13</Dt>
+        </Dt>
+      </Bal>
+      <TxsSummry>
+        <TtlCdtNtries>
+          <Sum>0.00</Sum>
+        </TtlCdtNtries>
+        <TtlDbtNtries>
+          <Sum>1111.40</Sum>
+        </TtlDbtNtries>
+      </TxsSummry>
+      <Ntry>
+        <Amt Ccy="CNY">1111.40</Amt>
+        <CdtDbtInd>DBIT</CdtDbtInd>
+        <Sts>BOOK</Sts>
+        <BookgDt>
+          <Dt>2010-10-12</Dt>
+        </BookgDt>
+        <ValDt>
+          <Dt>2010-10-12</Dt>
+        </ValDt>
+        <BkTxCd>
+          <Domn>
+            <Cd>PMNT</Cd>
+            <Fmly>
+              <Cd>OTHR</Cd>
+              <SubFmlyCd>OTHR</SubFmlyCd>
+            </Fmly>
+          </Domn>
+        </BkTxCd>
+        <NtryDtls>
+          <TxDtls>
+            <Refs>
+              <ClrSysRef>IBPS</ClrSysRef>
+            </Refs>
+          </TxDtls>
+        </NtryDtls>
+      </Ntry>
+    </Stmt>
+  </BkToCstmrStmt>
+
+</Document>

@@ -1,0 +1,17 @@
+{H:01104100000004IBPS102100099996IBPS20101001101807XMLccms.303.001.01     6c64a128ceb6eab67e8b6c64a128ceb6eab67e8a3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.303.001.01">
+  <FreeFrmt>
+    <GrpHdr>
+      <MsgId>1041000000042010100112000093</MsgId>
+      <CreDtTm>2010-10-01T10:10:10</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <SysCd>IBPS</SysCd>
+    <MsgInf>
+      <MsgCnt>自由格式报文测试-303</MsgCnt>
+    </MsgInf>
+    
+  </FreeFrmt>
+</Document> 

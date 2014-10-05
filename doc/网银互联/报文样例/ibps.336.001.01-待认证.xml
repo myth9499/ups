@@ -1,0 +1,22 @@
+{H:01102100099996IBPS313100000013IBPS20100528112132XMLibps.336.001.01     6c64a128ceb6eab67d136c64a128ceb6eab67d123U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.336.001.01">
+  <PmtPtcMgmtRspn>
+    <GrpHdr>
+      <MsgId>1021000999962010100733652601</MsgId>
+      <CreDtTm>2010-10-07T16:55:03</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>313100000013</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>3131000000132010100733552605</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <RspsnSts>PR01</RspsnSts>
+      <URLIdInf>urlsdlhg</URLIdInf>
+      <CstmrNb>第三方</CstmrNb>
+    </RspsnInf>
+    <RmkInf>搜集报文</RmkInf>
+    <DgtSgntr>axSDssDfYXPp3jIvZ/E0PtGeZz5EZif0CCGJyg5x/yTwQMsSYtnOSgkSI2eTKrR29JJBLoNOYcsq2PYyozyou0lwpF2UaXUEzazapxuG5nKGGepGJHRl/owS2Dy+8iBhpsiblVhNG8H643c56JbRqTtK5TyDQ8HDlrsKvJkJCNU=</DgtSgntr>
+  </PmtPtcMgmtRspn>
+</Document>

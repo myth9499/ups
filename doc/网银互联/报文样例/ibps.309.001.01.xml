@@ -1,0 +1,25 @@
+{H:01104100000004IBPS102100099996IBPS20101001101807XMLibps.309.001.01     6c64a128ceb6eab67e856c64a128ceb6eab67e843U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.309.001.01">
+  <AthtctnAcctInfReq>
+    <GrpHdr>
+      <MsgId>1041000000042010100113000033</MsgId>
+      <CreDtTm>2010-10-01T10:15:48</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <AcctQryInf>
+      <PtcId>11305</PtcId>
+      <QristAcct>123456</QristAcct>
+      <QristNm>王一</QristNm>
+      <QristPtyNm>招商银行北京分行</QristPtyNm>
+      <QristPtyHdl>104100000004</QristPtyHdl>
+      <RplirAcct>654321</RplirAcct>
+      <RplirNm>李珊</RplirNm>
+      <RplirDpsNm>中国进出口银行</RplirDpsNm>
+      <RplirDpsHdl>102100099996</RplirDpsHdl>
+    </AcctQryInf>
+    <RmkInf>账户余额查询报文-309-5</RmkInf>
+    <DgtSgntr>Vto97rKNVlgbUhLMvtWtDh31QgdrpfdQDBIz1H1yo58U6QF59E6KJvA0gJaYTjfy4SdGci9JBTyPuiY+IqHF8ERQClOZlrPIkaYp/tfP+bCHOkjziRSynBMQsfWPFI65g5wOYwY76sDl5icYqDtfvIRXVOJ/0vCRraEuJOf7b88=</DgtSgntr>
+  </AthtctnAcctInfReq>
+</Document>

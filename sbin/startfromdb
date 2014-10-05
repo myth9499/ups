@@ -1,0 +1,5 @@
+/item/ups/src/shm/initshm
+/item/ups/src/cfg/dbtoshm
+/item/ups/src/monitor/startups
+sleep 1
+/item/ups/src/monitor/monitor

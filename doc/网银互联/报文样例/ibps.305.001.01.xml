@@ -1,0 +1,22 @@
+{H:01102100099996IBPS0000        IBPS20100526113142XMLibps.305.001.01     6c64a128ceb6eab67cc36c64a128ceb6eab67cc23U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.305.001.01">
+  <TxStsReq>
+    <GrpHdr>
+      <MsgId>1021000999962010101104220169</MsgId>
+      <CreDtTm>2010-10-11T10:59:05</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>0000</InstdPty>
+    <TxStsInf>
+      <OrgnlGrpInf>
+        <OrgnlSndrId>102100099996</OrgnlSndrId>
+        <OrgnlMsgId>1021000999962010101100000129</OrgnlMsgId>
+      </OrgnlGrpInf>
+      <OrgnlMsgTp>ibps.101.001.01</OrgnlMsgTp>
+      <OrgnlTxTpCd>C200</OrgnlTxTpCd>
+    </TxStsInf>
+    <RmkInf>jinglei111</RmkInf>
+    <DgtSgntr>oVAUogbL2IIMPmrMZl13w725d3boas+QOeG4HeqXg1O2Vyo8V3lDhaO1AtSLyzRd1BF4zV18SMaPn9H9TS9k7ubi7ap8o85tg6Hs89IuLY+eKWRjwn95nzbQwfPjTwrEsq2tovQNejFT539h6RNums2M1BJeE7OdsVwIGLaE3KA=</DgtSgntr>
+  </TxStsReq>
+</Document>

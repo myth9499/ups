@@ -1,0 +1,27 @@
+{H:010000        IBPS102100099996IBPS20100903213505XMLsaps.605.001.01     IBPS4099009580      IBPS4099009580      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:saps.605.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <ChrgLst>
+    <GrpHdr>
+      <MsgId>0000000000002010100700014631</MsgId>
+      <CreDtTm>2010-09-03T21:35:05</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <ChrgInf>
+      <ChrgPty>102100099996</ChrgPty>
+      <ChrgMnth>201008</ChrgMnth>
+      <ChrgStartDt>2010-07-29</ChrgStartDt>
+      <ChrgEndDt>2010-08-22</ChrgEndDt>
+      <TtlAmt Ccy="CNY">3235.3</TtlAmt>
+      <CdtDbtInd>DBIT</CdtDbtInd>
+      <ChrgTtlAmt Ccy="CNY">3781.6</ChrgTtlAmt>
+      <ChrgRvsdTtlAmt Ccy="CNY">546.2</ChrgRvsdTtlAmt>
+    </ChrgInf>
+    <DgtSgntr>EMmg9mc2Ub2J8wP6suWemADzFsmEgWWcc2SEdIScOefYtzyb0uxE3k9H1j3IfkQEbNcU
+cHfpZ9Tw1XT2Qh9zcgsC1CJhl1hW0FD8jr7CTYJobe40ItvlrXgiXPwgXziLrjsaqVP8
+3UmgNaRUnj5nMAF/ZsVQDggfaLCVqxHrhD4=</DgtSgntr>
+  </ChrgLst>
+
+</Document>

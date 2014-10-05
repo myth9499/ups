@@ -1,0 +1,27 @@
+{H:01104100000004IBPS102100099996IBPS20100915103915XMLibps.341.001.01     6c64a128ceb6eab67d7e6c64a128ceb6eab67d7d3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.341.001.01">
+  <AcctPtcNtfctn>
+    <GrpHdr>
+      <MsgId>1041000000042010100510000144</MsgId>
+      <CreDtTm>2010-10-05T10:10:10</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <MgmtTp>MT00</MgmtTp>
+    <PtcInf>
+      <PtcId>100000000000</PtcId>
+      <QristAcct>666666666666</QristAcct>
+      <QristNm>姚三</QristNm>
+      <QristPtyNm>北京银行北京分行</QristPtyNm>
+      <QristPtyHdl>102100099996</QristPtyHdl>
+      <RplirAcct>555555555555</RplirAcct>
+      <RplirNm>被查询人户名</RplirNm>
+      <RplirAcctTp>AT00</RplirAcctTp>
+      <RplirDpsNm>招商银行北京分行</RplirDpsNm>
+      <RplirDpsHdl>104100000004</RplirDpsHdl>
+    </PtcInf>
+    <RmkInf>341-正常案例</RmkInf>
+    <DgtSgntr>B2ps4ZhDLcEV45V/+k5Grqvf8dxJ0AE1W6r4ydWCuns9z2MApHiMX75cNDHAvNFfByP3A1EPPLcLPRwH5vnkWcBiASednOxUOgX9Y4Q47nxGZ3mVJ2n3OqC1FKe5XWYkX6K9TZzzvt4r+uopQsa9PTsOefy3mPTgKsCyaxTAzQY=</DgtSgntr>
+  </AcctPtcNtfctn>
+</Document>

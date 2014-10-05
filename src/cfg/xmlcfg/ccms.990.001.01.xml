@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.990.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">    <ComuCnfm>
+        <OrigSndr>A16</OrigSndr>
+        <OrigSndDt>C30</OrigSndDt>
+        <MsgTp>V_MSGTYPE</MsgTp>
+        <MsgId>E20</MsgId>
+        <MsgRefId>E21</MsgRefId>
+        <MsgProCd>V_STAT</MsgProCd>
+    </ComuCnfm>
+</Document>

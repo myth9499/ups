@@ -1,0 +1,12 @@
+﻿{H:010000        IBPS104100000004IBPS20100903090716XMLccms.911.001.01     IBPS4099009423      6c64a128ceb6eab67e213D         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.911.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">	<DscrdMsgNtfctn>
+		<OrigSndr>104100000004</OrigSndr>
+		<OrigSndDt>20101005</OrigSndDt>
+		<MsgTp>ibps.103.001.01</MsgTp>
+		<MsgId>6c64a128ceb6eab67e22</MsgId>
+		<MsgRefId>6c64a128ceb6eab67e21</MsgRefId>
+		<ProcCd>IB1O0007</ProcCd>
+		<RjctInf>丢弃报头发起人非发起参与机构报文! -- 报头[104100000004]报体[102100099996]       </RjctInf>
+	</DscrdMsgNtfctn>
+</Document>

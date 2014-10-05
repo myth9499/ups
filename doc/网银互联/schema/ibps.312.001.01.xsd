@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.312.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cnaps:std:ibps:2010:tech:xsd:ibps.312.001.01" elementFormDefault="qualified">
+	<xs:element name="Document" type="Document"/>
+	<xs:complexType name="Document">
+		<xs:sequence>
+			<xs:element name="AthtctnAcctTxInfRspn" type="AthtctnAcctInfRspnV01"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AthtctnAcctInfRspnV01">
+		<xs:sequence>
+			<xs:element name="GrpHdr" type="GroupHeader1"/>
+			<xs:element name="InstgPty" type="Max12NumericText"/>
+			<xs:element name="InstdPty" type="Max12NumericText"/>
+			<xs:element name="OrgnlGrpInf" type="OriginalGroupInformation1"/>
+			<xs:element name="RspsnInf" type="ResponsionInformation1"/>
+			<xs:element name="QryRslt" type="QueryResult1" minOccurs="0"/>
+			<xs:element name="DgtSgntr" type="Max2048Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GroupHeader1">
+		<xs:sequence>
+			<xs:element name="MsgId" type="Max35Text"/>
+			<xs:element name="CreDtTm" type="ISODateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OriginalGroupInformation1">
+		<xs:sequence>
+			<xs:element name="OrgnlMsgId" type="Max35Text"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResponsionInformation1">
+		<xs:sequence>
+			<xs:element name="RspsnSts" type="ProcessCode"/>
+			<xs:element name="RjctCd" type="RejectCode" minOccurs="0"/>
+			<xs:element name="RjctInf" type="Max105Text" minOccurs="0"/>
+			<xs:element name="ProcDt" type="ISODate" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="QueryResult1">
+		<xs:sequence>
+			<xs:element name="Acct" type="Max32Text"/>
+			<xs:element name="AcctTp" type="AcctTypeCode"/>
+			<xs:element name="AcctRslt" type="AccountResult2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BalanceQuery1">
+		<xs:sequence>
+			<xs:element name="Acct" type="Max32Text"/>
+			<xs:element name="AcctTp" type="AcctTypeCode"/>
+			<xs:element name="AcctRslt" type="AccountResult1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AccountResult1">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="DbtAcct" type="DebitAccount1" minOccurs="0"/>
+				<xs:element name="CdtAcct" type="CreditAccount1" minOccurs="0"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DebitAccount1">
+		<xs:sequence>
+			<xs:element name="Ntry" type="Entry1" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entry1">
+		<xs:sequence>
+			<xs:element name="Bal" type="CurrencyAndAmount"/>
+			<xs:element name="TpNm" type="Max60Text" minOccurs="0"/>
+			<xs:element name="StartDt" type="ISODate" minOccurs="0"/>
+			<xs:element name="EndDt" type="ISODate" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditAccount1">
+		<xs:sequence>
+			<xs:element name="Ntry" type="Entry2" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entry2">
+		<xs:sequence>
+			<xs:element name="Acct" type="Max32Text"/>
+			<xs:element name="CdtAmt" type="DecimalNumber"/>
+			<xs:element name="AvlbAmt" type="DecimalNumber"/>
+			<xs:element name="CshCdtAmt" type="DecimalNumber"/>
+			<xs:element name="CshAvlbAmt" type="DecimalNumber"/>
+			<xs:element name="Ntry" type="Entry3" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entry3">
+		<xs:sequence>
+			<xs:element name="Amt" type="CurrencyAndAmount"/>
+			<xs:element name="DedlnDt" type="ISODate"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AccountResult2">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="DbtAcct" type="DebitAccount2" minOccurs="0"/>
+				<xs:element name="CdtAcct" type="CreditAccount2" minOccurs="0"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DebitAccount2">
+		<xs:sequence>
+			<xs:element name="Ntry" type="Entry4" minOccurs="0" maxOccurs="1000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entry4">
+		<xs:sequence>
+			<xs:element name="Dt" type="ISODate"/>
+			<xs:element name="Summry" type="Max256Text" minOccurs="0"/>
+			<xs:element name="Amt" type="CurrencyAndAmount"/>
+			<xs:element name="CdtDbtInd" type="CreditDebitCode"/>
+			<xs:element name="Bal" type="CurrencyAndAmount"/>
+			<xs:element name="VsAcct" type="Max32Text" minOccurs="0"/>
+			<xs:element name="VsNm" type="Max60Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreditAccount2">
+		<xs:sequence>
+			<xs:element name="Ntry" type="Entry5" minOccurs="0" maxOccurs="1000"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entry5">
+		<xs:sequence>
+			<xs:element name="Acct" type="Max32Text"/>
+			<xs:element name="Dt" type="ISODate"/>
+			<xs:element name="Summry" type="Max256Text" minOccurs="0"/>
+			<xs:element name="CdtDbtInd" type="CreditDebitCode"/>
+			<xs:element name="Amt" type="CurrencyAndAmount"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ErrorAccountList1">
+		<xs:sequence>
+			<xs:element name="RjctCd" type="RejectCode"/>
+			<xs:element name="RjctInf" type="Max105Text" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ProcessCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RejectCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AcctTypeCode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AT00"/>
+			<xs:enumeration value="AT01"/>
+			<xs:enumeration value="AT02"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CreditDebitCode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CRDT"/>
+			<xs:enumeration value="DBIT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="QueryTypeCode">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max4NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+			<xs:pattern value="[0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max12NumericText">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max32Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max35Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max60Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max105Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="105"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max256Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="256"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Max2048Text">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2048"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ISODateTime">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ISODate">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyAndAmount_SimpleType">
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="(\d{1,18})|(\d{1,18}\.)|(\d{1,17}\.\d{0,1})|(\d{1,16}\.\d{0,2})|(\.\d{1,2})"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyAndSignedAmount_SimpleType">
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="[\-]{0,1}((\d{1,18})|(\d{1,18}\.)|(\d{1,17}\.\d{0,1})|(\d{1,16}\.\d{0,2})|(\.\d{1,2}))"/>
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:complexType name="CurrencyAndAmount">
+		<xs:simpleContent>
+			<xs:extension base="CurrencyAndSignedAmount_SimpleType">
+				<xs:attribute name="Ccy" type="CurrencyCode" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="CurrencyCode">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{3,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DecimalNumber">
+		<xs:restriction base="xs:decimal">
+			<xs:fractionDigits value="17"/>
+			<xs:totalDigits value="18"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

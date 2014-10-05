@@ -1,0 +1,23 @@
+{H:010000        IBPS000000000000IBPS20100903091109XMLccms.907.001.01     IBPS4099009427      IBPS4099009427      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.907.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <SysParamNtfctn>
+    <GrpHdr>
+      <MsgId>0000000000002010100700014602</MsgId>
+      <CreDtTm>2010-09-03T09:11:09</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <SysCd>IBPS</SysCd>
+    <SysParamInf>
+      <ChgTp>CC01</ChgTp>
+      <FctvTp>EF01</FctvTp>
+      <FctvDt>2010-10-08</FctvDt>
+      <CmonDataTp>CM01</CmonDataTp>
+      <CmonDataCd>test0009</CmonDataCd>
+      <CmonDataNm>测试已下发指定</CmonDataNm>
+      <CmonDataVal>6</CmonDataVal>
+    </SysParamInf>
+  </SysParamNtfctn>
+
+</Document

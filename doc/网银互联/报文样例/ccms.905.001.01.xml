@@ -1,0 +1,28 @@
+{H:010000        IBPS000000000000IBPS20100903075021XMLccms.905.001.01     IBPS4099009079      IBPS4099009079      3D1        }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.905.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <PtyNtfctn>
+    <GrpHdr>
+      <MsgId>0000000000002010100500014519</MsgId>
+      <CreDtTm>2010-09-03T07:50:21</CreDtTm>
+      <TtlNb>1</TtlNb>
+      <StartNb>1</StartNb>
+      <EndNb>2</EndNb>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <SysCd>IBPS</SysCd>
+    <ChngCnt>20100077</ChngCnt>
+    <PtyInf>
+      <ChgTp>CC00</ChgTp>
+      <PtyId>102532000148</PtyId>
+      <PtyNm>中国工商银行荆门石化工业区支行</PtyNm>
+      <PtyAlsNm>中国工商银行荆门石化工业区支行</PtyAlsNm>
+      <BkCtgyCd>102</BkCtgyCd>
+      <PtyTp>CL02</PtyTp>
+      <SttlmAgtId>103100000018</SttlmAgtId>
+      <FctvDt>2010-10-07</FctvDt>
+    </PtyInf>
+  </PtyNtfctn>
+
+</Document>

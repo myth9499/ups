@@ -1,0 +1,35 @@
+{H:01104100000004IBPS102100099996IBPS20100915103915XMLibps.337.001.01     6c64a128ceb6eab67e8e6c64a128ceb6eab67e8d3U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.337.001.01">
+  <PmtPtcNtfctn>
+    <GrpHdr>
+      <MsgId>1041000000042010100120000151</MsgId>
+      <CreDtTm>2010-09-30T10:32:57</CreDtTm>
+    </GrpHdr>
+    <InstgPty>104100000004</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <MgmtTp>MT00</MgmtTp>
+    <PtcInf>
+      <PtcId>330000000000</PtcId>
+      <CstmrNb>0</CstmrNb>
+      <DbtrAcct>110000000000</DbtrAcct>
+      <DbtrNm>郭七一</DbtrNm>
+      <DbtAcctTp>AT00</DbtAcctTp>
+      <DbtrDpsNm>招商银行股份有限公司北京分行</DbtrDpsNm>
+      <DbtrDpsHdl>104100000004</DbtrDpsHdl>
+      <DbtrPhneNb>110</DbtrPhneNb>
+      <CdtrAcct>220000000000</CdtrAcct>
+      <CdtrNm>董十六</CdtrNm>
+      <CdtrDpsNm>中国工商银行总行清算中心</CdtrDpsNm>
+      <CdtrDpsHdl>102100099996</CdtrDpsHdl>
+      <CdtrCstmrId>222222222222</CdtrCstmrId>
+      <AthtctnPmtCtgy>0</AthtctnPmtCtgy>
+      <SnglTxAmtLmt Ccy="CNY">100.00</SnglTxAmtLmt>
+      <DlTtlAmtLmt Ccy="CNY">100.00</DlTtlAmtLmt>
+      <MslTtlAmtLmt Ccy="CNY">100.00</MslTtlAmtLmt>
+      <PtcFctvDt>2010-09-30</PtcFctvDt>
+    </PtcInf>
+    <RmkInf>337-正常案例</RmkInf>
+    <DgtSgntr>EHPTicxweZTeTmvk+xU00YRUbHo89uAAxml7BczhP5/ybVQx2tLJ12LcrgWtYzTcJ/Ok5e68RsS+pZDUPeVDmjOIzJ7T/OofDpQ0E37HVhgwoMq5JurnWxJUAiWf6qmZMZZ5JXcrSRTmW4f0ueRFGaQEXMb2/HkIGT0uDEWxNmo=</DgtSgntr>
+  </PmtPtcNtfctn>
+</Document>

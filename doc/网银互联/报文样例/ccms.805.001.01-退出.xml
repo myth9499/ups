@@ -1,0 +1,17 @@
+{H:01102100099996IBPS0000        IBPS20100915103915XMLccms.805.001.01     6c64a128ceb6eab67d256c64a128ceb6eab67d243U         }
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.805.001.01">
+  <LoginReq>
+    <GrpHdr>
+      <MsgId>1021000999962010041710000134</MsgId>
+      <CreDtTm>2010-10-06T09:17:31</CreDtTm>
+    </GrpHdr>
+    <InstgPty>102100099996</InstgPty>
+    <InstdPty>0000</InstdPty>
+    <SysCd>IBPS</SysCd>
+    <LoginInf>
+      <OprTp>OT01</OprTp>
+    </LoginInf>
+    <DgtSgntr>IYtUJmdTrwI6c/QkHYEAppUm0DwZxaLmblsho9RJAyTANfqfWCX7k7qJHP/lSDZ3/0eiEJM3oPpvS7mNfj4HEgtPybylZzPeR3yLFLKbdyXz3FCEAyLK6NbyDsxcUV+lGa8P4Cyqqhdaq7Zmx5HoQ8N3/Dke6qV5dv7131qAsUk=</DgtSgntr>
+  </LoginReq>
+</Document>

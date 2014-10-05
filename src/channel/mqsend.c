@@ -41,7 +41,7 @@ int	getchnlcfg(char *chnlname)
 	fp = fopen("/item/ups/src/cfg/chnl.cfg","r");
 	if(fp == NULL)
 	{
-		SysLog(1,"打开渠道初始化配置文件失败:[%s]\n",strerror(errno));
+		SysLog(1,"FILE [%s] LINE[%d]打开渠道初始化配置文件失败:[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	while(fgets(tmpbuf,sizeof(tmpbuf),fp)!=NULL)
@@ -92,13 +92,13 @@ int sendprocess(long inerid,MQLONG	*messlen)
 		  }else
 		  {
 		 **/
-		SysLog(1,"交易跟踪号[%ld]\t传入交易信息[%s][%s]\n",inerid,tranbuf->outtran,tranbuf->intran);
+		SysLog(1,"FILE [%s] LINE[%d] 交易跟踪号[%ld]\t传入交易信息[%s][%s]\n",__FILE__,__LINE__,inerid,tranbuf->outtran,tranbuf->intran);
 		strtok(tranbuf->outtran,"|");
 		strcpy(tmpfilename,strtok(NULL,"|"));
 		fp = fopen(tmpfilename,"r");
 		if(fp==NULL)	
 		{
-			SysLog(1,"读取文件[%s]失败:%s\n",tmpfilename,strerror(errno));
+			SysLog(1,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
 			return -1;
 		}
 		if(fread(buffer, sizeof(buffer), 1,fp) != -1)
@@ -111,7 +111,7 @@ int sendprocess(long inerid,MQLONG	*messlen)
 		//}
 	}else
 	{
-		SysLog(1,"获取传入交易信息失败\n");
+		SysLog(1,"FILE[%s] LINE[%d]获取传入交易信息失败\n"__FILE__,__LINE__);
 		return -1;
 	}
 }
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 	/* report reason and stop if it failed     */
 	if (CompCode == MQCC_FAILED)
 	{
-		SysLog(1,"MQCONN ended with reason code %d\n", CReason);
+		SysLog(1,"FILE [%s] LINE[%d] MQCONN ended with reason code %d\n",__FILE__,__LINE__,CReason);
 		exit( (int)CReason );
 	}
 
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 	/******************************************************************/
 	//strncpy(od.ObjectName, "RTEST", (size_t)MQ_Q_NAME_LENGTH);
 	strncpy(od.ObjectName, RQName, (size_t)MQ_Q_NAME_LENGTH);
-	SysLog(1,"target queue is %s\n", od.ObjectName);
+	SysLog(1,"FILE[%s] LINE[%d] target queue is %s\n",__FILE__,__LINE__, od.ObjectName);
 
 	//strncpy(od.ObjectQMgrName, argv[5], (size_t) MQ_Q_MGR_NAME_LENGTH);
 	//SysLog(1,"target queue manager is %s\n", od.ObjectQMgrName);
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 	if (argc > 3)
 	{
 		O_options = atoi( argv[3] );
-		SysLog(1,"open  options are %d\n", O_options);
+		SysLog(1,"FILE[%s] LINE[%d]open  options are %d\n",__FILE__,__LINE__, O_options);
 	}
 	else
 	{
@@ -243,12 +243,12 @@ int main(int argc, char **argv)
 	/* report reason, if any; stop if failed      */
 	if (Reason != MQRC_NONE)
 	{
-		SysLog(1,"MQOPEN ended with reason code %d\n", Reason);
+		SysLog(1,"FILE[%s] LINE[%d]MQOPEN ended with reason code %d\n",__FILE__,__LINE__, Reason);
 	}
 
 	if (OpenCode == MQCC_FAILED)
 	{
-		SysLog(1,"unable to open queue for output\n");
+		SysLog(1,"FILE[%s] LINE[%d]unable to open queue for output\n",__FILE__,__LINE__);
 	}
 
 	/******************************************************************/
@@ -308,7 +308,8 @@ int main(int argc, char **argv)
 			iret = shm_hash_update(mbuf->innerid,"EEEEEEE|发送失败",NULL);
 			if(iret == -1)
 			{
-				SysLog(1,"放置打包信息到共享内存失败 \n");
+				SysLog(1,"FILE[%s] LINE[%d] 放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+				msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 			}else
 			{
 				msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
@@ -321,7 +322,7 @@ int main(int argc, char **argv)
 			/*   Put each buffer to the message queue                       */
 			/*                                                              */
 			/****************************************************************/
-			SysLog(1,"buffer is [%s] len is [%d]\n",buffer,messlen);
+			SysLog(1,"FILE[%s] LINE[%d]buffer is [%s] len is [%d]\n",__FILE__,__LINE__,buffer,messlen);
 			if (messlen > 0)
 			{
 				/**************************************************************/
@@ -343,12 +344,13 @@ int main(int argc, char **argv)
 				/* report reason, if any */
 				if (Reason != MQRC_NONE)
 				{
-					SysLog(1,"MQPUT ended with reason code %d\n", Reason);
+					SysLog(1,"FILE[%s] LINE[%d]MQPUT ended with reason code %d\n",__FILE__,__LINE__, Reason);
 					/** 返回交易信息到服务端**/
 					iret = shm_hash_update(mbuf->innerid,"EEEEEEE|发送失败",NULL);
 					if(iret == -1)
 					{
-						SysLog(1,"放置打包信息到共享内存失败 \n");
+						SysLog(1,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+						msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 					}else
 					{
 						msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
@@ -358,7 +360,8 @@ int main(int argc, char **argv)
 				iret = shm_hash_update(mbuf->innerid,"AAAAAAA|发送成功",NULL);
 				if(iret == -1)
 				{
-					SysLog(1,"放置打包信息到共享内存失败 \n");
+					SysLog(1,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 				}else
 				{
 					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
@@ -379,7 +382,7 @@ int main(int argc, char **argv)
 		if (argc > 4)
 		{
 			C_options = atoi( argv[4] );
-			SysLog(1,"close options are %d\n", C_options);
+			SysLog(1,"FILE[%s] LINE[%d]close options are %d\n",__FILE__,__LINE__, C_options);
 		}
 		else
 		{
@@ -395,7 +398,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(1,"MQCLOSE ended with reason code %d\n", Reason);
+			SysLog(1,"FILE[%s] LINE[%d]MQCLOSE ended with reason code %d\n",__FILE__,__LINE__,Reason);
 		}
 	}
 
@@ -413,7 +416,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(1,"MQDISC ended with reason code %d\n", Reason);
+			SysLog(1,"FILE[%s] LINE[%d]MQDISC ended with reason code %d\n",__FILE__,__LINE__, Reason);
 		}
 	}
 
@@ -422,6 +425,6 @@ int main(int argc, char **argv)
 	/* END OF AMQSPUT0                                                */
 	/*                                                                */
 	/******************************************************************/
-	SysLog(1,"Sample AMQSPUT0 end\n");
+	SysLog(1,"FILE[%s] LINE[%d]Sample AMQSPUT0 end\n",__FILE__,__LINE__);
 	return(0);
 }

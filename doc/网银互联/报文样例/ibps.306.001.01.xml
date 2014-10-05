@@ -1,0 +1,30 @@
+{H:010000        IBPS102100099996IBPS20100903233253XMLibps.306.001.01     IBPS4099010156      IBPS4099010156      3D         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ibps.306.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <TxStsRspn>
+    <GrpHdr>
+      <MsgId>0000000000002010101100014789</MsgId>
+      <CreDtTm>2010-09-03T23:32:53</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1021000999962010101104220169</OrgnlMsgId>
+      <ProcSts>PR07</ProcSts>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <OrgnlMsgInf>
+        <OrgnlSndrId>102100099996</OrgnlSndrId>
+        <OrgnlMsgId>1021000999962010101100000129</OrgnlMsgId>
+      </OrgnlMsgInf>
+      <ProcSts>PR03</ProcSts>
+      <TxNetgDt>2010-10-11</TxNetgDt>
+      <TxNetgRnd>2</TxNetgRnd>
+    </RspsnInf>
+    <DgtSgntr>Wzss3oTYRVG44aCe4KRzSPn1ZnNxOuE0701b1GCiVeF9fjTIMSi7E6yaM+FA7Kil5FfR
+x1m8nCl+pJjjbVINe6B+1XTOgKbxHVBvt0emPzDTfSvct/Fv65qGgmu21L8baLWGSC7O
+zkrq9wxyrqM2RAeCB39xUopK3DITTor9f9M=</DgtSgntr>
+  </TxStsRspn>
+
+</Document>

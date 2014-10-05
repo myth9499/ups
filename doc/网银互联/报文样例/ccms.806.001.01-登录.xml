@@ -1,0 +1,26 @@
+{H:010000        IBPS102100099996IBPS20100903222835XMLccms.806.001.01     IBPS4099009887      IBPS4099009887      3D         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.806.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <LoginRspn>
+    <GrpHdr>
+      <MsgId>0000000000002010100800014708</MsgId>
+      <CreDtTm>2010-09-03T22:28:35</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <SysCd>IBPS</SysCd>
+    <OrgnlGrpInf>
+      <OrgnlMsgId>1021000999962010041710000135</OrgnlMsgId>
+    </OrgnlGrpInf>
+    <LoginRspsnInf>
+      <OprTp>OT00</OprTp>
+      <CurOrgnlSysDt>2010-10-08</CurOrgnlSysDt>
+      <CurSysSts>10</CurSysSts>
+      <ProcSts>PR07</ProcSts>
+      <ProcCd>IB1I0000</ProcCd>
+      <RjctInf>登录成功!</RjctInf>
+    </LoginRspsnInf>
+  </LoginRspn>
+
+</Document>

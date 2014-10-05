@@ -1,0 +1,27 @@
+{H:010000        IBPS102100099996IBPS20100903222246XMLccms.900.001.01     IBPS4099009841      IBPS4099009841      3D         }
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Document xmlns="urn:cnaps:std:ibps:2010:tech:xsd:ccms.900.001.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <CmonConf>
+    <GrpHdr>
+      <MsgId>0000000000002010100800014700</MsgId>
+      <CreDtTm>2010-09-03T22:22:46</CreDtTm>
+    </GrpHdr>
+    <InstgPty>0000</InstgPty>
+    <InstdPty>102100099996</InstdPty>
+    <OrgnlGrpInf>
+      <OrgnlSndrId>104100000004</OrgnlSndrId>
+      <OrgnlMsgId>1041000000042010100510000144</OrgnlMsgId>
+      <OrgnlMsgTp>ibps.341.001.01</OrgnlMsgTp>
+    </OrgnlGrpInf>
+    <RspsnInf>
+      <ProcSts>PR05</ProcSts>
+      <ProcCd>IB1I0000</ProcCd>
+      <ProcDt>2010-10-08</ProcDt>
+    </RspsnInf>
+    <DgtSgntr>eNdNw+dkEjHQWZlcF5PVG1fP0doyXDj17c0wIDhAuiBm2szpvxc/BJDj91Cn7IGLFphM
+bsgIQa0prYUfv2+3V3OH/dcbALTSA5cWJQlwaz5T2mGj32m1XobSWpQzYEPXn87LXnrH
+Ft2eLVxOxrkJY9pc8XW/IPZkoAN3h8/ZVsY=</DgtSgntr>
+  </CmonConf>
+
+</Document>
