@@ -89,6 +89,7 @@ int xml2table(char	*xmltype)
 		mysql_free_result(res);
 	}
 	mysql_close(mysql);
+	mysql_library_end();
 }
 
 int	init_var(char *a)

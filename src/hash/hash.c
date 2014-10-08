@@ -93,6 +93,8 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 				{
 					strcpy((transhm+pos+i)->outtran,outtran);
 				}
+				/** 增加交易开始时间 **/
+				(transhm+pos+i)->stime=time(NULL);
 				(transhm+pos+i)->stat[0]='N';
 				sem_post(&((transhm+pos+i)->sem1));
 				shmdt(transhm);
