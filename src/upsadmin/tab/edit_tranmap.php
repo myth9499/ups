@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-<title>ÎÞ±êÌâÎÄµµ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>äº¤æ˜“ç ä¿®æ”¹</title>
 <style type="text/css">
 <!--
 body {
@@ -22,7 +22,7 @@ body {
 
 <script>
 var  highlightcolor='#c1ebff';
-//´Ë´¦clickcolorÖ»ÄÜÓÃwinÏµÍ³ÑÕÉ«´úÂë²ÅÄÜ³É¹¦,Èç¹ûÓÃ#xxxxxxµÄ´úÂë¾Í²»ÐÐ,»¹Ã»¸ãÇå³þÎªÊ²Ã´:(
+//ï¿½Ë´ï¿½clickcolorÖ»ï¿½ï¿½ï¿½ï¿½winÏµÍ³ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü³É¹ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½#xxxxxxï¿½Ä´ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½,ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ÎªÊ²Ã´:(
 var  clickcolor='#51b2f6';
 function  changeto(){
 source=event.srcElement;
@@ -67,6 +67,15 @@ for(i=0;i<cs.length;i++){
 	cs[i].style.backgroundColor="";
 }
 }
+function updatetranmap(id)
+{
+	alert(id);
+	alert(document.getElementById("trancode").value);
+	alert(document.getElementById("tranname").value);
+	alert(document.getElementById("tranflow").value);
+	alert(document.getElementById("timeout").value);
+	
+}
 </script>
 
 </head>
@@ -82,7 +91,7 @@ for(i=0;i<cs.length;i++){
             <td width="46%" valign="middle"><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="5%"><div align="center"><img src="images/tb.gif" width="16" height="16" /></div></td>
-                <td width="95%" class="STYLE1"><span class="STYLE3">Äãµ±Ç°µÄÎ»ÖÃ</span>£º[ÒµÎñÖÐÐÄ]-[ÎÒµÄÓÊ¼þ]</td>
+                <td width="95%" class="STYLE1"><span class="STYLE3">å½“å‰ä½ç½®</span>ï¼š[ä¸šåŠ¡ä¸­å¿ƒ]-[äº¤æ˜“ç é…ç½®]</td>
               </tr>
             </table></td>
             <td width="54%"><table border="0" align="right" cellpadding="0" cellspacing="0">
@@ -92,25 +101,25 @@ for(i=0;i<cs.length;i++){
                     <td class="STYLE1"><div align="center">
                       <input type="checkbox" name="checkbox62" value="checkbox" />
                     </div></td>
-                    <td class="STYLE1"><div align="center">È«Ñ¡</div></td>
+                    <td class="STYLE1"><div align="center">å…¨é€‰</div></td>
                   </tr>
                 </table></td>
                 <td width="60"><table width="90%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td class="STYLE1"><div align="center"><img src="images/22.gif" width="14" height="14" /></div></td>
-                    <td class="STYLE1"><div align="center">ÐÂÔö</div></td>
+                    <td class="STYLE1"><div align="center">æ–°å¢ž</div></td>
                   </tr>
                 </table></td>
                 <td width="60"><table width="90%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td class="STYLE1"><div align="center"><img src="images/33.gif" width="14" height="14" /></div></td>
-                    <td class="STYLE1"><div align="center">ÐÞ¸Ä</div></td>
+                    <td class="STYLE1"><div align="center">ä¿®æ”¹</div></td>
                   </tr>
                 </table></td>
                 <td width="52"><table width="88%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td class="STYLE1"><div align="center"><img src="images/11.gif" width="14" height="14" /></div></td>
-                    <td class="STYLE1"><div align="center">É¾³ý</div></td>
+                    <td class="STYLE1"><div align="center">åˆ é™¤</div></td>
                   </tr>
                 </table></td>
               </tr>
@@ -127,13 +136,12 @@ for(i=0;i<cs.length;i++){
         <td width="8" background="images/tab_12.gif">&nbsp;</td>
         <td><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="b5d6e6" onmouseover="changeto()"  onmouseout="changeback()">
           <tr>
-            <td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">ÐòºÅ</span></div></td>
-            <td width="10%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">½»Ò×Âë</span></div></td>
-            <td width="5%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">½»Ò×Ãû³Æ</span></div></td>
-            <td width="15%" height="22"background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">½»Ò×Á÷³Ì</span></div></td>
-            <td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">³¬Ê±Ê±¼ä</span></div></td>
-			<td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF" class="STYLE1"><div align="center">»ù±¾²Ù
-×÷</div></td>
+            <td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">åºå·</span></div></td>
+            <td width="10%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">äº¤æ˜“ç </span></div></td>
+            <td width="5%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">äº¤æ˜“åç§°</span></div></td>
+            <td width="15%" height="22"background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">äº¤æ˜“æµç¨‹</span></div></td>
+            <td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF"><div align="center"><span class="STYLE1">è¶…æ—¶æ—¶é—´</span></div></td>
+			<td width="3%" height="22" background="images/bg.gif" bgcolor="#FFFFFF" class="STYLE1"><div align="center">åŸºæœ¬æ“ä½œ</div></td>
           </tr>
 			<!---html
             <td height="20" bgcolor="#FFFFFF"><div align="center" class="STYLE1">
@@ -152,12 +160,13 @@ for(i=0;i<cs.length;i++){
 		$cnt++;
      echo "<tr>";
      echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>".$row[0]."</span></div></td>";
-	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' name = 'id' value='$row[1]' />"."</span></div></td>";
-	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' name = 'id' value='$row[2]' />"."</span></div></td>";
-	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' name = 'id' value='$row[3]' />"."</span></div></td>";
-	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' name = 'id' value='$row[4]' />"."</span></div></td>";
-     echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE4'><img src='images/sure.gif' width='16' height='16' /></span></div></td>";
-     echo "</tr>";
+	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' id = 'trancode' value='$row[1]' />"."</span></div></td>";
+	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' id = 'tranname' value='$row[2]' />"."</span></div></td>";
+	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' id = 'tranflow' value='$row[3]' />"."</span></div></td>";
+	 echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE1'>"."<input type = 'text' id = 'timeout' value='$row[4]' />"."</span></div></td>";
+   echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE4'><input type='image'  src='../images/sure.gif' onclick='updatetranmap($row[0])' width='22' height='16' /></span></div></td>";
+   //echo "<td height='20' bgcolor='#FFFFFF'><div align='center'><span class='STYLE4'><button onclick='updatetranmap($row[0])' width='16' height='16' />æäº¤</button></span></div></td>";
+   echo "</tr>";
 	}
 ?>
         </table></td>
@@ -172,7 +181,7 @@ for(i=0;i<cs.length;i++){
         <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
 		  <?php
-            echo "<td class='STYLE4'>&nbsp;&nbsp;¹²ÓÐ ".$cnt." Ìõ¼ÇÂ¼£¬µ±Ç°µÚ 1/10 Ò³</td>";
+            echo "<td class='STYLE4'>&nbsp;&nbsp;å…±æœ‰ ".$cnt."æ¡è®°å½•ï¼Œå½“å‰ç¬¬ 1/10 é¡µ</td>";
 			?>
             <td><table border="0" align="right" cellpadding="0" cellspacing="0">
                 <tr>
@@ -180,9 +189,9 @@ for(i=0;i<cs.length;i++){
                   <td width="45"><img src="images/back.gif" width="43" height="15" /></td>
                   <td width="45"><img src="images/next.gif" width="43" height="15" /></td>
                   <td width="40"><img src="images/last.gif" width="37" height="15" /></td>
-                  <td width="100"><div align="center"><span class="STYLE1">×ªµ½µÚ
+                  <td width="100"><div align="center"><span class="STYLE1">è½¬åˆ°ç¬¬
                     <input name="textfield" type="text" size="4" style="height:12px; width:20px; border:1px solid #999999;" /> 
-                    Ò³ </span></div></td>
+                    é¡µ </span></div></td>
                   <td width="40"><img src="images/go.gif" width="37" height="15" /></td>
                 </tr>
             </table></td>
