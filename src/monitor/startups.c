@@ -55,6 +55,12 @@ int main(int argc,char *argv[] )
 				return -1;
 			}
 		}
+
+		if(servcnt==0)
+		{
+			printf("渠道[%s]\t执行命令[%s]\t启动成功不需要启动服务\n",chnlname,systemcmd);
+			continue;
+		}
 		printf("渠道[%s]\t执行命令[%s]\t启动服务数[%d]启动成功...开始启动服务\n",chnlname,systemcmd,servcnt);
 		sprintf(servbuf,"%s %s &","/item/ups/src/server/server ",chnlname);
 		for(i=0;i<servcnt;i++)
@@ -73,7 +79,7 @@ int main(int argc,char *argv[] )
 		}
 		printf("渠道[%s]\t执行命令[%s]\t启动服务数[%d]启动成功\n",chnlname,systemcmd,servcnt);
 		memset(buffer,0,sizeof(buffer));
-		sleep (1);
+		//sleep (2);
 	}
 	fclose(fp);
 	return 0;

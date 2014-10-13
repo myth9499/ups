@@ -228,6 +228,7 @@ int main(int argc, char **argv)
 	char	xmlfile[60];
 	char	sendbuf[90];
 	char	msgtype[90];
+	char	headbuf[1024];
 
 	memset(QMName,0,sizeof(QMName));
 	memset(LQName,0,sizeof(LQName));
@@ -370,98 +371,107 @@ int main(int argc, char **argv)
 	gmo.MatchOptions=MQMO_NONE;
 	gmo.Version=MQGMO_VERSION_2;
 
+	signal(SIGUSR1,SIG_IGN);
+	if(insert_chnlreg(chnlname)!=0)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
+		return -1;
+	}
+
 	//while (CompCode != MQCC_FAILED)
 	while (1)
 	{
-	buflen = sizeof(buffer) - 1; /* buffer size available for GET   */
+		buflen = sizeof(buffer) - 1; /* buffer size available for GET   */
 
-	/****************************************************************/
-	/* The following two statements are not required if the MQGMO   */
-	/* version is set to MQGMO_VERSION_2 and and gmo.MatchOptions   */
-	/* is set to MQGMO_NONE                                         */
-	/****************************************************************/
-	/*                                                              */
-	/*   In order to read the messages in sequence, MsgId and       */
-	/*   CorrelID must have the default value.  MQGET sets them     */
-	/*   to the values in for message it returns, so re-initialise  */
-	/*   them before every call                                     */
-	/*                                                              */
-	/****************************************************************/
-	memcpy(md.MsgId, MQMI_NONE, sizeof(md.MsgId));
-	memcpy(md.CorrelId, MQCI_NONE, sizeof(md.CorrelId));
+		/****************************************************************/
+		/* The following two statements are not required if the MQGMO   */
+		/* version is set to MQGMO_VERSION_2 and and gmo.MatchOptions   */
+		/* is set to MQGMO_NONE                                         */
+		/****************************************************************/
+		/*                                                              */
+		/*   In order to read the messages in sequence, MsgId and       */
+		/*   CorrelID must have the default value.  MQGET sets them     */
+		/*   to the values in for message it returns, so re-initialise  */
+		/*   them before every call                                     */
+		/*                                                              */
+		/****************************************************************/
+		memcpy(md.MsgId, MQMI_NONE, sizeof(md.MsgId));
+		memcpy(md.CorrelId, MQCI_NONE, sizeof(md.CorrelId));
 
-	/****************************************************************/
-	/*                                                              */
-	/*   MQGET sets Encoding and CodedCharSetId to the values in    */
-	/*   the message returned, so these fields should be reset to   */
-	/*   the default values before every call, as MQGMO_CONVERT is  */
-	/*   specified.                                                 */
-	/*                                                              */
-	/****************************************************************/
+		/****************************************************************/
+		/*                                                              */
+		/*   MQGET sets Encoding and CodedCharSetId to the values in    */
+		/*   the message returned, so these fields should be reset to   */
+		/*   the default values before every call, as MQGMO_CONVERT is  */
+		/*   specified.                                                 */
+		/*                                                              */
+		/****************************************************************/
 
-	md.Encoding       = MQENC_NATIVE;
-	md.CodedCharSetId = MQCCSI_Q_MGR;
+		md.Encoding       = MQENC_NATIVE;
+		md.CodedCharSetId = MQCCSI_Q_MGR;
 
-	MQGET(Hcon,                /* connection handle                 */
-			Hobj,                /* object handle                     */
-			&md,                 /* message descriptor                */
-			&gmo,                /* get message options               */
-			buflen,              /* buffer length                     */
-			buffer,              /* message buffer                    */
-			&messlen,            /* message length                    */
-			&CompCode,           /* completion code                   */
-			&Reason);            /* reason code                       */
+		MQGET(Hcon,                /* connection handle                 */
+				Hobj,                /* object handle                     */
+				&md,                 /* message descriptor                */
+				&gmo,                /* get message options               */
+				buflen,              /* buffer length                     */
+				buffer,              /* message buffer                    */
+				&messlen,            /* message length                    */
+				&CompCode,           /* completion code                   */
+				&Reason);            /* reason code                       */
 
-	/* report reason, if any     */
-	if (Reason != MQRC_NONE)
-	{
-		if (Reason == MQRC_NO_MSG_AVAILABLE)
-		{                         /* special report for normal end    */
-			SysLog(1,"no more messages\n");
-			sleep(atoi(waitsec));
-			continue;
-		}
-		else                      /* general report for other reasons */
+		/* report reason, if any     */
+		if (Reason != MQRC_NONE)
 		{
-			SysLog(1,"MQGET ended with reason code %d\n", Reason);
-
-			/*   treat truncated message as a failure for this sample   */
-			if (Reason == MQRC_TRUNCATED_MSG_FAILED)
-			{
-				CompCode = MQCC_FAILED;
+			if (Reason == MQRC_NO_MSG_AVAILABLE)
+			{                         /* special report for normal end    */
+				SysLog(1,"no more messages\n");
+				sleep(atoi(waitsec));
+				continue;
 			}
-			return -1;
-		}
-	}
-
-	/****************************************************************/
-	/*   Display each message received                              */
-	/****************************************************************/
-	if (CompCode != MQCC_FAILED)
-	{
-		buffer[messlen] = '\0';            /* add terminator          */
-		SysLog(1,"message <%s>\n", buffer);
-		memset(xmlfile,0,sizeof(xmlfile));
-		memset(msgtype,0,sizeof(msgtype));
-		/** 解报文头并生成文件 **/
-		if(unpack_head_file(buffer,msgtype,xmlfile)!=0)
-		{
-			SysLog(1,"解报文头生成文件失败\n");
-		}else
-		{
-			memset(sendbuf,0,sizeof(sendbuf));
-			sprintf(sendbuf,"%s|%s",msgtype,xmlfile);
-			SysLog(1,"传入hash表参数[%s]\n",sendbuf);
-			if(chnlprocess(sendbuf)==0)
+			else                      /* general report for other reasons */
 			{
-				SysLog(1,"渠道处理成功\n");
+				SysLog(1,"MQGET ended with reason code %d\n", Reason);
+
+				/*   treat truncated message as a failure for this sample   */
+				if (Reason == MQRC_TRUNCATED_MSG_FAILED)
+				{
+					CompCode = MQCC_FAILED;
+				}
+				return -1;
+			}
+		}
+
+		/****************************************************************/
+		/*   Display each message received                              */
+		/****************************************************************/
+		if (CompCode != MQCC_FAILED)
+		{
+			buffer[messlen] = '\0';            /* add terminator          */
+			SysLog(1,"message <%s>\n", buffer);
+			memset(xmlfile,0,sizeof(xmlfile));
+			memset(msgtype,0,sizeof(msgtype));
+			/** 解报文头并生成文件 **/
+			if(unpack_head_file(buffer,msgtype,xmlfile)!=0)
+			{
+				SysLog(1,"解报文头生成文件失败\n");
 			}else
 			{
-				SysLog(1,"渠道处理失败\n");
+				memset(sendbuf,0,sizeof(sendbuf));
+				memset(headbuf,0,sizeof(headbuf));
+				memcpy(headbuf,buffer,126);
+				sprintf(sendbuf,"%s|%s|%s",msgtype,xmlfile,headbuf);
+				SysLog(1,"传入hash表参数[%s]\n",sendbuf);
+				if(chnlprocess(sendbuf)==0)
+				{
+					SysLog(1,"渠道处理成功\n");
+				}else
+				{
+					SysLog(1,"渠道处理失败\n");
+				}
 			}
-		}
 
-	}
+		}
 	}
 
 	/******************************************************************/

@@ -13,15 +13,35 @@ int xml2table(char	*xmltype)
 	char	sqlstr2[1300];
 	char	sqlstr3[1300];
 	char	tablename[31];
+	char	msgtype[30];
+	int iret =0;
 
 	memset(sqlstr1,0,sizeof(sqlstr1));
 	memset(sqlstr2,0,sizeof(sqlstr2));
 	memset(sqlstr3,0,sizeof(sqlstr3));
 	memset(tablename,0,sizeof(tablename));
+	memset(msgtype,0,sizeof(msgtype));
 
+
+	if(xmltype[0]=='V')
+	{
+		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
+		iret = get_var_value(xmltype+1,sizeof(msgtype),1,msgtype);
+		if(iret == -1)
+		{
+			SysLog(1,"从变量[%s]取报文类型进行处理失败",xmltype+1);
+			return  -1;
+		}
+		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
+		trim(msgtype);
+	}else if(xmltype[0]=='B')
+	{
+		strcpy(msgtype,xmltype+1);
+		trim(msgtype);
+	}
 	/** 获取是登记往还是来 **/
 	char	*value;
-	strcpy(query,"select * from xml2tablemap where inoutflag ='1' ");
+	sprintf(query,"%s '%s' %s '%s' ","select * from xml2tablemap where inoutflag =","1"," and msgtype =",msgtype);
 	int	t,r;
 
 	mysql = mysql_init(NULL);

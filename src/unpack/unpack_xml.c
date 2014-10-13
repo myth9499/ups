@@ -14,13 +14,13 @@ int xml_unpack(char *a)
 	memset(msgtype,0,sizeof(msgtype));
 	memset(msgtypefile,0,sizeof(msgtypefile));
 
-	if(!strcmp(a,"V"))
+	if(a[0]=='V')
 	{
 		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
-		iret = get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype);
+		iret = get_var_value(a+1,sizeof(msgtype),1,msgtype);
 		if(iret == -1)
 		{
-			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
+			SysLog(1,"从变量[%s]取报文类型进行处理失败",a+1);
 			return  -1;
 		}
 		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
@@ -41,12 +41,14 @@ int xml_unpack(char *a)
 			return  -1;
 		}
 		return  0;
-	}
-	sprintf(msgtypefile,"%s/%s_1.xml","/item/ups/src/unpack",a);
-	if(unpack_xml(a,msgtypefile)==-1)
+	}else if(a[0]=='B')
 	{
-		SysLog(1,"解报文类型[%s]失败",a);
-		return  -1;
+		sprintf(msgtypefile,"%s/%s_1.xml","/item/ups/src/unpack",a+1);
+		if(unpack_xml(a,msgtypefile)==-1)
+		{
+			SysLog(1,"解报文类型[%s]失败",a);
+			return  -1;
+		}
 	}
 	SysLog(1,"unpack xml ok");
 	return 0;
@@ -121,8 +123,8 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 				//SysLog(1,"LILEI FILE [%s] LINE[%d]路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,tmpcfg->varname,szKey,tmpcfg->depth);
 				if(!strcmp(tmpcfg->fullpath,path)&&!strcmp(tmpcfg->xmlname,xmltype))
 				{
-						SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->parent->name);
-						SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->name);
+					SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->parent->name);
+					SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->name);
 					if(!strcmp(curNode->parent->name,"Ustrd"))
 					{
 						//SysLog(1,"FILE [%s] LINE[%d]路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,(tmpcfg+loop)->fullpath,(tmpcfg+loop)->varname,szKey,(tmpcfg+loop)->depth);

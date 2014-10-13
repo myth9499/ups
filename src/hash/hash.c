@@ -524,3 +524,58 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	shmdt(transhm);
 	return -1;
 }
+
+int	delete_msgq(long	inpid)
+{
+	/***轮询所有渠道对应消息队列，查看是否有未释放的消息队列数据 ***/
+	int shmid = 0,i=0;
+	int	msgidi,msgido,msgidr;
+	_servreg *sreg = NULL;
+	_msgbuf	*mbuf;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		SysLog(1,"get serv shm id error\n");
+		return -1;
+	}
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		SysLog(1,"shmat sreg error\n");
+		return -1;
+	}
+	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
+	if(mbuf == NULL)
+	{
+		SysLog(1,"malloc msgbuf error\n");
+		return -1;
+	}
+	for(i=0;(sreg+i)->servpid!=0;i++)
+	{
+		if(!strcmp((sreg+i)->type,"C"))
+		{
+			SysLog(1,"开始查找进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s待删除PID[%ld]\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat,inpid);
+			if(getmsgid((sreg+i)->chnlname,&msgidi,&msgido,&msgidr)!=0)
+			{
+				SysLog(1,"获取渠道:%s消息队列失败\t\n",(sreg+i)->chnlname);
+				continue;
+			}
+			if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			}
+			if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			}
+			if(msgrcv(msgidr,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
+			{
+				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			}
+			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据成功 inpid[%ld]\n",__FILE__,__LINE__,inpid);
+		}
+	}
+	free(mbuf);
+	shmdt(sreg);
+	return 0;
+
+}

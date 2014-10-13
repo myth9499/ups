@@ -179,12 +179,14 @@ int insert_servreg(char *chnlname )
 	for(i=0;i<MAXSERVREG;i++)
 	{
 		SysLog(1,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		sem_wait(&((sreg+i)->sem2));
 		if((sreg+i)->servpid==0)
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
 			(sreg+i)->stat[0]='N';
 			(sreg+i)->type[0]='S';
+			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);
 			return 0;
 		}else if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
@@ -192,9 +194,11 @@ int insert_servreg(char *chnlname )
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
 			(sreg+i)->stat[0]='N';
+			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);
 			return 0;
 		}
+		sem_post(&((sreg+i)->sem2));
 	}
 	shmdt(sreg);
 	return -1;
@@ -325,14 +329,22 @@ void serv(int sig)
 		seterr("EEEEEEEE","其他错误");
 	}
 	/** 删除共享内存hash表中的交易信息 **/
-    	if(delete_shm_hash(mbuf->innerid)==-1)
-    	{
-        	SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+	if(delete_shm_hash(mbuf->innerid)==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		updatestat();
 		alarm(0);
 		return ;
-    	}
-    	SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
+	}
+	SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
+	if(delete_msgq(mbuf->innerid)==-1)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败\n",__FILE__,__LINE__);
+		updatestat();
+		alarm(0);
+		return ;
+	}
+	SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);

@@ -151,8 +151,8 @@ int main(int argc, char **argv)
 		SysLog(1,"FILE[%s] LINE[%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);
 		return -1;
 	}
-		SysLog(1,"FILE[%s] LINE[%d] 远程队列管理器[%s]\n",__FILE__,__LINE__,QMName);
-		SysLog(1,"FILE[%s] LINE[%d] 远程队列[%s]\n",__FILE__,__LINE__,RQName);
+	SysLog(1,"FILE[%s] LINE[%d] 远程队列管理器[%s]\n",__FILE__,__LINE__,QMName);
+	SysLog(1,"FILE[%s] LINE[%d] 远程队列[%s]\n",__FILE__,__LINE__,RQName);
 
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
@@ -277,6 +277,7 @@ int main(int argc, char **argv)
 	/* pmo.Options |= MQPMO_NEW_MSG_ID;                               */
 	/* pmo.Options |= MQPMO_NEW_CORREL_ID;                            */
 
+	signal(SIGUSR1,SIG_IGN);
 	/** 添加该进程到进程控制表中，方便做统一处理 **/
 	if(insert_chnlreg(chnlname)!=0)
 	{
@@ -286,6 +287,7 @@ int main(int argc, char **argv)
 	/** 从消息队列读取数据，进行后续处理 **/
 	while(1)
 	{
+		SysLog(1,"FILE [%s] LINE [%d]:渠道[%s]开始服务\n",__FILE__,__LINE__,chnlname);
 		memset(mbuf,0,sizeof(mbuf));
 		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),0,0)==-1)
 		{

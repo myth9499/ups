@@ -158,7 +158,7 @@ int initservregsem()
 		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	for(i=0;i<1024;i++)
+	for(i=0;i<MAXSERVREG;i++)
 	{
 		sem_init(&(sreg+i)->sem1,1,1);
 		sem_init(&(sreg+i)->sem2,1,1);
@@ -371,12 +371,14 @@ int insert_chnlreg(char *chnlname )
 	for(i=0;i<MAXSERVREG;i++)
 	{
 		//SysLog(1,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		sem_wait(&((sreg+i)->sem2));
 		if((sreg+i)->servpid==0)
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
 			(sreg+i)->stat[0]='N';
 			(sreg+i)->type[0]='C';
+			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);
 			return 0;
 		}else if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
@@ -384,9 +386,11 @@ int insert_chnlreg(char *chnlname )
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
 			(sreg+i)->stat[0]='N';
+			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);
 			return 0;
 		}
+		sem_post(&((sreg+i)->sem2));
 	}
 	shmdt(sreg);
 	return -1;
@@ -466,4 +470,3 @@ int get_vardef(char	*varname,_vardef	*vardef)
 	shmdt(tstvardef);
 	return iret;
 }
-
