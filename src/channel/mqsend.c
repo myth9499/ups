@@ -93,21 +93,27 @@ int sendprocess(long inerid,MQLONG	*messlen)
 		  {
 		 **/
 		SysLog(1,"FILE [%s] LINE[%d] 交易跟踪号[%ld]\t传入交易信息[%s][%s]\n",__FILE__,__LINE__,inerid,tranbuf->outtran,tranbuf->intran);
-		strtok(tranbuf->outtran,"|");
-		strcpy(tmpfilename,strtok(NULL,"|"));
-		fp = fopen(tmpfilename,"r");
-		if(fp==NULL)	
+		if(strcmp(tranbuf->outtran,""))
 		{
-			SysLog(1,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
+			strtok(tranbuf->outtran,"|");
+			strcpy(tmpfilename,strtok(NULL,"|"));
+			fp = fopen(tmpfilename,"r");
+			if(fp==NULL)	
+			{
+				SysLog(1,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
+				return -1;
+			}
+			if(fread(buffer, sizeof(buffer), 1,fp) != -1)
+			{
+				*messlen = (MQLONG)strlen(buffer); /* length without null      */
+				fclose(fp);
+				return 0;
+			}
+		}else
+		{
+			SysLog(1,"FILE [%s] LINE[%d] 传入数据为空:%s\n",__FILE__,__LINE__);
 			return -1;
 		}
-		if(fread(buffer, sizeof(buffer), 1,fp) != -1)
-		{
-			*messlen = (MQLONG)strlen(buffer); /* length without null      */
-			fclose(fp);
-			return 0;
-		}
-		return -1;
 		//}
 	}else
 	{

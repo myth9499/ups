@@ -12,6 +12,7 @@ char	LQName[60];
 char	trancode[30];
 char	waitsec[10];
 
+static long testid=1;
 int	getchnlcfg(char *chnlname)
 {
 	FILE *fp;
@@ -82,7 +83,7 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 		SysLog(1,"FILE [%s] LINE [%d]:传入参数有误\n",__FILE__,__LINE__);
 		return -1;
 	}
-	printf("buffer is [%s]\n",buffer);
+	//printf("buffer is [%s]\n",buffer);
 	memcpy(msgtype,buffer+54,20);
 	memcpy(msgid,buffer+74,20);
 
@@ -140,7 +141,9 @@ int chnlprocess(char *buffer)
 	/**填充消息队列数据 **/
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
-	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	mbuf->innerid=getinnerid();
+	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
 	strcpy(mbuf->tranbuf.trancode,trancode);
 	mbuf->tranbuf.buffsize = strlen(buffer);

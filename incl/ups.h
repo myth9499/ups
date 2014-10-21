@@ -27,6 +27,8 @@
 #define SYS_ERR -1
 #define SYS_OK  0
 
+/** the global innerid **/
+static long	globalinnerid = 0;
 /** func define **/
 
 static int BUCKETSCNT=100; /** HASH最大值 **/

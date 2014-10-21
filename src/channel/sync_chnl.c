@@ -334,7 +334,8 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	/**填充消息队列数据 **/
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
-	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	mbuf->innerid =  getinnerid();
 	//sprintf(mbuf->tranbuf,"%20s|%10s|%10d",chnl_name,"IXO101",strlen(rcvbuf));
 	//
 	strcpy(mbuf->tranbuf.chnlname,chnl_name);
