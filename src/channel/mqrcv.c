@@ -95,7 +95,7 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 		SysLog(1,"FILE [%s] LINE [%d]:打开文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		return -1;
 	}
-	if(fwrite(buffer+126,strlen(buffer)-126,1,fp)==-1)
+	if(fwrite(buffer+128,strlen(buffer)-128,1,fp)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:写文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		fclose(fp);
@@ -153,6 +153,20 @@ int chnlprocess(char *buffer)
 		return -1;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
+	if((ipid = getservpid(chnlname))<=0)
+	{
+		SysLog(1,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
+		/** 删除消息队列信息，防止堵塞 **/
+		if(delete_shm_hash(mbuf->innerid)==-1)
+		{
+			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		}
+		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
+		{
+			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		}
+		return -1;
+	}
 	iret = msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 	if(iret == -1)
 	{
@@ -165,20 +179,6 @@ int chnlprocess(char *buffer)
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
 	/** 发送信号到核心服务 **/
-	if((ipid = getservpid(chnlname))<=0)
-	{
-		SysLog(1,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
-		/** 删除消息队列信息，防止堵塞 **/
-		if(delete_shm_hash(mbuf->innerid)==-1)
-		{
-			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
-		}
-		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0)==-1)
-		{
-			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
-		}
-		return -1;
-	}
 	SysLog(1,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
 	if(kill(ipid,SIGUSR2)==0)
 	{
@@ -459,7 +459,7 @@ int main(int argc, char **argv)
 			{
 				memset(sendbuf,0,sizeof(sendbuf));
 				memset(headbuf,0,sizeof(headbuf));
-				memcpy(headbuf,buffer,126);
+				memcpy(headbuf,buffer,128);
 				sprintf(sendbuf,"%s|%s|%s",msgtype,xmlfile,headbuf);
 				SysLog(1,"传入hash表参数[%s]\n",sendbuf);
 				if(chnlprocess(sendbuf)==0)
