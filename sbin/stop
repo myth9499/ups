@@ -1,2 +1,3 @@
 /item/ups/src/monitor/stopups
 /item/ups/sbin/del.sh
+kill -9  `ps -ef|grep monitor_timeout|grep -v grep|awk '{print $2}'`
