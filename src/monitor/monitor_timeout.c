@@ -57,8 +57,46 @@ int main(int argc,char *argv[] )
 			}
 		}
 		SysLog(1,"FILE[%s] LINE[%d]当前无服务超时\n",__FILE__,__LINE__);
+		/** 监控是否有进程退出运行 **/
+		viewexit();
 		sleep(5);
 	}
 	shmdt(tran);
 	return 0;
+}
+/** 查看是否有异常退出进程，若存在异常退出进程，进行自动重启动 **/
+int	viewexit()
+{
+	int shmid = 0,i=0,ret,result=0;
+	_servreg *sreg = NULL;
+	int shmsize = MAXSERVREG*sizeof(_servreg);
+	if((shmid = getshmid(7,shmsize))==-1)
+	{
+		printf("get serv shm id error\n");
+		return -1;
+	}
+	if((sreg = shmat(shmid,NULL,0))==NULL)
+	{
+		printf("shmat sreg error\n");
+		return -1;
+	}
+	for(i=0;(sreg+i)->servpid!=0;i++)
+	{
+		if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
+		{
+			result = 1;
+			SysLog(1,"FILE[%s] LINE[%d] 渠道[%s] 进程[%ld]退出运行，需要重新启动\n",__FILE__,__LINE__,(sreg+i)->chnlname,(sreg+i)->servpid);
+			ret = system((sreg+i)->startcmd);
+			if(WEXITSTATUS(ret)!=0||ret ==-1)
+			{
+				SysLog(1,"启动渠道[%s]服务 启动命令[%s]失败\n",(sreg+i)->chnlname,(sreg+i)->startcmd);
+			}
+		}
+	}
+	if(result == 0)
+	{
+		SysLog(1,"FILE[%s] LINE[%d] 当前无进程异常退出\n",__FILE__,__LINE__);
+	}
+	shmdt(sreg);
+	return  0;
 }

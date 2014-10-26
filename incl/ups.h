@@ -108,6 +108,7 @@ typedef struct SERVREG
 	char	stat[2];	/** 核心服务状态  **/
 	char	chnlname[20];/** 核心/渠道名称 **/
 	char	type[2];//S代表服务,C代表渠道
+	char	startcmd[200];/** 启动命令 **/
 	sem_t	sem1;	/** 信号量 **/
 	sem_t	sem2;	/** 信号量 **/
 }_servreg;

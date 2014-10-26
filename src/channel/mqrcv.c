@@ -207,6 +207,11 @@ int chnlprocess(char *buffer)
 int main(int argc, char **argv)
 {
 
+
+	char    startcmd[200];
+	int     i=0;
+	memset(startcmd,0x00,sizeof(startcmd));
+
 	/*   Declare MQI structures needed                                */
 	MQOD     od = {MQOD_DEFAULT};    /* Object Descriptor             */
 	MQMD     md = {MQMD_DEFAULT};    /* Message Descriptor            */
@@ -375,7 +380,17 @@ int main(int argc, char **argv)
 	gmo.Version=MQGMO_VERSION_2;
 
 	signal(SIGUSR1,SIG_IGN);
-	if(insert_chnlreg(chnlname)!=0)
+	for(i=0;i<argc;i++)
+	{
+		if(strlen(argv[i])==0)
+			break;
+		strcat(startcmd," ");
+		strcat(startcmd,argv[i]);
+	}
+
+	strcat(startcmd," ");
+	strcat(startcmd,"&");
+	if(insert_chnlreg(startcmd,chnlname)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;

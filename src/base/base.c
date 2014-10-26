@@ -352,7 +352,7 @@ pid_t getservpid(char *chnl_name)
 	shmdt(sreg);
 	return ret;
 }
-int insert_chnlreg(char *chnlname )
+int insert_chnlreg(char	*startcmd,char *chnlname )
 {
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
@@ -376,6 +376,7 @@ int insert_chnlreg(char *chnlname )
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
+			strcpy((sreg+i)->startcmd,startcmd);
 			(sreg+i)->stat[0]='N';
 			(sreg+i)->type[0]='C';
 			sem_post(&((sreg+i)->sem2));
@@ -385,6 +386,7 @@ int insert_chnlreg(char *chnlname )
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
+			strcpy((sreg+i)->startcmd,startcmd);
 			(sreg+i)->stat[0]='N';
 			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);

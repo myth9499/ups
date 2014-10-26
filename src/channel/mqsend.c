@@ -125,6 +125,9 @@ int sendprocess(long inerid,MQLONG	*messlen)
 
 int main(int argc, char **argv)
 {
+	char    startcmd[200];
+	int     i=0;
+	memset(startcmd,0x00,sizeof(startcmd));
 	/*  Declare file and character for sample input                   */
 
 	/*   Declare MQI structures needed                                */
@@ -285,7 +288,17 @@ int main(int argc, char **argv)
 
 	signal(SIGUSR1,SIG_IGN);
 	/** 添加该进程到进程控制表中，方便做统一处理 **/
-	if(insert_chnlreg(chnlname)!=0)
+	for(i=0;i<argc;i++)
+	{
+		if(strlen(argv[i])==0)
+			break;
+		strcat(startcmd," ");
+		strcat(startcmd,argv[i]);
+	}
+	strcat(startcmd," ");
+	strcat(startcmd,"&");
+
+	if(insert_chnlreg(startcmd,chnlname)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:添加渠道[%s]到监控内存失败\n",__FILE__,__LINE__,chnlname);
 		return -1;

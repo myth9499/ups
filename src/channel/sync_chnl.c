@@ -67,7 +67,11 @@ int main(int argc,char *argv[])
 	pid_t pid;
 	int sockfd,clifd;
 
+	char	startcmd[200];
+	int	i=0;
 
+
+	memset(startcmd,0x00,sizeof(startcmd));
 	memset(chnl_name,0,sizeof(chnl_name));
 	memset(syncflag,0,sizeof(syncflag));
 
@@ -119,7 +123,17 @@ int main(int argc,char *argv[])
 		SysLog(1,"FILE [%s] LINE [%d]:渠道[%s] 监听端口失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
-	if(insert_chnlreg(chnl_name)!=0)
+	for(i=0;i<argc;i++)
+	{
+		if(strlen(argv[i])==0)
+			break;
+		strcat(startcmd," ");
+		strcat(startcmd,argv[i]);
+	}
+	strcat(startcmd," ");
+	strcat(startcmd,"&");
+
+	if(insert_chnlreg(startcmd,chnl_name)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;

@@ -160,7 +160,7 @@ int updatestat(void)
 }
 
 
-int insert_servreg(char *chnlname )
+int insert_servreg(char	*startcmd,char *chnlname )
 {
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
@@ -184,6 +184,7 @@ int insert_servreg(char *chnlname )
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
+			strcpy((sreg+i)->startcmd,startcmd);
 			(sreg+i)->stat[0]='N';
 			(sreg+i)->type[0]='S';
 			sem_post(&((sreg+i)->sem2));
@@ -193,6 +194,7 @@ int insert_servreg(char *chnlname )
 		{
 			(sreg+i)->servpid = getpid();
 			strcpy((sreg+i)->chnlname,chnlname);
+			strcpy((sreg+i)->startcmd,startcmd);
 			(sreg+i)->stat[0]='N';
 			sem_post(&((sreg+i)->sem2));
 			shmdt(sreg);
@@ -216,7 +218,10 @@ int main(int argc,char *argv[])
 	atexit(memset_var_hash);
 	atexit(exit_free);
 	atexit(delservpid);
-	
+
+	char	startcmd[200];
+	int		i=0;
+	memset(startcmd,0x00,sizeof(startcmd));	
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
@@ -251,7 +256,17 @@ int main(int argc,char *argv[])
 	}
 
 	/** 注册serv **/
-	if(insert_servreg(argv[1])==0)
+
+	for(i=0;i<argc;i++)
+	{
+		if(strlen(argv[i])==0)
+			break;
+		strcat(startcmd," ");
+		strcat(startcmd,argv[i]);
+	}
+	strcat(startcmd," ");
+	strcat(startcmd,"&");
+	if(insert_servreg(startcmd,argv[1])==0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
 	}else

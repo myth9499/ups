@@ -3,3 +3,4 @@
 /item/ups/src/monitor/startups
 sleep 1
 /item/ups/src/monitor/monitor
+/item/ups/src/monitor/monitor_timeout &

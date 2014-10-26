@@ -19,7 +19,11 @@ int main(int argc,char *argv[] )
 	}
 	for(i=0;(sreg+i)->servpid!=0;i++)
 	{
-		printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat);
+		if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
+		{
+			strcpy((sreg+i)->stat,"E");
+		}
+		printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,(!strcmp((sreg+i)->stat,"N"))?"正常":"停止",(sreg+i)->startcmd);
 	}
 	if(i==0)
 	{

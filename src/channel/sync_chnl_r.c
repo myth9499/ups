@@ -49,6 +49,9 @@ int main(int argc,char *argv[])
 	pid_t pid;
 	_msgbuf *mbuf=NULL;
 
+	char    startcmd[200];
+	int     i=0;
+	memset(startcmd,0x00,sizeof(startcmd));
 
 	memset(chnl_name,0,sizeof(chnl_name));
 	memset(syncflag,0,sizeof(syncflag));
@@ -77,6 +80,7 @@ int main(int argc,char *argv[])
 	}
 	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
 	signal(SIGPIPE,SIG_IGN);
+	signal(SIGUSR1,SIG_IGN);
 	//signal(SIGCHLD,child_exit);
 	signal(SIGCHLD,SIG_IGN);
 #ifdef WIN32
@@ -88,7 +92,18 @@ int main(int argc,char *argv[])
 		printf("block sigpipe error/n");
 	} 
 #endif  
-	if(insert_chnlreg(chnl_name)!=0)
+
+	for(i=0;i<argc;i++)
+	{
+		if(strlen(argv[i])==0)
+			break;
+		strcat(startcmd," ");
+		strcat(startcmd,argv[i]);
+	}
+
+	strcat(startcmd," ");
+	strcat(startcmd,"&");
+	if(insert_chnlreg(startcmd,chnl_name)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;
