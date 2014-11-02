@@ -23,7 +23,16 @@ int main(int argc,char *argv[] )
 		{
 			strcpy((sreg+i)->stat,"E");
 		}
-		printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,(!strcmp((sreg+i)->stat,"N"))?"正常":"停止",(sreg+i)->startcmd);
+		if(!strcmp((sreg+i)->stat,"N"))
+		{
+			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"正常",(sreg+i)->startcmd);
+		}else if(!strcmp((sreg+i)->stat,"L"))
+		{
+			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"运行",(sreg+i)->startcmd);
+		}else
+		{
+			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"停止",(sreg+i)->startcmd);
+		}
 	}
 	if(i==0)
 	{

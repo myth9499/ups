@@ -348,8 +348,8 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	/**填充消息队列数据 **/
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
-	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	mbuf->innerid =  getinnerid();
+	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	//mbuf->innerid =  getinnerid();
 	//sprintf(mbuf->tranbuf,"%20s|%10s|%10d",chnl_name,"IXO101",strlen(rcvbuf));
 	//
 	strcpy(mbuf->tranbuf.chnlname,chnl_name);
@@ -391,6 +391,7 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
+		updatestat_foroth(ipid);
 		return -1;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
@@ -406,6 +407,7 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
+		updatestat_foroth(ipid);
 		return -1;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
@@ -428,6 +430,7 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
+		updatestat_foroth(ipid);
 		return -1;
 	}
 	iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);

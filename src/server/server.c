@@ -290,6 +290,9 @@ int main(int argc,char *argv[])
 }
 void serv(int sig)
 {
+	struct	timeval	t_start,t_end;
+	float	usetime;
+	gettimeofday(&t_start,NULL);
 	SysLog(1,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
 	if(init_malloced_hash()!=0)
 	{
@@ -327,6 +330,9 @@ void serv(int sig)
 		}else
 		{
 			SysLog(1,"FILE [%s] LINE[%d] 获取全局跟踪号:[%ld]信息失败\n",__FILE__,__LINE__,innerid);
+			gettimeofday(&t_end,NULL);
+			usetime=(t_end.tv_usec-t_start.tv_usec)/1000;
+			SysLog(1,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[%f]毫秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 			updatestat();
 			return ;
 		}
@@ -347,6 +353,9 @@ void serv(int sig)
 	if(delete_shm_hash(mbuf->innerid)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		gettimeofday(&t_end,NULL);
+		usetime=(t_end.tv_usec-t_start.tv_usec)/1000;
+		SysLog(1,"FILE [%s] LINE[%d] 交易成功结束开始[%ld]结束[%ld],耗时[%f]毫秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
@@ -355,11 +364,17 @@ void serv(int sig)
 	if(delete_msgq(mbuf->innerid)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败\n",__FILE__,__LINE__);
+		gettimeofday(&t_end,NULL);
+		usetime=(t_end.tv_usec-t_start.tv_usec)/1000;
+		SysLog(1,"FILE [%s] LINE[%d] 交易成功,结束开始[%ld]结束[%ld],耗时[%f]毫秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
 	}
 	SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
+	gettimeofday(&t_end,NULL);
+	usetime=(t_end.tv_usec-t_start.tv_usec)/1000;
+	SysLog(1,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]毫秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);
@@ -367,6 +382,7 @@ void serv(int sig)
 }
 int serv_flow(char *trancode)
 {
+	struct	timeval	t_start,t_end;
 	if(trancode==NULL)
 	{
 		SysLog(1,"FILE [%s] LINE[%d]获取交易码失败\n",__FILE__,__LINE__);
@@ -391,16 +407,19 @@ int serv_flow(char *trancode)
 	/** init commmsg **/
 	while(strcmp(localflow[i].flowname,"END"))
 	{
+		gettimeofday(&t_start,NULL);
 		SysLog(1,"开始处理流程flowname[%s]库[%s]函数[%s]参数[%s]\t\n",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
 		trim(localflow[i].flowso);
 		trim(localflow[i].flowfunc);
 		trim(localflow[i].funcpar1);
 		if(do_so(localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1)==0)
 		{
-			SysLog(1,"流程处理成功\n");
+			gettimeofday(&t_end,NULL);
+			SysLog(1,"流程处理成功,耗时[+%ld]\n",t_end.tv_usec-t_start.tv_usec);
 		}else
 		{
-			SysLog(1,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			gettimeofday(&t_end,NULL);
+			SysLog(1,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败,耗时[+%ld]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",t_end.tv_usec-t_start.tv_usec);
 			/** 执行错误流程**/
 			if(get_flow(localflow[i].errflow,localflow)!=0)
 			{
