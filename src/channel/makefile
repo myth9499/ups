@@ -1,2 +1,23 @@
-sync_chnl:sync_chnl.c
-	gcc  -g -o sync_chnl	sync_chnl.c -lpack -lhash -lbase   -lpthread -I ../../incl -L ../lib 
+all:sync_chnl	sync_chnl_r	mqsend	mqrcv
+.PHONY:all
+objects=sync_chnl.o	sync_chnl_r.o mqsend.o mqrcv.o
+upshome=/item/ups/
+upsincl=/item/ups/incl
+upslib=/item/ups/src/lib
+mqincl=/opt/mqm/inc/
+mqlib=/opt/mqm/lib64
+CFLAGS=-I $(upsincl) -I $(mqincl)
+LDFLAGS=-L $(upslib) -L $(mqlib)
+LIBS=-lpack	-lhash	-lbase -lpthread -lmqm
+sync_chnl:sync_chnl.o
+	gcc  -g -o sync_chnl	sync_chnl.o $(CFLAGS) $(LDFLAGS) $(LIBS) 
+	@mv	sync_chnl	$(upshome)/bin	
+sync_chnl_r:sync_chnl_r.o
+	gcc  -g -o sync_chnl_r	sync_chnl_r.o $(CFLAGS) $(LDFLAGS) $(LIBS)
+	@mv	sync_chnl_r	$(upshome)/bin	
+mqsend:mqsend.o
+	gcc -g -o mqsend mqsend.o  $(CFLAGS) $(LDFLAGS) $(LIBS) 
+	@mv	mqsend	$(upshome)/bin	
+mqrcv:mqrcv.o
+	gcc -o mqrcv mqrcv.o $(CFLAGS) $(LDFLAGS) $(LIBS)
+	@mv	mqrcv	$(upshome)/bin	

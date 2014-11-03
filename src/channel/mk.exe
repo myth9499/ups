@@ -1,2 +1,0 @@
-sync_chnl_r:sync_chnl_r.c
-	gcc  -g -o sync_chnl_r	sync_chnl_r.c -lpack -lhash -lbase  -lpthread -I ../../incl -L ../lib 

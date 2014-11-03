@@ -1,6 +1,6 @@
-/item/ups/src/shm/initshm
-/item/ups/src/cfg/loadcfg
-/item/ups/src/monitor/startups
+/item/ups/bin/initshm
+/item/ups/bin/loadcfg
+/item/ups/bin/startups
 sleep 1
-/item/ups/src/monitor/monitor
-/item/ups/src/monitor/monitor_timeout &
+/item/ups/bin/monitor
+/item/ups/bin/monitor_timeout &

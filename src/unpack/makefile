@@ -1,3 +1,13 @@
-libunpack.so:unpack_xml.c pack_xml.c
-	gcc	-g -o libunpack.so -fPIC -shared  unpack_xml.c pack_xml.c -I  ../../incl/ -I ../../incl/libxml2/include/libxml2/ -L  ../../incl/libxml2/lib/ -L ../lib/  -lxml2 -lbase
-	mv libunpack.so  ../lib
+all:libunpack.so
+.PHONY:all
+objects=unpack_xml.o	pack_xml.o
+upsincl=/item/ups/incl
+upslib=/item/ups/src/lib
+xmlincl=$(upsincl)/libxml2/include/libxml2
+xmllib= $(upsincl)/libxml2/lib
+CFLAGS=-I $(upsincl) -I $(xmlincl) -shared	-fPIC
+LDFLAGS=-L $(upslib)  -L $(xmllib)
+LIBS=-lxml2 	-lbase
+libunpack.so:$(objects)
+	    gcc -g -o libunpack.so $(objects) $(CFLAGS)	$(LDFLAGS)	$(LIBS)
+	    @mv libunpack.so  ../lib

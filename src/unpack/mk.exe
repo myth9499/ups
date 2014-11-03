@@ -1,2 +1,0 @@
-pack:pack.c
-	gcc	-o pack pack.c -I  ../../incl/ -I ../../incl/libxml2/include/libxml2/ -L  ../../incl/libxml2/lib/ -L ../lib/  -lxml2 -lbase -lpack

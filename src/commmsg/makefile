@@ -1,3 +1,11 @@
-libpack.so:unpack.c chnlcom.c unpack_define.c
-	gcc -g -o libpack.so unpack.c chnlcom.c unpack_define.c -fPIC -shared  -lbase -lhash -I ../../incl/ -L ../lib
-	mv libpack.so ../lib
+all:libpack.so
+.PHONY:all
+objects=unpack.o	chnlcom.o	unpack_define.o
+upsincl=/item/ups/incl
+upslib=/item/ups/src/lib
+CFLAGS=-I $(upsincl) -shared	-fPIC
+LDFLAGS=-L $(upslib)
+LIBS=-lhash	-lbase
+libpack.so:$(objects)
+	    gcc -g -o libpack.so $(objects)  $(CFLAGS)	$(LDFLAGS)	$(LIBS)
+	    @mv libpack.so  ../lib
