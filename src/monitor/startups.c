@@ -62,7 +62,7 @@ int main(int argc,char *argv[] )
 			continue;
 		}
 		printf("渠道[%s]\t执行命令[%s]\t启动服务数[%d]启动成功...开始启动服务\n",chnlname,systemcmd,servcnt);
-		sprintf(servbuf,"%s %s &","/item/ups/src/server/server ",chnlname);
+		sprintf(servbuf,"%s %s &","/item/ups/bin/server ",chnlname);
 		for(i=0;i<servcnt;i++)
 		{
 			printf("开始启动渠道[%s]第[%d]个服务 启动命令[%s]\n",chnlname,i,servbuf);

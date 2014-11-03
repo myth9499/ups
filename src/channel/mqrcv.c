@@ -142,7 +142,7 @@ int chnlprocess(char *buffer)
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
 	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	mbuf->innerid=getinnerid();
+	mbuf->innerid=getinnerid()+1;
 	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
 	strcpy(mbuf->tranbuf.trancode,trancode);
@@ -159,6 +159,7 @@ int chnlprocess(char *buffer)
 	if((ipid = getservpid(chnlname))<=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
+		updatestat_foroth(ipid);
 		/** 删除消息队列信息，防止堵塞 **/
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
@@ -174,6 +175,7 @@ int chnlprocess(char *buffer)
 	if(iret == -1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:发送控制信息到消息队列失败[%s]\n",__FILE__,__LINE__,strerror(errno));
+		updatestat_foroth(ipid);
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
 			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
@@ -189,6 +191,7 @@ int chnlprocess(char *buffer)
 	}else
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]失败：[%s]\n",__FILE__,__LINE__,ipid,strerror(errno));
+		updatestat_foroth(ipid);
 		/**还需要删除消息队列信息，防止堵塞 **/
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
