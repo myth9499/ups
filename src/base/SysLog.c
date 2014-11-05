@@ -16,10 +16,10 @@ int SysLog(int loglevel,char *format,...)
 	memset(log_path,0,sizeof(log_path));
 	if(loglevel==1)
 	{
-    	sprintf(log_path,"/item/ups/log/sys.log");
+    	sprintf(log_path,"%s%s",upshome,"/log/sys.log");
 	}else
 	{
-    	sprintf(log_path,"/item/ups/log/log_%ld.log",innerid);
+    	sprintf(log_path,"%s%s",upshome,"/log/log_%ld.log",innerid);
 	}
 	//printf("log path is [%s]\n",log_path);
     fp = fopen(log_path,"a");

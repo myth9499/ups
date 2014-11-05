@@ -59,6 +59,13 @@ int main(int argc,char *argv[])
 		printf("启动渠道参数错误:usage appname+chnlname+listenport\n");
 		return -1;
 	}
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	/** 需要屏蔽所有信号 **/
 	atexit(do_exit);
 	struct sockaddr_in serv_addr;

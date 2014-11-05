@@ -1,6 +1,5 @@
 #include "ups.h"
 #include  <sys/resource.h>
-
 void memset_var_hash(void);
 void serv(int sig);
 int iret = 0;
@@ -215,6 +214,13 @@ int main(int argc,char *argv[])
 		printf("服务启动参数不正确:usage appname chnlname\n");
 		return -1;
 	}
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	atexit(memset_var_hash);
 	atexit(exit_free);
 	atexit(delservpid);

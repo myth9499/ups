@@ -1,9 +1,9 @@
 all:loadcfg	filetodb	dbtoshm
 .PHONY:all
 objects=loadcfg.o	filetodb.o dbtoshm.o 
-upshome=/item/ups/
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upshome=$(UPSHOME)
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 sqlite3incl=$(upsincl)/sqlite3/include
 sqlite3lib=$(upsincl)/sqlite3/lib
 xmlincl=$(upsincl)/libxml2/include/libxml2

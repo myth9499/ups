@@ -4,9 +4,15 @@ int get_sem()
 {
 	key_t	key;
 	int semid;
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	char	cmd[110];
+	memset(cmd,0,sizeof(cmd));
 
-	system("touch /item/ups/etc/mq_2");
-	if((key=ftok("/item/ups/etc/mq_2",1))==-1)
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_2");
+	sprintf(cmd,"%s%s","touch ",keypath);
+	system(cmd);
+	if((key=ftok(keypath,1))==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		printf("ftok error[%s]",strerror(errno));
@@ -23,9 +29,16 @@ int init_sem(int	init_value)
 {
 	key_t	key;
 	int semid;
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	char	cmd[110];
+	memset(cmd,0,sizeof(cmd));
 
-	system("touch /item/ups/etc/mq_2");
-	if((key=ftok("/item/ups/etc/mq_2",1))==-1)
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_2");
+	sprintf(cmd,"%s%s","touch ",keypath);
+	system(cmd);
+
+	if((key=ftok(keypath,1))==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;

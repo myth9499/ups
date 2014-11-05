@@ -1,6 +1,7 @@
-/item/ups/bin/initshm
-/item/ups/bin/loadcfg
-/item/ups/bin/startups
+initshm
+loadcfg
+startups
 sleep 1
-/item/ups/bin/monitor
-/item/ups/bin/monitor_timeout &
+monitor
+monitor_timeout &
+

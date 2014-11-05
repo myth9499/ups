@@ -1,9 +1,9 @@
 all:initshm
 .PHONY:all
 objects=initshm.o
-upshome=/item/ups/
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upshome=$(UPSHOME)
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 CFLAGS=-I $(upsincl)
 LDFLAGS=-L $(upslib)
 LIBS=-lbase -lhash -lpack

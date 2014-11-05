@@ -29,6 +29,8 @@
 
 /** the global innerid **/
 static long	globalinnerid = 0;
+char	upshome[100];//统一支付系统根路径
+//extern	char	upshome[100];
 /** func define **/
 
 static int BUCKETSCNT=100; /** HASH最大值 **/

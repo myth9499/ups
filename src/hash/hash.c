@@ -56,7 +56,10 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 	size_t shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
 	int shmid;
 
-	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,10))==-1)
 	{
 		SysLog(1,"获取hash存储区主键失败");
 		return -1;
@@ -131,7 +134,10 @@ int get_shm_hash(long innerid,_tran *tranbuf)
 
 	sprintf(inpid,"2%010ld",innerid);
 
-	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,10))==-1)
 	{
 		SysLog(1,"获取hash存储区主键失败");
 		return -1;
@@ -178,7 +184,9 @@ int delete_shm_hash(long innerid)
 
 	sprintf(inpid,"2%010ld",innerid);
 
-	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	if((key = ftok(keypath,10))==-1)
 	{
 		SysLog(1,"获取HASH存储区主键失败");
 		return -1;
@@ -473,7 +481,10 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	size_t shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
 	int shmid;
 
-	if((key = ftok("/item/ups/etc/mq_1",10))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,10))==-1)
 	{
 		SysLog(1,"获取hash存储区主键失败");
 		return -1;

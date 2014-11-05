@@ -1,12 +1,12 @@
 #include "ups.h"
-
+extern	char	upshome[100];
 int	initmsg(char	*chnlname)
 {
 	char	keypath[60];
 	char	tmptouch[66];
 	memset(keypath,0,sizeof(keypath));
 	memset(tmptouch,0,sizeof(tmptouch));
-	sprintf(keypath,"%s%s","/item/ups/etc/",chnlname);
+	sprintf(keypath,"%s%s%s",upshome,"/etc/",chnlname);
 	sprintf(tmptouch,"touch %s",keypath);
 	system(tmptouch);
 	key_t	key;
@@ -51,10 +51,18 @@ int	initmsg(char	*chnlname)
 }
 int main(int argc,char *argv[])
 {
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
 	size_t shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
 	FILE *fp;
-	char	tmpbuf[60];
+	char	tmpbuf[100];
+	char	chnlcfgpath[100];
 	memset(tmpbuf,0,sizeof(tmpbuf));
+	memset(chnlcfgpath,0,sizeof(chnlcfgpath));
 
 	/** init tran shm **/
 	if(getshm(10,shmsize)==-1)
@@ -107,7 +115,8 @@ int main(int argc,char *argv[])
 	}
 
 	/** 初始化系统所有渠道的队列区 **/
-	fp = fopen("/item/ups/src/cfg/chnl.cfg","r");
+	sprintf(chnlcfgpath,"%s%s",upshome,"/src/cfg/chnl.cfg");
+	fp = fopen(chnlcfgpath,"r");
 	if(fp == NULL)
 	{
 		SysLog(1,"打开渠道初始化配置文件失败:[%s]\n",strerror(errno));

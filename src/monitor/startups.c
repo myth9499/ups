@@ -1,8 +1,14 @@
 #include "ups.h"
 
-
 int main(int argc,char *argv[] )
 {
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	FILE	*fp =NULL;
 	char	servcfgpath[60];
 	char	buffer[1024];
@@ -20,7 +26,7 @@ int main(int argc,char *argv[] )
 	memset(servbuf,0,sizeof(servbuf));
 	memset(buffer,0,sizeof(buffer));
 
-	strcpy(servcfgpath,"/item/ups/src/cfg/serv.cfg");
+	sprintf(servcfgpath,"%s%s",upshome,"/src/cfg/serv.cfg");
 
 	fp = fopen(servcfgpath,"r");
 	if(fp == NULL)
@@ -62,7 +68,7 @@ int main(int argc,char *argv[] )
 			continue;
 		}
 		printf("渠道[%s]\t执行命令[%s]\t启动服务数[%d]启动成功...开始启动服务\n",chnlname,systemcmd,servcnt);
-		sprintf(servbuf,"%s %s &","/item/ups/bin/server ",chnlname);
+		sprintf(servbuf,"%s %s &","server ",chnlname);
 		for(i=0;i<servcnt;i++)
 		{
 			printf("开始启动渠道[%s]第[%d]个服务 启动命令[%s]\n",chnlname,i,servbuf);

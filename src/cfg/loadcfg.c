@@ -2,42 +2,55 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-
 int main(int argc,char *argv[])
 {
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	FILE	*fp=NULL;
 	char	buffer[1024];
 	char	xmlname[256];
 	char	cfgfile[256];
 	char	xmlns[256];
+	char	cfgpath[100];
 
 	memset(buffer,0,sizeof(buffer));
 	memset(xmlname,0,sizeof(xmlname));
 	memset(cfgfile,0,sizeof(cfgfile));
 	memset(xmlns,0,sizeof(xmlns));
+	memset(cfgpath,0,sizeof(cfgpath));
 
-	if(load_commmsg_cfg("/item/ups/src/cfg/channel/chnl.cfg")==0)
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/channel/chnl.cfg");
+	if(load_commmsg_cfg(cfgpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
-	if(load_flow_cfg("/item/ups/src/cfg/flow/flow.cfg")==0)
+	memset(cfgpath,0,sizeof(cfgpath));
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/flow/flow.cfg");
+	if(load_flow_cfg(cfgpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
 
 	/**装载XML配置 **/
-	fp = fopen("/item/ups/src/cfg/xmlcfg/loadxml.list","r");
+	memset(cfgpath,0,sizeof(cfgpath));
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
-		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/loadxml.list");
+		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
@@ -64,20 +77,24 @@ int main(int argc,char *argv[])
 		memset(xmlns,0,sizeof(xmlns));
 	}
 	fclose(fp);
-	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
+	memset(cfgpath,0,sizeof(cfgpath));
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/trancode/tran.cfg");
+	if(load_tranmap_cfg(cfgpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
-	if(load_vardef_cfg("/item/ups/src/cfg/vardef/vardef.cfg")==0)
+	memset(cfgpath,0,sizeof(cfgpath));
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/vardef/vardef.cfg");
+	if(load_vardef_cfg(cfgpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
 	return 0;
@@ -362,7 +379,6 @@ int load_tranmap_cfg(char *filename)
 		SysLog(1,"tranmap shmat error\n");
 		return -1;
 	}
-	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
@@ -421,7 +437,6 @@ int load_vardef_cfg(char *filename)
 		SysLog(1,"vardef shmat error\n");
 		return -1;
 	}
-	//fp = fopen("/item/ups/src/cfg/channel/chnl.cfg","r");
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{

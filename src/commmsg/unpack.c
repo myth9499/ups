@@ -3,7 +3,11 @@ int getshmid(int procid,size_t shmsize)
 {
 	int shmid;
 	key_t	key;
-	if((key = ftok("/item/ups/etc/mq_1",procid))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,procid))==-1)
 	{
 		SysLog(1,"FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;

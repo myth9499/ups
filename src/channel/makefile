@@ -1,9 +1,9 @@
 all:sync_chnl	sync_chnl_r	mqsend	mqrcv
 .PHONY:all
 objects=sync_chnl.o	sync_chnl_r.o mqsend.o mqrcv.o
-upshome=/item/ups/
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upshome=$(UPSHOME)
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 mqincl=/opt/mqm/inc/
 mqlib=/opt/mqm/lib64
 CFLAGS=-I $(upsincl) -I $(mqincl)

@@ -1,8 +1,8 @@
 all:libhash.so
 .PHONY:all
 objects=hash.o
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 CFLAGS=-I $(upsincl) -shared	-fPIC
 LDFLAGS=-L $(upslib)
 LIBS=-lbase

@@ -10,19 +10,29 @@ int	rc;
 
 int main(int argc,char *argv[])
 {
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	FILE	*fp=NULL;
 	char	buffer[1024];
 	char	xmlname[256];
 	char	cfgfile[256];
 	char	xmlns[256];
+	char	dbpath[100];
 
 	memset(buffer,0,sizeof(buffer));
 	memset(xmlname,0,sizeof(xmlname));
 	memset(cfgfile,0,sizeof(cfgfile));
 	memset(xmlns,0,sizeof(xmlns));
+	memset(dbpath,0,sizeof(dbpath));
 
 	/* connect to sqlite3 **/
-	rc	=	sqlite3_open("/item/ups/src/cfg/db/ups.sqlite",&db);
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/db/ups.sqlite");
+	rc	=	sqlite3_open(dbpath,&db);
 	if(rc)
 	{
 		fprintf(stderr,"Cannot open db :%s\n",sqlite3_errmsg(db));
@@ -31,21 +41,25 @@ int main(int argc,char *argv[])
 	}
 
 	printf("sqlite open db ok\n");
-	if(load_commmsg_cfg("/item/ups/src/cfg/channel/chnl.cfg")==0)
+	memset(dbpath,0,sizeof(dbpath));
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/channel/chnl.cfg");
+	if(load_commmsg_cfg(dbpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,dbpath);
 		return -1;
 	}
 
-	if(load_flow_cfg("/item/ups/src/cfg/flow/flow.cfg")==0)
+	memset(dbpath,0,sizeof(dbpath));
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/flow/flow.cfg");
+	if(load_flow_cfg(dbpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,dbpath);
 		return -1;
 	}
 
@@ -62,10 +76,12 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 
-	fp = fopen("/item/ups/src/cfg/xmlcfg/loadxml.list","r");
+	memset(dbpath,0,sizeof(dbpath));
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	fp = fopen(dbpath,"r");
 	if(fp == NULL)
 	{
-		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/loadxml.list");
+		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,dbpath);
 		return -1;
 	}
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
@@ -105,12 +121,14 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 
-	if(load_tranmap_cfg("/item/ups/src/cfg/trancode/tran.cfg")==0)
+	memset(dbpath,0,sizeof(dbpath));
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/trancode/tran.cfg");
+	if(load_tranmap_cfg(dbpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,dbpath);
 		return -1;
 	}
 	memset(sql,0,sizeof(sql));
@@ -124,12 +142,14 @@ int main(int argc,char *argv[])
 		sqlite3_close(db);
 		exit(1);
 	}
-	if(load_vardef_cfg("/item/ups/src/cfg/vardef/vardef.cfg")==0)
+	memset(dbpath,0,sizeof(dbpath));
+	sprintf(dbpath,"%s%s",upshome,"/src/cfg/vardef/vardef.cfg");
+	if(load_vardef_cfg(dbpath)==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,dbpath);
 		return -1;
 	}
 

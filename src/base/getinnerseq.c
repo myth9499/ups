@@ -15,7 +15,7 @@ long getinnerid()
         memset(filepath,0,sizeof(filepath));
         memset(str,0,sizeof(str));
 
-        strcpy(filepath,"/item/ups/etc/innerid.seq");
+        sprintf(filepath,"%s%s",upshome,"/etc/innerid.seq");
         fp = fopen(filepath,"r+");
         if(fp == NULL)
         {

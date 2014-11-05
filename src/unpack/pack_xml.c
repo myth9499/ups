@@ -14,16 +14,19 @@ int	regNs(xmlXPathContextPtr context,char	*xmltype)
 	char    xmlname[256];
 	char    cfgfile[256];
 	char    xmlns[256];
+	char    cfgpath[100];
 
 	memset(buffer,0,sizeof(buffer));
 	memset(xmlname,0,sizeof(xmlname));
 	memset(cfgfile,0,sizeof(cfgfile));
 	memset(xmlns,0,sizeof(xmlns));
+	memset(cfgpath,0,sizeof(cfgpath));
 
-	fp = fopen("/item/ups/src/cfg/xmlcfg/loadxml.list","r");
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/item/ups/src/cfg/xmlcfg/loadxml.list");
+		SysLog(1,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
@@ -70,7 +73,7 @@ int	GetNewFileName(char	*ffile)
 		SysLog(1,"生成临时文件失败[%s]\n",strerror(errno));
 		return -1;
 	}
-	sprintf(ffile,"%s%s","/item/ups/log",nfilename);
+	sprintf(ffile,"%s%s%s",upshome,"/msg",nfilename);
 	SysLog(1,"临时文件名[%s]\n",ffile);
 	return 0;
 }
@@ -176,11 +179,11 @@ int pack_xml(char *xmltype)
 		}
 		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
 		trim(msgtype);
-		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",msgtype);
+		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
 	}else
 	{
 		SysLog(1,"直接从参数读取\n");
-		sprintf(xmlcfgpath,"%s/%s.xml","/item/ups/src/cfg/xmlcfg",xmltype);
+		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
 

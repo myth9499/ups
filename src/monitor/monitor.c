@@ -1,8 +1,14 @@
 #include "ups.h"
 
-
 int main(int argc,char *argv[] )
 {
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
+
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
 	int shmsize = MAXSERVREG*sizeof(_servreg);

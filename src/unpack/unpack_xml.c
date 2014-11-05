@@ -43,7 +43,7 @@ int xml_unpack(char *a)
 		return  0;
 	}else if(a[0]=='B')
 	{
-		sprintf(msgtypefile,"%s/%s_1.xml","/item/ups/src/unpack",a+1);
+		sprintf(msgtypefile,"%s%s/%s_1.xml",upshome,"/src/unpack",a+1);
 		if(unpack_xml(a,msgtypefile)==-1)
 		{
 			SysLog(1,"解报文类型[%s]失败",a);

@@ -1,9 +1,9 @@
 all:stopups	startups	monitor	monitor_timeout
 .PHONY:all
 objects=stopups.o	startups.o monitor.o monitor_timeout.o
-upshome=/item/ups/
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upshome=$(UPSHOME)
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 CFLAGS=-I $(upsincl)
 LDFLAGS=-L $(upslib)
 LIBS=-lpack	-lhash	-lbase -lpthread

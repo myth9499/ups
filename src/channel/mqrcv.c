@@ -18,6 +18,8 @@ int	getchnlcfg(char *chnlname)
 	FILE *fp;
 	char	tmpbuf[60];
 	memset(tmpbuf,0,sizeof(tmpbuf));
+	char	cfgpath[100];
+	memset(cfgpath,0,sizeof(cfgpath));
 
 	if(chnlname == NULL)
 	{
@@ -25,7 +27,8 @@ int	getchnlcfg(char *chnlname)
 		return -1;
 	}
 	/** 初始化系统所有渠道的队列区 **/
-	fp = fopen("/item/ups/src/cfg/chnl.cfg","r");
+	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/chnl.cfg");
+	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
 		SysLog(1,"打开渠道初始化配置文件失败:[%s]\n",strerror(errno));
@@ -89,7 +92,7 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 
 	trim(msgtype);
 	trim(msgid);
-	sprintf(xmlfile,"%s/%s","/item/ups/log",msgid);
+	sprintf(xmlfile,"%s%s/%s",upshome,"/msg",msgid);
 	fp = fopen(xmlfile,"w");
 	if(fp == NULL)
 	{
@@ -209,6 +212,13 @@ int chnlprocess(char *buffer)
 
 int main(int argc, char **argv)
 {
+
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(setupshome()==-1)
+	{
+		printf("设置全局变量upshome错误,请检查UPSHOME环境变量是否设置\n");
+		return -1;
+	}
 
 
 	char    startcmd[200];

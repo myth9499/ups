@@ -1,8 +1,8 @@
 all:libpack.so
 .PHONY:all
 objects=unpack.o	chnlcom.o	unpack_define.o
-upsincl=/item/ups/incl
-upslib=/item/ups/src/lib
+upsincl=$(UPSHOME)/incl
+upslib=$(UPSHOME)/src/lib
 CFLAGS=-I $(upsincl) -shared	-fPIC
 LDFLAGS=-L $(upslib)
 LIBS=-lhash	-lbase

@@ -4,7 +4,6 @@
 #include  <libxml/parser.h>
 
 /** 获取当前内存占用 **/
-
 void prtusage()
 {
         FILE    *fp ;
@@ -83,7 +82,7 @@ int	getmsgid(char *msgname,int *msgidi,int *msgido,int	*msgidr)
 
 	memset(ftokpath,0,sizeof(ftokpath));
 
-	sprintf(ftokpath,"%s/%s","/item/ups/etc",msgname);
+	sprintf(ftokpath,"%s/%s/%s",upshome,"/etc",msgname);
 	/** 1 for in msg queue **/
 	if((key=ftok(ftokpath,1))==-1)
 	{
@@ -124,7 +123,10 @@ int getshm(int procid,size_t shmsize)
 {
 	int shmid;
 	key_t   key;
-	if((key = ftok("/item/ups/etc/mq_1",procid))==-1)
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,procid))==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
@@ -471,4 +473,16 @@ int get_vardef(char	*varname,_vardef	*vardef)
 	}
 	shmdt(tstvardef);
 	return iret;
+}
+int	setupshome(void)
+{
+	/** 初始化全局共享内存前，先获取ups根路径 **/
+	if(getenv("UPSHOME")==NULL)
+	{
+		SysLog(1,"获取环境变量UPSHOME配置错\n");
+		return -1;
+	}
+	memset(upshome,0,sizeof(upshome));
+	strcpy(upshome,getenv("UPSHOME"));
+	return 0;
 }
