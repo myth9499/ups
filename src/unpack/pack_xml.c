@@ -213,49 +213,113 @@ int pack_xml(char *xmltype)
 			result = getnodeset(doc,xpath,xmltype);
 			if(result)
 			{
-				nodeset = result->nodesetval;
-				for(i=0;i<nodeset->nodeNr;i++)
+				int 	j=1;
+				for(j=1;j<=2;j++)
 				{
-					keyword = xmlNodeListGetString(doc,nodeset->nodeTab[i]->xmlChildrenNode,1);
-					if(keyword == NULL)
+					if(j==1)
 					{
-						memset(xpath,0,sizeof(xpath));
-						SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
-						break;
-					}
-					/** 根据值获取到对应变量信息 **/
-					memset(keyvalue,0,sizeof(keyvalue));
-					if(get_var_value(keyword,sizeof(keyvalue),1,keyvalue)==-1)
-					{
-						SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
-						/**
-						nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
-						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
+						nodeset = result->nodesetval;
+						SysLog(1,"FILE[%s]LINE[%d]noset'num is  [%d]\n",__FILE__,__LINE__,nodeset->nodeNr);
+						for(i=0;i<nodeset->nodeNr;i++)
 						{
-							nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
-						}else
-						{
-							nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
+							keyword = xmlNodeListGetString(doc,nodeset->nodeTab[i]->xmlChildrenNode,1);
+							if(keyword == NULL)
+							{
+								memset(xpath,0,sizeof(xpath));
+								SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
+								break;
+							}
+							/** 根据值获取到对应变量信息 **/
+							memset(keyvalue,0,sizeof(keyvalue));
+							if(get_var_value(keyword,sizeof(keyvalue),1,keyvalue)==-1)
+							{
+								SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
+								/**
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
+								  if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
+								  {
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
+								  }else
+								  {
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
+								  }
+								 **/
+								/** test not use  **/
+								xmlNodePtr	tempNode;
+								tempNode=nodeset->nodeTab[i]->next;
+								xmlUnlinkNode(nodeset->nodeTab[i]);
+								xmlFreeNode(nodeset->nodeTab[i]);
+								nodeset->nodeTab[i]=tempNode;
+								//free(keyword);
+								//xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
+								//xmlXPathFreeObject(result);
+								continue;
+							}else
+							{
+								SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
+								xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
+								//free(keyword);
+							}
 						}
-						**/
-						/** test not use  **/
-						xmlNodePtr	tempNode;
-						tempNode=nodeset->nodeTab[i]->next;
-						xmlUnlinkNode(nodeset->nodeTab[i]);
-						xmlFreeNode(nodeset->nodeTab[i]);
-						nodeset->nodeTab[i]=tempNode;
-						free(keyword);
-						//xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
-						//xmlXPathFreeObject(result);
-						continue;
+						xmlXPathFreeObject(result);
 					}else
 					{
-						SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
-						xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
-						free(keyword);
+						memset(tmppath,0,sizeof(tmppath));
+						strcpy(tmppath,tmpcfg->fullpath);
+						SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
+						tmp = strtok(tmppath,"/");
+						sprintf(xpath,"/lilei:%s",tmp);
+						while((tmp = strtok(NULL,"/"))!=NULL)
+						{
+							sprintf(xpath,"%s/lilei:%s",xpath,tmp);
+						}
+						SysLog(1,"FILE[%s]LINE[%d]xpath is [%s]\n",__FILE__,__LINE__,xpath);
+						nodeset = result->nodesetval;
+						SysLog(1,"FILE[%s]LINE[%d]noset'num is  [%d]\n",__FILE__,__LINE__,nodeset->nodeNr);
+						for(i=0;i<nodeset->nodeNr;i++)
+						{
+							keyword = xmlNodeListGetString(doc,nodeset->nodeTab[i]->xmlChildrenNode,1);
+							if(keyword == NULL)
+							{
+								memset(xpath,0,sizeof(xpath));
+								SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
+								break;
+							}
+							/** 根据值获取到对应变量信息 **/
+							memset(keyvalue,0,sizeof(keyvalue));
+							if(get_var_value(keyword,sizeof(keyvalue),1,keyvalue)==-1)
+							{
+								SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
+								/**
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
+								  if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
+								  {
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent->next->prev=nodeset->nodeTab[i]->xmlChildrenNode->parent->prev;
+								  }else
+								  {
+								  nodeset->nodeTab[i]->xmlChildrenNode->parent=NULL;
+								  }
+								 **/
+								/** test not use  **/
+								xmlNodePtr	tempNode;
+								tempNode=nodeset->nodeTab[i]->next;
+								xmlUnlinkNode(nodeset->nodeTab[i]);
+								xmlFreeNode(nodeset->nodeTab[i]);
+								nodeset->nodeTab[i]=tempNode;
+								free(keyword);
+								//xmlFreeNode(nodeset->nodeTab[i]->xmlChildrenNode->parent);
+								//xmlXPathFreeObject(result);
+								continue;
+							}else
+							{
+								SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
+								xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
+								free(keyword);
+							}
+						}
+						xmlXPathFreeObject(result);
 					}
 				}
-				xmlXPathFreeObject(result);
 			}
 			memset(xpath,0,sizeof(xpath));
 		}

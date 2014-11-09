@@ -336,7 +336,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 
 	while(tmpkvalue!=NULL)
 	{
-		if(!strcmp(tmpkvalue->varname,varname))
+		if(!strcmp(tmpkvalue->varname,varname)&&!(strcmp(tmpkvalue->varnameloop,varnameloop)))
 		{
 			memset(tmpkvalue->value,0,vardef.varlen);
 			memcpy(tmpkvalue->value,value,len);
@@ -364,7 +364,8 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	{
 		head->end=tmpkey;
 		strcpy(tmpkey->varname,varname);
-		memset(tmpkey->value,0,vardef.varlen);
+		strcpy(tmpkey->varnameloop,varnameloop);
+		memset(tmpkey->value,0x00,vardef.varlen);
 		memcpy(tmpkey->value,value,len);
 		SysLog(1,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
 		tmpkey->next = NULL;
@@ -414,7 +415,7 @@ int get_var_value(char *varname,int len,int loop,char *value)
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
 	{
-		if(!strcmp(tmpkvalue->varname,varname))
+		if(!strcmp(tmpkvalue->varname,varname)&&!strcmp(tmpkvalue->varnameloop,varnameloop))
 		{
 			trim(tmpkvalue->value);
 			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);

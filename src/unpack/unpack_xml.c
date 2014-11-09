@@ -3,6 +3,13 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
+typedef	struct	PATHLOOPREG
+{
+	char	path[128];
+	int		loop;
+}pathloopreg;
+pathloopreg	preg[100];
+
 int loop=0;
 _xmlcfg *xmlcfg = NULL;
 int xml_unpack(char *a)
@@ -55,10 +62,17 @@ int xml_unpack(char *a)
 }
 int unpack_xml(char *xmltype,char *filename)
 {
-	int shmid = 0;
+	int shmid = 0,i=0;
 	xmlDocPtr doc;
 	xmlNodePtr	curNode;
 	size_t shmsize = MAXXMLCFG*sizeof(_xmlcfg);
+
+	/** 初始化循环path登记表 **/
+	for(i=0;i<100;i++)
+	{
+		memset(preg[i].path,0x00,sizeof(preg[i].path));
+		preg[i].loop=1;
+	}
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
@@ -89,7 +103,7 @@ int unpack_xml(char *xmltype,char *filename)
 
 	if(prtvalue(curNode,xmltype)!=-1)
 	{
-		SysLog(1,"解包到变量成功\n");
+		SysLog(1,"解包到变量成功,解包循环深度[%d]\n",getmaxloop());
 	}else
 	{
 		SysLog(1,"解包到变量失败\n");
@@ -100,9 +114,60 @@ int unpack_xml(char *xmltype,char *filename)
 	shmdt(xmlcfg);
 	return 0;
 }
+/** updatepath 更新循环登记表  **/
+int	updatepath(char	*path)
+{
+	int	i=0;
+	for(i=0;i<100;i++)
+	{
+		if(!strcmp(preg[i].path,path))
+		{
+			preg[i].loop++;
+			return  1;
+		}
+	}
+	for(i=0;i<100;i++)
+	{
+		if(strlen(preg[i].path)==0)
+		{
+			strcpy(preg[i].path,path);
+			preg[i].loop=1;
+			break;
+		}
+	}
+	return 1;
+}
+/** getpathloop 获取循环标志  **/
+int	getpathloop(char	*path)
+{
+	int	i=0;
+	for(i=0;i<100;i++)
+	{
+		if(!strcmp(preg[i].path,path))
+		{
+			return preg[i].loop;
+		}
+	}
+	return 1;
+}
+/** getmaxloop 获取最深循环层数  **/
+int	getmaxloop(void)
+{
+	int	i=0;
+	int max=1;
+	for(i=0;i<100;i++)
+	{
+		if(max<preg[i].loop)
+		{
+			max=preg[i].loop;
+		}
+	}
+	return max;
+}
 int prtvalue(xmlNodePtr cur,char *xmltype)
 {
 	xmlChar	*szKey;
+	int	pathloop=0;
 	xmlNodePtr curNode ;
 	curNode = cur;
 	char	path[256];
@@ -113,16 +178,18 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 	{
 		if(curNode->type == XML_ELEMENT_NODE)
 		{
-			SysLog(1,"ELement name [%s]\n",curNode->name);
+			SysLog(1,"ELement name [%s] \n",curNode->name);
 		}else if(curNode->type == XML_TEXT_NODE)
 		{
 			szKey = xmlNodeGetContent(curNode);
 			getNodePath(path,curNode);
 			while(strcmp(tmpcfg->xmlname,""))
 			{
-				//SysLog(1,"LILEI FILE [%s] LINE[%d]路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,tmpcfg->varname,szKey,tmpcfg->depth);
+				//SysLog(1,"LILEI FILE [%s] LINE[%d]配置路径[%s]当前路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,path,tmpcfg->varname,szKey,tmpcfg->depth);
 				if(!strcmp(tmpcfg->fullpath,path)&&!strcmp(tmpcfg->xmlname,xmltype))
 				{
+					/**每次更新循环登记表，入变量维度时以循环登记表为准 **/
+					updatepath(path);
 					SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->parent->name);
 					SysLog(1,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->name);
 					if(!strcmp(curNode->parent->name,"Ustrd"))
@@ -140,7 +207,8 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 					}else
 					{
 						//SysLog(1,"FILE [%s] LINE[%d]路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,tmpcfg->fullpath,tmpcfg->varname,szKey,tmpcfg->depth);
-						if(put_var_value(tmpcfg->varname,strlen(szKey)+1,1,szKey)!=0)
+						//if(put_var_value(tmpcfg->varname,strlen(szKey)+1,1,szKey)!=0)
+						if(put_var_value(tmpcfg->varname,strlen(szKey)+1,getpathloop(path),szKey)!=0)
 						{
 							xmlFree(szKey);
 							SysLog(1,"put error\n");

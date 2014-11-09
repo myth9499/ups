@@ -77,6 +77,7 @@ typedef struct KEYVALUE
 {
 	struct KEYVALUE *head;/** 链表头指针**/
 	char varname[20];
+	char varnameloop[30]; /** 循环拼装后的变量**/
 	void *value;		  /** 设置为void指针，可以存放全部值 **/
 	struct KEYVALUE *pre; /** 链表前指针 **/
 	struct KEYVALUE *next; /** 链表后指针 **/
