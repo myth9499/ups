@@ -1,6 +1,6 @@
 all:libunpack.so
 .PHONY:all
-objects=unpack_xml.o	pack_xml.o
+objects=unpack_xml.o	pack_xml.o	pack_xml_loop.o
 upsincl=$(UPSHOME)/incl
 upslib=$(UPSHOME)/src/lib
 xmlincl=$(upsincl)/libxml2/include/libxml2

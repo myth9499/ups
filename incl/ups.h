@@ -141,7 +141,7 @@ union semun
 /** 交易码映射表 **/
 typedef struct TRANMAP
 {
-	char	trancode[10];	/** 交易码 **/
+	char	trancode[20];	/** 交易码 **/
 	char	tranname[60];	/** 交易名称 **/
 	char	tranflow[60];	/** 对应流程名称 **/
 	int		timeout;		/** 交易超时时间 **/

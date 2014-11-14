@@ -186,6 +186,7 @@ int delete_shm_hash(long innerid)
 
 	char	keypath[100];
 	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
 		SysLog(1,"获取HASH存储区主键失败");

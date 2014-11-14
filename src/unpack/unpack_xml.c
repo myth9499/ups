@@ -64,6 +64,8 @@ int unpack_xml(char *xmltype,char *filename)
 {
 	int shmid = 0,i=0;
 	xmlDocPtr doc;
+	char	loop[5];
+	memset(loop,0x00,sizeof(loop));
 	xmlNodePtr	curNode;
 	size_t shmsize = MAXXMLCFG*sizeof(_xmlcfg);
 
@@ -103,7 +105,9 @@ int unpack_xml(char *xmltype,char *filename)
 
 	if(prtvalue(curNode,xmltype)!=-1)
 	{
-		SysLog(1,"解包到变量成功,解包循环深度[%d]\n",getmaxloop());
+		sprintf(loop,"%d",getmaxloop());
+		SysLog(1,"解包到变量成功,解包循环深度[%s]\n",loop);
+		put_var_value("V_LOOP",strlen(loop)+1,1,loop);
 	}else
 	{
 		SysLog(1,"解包到变量失败\n");

@@ -331,6 +331,11 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 						while(attr)
 						{
 							SysLog(1,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
+							if(!strcmp(attr->name,"loop"))
+							{
+								strcpy((xmlcfg+i)->loop,attr->children->content);
+								break;
+							}
 							if(!strcmp(attr->name,"seq"))
 							{
 								(xmlcfg+i)->depth = atoi(attr->children->content);
@@ -340,7 +345,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 							{
 								(xmlcfg+i)->depth = -1;
 								break;
-							}
+							} 
 							attr = attr->next;
 						}
 					}

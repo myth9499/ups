@@ -57,8 +57,8 @@ int	getchnlcfg(char *chnlname)
 					strcpy(trancode,strstr(tmpbuf,":")+1);
 					if(trancode[0]=='B')
 					{
-						SysLog(1,"静态获取交易代码\n");
-						strcpy(trancode,trancode+1);
+						SysLog(1,"静态获取交易代码[%s]\n",trancode+1);
+						//strcpy(trancode,trancode+1);
 					}
 				}
 				if(!memcmp(tmpbuf,"无交易等待间隔",14))
@@ -87,8 +87,8 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 		return -1;
 	}
 	//printf("buffer is [%s]\n",buffer);
-	memcpy(msgtype,buffer+54,20);
-	memcpy(msgid,buffer+74,20);
+	memcpy(msgtype,buffer+58,20);
+	memcpy(msgid,buffer+78,20);
 
 	trim(msgtype);
 	trim(msgid);
@@ -99,7 +99,7 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 		SysLog(1,"FILE [%s] LINE [%d]:打开文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		return -1;
 	}
-	if(fwrite(buffer+128,strlen(buffer)-128,1,fp)==-1)
+	if(fwrite(buffer+132,strlen(buffer)-132,1,fp)==-1)
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:写文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		fclose(fp);
@@ -148,7 +148,8 @@ int chnlprocess(char *buffer)
 	mbuf->innerid=getinnerid()+1;
 	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
-	strcpy(mbuf->tranbuf.trancode,trancode);
+	memset(mbuf->tranbuf.trancode,0x00,sizeof(mbuf->tranbuf.trancode));
+	strcpy(mbuf->tranbuf.trancode,trancode+1);
 	mbuf->tranbuf.buffsize = strlen(buffer);
 
 	SysLog(1,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
@@ -213,6 +214,11 @@ int chnlprocess(char *buffer)
 int main(int argc, char **argv)
 {
 
+	if(argc<2)
+	{
+		printf("USAGE:appname+chnlname\n");
+		return -1;
+	}
 	/** 初始化全局共享内存前，先获取ups根路径 **/
 	if(setupshome()==-1)
 	{
@@ -259,7 +265,7 @@ int main(int argc, char **argv)
 	memset(sendbuf,0,sizeof(sendbuf));
 	memset(msgtype,0,sizeof(msgtype));
 
-	strcpy(chnlname,"MQ接收渠道");
+	strcpy(chnlname,argv[1]);
 	if(getchnlcfg(chnlname)!=0)
 	{
 		SysLog(1,"FILE [%s] LINE [%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);

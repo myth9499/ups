@@ -118,7 +118,7 @@ int pack_define(char *msgtype)
 					break;
 				}
 				memset(tmpbuf,0,sizeof(tmpbuf));
-				if(get_var_value(cmsg->commvar,cmsg->len,1,tmpbuf)==-1)
+				if(get_var_value(cmsg->commvar,cmsg->len+1,1,tmpbuf)==-1)
 				{
 					SysLog(1,"获取变量[%s]失败\n",cmsg->commvar);
 					free(tmpbuf);
@@ -126,8 +126,8 @@ int pack_define(char *msgtype)
 					return -1;
 				}
 				SysLog(1,"获取变量[%s]成功,value[%s]\n",cmsg->commvar,tmpbuf);
-				sprintf(tmpbuf,"%s|",tmpbuf);
-				strncat(outtran,tmpbuf,strlen(tmpbuf));
+				//sprintf(tmpbuf,"%s|",tmpbuf);
+				strncat(outtran,tmpbuf,cmsg->len);
 				free(tmpbuf);
 			}
 			cmsg++;
@@ -140,15 +140,10 @@ int pack_define(char *msgtype)
 		}else
 		{
 			SysLog(1,"打类型[%s]包成功 \n",msgtype);
+			/** 防止到V_HEADBUF中**/
+			put_var_value("V_HEADBUF",strlen(outtran),1,outtran);
 		}
 		/** 根据报文格式配置，打返回包**/
-		iret = shm_hash_update(innerid,NULL,outtran);
-		if(iret == -1)
-		{
-			SysLog(1,"放置打包信息到共享内存失败 \n");
-			return -1;
-		}
-		SysLog(1,"打[%s]包成功 \n",msgtype);
 		return 0;
 }
 

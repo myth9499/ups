@@ -126,7 +126,25 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 	}                                                                                  
 	return result;                                                                     
 }  
-int pack_xml(char *xmltype)
+int	pack_xml(char	*xmltype)
+{
+	/** 获取V_LOOP 值，若V_LOOP==0或者未获取到，走单独打包XML **/
+	char	loop[5];
+	memset(loop,0x00,sizeof(loop));
+	int	ret;
+	ret = get_var_value("V_LOOP",sizeof(loop),1,loop);
+	if(ret ==-1||atoi(loop)<=0)
+	{
+		SysLog(1,"走单独XML打包函数\n");
+		return (pack_xml_single(xmltype));
+	}else
+	{
+		SysLog(1,"走循环XML打包函数\n");
+		return (pack_xml_loop(xmltype));
+	}
+	return 0;
+}
+int pack_xml_single(char *xmltype)
 {
 	int shmid = 0,flag = 0;
 	xmlDocPtr doc = NULL;

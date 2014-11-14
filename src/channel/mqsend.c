@@ -9,6 +9,8 @@ _msgbuf *mbuf=NULL;
 _tran *tranbuf=NULL;
 char    chnlname[50];
 char     buffer[65535];          /* message buffer                */
+char     tmpbuffer[65000];          /* message buffer                */
+char     headbuf[1024];          /* message buffer                */
 char     QMName[50];             /* queue manager name            */
 char     RQName[50];             /* remote queue name            */
 
@@ -81,6 +83,8 @@ int sendprocess(long inerid,MQLONG	*messlen)
 
 	memset(tmpfilename,0,sizeof(tmpfilename));
 	memset(buffer,0,sizeof(buffer));
+	memset(tmpbuffer,0,sizeof(tmpbuffer));
+	memset(headbuf,0,sizeof(headbuf));
 
 	SysLog(1,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]\n",__FILE__,__LINE__,inerid);
 	/**get the shm **/ 
@@ -100,14 +104,16 @@ int sendprocess(long inerid,MQLONG	*messlen)
 		{
 			strtok(tranbuf->outtran,"|");
 			strcpy(tmpfilename,strtok(NULL,"|"));
+			strcpy(headbuf,strtok(NULL,"|"));
 			fp = fopen(tmpfilename,"r");
 			if(fp==NULL)	
 			{
 				SysLog(1,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
 				return -1;
 			}
-			if(fread(buffer, sizeof(buffer), 1,fp) != -1)
+			if(fread(tmpbuffer, sizeof(tmpbuffer), 1,fp) != -1)
 			{
+				sprintf(buffer,"%s%s",headbuf,tmpbuffer);
 				*messlen = (MQLONG)strlen(buffer); /* length without null      */
 				fclose(fp);
 				return 0;

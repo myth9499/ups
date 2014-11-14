@@ -1,6 +1,6 @@
-all:sync_chnl	sync_chnl_r	mqsend	mqrcv
+all:sync_chnl	sync_chnl_r	mqsend	mqrcv_ibps	mqrcv_cnaps
 .PHONY:all
-objects=sync_chnl.o	sync_chnl_r.o mqsend.o mqrcv.o
+objects=sync_chnl.o	sync_chnl_r.o mqsend.o mqrcv_ibps.o mqrcv_cnaps.o
 upshome=$(UPSHOME)
 upsincl=$(UPSHOME)/incl
 upslib=$(UPSHOME)/src/lib
@@ -18,6 +18,9 @@ sync_chnl_r:sync_chnl_r.o
 mqsend:mqsend.o
 	gcc -g -o mqsend mqsend.o  $(CFLAGS) $(LDFLAGS) $(LIBS) 
 	@mv	mqsend	$(upshome)/bin	
-mqrcv:mqrcv.o
-	gcc -o mqrcv mqrcv.o $(CFLAGS) $(LDFLAGS) $(LIBS)
-	@mv	mqrcv	$(upshome)/bin	
+mqrcv_ibps:mqrcv_ibps.o
+	gcc -o mqrcv_ibps mqrcv_ibps.o $(CFLAGS) $(LDFLAGS) $(LIBS)
+	@mv	mqrcv_ibps	$(upshome)/bin	
+mqrcv_cnaps:mqrcv_cnaps.o
+	gcc -o mqrcv_cnaps mqrcv_cnaps.o $(CFLAGS) $(LDFLAGS) $(LIBS)
+	@mv	mqrcv_cnaps	$(upshome)/bin	
