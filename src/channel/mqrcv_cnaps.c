@@ -496,7 +496,7 @@ int main(int argc, char **argv)
 			{
 				memset(sendbuf,0,sizeof(sendbuf));
 				memset(headbuf,0,sizeof(headbuf));
-				memcpy(headbuf,buffer,128);
+				memcpy(headbuf,buffer,132);
 				sprintf(sendbuf,"%s|%s|%s",msgtype,xmlfile,headbuf);
 				SysLog(1,"传入hash表参数[%s]\n",sendbuf);
 				if(chnlprocess(sendbuf)==0)

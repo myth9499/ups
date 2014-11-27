@@ -15,7 +15,7 @@ _xmlcfg *xmlcfg = NULL;
 int xml_unpack(char *a)
 {
 	int iret;
-	char	msgtype[30];
+	char	msgtype[21];
 	char	msgtypefile[60];
 
 	memset(msgtype,0,sizeof(msgtype));

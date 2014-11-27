@@ -113,7 +113,7 @@ int sendprocess(long inerid,MQLONG	*messlen)
 			}
 			if(fread(tmpbuffer, sizeof(tmpbuffer), 1,fp) != -1)
 			{
-				sprintf(buffer,"%s%s",headbuf,tmpbuffer);
+				sprintf(buffer,"%s%s%s%s",headbuf,"\r","\n",tmpbuffer);
 				*messlen = (MQLONG)strlen(buffer); /* length without null      */
 				fclose(fp);
 				return 0;

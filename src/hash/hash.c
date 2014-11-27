@@ -314,7 +314,9 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
-	if(len>vardef.varlen)
+	/** strlen 不包括\0的计算,所以所有的变量定义需要在原有基础上+1 **/
+	//if(len>vardef.varlen-1)
+	if(strlen(value)>vardef.varlen-1)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
 		return -1;
@@ -390,7 +392,10 @@ int get_var_value(char *varname,int len,int loop,char *value)
 		return -1;
 	}
 	/** 当变量定义长度大于传入取出值存放变量时，不取出，存放不了，会core done **/
-	if(vardef.varlen>len)
+	/** strlen 不包括\0的计算,所以所有的变量定义需要在原有基础上+1 **/
+	//if(vardef.varlen-1>len)
+	/** 如果获取的变量存放大小大于变量定义大小，不能放入，防止出现乱码 **/
+	if(len<vardef.varlen)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
 		return -1;
