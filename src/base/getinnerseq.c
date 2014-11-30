@@ -45,6 +45,34 @@ long getinnerid()
 		}
         fclose(fp);
         return -1L;
-#endif
 		return	globalinnerid++;
+#endif
+		FILE    *fp = NULL;
+		char    seqno[20];
+		long        seq = 0;
+        char    filepath[100];
+		memset(seqno,0x00,sizeof(seqno));
+		memset(filepath,0x00,sizeof(filepath));
+
+        sprintf(filepath,"%s%s",upshome,"/etc/innerid.seq");
+		fp = fopen(filepath,"r+w");
+		if(fp == NULL)
+		{
+			SysLog(1,"file open error");
+			return -1;
+		}
+		if(0==flock(fileno(fp),LOCK_EX))
+		{
+			fgets(seqno,sizeof(seqno),fp);
+			seq = atol(seqno);
+			if(seq==99999999)
+				seq=1L;
+			seq++;
+			sprintf(seqno,"%8ld",seq);
+			fseek(fp,SEEK_SET,0);
+			fwrite(seqno,strlen(seqno),1,fp);
+			flock(fileno(fp),LOCK_UN);
+		}
+		fclose(fp);
+		return seq;
 }

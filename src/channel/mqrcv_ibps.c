@@ -145,7 +145,7 @@ int chnlprocess(char *buffer)
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
 	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	mbuf->innerid=getinnerid()+1;
+	mbuf->innerid=getinnerid();
 	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
 	strcpy(mbuf->tranbuf.trancode,trancode+1);
