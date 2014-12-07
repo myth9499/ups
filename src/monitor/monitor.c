@@ -17,7 +17,6 @@ int main(int argc,char *argv[] )
 		printf("get serv shm id error\n");
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
 		printf("shmat sreg error\n");
@@ -31,13 +30,13 @@ int main(int argc,char *argv[] )
 		}
 		if(!strcmp((sreg+i)->stat,"N"))
 		{
-			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"正常",(sreg+i)->startcmd);
+			printf("进程名称:%-30s\t进程类型:%-6s\t进程号:%-10ld\t进程状态:%-6s\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"正常",(sreg+i)->startcmd);
 		}else if(!strcmp((sreg+i)->stat,"L"))
 		{
-			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"运行",(sreg+i)->startcmd);
+			printf("进程名称:%-30s\t进程类型:%-6s\t进程号:%-10ld\t进程状态:%-6s\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"运行",(sreg+i)->startcmd);
 		}else
 		{
-			printf("进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t启动命令:[%s]\t\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"停止",(sreg+i)->startcmd);
+			printf("进程名称:%-30s\t进程类型:%-6s\t进程号:%-10ld\t进程状态:%-6s\n",(sreg+i)->chnlname,(!strcmp((sreg+i)->type,"C"))?"渠道":"服务",(sreg+i)->servpid,"停止",(sreg+i)->startcmd);
 		}
 	}
 	if(i==0)

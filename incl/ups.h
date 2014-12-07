@@ -53,6 +53,7 @@ typedef struct TRAN
 	char	stat[2];		/** 当前服务状态 **/
 	sem_t	sem1;			/** 信号量  **/
 	sem_t	sem2;			/** 信号量 **/
+	time_t	timeout;		/** 当前交易的超时时间 **/
 }_tran;
 
 /** main msg buf 

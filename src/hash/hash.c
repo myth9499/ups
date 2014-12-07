@@ -597,3 +597,53 @@ int	delete_msgq(long	inpid)
 	return 0;
 
 }
+/** 更新超时时间 **/
+int shm_hash_tout(long innerid,time_t	tout)
+{
+	_tran *transhm =NULL;
+	key_t   key;
+	char inpid[20];
+	int pos=0,i=0;
+	int	iret=0;
+	memset(inpid,0,sizeof(inpid));
+
+	sprintf(inpid,"2%010ld",innerid);
+
+	size_t shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
+	int shmid;
+
+	char	keypath[100];
+	memset(keypath,0,sizeof(keypath));
+	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+	if((key = ftok(keypath,10))==-1)
+	{
+		SysLog(1,"获取hash存储区主键失败");
+		return -1;
+	}
+	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
+	{
+		SysLog(1,"获取hash存储区共享内存失败");
+		return -1;
+	}
+	transhm = (_tran *)shmat(shmid,NULL,0);
+	if(transhm ==  (void *)-1)
+	{
+		SysLog(1,"连接hash存储区共享内存失败");
+		return -1;
+	}
+	pos = hashfunc(inpid);
+	for(i=0;i<BUCKETSCNT;i++)
+	{
+		if((transhm+pos+i)->innerid == innerid)
+		{
+			iret = sem_wait(&((transhm+pos+i)->sem1));
+			(transhm+pos+i)->timeout=tout;
+			sem_post(&((transhm+pos+i)->sem1));
+			shmdt(transhm);
+			return 0;
+		}
+	}
+	SysLog(1,"FILE[%s] LINE[%d]HASH桶满,更新超时时间\n",__FILE__,__LINE__);
+	shmdt(transhm);
+	return -1;
+}

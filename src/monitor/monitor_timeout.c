@@ -24,7 +24,6 @@ int main(int argc,char *argv[] )
 		SysLog(1,"FILE[%s] LINE[%d] get shmid error\n",__FILE__,__LINE__);
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
 	if((tran = shmat(shmid,NULL,0))==NULL)
 	{
 		SysLog(1,"FILE[%s] LINE[%d] shmat shmid error\n",__FILE__,__LINE__);
@@ -38,13 +37,13 @@ int main(int argc,char *argv[] )
 				continue;
 			else
 			{
-				/** 获取当前时间 **/
+				/** 获取当前时间 超时监控处理长时间超时情况，默认情况由serv自己执行超时处理 **/
 				time(&curtime);
-				if(curtime-((tran+i)->stime)>60)
+				if(curtime-((tran+i)->stime)>(tran+i)->timeout*2)
 				{
 					/** 上锁当前共享内存 **/
 					sem_wait(&((tran+i)->sem1));
-					SysLog(1,"FILE[%s] LINE[%d]PID[%ld]超时，需要进行处理\n",__FILE__,__LINE__,(tran+i)->innerid);
+					SysLog(1,"FILE[%s] LINE[%d]PID[%ld]超时超时时间[%ld]，需要进行处理\n",__FILE__,__LINE__,(tran+i)->innerid,(tran+i)->timeout);
 					inpid = (tran+i)->innerid;
 					(tran+i)->innerid =0;
 					memset((tran+i)->intran,0,sizeof((tran+i)->intran));

@@ -30,7 +30,7 @@ int xml_unpack(char *a)
 			SysLog(1,"从变量[%s]取报文类型进行处理失败",a+1);
 			return  -1;
 		}
-		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
+		SysLog(1,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 
 		SysLog(1,"从变量V_XMLFILE读取报文进行处理");

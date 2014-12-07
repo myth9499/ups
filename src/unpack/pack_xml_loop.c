@@ -115,7 +115,7 @@ int pack_xml_loop(char *xmltype)
 			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
 			return  -1;
 		}
-		SysLog(1,"获取到待解包报文类型[%s]",msgtype);
+		SysLog(1,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
 	}else

@@ -154,7 +154,6 @@ int initservregsem()
 		SysLog(1,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	printf("shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL) 
 	{
 		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));

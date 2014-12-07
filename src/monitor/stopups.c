@@ -25,7 +25,7 @@ int main(int argc,char *argv[] )
 	printf("开始停止UPS服务进程.........\n");
 	for(i=0;(sreg+i)->servpid!=0;i++)
 	{
-		printf("开始停止:进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat);
+		printf("开始停止:进程名称:%-30s\t进程类型:%-6s\t进程号:%ld\t进程状态:%-6s\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat);
 		kill((sreg+i)->servpid,9);
 	}
 	if(i==0)
