@@ -23,6 +23,20 @@
 #include <semaphore.h>
 #include <bits/pthreadtypes.h>
 
+
+/** define log level **/
+static	int		LOG_APP_SHOW=5;//用来显示应用主要日志
+static	int		LOG_SYS_ERR=4;//系统平台级别日志
+static	int		LOG_APP_ERR=3;//应用必要日志
+static	int		LOG_APP_DEBUG=2;//应用调试日志
+static	int		LOG_SYS_DEBUG=1;//平台调试级别日志
+
+typedef	struct	SYS_PARAM
+{
+	int		curloglvl;
+	char	cursysstatus;
+}_sys_param;
+
 /** system define errno **/
 #define SYS_ERR -1
 #define SYS_OK  0

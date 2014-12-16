@@ -38,7 +38,7 @@ int do_so(char *so_name,char *func_name,char *par1)
 {
 	if(so_name==NULL||func_name==NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:调用动态库参数错误\n",__FILE__,__LINE__);
 		return -1;
 	}
 	void *handle;
@@ -51,26 +51,25 @@ int do_so(char *so_name,char *func_name,char *par1)
 	handle = dlopen(so_name,RTLD_LAZY);
 	if(handle == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:打开动态库[%s]失败:%s\n",__FILE__,__LINE__,so_name,dlerror());
 		return -1;
 	}
 	//}
 	func = (int(*)(char *par1))dlsym(handle,func_name);
 	if(func == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,dlerror());
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:打开函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,dlerror());
 		dlclose(handle);
 		return -1;
 	}
-		SysLog(1,"@@@@@@@@@@@FILE [%s] LINE [%d]:执行函数[%s]参数:%s\n",__FILE__,__LINE__,func_name,par1);
 	if(func(par1)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:执行函数[%s]失败:%s\n",__FILE__,__LINE__,func_name,strerror(errno));
 		dlclose(handle);
 		return -1;
 	}
 	dlclose(handle);
-	SysLog(1,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
+	SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
 	return 0;
 }
 
@@ -86,37 +85,37 @@ int	getmsgid(char *msgname,int *msgidi,int *msgido,int	*msgidr)
 	/** 1 for in msg queue **/
 	if((key=ftok(ftokpath,1))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
 		return -1;
 	}
 	if((*msgidi = msgget(key,IPC_EXCL))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
 	/** 2 for out msg queue **/
 	if((key=ftok(ftokpath,2))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
 		return -1;
 	}
 	if((*msgido = msgget(key,IPC_EXCL))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
 	/** 3 for 应答核心 msg queue **/
 	if((key=ftok(ftokpath,3))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取主键[%s]失败:%s\n",__FILE__,__LINE__,ftokpath,strerror(errno));
 		return -1;
 	}
 	if((*msgidr = msgget(key,IPC_EXCL))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取消息队列[%s]失败:%s\n",__FILE__,__LINE__,msgname,strerror(errno));
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:获取消息队列[%s]成功:进入队列[%d]外出队列[%d]应答核心队列[%d]\n",__FILE__,__LINE__,msgname,*msgidi,*msgido,*msgidr);
+	SysLog(LOG_SYS_DEBUG,"FILE [%s] LINE [%d]:获取消息队列[%s]成功:进入队列[%d]外出队列[%d]应答核心队列[%d]\n",__FILE__,__LINE__,msgname,*msgidi,*msgido,*msgidr);
 	return 0;
 }
 int getshm(int procid,size_t shmsize)
@@ -128,15 +127,15 @@ int getshm(int procid,size_t shmsize)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,procid))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);
+	SysLog(LOG_SYS_DEBUG,"FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);
 	return 0;
 }
 
@@ -151,12 +150,12 @@ int initservregsem()
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{         
-		SysLog(1,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((sreg = shmat(shmid,NULL,0))==NULL) 
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	for(i=0;i<MAXSERVREG;i++)
@@ -170,12 +169,12 @@ int initservregsem()
 	/** init tran shm **/
 	if((shmid = getshmid(10,shmsize))==-1)
 	{
-		SysLog(1,"获取交易hash桶共享内存ID失败\n");
+		SysLog(LOG_SYS_ERR,"获取交易hash桶共享内存ID失败\n");
 		return -1;
 	}
 	if((tran = shmat(shmid,NULL,0))==NULL) 
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:链接共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	for(i=0;i<HASHCNT*BUCKETSCNT;i++)
@@ -215,12 +214,12 @@ int	seterr(char *errcode,char *errmsg)
 {
 	if(put_var_value("V_ERRCODE",strlen(errcode)+1,1,errcode)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:设置V_ERRCODE为:%s失败\n",__FILE__,__LINE__,errcode);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRCODE为:%s失败\n",__FILE__,__LINE__,errcode);
 		return -1;
 	}
 	if(put_var_value("V_ERRMSG",strlen(errmsg)+1,1,errmsg)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:设置V_ERRMSG为:%s失败\n",__FILE__,__LINE__,errcode);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRMSG为:%s失败\n",__FILE__,__LINE__,errcode);
 		return -1;
 	}
 	return 0;
@@ -235,19 +234,19 @@ int gettranmap(_tranmap *tmap,char *trancode)
 
 	if((tmap == NULL)||(trancode == NULL))
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]的交易属性参数有误\n",__FILE__,__LINE__,trancode);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取交易码为[%s]的交易属性参数有误\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	_tranmap *ttmap,*tstmap = NULL;
 	if((shmid = getshmid(5,shmsize))==-1)
 	{         
-		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时获取共享内存失败\n",__FILE__,__LINE__,trancode);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取交易码为[%s]时获取共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	tstmap  = shmat(shmid,NULL,0);
 	if(tstmap == (void *)-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取交易码为[%s]时链接共享内存失败\n",__FILE__,__LINE__,trancode);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取交易码为[%s]时链接共享内存失败\n",__FILE__,__LINE__,trancode);
 		return -1;
 	}
 	ttmap = tstmap;
@@ -308,12 +307,12 @@ pid_t getservpid(char *chnl_name)
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:连接服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:连接服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	/** 信号量控制 **/
@@ -321,11 +320,10 @@ pid_t getservpid(char *chnl_name)
 	servpos = MAXSERVREG/2;
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		//SysLog(1,"#####FILE[%s] LINE[%d]@@@@pid  [%ld] 尝试[%d]个\n",__FILE__,__LINE__,getpid(),i);
 		err=sem_trywait(&((sreg+i)->sem1));
 		if(err!=0&&errno==EAGAIN)
 		{
-			SysLog(1,"FILE[%s] LINE[%d]pid[%ld]当前正在占用，尝试下一个[%d]\n",__FILE__,__LINE__,getpid(),i);
+			SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d]pid[%ld]当前正在占用，尝试下一个[%d]\n",__FILE__,__LINE__,getpid(),i);
 			// 为了最大限度保证每次查询都可以查询的到，尝试得不到的时候直接加一半再找 
 			//i+=servpos;
 			continue;
@@ -334,11 +332,11 @@ pid_t getservpid(char *chnl_name)
 		{
 			if((sreg+i)->stat[0]=='N'&&!strcmp((sreg+i)->chnlname,chnl_name)&&!strcmp((sreg+i)->type,"S"))
 			{
-				SysLog(1,"FILE[%s]LINE[%d]开始修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+				SysLog(LOG_SYS_DEBUG,"FILE[%s]LINE[%d]开始修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
 				(sreg+i)->stat[0]='L';
 				ret = (sreg+i)->servpid ;
 				sem_post(&((sreg+i)->sem1));
-				SysLog(1,"FILE[%s]LINE[%d]结束修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
+				SysLog(LOG_SYS_DEBUG,"FILE[%s]LINE[%d]结束修改服务[%ld]状态\n",__FILE__,__LINE__,(sreg+i)->servpid);
 				break;
 			}else
 			{
@@ -346,7 +344,7 @@ pid_t getservpid(char *chnl_name)
 			}
 		}else
 		{
-			SysLog(1,"FILE[%s]LINE[%d]加锁进程[%ld]状态失败:%s\n",__FILE__,__LINE__,(sreg+i)->servpid,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d]加锁进程[%ld]状态失败:%s\n",__FILE__,__LINE__,(sreg+i)->servpid,strerror(errno));
 			break;
 		}
 	}
@@ -360,18 +358,16 @@ int insert_chnlreg(char	*startcmd,char *chnlname )
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		SysLog(1,"get serv shm id error\n");
+		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
 		return -1;
 	}
-	SysLog(1,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(1,"shmat sreg error\n");
+		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
 		return -1;
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		//SysLog(1,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
 		sem_wait(&((sreg+i)->sem2));
 		if((sreg+i)->servpid==0)
 		{
@@ -408,18 +404,16 @@ int updatestat_foroth(pid_t	pid)
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		SysLog(1,"get serv shm id error\n");
+		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
 		return -1;
 	}
-	SysLog(1,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(1,"shmat sreg error\n");
+		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
 		return -1;
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		//SysLog(1,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
 		if((sreg+i)->servpid==pid)
 		{
 			sem_wait(&((sreg+i)->sem1));
@@ -432,7 +426,7 @@ int updatestat_foroth(pid_t	pid)
 
 	}
 	shmdt(sreg);
-	SysLog(1,"解除信号量成功\n");
+	SysLog(LOG_SYS_DEBUG,"解除信号量成功\n");
 	return ret;
 }
 /** 获取交易属性 **/
@@ -444,19 +438,19 @@ int get_vardef(char	*varname,_vardef	*vardef)
 
 	if((varname == NULL)||(vardef == NULL))
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]的配置失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取变量为[%s]的配置失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	_vardef *tvardef,*tstvardef = NULL;
 	if((shmid = getshmid(4,shmsize))==-1)
 	{         
-		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]时获取共享内存失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取变量为[%s]时获取共享内存失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	tstvardef  = shmat(shmid,NULL,0);
 	if(tstvardef == (void *)-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取变量为[%s]时链接共享内存失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取变量为[%s]时链接共享内存失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	tvardef = tstvardef;
@@ -478,7 +472,7 @@ int	setupshome(void)
 	/** 初始化全局共享内存前，先获取ups根路径 **/
 	if(getenv("UPSHOME")==NULL)
 	{
-		SysLog(1,"获取环境变量UPSHOME配置错\n");
+		SysLog(LOG_SYS_ERR,"获取环境变量UPSHOME配置错\n");
 		return -1;
 	}
 	memset(upshome,0,sizeof(upshome));

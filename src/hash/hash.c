@@ -61,18 +61,18 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
-		SysLog(1,"获取hash存储区主键失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(1,"获取hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		SysLog(1,"连接hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"连接hash存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -81,7 +81,7 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 		iret = sem_trywait(&((transhm+pos+i)->sem1));
 		if(iret !=0&&errno==EAGAIN)
 		{
-			SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
+			SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
 			continue;
 		}else if(iret == 0)
 		{
@@ -112,12 +112,12 @@ int shm_hash_insert(long innerid,char *intran,char *outtran)
 		else
 		{
 			/** 添加hash表错误 **/
-			SysLog(1,"FILE[%s]LINE[%d]添加hash错误\n",__FILE__,__LINE__);
+			SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d]添加hash错误\n",__FILE__,__LINE__);
 			shmdt(transhm);
 			return -1;
 		}
 	}
-	SysLog(1,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]HASH桶满\n",__FILE__,__LINE__);
 	shmdt(transhm);
 	return -1;
 }
@@ -139,24 +139,24 @@ int get_shm_hash(long innerid,_tran *tranbuf)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
-		SysLog(1,"获取hash存储区主键失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(1,"获取HASH存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"获取HASH存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		SysLog(1,"链接HASH存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"链接HASH存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
 	for(i=0;i<BUCKETSCNT;i++)
 	{
-		//SysLog(1,"fucking FILE[%s] LINE[%d] pos[%d] i[%d] intran[%s] outtran[%s]\n",__FILE__,__LINE__,pos,i,(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
+		//SysLog(LOG_SYS_ERR,"fucking FILE[%s] LINE[%d] pos[%d] i[%d] intran[%s] outtran[%s]\n",__FILE__,__LINE__,pos,i,(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
 		if((transhm+pos+i)->innerid == innerid)
 		{
 			//printf("in hash intran[%s]\t outtran[%s]\n",(transhm+pos+i)->intran,(transhm+pos+i)->outtran);
@@ -189,18 +189,18 @@ int delete_shm_hash(long innerid)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
-		SysLog(1,"获取HASH存储区主键失败");
+		SysLog(LOG_SYS_ERR,"获取HASH存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(1,"获取HASH存储区恭喜内存失败");
+		SysLog(LOG_SYS_ERR,"获取HASH存储区恭喜内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		SysLog(1,"链接HASH存储区恭喜内存失败");
+		SysLog(LOG_SYS_ERR,"链接HASH存储区恭喜内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -226,7 +226,7 @@ int init_var_hash(void)
 	kvalue  = (_keyvalue *)malloc(HASHCNT*sizeof(_keyvalue));
 	if(kvalue == NULL)
 	{
-		SysLog(1,"申请服务变量存放区内存失败\n");
+		SysLog(LOG_SYS_ERR,"申请服务变量存放区内存失败\n");
 		return -1;
 	}
 	for(i=0;i<HASHCNT;i++)
@@ -258,10 +258,10 @@ int	memset_var_hash(void)
 		endk=tmpk->end;
 		while(endk!=tmpk)
 		{
-			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
 			if(get_vardef(endk->varname,&vardef)!=0)
 			{
-				SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,tmpk->varname);
+				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,tmpk->varname);
 				return -1;
 			}
 			free(endk->value);
@@ -288,10 +288,10 @@ int	init_malloced_hash(void)
 		endk=tmpk;
 		while(endk!=NULL&&endk!=tmpk)
 		{
-			SysLog(1,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
 			if(get_vardef(endk->varname,&vardef)!=0)
 			{
-				SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,endk->varname);
+				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,endk->varname);
 				return -1;
 			}
 			memset(endk->value,0,vardef.varlen);
@@ -311,27 +311,27 @@ int put_var_value(char *varname,int len,int loop,char *value)
 
 	if(get_vardef(varname,&vardef)!=0)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	/** strlen 不包括\0的计算,所以所有的变量定义需要在原有基础上+1 **/
 	//if(len>vardef.varlen-1)
 	if(strlen(value)>vardef.varlen-1)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
 		return -1;
 	}
-	SysLog(1,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 
 	if(kvalue == NULL||varname ==NULL||strlen(varname)==0)
 	{
-		SysLog(1,"服务变量存放区内存未申请或变量名为空\n");
+		SysLog(LOG_SYS_ERR,"服务变量存放区内存未申请或变量名为空\n");
 		return -1;
 	}
 	memset(varnameloop,0,sizeof(varnameloop));
 	sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 	hash = hashfunc(varnameloop);
-	SysLog(1,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
 
 	head = kvalue+hash;
 	tmpkvalue = kvalue+hash;
@@ -343,24 +343,24 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		{
 			memset(tmpkvalue->value,0,vardef.varlen);
 			memcpy(tmpkvalue->value,value,len);
-			SysLog(1,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
+			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 			return 0;
 		}
 		pre = tmpkvalue;
 		tmpkvalue=tmpkvalue->next;
 	}
 	/** 第一次申请内存 **/
-	SysLog(1,"FILE [%s]  LINE[%d] 变量[%s]第一次使用，申请新内存!!!!!\n",__FILE__,__LINE__,varname);
+	SysLog(LOG_SYS_ERR,"FILE [%s]  LINE[%d] 变量[%s]第一次使用，申请新内存!!!!!\n",__FILE__,__LINE__,varname);
 	tmpkey = (_keyvalue *)malloc(sizeof(_keyvalue));
 	if(tmpkey == NULL)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 		return -1;
 	}
 	tmpkey->value = (char *)malloc(vardef.varlen);
 	if(tmpkey->value==NULL)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 		free(tmpkey);
 		return -1;
 	}else
@@ -370,7 +370,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		strcpy(tmpkey->varnameloop,varnameloop);
 		memset(tmpkey->value,0x00,vardef.varlen);
 		memcpy(tmpkey->value,value,len);
-		SysLog(1,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
 		tmpkey->next = NULL;
 		tmpkey->pre = pre;
 		pre->next = tmpkey;	
@@ -388,7 +388,7 @@ int get_var_value(char *varname,int len,int loop,char *value)
 
 	if(get_vardef(varname,&vardef)!=0)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	/** 当变量定义长度大于传入取出值存放变量时，不取出，存放不了，会core done **/
@@ -397,26 +397,26 @@ int get_var_value(char *varname,int len,int loop,char *value)
 	/** 如果获取的变量存放大小大于变量定义大小，不能放入，防止出现乱码 **/
 	if(len<vardef.varlen)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
 		return -1;
 	}
-	SysLog(1,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 	if(kvalue == NULL)
 	{
-		SysLog(1,"进程变量值内存空间未申请 \n");
+		SysLog(LOG_SYS_ERR,"进程变量值内存空间未申请 \n");
 		return -1;
 	}
 	if(loop == 0)
 	{
 		hash = hashfunc(varname);
-		SysLog(1,"变量[%s]HASH值为[%d]\n",varname,hash);
+		SysLog(LOG_SYS_ERR,"变量[%s]HASH值为[%d]\n",varname,hash);
 	}else
 	{
 		memset(varnameloop,0,sizeof(varnameloop));
 		//sprintf(varnameloop,"%s[%d]",varname,loop);
 		sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 		hash = hashfunc(varnameloop);
-		SysLog(1,"变量[%s]HASH值为[%d]\n",varnameloop,hash);
+		SysLog(LOG_SYS_ERR,"变量[%s]HASH值为[%d]\n",varnameloop,hash);
 	}
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
@@ -424,7 +424,7 @@ int get_var_value(char *varname,int len,int loop,char *value)
 		if(!strcmp(tmpkvalue->varname,varname)&&!strcmp(tmpkvalue->varnameloop,varnameloop))
 		{
 			trim(tmpkvalue->value);
-			SysLog(1,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
+			SysLog(LOG_SYS_ERR,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
 			//memcpy(value,tmpkvalue->value,strlen(tmpkvalue->value));
 			//memcpy(value,tmpkvalue->value,len);
 			memcpy(value,tmpkvalue->value,vardef.varlen);
@@ -452,7 +452,7 @@ void destory_var_hash(void)
 		return ;
 	while(i<HASHCNT)
 	{
-		SysLog(1,"start at [%d]\n",i);
+		SysLog(LOG_SYS_ERR,"start at [%d]\n",i);
 		endkvalue = kvalue+i;
 		if(endkvalue->next==NULL)
 		{
@@ -493,18 +493,18 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
-		SysLog(1,"获取hash存储区主键失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(1,"获取hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		SysLog(1,"连接hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"连接hash存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -517,7 +517,7 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 			/**
 			if(iret !=0&&errno==EAGAIN)
 			{
-				SysLog(1,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
+				SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d]暂时无可用hash空间\n",__FILE__,__LINE__);
 				i++;
 				continue;
 			}
@@ -538,7 +538,7 @@ int shm_hash_update(long innerid,char *intran,char *outtran)
 			return 0;
 		}
 	}
-	SysLog(1,"FILE[%s] LINE[%d]HASH桶满,更新失败\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]HASH桶满,更新失败\n",__FILE__,__LINE__);
 	shmdt(transhm);
 	return -1;
 }
@@ -553,43 +553,43 @@ int	delete_msgq(long	inpid)
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		SysLog(1,"get serv shm id error\n");
+		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
 		return -1;
 	}
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(1,"shmat sreg error\n");
+		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
 		return -1;
 	}
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == NULL)
 	{
-		SysLog(1,"malloc msgbuf error\n");
+		SysLog(LOG_SYS_ERR,"malloc msgbuf error\n");
 		return -1;
 	}
 	for(i=0;(sreg+i)->servpid!=0;i++)
 	{
 		if(!strcmp((sreg+i)->type,"C"))
 		{
-			SysLog(1,"开始查找进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s待删除PID[%ld]\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat,inpid);
+			SysLog(LOG_SYS_ERR,"开始查找进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s待删除PID[%ld]\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat,inpid);
 			if(getmsgid((sreg+i)->chnlname,&msgidi,&msgido,&msgidr)!=0)
 			{
-				SysLog(1,"获取渠道:%s消息队列失败\t\n",(sreg+i)->chnlname);
+				SysLog(LOG_SYS_ERR,"获取渠道:%s消息队列失败\t\n",(sreg+i)->chnlname);
 				continue;
 			}
 			if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
 			if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
 			if(msgrcv(msgidr,mbuf,sizeof(mbuf->tranbuf),inpid,IPC_NOWAIT)==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
-			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据成功 inpid[%ld]\n",__FILE__,__LINE__,inpid);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据成功 inpid[%ld]\n",__FILE__,__LINE__,inpid);
 		}
 	}
 	free(mbuf);
@@ -617,18 +617,18 @@ int shm_hash_tout(long innerid,time_t	tout)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,10))==-1)
 	{
-		SysLog(1,"获取hash存储区主键失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区主键失败");
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(1,"获取hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"获取hash存储区共享内存失败");
 		return -1;
 	}
 	transhm = (_tran *)shmat(shmid,NULL,0);
 	if(transhm ==  (void *)-1)
 	{
-		SysLog(1,"连接hash存储区共享内存失败");
+		SysLog(LOG_SYS_ERR,"连接hash存储区共享内存失败");
 		return -1;
 	}
 	pos = hashfunc(inpid);
@@ -643,7 +643,7 @@ int shm_hash_tout(long innerid,time_t	tout)
 			return 0;
 		}
 	}
-	SysLog(1,"FILE[%s] LINE[%d]HASH桶满,更新超时时间\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]HASH桶满,更新超时时间\n",__FILE__,__LINE__);
 	shmdt(transhm);
 	return -1;
 }

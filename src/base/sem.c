@@ -14,13 +14,13 @@ int get_sem()
 	system(cmd);
 	if((key=ftok(keypath,1))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		printf("ftok error[%s]",strerror(errno));
 		return -1;
 	}
 	if((semid = semget(key,0,IPC_EXCL))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	return  semid;
@@ -40,12 +40,12 @@ int init_sem(int	init_value)
 
 	if((key=ftok(keypath,1))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取信号量主建失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((semid = semget(key,1,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取信号量ID失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	return  0;

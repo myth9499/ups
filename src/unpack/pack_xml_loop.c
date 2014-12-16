@@ -94,12 +94,12 @@ int pack_xml_loop(char *xmltype)
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	if((tmpcfgloop = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	dtcfgloop = tmpcfgloop;
@@ -109,18 +109,18 @@ int pack_xml_loop(char *xmltype)
 	/** 获取变量对应配置 **/
 	if(!strcmp(xmltype,"V")||strlen(xmltype)==0)
 	{
-		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
+		SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理");
 		if(get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype)!=0)
 		{
-			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
+			SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理失败");
 			return  -1;
 		}
-		SysLog(1,"获取到待解包报文类型[%s]\n",msgtype);
+		SysLog(LOG_APP_ERR,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
 	}else
 	{
-		SysLog(1,"直接从参数读取\n");
+		SysLog(LOG_APP_ERR,"直接从参数读取\n");
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
@@ -129,7 +129,7 @@ int pack_xml_loop(char *xmltype)
 	doc = xmlNewDoc(BAD_CAST"1.0");
 	if(doc == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取doc指针\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取doc指针\n",__FILE__,__LINE__);
 		return -1;
 	}
 
@@ -150,7 +150,7 @@ int pack_xml_loop(char *xmltype)
 				{
 					memset(tmppath,0,sizeof(tmppath));
 					strcpy(tmppath,tmpcfgloop->fullpath);
-				//	SysLog(1,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]loop[%s]:\n",__FILE__,__LINE__,tmppath,flag,tmpcfgloop->loop);
+				//	SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]loop[%s]:\n",__FILE__,__LINE__,tmppath,flag,tmpcfgloop->loop);
 					/** 判断全路径倒数第二个节点是否已经创建，若已经创建，判断是否与当前循环次数相符**/
 					if(flag==0)
 					{
@@ -158,7 +158,7 @@ int pack_xml_loop(char *xmltype)
 						sprintf(docpath,"/%s",tpath);
 						root=getNodePtr(docpath,l);
 						xmlDocSetRootElement(doc,root);
-						SysLog(1,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
+						SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
 					}
 					if(flag ==1)
 					{
@@ -185,7 +185,7 @@ int pack_xml_loop(char *xmltype)
 					memset(keyvalue,0,sizeof(keyvalue));
 					if(get_var_value(tmpcfgloop->varname,sizeof(keyvalue),l+1,keyvalue)==-1)
 					{
-						SysLog(1,"get keyvalue error\n");
+						SysLog(LOG_APP_ERR,"get keyvalue error\n");
 						flag = 1;
 						continue;
 					}else
@@ -199,7 +199,7 @@ int pack_xml_loop(char *xmltype)
 			{
 				memset(tmppath,0,sizeof(tmppath));
 				strcpy(tmppath,tmpcfgloop->fullpath);
-				//SysLog(1,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]:\n",__FILE__,__LINE__,tmppath,flag);
+				//SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]:\n",__FILE__,__LINE__,tmppath,flag);
 				/** 判断全路径倒数第二个节点是否已经创建，若已经创建，判断是否与当前循环次数相符**/
 				if(flag==0)
 				{
@@ -207,7 +207,7 @@ int pack_xml_loop(char *xmltype)
 					sprintf(docpath,"/%s",tpath);
 					root=getNodePtr(docpath,0);
 					xmlDocSetRootElement(doc,root);
-					SysLog(1,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
+					SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
 				}
 				if(flag ==1)
 				{
@@ -233,7 +233,7 @@ int pack_xml_loop(char *xmltype)
 				strcpy(tmpfullpath,strstr(fullpath,"/"));
 				if(get_var_value(tmpcfgloop->varname,sizeof(keyvalue),1,keyvalue)==-1)
 				{
-					SysLog(1,"get keyvalue error\n");
+					SysLog(LOG_APP_ERR,"get keyvalue error\n");
 					flag = 1;
 				}else
 				{
@@ -255,7 +255,7 @@ int pack_xml_loop(char *xmltype)
 		/** 放置到变量中**/
 		if(put_var_value("V_XMLFILE",strlen(ffile),1,ffile)!=0)
 		{
-			SysLog(1,"打包文件失败\n");
+			SysLog(LOG_APP_ERR,"打包文件失败\n");
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
 			//xmlXPathFreeObject(result);
@@ -264,7 +264,7 @@ int pack_xml_loop(char *xmltype)
 			return -1;
 		}else
 		{
-			SysLog(1,"打包文件成功[%s]\n",ffile);
+			SysLog(LOG_APP_ERR,"打包文件成功[%s]\n",ffile);
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
 			//xmlXPathFreeObject(result);
@@ -274,7 +274,7 @@ int pack_xml_loop(char *xmltype)
 		}
 	}else
 	{
-		SysLog(1,"打包文件失败\n");
+		SysLog(LOG_APP_ERR,"打包文件失败\n");
 		xmlFreeDoc(doc);
 		xmlCleanupParser();
 		//xmlXPathFreeObject(result);

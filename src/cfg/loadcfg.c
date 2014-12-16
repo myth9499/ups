@@ -17,6 +17,7 @@ int main(int argc,char *argv[])
 	char	cfgfile[256];
 	char	xmlns[256];
 	char	cfgpath[100];
+	int 	ret;
 
 	memset(buffer,0,sizeof(buffer));
 	memset(xmlname,0,sizeof(xmlname));
@@ -97,6 +98,11 @@ int main(int argc,char *argv[])
 		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
+	if((ret=setsysparam())==-1)
+	{
+		printf("FILE [%s] LINE [%d]:设置LOGLEVEL失败\n",__FILE__,__LINE__);
+	}
+	printf("FILE [%s] LINE [%d]:设置LOGLEVEL成功,当前日志级别为[%d]\n",__FILE__,__LINE__,ret);
 	return 0;
 }
 int load_commmsg_cfg(char *filename)
@@ -117,14 +123,14 @@ int load_commmsg_cfg(char *filename)
 	shmsize=MAXCOMMMSG*sizeof(_commmsg);
 	if((shmid=getshmid(9,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"get shm error\n");
 		return -1;
 	}
-	SysLog(1,"start loadcfg \n");
+	SysLog(LOG_SYS_ERR,"start loadcfg \n");
 	cmsg = (_commmsg *)shmat(shmid,NULL,0);
 	if(cmsg == NULL)
 	{
-		SysLog(1,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"cmsg shmat error\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
@@ -169,7 +175,7 @@ int load_commmsg_cfg(char *filename)
 	}
 	shmdt(cmsg);
 	fclose(fp);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_ERR,"load ok\n");
 	return 0;
 }
 int load_flow_cfg(char *filename)
@@ -190,14 +196,14 @@ int load_flow_cfg(char *filename)
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"get shm error\n");
 		return -1;
 	}
-	SysLog(1,"start loadcfg \n");
+	SysLog(LOG_SYS_ERR,"start loadcfg \n");
 	flow = (_flow *)shmat(shmid,NULL,0);
 	if(flow == NULL)
 	{
-		SysLog(1,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"cmsg shmat error\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
@@ -247,7 +253,7 @@ int load_flow_cfg(char *filename)
 	}
 	shmdt(flow);
 	fclose(fp);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_ERR,"load ok\n");
 	return 0;
 }
 
@@ -262,12 +268,12 @@ int load_xmlcfg(char *xmltype,char *filename)
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(1,"get xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"get xml cfg error\n");
 		return -1;
 	}
 	if((xmlcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(1,"shmat xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"shmat xml cfg error\n");
 		return -1;
 	}
 
@@ -275,14 +281,14 @@ int load_xmlcfg(char *xmltype,char *filename)
 	doc = xmlReadFile(filename,"UTF-8",XML_PARSE_RECOVER);
 	if(doc == NULL)
 	{
-		SysLog(1,"parse file error\n");
+		SysLog(LOG_SYS_ERR,"parse file error\n");
 		return -1;
 	}
 
 	curNode = xmlDocGetRootElement(doc);
 	if(curNode == NULL)
 	{
-		SysLog(1,"get root elemenet error\n");
+		SysLog(LOG_SYS_ERR,"get root elemenet error\n");
 		xmlFreeDoc(doc);
 		return -1;
 	}
@@ -304,13 +310,13 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 	{
 		if(curNode->type == XML_ELEMENT_NODE)
 		{
-			SysLog(1,"ELement name [%s]\n",curNode->name);
+			SysLog(LOG_SYS_ERR,"ELement name [%s]\n",curNode->name);
 		}else if(curNode->type == XML_TEXT_NODE)
 		{
 			szKey = xmlNodeGetContent(curNode);
-			SysLog(1,"[%s]---%s---\n",curNode->name,szKey);
+			SysLog(LOG_SYS_ERR,"[%s]---%s---\n",curNode->name,szKey);
 			iret = getNodePath(path,curNode);
-			SysLog(1,"path is [%s]\n",path);
+			SysLog(LOG_SYS_ERR,"path is [%s]\n",path);
 			attr = curNode->parent->properties;
 			for(i=0;i<MAXXMLCFG;i++)
 			{
@@ -321,7 +327,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					strcpy((xmlcfg+i)->mark,curNode->name);
 					strcpy((xmlcfg+i)->fullpath,path);
 					strcpy((xmlcfg+i)->varname,szKey);
-					SysLog(1,"FILE[%s] LINE[%d] 放入变量[%s]\n",__FILE__,__LINE__,(xmlcfg+i)->varname);
+					SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 放入变量[%s]\n",__FILE__,__LINE__,(xmlcfg+i)->varname);
 					if(attr==NULL)
 					{
 						(xmlcfg+i)->depth = -1;
@@ -330,7 +336,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					{
 						while(attr)
 						{
-							SysLog(1,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
+							SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
 							if(!strcmp(attr->name,"loop"))
 							{
 								strcpy((xmlcfg+i)->loop,attr->children->content);
@@ -374,14 +380,14 @@ int load_tranmap_cfg(char *filename)
 	shmsize=MAXTRANMAP*sizeof(_tranmap);
 	if((shmid=getshmid(5,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"get shm error\n");
 		return -1;
 	}
-	SysLog(1,"start load tranmap  cfg \n");
+	SysLog(LOG_SYS_ERR,"start load tranmap  cfg \n");
 	tmap = (_tranmap *)shmat(shmid,NULL,0);
 	if(tmap == NULL)
 	{
-		SysLog(1,"tranmap shmat error\n");
+		SysLog(LOG_SYS_ERR,"tranmap shmat error\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
@@ -414,7 +420,7 @@ int load_tranmap_cfg(char *filename)
 	}
 	shmdt(tmap);
 	fclose(fp);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_ERR,"load ok\n");
 	return 0;
 }
 int load_vardef_cfg(char *filename)
@@ -432,14 +438,14 @@ int load_vardef_cfg(char *filename)
 	shmsize=MAXVARDEF*sizeof(_vardef);
 	if((shmid=getshmid(4,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"get shm error\n");
 		return -1;
 	}
-	SysLog(1,"start load vardef  cfg \n");
+	SysLog(LOG_SYS_ERR,"start load vardef  cfg \n");
 	vardef = (_vardef *)shmat(shmid,NULL,0);
 	if(vardef == NULL)
 	{
-		SysLog(1,"vardef shmat error\n");
+		SysLog(LOG_SYS_ERR,"vardef shmat error\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
@@ -466,6 +472,57 @@ int load_vardef_cfg(char *filename)
 	}
 	shmdt(vardef);
 	fclose(fp);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_ERR,"load ok\n");
 	return 0;
+}
+
+int	setsysparam(void)
+{
+	_sys_param  *sp = NULL;
+	int shmsize,ret=-1;
+	FILE	*fp = NULL;
+	char	filepath[100];
+	char	tmpbuf[100];
+	memset(filepath,0x00,sizeof(filepath));
+	memset(tmpbuf,0x00,sizeof(tmpbuf));
+
+	shmsize =   sizeof(_sys_param);
+	int shmid,isfound = 0;
+	if((shmid=getshmid(3,shmsize))==-1)
+	{
+		printf("FILE [%s] LINE[%d] 获取系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	sp = (_sys_param *)shmat(shmid,NULL,0);
+	if(sp == NULL)
+	{
+		printf("FILE [%s] LINE[%d] 链接系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		return -1;
+	}
+	sprintf(filepath,"%s/%s",upshome,"/src/cfg/sys.cfg");
+	fp = fopen(filepath,"r");
+	if(fp == NULL)
+	{
+		printf("FILE [%s] LINE[%d] 打开[%s]配置失败:%s\n",__FILE__,__LINE__,filepath,strerror(errno));
+		shmdt(sp);
+		return -1;
+	}
+	while(fgets(tmpbuf,sizeof(tmpbuf),fp)!=NULL)
+	{
+		if(tmpbuf[0]=='#')
+			continue;
+		if(!memcmp(tmpbuf,"LOGLEVEL",8))
+		{
+			isfound = 1;
+			sp->curloglvl=atoi(tmpbuf+9);
+			ret = sp->curloglvl;
+		}
+	}
+	if(isfound ==0)
+	{
+		printf("FILE [%s] LINE[%d] sys.cfg中未配置LOGLEVEL:%s\n",__FILE__,__LINE__,strerror(errno));
+	}
+	fclose(fp);
+	shmdt(sp);
+	return ret;
 }

@@ -26,7 +26,7 @@ int	regNs(xmlXPathContextPtr context,char	*xmltype)
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
@@ -42,7 +42,7 @@ int	regNs(xmlXPathContextPtr context,char	*xmltype)
 			xmlXPathRegisterNs(context,BAD_CAST"lilei",BAD_CAST(xmlns));  
 			if(!context)  
 			{  
-				SysLog(1,"Error: unable to create new XPath context\n");  
+				SysLog(LOG_APP_ERR,"Error: unable to create new XPath context\n");  
 				fclose(fp);
 				return -1;  
 			}
@@ -63,18 +63,18 @@ int	GetNewFileName(char	*ffile)
 	char	nfilename[L_tmpnam+1];
 	if(ffile == NULL)
 	{
-		SysLog(1,"传入生成文件名存放空间为NULL\n");
+		SysLog(LOG_APP_ERR,"传入生成文件名存放空间为NULL\n");
 		return -1;
 	}
 	memset(nfilename,0,L_tmpnam+1);
 	//strcpy(nfilename,tmpnam(nfilename));
 	if(tmpnam(nfilename)==NULL)
 	{
-		SysLog(1,"生成临时文件失败[%s]\n",strerror(errno));
+		SysLog(LOG_APP_ERR,"生成临时文件失败[%s]\n",strerror(errno));
 		return -1;
 	}
 	sprintf(ffile,"%s%s%s",upshome,"/msg",nfilename);
-	SysLog(1,"临时文件名[%s]\n",ffile);
+	SysLog(LOG_APP_ERR,"临时文件名[%s]\n",ffile);
 	return 0;
 }
 xmlDocPtr  getdoc (char *docname) 
@@ -83,7 +83,7 @@ xmlDocPtr  getdoc (char *docname)
 	doc = xmlParseFile(docname);                                                       
 
 	if (doc == NULL ) {                                                                
-		SysLog(1,"FILE [%s] LINE[%d] Document not parsed successfully. \n",__FILE__,__LINE__);                          
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d] Document not parsed successfully. \n",__FILE__,__LINE__);                          
 		return NULL;                                                                     
 	}                                                                                  
 
@@ -95,7 +95,7 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 
 	if(doc == NULL || strlen(xpath)==0)
 	{
-		SysLog(1,"FILE [%s] LINE[%d] doc == NULL of xpath  == NULL. \n",__FILE__,__LINE__);                          
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d] doc == NULL of xpath  == NULL. \n",__FILE__,__LINE__);                          
 		return NULL;
 	}
 	xmlXPathContextPtr context;                                                        
@@ -103,7 +103,7 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 
 	context = xmlXPathNewContext(doc);                                                 
 	if (context == NULL) {                                                             
-		SysLog(1,"FILE [%s] LINE[%d] Error in xmlXPathNewContext. \n",__FILE__,__LINE__);                          
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d] Error in xmlXPathNewContext. \n",__FILE__,__LINE__);                          
 		return NULL;                                                                     
 	}
 	/** 根据报文类型，设置xpath命名空间 **/
@@ -116,12 +116,12 @@ xmlXPathObjectPtr  getnodeset (xmlDocPtr doc, xmlChar *xpath,char *xmltype)
 	result = xmlXPathEvalExpression(xpath, context);                                   
 	xmlXPathFreeContext(context);                                                      
 	if (result == NULL) {                                                              
-		SysLog(1,"FILE [%s] LINE[%d] Error in xmlXPathEvalExpression. \n",__FILE__,__LINE__);                          
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d] Error in xmlXPathEvalExpression. \n",__FILE__,__LINE__);                          
 		return NULL;                                                                     
 	}                                                                                  
 	if(xmlXPathNodeSetIsEmpty(result->nodesetval)){                                    
 		xmlXPathFreeObject(result);                                                      
-		SysLog(1,"FILE [%s] LINE[%d] no result. \n",__FILE__,__LINE__);                          
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d] no result. \n",__FILE__,__LINE__);                          
 		return NULL;                                                                     
 	}                                                                                  
 	return result;                                                                     
@@ -135,11 +135,11 @@ int	pack_xml(char	*xmltype)
 	ret = get_var_value("V_LOOP",sizeof(loop),1,loop);
 	if(ret ==-1||atoi(loop)<=0)
 	{
-		SysLog(1,"走单独XML打包函数\n");
+		SysLog(LOG_APP_ERR,"走单独XML打包函数\n");
 		return (pack_xml_single(xmltype));
 	}else
 	{
-		SysLog(1,"走循环XML打包函数\n");
+		SysLog(LOG_APP_ERR,"走循环XML打包函数\n");
 		return (pack_xml_loop(xmltype));
 	}
 	return 0;
@@ -174,12 +174,12 @@ int pack_xml_single(char *xmltype)
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	if((tmpcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取XML配置失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	dtcfg = tmpcfg;
@@ -189,18 +189,18 @@ int pack_xml_single(char *xmltype)
 	/** 获取变量对应配置 **/
 	if(!strcmp(xmltype,"V")||strlen(xmltype)==0)
 	{
-		SysLog(1,"从变量V_MSGTYPE取报文类型进行处理");
+		SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理");
 		if(get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype)!=0)
 		{
-			SysLog(1,"从变量V_MSGTYPE取报文类型进行处理失败");
+			SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理失败");
 			return  -1;
 		}
-		SysLog(1,"获取到待解包报文类型[%s]\n",msgtype);
+		SysLog(LOG_APP_ERR,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
 	}else
 	{
-		SysLog(1,"直接从参数读取\n");
+		SysLog(LOG_APP_ERR,"直接从参数读取\n");
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
@@ -209,7 +209,7 @@ int pack_xml_single(char *xmltype)
 	doc = getdoc(xmlcfgpath);
 	if(doc == NULL)
 	{
-		SysLog(1,"FILE [%s] LINE [%d] 获取doc指针\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取doc指针\n",__FILE__,__LINE__);
 		return -1;
 	}
 
@@ -220,14 +220,14 @@ int pack_xml_single(char *xmltype)
 		{
 			memset(tmppath,0,sizeof(tmppath));
 			strcpy(tmppath,tmpcfg->fullpath);
-			SysLog(1,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
+			SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 1:\n",__FILE__,__LINE__);
 			tmp = strtok(tmppath,"/");
 			sprintf(xpath,"/lilei:%s",tmp);
 			while((tmp = strtok(NULL,"/"))!=NULL)
 			{
 				sprintf(xpath,"%s/lilei:%s",xpath,tmp);
 			}
-			SysLog(1,"FILE[%s]LINE[%d]xpath is [%s]\n",__FILE__,__LINE__,xpath);
+			SysLog(LOG_APP_ERR,"FILE[%s]LINE[%d]xpath is [%s]\n",__FILE__,__LINE__,xpath);
 			result = getnodeset(doc,xpath,xmltype);
 			if(result)
 			{
@@ -238,14 +238,14 @@ int pack_xml_single(char *xmltype)
 					if(keyword == NULL)
 					{
 						memset(xpath,0,sizeof(xpath));
-						SysLog(1,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
+						SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] malloc xpath error:\n",__FILE__,__LINE__,strerror(errno));
 						break;
 					}
 					/** 根据值获取到对应变量信息 **/
 					memset(keyvalue,0,sizeof(keyvalue));
 					if(get_var_value(keyword,sizeof(keyvalue),1,keyvalue)==-1)
 					{
-						SysLog(1,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
+						SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] 获取[%s]变量值失败\n",__FILE__,__LINE__,keyword);
 						/**
 						nodeset->nodeTab[i]->xmlChildrenNode->parent->prev->next=nodeset->nodeTab[i]->xmlChildrenNode->parent->next;
 						if(nodeset->nodeTab[i]->xmlChildrenNode->parent->next!=NULL)
@@ -268,7 +268,7 @@ int pack_xml_single(char *xmltype)
 						continue;
 					}else
 					{
-						SysLog(1,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
+						SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] keyword:%s keyvalue[%s]\n",__FILE__,__LINE__,keyword,keyvalue);
 						xmlNodeSetContent(nodeset->nodeTab[i],keyvalue);
 						free(keyword);
 					}
@@ -289,7 +289,7 @@ int pack_xml_single(char *xmltype)
 		/** 放置到变量中**/
 		if(put_var_value("V_XMLFILE",strlen(ffile),1,ffile)!=0)
 		{
-			SysLog(1,"打包文件失败\n");
+			SysLog(LOG_APP_ERR,"打包文件失败\n");
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
 			//xmlXPathFreeObject(result);
@@ -298,7 +298,7 @@ int pack_xml_single(char *xmltype)
 			return -1;
 		}else
 		{
-			SysLog(1,"打包文件成功[%s]\n",ffile);
+			SysLog(LOG_APP_ERR,"打包文件成功[%s]\n",ffile);
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
 			//xmlXPathFreeObject(result);
@@ -308,7 +308,7 @@ int pack_xml_single(char *xmltype)
 		}
 	}else
 	{
-		SysLog(1,"打包文件失败\n");
+		SysLog(LOG_APP_ERR,"打包文件失败\n");
 		xmlFreeDoc(doc);
 		xmlCleanupParser();
 		//xmlXPathFreeObject(result);

@@ -16,11 +16,11 @@ void child_exit(int signal)
 	//while((pid = waitpid(-1,&stat,WNOHANG))>0)
 	while((pid = waitpid(-1,&stat,WNOHANG|WUNTRACED))>0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:子进程[%d]退出，退出状态[%d]\n",__FILE__,__LINE__,pid,stat);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:子进程[%d]退出，退出状态[%d]\n",__FILE__,__LINE__,pid,stat);
 	}
 	if(pid == -1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:ERROR[%s]!!!\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:ERROR[%s]!!!\n",__FILE__,__LINE__,strerror(errno));
 	}
 	return ;
 }
@@ -29,17 +29,17 @@ void child_exit(int signal)
  * */
 void timeout(int signal)
 {
-	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据\n",__FILE__,__LINE__);
 	/**
 	if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:超时删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:超时删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 	}
 	if(delete_shm_hash(mbuf->innerid)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:超时删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:超时删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据成功\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:交易超时结束,删除消息队列和hash表数据成功\n",__FILE__,__LINE__);
 	**/
 	return ;
 }
@@ -89,7 +89,7 @@ int main(int argc,char *argv[])
 
 	if(getmsgid(chnl_name,&msgidi,&msgido,&msgidr)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
 
@@ -110,10 +110,10 @@ int main(int argc,char *argv[])
 #endif  
 	if((sockfd = socket(AF_INET,SOCK_STREAM,0))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:创建服务器套接字失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:创建服务器套接字失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:创建服务器套接字成功\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:创建服务器套接字成功\n",__FILE__,__LINE__);
 	bzero(&serv_addr,sizeof(struct sockaddr_in));
 	serv_addr.sin_family = AF_INET;
 	//serv_addr.sin_port = htons(10000);
@@ -122,12 +122,12 @@ int main(int argc,char *argv[])
 
 	if(bind(sockfd,(struct sockaddr *)(&serv_addr),sizeof(struct sockaddr))==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:渠道[%s] 绑定端口失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道[%s] 绑定端口失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
 	if(listen(sockfd,10000)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:渠道[%s] 监听端口失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道[%s] 监听端口失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
 	for(i=0;i<argc;i++)
@@ -142,7 +142,7 @@ int main(int argc,char *argv[])
 
 	if(insert_chnlreg(startcmd,chnl_name)!=0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	while(1)
@@ -156,7 +156,7 @@ int main(int argc,char *argv[])
 				continue;
 			}else
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:接收accept失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:接收accept失败 ERROR[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 				sleep (1);
 			}
 		}
@@ -176,14 +176,14 @@ int main(int argc,char *argv[])
 			mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 			if(mbuf == (void *)-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 				return -2;
 			}
 
 			tranbuf = (_tran *)malloc(sizeof(_tran));
 			if(tranbuf == (void *)-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 				free(mbuf);
 				return -2;
 			}
@@ -193,7 +193,7 @@ int main(int argc,char *argv[])
 			{
 				if(get_shm_hash(mbuf->innerid,tranbuf)==-1)
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 处理成功，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理成功，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
 					exit(-1);
 				}else
 				{
@@ -201,7 +201,7 @@ int main(int argc,char *argv[])
 					iret = shm_hash_update(mbuf->innerid,"AAAAAAA|渠道处理成功",NULL);
 					if(iret == -1)
 					{
-						SysLog(1,"放置打包信息到共享内存失败 \n");
+						SysLog(LOG_SYS_ERR,"放置打包信息到共享内存失败 \n");
 					}else
 					{
 						msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
@@ -209,7 +209,7 @@ int main(int argc,char *argv[])
 					/** 检测一下再关闭，适合在机器性能较差的机器上做检测
 					  防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
 					/** for 低性能机器代码 
-					  SysLog(1,"开始检测\n");
+					  SysLog(LOG_SYS_ERR,"开始检测\n");
 					  iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 					//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
 					if(iiret ==-1||iiret ==0)
@@ -219,7 +219,7 @@ int main(int argc,char *argv[])
 					//	shutdown(clifd,SHUT_RDWR);
 					 **/
 					/**for 高性能机器代码，不检查，直接关闭 **/
-					SysLog(1,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
+					SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道处理成功\n",__FILE__,__LINE__);
 					close(clifd);
 					free(mbuf);
 					free(tranbuf);
@@ -228,16 +228,16 @@ int main(int argc,char *argv[])
 			{
 				if(get_shm_hash(mbuf->innerid,tranbuf)==-1)
 				{
-					SysLog(1,"FILE [%s] LINE[%d] 处理失败，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理失败，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
 					exit(-1);
 				}else
 				{
-					//SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+					//SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 					/** 返回交易信息到服务端**/
 					iret = shm_hash_update(mbuf->innerid,"EEEEEEE|渠道处理失败",NULL);
 					if(iret == -1)
 					{
-						SysLog(1,"放置打包信息到共享内存失败 \n");
+						SysLog(LOG_SYS_ERR,"放置打包信息到共享内存失败 \n");
 					}else
 					{
 						msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
@@ -245,7 +245,7 @@ int main(int argc,char *argv[])
 					/** 检测一下再关闭，适合在机器性能较差的机器上做检测
 					  防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
 					/** for 低性能机器代码 
-					  SysLog(1,"开始检测\n");
+					  SysLog(LOG_SYS_ERR,"开始检测\n");
 					  iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 					//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
 					if(iiret ==-1||iiret ==0)
@@ -255,7 +255,7 @@ int main(int argc,char *argv[])
 					//	shutdown(clifd,SHUT_RDWR);
 					 **/
 					/**for 高性能机器代码，不检查，直接关闭 **/
-					SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+					SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 					close(clifd);
 					free(mbuf);
 					free(tranbuf);
@@ -265,7 +265,7 @@ int main(int argc,char *argv[])
 				/** 检测一下再关闭，适合在机器性能较差的机器上做检测
 				  防止出现CLOSE_WAIT较多导致服务连接不上的情况，高性能机器直接关闭 **/
 				/** for 低性能机器代码 
-				  SysLog(1,"开始检测\n");
+				  SysLog(LOG_SYS_ERR,"开始检测\n");
 				  iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),0);
 				//iiret =recv(clifd,rcvbuf,sizeof(rcvbuf),MSG_DONTWAIT);
 				if(iiret ==-1||iiret ==0)
@@ -275,7 +275,7 @@ int main(int argc,char *argv[])
 				//	shutdown(clifd,SHUT_RDWR);
 				 **/
 				/**for 高性能机器代码，不检查，直接关闭 **/
-				SysLog(1,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道处理失败\n",__FILE__,__LINE__);
 				close(clifd);
 				free(mbuf);
 				free(tranbuf);
@@ -285,7 +285,7 @@ int main(int argc,char *argv[])
 			exit(0);
 		}else if(pid<0)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:FORK ERROR\n",__FILE__,__LINE__);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:FORK ERROR\n",__FILE__,__LINE__);
 		}
 		//alarm(0);
 		close(clifd);
@@ -318,14 +318,14 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	  so_linger.l_linger = 2;
 	  if(setsockopt(clifd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof so_linger)!=0)
 	  {
-	  SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+	  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 	  return -1;
 	  }
 	 **/
 	int	keepAlive = 1;
 	if(setsockopt(clifd, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(keepAlive))!=0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	/**  设置recv超时时间 **/
@@ -334,21 +334,21 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	tv.tv_usec = 0;
 	if(setsockopt(clifd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval))!=0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:设置socket参数失败ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -2;
 	}
 
 	if(recv(clifd,rcvbuf,sizeof(rcvbuf),0)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:读取socket报文失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:读取socket报文失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		strcpy(errmsg,"读取报文失败");
 		if(send(clifd,errmsg,strlen(errmsg),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		return  -2;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:获取到的报文信息为[%s]\n",__FILE__,__LINE__,rcvbuf);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取到的报文信息为[%s]\n",__FILE__,__LINE__,rcvbuf);
 	memset(mbuf,0,sizeof(mbuf));
 	strcpy(rbuf,rcvbuf);
 
@@ -365,77 +365,77 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	strcpy(mbuf->tranbuf.trancode,strtok(NULL,"|"));
 	mbuf->tranbuf.buffsize = strlen(rcvbuf);
 
-	SysLog(1,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
 	i++;
 	/** 发送信号到核心服务 **/
-	SysLog(1,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
 	if((ipid = getservpid(chnl_name))<=0)
 	{
 		/** 同时要变更查找到的服务为可用 **/
-		SysLog(1,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
 		updatestat_foroth(ipid);
 		/** 删除消息队列信息，防止堵塞 
 		  if(delete_shm_hash(mbuf->innerid)==-1)
 		  {
-		  SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		  }
 		  if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0)==-1)
 		  {
-		  SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		  }
 		 **/
 		if(send(clifd,"error",strlen("error"),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		return -2;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:获取可用服务[%ld]\n",__FILE__,__LINE__,ipid);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取可用服务[%ld]\n",__FILE__,__LINE__,ipid);
 	if(shm_hash_insert(mbuf->innerid,rcvbuf,NULL)==-1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中失败\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中失败\n",__FILE__,__LINE__);
 		if(send(clifd,"error",strlen("error"),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		updatestat_foroth(ipid);
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
 	iret = msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 	if(iret == -1)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:发送控制信息到消息队列失败[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信息到消息队列失败[%s]\n",__FILE__,__LINE__,strerror(errno));
 		if(send(clifd,"error",strlen("error"),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
 		updatestat_foroth(ipid);
 		return -1;
 	}
-	SysLog(1,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
+	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
 	if(kill(ipid,SIGUSR2)==0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]成功\n",__FILE__,__LINE__,ipid);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]成功\n",__FILE__,__LINE__,ipid);
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]失败：[%s]\n",__FILE__,__LINE__,ipid,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]失败：[%s]\n",__FILE__,__LINE__,ipid,strerror(errno));
 		if(send(clifd,"error",strlen("error"),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		/**还需要删除消息队列信息，防止堵塞 **/
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
 		if(msgrcv(msgido,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		updatestat_foroth(ipid);
 		return -1;
@@ -443,50 +443,50 @@ int chnlprocess(int clifd,_msgbuf *mbuf,_tran *tranbuf)
 	iret = msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0);
 	if(iret < 0)
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取服务返回失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取服务返回失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		if(send(clifd,"交易处理失败",strlen("交易处理失败"),0)==-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		/**还需要删除消息队列信息，防止堵塞 
 		  if(delete_shm_hash(mbuf->innerid)==-1)
 		  {
-		  SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+		  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		  }
 		  close(clifd);
 		 **/
 		return -1;
 	}else
 	{
-		SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取到服务返回信息\n",__FILE__,__LINE__);
 		//printf("渠道名称[%20s]交易码[%10s]返回数据长度[%10ld]\n",mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
 		if(get_shm_hash(mbuf->innerid,tranbuf)!=-1)
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息，跟踪号[%ld]返回信息[%s]\n",__FILE__,__LINE__,mbuf->innerid,tranbuf->outtran);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取到服务返回信息，跟踪号[%ld]返回信息[%s]\n",__FILE__,__LINE__,mbuf->innerid,tranbuf->outtran);
 			if(write(clifd,tranbuf->outtran,strlen(tranbuf->outtran))==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
 			memset(tranbuf,0,sizeof(_tran));
 			/**
 			  if(delete_shm_hash(mbuf->innerid)==-1)
 			  {
-			  SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 			  }
 			  close(clifd);
 			 **/
 			return  0;
 		}else
 		{
-			SysLog(1,"FILE [%s] LINE [%d]:获取到服务返回信息错误跟踪号[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取到服务返回信息错误跟踪号[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
 			if(send(clifd,"error",strlen("error"),0)==-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:反馈渠道错误信息失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
 			/**
 			  if(delete_shm_hash(mbuf->innerid)==-1)
 			  {
-			  SysLog(1,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			  SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 			  }
 			  close(clifd);
 			 **/

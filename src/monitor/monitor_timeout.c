@@ -21,12 +21,12 @@ int main(int argc,char *argv[] )
 	int shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
 	if((shmid = getshmid(10,shmsize))==-1)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] get shmid error\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] get shmid error\n",__FILE__,__LINE__);
 		return -1;
 	}
 	if((tran = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] shmat shmid error\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] shmat shmid error\n",__FILE__,__LINE__);
 		return -1;
 	}
 	while(1)
@@ -43,7 +43,7 @@ int main(int argc,char *argv[] )
 				{
 					/** 上锁当前共享内存 **/
 					sem_wait(&((tran+i)->sem1));
-					SysLog(1,"FILE[%s] LINE[%d]PID[%ld]超时超时时间[%ld]，需要进行处理\n",__FILE__,__LINE__,(tran+i)->innerid,(tran+i)->timeout);
+					SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]PID[%ld]超时超时时间[%ld]，需要进行处理\n",__FILE__,__LINE__,(tran+i)->innerid,(tran+i)->timeout);
 					inpid = (tran+i)->innerid;
 					(tran+i)->innerid =0;
 					memset((tran+i)->intran,0,sizeof((tran+i)->intran));
@@ -55,13 +55,13 @@ int main(int argc,char *argv[] )
 					/** 第二步，查看当前跟踪号是否有未释放的消息队列，有的话进行释放 **/
 					if(delete_msgq(inpid)!=0)
 					{
-						SysLog(1,"FILE[%s] LINE[%d]删除跟踪号[%ld]对应队列失败\n",__FILE__,__LINE__,inpid);
+						SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]删除跟踪号[%ld]对应队列失败\n",__FILE__,__LINE__,inpid);
 					}
 				}
 				continue;
 			}
 		}
-		SysLog(1,"FILE[%s] LINE[%d]当前无服务超时\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]当前无服务超时\n",__FILE__,__LINE__);
 		/** 监控是否有进程退出运行 **/
 		viewexit();
 		sleep(5);
@@ -90,17 +90,17 @@ int	viewexit()
 		if((kill((sreg+i)->servpid,SIGUSR1)==-1)&&(errno == ESRCH))
 		{
 			result = 1;
-			SysLog(1,"FILE[%s] LINE[%d] 渠道[%s] 进程[%ld]退出运行，需要重新启动\n",__FILE__,__LINE__,(sreg+i)->chnlname,(sreg+i)->servpid);
+			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 渠道[%s] 进程[%ld]退出运行，需要重新启动\n",__FILE__,__LINE__,(sreg+i)->chnlname,(sreg+i)->servpid);
 			ret = system((sreg+i)->startcmd);
 			if(WEXITSTATUS(ret)!=0||ret ==-1)
 			{
-				SysLog(1,"启动渠道[%s]服务 启动命令[%s]失败\n",(sreg+i)->chnlname,(sreg+i)->startcmd);
+				SysLog(LOG_SYS_ERR,"启动渠道[%s]服务 启动命令[%s]失败\n",(sreg+i)->chnlname,(sreg+i)->startcmd);
 			}
 		}
 	}
 	if(result == 0)
 	{
-		SysLog(1,"FILE[%s] LINE[%d] 当前无进程异常退出\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 当前无进程异常退出\n",__FILE__,__LINE__);
 	}
 	shmdt(sreg);
 	return  0;

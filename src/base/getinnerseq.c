@@ -19,7 +19,7 @@ long getinnerid()
         fp = fopen(filepath,"r+");
         if(fp == NULL)
         {
-			SysLog(1,"FILE [%s] LINE [%d]:打开seq文件失败:%s\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:打开seq文件失败:%s\n",__FILE__,__LINE__,strerror(errno));
             return  -1L;
         }
 		if(flock(fileno(fp),LOCK_EX)==0)
@@ -27,7 +27,7 @@ long getinnerid()
 			memset(str,0x00,sizeof(str));
 			if(fgets(str,sizeof(str),fp)==(void *)-1)
 			{
-				SysLog(1,"FILE [%s] LINE [%d]:获取SEQ失败:%s\n",__FILE__,__LINE__,strerror(errno));
+				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取SEQ失败:%s\n",__FILE__,__LINE__,strerror(errno));
 				sprintf(str,"%8ld",ret);
 				fwrite(str,strlen(str),1,fp);
 				flock(fileno(fp), LOCK_UN);
@@ -58,7 +58,7 @@ long getinnerid()
 		fp = fopen(filepath,"r+w");
 		if(fp == NULL)
 		{
-			SysLog(1,"file open error");
+			SysLog(LOG_SYS_ERR,"file open error");
 			return -1;
 		}
 		if(0==flock(fileno(fp),LOCK_EX))
