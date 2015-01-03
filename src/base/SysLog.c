@@ -79,6 +79,7 @@ int SysLog(int loglevel,char *format,...)
 	{
 		mkdir(log_path,S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH);
 	}
+	closedir(dp);
 	memset(log_path,0,sizeof(log_path));
 	if(!strcmp(type,"sys"))
 	{
@@ -104,7 +105,7 @@ int SysLog(int loglevel,char *format,...)
     fp = fopen(log_path,"a");
     if(fp == NULL)
     {
-        perror("file open error");
+        printf("file open error:[%s]\n",log_path);
         return -1;
     }
 	fprintf(fp,"进程号:[%ld]\tTIME[%d:%d:%d]平台跟踪号[%ld]",(long)getpid(),ttm->tm_hour,ttm->tm_min,ttm->tm_sec,innerid);
