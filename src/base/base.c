@@ -128,11 +128,13 @@ int getshm(int procid,size_t shmsize)
 	if((key = ftok(keypath,procid))==-1)
 	{
 		printf("FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
 		printf("FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	printf("FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);

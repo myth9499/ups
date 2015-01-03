@@ -9,12 +9,14 @@ int getshmid(int procid,size_t shmsize)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,procid))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	return shmid;

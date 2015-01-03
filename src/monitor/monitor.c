@@ -14,12 +14,12 @@ int main(int argc,char *argv[] )
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		printf("get serv shm id error\n");
+		printf("获取服务共享内存区失败\n");
 		return -1;
 	}
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		printf("shmat sreg error\n");
+		printf("链接服务共享内存区失败\n");
 		return -1;
 	}
 	for(i=0;(sreg+i)->servpid!=0;i++)

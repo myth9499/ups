@@ -25,6 +25,12 @@ int SysLog(int loglevel,char *format,...)
 		ret = getcursysloglvl("APP");
 		memset(type,0,sizeof(type));
 		strcpy(type,"app");
+	}else
+	{
+		/** 在未初始化共享内存前的日志打印 **/
+		ret =1;
+		memset(type,0,sizeof(type));
+		strcpy(type,"sys");
 	}
 	if(ret == -1)
 	{
@@ -122,13 +128,13 @@ int	getcursysloglvl(char *type)
 	int	shmid;
 	if((shmid=getshmid(3,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	sp = (_sys_param *)shmat(shmid,NULL,0);
 	if(sp == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 链接系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 链接系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	int loop=0;

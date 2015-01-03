@@ -26,6 +26,7 @@
 
 
 /** define log level **/
+static	int	LOG_SYS        =10;  //未初始化共享内存前的日志打印
 static	int	LOG_SYS_ERR    =9;  //系统级别出错日志，任何时候都应该抛出
 static	int	LOG_SYS_SHOW   =8;  //系统正常显示使用日志 
 static	int	LOG_SYS_DEBUG  =7;  //系统调试日志，最低级别，调试代码使用
