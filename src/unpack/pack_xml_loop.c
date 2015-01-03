@@ -109,18 +109,18 @@ int pack_xml_loop(char *xmltype)
 	/** 获取变量对应配置 **/
 	if(!strcmp(xmltype,"V")||strlen(xmltype)==0)
 	{
-		SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理");
+		SysLog(LOG_APP_SHOW,"从变量V_MSGTYPE取报文类型进行处理");
 		if(get_var_value("V_MSGTYPE",sizeof(msgtype),1,msgtype)!=0)
 		{
 			SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理失败");
 			return  -1;
 		}
-		SysLog(LOG_APP_ERR,"获取到待解包报文类型[%s]\n",msgtype);
+		SysLog(LOG_APP_SHOW,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
 	}else
 	{
-		SysLog(LOG_APP_ERR,"直接从参数读取\n");
+		SysLog(LOG_APP_SHOW,"直接从参数读取\n");
 		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
@@ -158,7 +158,7 @@ int pack_xml_loop(char *xmltype)
 						sprintf(docpath,"/%s",tpath);
 						root=getNodePtr(docpath,l);
 						xmlDocSetRootElement(doc,root);
-						SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
+						SysLog(LOG_APP_DEBUG,"FILE [%s] LINE [%d] 设置根节点，标识为 [%d]:\n",__FILE__,__LINE__,flag);
 					}
 					if(flag ==1)
 					{
@@ -185,7 +185,7 @@ int pack_xml_loop(char *xmltype)
 					memset(keyvalue,0,sizeof(keyvalue));
 					if(get_var_value(tmpcfgloop->varname,sizeof(keyvalue),l+1,keyvalue)==-1)
 					{
-						SysLog(LOG_APP_ERR,"get keyvalue error\n");
+						SysLog(LOG_APP_ERR,"获取变量[%s]值失败\n",tmpcfgloop->varname);
 						flag = 1;
 						continue;
 					}else
@@ -207,7 +207,7 @@ int pack_xml_loop(char *xmltype)
 					sprintf(docpath,"/%s",tpath);
 					root=getNodePtr(docpath,0);
 					xmlDocSetRootElement(doc,root);
-					SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] set the root element flag is [%d]:\n",__FILE__,__LINE__,flag);
+					SysLog(LOG_APP_DEBUG,"FILE [%s] LINE [%d] 设置根节点，标识为 [%d]:\n",__FILE__,__LINE__,flag);
 				}
 				if(flag ==1)
 				{
@@ -233,7 +233,7 @@ int pack_xml_loop(char *xmltype)
 				strcpy(tmpfullpath,strstr(fullpath,"/"));
 				if(get_var_value(tmpcfgloop->varname,sizeof(keyvalue),1,keyvalue)==-1)
 				{
-					SysLog(LOG_APP_ERR,"get keyvalue error\n");
+					SysLog(LOG_APP_ERR,"获取变量[%s]值失败\n",tmpcfgloop->varname);
 					flag = 1;
 				}else
 				{
@@ -264,7 +264,7 @@ int pack_xml_loop(char *xmltype)
 			return -1;
 		}else
 		{
-			SysLog(LOG_APP_ERR,"打包文件成功[%s]\n",ffile);
+			SysLog(LOG_APP_SHOW,"打包文件成功[%s]\n",ffile);
 			xmlFreeDoc(doc);
 			xmlCleanupParser();
 			//xmlXPathFreeObject(result);

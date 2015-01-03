@@ -26,7 +26,7 @@ void child_exit(int signal)
  * */
 void timeout(int signal)
 {
-	SysLog(LOG_SYS_ERR,"交易超时结束\n");
+	SysLog(LOG_CHNL_ERR,"交易超时结束\n");
 	return ;
 }
 /** 注册程序退出函数 
@@ -66,7 +66,7 @@ int main(int argc,char *argv[])
 
 	if(argc < 4)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 启动参数错误:appname + channelname+remoteip+remoteport\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 启动参数错误:appname + channelname+remoteip+remoteport\n",__FILE__,__LINE__);
 		return -1;
 	}
 	strcpy(chnl_name,argv[1]);
@@ -77,12 +77,12 @@ int main(int argc,char *argv[])
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 申请消息队列内存失败[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 申请消息队列内存失败[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if(getmsgid(chnl_name,&msgidi,&msgido,&msgidr)==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 		return -1;
 	}
 	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
@@ -112,7 +112,7 @@ int main(int argc,char *argv[])
 	strcat(startcmd,"&");
 	if(insert_chnlreg(startcmd,chnl_name)!=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 	while(1)
@@ -125,13 +125,13 @@ int main(int argc,char *argv[])
 				continue;
 			}else
 			{
-				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
+				SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnl_name,strerror(errno));
 				sleep (1);
 				continue;
 			}
 			//continue;
 		}
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 渠道[%s]获取到交易码[%s]渠道跟踪号[%ld]\n",__FILE__,__LINE__,chnl_name,mbuf->tranbuf.trancode,mbuf->innerid);
+		SysLog(LOG_CHNL_DEBUG,"FILE[%s] LINE[%d] 渠道[%s]获取到交易码[%s]渠道跟踪号[%ld]\n",__FILE__,__LINE__,chnl_name,mbuf->tranbuf.trancode,mbuf->innerid);
 		pid = fork();
 		if(pid == 0)
 		{
@@ -140,19 +140,19 @@ int main(int argc,char *argv[])
 			{
 				if(get_shm_hash(mbuf->innerid,&tmptran)==-1)
 				{
-					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理成功，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 处理成功，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
 					exit(-1);
 				}else
 				{
-					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理成功\n",__FILE__,__LINE__);
+					SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE[%d] 处理成功\n",__FILE__,__LINE__);
 					/** 返回核心 **/
 					if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
 					{
-						SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
+						SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
 						exit(0);
 					}else
 					{
-						SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
+						SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
 						exit(-1);
 					}
 				}
@@ -160,19 +160,19 @@ int main(int argc,char *argv[])
 			{
 				if(get_shm_hash(mbuf->innerid,&tmptran)==-1)
 				{
-					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理失败，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
+					SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 处理失败，但核心已超时，不发送消息队列通知\n",__FILE__,__LINE__);
 					exit(-1);
 				}else
 				{
-					SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
+					SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
 					/** 返回核心 **/
 					if(msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT)==0)
 					{
-						SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
+						SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 返回核心交易结果成功\n",__FILE__,__LINE__);
 						exit(0);
 					}else
 					{
-						SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
+						SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 返回核心交易结果失败\n",__FILE__,__LINE__);
 						exit(-1);
 					}
 				}
@@ -185,7 +185,7 @@ int main(int argc,char *argv[])
 }
 int sendprocess(long inerid)
 {
-	SysLog(LOG_SYS_ERR,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]&&&&&&&&&&&&&&&&&&&\n",__FILE__,__LINE__,inerid);
+	SysLog(LOG_CHNL_DEBUG,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]&&&&&&&&&&&&&&&&&&&\n",__FILE__,__LINE__,inerid);
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
 	//alarm(10);
@@ -196,7 +196,7 @@ int sendprocess(long inerid)
 	sockfd = socket(AF_INET,SOCK_STREAM,0);
 	if(sockfd <0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取sockfd失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 获取sockfd失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	bzero(&servaddr,sizeof(servaddr));
@@ -206,43 +206,43 @@ int sendprocess(long inerid)
 
 	if(connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr))<0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 建立连接失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 建立连接失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		close(sockfd);
 		if(shm_hash_update(inerid,"EEEEEEE|建立连接失败",NULL)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"更新共享内存区失败\n");
+			SysLog(LOG_CHNL_ERR,"更新共享内存区失败\n");
 			return -1;
 		}
 		return -1;
 	}else
 	{
-	SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d] 链接成功，开始发送....\n",__FILE__,__LINE__);
+	SysLog(LOG_CHNL_SHOW,"FILE[%s]LINE[%d] 链接成功，开始发送....\n",__FILE__,__LINE__);
 		tranbuf = (_tran *)malloc(sizeof(_tran));
 		if(tranbuf == (void *)-1)
 		{
-			SysLog(LOG_SYS_ERR,"MALLOC tranbuf 失败:%s\n",strerror(errno));
+			SysLog(LOG_CHNL_ERR,"MALLOC tranbuf 失败:%s\n",strerror(errno));
 			return -1;
 		}
 		if(get_shm_hash(inerid,tranbuf)!=-1)
 		{
 			/** 获取共享内存信息，outtran 读取发送到外部系统 **/
-			SysLog(LOG_SYS_ERR,"FILE[%s]LINE[%d] 链接成功，开始发送[%s]....\n",__FILE__,__LINE__,tranbuf->outtran);
+			SysLog(LOG_CHNL_ERR,"FILE[%s]LINE[%d] 链接成功，开始发送[%s]....\n",__FILE__,__LINE__,tranbuf->outtran);
 			if(send(sockfd,tranbuf->outtran,strlen(tranbuf->outtran),MSG_DONTWAIT)==-1)
 			{
-				SysLog(LOG_SYS_ERR,"发送到其他系统失败:%s\n",strerror(errno));
+				SysLog(LOG_CHNL_ERR,"发送到其他系统失败:%s\n",strerror(errno));
 				close(sockfd);
 				free(tranbuf);
 				return  -1;
 			}else
 			{
-				SysLog(LOG_SYS_ERR,"发送到其他系统成功:%ld\n",inerid);
+				SysLog(LOG_CHNL_ERR,"发送到其他系统成功:%ld\n",inerid);
 				close(sockfd);
 				free(tranbuf);
 				return  0;
 			}
 		}else
 		{
-				SysLog(LOG_SYS_ERR,"核心无:[%ld]信息\n",innerid);
+				SysLog(LOG_CHNL_ERR,"核心无:[%ld]信息\n",innerid);
 				close(sockfd);
 				free(tranbuf);
 				return -1;

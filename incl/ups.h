@@ -21,18 +21,26 @@
 #include<netinet/in.h>
 #include <fcntl.h>
 #include <semaphore.h>
+#include <dirent.h>
 #include <bits/pthreadtypes.h>
 
 
 /** define log level **/
-static	int		LOG_APP_SHOW=5;//用来显示应用主要日志
-static	int		LOG_SYS_ERR=4;//系统平台级别日志
-static	int		LOG_APP_ERR=3;//应用必要日志
-static	int		LOG_APP_DEBUG=2;//应用调试日志
-static	int		LOG_SYS_DEBUG=1;//平台调试级别日志
+static	int	LOG_SYS_ERR    =9;  //系统级别出错日志，任何时候都应该抛出
+static	int	LOG_SYS_SHOW   =8;  //系统正常显示使用日志 
+static	int	LOG_SYS_DEBUG  =7;  //系统调试日志，最低级别，调试代码使用
+
+static	int	LOG_CHNL_ERR    =6;  //渠道级别出错日志，任何时候都应该抛出
+static	int	LOG_CHNL_SHOW   =5;  //渠道正常显示使用日志 
+static	int	LOG_CHNL_DEBUG  =4;  //渠道调试日志，最低级别，调试代码使用
+
+static	int	LOG_APP_ERR    =3; //交易级别出错日志，任何时候都应该抛出
+static	int	LOG_APP_SHOW   =2; //交易正常显示使用日志 
+static	int	LOG_APP_DEBUG  =1; //交易调试日志，最低级别，调试代码使用
 
 typedef	struct	SYS_PARAM
 {
+	char	type[10];//chnl sys app
 	int		curloglvl;
 	char	cursysstatus;
 }_sys_param;

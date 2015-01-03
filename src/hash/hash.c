@@ -258,7 +258,7 @@ int	memset_var_hash(void)
 		endk=tmpk->end;
 		while(endk!=tmpk)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			SysLog(LOG_SYS_DEBUG,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
 			if(get_vardef(endk->varname,&vardef)!=0)
 			{
 				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,tmpk->varname);
@@ -288,7 +288,7 @@ int	init_malloced_hash(void)
 		endk=tmpk;
 		while(endk!=NULL&&endk!=tmpk)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
+			SysLog(LOG_SYS_DEBUG,"FILE [%s] LINE[%d] 开始初始化变量[%s]\n",__FILE__,__LINE__,endk->varname);
 			if(get_vardef(endk->varname,&vardef)!=0)
 			{
 				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,endk->varname);
@@ -321,7 +321,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 
 	if(kvalue == NULL||varname ==NULL||strlen(varname)==0)
 	{
@@ -331,7 +331,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	memset(varnameloop,0,sizeof(varnameloop));
 	sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 	hash = hashfunc(varnameloop);
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
+	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
 
 	head = kvalue+hash;
 	tmpkvalue = kvalue+hash;
@@ -350,7 +350,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		tmpkvalue=tmpkvalue->next;
 	}
 	/** 第一次申请内存 **/
-	SysLog(LOG_SYS_ERR,"FILE [%s]  LINE[%d] 变量[%s]第一次使用，申请新内存!!!!!\n",__FILE__,__LINE__,varname);
+	SysLog(LOG_SYS_DEBUG,"FILE [%s]  LINE[%d] 变量[%s]第一次使用，申请新内存!!!!!\n",__FILE__,__LINE__,varname);
 	tmpkey = (_keyvalue *)malloc(sizeof(_keyvalue));
 	if(tmpkey == NULL)
 	{
@@ -370,7 +370,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		strcpy(tmpkey->varnameloop,varnameloop);
 		memset(tmpkey->value,0x00,vardef.varlen);
 		memcpy(tmpkey->value,value,len);
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
+		SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 第一次申请变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkey->value,len);
 		tmpkey->next = NULL;
 		tmpkey->pre = pre;
 		pre->next = tmpkey;	
@@ -400,7 +400,7 @@ int get_var_value(char *varname,int len,int loop,char *value)
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 	if(kvalue == NULL)
 	{
 		SysLog(LOG_SYS_ERR,"进程变量值内存空间未申请 \n");
@@ -452,7 +452,7 @@ void destory_var_hash(void)
 		return ;
 	while(i<HASHCNT)
 	{
-		SysLog(LOG_SYS_ERR,"start at [%d]\n",i);
+		SysLog(LOG_SYS_DEBUG,"start at [%d]\n",i);
 		endkvalue = kvalue+i;
 		if(endkvalue->next==NULL)
 		{
@@ -553,25 +553,25 @@ int	delete_msgq(long	inpid)
 	int shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
+		SysLog(LOG_SYS_ERR,"获取服务区共享内存失败\n");
 		return -1;
 	}
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
-		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
+		SysLog(LOG_SYS_ERR,"链接服务区共享内存失败\n");
 		return -1;
 	}
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"malloc msgbuf error\n");
+		SysLog(LOG_SYS_ERR,"申请msgbuf内存失败\n");
 		return -1;
 	}
 	for(i=0;(sreg+i)->servpid!=0;i++)
 	{
 		if(!strcmp((sreg+i)->type,"C"))
 		{
-			SysLog(LOG_SYS_ERR,"开始查找进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s待删除PID[%ld]\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat,inpid);
+			SysLog(LOG_SYS_SHOW,"开始查找进程名称:%s\t进程类型:%s\t进程号:%ld\t进程状态:%s待删除PID[%ld]\t\n",(sreg+i)->chnlname,(sreg+i)->type,(sreg+i)->servpid,(sreg+i)->stat,inpid);
 			if(getmsgid((sreg+i)->chnlname,&msgidi,&msgido,&msgidr)!=0)
 			{
 				SysLog(LOG_SYS_ERR,"获取渠道:%s消息队列失败\t\n",(sreg+i)->chnlname);
@@ -589,7 +589,7 @@ int	delete_msgq(long	inpid)
 			{
 				SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 			}
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据成功 inpid[%ld]\n",__FILE__,__LINE__,inpid);
+			SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:删除消息队列数据成功 inpid[%ld]\n",__FILE__,__LINE__,inpid);
 		}
 	}
 	free(mbuf);

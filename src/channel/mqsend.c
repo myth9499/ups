@@ -38,7 +38,7 @@ int	getchnlcfg(char *chnlname)
 
 	if(chnlname == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 传入渠道名称为空\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 传入渠道名称为空\n",__FILE__,__LINE__);
 		return -1;
 	}
 	/** 初始化系统所有渠道的队列区 **/
@@ -46,7 +46,7 @@ int	getchnlcfg(char *chnlname)
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d]打开渠道初始化配置文件失败:[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d]打开渠道初始化配置文件失败:[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	while(fgets(tmpbuf,sizeof(tmpbuf),fp)!=NULL)
@@ -86,20 +86,20 @@ int sendprocess(long inerid,MQLONG	*messlen)
 	memset(tmpbuffer,0,sizeof(tmpbuffer));
 	memset(headbuf,0,sizeof(headbuf));
 
-	SysLog(LOG_SYS_ERR,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]\n",__FILE__,__LINE__,inerid);
+	SysLog(LOG_CHNL_SHOW,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]\n",__FILE__,__LINE__,inerid);
 	/**get the shm **/ 
 	if((get_shm_hash(inerid,tranbuf))!=-1)
 	{
 		/**
-		  SysLog(LOG_SYS_ERR,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->outtran);
+		  SysLog(LOG_CHNL_ERR,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->outtran);
 		  if(unpack(mbuf->tranbuf.chnlname,tranbuf->outtran)==-1)
 		  {
-		  SysLog(LOG_SYS_ERR,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->outtran);
+		  SysLog(LOG_CHNL_ERR,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->outtran);
 		  seterr("EEEEEEEE","解包失败");
 		  }else
 		  {
 		 **/
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 交易跟踪号[%ld]\t传入交易信息[%s][%s]\n",__FILE__,__LINE__,inerid,tranbuf->outtran,tranbuf->intran);
+		SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE[%d] 交易跟踪号[%ld]\t传入交易信息[%s][%s]\n",__FILE__,__LINE__,inerid,tranbuf->outtran,tranbuf->intran);
 		if(strcmp(tranbuf->outtran,""))
 		{
 			strtok(tranbuf->outtran,"|");
@@ -108,7 +108,7 @@ int sendprocess(long inerid,MQLONG	*messlen)
 			fp = fopen(tmpfilename,"r");
 			if(fp==NULL)	
 			{
-				SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
+				SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 读取文件[%s]失败:%s\n",__FILE__,__LINE__,tmpfilename,strerror(errno));
 				return -1;
 			}
 			if(fread(tmpbuffer, sizeof(tmpbuffer), 1,fp) != -1)
@@ -120,13 +120,13 @@ int sendprocess(long inerid,MQLONG	*messlen)
 			}
 		}else
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 传入数据为空:%s\n",__FILE__,__LINE__);
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 传入数据为空:%s\n",__FILE__,__LINE__);
 			return -1;
 		}
 		//}
 	}else
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]获取传入交易信息失败\n"__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]获取传入交易信息失败\n"__FILE__,__LINE__);
 		return -1;
 	}
 }
@@ -173,30 +173,30 @@ int main(int argc, char **argv)
 	strcpy(chnlname,"MQ发送渠道");
 	if(getchnlcfg(chnlname)!=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 远程队列管理器[%s]\n",__FILE__,__LINE__,QMName);
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 远程队列[%s]\n",__FILE__,__LINE__,RQName);
+	SysLog(LOG_CHNL_SHOW,"FILE[%s] LINE[%d] 远程队列管理器[%s]\n",__FILE__,__LINE__,QMName);
+	SysLog(LOG_CHNL_SHOW,"FILE[%s] LINE[%d] 远程队列[%s]\n",__FILE__,__LINE__,RQName);
 
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 
 	tranbuf = (_tran *)malloc(sizeof(_tran));
 	if(tranbuf == (void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		free(mbuf);
 		return -1;
 	}
 
 	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
 		return -1;
 	}
 
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 	/* report reason and stop if it failed     */
 	if (CompCode == MQCC_FAILED)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] MQCONN ended with reason code %d\n",__FILE__,__LINE__,CReason);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] MQCONN MQ链接失败，错误码%d\n",__FILE__,__LINE__,CReason);
 		exit( (int)CReason );
 	}
 
@@ -233,13 +233,13 @@ int main(int argc, char **argv)
 	/******************************************************************/
 	//strncpy(od.ObjectName, "RTEST", (size_t)MQ_Q_NAME_LENGTH);
 	strncpy(od.ObjectName, RQName, (size_t)MQ_Q_NAME_LENGTH);
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] target queue is %s\n",__FILE__,__LINE__, od.ObjectName);
+	SysLog(LOG_CHNL_SHOW,"FILE[%s] LINE[%d] target queue is %s\n",__FILE__,__LINE__, od.ObjectName);
 
 	//strncpy(od.ObjectQMgrName, argv[5], (size_t) MQ_Q_MGR_NAME_LENGTH);
-	//SysLog(LOG_SYS_ERR,"target queue manager is %s\n", od.ObjectQMgrName);
+	//SysLog(LOG_CHNL_ERR,"target queue manager is %s\n", od.ObjectQMgrName);
 
 	//strncpy(od.DynamicQName, argv[6], (size_t) MQ_Q_NAME_LENGTH);
-	//SysLog(LOG_SYS_ERR,"dynamic queue name is %s\n", od.DynamicQName);
+	//SysLog(LOG_CHNL_ERR,"dynamic queue name is %s\n", od.DynamicQName);
 
 	/******************************************************************/
 	/*                                                                */
@@ -249,7 +249,7 @@ int main(int argc, char **argv)
 	if (argc > 3)
 	{
 		O_options = atoi( argv[3] );
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]open  options are %d\n",__FILE__,__LINE__, O_options);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]open  options are %d\n",__FILE__,__LINE__, O_options);
 	}
 	else
 	{
@@ -268,12 +268,12 @@ int main(int argc, char **argv)
 	/* report reason, if any; stop if failed      */
 	if (Reason != MQRC_NONE)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]MQOPEN ended with reason code %d\n",__FILE__,__LINE__, Reason);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]MQOPEN ended with reason code %d\n",__FILE__,__LINE__, Reason);
 	}
 
 	if (OpenCode == MQCC_FAILED)
 	{
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]unable to open queue for output\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]unable to open queue for output\n",__FILE__,__LINE__);
 	}
 
 	/******************************************************************/
@@ -316,13 +316,13 @@ int main(int argc, char **argv)
 
 	if(insert_chnlreg(startcmd,chnlname)!=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:添加渠道[%s]到监控内存失败\n",__FILE__,__LINE__,chnlname);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:添加渠道[%s]到监控内存失败\n",__FILE__,__LINE__,chnlname);
 		return -1;
 	}
 	/** 从消息队列读取数据，进行后续处理 **/
 	while(1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:渠道[%s]开始服务\n",__FILE__,__LINE__,chnlname);
+		SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE [%d]:渠道[%s]开始服务\n",__FILE__,__LINE__,chnlname);
 		memset(mbuf,0,sizeof(mbuf));
 		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),0,0)==-1)
 		{
@@ -331,21 +331,21 @@ int main(int argc, char **argv)
 				continue;
 			}else
 			{
-				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
+				SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 获取渠道[%s]消息队列消息失败[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
 				sleep (5);
 				continue;
 			}
 		}
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 渠道[%s]获取到跟踪号[%ld]\n",__FILE__,__LINE__,chnlname,mbuf->innerid);
+		SysLog(LOG_CHNL_SHOW,"FILE[%s] LINE[%d] 渠道[%s]获取到跟踪号[%ld]\n",__FILE__,__LINE__,chnlname,mbuf->innerid);
 
 		if(sendprocess(mbuf->innerid,&messlen)!=0)
 		{
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
+			SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 处理失败\n",__FILE__,__LINE__);
 			/** 返回交易信息到服务端**/
 			iret = shm_hash_update(mbuf->innerid,"EEEEEEE|发送失败",NULL);
 			if(iret == -1)
 			{
-				SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+				SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d] 放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
 				msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 			}else
 			{
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 			/*   Put each buffer to the message queue                       */
 			/*                                                              */
 			/****************************************************************/
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]buffer is [%s] len is [%d]\n",__FILE__,__LINE__,buffer,messlen);
+			SysLog(LOG_CHNL_SHOW,"FILE[%s] LINE[%d]buffer is [%s] len is [%d]\n",__FILE__,__LINE__,buffer,messlen);
 			if (messlen > 0)
 			{
 				/**************************************************************/
@@ -381,12 +381,12 @@ int main(int argc, char **argv)
 				/* report reason, if any */
 				if (Reason != MQRC_NONE)
 				{
-					SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]MQPUT ended with reason code %d\n",__FILE__,__LINE__, Reason);
+					SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]MQPUT ended with reason code %d\n",__FILE__,__LINE__, Reason);
 					/** 返回交易信息到服务端**/
 					iret = shm_hash_update(mbuf->innerid,"EEEEEEE|发送失败",NULL);
 					if(iret == -1)
 					{
-						SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+						SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
 						msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 					}else
 					{
@@ -397,7 +397,7 @@ int main(int argc, char **argv)
 				iret = shm_hash_update(mbuf->innerid,"AAAAAAA|发送成功",NULL);
 				if(iret == -1)
 				{
-					SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
+					SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]放置打包信息到共享内存失败 \n",__FILE__,__LINE__);
 					msgsnd(msgidr,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 				}else
 				{
@@ -419,7 +419,7 @@ int main(int argc, char **argv)
 		if (argc > 4)
 		{
 			C_options = atoi( argv[4] );
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]close options are %d\n",__FILE__,__LINE__, C_options);
+			SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]close options are %d\n",__FILE__,__LINE__, C_options);
 		}
 		else
 		{
@@ -435,7 +435,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]MQCLOSE ended with reason code %d\n",__FILE__,__LINE__,Reason);
+			SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]MQCLOSE ended with reason code %d\n",__FILE__,__LINE__,Reason);
 		}
 	}
 
@@ -453,7 +453,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]MQDISC ended with reason code %d\n",__FILE__,__LINE__, Reason);
+			SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]MQDISC ended with reason code %d\n",__FILE__,__LINE__, Reason);
 		}
 	}
 
@@ -462,6 +462,6 @@ int main(int argc, char **argv)
 	/* END OF AMQSPUT0                                                */
 	/*                                                                */
 	/******************************************************************/
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]Sample AMQSPUT0 end\n",__FILE__,__LINE__);
+	SysLog(LOG_CHNL_ERR,"FILE[%s] LINE[%d]Sample AMQSPUT0 end\n",__FILE__,__LINE__);
 	return(0);
 }

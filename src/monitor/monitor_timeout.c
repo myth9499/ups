@@ -61,7 +61,7 @@ int main(int argc,char *argv[] )
 				continue;
 			}
 		}
-		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d]当前无服务超时\n",__FILE__,__LINE__);
+		SysLog(LOG_SYS_SHOW,"FILE[%s] LINE[%d]当前无服务超时\n",__FILE__,__LINE__);
 		/** 监控是否有进程退出运行 **/
 		viewexit();
 		sleep(5);

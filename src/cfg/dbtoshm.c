@@ -126,14 +126,14 @@ int load_commmsg_cfg(char *table)
 	shmsize=MAXCOMMMSG*sizeof(_commmsg);
 	if((shmid=getshmid(9,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取共享内存失败\n");
 		return -1;
 	}
-	SysLog(1,"start loadcfg \n");
+	SysLog(LOG_SYS_SHOW,"开始加载配置文件\n");
 	cmsg = (_commmsg *)shmat(shmid,NULL,0);
 	if(cmsg == NULL)
 	{
-		SysLog(1,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接共享内存失败\n");
 		return -1;
 	}
 
@@ -193,7 +193,7 @@ int load_commmsg_cfg(char *table)
 		}  
 		cmsg++;
 	}
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"加载配置文件成功\n");
 	shmdt(cmsg);
 	return 0;
 }
@@ -210,14 +210,14 @@ int load_flow_cfg(char *table)
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取流程配置共享内存失败\n");
 		return -1;
 	}
-	SysLog(1,"start loadcfg \n");
+	SysLog(LOG_SYS_SHOW,"开始装载流程配置表[%s]\n",table);
 	flow = (_flow *)shmat(shmid,NULL,0);
 	if(flow == NULL)
 	{
-		SysLog(1,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接流程配置共享内存失败\n");
 		return -1;
 	}
 	sprintf(sql,"%s %s","select * from ",table);
@@ -273,7 +273,7 @@ int load_flow_cfg(char *table)
 		flow++;
 	}
 	shmdt(flow);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"装载流程配置表[%s]成功\n",table);
 	return 0;
 }
 
@@ -285,14 +285,15 @@ int load_xmlcfg(char *xmltype,char *table)
 	int shmid = 0;
 	size_t shmsize = MAXXMLCFG*sizeof(_xmlcfg);
 
+	SysLog(LOG_SYS_SHOW,"开始装载XML配置表[%s]\n",table);
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(1,"get xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"获取XML配置共享内存失败\n");
 		return -1;
 	}
 	if((xmlcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(1,"shmat xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"链接XML配置共享内存失败\n");
 		return -1;
 	}
 	sprintf(sql,"%s %s","select * from ",table);
@@ -352,6 +353,7 @@ int load_xmlcfg(char *xmltype,char *table)
 		xmlcfg++;
 	}
 	shmdt(xmlcfg);
+	SysLog(LOG_SYS_SHOW,"装载XML配置表[%s]成功\n",table);
 	return  0;
 }
 int load_tranmap_cfg(char *table)
@@ -362,18 +364,18 @@ int load_tranmap_cfg(char *table)
 	int	shmid=0;
 
 
+	SysLog(LOG_SYS_SHOW,"开始装载交易映射配置表[%s]\n",table);
 	/** init commmsg **/
 	shmsize=MAXTRANMAP*sizeof(_tranmap);
 	if((shmid=getshmid(5,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取交易映射配置共享内存失败\n");
 		return -1;
 	}
-	SysLog(1,"start load tranmap  cfg \n");
 	tmap = (_tranmap *)shmat(shmid,NULL,0);
 	if(tmap == NULL)
 	{
-		SysLog(1,"tranmap shmat error\n");
+		SysLog(LOG_SYS_ERR,"鏈接交易映射配置共享内存失败\n");
 		return -1;
 	}
 	sprintf(sql,"%s %s","select * from ",table);
@@ -433,7 +435,7 @@ int load_tranmap_cfg(char *table)
 		tmap++;
 	}
 	shmdt(tmap);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"装载交易映射配置表[%s]成功\n",table);
 	return 0;
 }
 int load_vardef_cfg(char *table)
@@ -443,18 +445,18 @@ int load_vardef_cfg(char *table)
 	size_t shmsize;
 
 
+	SysLog(LOG_SYS_SHOW,"开始装载变量定义配置表[%s]\n",table);
 	/** init vardef **/
 	shmsize=MAXVARDEF*sizeof(_vardef);
 	if((shmid=getshmid(4,shmsize))==-1)
 	{
-		SysLog(1,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取交易定义配置共享内存失败\n");
 		return -1;
 	}
-	SysLog(1,"start load vardef  cfg \n");
 	vardef = (_vardef *)shmat(shmid,NULL,0);
 	if(vardef == NULL)
 	{
-		SysLog(1,"vardef shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接交易定义配置共享内存失败\n");
 		return -1;
 	}
 	sprintf(sql,"%s %s","select * from ",table);
@@ -514,6 +516,6 @@ int load_vardef_cfg(char *table)
 		vardef++;
 	}
 	shmdt(vardef);
-	SysLog(1,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"装载变量定义配置表[%s]成功\n",table);
 	return 0;
 }

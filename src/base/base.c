@@ -69,7 +69,7 @@ int do_so(char *so_name,char *func_name,char *par1)
 		return -1;
 	}
 	dlclose(handle);
-	SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
+	SysLog(LOG_APP_SHOW,"FILE [%s] LINE [%d]:执行函数[%s]成功\n",__FILE__,__LINE__,func_name);
 	return 0;
 }
 
@@ -127,15 +127,15 @@ int getshm(int procid,size_t shmsize)
 	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
 	if((key = ftok(keypath,procid))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		printf("FILE [%s] LINE [%d]:获取主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 	if((shmid = shmget(key,shmsize,IPC_CREAT|IPC_EXCL|00666))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+		printf("FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	SysLog(LOG_SYS_DEBUG,"FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);
+	printf("FILE [%s] LINE [%d]:获取共享内存成功:%d\n",__FILE__,__LINE__,shmid);
 	return 0;
 }
 

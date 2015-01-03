@@ -23,7 +23,7 @@ int	getchnlcfg(char *chnlname)
 
 	if(chnlname == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 传入渠道名称为空\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE[%d] 传入渠道名称为空\n",__FILE__,__LINE__);
 		return -1;
 	}
 	/** 初始化系统所有渠道的队列区 **/
@@ -31,7 +31,7 @@ int	getchnlcfg(char *chnlname)
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"打开渠道初始化配置文件失败:[%s]\n",strerror(errno));
+		SysLog(LOG_CHNL_ERR,"打开渠道初始化配置文件失败:[%s]\n",strerror(errno));
 		return -1;
 	}
 	while(fgets(tmpbuf,sizeof(tmpbuf),fp)!=NULL)
@@ -57,7 +57,7 @@ int	getchnlcfg(char *chnlname)
 					strcpy(trancode,strstr(tmpbuf,":")+1);
 					if(trancode[0]=='B')
 					{
-						SysLog(LOG_SYS_ERR,"静态获取交易代码[%s]\n",trancode+1);
+						SysLog(LOG_CHNL_SHOW,"静态获取交易代码[%s]\n",trancode+1);
 						//strcpy(trancode,trancode+1);
 					}
 				}
@@ -83,7 +83,7 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 	memset(msgid,0,sizeof(msgid));
 	if(buffer == NULL||strlen(buffer)==0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:传入参数有误\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:传入参数有误\n",__FILE__,__LINE__);
 		return -1;
 	}
 	//printf("buffer is [%s]\n",buffer);
@@ -96,12 +96,12 @@ int	unpack_head_file(char *buffer,char *msgtype,char *xmlfile)
 	fp = fopen(xmlfile,"w");
 	if(fp == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:打开文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:打开文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		return -1;
 	}
 	if(fwrite(buffer+132,strlen(buffer)-132,1,fp)==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:写文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:写文件[%s]失败[%s]\n",__FILE__,__LINE__,xmlfile,strerror(errno));
 		fclose(fp);
 		return -1;
 	}
@@ -118,7 +118,7 @@ void child_exit(int signal)
 	int     stat;
 	while((pid = waitpid(-1,&stat,WNOHANG))>0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:子进程[%d]退出，退出状态[%d]\n",__FILE__,__LINE__,pid,stat);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:子进程[%d]退出，退出状态[%d]\n",__FILE__,__LINE__,pid,stat);
 	}
 	return ;
 }
@@ -152,58 +152,58 @@ int chnlprocess(char *buffer)
 	strcpy(mbuf->tranbuf.trancode,trancode+1);
 	mbuf->tranbuf.buffsize = strlen(buffer);
 
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
+	SysLog(LOG_CHNL_SHOW,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
 	i++;
 	if(shm_hash_insert(mbuf->innerid,buffer,NULL)==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中失败\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中失败\n",__FILE__,__LINE__);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
+	SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中成功,跟踪号：[%ld],报文长度[%d]\n",__FILE__,__LINE__,mbuf->innerid,strlen(rcvbuf));
 	if((ipid = getservpid(chnlname))<=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:暂无可用服务\n",__FILE__,__LINE__);
 		updatestat_foroth(ipid);
 		/** 删除消息队列信息，防止堵塞 **/
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
 		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,IPC_NOWAIT)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		return -1;
 	}
 	iret = msgsnd(msgido,mbuf,sizeof(mbuf->tranbuf),IPC_NOWAIT);
 	if(iret == -1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信息到消息队列失败[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:发送控制信息到消息队列失败[%s]\n",__FILE__,__LINE__,strerror(errno));
 		updatestat_foroth(ipid);
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
+	SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE [%d]:获取可用服务并发送控制信号\n",__FILE__,__LINE__);
 	/** 发送信号到核心服务 **/
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
+	SysLog(LOG_CHNL_DEBUG,"FILE [%s] LINE [%d]:准备发送到的服务进程为 [%ld]\n",__FILE__,__LINE__,ipid);
 	if(kill(ipid,SIGUSR2)==0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]成功\n",__FILE__,__LINE__,ipid);
+		SysLog(LOG_CHNL_SHOW,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]成功\n",__FILE__,__LINE__,ipid);
 	}else
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]失败：[%s]\n",__FILE__,__LINE__,ipid,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:发送控制信号到服务 [%ld]失败：[%s]\n",__FILE__,__LINE__,ipid,strerror(errno));
 		updatestat_foroth(ipid);
 		/**还需要删除消息队列信息，防止堵塞 **/
 		if(delete_shm_hash(mbuf->innerid)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		}
 		if(msgrcv(msgidi,mbuf,sizeof(mbuf->tranbuf),mbuf->innerid,0)==-1)
 		{
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+			SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		}
 		return -1;
 	}
@@ -268,28 +268,28 @@ int main(int argc, char **argv)
 	strcpy(chnlname,argv[1]);
 	if(getchnlcfg(chnlname)!=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d] 获取渠道[%s]配置失败\n",__FILE__,__LINE__,chnlname);
 		return -1;
 	}
 
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == (void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:MALLOC MSGBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
 
 	tranbuf = (_tran *)malloc(sizeof(_tran));
 	if(tranbuf == (void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:MALLOC TRANBUF ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
 		free(mbuf);
 		return -1;
 	}
 
 	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)==-1)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
 		free(mbuf);
 		free(tranbuf);
 		return -1;
@@ -324,7 +324,7 @@ int main(int argc, char **argv)
 	/* report reason and stop if it failed     */
 	if (CompCode == MQCC_FAILED)
 	{
-		SysLog(LOG_SYS_ERR,"MQCONN ended with reason code %d\n", CReason);
+		SysLog(LOG_CHNL_ERR,"MQCONN MQ链接失败，错误码 %d\n", CReason);
 		free(mbuf);
 		free(tranbuf);
 		exit( (int)CReason );
@@ -340,7 +340,7 @@ int main(int argc, char **argv)
 	if (argc > 3)
 	{
 		O_options = atoi( argv[3] );
-		SysLog(LOG_SYS_ERR,"open  options are %d\n", O_options);
+		SysLog(LOG_CHNL_DEBUG,"open  options are %d\n", O_options);
 	}
 	else
 	{
@@ -363,12 +363,12 @@ int main(int argc, char **argv)
 	/* report reason, if any; stop if failed      */
 	if (Reason != MQRC_NONE)
 	{
-		SysLog(LOG_SYS_ERR,"MQOPEN ended with reason code %d\n", Reason);
+		SysLog(LOG_CHNL_ERR,"MQOPEN MQ打开失败，错误码 %d\n", Reason);
 	}
 
 	if (OpenCode == MQCC_FAILED)
 	{
-		SysLog(LOG_SYS_ERR,"unable to open queue for input\n");
+		SysLog(LOG_CHNL_ERR,"打开队列失败\n");
 		return -1;
 	}
 
@@ -411,7 +411,7 @@ int main(int argc, char **argv)
 	strcat(startcmd,"&");
 	if(insert_chnlreg(startcmd,chnlname)!=0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:添加渠道到监控内存失败\n",__FILE__,__LINE__);
 		return -1;
 	}
 
@@ -462,13 +462,13 @@ int main(int argc, char **argv)
 		{
 			if (Reason == MQRC_NO_MSG_AVAILABLE)
 			{                         /* special report for normal end    */
-				SysLog(LOG_SYS_ERR,"no more messages\n");
+				SysLog(LOG_CHNL_DEBUG,"暂无消息\n");
 				sleep(atoi(waitsec));
 				continue;
 			}
 			else                      /* general report for other reasons */
 			{
-				SysLog(LOG_SYS_ERR,"MQGET ended with reason code %d\n", Reason);
+				SysLog(LOG_CHNL_ERR,"MQGET MQ获取消息内容失败,错误码 %d\n", Reason);
 
 				/*   treat truncated message as a failure for this sample   */
 				if (Reason == MQRC_TRUNCATED_MSG_FAILED)
@@ -485,26 +485,26 @@ int main(int argc, char **argv)
 		if (CompCode != MQCC_FAILED)
 		{
 			buffer[messlen] = '\0';            /* add terminator          */
-			SysLog(LOG_SYS_ERR,"message <%s>\n", buffer);
+			SysLog(LOG_CHNL_DEBUG,"message <%s>\n", buffer);
 			memset(xmlfile,0,sizeof(xmlfile));
 			memset(msgtype,0,sizeof(msgtype));
 			/** 解报文头并生成文件 **/
 			if(unpack_head_file(buffer,msgtype,xmlfile)!=0)
 			{
-				SysLog(LOG_SYS_ERR,"解报文头生成文件失败\n");
+				SysLog(LOG_CHNL_ERR,"解报文头生成文件失败\n");
 			}else
 			{
 				memset(sendbuf,0,sizeof(sendbuf));
 				memset(headbuf,0,sizeof(headbuf));
 				memcpy(headbuf,buffer,132);
 				sprintf(sendbuf,"%s|%s|%s",msgtype,xmlfile,headbuf);
-				SysLog(LOG_SYS_ERR,"传入hash表参数[%s]\n",sendbuf);
+				SysLog(LOG_CHNL_SHOW,"传入hash表参数[%s]\n",sendbuf);
 				if(chnlprocess(sendbuf)==0)
 				{
-					SysLog(LOG_SYS_ERR,"渠道处理成功\n");
+					SysLog(LOG_CHNL_SHOW,"渠道处理成功\n");
 				}else
 				{
-					SysLog(LOG_SYS_ERR,"渠道处理失败\n");
+					SysLog(LOG_CHNL_ERR,"渠道处理失败\n");
 				}
 			}
 
@@ -521,7 +521,7 @@ int main(int argc, char **argv)
 		if (argc > 4)
 		{
 			C_options = atoi( argv[4] );
-			SysLog(LOG_SYS_ERR,"close options are %d\n", C_options);
+			SysLog(LOG_CHNL_DEBUG,"close options are %d\n", C_options);
 		}
 		else
 		{
@@ -537,7 +537,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(LOG_SYS_ERR,"MQCLOSE ended with reason code %d\n", Reason);
+			SysLog(LOG_CHNL_ERR,"MQCLOSE ended with reason code %d\n", Reason);
 		}
 	}
 
@@ -555,7 +555,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(LOG_SYS_ERR,"MQDISC ended with reason code %d\n", Reason);
+			SysLog(LOG_CHNL_ERR,"MQDISC ended with reason code %d\n", Reason);
 		}
 	}
 
@@ -564,7 +564,7 @@ int main(int argc, char **argv)
 	/* END OF AMQSGET0                                                */
 	/*                                                                */
 	/******************************************************************/
-	SysLog(LOG_SYS_ERR,"Sample AMQSGET0 end\n");
+	SysLog(LOG_CHNL_ERR,"Sample AMQSGET0 end\n");
 	free(mbuf);
 	free(tranbuf);
 	return(0);

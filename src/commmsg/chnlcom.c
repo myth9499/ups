@@ -3,7 +3,7 @@
 /** 发送报文到渠道**/
 int send_to_channel(char *chnlname)
 {
-	SysLog(LOG_SYS_ERR,"开始发送报文到渠道[%s]\n",chnlname);
+	SysLog(LOG_SYS_SHOW,"开始发送报文到渠道[%s]\n",chnlname);
 	_msgbuf	*mbuf ;
 	int	msgidi,msgido,msgidr;
 	int iret ;
@@ -11,7 +11,7 @@ int send_to_channel(char *chnlname)
 	mbuf = (_msgbuf *)malloc(sizeof(_msgbuf));
 	if(mbuf == NULL)
 	{
-		printf("get mbuf error\n");
+		SysLog(LOG_SYS_ERR,"申请msgbuf内存失败[%s]\n",strerror(errno));
 		return -1;
 	}
 	memset(mbuf,0,sizeof(mbuf));
@@ -39,7 +39,7 @@ int send_to_channel(char *chnlname)
 }
 int recv_from_channel(char *chnlname)
 {
-	SysLog(LOG_SYS_ERR,"开始接收渠道[%s]返回报文\n",chnlname);
+	SysLog(LOG_SYS_SHOW,"开始接收渠道[%s]返回报文\n",chnlname);
 	_msgbuf	*mbuf ;
 	int	msgidi,msgido,msgidr;
 	int iret ;
@@ -65,7 +65,7 @@ int recv_from_channel(char *chnlname)
 		free(mbuf);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"接收渠道[%s]返回报文成功\n",chnlname);
+	SysLog(LOG_SYS_SHOW,"接收渠道[%s]返回报文成功\n",chnlname);
 
 	/** 开始解析返回报文**/
 	tranbuf = (_tran *)malloc(sizeof(_tran));
@@ -78,7 +78,7 @@ int recv_from_channel(char *chnlname)
 	sprintf(mbuf->tranbuf.chnlname,"%s返回",chnlname);
 	if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
 	{
-		SysLog(LOG_SYS_ERR,"交易跟踪号[%ld]\t[%s]渠道返回信息信息[%s]\n",mbuf->innerid,chnlname,tranbuf->intran);
+		SysLog(LOG_SYS_SHOW,"交易跟踪号[%ld]\t[%s]渠道返回信息信息[%s]\n",mbuf->innerid,chnlname,tranbuf->intran);
 		if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran,"|")==-1)
 		{
 			SysLog(LOG_SYS_ERR,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);

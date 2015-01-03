@@ -25,6 +25,10 @@ int main(int argc,char *argv[])
 	memset(xmlns,0,sizeof(xmlns));
 	memset(cfgpath,0,sizeof(cfgpath));
 
+	if((ret=setsysparam())==-1)
+	{
+		printf("FILE [%s] LINE [%d]:设置LOGLEVEL失败\n",__FILE__,__LINE__);
+	}
 	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/channel/chnl.cfg");
 	if(load_commmsg_cfg(cfgpath)==0)
 	{
@@ -98,11 +102,6 @@ int main(int argc,char *argv[])
 		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
 		return -1;
 	}
-	if((ret=setsysparam())==-1)
-	{
-		printf("FILE [%s] LINE [%d]:设置LOGLEVEL失败\n",__FILE__,__LINE__);
-	}
-	printf("FILE [%s] LINE [%d]:设置LOGLEVEL成功,当前日志级别为[%d]\n",__FILE__,__LINE__,ret);
 	return 0;
 }
 int load_commmsg_cfg(char *filename)
@@ -123,20 +122,20 @@ int load_commmsg_cfg(char *filename)
 	shmsize=MAXCOMMMSG*sizeof(_commmsg);
 	if((shmid=getshmid(9,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取渠道通信区共享内存失败\n");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"start loadcfg \n");
+	SysLog(LOG_SYS_SHOW,"开始加载渠道通信区配置 \n");
 	cmsg = (_commmsg *)shmat(shmid,NULL,0);
 	if(cmsg == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接渠道通信区共享内存失败\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
-		perror("file open error");
+		SysLog(LOG_SYS_ERR,"打开文件[%s]失败[%s]\n",filename,strerror(errno));
 		shmdt(cmsg);
 		return -1;
 	}
@@ -175,7 +174,7 @@ int load_commmsg_cfg(char *filename)
 	}
 	shmdt(cmsg);
 	fclose(fp);
-	SysLog(LOG_SYS_ERR,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"加载渠道通信区配置成功\n");
 	return 0;
 }
 int load_flow_cfg(char *filename)
@@ -196,20 +195,20 @@ int load_flow_cfg(char *filename)
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取流程定义区共享内存失败\n");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"start loadcfg \n");
+	SysLog(LOG_SYS_SHOW,"开始加载流程定义区共享内存 \n");
 	flow = (_flow *)shmat(shmid,NULL,0);
 	if(flow == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"cmsg shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接流程定义区共享内存失败\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
-		perror("file open error");
+		SysLog(LOG_SYS_ERR,"打开文件[%s]失败[%s]\n",filename,strerror(errno));
 		shmdt(flow);
 		return -1;
 	}
@@ -253,7 +252,7 @@ int load_flow_cfg(char *filename)
 	}
 	shmdt(flow);
 	fclose(fp);
-	SysLog(LOG_SYS_ERR,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"加载流程配置成功\n");
 	return 0;
 }
 
@@ -266,14 +265,15 @@ int load_xmlcfg(char *xmltype,char *filename)
 	int shmid = 0;
 	size_t shmsize = MAXXMLCFG*sizeof(_xmlcfg);
 
+	SysLog(LOG_SYS_SHOW,"开始加载XML定义区共享内存 \n");
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"获取XML配置共享内存区失败\n");
 		return -1;
 	}
 	if((xmlcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(LOG_SYS_ERR,"shmat xml cfg error\n");
+		SysLog(LOG_SYS_ERR,"链接XML配置共享内存区失败\n");
 		return -1;
 	}
 
@@ -281,20 +281,22 @@ int load_xmlcfg(char *xmltype,char *filename)
 	doc = xmlReadFile(filename,"UTF-8",XML_PARSE_RECOVER);
 	if(doc == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"parse file error\n");
+		SysLog(LOG_SYS_ERR,"解析文件[%s]失败:[%s]\n",filename,strerror(errno));
 		return -1;
 	}
 
 	curNode = xmlDocGetRootElement(doc);
 	if(curNode == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"get root elemenet error\n");
+		SysLog(LOG_SYS_ERR,"获取[%s]根结点失败:[%s]\n",filename,strerror(errno));
 		xmlFreeDoc(doc);
 		return -1;
 	}
 	insertcfg(curNode,xmlcfg,xmltype);
 	xmlFreeDoc(doc);
 	shmdt(xmlcfg);
+	SysLog(LOG_SYS_SHOW,"加载XML配置成功\n");
+	return 0;
 }
 int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 {
@@ -310,13 +312,13 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 	{
 		if(curNode->type == XML_ELEMENT_NODE)
 		{
-			SysLog(LOG_SYS_ERR,"ELement name [%s]\n",curNode->name);
+			SysLog(LOG_SYS_DEBUG,"ELement name [%s]\n",curNode->name);
 		}else if(curNode->type == XML_TEXT_NODE)
 		{
 			szKey = xmlNodeGetContent(curNode);
-			SysLog(LOG_SYS_ERR,"[%s]---%s---\n",curNode->name,szKey);
+			SysLog(LOG_SYS_DEBUG,"[%s]---%s---\n",curNode->name,szKey);
 			iret = getNodePath(path,curNode);
-			SysLog(LOG_SYS_ERR,"path is [%s]\n",path);
+			SysLog(LOG_SYS_DEBUG,"path is [%s]\n",path);
 			attr = curNode->parent->properties;
 			for(i=0;i<MAXXMLCFG;i++)
 			{
@@ -327,7 +329,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					strcpy((xmlcfg+i)->mark,curNode->name);
 					strcpy((xmlcfg+i)->fullpath,path);
 					strcpy((xmlcfg+i)->varname,szKey);
-					SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 放入变量[%s]\n",__FILE__,__LINE__,(xmlcfg+i)->varname);
+					SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 放入变量[%s]\n",__FILE__,__LINE__,(xmlcfg+i)->varname);
 					if(attr==NULL)
 					{
 						(xmlcfg+i)->depth = -1;
@@ -336,7 +338,7 @@ int insertcfg(xmlNodePtr cur,_xmlcfg *xmlcfg,char *xmltype)
 					{
 						while(attr)
 						{
-							SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
+							SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] attr name[%s] attr value[%s]\n",__FILE__,__LINE__,attr->name,attr->children->content);
 							if(!strcmp(attr->name,"loop"))
 							{
 								strcpy((xmlcfg+i)->loop,attr->children->content);
@@ -380,20 +382,20 @@ int load_tranmap_cfg(char *filename)
 	shmsize=MAXTRANMAP*sizeof(_tranmap);
 	if((shmid=getshmid(5,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取交易映射区共享内存失败\n");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"start load tranmap  cfg \n");
+	SysLog(LOG_SYS_SHOW,"开始加载交易映射区共享内存配置 \n");
 	tmap = (_tranmap *)shmat(shmid,NULL,0);
 	if(tmap == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"tranmap shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接交易映射区共享内存失败\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
-		perror("file open error");
+		SysLog(LOG_SYS_ERR,"打开文件[%s]失败[%s]\n",filename,strerror(errno));
 		shmdt(tmap);
 		return -1;
 	}
@@ -420,7 +422,7 @@ int load_tranmap_cfg(char *filename)
 	}
 	shmdt(tmap);
 	fclose(fp);
-	SysLog(LOG_SYS_ERR,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"加载交易映射区共享内存配置成功 \n");
 	return 0;
 }
 int load_vardef_cfg(char *filename)
@@ -438,20 +440,20 @@ int load_vardef_cfg(char *filename)
 	shmsize=MAXVARDEF*sizeof(_vardef);
 	if((shmid=getshmid(4,shmsize))==-1)
 	{
-		SysLog(LOG_SYS_ERR,"get shm error\n");
+		SysLog(LOG_SYS_ERR,"获取交易定义表共享内存失败\n");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"start load vardef  cfg \n");
+	SysLog(LOG_SYS_SHOW,"开始加载变量定义区共享内存配置 \n");
 	vardef = (_vardef *)shmat(shmid,NULL,0);
 	if(vardef == NULL)
 	{
-		SysLog(LOG_SYS_ERR,"vardef shmat error\n");
+		SysLog(LOG_SYS_ERR,"链接交易定义表共享内存失败\n");
 		return -1;
 	}
 	fp = fopen(filename,"r");
 	if(fp==NULL)
 	{
-		perror("file open error");
+		SysLog(LOG_SYS_ERR,"打开文件[%s]失败[%s]\n",filename,strerror(errno));
 		shmdt(vardef);
 		return -1;
 	}
@@ -472,21 +474,21 @@ int load_vardef_cfg(char *filename)
 	}
 	shmdt(vardef);
 	fclose(fp);
-	SysLog(LOG_SYS_ERR,"load ok\n");
+	SysLog(LOG_SYS_SHOW,"加载变量定义区共享内存配置成功 \n");
 	return 0;
 }
 
 int	setsysparam(void)
 {
 	_sys_param  *sp = NULL;
-	int shmsize,ret=-1;
+	int shmsize,ret=-1,loop=0;
 	FILE	*fp = NULL;
 	char	filepath[100];
 	char	tmpbuf[100];
 	memset(filepath,0x00,sizeof(filepath));
 	memset(tmpbuf,0x00,sizeof(tmpbuf));
 
-	shmsize =   sizeof(_sys_param);
+	shmsize =   sizeof(_sys_param)*3;
 	int shmid,isfound = 0;
 	if((shmid=getshmid(3,shmsize))==-1)
 	{
@@ -511,11 +513,32 @@ int	setsysparam(void)
 	{
 		if(tmpbuf[0]=='#')
 			continue;
-		if(!memcmp(tmpbuf,"LOGLEVEL",8))
+		if(!memcmp(tmpbuf,"SYSLOGLEVEL",11))
 		{
 			isfound = 1;
-			sp->curloglvl=atoi(tmpbuf+9);
-			ret = sp->curloglvl;
+			memcpy((sp+loop)->type,tmpbuf,3);
+			(sp+loop)->curloglvl=atoi(tmpbuf+12);
+			ret = (sp+loop)->curloglvl;
+			loop++;
+			printf("FILE [%s] LINE [%d]:设置SYSLOGLEVEL成功,当前系统日志级别为[%d]\n",__FILE__,__LINE__,ret);
+		}
+		if(!memcmp(tmpbuf,"CHNLLOGLEVEL",12))
+		{
+			isfound = 1;
+			memcpy((sp+loop)->type,tmpbuf,4);
+			(sp+loop)->curloglvl=atoi(tmpbuf+13);
+			ret = (sp+loop)->curloglvl;
+			loop++;
+			printf("FILE [%s] LINE [%d]:设置CHNLLOGLEVEL成功,当前渠道日志级别为[%d]\n",__FILE__,__LINE__,ret);
+		}
+		if(!memcmp(tmpbuf,"APPLOGLEVEL",11))
+		{
+			isfound = 1;
+			memcpy((sp+loop)->type,tmpbuf,3);
+			(sp+loop)->curloglvl=atoi(tmpbuf+12);
+			ret = (sp+loop)->curloglvl;
+			loop++;
+			printf("FILE [%s] LINE [%d]:设置APPLOGLEVEL成功,当前应用日志级别为[%d]\n",__FILE__,__LINE__,ret);
 		}
 	}
 	if(isfound ==0)

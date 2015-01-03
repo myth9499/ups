@@ -48,7 +48,7 @@ int	get_flow(char	*trancode,_flow	*localflow)
 	}
 
 	/** 根据交易码，获取到流程名称 **/
-	SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 传入交易码:%s\n",__FILE__,__LINE__,trancode);
+	SysLog(LOG_SYS_SHOW,"FILE[%s] LINE[%d] 传入交易码:%s\n",__FILE__,__LINE__,trancode);
 	trim(trancode);
 	if(gettranmap(&tmap,trancode)==-1)
 	{
@@ -56,7 +56,7 @@ int	get_flow(char	*trancode,_flow	*localflow)
 		seterr("EEEEEEEEEE","根据交易码获取交易流程失败，请查看是否配置");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
+	SysLog(LOG_SYS_SHOW,"交易码[%s]交易名称[%s]交易流程名称[%s]超时时间[%d]\n",tmap.trancode,tmap.tranname,tmap.tranflow,tmap.timeout);
 	
 	/** 增加超时 **/
 	/**修改hash表中超时时间为获取到的超时时间 **/
@@ -71,7 +71,7 @@ int	get_flow(char	*trancode,_flow	*localflow)
 	_flow *tmpshmdt=NULL;
 	size_t shmsize;
 
-	SysLog(LOG_SYS_ERR,"开始获取交易码为[%s]的流程配置\n",trancode);
+	SysLog(LOG_SYS_SHOW,"开始获取交易码为[%s]的流程配置\n",trancode);
 	shmsize=MAXFLOW*sizeof(_flow);
 	if((shmid=getshmid(8,shmsize))==-1)
 	{
@@ -87,7 +87,7 @@ int	get_flow(char	*trancode,_flow	*localflow)
 		return -1;
 	}
 	tmpshmdt = flow;
-	SysLog(LOG_SYS_ERR,"开始执行流程[%s] \n",tmap.tranflow);
+	SysLog(LOG_SYS_SHOW,"开始执行流程[%s] \n",tmap.tranflow);
 	while(strcmp(flow->flowname,"END"))
 	{
 		if(!strcmp(flow->flowname,tmap.tranflow))
@@ -103,7 +103,7 @@ int	get_flow(char	*trancode,_flow	*localflow)
 }
 void delservpid(void)
 {
-	SysLog(LOG_SYS_ERR,"开始删除共享内存数据[%ld]\n",getpid());
+	SysLog(LOG_SYS_SHOW,"开始删除共享内存数据[%ld]\n",getpid());
 	pid_t ret = 0;
 	int shmid = 0,i=0,semid = 0;
 	_servreg *sreg = NULL;
@@ -113,7 +113,6 @@ void delservpid(void)
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
 		return ;
 	}
-	SysLog(LOG_SYS_ERR,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
 		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
@@ -122,7 +121,7 @@ void delservpid(void)
 	/** 信号量控制 **/
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		SysLog(LOG_SYS_ERR,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
+		SysLog(LOG_SYS_DEBUG,"i[[[[]]]]]%d servpid [%d][%c]\n",i,(sreg+i)->servpid,(sreg+i)->stat[0]);
 		if((sreg+i)->servpid==getpid())
 		{
 			sem_wait(&((sreg+i)->sem1));
@@ -168,7 +167,7 @@ int updatestat(void)
 
 	}
 	shmdt(sreg);
-	SysLog(LOG_SYS_ERR,"解除信号量成功\n");
+	SysLog(LOG_SYS_SHOW,"解除信号量成功\n");
 	return ret;
 }
 
@@ -183,7 +182,6 @@ int insert_servreg(char	*startcmd,char *chnlname )
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"shmid is[%d]\n",shmid);
 	if((sreg = shmat(shmid,NULL,0))==NULL)
 	{
 		SysLog(LOG_SYS_ERR,"shmat sreg error\n");
@@ -191,7 +189,7 @@ int insert_servreg(char	*startcmd,char *chnlname )
 	}
 	for(i=0;i<MAXSERVREG;i++)
 	{
-		SysLog(LOG_SYS_ERR,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
+		SysLog(LOG_SYS_DEBUG,"i[[[[]]]]]%d servpid [%d]\n",i,(sreg+i)->servpid);
 		sem_wait(&((sreg+i)->sem2));
 		if((sreg+i)->servpid==0)
 		{
@@ -288,7 +286,7 @@ int main(int argc,char *argv[])
 	strcat(startcmd,"&");
 	if(insert_servreg(startcmd,argv[1])==0)
 	{
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
+		SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:注册服务成功,PID[%ld]\n",__FILE__,__LINE__,getpid());
 	}else
 	{
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:注册服务失败,PID[%ld]\n",__FILE__,__LINE__,getpid());
@@ -313,13 +311,13 @@ void serv(int sig)
 	struct	timeval	t_start,t_end;
 	double	usetime;
 	gettimeofday(&t_start,NULL);
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
+	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
 	if(init_malloced_hash()!=0)
 	{
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d] 初始化变量存放区失败\n",__FILE__,__LINE__);
 		return ;
 	}
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d] 初始化变量存放区成功\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d] 初始化变量存放区成功\n",__FILE__,__LINE__);
 
 	seterr("AAAAAAAA","交易正常结束");
 
@@ -327,24 +325,24 @@ void serv(int sig)
 	if(iret > 0)
 	{
 		innerid = mbuf->innerid ; 
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d] 处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",__FILE__,__LINE__,mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 全局跟踪号为:[%ld]\n",__FILE__,__LINE__,innerid);
+		SysLog(LOG_APP_SHOW,"FILE [%s] LINE [%d] 处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",__FILE__,__LINE__,mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
+		SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 全局跟踪号为:[%ld]\n",__FILE__,__LINE__,innerid);
 		if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)
 		{
-			SysLog(LOG_SYS_ERR,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->intran);
+			SysLog(LOG_APP_ERR,"交易跟踪号[%ld]\t传入交易信息[%s]\n",mbuf->innerid,tranbuf->intran);
 			if(unpack(mbuf->tranbuf.chnlname,tranbuf->intran,"|")==-1)
 			{
-				SysLog(LOG_SYS_ERR,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);
+				SysLog(LOG_APP_ERR,"解[%s]包失败\t传入交易信息[%s]\n",mbuf->tranbuf.chnlname,tranbuf->intran);
 				seterr("EEEEEEEE","解包失败");
 			}else
 			{
 				if(serv_flow(mbuf->tranbuf.trancode)!=0)
 				{
-					SysLog(LOG_SYS_ERR,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
+					SysLog(LOG_APP_ERR,"处理[%s]交易流程失败\n",mbuf->tranbuf.trancode);
 					seterr("EEEEEEEE","执行交易失败");
 				}else
 				{
-					SysLog(LOG_SYS_ERR,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
+					SysLog(LOG_APP_SHOW,"处理[%s]交易流程成功\n",mbuf->tranbuf.trancode);
 				}
 			}
 		}else
@@ -352,7 +350,7 @@ void serv(int sig)
 			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取全局跟踪号:[%ld]信息失败\n",__FILE__,__LINE__,innerid);
 			gettimeofday(&t_end,NULL);
 			usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+			SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 			updatestat();
 			return ;
 		}
@@ -375,26 +373,26 @@ void serv(int sig)
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		gettimeofday(&t_end,NULL);
 		usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+		SysLog(LOG_SYS_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
 	}
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:删除共享内存hash表数据成功\n",__FILE__,__LINE__);
 	if(delete_msgq(mbuf->innerid)==-1)
 	{
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败\n",__FILE__,__LINE__);
 		gettimeofday(&t_end,NULL);
 		usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-		SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+		SysLog(LOG_SYS_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
 	}
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
+	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
 	gettimeofday(&t_end,NULL);
 	usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-	SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+	SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);
@@ -419,41 +417,41 @@ int serv_flow(char *trancode)
 		SysLog(LOG_SYS_ERR,"获取交易码为[%s]的流程失败\n",trancode);
 		return -1;
 	}
-	SysLog(LOG_SYS_ERR,"交易码[%s]流程开始\n",trancode);
+	SysLog(LOG_APP_SHOW,"交易码[%s]流程开始\n",trancode);
 	for(i=1;strcmp(localflow[i].flowname,"END");i++)
 	{
-		SysLog(LOG_SYS_ERR,"执行流程序号[%-3d]\t流程名称[%-20s]函数名称[%-20s]\n",i,localflow[i].flowname,localflow[i].flowfunc);
+		SysLog(LOG_APP_ERR,"执行流程序号[%-3d]\t流程名称[%-20s]函数名称[%-20s]\n",i,localflow[i].flowname,localflow[i].flowfunc);
 	}
-	SysLog(LOG_SYS_ERR,"交易码[%s]流程结束\n",trancode);
+	SysLog(LOG_APP_SHOW,"交易码[%s]流程结束\n",trancode);
 	i=1;
 	/** init commmsg **/
 	while(strcmp(localflow[i].flowname,"END"))
 	{
 		gettimeofday(&t_start,NULL);
-		SysLog(LOG_SYS_ERR,"开始处理流程flowname[%-20s]库[%-20s]函数[%-20s]参数[%-20s]\t\n",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
+		SysLog(LOG_APP_SHOW,"开始处理流程flowname[%-20s]库[%-20s]函数[%-20s]参数[%-20s]\t\n",localflow[i].flowname,localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1);
 		trim(localflow[i].flowso);
 		trim(localflow[i].flowfunc);
 		trim(localflow[i].funcpar1);
 		if(do_so(localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1)==0)
 		{
 			gettimeofday(&t_end,NULL);
-			SysLog(LOG_SYS_ERR,"流程处理成功,耗时[+%f]微秒\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
+			SysLog(LOG_APP_SHOW,"流程处理成功,耗时[+%f]微秒\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
 		}else
 		{
 			gettimeofday(&t_end,NULL);
-			SysLog(LOG_SYS_ERR,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败,耗时[+%f]微秒!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
+			SysLog(LOG_APP_ERR,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败,耗时[+%f]微秒!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
 			/** 执行错误流程**/
 			if(get_flow(localflow[i].errflow,localflow)!=0)
 			{
-				SysLog(LOG_SYS_ERR,"获取交易码为[%s]的流程失败\n",trancode);
+				SysLog(LOG_APP_ERR,"获取交易码为[%s]的流程失败\n",trancode);
 				return -1;
 			}
-			SysLog(LOG_SYS_ERR,"交易码[%s]错误/超时流程开始\n",trancode);
+			SysLog(LOG_APP_ERR,"交易码[%s]错误/超时流程开始\n",trancode);
 			for(j=1;strcmp(localflow[j].flowname,"END");j++)
 			{
-				SysLog(LOG_SYS_ERR,"执行流程序号[%-3d]\t流程名称[%-20s]函数名称[%-20s]\n",j,localflow[j].flowname,localflow[j].flowfunc);
+				SysLog(LOG_APP_ERR,"执行流程序号[%-3d]\t流程名称[%-20s]函数名称[%-20s]\n",j,localflow[j].flowname,localflow[j].flowfunc);
 			}
-			SysLog(LOG_SYS_ERR,"交易码[%s]错误/超时流程结束\n",trancode);
+			SysLog(LOG_APP_SHOW,"交易码[%s]错误/超时流程结束\n",trancode);
 			i=1;
 			continue;
 		}

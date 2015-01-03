@@ -23,24 +23,24 @@ int xml_unpack(char *a)
 
 	if(a[0]=='V')
 	{
-		SysLog(LOG_APP_ERR,"从变量V_MSGTYPE取报文类型进行处理");
+		SysLog(LOG_APP_SHOW,"从变量V_MSGTYPE取报文类型进行处理");
 		iret = get_var_value(a+1,sizeof(msgtype),1,msgtype);
 		if(iret == -1)
 		{
 			SysLog(LOG_APP_ERR,"从变量[%s]取报文类型进行处理失败",a+1);
 			return  -1;
 		}
-		SysLog(LOG_APP_ERR,"获取到待解包报文类型[%s]\n",msgtype);
+		SysLog(LOG_APP_SHOW,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
 
-		SysLog(LOG_APP_ERR,"从变量V_XMLFILE读取报文进行处理");
+		SysLog(LOG_APP_SHOW,"从变量V_XMLFILE读取报文进行处理");
 		iret = get_var_value("V_XMLFILE",sizeof(msgtypefile),1,msgtypefile);
 		if(iret == -1)
 		{
 			SysLog(LOG_APP_ERR,"从变量V_XMLFILE读取报文进行处理失败");
 			return  -1;
 		}
-		SysLog(LOG_APP_ERR,"获取到待处理报文[%s]",msgtypefile);
+		SysLog(LOG_APP_SHOW,"获取到待处理报文[%s]",msgtypefile);
 		trim(msgtypefile);
 		if(unpack_xml(msgtype,msgtypefile)==-1)
 		{
@@ -57,7 +57,7 @@ int xml_unpack(char *a)
 			return  -1;
 		}
 	}
-	SysLog(LOG_APP_ERR,"unpack xml ok");
+	SysLog(LOG_APP_SHOW,"解析报文成功");
 	return 0;
 }
 int unpack_xml(char *xmltype,char *filename)
@@ -78,12 +78,12 @@ int unpack_xml(char *xmltype,char *filename)
 
 	if((shmid = getshmid(6,shmsize))==-1)
 	{
-		SysLog(LOG_APP_ERR,"get xml cfg error\n");
+		SysLog(LOG_APP_ERR,"获取XML报文配置区共享内存失败\n");
 		return -1;
 	}
 	if((xmlcfg = shmat(shmid,NULL,0))==(void *)-1)
 	{
-		SysLog(LOG_APP_ERR,"shmat xml cfg error\n");
+		SysLog(LOG_APP_ERR,"链接XML报文配置区共享内存失败\n");
 		return -1;
 	}
 
@@ -91,14 +91,14 @@ int unpack_xml(char *xmltype,char *filename)
 	doc = xmlReadFile(filename,"UTF-8",XML_PARSE_RECOVER);
 	if(doc == NULL)
 	{
-		SysLog(LOG_APP_ERR,"parse file error\n");
+		SysLog(LOG_APP_ERR,"解析XML文件[%s]失败[%s]\n",filename,strerror(errno));
 		return -1;
 	}
 
 	curNode = xmlDocGetRootElement(doc);
 	if(curNode == NULL)
 	{
-		SysLog(LOG_APP_ERR,"get root elemenet error\n");
+		SysLog(LOG_APP_ERR,"获取根节点失败\n");
 		xmlFreeDoc(doc);
 		return -1;
 	}
@@ -106,7 +106,7 @@ int unpack_xml(char *xmltype,char *filename)
 	if(prtvalue(curNode,xmltype)!=-1)
 	{
 		sprintf(loop,"%d",getmaxloop());
-		SysLog(LOG_APP_ERR,"解包到变量成功,解包循环深度[%s]\n",loop);
+		SysLog(LOG_APP_SHOW,"解包到变量成功,解包循环深度[%s]\n",loop);
 		put_var_value("V_LOOP",strlen(loop)+1,1,loop);
 	}else
 	{
@@ -182,7 +182,7 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 	{
 		if(curNode->type == XML_ELEMENT_NODE)
 		{
-			SysLog(LOG_APP_ERR,"ELement name [%s] \n",curNode->name);
+			SysLog(LOG_APP_DEBUG,"ELement name [%s] \n",curNode->name);
 		}else if(curNode->type == XML_TEXT_NODE)
 		{
 			szKey = xmlNodeGetContent(curNode);
@@ -194,15 +194,15 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 				{
 					/**每次更新循环登记表，入变量维度时以循环登记表为准 **/
 					updatepath(path);
-					SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->parent->name);
-					SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->name);
+					SysLog(LOG_APP_DEBUG,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->parent->name);
+					SysLog(LOG_APP_DEBUG,"FILE [%s] LINE[%d]curname[%s]\n",__FILE__,__LINE__,curNode->name);
 					if(!strcmp(curNode->parent->name,"Ustrd"))
 					{
 						//SysLog(LOG_APP_ERR,"FILE [%s] LINE[%d]路径[%s]变量名[%s]变量值[%s]属性[%d]\n",__FILE__,__LINE__,(tmpcfg+loop)->fullpath,(tmpcfg+loop)->varname,szKey,(tmpcfg+loop)->depth);
 						if(put_var_value((tmpcfg+loop)->varname,strlen(szKey)+1,1,szKey)!=0)
 						{
 							xmlFree(szKey);
-							SysLog(LOG_APP_ERR,"put error\n");
+							SysLog(LOG_APP_ERR,"放置变量[%s]失败\n",(tmpcfg+loop)->varname);
 							return -1;
 						}
 						xmlFree(szKey);
@@ -215,7 +215,7 @@ int prtvalue(xmlNodePtr cur,char *xmltype)
 						if(put_var_value(tmpcfg->varname,strlen(szKey)+1,getpathloop(path),szKey)!=0)
 						{
 							xmlFree(szKey);
-							SysLog(LOG_APP_ERR,"put error\n");
+							SysLog(LOG_APP_ERR,"放置变量[%s]失败\n",(tmpcfg+loop)->varname);
 							return -1;
 						}
 						xmlFree(szKey);
