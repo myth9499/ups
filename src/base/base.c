@@ -172,7 +172,7 @@ int initservregsem()
 	_servreg *sreg = NULL;
 	_tran	*tran = NULL;
 
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{         
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:获取共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
@@ -239,7 +239,7 @@ int gettranmap(_tranmap *tmap,char *trancode)
 {
 	int iret =-1;
 	int shmid ;
-	int shmsize = MAXTRANMAP*(sizeof(_tranmap));
+	size_t shmsize = MAXTRANMAP*(sizeof(_tranmap));
 
 	if((tmap == NULL)||(trancode == NULL))
 	{
@@ -313,7 +313,7 @@ pid_t getservpid(char *chnl_name)
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
 	int	servpos=0;//serv 偏移
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:获取服务登记表失败 ERROR[%s]\n",__FILE__,__LINE__,strerror(errno));
@@ -364,7 +364,7 @@ int insert_chnlreg(char	*startcmd,char *chnlname )
 {
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
@@ -410,7 +410,7 @@ int updatestat_foroth(pid_t	pid)
 	int ret = 0;
 	int shmid = 0,i=0,semid = 0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
@@ -443,7 +443,7 @@ int get_vardef(char	*varname,_vardef	*vardef)
 {
 	int iret =-1;
 	int shmid ;
-	int shmsize = MAXVARDEF*(sizeof(_vardef));
+	size_t shmsize = MAXVARDEF*(sizeof(_vardef));
 
 	if((varname == NULL)||(vardef == NULL))
 	{

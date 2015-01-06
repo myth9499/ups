@@ -550,7 +550,7 @@ int	delete_msgq(long	inpid)
 	int	msgidi,msgido,msgidr;
 	_servreg *sreg = NULL;
 	_msgbuf	*mbuf;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"获取服务区共享内存失败\n");

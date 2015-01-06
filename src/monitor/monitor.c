@@ -11,7 +11,7 @@ int main(int argc,char *argv[] )
 
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		printf("获取服务共享内存区失败\n");

@@ -125,7 +125,7 @@ int SysLog(int loglevel,char *format,...)
 int	getcursysloglvl(char *type)
 {
 	_sys_param	*sp = NULL;
-	int	shmsize,ret;
+	size_t	shmsize,ret;
 	shmsize	=	sizeof(_sys_param)*3;
 	int	shmid;
 	if((shmid=getshmid(3,shmsize))==-1)

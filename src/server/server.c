@@ -107,7 +107,7 @@ void delservpid(void)
 	pid_t ret = 0;
 	int shmid = 0,i=0,semid = 0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
@@ -140,7 +140,7 @@ int updatestat(void)
 	pid_t ret = 0;
 	int shmid = 0,i=0,semid = 0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");
@@ -176,7 +176,7 @@ int insert_servreg(char	*startcmd,char *chnlname )
 {
 	int shmid = 0,i=0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"get serv shm id error\n");

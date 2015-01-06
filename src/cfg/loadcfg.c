@@ -481,7 +481,8 @@ int load_vardef_cfg(char *filename)
 int	setsysparam(void)
 {
 	_sys_param  *sp = NULL;
-	int shmsize,ret=-1,loop=0;
+	size_t shmsize;
+	int	ret=-1,loop=0;
 	FILE	*fp = NULL;
 	char	filepath[100];
 	char	tmpbuf[100];

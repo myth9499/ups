@@ -18,7 +18,7 @@ int main(int argc,char *argv[] )
 	_tran *tran = NULL;
 	time_t	curtime;
 	long	inpid=0;
-	int shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
+	size_t shmsize = HASHCNT*BUCKETSCNT*sizeof(_tran);
 	if((shmid = getshmid(10,shmsize))==-1)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] get shmid error\n",__FILE__,__LINE__);
@@ -74,7 +74,7 @@ int	viewexit()
 {
 	int shmid = 0,i=0,ret,result=0;
 	_servreg *sreg = NULL;
-	int shmsize = MAXSERVREG*sizeof(_servreg);
+	size_t shmsize = MAXSERVREG*sizeof(_servreg);
 	if((shmid = getshmid(7,shmsize))==-1)
 	{
 		printf("get serv shm id error\n");
