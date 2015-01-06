@@ -1,26 +1,4 @@
 #include "ups.h"
-int getshmid(int procid,size_t shmsize)
-{
-	int shmid;
-	key_t	key;
-	char	keypath[100];
-	memset(keypath,0,sizeof(keypath));
-
-	sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
-	if((key = ftok(keypath,procid))==-1)
-	{
-		printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
-		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
-	}
-	if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
-	{
-		printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
-		SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
-		return -1;
-	}
-	return shmid;
-}
 int unpack(char *chnlname,char *commbuf,char	*delim)
 {
 	key_t	key;

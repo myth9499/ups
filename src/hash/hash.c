@@ -647,3 +647,20 @@ int shm_hash_tout(long innerid,time_t	tout)
 	shmdt(transhm);
 	return -1;
 }
+
+/** 设置错误代码函数 **/
+int     seterr(char *errcode,char *errmsg)
+{
+        if(put_var_value("V_ERRCODE",strlen(errcode)+1,1,errcode)==-1)
+        {
+                SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRCODE为:%s失败\n",__FILE__,__LINE__,errcode);
+                return -1;
+        }
+        if(put_var_value("V_ERRMSG",strlen(errmsg)+1,1,errmsg)==-1)
+        {
+                SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRMSG为:%s失败\n",__FILE__,__LINE__,errcode);
+                return -1;
+        }
+        return 0;
+}
+

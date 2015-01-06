@@ -40,11 +40,11 @@ int SysLog(int loglevel,char *format,...)
 	{
 		return 0;
 	}
-    FILE *fp = NULL;
-    va_list argptr;
-    char log_path[100];
-    char trancode[11];
-    va_start(argptr,format);
+	FILE *fp = NULL;
+	va_list argptr;
+	char log_path[100];
+	char trancode[11];
+	va_start(argptr,format);
 	time_t	now;
 	time(&now);
 	struct tm *ttm;
@@ -96,7 +96,8 @@ int SysLog(int loglevel,char *format,...)
     	sprintf(log_path,"%s%s%s/%s",upshome,"/log/",dat,"chnl.log");
 	}else if(!strcmp(type,"app"))
 	{
-		/** 获取当前交易码 **/
+		sprintf(log_path,"%s%s%s/%s",upshome,"/log/",dat,"app.log");
+		/** 获取当前交易码 
 		memset(trancode,0,sizeof(trancode));
 		get_var_value("V_TRAN",sizeof(trancode),1,trancode);
 		if(strlen(trancode)==0)
@@ -106,6 +107,7 @@ int SysLog(int loglevel,char *format,...)
 		{
 			sprintf(log_path,"%s%s%s%s",upshome,"/log/",trancode,".log");
 		}
+		**/
 	}
 	//printf("log path is [%s]\n",log_path);
     fp = fopen(log_path,"a");

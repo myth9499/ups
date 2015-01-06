@@ -141,6 +141,29 @@ int getshm(int procid,size_t shmsize)
 	return 0;
 }
 
+int getshmid(int procid,size_t shmsize)
+{
+        int shmid;
+        key_t   key;
+        char    keypath[100];
+        memset(keypath,0,sizeof(keypath));
+
+        sprintf(keypath,"%s%s",upshome,"/etc/mq_1");
+        if((key = ftok(keypath,procid))==-1)
+        {
+                printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+                SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存主键失败:%s\n",__FILE__,__LINE__,strerror(errno));
+                return -1;
+        }
+        if((shmid = shmget(key,shmsize,IPC_EXCL))==-1)
+        {
+                printf("FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+                SysLog(LOG_SYS,"FILE [%s] LINE[%d] 获取渠道交易区共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
+                return -1;
+        }
+        return shmid;
+}
+
 /** init posix sem  **/
 int initservregsem()
 {
@@ -209,22 +232,6 @@ int getNodePath(char *path,xmlNodePtr cur)
 	}
 	path[strlen(path)-1]='\0';
 	return loop;
-}
-
-/** 设置错误代码函数 **/
-int	seterr(char *errcode,char *errmsg)
-{
-	if(put_var_value("V_ERRCODE",strlen(errcode)+1,1,errcode)==-1)
-	{
-		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRCODE为:%s失败\n",__FILE__,__LINE__,errcode);
-		return -1;
-	}
-	if(put_var_value("V_ERRMSG",strlen(errmsg)+1,1,errmsg)==-1)
-	{
-		SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:设置V_ERRMSG为:%s失败\n",__FILE__,__LINE__,errcode);
-		return -1;
-	}
-	return 0;
 }
 
 /** 获取交易属性 **/
