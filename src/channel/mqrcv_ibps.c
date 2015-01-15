@@ -144,8 +144,8 @@ int chnlprocess(char *buffer)
 	/**填充消息队列数据 **/
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
-	//mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	mbuf->innerid=getinnerid();
+	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
+	//mbuf->innerid=getinnerid();
 	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
 	strcpy(mbuf->tranbuf.trancode,trancode+1);
@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 	MQLONG   OpenCode;               /* MQOPEN completion code        */
 	MQLONG   Reason;                 /* reason code                   */
 	MQLONG   CReason;                /* reason code for MQCONN        */
-	MQBYTE   buffer[65536];          /* message buffer                */
+	MQBYTE   buffer[2097152];        /* message buffer 2M             */
 	MQLONG   buflen;                 /* buffer length                 */
 	MQLONG   messlen;                /* message length received       */
 

@@ -309,9 +309,16 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	_vardef	vardef;/* 存放变量配置 **/
 	int hash = 0;
 
+	if(strlen(varname)==0||varname ==NULL)
+	{
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量不合法\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量不合法\n",__FILE__,__LINE__);
+		return -1;
+	}
 	if(get_vardef(varname,&vardef)!=0)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	/** strlen 不包括\0的计算,所以所有的变量定义需要在原有基础上+1 **/
@@ -319,9 +326,11 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	if(strlen(value)>vardef.varlen-1)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量[%s]传入长度[%d]大于配置长度[%d]\n",__FILE__,__LINE__,varname,len,vardef.varlen);
 		return -1;
 	}
 	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_APP_SHOW,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 
 	if(kvalue == NULL||varname ==NULL||strlen(varname)==0)
 	{
@@ -332,6 +341,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 	hash = hashfunc(varnameloop);
 	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
+	SysLog(LOG_APP_DEBUG,"FILE[%s] LINE[%d] 变量名[%s]HASH值[%d]变量值[%s]\n",__FILE__,__LINE__,varnameloop,hash,value);
 
 	head = kvalue+hash;
 	tmpkvalue = kvalue+hash;
@@ -343,7 +353,7 @@ int put_var_value(char *varname,int len,int loop,char *value)
 		{
 			memset(tmpkvalue->value,0,vardef.varlen);
 			memcpy(tmpkvalue->value,value,len);
-			SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
+			SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] **重复使用hash空间**变量值[%s]传入值[%s]放入后值[%s]长度[%d]\n",__FILE__,__LINE__,varname,value,tmpkvalue->value,len);
 			return 0;
 		}
 		pre = tmpkvalue;
@@ -355,12 +365,14 @@ int put_var_value(char *varname,int len,int loop,char *value)
 	if(tmpkey == NULL)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 		return -1;
 	}
 	tmpkey->value = (char *)malloc(vardef.varlen);
 	if(tmpkey->value==NULL)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量值[%s]传入值[%s]申请内存失败：%s\n",__FILE__,__LINE__,varname,value,strerror(errno));
 		free(tmpkey);
 		return -1;
 	}else
@@ -386,9 +398,16 @@ int get_var_value(char *varname,int len,int loop,char *value)
 
 	_vardef	vardef;/* 存放变量配置 **/
 
+	if(strlen(varname)==0||varname ==NULL)
+	{
+		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量不合法\n",__FILE__,__LINE__);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量不合法\n",__FILE__,__LINE__);
+		return -1;
+	}
 	if(get_vardef(varname,&vardef)!=0)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 获取变量[%s]定义失败\n",__FILE__,__LINE__,varname);
 		return -1;
 	}
 	/** 当变量定义长度大于传入取出值存放变量时，不取出，存放不了，会core done **/
@@ -398,9 +417,11 @@ int get_var_value(char *varname,int len,int loop,char *value)
 	if(len<vardef.varlen)
 	{
 		SysLog(LOG_SYS_ERR,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d] 变量[%s]配置长度[%d]大于传入长度[%d]\n",__FILE__,__LINE__,varname,vardef.varlen,len);
 		return -1;
 	}
 	SysLog(LOG_SYS_DEBUG,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
+	SysLog(LOG_APP_SHOW,"FILE[%s] LINE[%d] 变量[%s]说明[%s]变量类型[%s]变量长度[%d]\n",__FILE__,__LINE__,varname,vardef.varmark,vardef.vartype,vardef.varlen);
 	if(kvalue == NULL)
 	{
 		SysLog(LOG_SYS_ERR,"进程变量值内存空间未申请 \n");
@@ -409,14 +430,14 @@ int get_var_value(char *varname,int len,int loop,char *value)
 	if(loop == 0)
 	{
 		hash = hashfunc(varname);
-		SysLog(LOG_SYS_ERR,"变量[%s]HASH值为[%d]\n",varname,hash);
+		SysLog(LOG_SYS_DEBUG,"变量[%s]HASH值为[%d]\n",varname,hash);
 	}else
 	{
 		memset(varnameloop,0,sizeof(varnameloop));
 		//sprintf(varnameloop,"%s[%d]",varname,loop);
 		sprintf(varnameloop,"%s_%d_%c",varname,loop,varname[1]);
 		hash = hashfunc(varnameloop);
-		SysLog(LOG_SYS_ERR,"变量[%s]HASH值为[%d]\n",varnameloop,hash);
+		SysLog(LOG_SYS_DEBUG,"变量[%s]HASH值为[%d]\n",varnameloop,hash);
 	}
 	tmpkvalue = kvalue+hash;
 	while(tmpkvalue!=NULL)
@@ -424,7 +445,8 @@ int get_var_value(char *varname,int len,int loop,char *value)
 		if(!strcmp(tmpkvalue->varname,varname)&&!strcmp(tmpkvalue->varnameloop,varnameloop))
 		{
 			trim(tmpkvalue->value);
-			SysLog(LOG_SYS_ERR,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
+			SysLog(LOG_SYS_DEBUG,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
+			SysLog(LOG_APP_SHOW,"本次获取变量名[%s]变量值为[%s]\n",varname,tmpkvalue->value);
 			//memcpy(value,tmpkvalue->value,strlen(tmpkvalue->value));
 			//memcpy(value,tmpkvalue->value,len);
 			memcpy(value,tmpkvalue->value,vardef.varlen);
