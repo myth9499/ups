@@ -1,6 +1,10 @@
 #include  "ups.h"
 #include  "pool.h"
 
+
+struct  timeval t_cur,t_last;
+float   usetime;
+
 /** 获取当前设置的日志级别
  * 当前日志级别大于传入loglevel时进行打印
  * 小于传入loglevel时，直接进行退出
@@ -23,7 +27,7 @@ int SysLog(int loglevel,char *format,...)
 	}else if(loglevel>=LOG_APP_DEBUG&&loglevel<=LOG_APP_ERR)
 	{
 		ret = getcursysloglvl("APP");
-		memset(type,0,sizeof(type));
+		memset(type,0,sizeof(type)); 
 		strcpy(type,"app");
 	}else
 	{
@@ -116,10 +120,15 @@ int SysLog(int loglevel,char *format,...)
         printf("file open error:[%s]\n",log_path);
         return -1;
     }
-	fprintf(fp,"进程号:[%ld]\tTIME[%d:%d:%d]平台跟踪号[%ld]",(long)getpid(),ttm->tm_hour,ttm->tm_min,ttm->tm_sec,innerid);
+	gettimeofday(&t_cur,NULL);
+	usetime=((float)(t_cur.tv_sec*1000000+t_cur.tv_usec-(t_last.tv_sec*1000000+t_last.tv_usec)))/1000000;
+	if(usetime<0)
+		usetime =0.00;
+	fprintf(fp,"[+%-10f]进程号:[%ld]\tTIME[%d:%d:%d]平台跟踪号[%ld]",usetime,(long)getpid(),ttm->tm_hour,ttm->tm_min,ttm->tm_sec,innerid);
     ret = vfprintf(fp,format,argptr);
     fclose(fp);
     va_end(argptr);
+	gettimeofday(&t_last,NULL);
     return (ret);
 }
 int	getcursysloglvl(char *type)

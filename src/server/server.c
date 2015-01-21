@@ -309,7 +309,7 @@ int main(int argc,char *argv[])
 void serv(int sig)
 {
 	struct	timeval	t_start,t_end;
-	double	usetime;
+	float 	usetime;
 	gettimeofday(&t_start,NULL);
 	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:服务[%ld]获取到信号\n",__FILE__,__LINE__,getpid());
 	if(init_malloced_hash()!=0)
@@ -349,8 +349,8 @@ void serv(int sig)
 		{
 			SysLog(LOG_SYS_ERR,"FILE [%s] LINE[%d] 获取全局跟踪号:[%ld]信息失败\n",__FILE__,__LINE__,innerid);
 			gettimeofday(&t_end,NULL);
-			usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-			SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+			usetime=((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000;
+			SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 			updatestat();
 			return ;
 		}
@@ -372,8 +372,8 @@ void serv(int sig)
 	{
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除共享内存hash表数据失败\n",__FILE__,__LINE__);
 		gettimeofday(&t_end,NULL);
-		usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-		SysLog(LOG_SYS_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+		usetime=((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000;
+		SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
@@ -383,16 +383,16 @@ void serv(int sig)
 	{
 		SysLog(LOG_SYS_ERR,"FILE [%s] LINE [%d]:删除消息队列数据失败\n",__FILE__,__LINE__);
 		gettimeofday(&t_end,NULL);
-		usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-		SysLog(LOG_SYS_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+		usetime=((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000;
+		SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 		updatestat();
 		alarm(0);
 		return ;
 	}
 	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
 	gettimeofday(&t_end,NULL);
-	usetime=(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec);
-	SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易成功结束,开始[%ld]结束[%ld],耗时[%f]微秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+	usetime=((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000;
+	SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);
@@ -435,11 +435,11 @@ int serv_flow(char *trancode)
 		if(do_so(localflow[i].flowso,localflow[i].flowfunc,localflow[i].funcpar1)==0)
 		{
 			gettimeofday(&t_end,NULL);
-			SysLog(LOG_APP_SHOW,"流程处理成功,耗时[+%f]微秒\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
+			SysLog(LOG_APP_SHOW,"流程处理成功,耗时[+%10f]秒\n",((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000);
 		}else
 		{
 			gettimeofday(&t_end,NULL);
-			SysLog(LOG_APP_ERR,"!!!!!!!!!!!!!!!!!!!!!!!!流程处理失败,耗时[+%f]微秒!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n",(t_end.tv_sec*1000000+t_end.tv_usec-t_start.tv_sec*1000000+t_start.tv_usec));
+			SysLog(LOG_APP_ERR,"ERROR!!![流程处理失败,耗时[+%10f]秒]ERROR\n",((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000);
 			/** 执行错误流程**/
 			if(get_flow(localflow[i].errflow,localflow)!=0)
 			{
