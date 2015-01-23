@@ -392,7 +392,7 @@ void serv(int sig)
 	SysLog(LOG_SYS_SHOW,"FILE [%s] LINE [%d]:删除消息队列数据成功\n",__FILE__,__LINE__);
 	gettimeofday(&t_end,NULL);
 	usetime=((float)(t_end.tv_sec*1000000+t_end.tv_usec-(t_start.tv_sec*1000000+t_start.tv_usec)))/1000000;
-	SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易失败结束开始[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
+	SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 交易成功结束[%ld]结束[%ld],耗时[+%10f]秒\n",__FILE__,__LINE__,t_start.tv_usec,t_end.tv_usec,usetime);
 	/**修改状态为空闲 **/
 	updatestat();
 	alarm(0);

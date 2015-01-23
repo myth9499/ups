@@ -15,6 +15,50 @@ typedef struct	NODELIST
 }_nodelist;
 _nodelist	nl[1024];
 
+int	getxmlNs(char *xmltype,char	*xmlNs)
+{
+	    FILE    *fp=NULL;
+		char    buffer[1024];
+		char    xmlname[256];
+		char    cfgfile[256];
+		char    xmlns[256];
+		char    cfgpath[100];
+
+		memset(buffer,0,sizeof(buffer));
+		memset(xmlname,0,sizeof(xmlname));
+		memset(cfgfile,0,sizeof(cfgfile));
+		memset(xmlns,0,sizeof(xmlns));
+		memset(cfgpath,0,sizeof(cfgpath));
+
+		sprintf(cfgpath,"%s%s",upshome,"/cfg/xmlcfg/loadxml.list");
+		fp = fopen(cfgpath,"r");
+		if(fp == NULL)
+		{
+			SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,cfgpath);
+			return -1;
+		}
+		while(fgets(buffer,sizeof(buffer),fp)!=NULL)
+		{
+			if(buffer[0]=='#')
+				continue;
+			buffer[strlen(buffer)-1]='\0';
+			strcpy(xmlname,strtok(buffer,"^"));
+			strcpy(cfgfile,strtok(NULL,"^"));
+			strcpy(xmlns,strtok(NULL,"^"));
+			if(!strcmp(xmltype,xmlname))
+			{
+				strcpy(xmlNs,xmlns);
+				fclose(fp);
+				return 0;
+			}
+			memset(buffer,0,sizeof(buffer));
+			memset(xmlname,0,sizeof(xmlname));
+			memset(cfgfile,0,sizeof(cfgfile));
+			memset(xmlns,0,sizeof(xmlns));
+		}
+		fclose(fp);
+		return -1;
+}
 xmlNodePtr	getNodePtr(char	*fullpath,int loop)
 {
 	int	i=0;
@@ -76,7 +120,11 @@ int pack_xml_loop(char *xmltype)
 	char	xmlcfgpath[60];
 	char	msgtype[30];
 	char	ffile[60];
-	xmlNodePtr	root,curnode,lastnode;
+	xmlNodePtr	root,curnode,lastnode,rootnode;
+
+	/** for name space **/
+	xmlNsPtr nsptr;
+	char	xmlNameSpace[256];
 
 
 	memset(tmppath,0,sizeof(tmppath));
@@ -150,7 +198,7 @@ int pack_xml_loop(char *xmltype)
 				{
 					memset(tmppath,0,sizeof(tmppath));
 					strcpy(tmppath,tmpcfgloop->fullpath);
-				//	SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]loop[%s]:\n",__FILE__,__LINE__,tmppath,flag,tmpcfgloop->loop);
+					//	SysLog(LOG_APP_ERR,"FILE [%s] LINE [%d] path is  [%s] flag is [%d]loop[%s]:\n",__FILE__,__LINE__,tmppath,flag,tmpcfgloop->loop);
 					/** 判断全路径倒数第二个节点是否已经创建，若已经创建，判断是否与当前循环次数相符**/
 					if(flag==0)
 					{
@@ -207,6 +255,7 @@ int pack_xml_loop(char *xmltype)
 					sprintf(docpath,"/%s",tpath);
 					root=getNodePtr(docpath,0);
 					xmlDocSetRootElement(doc,root);
+					rootnode = root;
 					SysLog(LOG_APP_DEBUG,"FILE [%s] LINE [%d] 设置根节点，标识为 [%d]:\n",__FILE__,__LINE__,flag);
 				}
 				if(flag ==1)
@@ -246,6 +295,30 @@ int pack_xml_loop(char *xmltype)
 		memset(lastpath,0,sizeof(lastpath));
 		strcpy(lastpath,tmpcfgloop->fullpath);
 		tmpcfgloop++;
+	}
+
+	/** 打包之前，还需要生成对应的namespace **/
+	memset(xmlNameSpace,0x00,sizeof(xmlNameSpace));
+	if(getxmlNs(xmltype,xmlNameSpace)!=0)
+	{
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d]获取命名空间失败\n",__FILE__,__LINE__);
+		xmlFreeDoc(doc);
+		xmlCleanupParser();
+		//xmlXPathFreeObject(result);
+		xmlMemoryDump();
+		shmdt(dtcfgloop);
+		return -1;
+	}
+	nsptr = xmlNewNs(rootnode,BAD_CAST(xmlNameSpace),NULL);
+	if(nsptr == NULL)
+	{
+		SysLog(LOG_APP_ERR,"FILE[%s] LINE[%d]设置命名空间失败\n",__FILE__,__LINE__);
+		xmlFreeDoc(doc);
+		xmlCleanupParser();
+		//xmlXPathFreeObject(result);
+		xmlMemoryDump();
+		shmdt(dtcfgloop);
+		return -1;
 	}
 	/** 生成新的文件名,放置到变量中 **/
 	memset(ffile,0,sizeof(ffile));
