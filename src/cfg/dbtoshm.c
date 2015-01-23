@@ -35,7 +35,7 @@ int main(int argc,char *argv[])
 	memset(dbpath,0,sizeof(dbpath));
 
 	/* connect to sqlite3 **/
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/db/ups.sqlite");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/db/ups.sqlite");
 	rc  =   sqlite3_open(dbpath,&db);
 	if(rc)
 	{
@@ -48,28 +48,28 @@ int main(int argc,char *argv[])
 
 	if(load_commmsg_cfg("commmsg")==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,"/cfg/channel/chnl.cfg");
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/src/cfg/channel/chnl.cfg");
+		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]失败\n",__FILE__,__LINE__,"/cfg/channel/chnl.cfg");
 		return -1;
 	}
 	if(load_flow_cfg("flow")==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,"/cfg/flow/flow.cfg");
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/src/cfg/flow/flow.cfg");
+		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]失败\n",__FILE__,__LINE__,"/cfg/flow/flow.cfg");
 		return -1;
 	}
 
 	/**装载XML配置 **/
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/xmlcfg/loadxml.list");
 	fp = fopen(dbpath,"r");
 	if(fp == NULL)
 	{
-		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/src/cfg/xmlcfg/loadxml.list");
+		printf("FILE [%s] LINE [%d]:加载XML列表文件[%s]失败\n",__FILE__,__LINE__,"/cfg/xmlcfg/loadxml.list");
 		return -1;
 	}
 	while(fgets(buffer,sizeof(buffer),fp)!=NULL)
@@ -98,18 +98,18 @@ int main(int argc,char *argv[])
 	fclose(fp);
 	if(load_tranmap_cfg("tranmap")==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,"/cfg/trancode/tran.cfg");
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/src/cfg/trancode/tran.cfg");
+		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]失败\n",__FILE__,__LINE__,"/cfg/trancode/tran.cfg");
 		return -1;
 	}
 	if(load_vardef_cfg("vardef")==0)
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,"/cfg/vardef/vardef.cfg");
 	}else
 	{
-		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/src/cfg/vardef/vardef.cfg");
+		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]失败\n",__FILE__,__LINE__,"/cfg/vardef/vardef.cfg");
 		return -1;
 	}
 	return 0;

@@ -29,7 +29,7 @@ int main(int argc,char *argv[])
 	{
 		printf("FILE [%s] LINE [%d]:设置LOGLEVEL失败\n",__FILE__,__LINE__);
 	}
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/channel/chnl.cfg");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/channel/chnl.cfg");
 	if(load_commmsg_cfg(cfgpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
@@ -39,7 +39,7 @@ int main(int argc,char *argv[])
 		return -1;
 	}
 	memset(cfgpath,0,sizeof(cfgpath));
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/flow/flow.cfg");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/flow/flow.cfg");
 	if(load_flow_cfg(cfgpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
@@ -51,7 +51,7 @@ int main(int argc,char *argv[])
 
 	/**装载XML配置 **/
 	memset(cfgpath,0,sizeof(cfgpath));
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/xmlcfg/loadxml.list");
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
@@ -83,7 +83,7 @@ int main(int argc,char *argv[])
 	}
 	fclose(fp);
 	memset(cfgpath,0,sizeof(cfgpath));
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/trancode/tran.cfg");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/trancode/tran.cfg");
 	if(load_tranmap_cfg(cfgpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
@@ -93,7 +93,7 @@ int main(int argc,char *argv[])
 		return -1;
 	}
 	memset(cfgpath,0,sizeof(cfgpath));
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/vardef/vardef.cfg");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/vardef/vardef.cfg");
 	if(load_vardef_cfg(cfgpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,cfgpath);
@@ -502,7 +502,7 @@ int	setsysparam(void)
 		printf("FILE [%s] LINE[%d] 链接系统公用共享内存失败:%s\n",__FILE__,__LINE__,strerror(errno));
 		return -1;
 	}
-	sprintf(filepath,"%s/%s",upshome,"/src/cfg/sys.cfg");
+	sprintf(filepath,"%s/%s",upshome,"/cfg/sys.cfg");
 	fp = fopen(filepath,"r");
 	if(fp == NULL)
 	{

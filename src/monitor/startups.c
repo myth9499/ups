@@ -26,7 +26,7 @@ int main(int argc,char *argv[] )
 	memset(servbuf,0,sizeof(servbuf));
 	memset(buffer,0,sizeof(buffer));
 
-	sprintf(servcfgpath,"%s%s",upshome,"/src/cfg/serv.cfg");
+	sprintf(servcfgpath,"%s%s",upshome,"/cfg/serv.cfg");
 
 	fp = fopen(servcfgpath,"r");
 	if(fp == NULL)

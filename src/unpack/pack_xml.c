@@ -22,7 +22,7 @@ int	regNs(xmlXPathContextPtr context,char	*xmltype)
 	memset(xmlns,0,sizeof(xmlns));
 	memset(cfgpath,0,sizeof(cfgpath));
 
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/xmlcfg/loadxml.list");
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{
@@ -197,11 +197,11 @@ int pack_xml_single(char *xmltype)
 		}
 		SysLog(LOG_APP_SHOW,"获取到待解包报文类型[%s]\n",msgtype);
 		trim(msgtype);
-		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",msgtype);
+		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/cfg/xmlcfg",msgtype);
 	}else
 	{
 		SysLog(LOG_APP_SHOW,"直接从参数读取\n");
-		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/src/cfg/xmlcfg",xmltype);
+		sprintf(xmlcfgpath,"%s%s/%s.xml",upshome,"/cfg/xmlcfg",xmltype);
 		strcpy(msgtype,xmltype);
 	}
 

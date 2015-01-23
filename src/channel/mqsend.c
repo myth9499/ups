@@ -42,7 +42,7 @@ int	getchnlcfg(char *chnlname)
 		return -1;
 	}
 	/** 初始化系统所有渠道的队列区 **/
-	sprintf(cfgpath,"%s%s",upshome,"/src/cfg/chnl.cfg");
+	sprintf(cfgpath,"%s%s",upshome,"/cfg/chnl.cfg");
 	fp = fopen(cfgpath,"r");
 	if(fp == NULL)
 	{

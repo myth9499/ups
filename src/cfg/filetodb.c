@@ -31,7 +31,7 @@ int main(int argc,char *argv[])
 	memset(dbpath,0,sizeof(dbpath));
 
 	/* connect to sqlite3 **/
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/db/ups.sqlite");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/db/ups.sqlite");
 	rc	=	sqlite3_open(dbpath,&db);
 	if(rc)
 	{
@@ -42,7 +42,7 @@ int main(int argc,char *argv[])
 
 	printf("sqlite open db ok\n");
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/channel/chnl.cfg");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/channel/chnl.cfg");
 	if(load_commmsg_cfg(dbpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载渠道配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
@@ -53,7 +53,7 @@ int main(int argc,char *argv[])
 	}
 
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/flow/flow.cfg");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/flow/flow.cfg");
 	if(load_flow_cfg(dbpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载流程配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
@@ -77,7 +77,7 @@ int main(int argc,char *argv[])
 	}
 
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/xmlcfg/loadxml.list");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/xmlcfg/loadxml.list");
 	fp = fopen(dbpath,"r");
 	if(fp == NULL)
 	{
@@ -122,7 +122,7 @@ int main(int argc,char *argv[])
 	}
 
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/trancode/tran.cfg");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/trancode/tran.cfg");
 	if(load_tranmap_cfg(dbpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载交易映射配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);
@@ -143,7 +143,7 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 	memset(dbpath,0,sizeof(dbpath));
-	sprintf(dbpath,"%s%s",upshome,"/src/cfg/vardef/vardef.cfg");
+	sprintf(dbpath,"%s%s",upshome,"/cfg/vardef/vardef.cfg");
 	if(load_vardef_cfg(dbpath)==0)
 	{
 		printf("FILE [%s] LINE [%d]:加载变量映射配置文件[%s]成功\n",__FILE__,__LINE__,dbpath);

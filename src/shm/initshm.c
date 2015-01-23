@@ -124,7 +124,7 @@ int main(int argc,char *argv[])
 	}
 
 	/** 初始化系统所有渠道的队列区 **/
-	sprintf(chnlcfgpath,"%s%s",upshome,"/src/cfg/chnl.cfg");
+	sprintf(chnlcfgpath,"%s%s",upshome,"/cfg/chnl.cfg");
 	fp = fopen(chnlcfgpath,"r");
 	if(fp == NULL)
 	{

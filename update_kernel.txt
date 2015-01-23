@@ -1,7 +1,7 @@
 #update the kernel shm cfg
 sysctl -w kernel.shmmax=13421772800
 sysctl -w kernel.msgmnb=1000000
-sysctl -w kernel.msgmni=32
+sysctl -w kernel.msgmni=64
 export LD_LIBRARY_PATH=/item/ups/src/lib/
 
 #socket 参数
