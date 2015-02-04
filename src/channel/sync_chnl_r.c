@@ -6,7 +6,7 @@ int iret = 0;
 int msgidi=0,msgido=0,msgidr=0;
 char	rip[16];
 int	rport;
-
+int  sendprocess(long );
 
 /** 主进程注册信号，当子进程退出时进行后续处理
  * 防止僵尸进程
@@ -35,10 +35,10 @@ void do_exit(void)
 {
 	//free(mbuf);
 }
-int  sendprocess(long );
 
 
-/** 传入参数
+/** 连接远程系统并发送报文
+ * 传入参数
  * 渠道名称+对方地址+对方端口
  **/
 
@@ -129,7 +129,6 @@ int main(int argc,char *argv[])
 				sleep (1);
 				continue;
 			}
-			//continue;
 		}
 		SysLog(LOG_CHNL_DEBUG,"FILE[%s] LINE[%d] 渠道[%s]获取到交易码[%s]渠道跟踪号[%ld]\n",__FILE__,__LINE__,chnl_name,mbuf->tranbuf.trancode,mbuf->innerid);
 		pid = fork();
@@ -183,12 +182,15 @@ int main(int argc,char *argv[])
 	free(mbuf);
 	return 0;
 }
+/**
+ * 发送到外部系统处理函数
+ * 李磊
+ **/
 int sendprocess(long inerid)
 {
 	SysLog(LOG_CHNL_DEBUG,"&&&&&&&&&&&&&&&&&FILE [%s] LINE[%d] 开始处理[%ld]&&&&&&&&&&&&&&&&&&&\n",__FILE__,__LINE__,inerid);
 	/** 注册超时信号 **/
 	signal(SIGALRM,timeout);
-	//alarm(10);
 	int sockfd;
 	_tran	*tranbuf=NULL;
 
@@ -216,7 +218,7 @@ int sendprocess(long inerid)
 		return -1;
 	}else
 	{
-	SysLog(LOG_CHNL_SHOW,"FILE[%s]LINE[%d] 链接成功，开始发送....\n",__FILE__,__LINE__);
+		SysLog(LOG_CHNL_SHOW,"FILE[%s]LINE[%d] 链接成功，开始发送....\n",__FILE__,__LINE__);
 		tranbuf = (_tran *)malloc(sizeof(_tran));
 		if(tranbuf == (void *)-1)
 		{

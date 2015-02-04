@@ -325,6 +325,8 @@ void serv(int sig)
 	if(iret > 0)
 	{
 		innerid = mbuf->innerid ; 
+		trim(mbuf->tranbuf.chnlname);
+		trim(mbuf->tranbuf.trancode);
 		SysLog(LOG_APP_SHOW,"FILE [%s] LINE [%d] 处理来自[%20s]交易码为[%10s]长度为[%10ld]的交易\n",__FILE__,__LINE__,mbuf->tranbuf.chnlname,mbuf->tranbuf.trancode,mbuf->tranbuf.buffsize);
 		SysLog(LOG_APP_SHOW,"FILE [%s] LINE[%d] 全局跟踪号为:[%ld]\n",__FILE__,__LINE__,innerid);
 		if((get_shm_hash(mbuf->innerid,tranbuf))!=-1)

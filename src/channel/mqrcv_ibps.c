@@ -6,7 +6,6 @@ int msgidi=0,msgido=0,msgidr=0;
 _msgbuf *mbuf=NULL;
 _tran *tranbuf=NULL;
 char	chnlname[50];
-long i=1L;
 char     QMName[50];             /* queue manager name            */
 char	LQName[60];
 char	trancode[30];
@@ -145,14 +144,12 @@ int chnlprocess(char *buffer)
 	/** 利用随机数产生唯一的交易跟踪号 **/
 	srand((unsigned)time(NULL));
 	mbuf->innerid =  (long)getpid()+rand()%1000000+rand()%3333333;
-	//mbuf->innerid=getinnerid();
 	testid++;
 	strcpy(mbuf->tranbuf.chnlname,chnlname);
 	strcpy(mbuf->tranbuf.trancode,trancode+1);
 	mbuf->tranbuf.buffsize = strlen(buffer);
 
 	SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:全系统跟踪号为[%ld]\n",__FILE__,__LINE__,mbuf->innerid);
-	i++;
 	if(shm_hash_insert(mbuf->innerid,buffer,NULL)==-1)
 	{
 		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:放置交易报文信息到共享内存hash表中失败\n",__FILE__,__LINE__);
@@ -210,9 +207,12 @@ int chnlprocess(char *buffer)
 }
 
 
+/** 接收MQ转发报文并进行处理渠道 
+ *
+ * 李磊
+ **/
 int main(int argc, char **argv)
 {
-
 	if(argc<2)
 	{
 		printf("USAGE:appname+chnlname\n");
@@ -288,7 +288,7 @@ int main(int argc, char **argv)
 
 	if(getmsgid(chnlname,&msgidi,&msgido,&msgidr)==-1)
 	{
-		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:GET CHANNEL[%s] MSGID ERROR[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
+		SysLog(LOG_CHNL_ERR,"FILE [%s] LINE [%d]:获取渠道[%s]消息队列失败[%s]\n",__FILE__,__LINE__,chnlname,strerror(errno));
 		free(mbuf);
 		free(tranbuf);
 		return -1;
@@ -297,18 +297,6 @@ int main(int argc, char **argv)
 	/** 设置忽略SIGPIPE信号，防止因socket写的时候客户端关闭导致的SIGPIPE信号 **/
 	signal(SIGPIPE,SIG_IGN);
 	signal(SIGCHLD,child_exit);
-
-	/******************************************************************/
-	/*                                                                */
-	/*   Create object descriptor for subject queue                   */
-	/*                                                                */
-	/******************************************************************/
-	/**
-	  strncpy(od.ObjectName, argv[1], MQ_Q_NAME_LENGTH);
-	  QMName[0] = 0;    default 
-	  if (argc > 2)
-	  strncpy(QMName, argv[2], MQ_Q_MGR_NAME_LENGTH);
-	 **/
 
 	/******************************************************************/
 	/*                                                                */
@@ -323,7 +311,7 @@ int main(int argc, char **argv)
 	/* report reason and stop if it failed     */
 	if (CompCode == MQCC_FAILED)
 	{
-		SysLog(LOG_CHNL_ERR,"MQCONN ended with reason code %d\n", CReason);
+		SysLog(LOG_CHNL_ERR,"MQ连接失败，错误码 [%d]\n", CReason);
 		free(mbuf);
 		free(tranbuf);
 		exit( (int)CReason );
@@ -336,20 +324,11 @@ int main(int argc, char **argv)
 	/*                                                                */
 	/******************************************************************/
 
-	if (argc > 3)
-	{
-		O_options = atoi( argv[3] );
-		SysLog(LOG_CHNL_ERR,"open  options are %d\n", O_options);
-	}
-	else
-	{
-		O_options = MQOO_INPUT_AS_Q_DEF    /* open queue for input      */
-			| MQOO_FAIL_IF_QUIESCING /* but not if MQM stopping   */
-			;                        /* = 0x2001 = 8193 decimal   */
-	}
+	O_options = MQOO_INPUT_AS_Q_DEF    /* open queue for input      */
+		| MQOO_FAIL_IF_QUIESCING /* but not if MQM stopping   */
+		;                        /* = 0x2001 = 8193 decimal   */
 
 	/** the local queue name **/
-	//strcpy(od.ObjectName,"TEST");
 	strcpy(od.ObjectName,LQName);
 
 	MQOPEN(Hcon,                      /* connection handle            */
@@ -362,12 +341,12 @@ int main(int argc, char **argv)
 	/* report reason, if any; stop if failed      */
 	if (Reason != MQRC_NONE)
 	{
-		SysLog(LOG_CHNL_ERR,"MQOPEN ended with reason code %d\n", Reason);
+		SysLog(LOG_CHNL_ERR,"打开MQ失败，错误原因[ %d]\n", Reason);
 	}
 
 	if (OpenCode == MQCC_FAILED)
 	{
-		SysLog(LOG_CHNL_ERR,"unable to open queue for input\n");
+		SysLog(LOG_CHNL_ERR,"区法打开MQ渠道用来输入\n");
 		return -1;
 	}
 
@@ -386,13 +365,9 @@ int main(int argc, char **argv)
 	/* These options cause the MsgId and CorrelId to be replaced, so  */
 	/* that there is no need to reset them before each MQGET          */
 	/******************************************************************/
-	/*gmo.Version = MQGMO_VERSION_2;*/ /* Avoid need to reset Message */
-	/*gmo.MatchOptions = MQMO_NONE; */ /* ID and Correlation ID after */
-	/* every MQGET                 */
 	gmo.Options = MQGMO_WAIT           /* wait for new messages       */
 		| MQGMO_NO_SYNCPOINT   /* no transaction              */
 		| MQGMO_CONVERT;       /* convert if necessary        */
-	//gmo.WaitInterval = MQWI_UNLIMITED;          /* 15 second limit for waiting */
 	gmo.WaitInterval = 2000;          /* 15 second limit for waiting */
 	gmo.MatchOptions=MQMO_NONE;
 	gmo.Version=MQGMO_VERSION_2;
@@ -414,7 +389,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	//while (CompCode != MQCC_FAILED)
 	while (1)
 	{
 		buflen = sizeof(buffer) - 1; /* buffer size available for GET   */
@@ -461,13 +435,13 @@ int main(int argc, char **argv)
 		{
 			if (Reason == MQRC_NO_MSG_AVAILABLE)
 			{                         /* special report for normal end    */
-				SysLog(LOG_CHNL_DEBUG,"no more messages\n");
+				SysLog(LOG_CHNL_DEBUG,"暂无消息\n");
 				sleep(atoi(waitsec));
 				continue;
 			}
 			else                      /* general report for other reasons */
 			{
-				SysLog(LOG_CHNL_ERR,"MQGET ended with reason code %d\n", Reason);
+				SysLog(LOG_CHNL_ERR,"获取MQ消息失败，失败原因 [%d]\n", Reason);
 
 				/*   treat truncated message as a failure for this sample   */
 				if (Reason == MQRC_TRUNCATED_MSG_FAILED)
@@ -517,15 +491,7 @@ int main(int argc, char **argv)
 	/******************************************************************/
 	if (OpenCode != MQCC_FAILED)
 	{
-		if (argc > 4)
-		{
-			C_options = atoi( argv[4] );
-			SysLog(LOG_CHNL_ERR,"close options are %d\n", C_options);
-		}
-		else
-		{
-			C_options = MQCO_NONE;        /* no close options             */
-		}
+		C_options = MQCO_NONE;        /* no close options             */
 
 		MQCLOSE(Hcon,                    /* connection handle           */
 				&Hobj,                   /* object handle               */
@@ -536,7 +502,7 @@ int main(int argc, char **argv)
 		/* report reason, if any     */
 		if (Reason != MQRC_NONE)
 		{
-			SysLog(LOG_CHNL_ERR,"MQCLOSE ended with reason code %d\n", Reason);
+			SysLog(LOG_CHNL_ERR,"关闭MQ对象失败，失败原因[%d]\n", Reason);
 		}
 	}
 
@@ -563,7 +529,6 @@ int main(int argc, char **argv)
 	/* END OF AMQSGET0                                                */
 	/*                                                                */
 	/******************************************************************/
-	SysLog(LOG_CHNL_ERR,"Sample AMQSGET0 end\n");
 	free(mbuf);
 	free(tranbuf);
 	return(0);
